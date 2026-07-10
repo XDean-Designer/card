@@ -1234,10 +1234,6 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
               <div class="form-row"><span class="label">卡名称<span class="req">*</span></span><input class="value" id="fName" placeholder="请输入" /></div>
               <div class="form-row" id="rowRecharge"><span class="label">购买金额<span class="req">*</span></span><input class="value input-amount" id="fRecharge" type="number" min="0" step="0.01" placeholder="请输入" /></div>
               <div class="form-row clickable" id="rowCardValidity"><span class="label">有效期限<span class="req" id="cardValidityReq">*</span></span><span class="form-row__trail"><span class="value has-val" id="cardValidityDisplay">永久有效</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></span></div>
-              <div class="form-hint form-hint--emph">
-                <svg class="tip-info-icon tip-info-icon--emph" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>
-                <span id="cardValidityScopeHint">仅约束项目与折扣；面值永久有效</span>
-              </div>
             </div>
             <div id="step1CardTheme">
             <div class="section-head">卡面模板</div>
@@ -2150,7 +2146,8 @@ const OPTIMIZATION_LOG = [
   '演示账本：m14 对齐算例 D（赠送余额 500 + 烫发折扣 2 次 + 染发折扣 1 次）',
   '尊享组合卡：扩展为 10 项目 + 10 折扣，列表卡面默认折叠展示',
   '面值配置：赠送可编辑并与面值双向联动；允许面值 0 / 小于购买价（赠送最低 0）',
-  'Step1/Step2 面值永久有效提示：橙字 #FF7043 + 信息图标',
+  'Step1/Step2 面值永久有效提示：橙字 #FF7043 + 信息图标（首行垂直居中；仅 Step2 展示）',
+  '用卡策略：retail 模式 UI 文案「原价模式」统一改为「减值模式」',
   '列表卡面：权益区「期限」区块仅展示期限值（1年/永久有效等；纯储值卡为永久有效）',
   '列表卡面：期限值改用思源黑体（Source Han Sans SC），不再使用数字字体',
 ];
@@ -2297,11 +2294,11 @@ const QUICK_TEMPLATES = [
   },
   {
     id: 'retail_policy',
-    title: '原价策略',
-    desc: '退卡/业绩按原价',
+    title: '减值策略',
+    desc: '退卡/业绩按减值模式',
     icon: '📋',
     preset: {
-      name: '原价策略演示卡',
+      name: '减值策略演示卡',
       audience: ['all'],
       recharge: '498',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
@@ -2309,7 +2306,7 @@ const QUICK_TEMPLATES = [
       projectItems: [{ id: 'demo_retail_kids', name: '儿童剪发', purchaseQty: 10, giftQty: 0, unlimited: false }],
       cardColor: 'brand_red',
       usagePolicy: { refundRule: 'retail', performanceRule: 'retail' },
-      cardDesc: '用卡策略演示：退卡与业绩均按价目表原价口径',
+      cardDesc: '用卡策略演示：退卡与业绩均按减值模式',
     },
   },
   {
@@ -2447,11 +2444,11 @@ let toastTimer = null;
 const USAGE_POLICY_OPTIONS = {
   refundRule: [
     { id: 'alloc_pool', name: '均值模式', hint: '按办卡花的钱分摊算', helpKey: 'refund_alloc_pool' },
-    { id: 'retail', name: '原价模式', hint: '按项目挂牌价算', helpKey: 'refund_retail' },
+    { id: 'retail', name: '减值模式', hint: '按项目挂牌价算', helpKey: 'refund_retail' },
   ],
   performanceRule: [
     { id: 'alloc_pool', name: '均值模式', hint: '员工业绩按办卡分摊金额算', helpKey: 'performance_alloc_pool' },
-    { id: 'retail', name: '原价模式', hint: '员工业绩按这次服务挂牌价算', helpKey: 'performance_retail' },
+    { id: 'retail', name: '减值模式', hint: '员工业绩按这次服务挂牌价算', helpKey: 'performance_retail' },
   ],
 };
 
@@ -2469,7 +2466,7 @@ const USAGE_POLICY_HELP = {
     ],
   },
   refund_retail: {
-    title: '原价模式 · 消耗及退卡',
+    title: '减值模式 · 消耗及退卡',
     lead: '项目、折扣按价目表挂牌价计量已消耗与剩余；余额仍按实耗面值折算办卡实付。',
     items: [
       { term: '项目次数', def: '已消耗 = 价目表原价 × 已用次数；剩余 = 原价 × 剩余次数。' },
@@ -2487,7 +2484,7 @@ const USAGE_POLICY_HELP = {
     ],
   },
   performance_retail: {
-    title: '原价模式 · 业绩结算',
+    title: '减值模式 · 业绩结算',
     lead: '不论支付来源，单次服务劳动业绩均按价目表挂牌价计（原型展示说明，正式核销计绩待对接）。',
     items: [
       { term: '统一规则', def: '余额 / 次数 / 折扣消费：劳动业绩 = 当次服务项目价目表原价。' },
@@ -2513,8 +2510,8 @@ function getTemplateUsagePolicy(tpl) {
 
 function formatUsagePolicyLabel(policy) {
   const p = normalizeUsagePolicy(policy);
-  const refund = p.refundRule === 'retail' ? '原价退卡' : '均值退卡';
-  const perf = p.performanceRule === 'retail' ? '原价计绩' : '均值计绩';
+  const refund = p.refundRule === 'retail' ? '减值退卡' : '均值退卡';
+  const perf = p.performanceRule === 'retail' ? '减值计绩' : '均值计绩';
   return `${refund} · ${perf}`;
 }
 
@@ -4296,13 +4293,7 @@ function syncColorPreview() {
 function syncStep1ValidityScope() {
   const hasTimed = templateHasTimedBenefits({ benefits: state.benefits });
   const reqEl = document.getElementById('cardValidityReq');
-  const hintEl = document.getElementById('cardValidityScopeHint');
   if (reqEl) reqEl.classList.toggle('hidden', !hasTimed);
-  if (hintEl) {
-    hintEl.textContent = hasTimed
-      ? '仅约束项目与折扣；面值永久有效'
-      : '未配置项目/折扣时无需设置；面值永久有效';
-  }
 }
 
 function syncStep1UI() {
@@ -5747,7 +5738,7 @@ function renderRefundSheet(tpl, member) {
   const calc = computeSuggestedRefund(tpl, meta);
   const policy = getTemplateUsagePolicy(tpl);
   state.refundActualAmount = calc.suggestedRefund;
-  const policyNote = policy.refundRule === 'retail' ? ' · 原价退卡' : ' · 均值退卡';
+  const policyNote = policy.refundRule === 'retail' ? ' · 减值退卡' : ' · 均值退卡';
   document.getElementById('refundSheetSubtitle').textContent = `${member.name} · ${tpl.name}${policyNote}`;
   const linesHtml = calc.lines.length
     ? calc.lines.map(l => `<div class="refund-line"><span class="refund-line__name">${escapeHtml(l.label)}<br><span class="refund-line__meta">${escapeHtml(l.detail)}</span></span><span class="refund-line__meta">${formatMoneyDisplay(l.remain)}</span></div>`).join('')
