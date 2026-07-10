@@ -992,9 +992,24 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .proj-pick-block--all .proj-item-name { font-weight: 600; }
 .proj-pick-sub { display: block; font-size: 11px; color: var(--text-sec); margin-top: 2px; }
 .proj-pick-block:last-child { border-bottom: none; }
-.proj-pick-mode-seg { margin: 12px 16px 8px; }
-.proj-pick-summary {
-  padding: 0 16px 10px; font-size: 12px; color: var(--text-sec); line-height: 1.45;
+.proj-pick-mode-head {
+  width: calc(100% + 32px); margin: 0 -16px 0; flex-shrink: 0;
+  border-bottom: 1px solid var(--bg-page); background: var(--card);
+}
+.proj-pick-mode-tabs {
+  width: 100%; margin: 0; height: 64px; min-height: 64px;
+  padding-top: 6px; padding-bottom: 0; border-bottom: none; align-items: stretch;
+  box-sizing: border-box;
+}
+.proj-pick-mode-tabs .page-tabs__item {
+  gap: 2px; padding-bottom: 0; height: 100%; justify-content: flex-start; box-sizing: border-box;
+}
+.proj-pick-mode-tabs .page-tabs__count {
+  font-size: 12px; line-height: 1.35; color: var(--text-sec); font-weight: 400; margin-top: 2px;
+}
+.proj-pick-mode-tabs .page-tabs__item.on .page-tabs__count { color: var(--text-sec); }
+.proj-pick-list--exclude .proj-switch input:checked + .proj-switch__track {
+  background: var(--switch-qty-on);
 }
 .proj-pick-block--excluded .proj-item-name { color: var(--text-sec); }
 .proj-pick-block--excluded .proj-item-price { opacity: .72; }
@@ -1196,9 +1211,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
       <div id="flowMapBody"></div>
       <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示上下文。Sheet/弹窗（选会员、退卡估值等）请从列表或详情进入。</p>
     </div>
-    <a class="doc-link-entry" href="剑琅联盟-会员卡逻辑梳理.html" target="_blank" rel="noopener noreferrer">
+    <a class="doc-link-entry" href="logic.html">
       逻辑梳理文档
-      <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例 · 在新标签页打开</span>
+      <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例</span>
     </a>
   </aside>
 
@@ -2143,7 +2158,7 @@ const OPTIMIZATION_LOG = [
   '修复延期费用：金额键盘 z-index 高于办卡弹窗；未选时长前禁用费用框并自动折算',
   '延期收费范围：凡含折扣权益的卡均展示费用；组合卡按名义价值池折扣权重分摊购卡价',
   '选择项目/折扣项目：开关多选；全部联动；单独开关联动展开设置；确定后整表替换',
-  '选择项目/折扣项目：正向/反选分段；反选默认全适用、开关 ON 为排除；折扣可配合全部统一设折',
+  '选择项目/折扣项目：正向/反选 PageTabs；当前 Tab 标题下居中显示「已选 N 项」',
   '折扣项目列表：补全左右边距；点「全部」展开统一折扣设置，不再预填 8.5 折',
   'Toast 对齐设计规范：#333 90% 底 · 14px/20px · 左右 16px 上下 10px · 2.5s',
   '演示数据：新增「可编辑演示卡」（无持卡 · 有效卡 0 · 可进编辑流程）',
@@ -5961,23 +5976,31 @@ function getMpPickerIncluded() {
   return PROJECTS.filter(p => state.mpPickerOn[p]);
 }
 
-function projPickModeSegHtml(pickerType) {
+function projPickModeTabsHtml(pickerType) {
   const cur = pickerType === 'project' ? state.pickerSelectionMode : state.mpPickerSelectionMode;
-  return `<div class="sub-seg proj-pick-mode-seg" data-pick-mode-seg="${pickerType}" role="tablist">
-    <button type="button" class="${cur === 'include' ? 'on' : ''}" data-pick-mode="include">正向选择</button>
-    <button type="button" class="${cur === 'exclude' ? 'on' : ''}" data-pick-mode="exclude">反向选择</button>
+  const includedCount = pickerType === 'project'
+    ? getProjectPickerIncluded().length
+    : getMpPickerIncluded().length;
+  const includeCountHtml = cur === 'include'
+    ? `<span class="page-tabs__count">已选 ${includedCount} 项</span>`
+    : '';
+  const excludeCountHtml = cur === 'exclude'
+    ? `<span class="page-tabs__count">已选 ${includedCount} 项</span>`
+    : '';
+  return `<div class="proj-pick-mode-head">
+    <div class="page-tabs proj-pick-mode-tabs" data-pick-mode-seg="${pickerType}" role="tablist">
+      <button type="button" class="page-tabs__item${cur === 'include' ? ' on' : ''}" data-pick-mode="include" role="tab" aria-selected="${cur === 'include'}">
+        <span class="page-tabs__label">正向选择</span>
+        ${includeCountHtml}
+        <span class="page-tabs__indicator" aria-hidden="true"></span>
+      </button>
+      <button type="button" class="page-tabs__item${cur === 'exclude' ? ' on' : ''}" data-pick-mode="exclude" role="tab" aria-selected="${cur === 'exclude'}">
+        <span class="page-tabs__label">反向选择</span>
+        ${excludeCountHtml}
+        <span class="page-tabs__indicator" aria-hidden="true"></span>
+      </button>
+    </div>
   </div>`;
-}
-
-function projPickSummaryHtml(pickerType) {
-  const excludeMode = pickerType === 'project' ? isProjectPickerExclude() : isMpPickerExclude();
-  const onMap = pickerType === 'project' ? state.pickerProjectOn : state.mpPickerOn;
-  const excludedCount = excludeMode
-    ? PROJECTS.filter(p => onMap[p]).length
-    : PROJECTS.filter(p => !onMap[p]).length;
-  const includedCount = PROJECTS.length - excludedCount;
-  const lead = excludeMode ? '默认全适用，开关 ON 为排除' : '开关 ON 为选中';
-  return `<div class="proj-pick-summary">${lead} · 适用 ${includedCount} 项 · 排除 ${excludedCount} 项</div>`;
 }
 
 function syncMpPickTipText() {
@@ -6318,8 +6341,7 @@ function wireProjPickList(container, mode) {
 function renderMemberPriceProjectList() {
   syncMpPickTipText();
   const container = document.getElementById('memberPriceProjectList');
-  let html = projPickModeSegHtml('discount');
-  html += projPickSummaryHtml('discount');
+  let html = projPickModeTabsHtml('discount');
   html += projPickAllRowHtml('discount');
   PROJECTS.forEach(p => {
     const price = formatProjectPrice(p);
@@ -6549,8 +6571,7 @@ function projQtyStepperHtml(proj, kind, value, minVal) {
 
 function renderProjectList() {
   const container = document.getElementById('projectList');
-  let html = projPickModeSegHtml('project');
-  html += projPickSummaryHtml('project');
+  let html = projPickModeTabsHtml('project');
   html += projPickAllRowHtml('project');
   PROJECTS.forEach(p => {
     const price = formatProjectPrice(p);
