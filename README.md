@@ -10,7 +10,7 @@
 - 交互原型：`demo.html`
 - 逻辑梳理：`logic.html`
 
-推送 `main` 后，GitHub Actions 会自动部署到 `gh-pages` 分支。若首次访问 404，请在仓库 **Settings → Pages → Build and deployment → Source** 选择 **Deploy from a branch**，Branch 选 **gh-pages** / **/(root)**。
+推送 `main` 后，GitHub Actions（`Deploy GitHub Pages`）会自动发布。仓库 Pages 源需为 **GitHub Actions**（首次若 404，在 Settings → Pages 确认即可）。
 
 ## 本地预览
 
