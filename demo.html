@@ -341,6 +341,11 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item__line-val.is-data {
   font-family: var(--font-data); font-variant-numeric: tabular-nums; color: var(--text);
 }
+.member-card-item__line-val.is-validity {
+  font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+}
+.member-card-item__line-val.is-validity.is-muted { color: var(--text-sec); }
 .member-card-item__empty { font-size: 12px; color: var(--text-sec); margin: 0; line-height: 1.45; }
 .member-card-item__footer {
   display: flex; justify-content: flex-end; align-items: center; gap: 8px;
@@ -921,6 +926,15 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .policy-option__info:active { opacity: .75; }
 .policy-option__hint { font-size: 12px; color: var(--text-sec); line-height: 1.45; margin-top: 4px; padding-left: 24px; font-weight: 400; }
 .form-hint { font-size: 12px; color: var(--text-sec); padding: 0 16px 8px; line-height: 1.55; }
+.form-hint--emph {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--switch-qty-on); padding: 0 16px 8px; line-height: 1.55;
+}
+.form-hint--emph .tip-info-icon--emph {
+  flex-shrink: 0; display: block; width: 16px; height: 16px; margin-top: 2px;
+  color: var(--switch-qty-on);
+}
+.form-hint--emph > span { flex: 1; min-width: 0; }
 .balance-permanent-tag { font-size: 11px; color: var(--text-sec); margin-left: 6px; font-weight: 500; }
 .proj-tag-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 10px; min-height: 4px; }
 .proj-tag-list:empty { display: none; }
@@ -1171,9 +1185,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
       <div id="flowMapBody"></div>
       <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示上下文。Sheet/弹窗（选会员、退卡估值等）请从列表或详情进入。</p>
     </div>
-    <a class="doc-link-entry" href="logic.html">
+    <a class="doc-link-entry" href="剑琅联盟-会员卡逻辑梳理.html" target="_blank" rel="noopener noreferrer">
       逻辑梳理文档
-      <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例</span>
+      <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例 · 在新标签页打开</span>
     </a>
   </aside>
 
@@ -1220,7 +1234,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
               <div class="form-row"><span class="label">卡名称<span class="req">*</span></span><input class="value" id="fName" placeholder="请输入" /></div>
               <div class="form-row" id="rowRecharge"><span class="label">购买金额<span class="req">*</span></span><input class="value input-amount" id="fRecharge" type="number" min="0" step="0.01" placeholder="请输入" /></div>
               <div class="form-row clickable" id="rowCardValidity"><span class="label">有效期限<span class="req" id="cardValidityReq">*</span></span><span class="form-row__trail"><span class="value has-val" id="cardValidityDisplay">永久有效</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></span></div>
-              <p class="form-hint" id="cardValidityScopeHint">仅约束项目与折扣；面值永久有效</p>
+              <div class="form-hint form-hint--emph">
+                <svg class="tip-info-icon tip-info-icon--emph" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>
+                <span id="cardValidityScopeHint">仅约束项目与折扣；面值永久有效</span>
+              </div>
             </div>
             <div id="step1CardTheme">
             <div class="section-head">卡面模板</div>
@@ -1260,8 +1277,11 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
                   <div class="benefit-expand__inner benefit-tree">
                   <div class="form-section benefit-tree-node" id="secBalance">
                     <div class="form-row"><span class="label">面值金额</span><input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" /></div>
-                    <div class="form-row"><span class="label">赠送</span><span class="value readonly-val" id="giftCalculated">—</span></div>
-                    <p class="form-hint" id="balancePermanentHint">面值永久有效，不受卡级有效期限约束</p>
+                    <div class="form-row"><span class="label">赠送</span><input class="value input-amount" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="请输入" /></div>
+                    <div class="form-hint form-hint--emph">
+                      <svg class="tip-info-icon tip-info-icon--emph" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>
+                      <span id="balancePermanentHint">面值永久有效，不受卡级有效期限约束</span>
+                    </div>
                   </div>
                   </div>
                 </div>
@@ -2128,6 +2148,11 @@ const OPTIMIZATION_LOG = [
   'PageTabs 规范：列表与办卡弹层 Tab 改为 48px 白底 + 32×3 底部指示条',
   '已下架 UI：列表标签在卡条名称右侧；详情顶栏「已下架+克隆」，底栏「重新上架/已持卡管理」',
   '演示账本：m14 对齐算例 D（赠送余额 500 + 烫发折扣 2 次 + 染发折扣 1 次）',
+  '尊享组合卡：扩展为 10 项目 + 10 折扣，列表卡面默认折叠展示',
+  '面值配置：赠送可编辑并与面值双向联动；允许面值 0 / 小于购买价（赠送最低 0）',
+  'Step1/Step2 面值永久有效提示：橙字 #FF7043 + 信息图标',
+  '列表卡面：权益区「期限」区块仅展示期限值（1年/永久有效等；纯储值卡为永久有效）',
+  '列表卡面：期限值改用思源黑体（Source Han Sans SC），不再使用数字字体',
 ];
 
 const STATS_HELP_ITEMS = [
@@ -2145,7 +2170,7 @@ const QUICK_TEMPLATES = [
   {
     id: 'vip_combo',
     title: '尊享组合',
-    desc: '充2000送500 · 三项权益',
+    desc: '充2000送500 · 10项权益折叠演示',
     icon: '👑',
     preset: {
       name: '尊享组合卡',
@@ -2158,10 +2183,25 @@ const QUICK_TEMPLATES = [
         { id: 'demo_vip_wash', name: '洗剪吹', purchaseQty: 10, giftQty: 0, unlimited: false },
         { id: 'demo_vip_scalp', name: '头皮护理', purchaseQty: 3, giftQty: 0, unlimited: false },
         { id: 'demo_vip_style', name: '时尚造型', purchaseQty: 2, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_fine_cut', name: '精致剪发', purchaseQty: 5, giftQty: 1, unlimited: false },
+        { id: 'demo_vip_wash_blow', name: '时尚洗吹', purchaseQty: 8, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_deep_nourish', name: '深层滋养', purchaseQty: 4, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_morgan', name: '摩根烫', purchaseQty: 2, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_lady_style', name: '女士造型', purchaseQty: 3, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_kids_cut', name: '儿童剪发', purchaseQty: 5, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_head_spa', name: '头疗', purchaseQty: 2, giftQty: 1, unlimited: false },
       ],
       memberPrices: {
         '烫发': { tickIndex: 17 },
         '染发': { mode: 'fixed', amount: '299' },
+        '洗剪吹': { tickIndex: 16 },
+        '精致剪发': { tickIndex: 15 },
+        '时尚洗吹': { tickIndex: 18 },
+        '漂发': { mode: 'fixed', amount: '238' },
+        '头皮护理': { tickIndex: 14 },
+        '深层滋养': { tickIndex: 16 },
+        '蛋白矫正': { tickIndex: 17 },
+        '电棒烫': { mode: 'fixed', amount: '368' },
       },
       cardColor: 'gold',
     },
@@ -2297,6 +2337,13 @@ const DEMO_TEMPLATE_STATS = {
       '洗剪吹': { consumed: 92, remaining: 18 },
       '头皮护理': { consumed: 18, remaining: 4 },
       '时尚造型': { consumed: 8, remaining: 1 },
+      '精致剪发': { consumed: 45, remaining: 12 },
+      '时尚洗吹': { consumed: 62, remaining: 20 },
+      '深层滋养': { consumed: 15, remaining: 8 },
+      '摩根烫': { consumed: 6, remaining: 3 },
+      '女士造型': { consumed: 22, remaining: 9 },
+      '儿童剪发': { consumed: 30, remaining: 15 },
+      '头疗': { consumed: 9, remaining: 4 },
     },
   },
   demo_new_first: {
@@ -3991,16 +4038,79 @@ function getTemplateFaceTotal(tpl) {
   return purchase + gift;
 }
 
+let balanceFieldSyncLock = null;
+
 function wireFaceValueInput() {
   const el = document.getElementById('fFaceValue');
   if (!el || el.dataset.faceValueWired) return;
   el.dataset.faceValueWired = '1';
   const sync = () => {
     clampNonNegativeAmountInput(el);
-    syncGiftCalculated();
+    syncBalanceFromFace();
   };
   el.addEventListener('input', sync);
   el.addEventListener('change', sync);
+}
+
+function wireGiftAmountInput() {
+  const el = document.getElementById('fGiftAmount');
+  if (!el || el.dataset.giftAmountWired) return;
+  el.dataset.giftAmountWired = '1';
+  const sync = () => {
+    clampNonNegativeAmountInput(el);
+    syncBalanceFromGift();
+  };
+  el.addEventListener('input', sync);
+  el.addEventListener('change', sync);
+}
+
+function readBalancePurchase() {
+  return parseAmount(document.getElementById('fRecharge')?.value);
+}
+
+function syncBalanceFromFace() {
+  if (balanceFieldSyncLock === 'gift') return;
+  balanceFieldSyncLock = 'face';
+  const giftEl = document.getElementById('fGiftAmount');
+  const faceEl = document.getElementById('fFaceValue');
+  if (!giftEl || !faceEl || !state.benefits.balance) {
+    balanceFieldSyncLock = null;
+    return;
+  }
+  const purchase = readBalancePurchase();
+  const faceRaw = faceEl.value ?? '';
+  if (!String(faceRaw).trim()) {
+    giftEl.value = '';
+  } else {
+    const face = parseAmount(faceRaw);
+    giftEl.value = formatGiftAmountInput(Math.max(0, face - purchase));
+  }
+  balanceFieldSyncLock = null;
+  syncColorPreview();
+}
+
+function syncBalanceFromGift() {
+  if (balanceFieldSyncLock === 'face') return;
+  balanceFieldSyncLock = 'gift';
+  const giftEl = document.getElementById('fGiftAmount');
+  const faceEl = document.getElementById('fFaceValue');
+  if (!giftEl || !faceEl || !state.benefits.balance) {
+    balanceFieldSyncLock = null;
+    return;
+  }
+  const purchase = readBalancePurchase();
+  const gift = parseAmount(giftEl.value);
+  faceEl.value = formatGiftAmountInput(purchase + gift);
+  balanceFieldSyncLock = null;
+  syncColorPreview();
+}
+
+function syncBalanceFields() {
+  syncBalanceFromFace();
+}
+
+function syncGiftCalculated() {
+  syncBalanceFromFace();
 }
 
 function parseAmount(str) {
@@ -4008,49 +4118,22 @@ function parseAmount(str) {
   return Number.isFinite(n) ? n : 0;
 }
 
-function syncGiftCalculated() {
-  const giftEl = document.getElementById('giftCalculated');
-  if (!giftEl) return;
-  if (!state.benefits.balance) {
-    giftEl.textContent = '—';
-    giftEl.classList.remove('has-val');
-    return;
-  }
-  const purchase = parseAmount(document.getElementById('fRecharge')?.value);
-  const face = parseAmount(document.getElementById('fFaceValue')?.value);
-  if (!document.getElementById('fFaceValue')?.value.trim() && !purchase) {
-    giftEl.textContent = '—';
-    giftEl.classList.remove('has-val');
-    return;
-  }
-  const gift = face - purchase;
-  giftEl.textContent = formatMoneyDisplay(gift);
-  giftEl.classList.add('has-val');
-  giftEl.classList.toggle('is-warn', gift < 0);
-}
-
 function syncStep2BalanceFields() {
   if (!state.benefits.balance) return;
   const faceEl = document.getElementById('fFaceValue');
   if (!faceEl) return;
   if (faceEl.value.trim() === '') {
-    const purchase = parseAmount(document.getElementById('fRecharge')?.value);
+    const purchase = readBalancePurchase();
     if (purchase) faceEl.value = String(purchase);
   }
-  syncGiftCalculated();
+  syncBalanceFromFace();
 }
 
 function validateBalanceAmounts() {
   if (!state.benefits.balance) return true;
-  const purchase = parseAmount(document.getElementById('fRecharge')?.value);
   const faceRaw = document.getElementById('fFaceValue')?.value ?? '';
-  if (!String(faceRaw).trim()) {
+  if (!String(faceRaw).trim() && faceRaw !== 0 && faceRaw !== '0') {
     showToast('请填写面值金额', true);
-    return false;
-  }
-  const face = parseAmount(faceRaw);
-  if (face < purchase) {
-    showToast('面值金额不能小于购买金额', true);
     return false;
   }
   return true;
@@ -4189,8 +4272,7 @@ function syncCardThemePreview() {
   const purchase = parseAmount(document.getElementById('fRecharge')?.value);
   let giftAmount = '';
   if (state.benefits.balance) {
-    const face = parseAmount(document.getElementById('fFaceValue')?.value);
-    giftAmount = formatGiftAmountInput(face - purchase);
+    giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
   }
   const draft = {
     recharge: document.getElementById('fRecharge')?.value.trim() || '',
@@ -4264,6 +4346,8 @@ function applyBenefitDiff(oldB, newB) {
   if (oldB.balance && !newB.balance) {
     const faceEl = document.getElementById('fFaceValue');
     if (faceEl) faceEl.value = '';
+    const giftEl = document.getElementById('fGiftAmount');
+    if (giftEl) giftEl.value = '';
   }
   if (oldB.projectDiscount && !newB.projectDiscount) {
     state.memberPrices = {};
@@ -4605,6 +4689,17 @@ function renderCardSection(title, lineHtmlList) {
   </div>`;
 }
 
+function isBalanceOnlyCard(tpl) {
+  const b = tpl?.benefits || {};
+  return !!b.balance && !b.timesOrValidity && !b.projectDiscount;
+}
+
+function formatListCardValidity(tpl) {
+  if (templateHasTimedBenefits(tpl)) return formatCardValidity(tpl);
+  if (isBalanceOnlyCard(tpl)) return '永久有效';
+  return '—';
+}
+
 function renderCardFacePanel(tpl) {
   const sections = [];
   const benefits = tpl.benefits || {};
@@ -4635,9 +4730,14 @@ function renderCardFacePanel(tpl) {
     sections.push(renderCardSectionBlock('折扣', renderCollapsibleItemGrid(cells)));
   }
 
-  if (!sections.length) {
-    return '<div class="member-card-item__panel"><p class="member-card-item__empty">暂无权益信息</p></div>';
-  }
+  const validityText = formatListCardValidity(tpl);
+  const validityValClass = templateHasTimedBenefits(tpl) || isBalanceOnlyCard(tpl)
+    ? 'member-card-item__line-val is-validity'
+    : 'member-card-item__line-val is-validity is-muted';
+  sections.push(renderCardSection('期限', [
+    `<span class="${validityValClass}">${escapeHtml(validityText)}</span>`,
+  ]));
+
   return `<div class="member-card-item__panel">${sections.join('')}</div>`;
 }
 
@@ -4993,9 +5093,7 @@ function getFormData() {
   const memberPrices = normalizeMemberPricesFromTpl(state.memberPrices);
   let giftAmount = '';
   if (state.benefits.balance) {
-    const purchase = parseAmount(document.getElementById('fRecharge').value);
-    const face = parseAmount(document.getElementById('fFaceValue').value);
-    giftAmount = formatGiftAmountInput(face - purchase);
+    giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
   }
   return sanitizeTemplatePayload({
     name: document.getElementById('fName').value.trim(),
@@ -5015,13 +5113,16 @@ function loadPresetIntoForm(p) {
   document.getElementById('fName').value = p.name || '';
   document.getElementById('fRecharge').value = p.recharge || '';
   const faceEl = document.getElementById('fFaceValue');
+  const giftEl = document.getElementById('fGiftAmount');
   if (faceEl) {
     if (p.benefits?.balance) {
-      const total = getTemplateFaceTotal(p);
-      faceEl.value = total ? String(total) : '';
+      faceEl.value = String(getTemplateFaceTotal(p));
     } else {
       faceEl.value = '';
     }
+  }
+  if (giftEl) {
+    giftEl.value = p.benefits?.balance ? formatGiftAmountInput(p.giftAmount ?? '') : '';
   }
   state.audience = normalizeAudience(p.audience);
   state.benefits = { ...(p.benefits || emptyBenefits()) };
@@ -5039,6 +5140,8 @@ function clearFormFields() {
   document.getElementById('fRecharge').value = '';
   const faceEl = document.getElementById('fFaceValue');
   if (faceEl) faceEl.value = '';
+  const giftEl = document.getElementById('fGiftAmount');
+  if (giftEl) giftEl.value = '';
   state.audience = ['all'];
   state.projectItems = [];
   state.memberPrices = {};
@@ -6520,9 +6623,10 @@ document.querySelectorAll('#listShelfSeg [data-shelf-tab]').forEach(btn => {
 document.getElementById('fName').addEventListener('input', syncColorPreview);
 document.getElementById('fRecharge').addEventListener('input', () => {
   syncColorPreview();
-  syncGiftCalculated();
+  syncBalanceFromFace();
 });
 wireFaceValueInput();
+wireGiftAmountInput();
 wireNonNegativeAmountInputs(document);
 wireAmountKeypadInputs(document);
 wireAmountKeypadControls();
