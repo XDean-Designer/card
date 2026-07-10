@@ -174,12 +174,12 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       <div class="block">
         <h3><span class="dot rec"></span>锁定判定</h3>
         <ul>
-          <li><strong>可编辑</strong>：该模板 <code>有效卡 = 0</code>（无未退卡且卡级未过期的持卡）。</li>
-          <li><strong>不可编辑</strong>：该模板 <code>有效卡 &gt; 0</code>。</li>
+          <li><strong>可编辑</strong>：该模板 <code>当前有效 = 0</code>（无未退卡且卡级未过期的持卡）。</li>
+          <li><strong>不可编辑</strong>：该模板 <code>当前有效 &gt; 0</code>。</li>
           <li><strong>重新解锁</strong>：全部持卡已退卡，或全部持卡已因到期/退卡变为非有效后，模板恢复可编辑。</li>
-          <li><strong>不计入锁定</strong>：历史「办卡人数」、已退卡记录、已失效（未退卡）的持卡均不触发锁定；<strong>仅以当前有效卡数量为准</strong>。</li>
+          <li><strong>不计入锁定</strong>：历史「办卡人数」、已退卡记录、已失效（未退卡）的持卡均不触发锁定；<strong>仅以当前有效数量为准</strong>。</li>
         </ul>
-        <div class="callout info"><strong>与运营指标对齐：</strong>锁定条件与详情页「有效卡」统计一致（未退卡且卡级未过期）。</div>
+        <div class="callout info"><strong>与运营指标对齐：</strong>锁定条件与详情页「当前有效」统计一致（未退卡且卡级未过期）。</div>
       </div>
 
       <div class="block">
@@ -202,8 +202,8 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <div class="mermaid-box">编辑锁定决策
 
   打开模板详情
-    ├─ 有效卡 = 0 → 「编辑」可用 → 进入 Step1–3 修改并保存
-    └─ 有效卡 &gt; 0 → 「编辑」置灰
+    ├─ 当前有效 = 0 → 「编辑」可用 → 进入 Step1–3 修改并保存
+    └─ 当前有效 &gt; 0 → 「编辑」置灰
           提示：已有持卡，不可编辑；请克隆后修改
           可操作：克隆 / 下架 / 查看 / 已持卡管理</div>
       </div>
@@ -211,7 +211,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       <div class="block">
         <h3><span class="dot rec"></span>界面表现</h3>
         <ul>
-          <li>详情页保留「编辑」按钮；<code>有效卡 &gt; 0</code> 时按钮<strong>置灰不可点</strong>。</li>
+          <li>详情页保留「编辑」按钮；<code>当前有效 &gt; 0</code> 时按钮<strong>置灰不可点</strong>。</li>
           <li>置灰态提示文案：<strong>「已有持卡，不可编辑；请克隆后修改」</strong>（点击或 hover 展示均可）。</li>
           <li>「克隆」入口保持可用，与编辑按钮并列或置于同一操作区。</li>
         </ul>
@@ -277,7 +277,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
     └─ 折扣权益[]（仅折扣规则，随卡到期）
 
 卡到期 → 项目/折扣不可用；面值仍可消费与退卡</div>
-        <div class="callout ok"><strong>闭环要点：</strong>「有效卡」统计仍看是否退卡；含项目/折扣时另看卡级是否过期。面值区展示「永久有效」，期限行仅展示给项目/折扣。</div>
+        <div class="callout ok"><strong>闭环要点：</strong>「当前有效」统计仍看是否退卡；含项目/折扣时另看卡级是否过期。面值区展示「永久有效」，期限行仅展示给项目/折扣。</div>
       </div>
 
       <div class="block">
@@ -294,7 +294,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             <div class="scheme-head"><span class="name">到期当日 · 硬失效（无宽限）</span></div>
             <p>卡级到期日当天 0 点（或营业日规则）起，<strong>项目次数与折扣</strong>不可核销；<strong>面值余额仍可消费</strong>。</p>
             <p><strong>不设宽限期</strong>；到期前可通过消息提醒，但不延长可用期。</p>
-            <p class="pros">规则简单、与「有效卡」统计一致；减少到期后争议消费。</p>
+            <p class="pros">规则简单、与「当前有效」统计一致；减少到期后争议消费。</p>
             <p class="cons">到期日当天仍想消费的客人须先延期；对忘记续期的体验较硬。</p>
           </div>
         </div>
@@ -724,7 +724,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         </div>
         <ul style="margin-top:12px">
           <li><strong>人工确认</strong>：店员可下调 <code>实际退款</code> 并必填原因；高于建议需授权（原型未实现）。</li>
-          <li><strong>退卡后</strong>：持卡失效、权益清零、写退卡流水，联动「有效卡」等运营指标。</li>
+          <li><strong>退卡后</strong>：持卡失效、权益清零、写退卡流水，联动「当前有效」等运营指标。</li>
         </ul>
         <div class="mermaid-box">退卡流程（统一分摊池 · 原型）
 

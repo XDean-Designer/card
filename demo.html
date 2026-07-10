@@ -2161,7 +2161,7 @@ const OPTIMIZATION_LOG = [
   '选择项目/折扣项目：正向/反选 PageTabs；当前 Tab 标题下居中显示「已选 N 项」',
   '折扣项目列表：补全左右边距；点「全部」展开统一折扣设置，不再预填 8.5 折',
   'Toast 对齐设计规范：#333 90% 底 · 14px/20px · 左右 16px 上下 10px · 2.5s',
-  '演示数据：新增「可编辑演示卡」（无持卡 · 有效卡 0 · 可进编辑流程）',
+  '演示数据：新增「可编辑演示卡」（无持卡 · 当前有效 0 · 可进编辑流程）',
   '用卡策略 Step3：四选项标题旁 ⓘ 图标 · 居中弹窗展示计算方法（白话+公式要点）',
   '卡面优化：项目/折扣双列展示 · 超过 4 条默认折叠 · 详情卡面+运营数据可展开',
   '折扣「全部」：取消部分项目后，其余已选项目继承统一折扣；再次开「全部」用 batch 草稿覆盖',
@@ -2184,7 +2184,7 @@ const STATS_HELP_ITEMS = [
   { term: '办卡次数', def: '累计办卡笔数；同一顾客多次办卡分别计次。' },
   { term: '办卡人数', def: '办过该卡模板的顾客总人数，含补录老卡人数。' },
   { term: '持卡余额', def: '当前所有有效持卡账户余额合计，含赠送余额；仅配置面值权益时展示。' },
-  { term: '有效卡', def: '当前仍有效的持卡数量（未退卡且卡级未过期），不含已失效、已退卡。' },
+  { term: '当前有效', def: '当前仍有效的持卡数量（未退卡且卡级未过期），不含已失效、已退卡。' },
   { term: '卡有效期', def: '模板级有效期，仅约束项目与折扣权益；面值永久有效，不受卡级到期影响。' },
   { term: '消费次数（含赠送）', def: '按项目统计，该项目已被消费的次数，含赠送次数。' },
   { term: '剩余次数（含赠送）', def: '按项目统计，该项目当前仍可使用的次数，含赠送次数；不限次项目显示「不限次」。' },
@@ -2349,7 +2349,7 @@ const QUICK_TEMPLATES = [
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: true, timesOrValidity: false, projectDiscount: false },
       cardColor: 'teal',
-      cardDesc: '演示用：有效卡为 0，详情页「编辑」可正常进入修改',
+      cardDesc: '演示用：当前有效为 0，详情页「编辑」可正常进入修改',
     },
   },
 ];
@@ -4986,7 +4986,7 @@ function renderDetailStatsList(t) {
   if (t.benefits?.balance) {
     html += renderDetailStatRow('持卡余额', formatMoneyDisplay(s.totalBalance ?? 0), true);
   }
-  html += renderDetailStatRow('有效卡', String(s.validCardCount ?? 0), false);
+  html += renderDetailStatRow('当前有效', String(s.validCardCount ?? 0), false);
   html += '</div>';
 
   if (t.benefits?.timesOrValidity) {
