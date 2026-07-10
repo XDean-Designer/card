@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>剑琅联盟 · 会员卡演示</title>
+<style>
+:root {
+  --brand: #F32F41; --brand-soft: #FFF2F2; --brand-border: #FFD5D9;
+  --bg: #F7F7F7; --card: #fff; --text: #333; --muted: #929292; --border: #D7D7D5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6; padding: 32px 20px 48px;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+.badge {
+  display: inline-block; font-size: 12px; font-weight: 600; color: var(--brand);
+  background: var(--brand-soft); border: 1px solid var(--brand-border);
+  padding: 4px 10px; border-radius: 4px; margin-bottom: 10px;
+}
+h1 { font-size: 22px; margin-bottom: 8px; }
+.lead { font-size: 14px; color: var(--muted); margin-bottom: 24px; max-width: 560px; }
+.cards { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  display: block; padding: 16px 18px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s;
+}
+.card:hover { border-color: var(--brand-border); box-shadow: 0 2px 8px rgba(243,47,65,.08); }
+.card.is-primary { border-color: var(--brand-border); background: linear-gradient(135deg, #fff 0%, var(--brand-soft) 100%); }
+.card__title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.card__desc { font-size: 13px; color: var(--muted); }
+.note {
+  margin-top: 24px; padding: 12px 14px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; font-size: 12px; color: var(--muted); line-height: 1.65;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">GitHub Pages · 静态演示</span>
+  <h1>剑琅联盟 · 会员卡</h1>
+  <p class="lead">交互原型与逻辑梳理。桌面端打开「权益组合版」，左侧功能链路可跳转各页面；首次使用请点「有数据」。</p>
+  <div class="cards">
+    <a class="card is-primary" href="demo.html">
+      <div class="card__title">会员卡 · 权益组合版</div>
+      <div class="card__desc">三步创建、列表/详情、办卡、已持卡管理、退卡估值等完整交互</div>
+    </a>
+    <a class="card" href="logic.html">
+      <div class="card__title">会员卡逻辑梳理</div>
+      <div class="card__desc">Q1–Q4 规则、用卡策略、场景算例与退卡推演</div>
+    </a>
+  </div>
+  <p class="note">设计规范：<a href="https://xdean-designer.github.io/jianlang-design-spec/" target="_blank" rel="noopener noreferrer">剑琅联盟设计规范</a></p>
+</div>
+</body>
+</html>
