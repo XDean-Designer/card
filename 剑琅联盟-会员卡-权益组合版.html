@@ -673,7 +673,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .picker-item--proj { justify-content: space-between; gap: 12px; cursor: pointer; }
 .picker-item--select-all { font-weight: 600; border-bottom: 1px solid var(--border) !important; }
 .proj-item-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
-.proj-item-name { flex: 1; min-width: 0; font-size: 14px; }
+.proj-item-name { flex: 1; min-width: 0; font-size: 14px; display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .proj-item-price { font-size: 13px; color: var(--text-sec); font-variant-numeric: tabular-nums; flex-shrink: 0; }
 .proj-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0; }
 .proj-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -992,6 +992,17 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .proj-pick-block--all .proj-item-name { font-weight: 600; }
 .proj-pick-sub { display: block; font-size: 11px; color: var(--text-sec); margin-top: 2px; }
 .proj-pick-block:last-child { border-bottom: none; }
+.proj-pick-mode-seg { margin: 12px 16px 8px; }
+.proj-pick-summary {
+  padding: 0 16px 10px; font-size: 12px; color: var(--text-sec); line-height: 1.45;
+}
+.proj-pick-block--excluded .proj-item-name { color: var(--text-sec); }
+.proj-pick-block--excluded .proj-item-price { opacity: .72; }
+.proj-pick-exclude-tag {
+  flex-shrink: 0; font-size: 10px; font-weight: 600; line-height: 1.2; color: var(--switch-qty-on);
+  background: rgba(255, 112, 67, .12); border-radius: 999px; padding: 2px 8px; margin-left: 6px;
+}
+.proj-pick-block--excluded .proj-switch__track { opacity: .85; }
 .proj-qty-dual { background: var(--bg-page); padding-left: 12px; }
 .proj-qty-dual.hidden { display: none !important; }
 .proj-qty-panel {
@@ -1432,7 +1443,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title">选择折扣项目</span>
           </div>
-          <div class="mp-tip"><svg class="tip-info-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span>打开「全部」可统一设置折扣；取消部分项目后，其余已选项目将继承该统一折扣；也可单独打开项目分别设置。</span></div>
+          <div class="mp-tip" id="mpPickTip"><svg class="tip-info-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span id="mpPickTipText">打开「全部」可统一设置折扣；取消部分项目后，其余已选项目将继承该统一折扣；也可单独打开项目分别设置。</span></div>
           <div class="page-body" id="memberPriceProjectList"></div>
           <div class="bottom-bar bottom-bar--dual">
             <div class="bottom-bar__action">
@@ -2132,6 +2143,7 @@ const OPTIMIZATION_LOG = [
   '修复延期费用：金额键盘 z-index 高于办卡弹窗；未选时长前禁用费用框并自动折算',
   '延期收费范围：凡含折扣权益的卡均展示费用；组合卡按名义价值池折扣权重分摊购卡价',
   '选择项目/折扣项目：开关多选；全部联动；单独开关联动展开设置；确定后整表替换',
+  '选择项目/折扣项目：正向/反选分段；反选默认全适用、开关 ON 为排除；折扣可配合全部统一设折',
   '折扣项目列表：补全左右边距；点「全部」展开统一折扣设置，不再预填 8.5 折',
   'Toast 对齐设计规范：#333 90% 底 · 14px/20px · 左右 16px 上下 10px · 2.5s',
   '演示数据：新增「可编辑演示卡」（无持卡 · 有效卡 0 · 可进编辑流程）',
@@ -2391,12 +2403,14 @@ const state = {
   pickerProjectDrafts: {},
   pickerProjectExpanded: {},
   pickerAllOn: false,
+  pickerSelectionMode: 'include',
   mpPickerOn: {},
   mpPickerDrafts: {},
   mpPickerExpanded: {},
   mpPickerAllOn: false,
   mpPickerAllExpanded: false,
   mpPickerBatchDraft: null,
+  mpPickerSelectionMode: 'include',
   cardValidityKey: 'permanent',
   cardValidityDays: null,
   cardValidityMonths: null,
@@ -5143,6 +5157,7 @@ function clearFormFields() {
   state.pickerProjectDrafts = {};
   state.pickerProjectExpanded = {};
   state.pickerAllOn = false;
+  state.pickerSelectionMode = 'include';
   state.mpPickerOn = {};
   state.mpPickerDrafts = {};
   state.mpPickerExpanded = {};
@@ -5920,14 +5935,116 @@ function inheritMpBatchDraftToRemaining() {
   const batchRule = normalizeDiscountRule(state.mpPickerBatchDraft);
   if (!isMpDiscountRuleConfigured(batchRule)) return;
   PROJECTS.forEach(p => {
-    if (state.mpPickerOn[p]) {
+    const included = isMpPickerExclude() ? !state.mpPickerOn[p] : !!state.mpPickerOn[p];
+    if (included) {
       state.mpPickerDrafts[p] = normalizeDiscountRule(batchRule);
       state.mpPickerExpanded[p] = false;
     }
   });
 }
 
+function isProjectPickerExclude() {
+  return state.pickerSelectionMode === 'exclude';
+}
+
+function isMpPickerExclude() {
+  return state.mpPickerSelectionMode === 'exclude';
+}
+
+function getProjectPickerIncluded() {
+  if (isProjectPickerExclude()) return PROJECTS.filter(p => !state.pickerProjectOn[p]);
+  return PROJECTS.filter(p => state.pickerProjectOn[p]);
+}
+
+function getMpPickerIncluded() {
+  if (isMpPickerExclude()) return PROJECTS.filter(p => !state.mpPickerOn[p]);
+  return PROJECTS.filter(p => state.mpPickerOn[p]);
+}
+
+function projPickModeSegHtml(pickerType) {
+  const cur = pickerType === 'project' ? state.pickerSelectionMode : state.mpPickerSelectionMode;
+  return `<div class="sub-seg proj-pick-mode-seg" data-pick-mode-seg="${pickerType}" role="tablist">
+    <button type="button" class="${cur === 'include' ? 'on' : ''}" data-pick-mode="include">正向选择</button>
+    <button type="button" class="${cur === 'exclude' ? 'on' : ''}" data-pick-mode="exclude">反向选择</button>
+  </div>`;
+}
+
+function projPickSummaryHtml(pickerType) {
+  const excludeMode = pickerType === 'project' ? isProjectPickerExclude() : isMpPickerExclude();
+  const onMap = pickerType === 'project' ? state.pickerProjectOn : state.mpPickerOn;
+  const excludedCount = excludeMode
+    ? PROJECTS.filter(p => onMap[p]).length
+    : PROJECTS.filter(p => !onMap[p]).length;
+  const includedCount = PROJECTS.length - excludedCount;
+  const lead = excludeMode ? '默认全适用，开关 ON 为排除' : '开关 ON 为选中';
+  return `<div class="proj-pick-summary">${lead} · 适用 ${includedCount} 项 · 排除 ${excludedCount} 项</div>`;
+}
+
+function syncMpPickTipText() {
+  const el = document.getElementById('mpPickTipText');
+  if (!el) return;
+  el.textContent = isMpPickerExclude()
+    ? '反向选择：默认全适用，勾选要排除的项目。打开「全部」可统一设置折扣，再排除不需折扣的项目。'
+    : '打开「全部」可统一设置折扣；取消部分项目后，其余已选项目将继承该统一折扣；也可单独打开项目分别设置。';
+}
+
+function recalcProjectPickAllFlag() {
+  if (isProjectPickerExclude()) {
+    state.pickerAllOn = false;
+    return;
+  }
+  state.pickerAllOn = PROJECTS.length > 0 && PROJECTS.every(p => state.pickerProjectOn[p]);
+}
+
+function recalcMpPickAllFlag() {
+  if (isMpPickerExclude()) return;
+  state.mpPickerAllOn = PROJECTS.length > 0 && PROJECTS.every(p => state.mpPickerOn[p]);
+  if (!state.mpPickerAllOn) state.mpPickerAllExpanded = false;
+}
+
+function setPickerSelectionMode(pickerType, newMode) {
+  const modeKey = pickerType === 'project' ? 'pickerSelectionMode' : 'mpPickerSelectionMode';
+  if (state[modeKey] === newMode) return;
+  if (pickerType === 'project') {
+    PROJECTS.forEach(p => {
+      state.pickerProjectOn[p] = !state.pickerProjectOn[p];
+    });
+    state.pickerProjectExpanded = {};
+    state.pickerSelectionMode = newMode;
+    recalcProjectPickAllFlag();
+    renderProjectList();
+    return;
+  }
+  const keepBatch = state.mpPickerAllOn;
+  PROJECTS.forEach(p => {
+    state.mpPickerOn[p] = !state.mpPickerOn[p];
+  });
+  state.mpPickerExpanded = {};
+  state.mpPickerSelectionMode = newMode;
+  if (newMode === 'exclude' && keepBatch) {
+    PROJECTS.forEach(p => { state.mpPickerOn[p] = false; });
+    state.mpPickerAllOn = true;
+    state.mpPickerAllExpanded = true;
+    inheritMpBatchDraftToRemaining();
+  } else {
+    recalcMpPickAllFlag();
+  }
+  syncMpPickTipText();
+  renderMemberPriceProjectList();
+}
+
+function wireProjPickModeSeg(container, pickerType) {
+  container.querySelectorAll(`[data-pick-mode-seg="${pickerType}"] [data-pick-mode]`).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.pickMode;
+      if (!next) return;
+      setPickerSelectionMode(pickerType, next);
+    });
+  });
+}
+
 function initProjectPickerFromItems() {
+  state.pickerSelectionMode = 'include';
   state.pickerProjectOn = {};
   state.pickerProjectDrafts = {};
   state.pickerProjectExpanded = {};
@@ -5944,6 +6061,7 @@ function initProjectPickerFromItems() {
 }
 
 function initMemberPricePickerFromState() {
+  state.mpPickerSelectionMode = 'include';
   state.mpPickerOn = {};
   state.mpPickerDrafts = {};
   state.mpPickerExpanded = {};
@@ -5967,8 +6085,12 @@ function initMemberPricePickerFromState() {
 }
 
 function projPickAllRowHtml(mode) {
+  if (mode === 'project' && isProjectPickerExclude()) return '';
   const allOn = mode === 'project' ? state.pickerAllOn : state.mpPickerAllOn;
-  const sub = mode === 'project' ? '一次选中所有项目' : '选中所有项目并设置统一折扣';
+  let sub = mode === 'project' ? '一次选中所有项目' : '选中所有项目并设置统一折扣';
+  if (mode === 'discount' && isMpPickerExclude()) {
+    sub = '设置统一折扣，再排除不需折扣的项目';
+  }
   const allExpanded = mode === 'discount' && allOn && state.mpPickerAllExpanded;
   const batchPanel = allExpanded
     ? `<div class="proj-config-panel">${buildMpConfigBlockHtml(MP_BATCH_KEY, getMpPickBatchDraft())}</div>`
@@ -5990,6 +6112,7 @@ function projPickSwitchHtml(value, checked, extraAttrs = '') {
 }
 
 function setProjectPickAll(checked) {
+  if (isProjectPickerExclude()) return;
   state.pickerAllOn = checked;
   if (checked) {
     PROJECTS.forEach(p => {
@@ -6008,20 +6131,23 @@ function setMpPickAll(checked) {
   state.mpPickerAllOn = checked;
   if (checked) {
     if (!state.mpPickerBatchDraft) state.mpPickerBatchDraft = defaultMemberPricePickRule();
-    const batchRule = normalizeDiscountRule(state.mpPickerBatchDraft);
-    PROJECTS.forEach(p => {
-      state.mpPickerOn[p] = true;
-      state.mpPickerExpanded[p] = false;
-      state.mpPickerDrafts[p] = normalizeDiscountRule(batchRule);
-    });
     state.mpPickerAllExpanded = true;
+    inheritMpBatchDraftToRemaining();
+    if (!isMpPickerExclude()) {
+      PROJECTS.forEach(p => {
+        state.mpPickerOn[p] = true;
+        state.mpPickerExpanded[p] = false;
+      });
+    }
   } else {
-    PROJECTS.forEach(p => {
-      state.mpPickerOn[p] = false;
-      state.mpPickerExpanded[p] = false;
-    });
     state.mpPickerAllExpanded = false;
     state.mpPickerBatchDraft = null;
+    if (!isMpPickerExclude()) {
+      PROJECTS.forEach(p => {
+        state.mpPickerOn[p] = false;
+        state.mpPickerExpanded[p] = false;
+      });
+    }
   }
 }
 
@@ -6088,6 +6214,12 @@ function wireProjPickList(container, mode) {
         if (mode === 'project') setProjectPickAll(checked);
         else setMpPickAll(checked);
       } else if (mode === 'project') {
+        if (isProjectPickerExclude()) {
+          state.pickerProjectOn[val] = checked;
+          recalcProjectPickAllFlag();
+          renderProjectList();
+          return;
+        }
         if (checked) {
           state.pickerProjectOn[val] = true;
           state.pickerProjectExpanded[val] = true;
@@ -6100,6 +6232,14 @@ function wireProjPickList(container, mode) {
         renderProjectList();
         return;
       } else {
+        if (isMpPickerExclude()) {
+          state.mpPickerOn[val] = checked;
+          if (!checked && state.mpPickerAllOn) {
+            state.mpPickerDrafts[val] = normalizeDiscountRule(getMpPickBatchDraft());
+          }
+          renderMemberPriceProjectList();
+          return;
+        }
         if (checked) {
           state.mpPickerOn[val] = true;
           if (!state.mpPickerAllOn) {
@@ -6160,7 +6300,10 @@ function wireProjPickList(container, mode) {
     });
   } else {
     if (state.mpPickerAllOn && state.mpPickerAllExpanded) {
-      wireMpConfigBlock(container, MP_BATCH_KEY, () => getMpPickBatchDraft(), rule => { state.mpPickerBatchDraft = rule; });
+      wireMpConfigBlock(container, MP_BATCH_KEY, () => getMpPickBatchDraft(), rule => {
+        state.mpPickerBatchDraft = rule;
+        inheritMpBatchDraftToRemaining();
+      });
     }
     PROJECTS.forEach(p => {
       if (!state.mpPickerOn[p] || !state.mpPickerExpanded[p] || state.mpPickerAllOn) return;
@@ -6169,22 +6312,29 @@ function wireProjPickList(container, mode) {
     wireNonNegativeAmountInputs(container);
     wireAmountKeypadInputs(container);
   }
+  wireProjPickModeSeg(container, mode);
 }
 
 function renderMemberPriceProjectList() {
+  syncMpPickTipText();
   const container = document.getElementById('memberPriceProjectList');
-  let html = projPickAllRowHtml('discount');
+  let html = projPickModeSegHtml('discount');
+  html += projPickSummaryHtml('discount');
+  html += projPickAllRowHtml('discount');
   PROJECTS.forEach(p => {
     const price = formatProjectPrice(p);
-    const isOn = !!state.mpPickerOn[p];
-    const expanded = isOn && !!state.mpPickerExpanded[p] && !state.mpPickerAllOn;
+    const excluded = isMpPickerExclude() && !!state.mpPickerOn[p];
+    const isOn = isMpPickerExclude() ? excluded : !!state.mpPickerOn[p];
+    const expanded = !isMpPickerExclude() && state.mpPickerOn[p] && !!state.mpPickerExpanded[p] && !state.mpPickerAllOn;
     const draft = getMpPickDraft(p);
-    const summary = isOn && !expanded && !state.mpPickerAllOn && isMpDiscountRuleConfigured(draft)
+    const summary = !isMpPickerExclude() && state.mpPickerOn[p] && !expanded && !state.mpPickerAllOn && isMpDiscountRuleConfigured(draft)
       ? formatMemberPriceDisplay(draft) : '';
-    html += `<div class="proj-pick-block" data-proj-block="${escapeAttr(p)}">
+    const blockClass = excluded ? ' proj-pick-block--excluded' : '';
+    const excludeTag = excluded ? '<span class="proj-pick-exclude-tag">排除</span>' : '';
+    html += `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
       <label class="picker-item picker-item--proj">
         <span class="proj-item-main">
-          <span class="proj-item-name">${escapeHtml(p)}</span>
+          <span class="proj-item-name">${escapeHtml(p)}${excludeTag}</span>
           ${price ? `<span class="proj-item-price">${price}${summary ? ` · ${escapeHtml(summary)}` : ''}</span>` : ''}
         </span>
         ${projPickSwitchHtml(p, isOn)}
@@ -6310,6 +6460,7 @@ function clearAllMemberPrices(stayOnList) {
   state.mpPickerAllOn = false;
   state.mpPickerAllExpanded = false;
   state.mpPickerBatchDraft = null;
+  state.mpPickerSelectionMode = 'include';
   syncMemberPriceDisplay();
   if (stayOnList) {
     initMemberPricePickerFromState();
@@ -6319,12 +6470,12 @@ function clearAllMemberPrices(stayOnList) {
 }
 
 function confirmMemberPriceList() {
-  const selected = PROJECTS.filter(p => state.mpPickerOn[p]);
+  const selected = getMpPickerIncluded();
   if (!selected.length) {
-    showToast('请至少选择一个折扣项目', true);
+    showToast('请至少保留一个折扣项目', true);
     return;
   }
-  if (state.mpPickerAllOn && selected.length === PROJECTS.length) {
+  if (state.mpPickerAllOn) {
     const batchRule = normalizeDiscountRule(getMpPickBatchDraft());
     if (!isMpDiscountRuleConfigured(batchRule)) {
       showToast('请设置全部项目的折扣', true);
@@ -6332,7 +6483,11 @@ function confirmMemberPriceList() {
       renderMemberPriceProjectList();
       return;
     }
-    state.memberPrices = { [MP_BATCH_KEY]: batchRule };
+    if (selected.length === PROJECTS.length) {
+      state.memberPrices = { [MP_BATCH_KEY]: batchRule };
+    } else {
+      state.memberPrices = Object.fromEntries(selected.map(p => [p, batchRule]));
+    }
     syncMemberPriceDisplay();
     returnToForm();
     return;
@@ -6394,17 +6549,22 @@ function projQtyStepperHtml(proj, kind, value, minVal) {
 
 function renderProjectList() {
   const container = document.getElementById('projectList');
-  let html = projPickAllRowHtml('project');
+  let html = projPickModeSegHtml('project');
+  html += projPickSummaryHtml('project');
+  html += projPickAllRowHtml('project');
   PROJECTS.forEach(p => {
     const price = formatProjectPrice(p);
-    const isOn = !!state.pickerProjectOn[p];
-    const expanded = isOn && !!state.pickerProjectExpanded[p];
+    const excluded = isProjectPickerExclude() && !!state.pickerProjectOn[p];
+    const isOn = isProjectPickerExclude() ? excluded : !!state.pickerProjectOn[p];
+    const expanded = !isProjectPickerExclude() && state.pickerProjectOn[p] && !!state.pickerProjectExpanded[p];
     const draft = getProjectPickDraft(p);
     const unlimited = !!draft.unlimited;
-    html += `<div class="proj-pick-block" data-proj-block="${escapeAttr(p)}">
+    const blockClass = excluded ? ' proj-pick-block--excluded' : '';
+    const excludeTag = excluded ? '<span class="proj-pick-exclude-tag">排除</span>' : '';
+    html += `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
       <label class="picker-item picker-item--proj">
         <span class="proj-item-main">
-          <span class="proj-item-name">${escapeHtml(p)}</span>
+          <span class="proj-item-name">${escapeHtml(p)}${excludeTag}</span>
           ${price ? `<span class="proj-item-price">${price}</span>` : ''}
         </span>
         ${projPickSwitchHtml(p, isOn)}
@@ -6435,14 +6595,17 @@ function renderProjectList() {
 }
 
 function confirmProjectPick() {
-  const selected = PROJECTS.filter(p => state.pickerProjectOn[p]);
+  const selected = getProjectPickerIncluded();
   if (!selected.length) {
-    showToast('请至少选择一个项目', true);
+    showToast('请至少保留一个项目', true);
     return;
   }
   const existingByName = Object.fromEntries(state.projectItems.map(i => [i.name, i]));
   for (const proj of selected) {
     const draft = getProjectPickDraft(proj);
+    if (!existingByName[proj] && !draft.unlimited && !(draft.purchaseQty || 0) && !(draft.giftQty || 0)) {
+      draft.purchaseQty = 1;
+    }
     if (!draft.unlimited && (draft.purchaseQty || 0) + (draft.giftQty || 0) <= 0) {
       showToast(`请为「${proj}」设置次数或选择不限次`, true);
       state.pickerProjectExpanded[proj] = true;
