@@ -183,7 +183,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item--shelved .member-card-compact { filter: saturate(.82) brightness(.96); }
 .member-card-compact__title {
   position: absolute; left: 16px; right: 108px; top: 50%; transform: translateY(-50%);
-  display: flex; align-items: center; justify-content: flex-start; gap: 4px; min-width: 0;
+  display: flex; align-items: center; justify-content: flex-start; gap: 6px; min-width: 0;
+}
+.member-card-compact__vip {
+  flex-shrink: 0; display: block; width: 40.56px; height: 15.64px;
 }
 .member-card-compact__title .member-card-compact__name {
   position: static; transform: none; left: auto; right: auto;
@@ -282,8 +285,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item:active { opacity: .95; }
 .member-card-compact { height: 48px; position: relative; overflow: hidden; background-size: cover; background-position: center; }
 .member-card-compact__name {
-  position: absolute; left: 16px; right: 108px; top: 50%; transform: translateY(-50%);
-  font-size: 15px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 15px; font-weight: 600; color: #fff;
 }
 .member-card-compact__price {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 2;
@@ -415,27 +417,49 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .benefit-expand-field__val { font-size: 13px; color: var(--brand); font-weight: 600; }
 .benefit-expand .proj-tag-list { padding: 2px 0 12px; }
 .benefit-expand .mp-tag-list { padding: 2px 0 12px; }
+.phone-shell--success {
+  background:
+    linear-gradient(180deg, rgba(83, 255, 114, 0.43) 0%, rgba(224, 251, 165, 0.43) 24.05%, rgba(247, 247, 247, 0.43) 48.1%),
+    #F7F7F7;
+}
+.phone-shell--success .status-bar { background: transparent; }
+#screen7, #screen8 { background: transparent; }
 .create-success-body {
-  display: flex; flex-direction: column; align-items: stretch;
-  padding: 24px 16px; text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 16px; text-align: center; gap: 20px;
 }
 .create-success-hero {
-  display: flex; justify-content: center; margin-bottom: 16px;
+  display: flex; justify-content: center; width: 100%;
 }
 .create-success-icon {
-  width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+  position: relative; width: 100%; height: 112px; flex-shrink: 0;
 }
-.create-success-icon svg { display: block; width: 56px; height: 56px; }
+.create-success-icon__glow-wrap {
+  position: absolute; left: 50%; top: 25px; transform: translateX(-50%);
+  width: 154px; height: 95px; pointer-events: none;
+}
+.create-success-icon__glow {
+  display: block; width: 100%; height: 100%;
+}
+.create-success-icon__mark-wrap {
+  position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
+  width: 112px; height: 112px; pointer-events: none;
+}
+.create-success-icon__mark {
+  display: block; width: 112px; height: 112px;
+  object-fit: contain;
+}
 .create-success-title {
-  font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 20px;
-  letter-spacing: .02em;
+  font-size: 20px; font-weight: 500; color: var(--text); margin: 0;
+  letter-spacing: .02em; line-height: 1.5; width: 100%;
 }
 .create-success-card-slot {
-  width: 100%; margin: 0 auto 16px; text-align: left; flex-shrink: 0;
+  width: 100%; text-align: left; flex-shrink: 0; padding-bottom: 16px;
 }
 .create-success-card-slot .member-card-item { cursor: default; pointer-events: none; flex-shrink: 0; }
 .create-success-desc {
-  font-size: 14px; color: var(--text-sec); line-height: 1.6; max-width: 300px; margin: 0 auto;
+  font-size: 16px; font-weight: 500; color: #7f7f7f;
+  line-height: 1.375; width: 100%; margin: 0;
 }
 .issue-member-row__avatar {
   width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
@@ -474,10 +498,11 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   height: 48px; border-radius: 0; box-shadow: none;
   background-size: cover; background-position: center;
 }
-.card-theme-preview-card .member-card-compact__name {
+.card-theme-preview-card .member-card-compact__title {
   position: absolute; left: 16px; right: 16px; top: 50%; transform: translateY(-50%);
+}
+.card-theme-preview-card .member-card-compact__name {
   font-size: 15px; font-weight: 600; color: #fff;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-theme-preview-card .member-card-item__panel { padding: 8px 12px 10px; }
 .color-preview-wrap { padding: 4px 14px 10px; }
@@ -509,8 +534,8 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .tpl-detail-head-unit { background: var(--card); margin-bottom: 12px; }
 .tpl-detail-head-unit .form-section { margin-bottom: 0; }
 .tpl-detail-head-unit .member-card-compact { width: 100%; }
-.tpl-detail-head-unit .member-card-compact__name { right: 148px; }
-.tpl-detail-head-unit .member-card-compact--shelved .member-card-compact__name { right: 196px; }
+.tpl-detail-head-unit .member-card-compact__title { right: 148px; }
+.tpl-detail-head-unit .member-card-compact--shelved .member-card-compact__title { right: 196px; }
 .duplicate-banner {
   display: flex; align-items: flex-start; gap: 10px;
   margin: 0; padding: 12px 16px; border-radius: 0; border: none;
@@ -1189,7 +1214,42 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .ruler--pill .discount-ruler__thumb:active { cursor: grabbing; transform: scale(1.08); }
 .ruler-block { padding: 0 0 4px; }
 .ruler-block .ruler--pill { padding-bottom: 38px; }
+
+/* Figma capture: ?figma=list-active | issue-success — phone-only */
+html.figma-capture-list-active,
+html.figma-capture-issue-success { --phone-scale: 1; }
+html.figma-capture-list-active body,
+html.figma-capture-issue-success body { background: var(--bg-page); }
+html.figma-capture-list-active .shell,
+html.figma-capture-issue-success .shell { max-width: none; margin: 0; padding: 0; display: block; }
+html.figma-capture-list-active .toolbar,
+html.figma-capture-issue-success .toolbar { display: none !important; }
+html.figma-capture-list-active .phone-label,
+html.figma-capture-issue-success .phone-label { display: none !important; }
+html.figma-capture-list-active .phone-scale-slot,
+html.figma-capture-issue-success .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
+html.figma-capture-list-active .phone-wrap,
+html.figma-capture-issue-success .phone-wrap { transform: none; }
+html.figma-capture-list-active .phone,
+html.figma-capture-issue-success .phone { height: auto; min-height: var(--phone-h); overflow: visible; border: none; }
+html.figma-capture-list-active .phone-shell,
+html.figma-capture-issue-success .phone-shell { height: auto; overflow: visible; }
+html.figma-capture-list-active .screen,
+html.figma-capture-issue-success .screen { overflow: visible; min-height: auto; flex: none; }
+html.figma-capture-list-active .page-body,
+html.figma-capture-issue-success .page-body { overflow: visible; flex: none; min-height: auto; }
+html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
+html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
+html.figma-capture-list-active .member-card-item__expand { display: none !important; }
 </style>
+<script>
+if (new URLSearchParams(location.search).get('figma') || location.hash.includes('figmacapture')) {
+  var figmaCaptureScript = document.createElement('script');
+  figmaCaptureScript.src = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+  figmaCaptureScript.async = true;
+  document.head.appendChild(figmaCaptureScript);
+}
+</script>
 </head>
 <body>
 <div class="shell">
@@ -1269,7 +1329,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
             <div class="card-theme-preview-slot">
               <div class="member-card-item card-theme-preview-card">
                 <div class="member-card-compact" id="colorPreviewCompact">
-                  <span class="member-card-compact__name" id="previewName">会员卡名称</span>
+                  <div class="member-card-compact__title">
+                    <img class="member-card-compact__vip" src="assets/member-card-vip.svg" alt="" width="41" height="16" aria-hidden="true">
+                    <span class="member-card-compact__name" id="previewName">会员卡名称</span>
+                  </div>
                   <span class="member-card-compact__price" id="previewPrice"><span class="member-card-compact__price-label">价格</span><span class="member-card-compact__price-val">—</span></span>
                 </div>
                 <div class="member-card-item__panel" id="cardThemePreviewPanel"></div>
@@ -1363,16 +1426,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
         </div>
 
         <div class="screen hidden" id="screen7">
-          <div class="page-title-bar"><span class="title">创建成功</span></div>
           <div class="page-body create-success-body">
             <div class="create-success-hero" aria-hidden="true">
               <div class="create-success-icon">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#2BA471"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="create-success-icon__glow-wrap" aria-hidden="true">
+                  <img class="create-success-icon__glow" src="assets/success-icon-glow.svg" alt="">
+                </div>
+                <div class="create-success-icon__mark-wrap" aria-hidden="true">
+                  <img class="create-success-icon__mark" src="assets/success-icon-3d.png" alt="" width="112" height="112">
+                </div>
               </div>
             </div>
             <p class="create-success-title">会员卡已创建</p>
-            <div class="create-success-card-slot" id="createSuccessCard"></div>
             <p class="create-success-desc" id="createSuccessDesc">已上架，可立即为会员办理</p>
+            <div class="create-success-card-slot" id="createSuccessCard"></div>
           </div>
           <div class="bottom-bar bottom-bar--dual">
             <div class="bottom-bar__action">
@@ -1384,16 +1451,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
         </div>
 
         <div class="screen hidden" id="screen8">
-          <div class="page-title-bar"><span class="title">办卡成功</span></div>
           <div class="page-body create-success-body">
             <div class="create-success-hero" aria-hidden="true">
               <div class="create-success-icon">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#2BA471"/><path d="M8 12.5l2.5 2.5L16 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="create-success-icon__glow-wrap" aria-hidden="true">
+                  <img class="create-success-icon__glow" src="assets/success-icon-glow.svg" alt="">
+                </div>
+                <div class="create-success-icon__mark-wrap" aria-hidden="true">
+                  <img class="create-success-icon__mark" src="assets/success-icon-3d.png" alt="" width="112" height="112">
+                </div>
               </div>
             </div>
             <p class="create-success-title">办卡成功</p>
-            <div class="create-success-card-slot" id="issueSuccessCard"></div>
             <p class="create-success-desc" id="issueSuccessDesc">—</p>
+            <div class="create-success-card-slot" id="issueSuccessCard"></div>
           </div>
           <div class="bottom-bar bottom-bar--dual">
             <div class="bottom-bar__action">
@@ -1412,7 +1483,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
           <div class="page-body page-body--detail">
             <div class="tpl-detail-head-unit">
               <div class="member-card-compact" id="tplDetailBar">
-                <span class="member-card-compact__name" id="tplDetailBarName">—</span>
+                <div class="member-card-compact__title">
+                  <img class="member-card-compact__vip" src="assets/member-card-vip.svg" alt="" width="41" height="16" aria-hidden="true">
+                  <span class="member-card-compact__name" id="tplDetailBarName">—</span>
+                </div>
                 <div class="detail-bar-actions">
                   <span class="detail-shelf-status hidden" id="tplDetailShelvedBadge">已下架</span>
                   <button type="button" class="detail-clone-btn hidden" id="btnDetailCloneTop">克隆</button>
@@ -2398,7 +2472,7 @@ const DEMO_TEMPLATE_STATS = {
 
 const CARD_COLORS = {
   brand_red: { label: '品牌红', gradient: 'linear-gradient(135deg, #F32F41 0%, #FF6B7A 100%)' },
-  gold: { label: '金棕', gradient: 'linear-gradient(135deg, #C9A227 0%, #E8D5A3 100%)' },
+  gold: { label: '金棕', gradient: 'linear-gradient(172.32deg, #D8993B 0%, #FFCF60 100%)' },
   blue: { label: '深蓝', gradient: 'linear-gradient(135deg, #1A3A5C 0%, #2E6BA8 100%)' },
   purple: { label: '紫罗兰', gradient: 'linear-gradient(135deg, #5B3A8C 0%, #9B7FD4 100%)' },
   teal: { label: '青绿', gradient: 'linear-gradient(135deg, #0D7377 0%, #4ECDC4 100%)' },
@@ -3694,6 +3768,8 @@ function showOnlyScreen(id) {
   document.querySelectorAll('.phone .screen').forEach(el => {
     el.classList.toggle('hidden', el.id !== id);
   });
+  const shell = document.querySelector('.phone-shell');
+  if (shell) shell.classList.toggle('phone-shell--success', id === 'screen7' || id === 'screen8');
   syncFlowMapFromAppState();
 }
 
@@ -4761,6 +4837,18 @@ function renderCardFacePanel(tpl) {
   return `<div class="member-card-item__panel">${sections.join('')}</div>`;
 }
 
+function cardVipIconHtml() {
+  return '<img class="member-card-compact__vip" src="assets/member-card-vip.svg" alt="" width="41" height="16" aria-hidden="true">';
+}
+
+function renderCardCompactTitleHtml(name, opts = {}) {
+  const tag = opts.shelved ? '<span class="member-card-compact__shelved-tag">已下架</span>' : '';
+  const nameSpan = opts.nameId
+    ? `<span class="member-card-compact__name" id="${escapeAttr(opts.nameId)}">${escapeHtml(name)}</span>`
+    : `<span class="member-card-compact__name">${escapeHtml(name)}</span>`;
+  return `<div class="member-card-compact__title">${cardVipIconHtml()}${nameSpan}${tag}</div>`;
+}
+
 function renderMemberCardItemHtml(t, opts = {}) {
   const showFooter = !!opts.showFooter;
   const showIssue = opts.showIssue !== false;
@@ -4777,12 +4865,7 @@ function renderMemberCardItemHtml(t, opts = {}) {
     : '';
   const rootAttrs = opts.templateIdAttr ? ` data-template-id="${escapeAttr(t.id)}"` : '';
   const shelvedClass = isShelved ? ' member-card-item--shelved' : '';
-  const nameBlock = isShelved
-    ? `<div class="member-card-compact__title">
-        <span class="member-card-compact__name">${escapeHtml(t.name)}</span>
-        <span class="member-card-compact__shelved-tag">已下架</span>
-      </div>`
-    : `<span class="member-card-compact__name">${escapeHtml(t.name)}</span>`;
+  const nameBlock = renderCardCompactTitleHtml(t.name, { shelved: isShelved });
   return `<div class="member-card-item${shelvedClass}"${rootAttrs}>
     <div class="member-card-compact" style="background:${grad}">
       ${nameBlock}
@@ -6680,6 +6763,28 @@ function syncDemoStateButtons() {
   document.getElementById('btnDemoFilled').classList.toggle('on', state.demoListMode === 'filled');
 }
 
+function applyFigmaCaptureListActive() {
+  document.documentElement.classList.add('figma-capture-list-active');
+  applyDemoListState('filled');
+  state.listShelfTab = 'active';
+  renderTemplateList();
+  document.querySelectorAll('.member-card-item__grid--more.is-collapsed').forEach(el => el.classList.remove('is-collapsed'));
+  document.querySelectorAll('.member-card-item__expand').forEach(el => { el.style.display = 'none'; });
+}
+
+function isFigmaCaptureListActive() {
+  return new URLSearchParams(location.search).get('figma') === 'list-active';
+}
+
+function applyFigmaCaptureIssueSuccess() {
+  document.documentElement.classList.add('figma-capture-issue-success');
+  FLOW_NAV['issue-success']();
+}
+
+function isFigmaCaptureIssueSuccess() {
+  return new URLSearchParams(location.search).get('figma') === 'issue-success';
+}
+
 function applyDemoListState(mode) {
   if (state.demoListMode === mode) {
     if (state.step !== 0) setStep(0);
@@ -6826,8 +6931,14 @@ renderFlowMap();
 ['benBalance', 'benTimesOrValidity', 'benProjectDiscount'].forEach(id => {
   document.getElementById(id).addEventListener('change', onBenefitCheckChange);
 });
-setStep(0);
-syncDemoStateButtons();
+if (isFigmaCaptureListActive()) {
+  applyFigmaCaptureListActive();
+} else if (isFigmaCaptureIssueSuccess()) {
+  applyFigmaCaptureIssueSuccess();
+} else {
+  setStep(0);
+  syncDemoStateButtons();
+}
 renderProjectItemTags();
 renderStatsHelpBody();
 document.getElementById('btnStatsHelp').onclick = openStatsHelp;
