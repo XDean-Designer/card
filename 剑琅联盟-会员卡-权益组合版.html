@@ -4656,16 +4656,19 @@ const FLOW_NAV = {
   },
   'pick-projects'() {
     closeAllFlowOverlays();
+    ensureDemoFilled();
     seedCreateFormFromPreset();
     openProjectPicker();
   },
   'pick-discount-list'() {
     closeAllFlowOverlays();
+    ensureDemoFilled();
     seedCreateFormFromPreset();
     openMemberPriceFlow();
   },
   'pick-discount-config'() {
     closeAllFlowOverlays();
+    ensureDemoFilled();
     seedCreateFormFromPreset();
     openMemberPriceConfigForProject('洗剪吹');
   },
