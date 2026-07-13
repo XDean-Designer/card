@@ -698,7 +698,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .picker-search input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: var(--bg-page); }
 .picker-foot { padding: 12px 16px var(--safe-bottom); border-top: none; }
 .picker-list--safe-bottom { padding-bottom: var(--safe-bottom) !important; }
-#projectList { padding: 0 16px 8px; }
+#projectList { padding: 0 16px 8px; background: var(--card); }
 .picker-item--proj { justify-content: space-between; gap: 12px; cursor: pointer; }
 .picker-item--select-all { font-weight: 600; border-bottom: 1px solid var(--border) !important; }
 .proj-item-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
@@ -754,11 +754,14 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .picker-custom input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: var(--bg-page); }
 .picker-custom .tip { font-size: 11px; color: var(--text-sec); margin-top: 6px; }
 .mp-tip {
-  display: flex; align-items: baseline; gap: 8px;
+  display: flex; align-items: flex-start; gap: 8px;
   margin: 12px 16px; padding: 10px 12px; background: var(--bg-page); border-radius: 8px;
   font-size: 12px; color: var(--text-sec); line-height: 1.6;
 }
-.tip-info-icon { flex-shrink: 0; color: var(--text-sec); display: block; align-self: baseline; }
+.mp-tip .tip-info-icon {
+  flex-shrink: 0; color: var(--text-sec); display: block;
+  margin-top: 1.6px; /* (12px × 1.6 − 16px) / 2，与首行文字垂直居中 */
+}
 .mp-row { background: var(--card); padding: 14px 16px; border-bottom: 1px solid var(--bg-page); }
 .mp-row .mp-name { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
 .mp-row .mp-modes { display: flex; gap: 16px; margin-bottom: 10px; }
@@ -1022,8 +1025,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .mp-tag__name { font-weight: 600; color: var(--text); }
 .mp-tag__val { font-size: 11px; font-weight: 600; color: var(--brand); font-variant-numeric: tabular-nums; }
 .form-row--add-proj .chevron { color: var(--text-sec); margin-left: auto; }
-.proj-config-panel { background: var(--bg-page); padding: 0 0 12px; border-top: 1px solid var(--bg-page); }
-.proj-config-panel .mp-config-block { margin-top: 8px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.proj-config-panel { background: var(--card); padding: 0; border-top: 1px solid var(--bg-page); }
+.proj-config-panel .mp-config-block { margin-top: 0; border-radius: 0; border: none; border-bottom: 1px solid var(--bg-page); }
+.proj-config-panel .proj-qty-dual { background: var(--card); }
 .proj-pick-block { border-bottom: 1px solid var(--bg-page); }
 .proj-pick-block--all .proj-item-name { font-weight: 600; }
 .proj-pick-sub { display: block; font-size: 11px; color: var(--text-sec); margin-top: 2px; }
@@ -1032,9 +1036,6 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   margin: 0; padding: 8px 16px 4px; font-size: 11px; color: var(--text-sec); line-height: 1.55;
 }
 .proj-pick-section-title {
-  padding: 10px 0 6px; font-size: 12px; font-weight: 600; color: var(--text-sec);
-  border-bottom: 1px solid var(--bg-page);
-}
   padding: 10px 0 6px; font-size: 12px; font-weight: 600; color: var(--text-sec);
   border-bottom: 1px solid var(--bg-page);
 }
@@ -1064,11 +1065,11 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: rgba(255, 112, 67, .12); border-radius: 999px; padding: 2px 8px; margin-left: 6px;
 }
 .proj-pick-block--excluded .proj-switch__track { opacity: .85; }
-.proj-qty-dual { background: var(--bg-page); padding-left: 12px; }
+.proj-qty-dual { background: var(--card); padding-left: 12px; }
 .proj-qty-dual.hidden { display: none !important; }
 .proj-qty-panel {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 0 16px 8px; background: var(--bg-page);
+  padding: 0 16px 8px; background: var(--card);
 }
 .proj-qty-panel:first-of-type { padding-top: 4px; }
 .proj-qty-panel--sub { padding-left: 42px; }
@@ -1305,7 +1306,7 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
 .proj-list-empty { text-align: center; padding: 48px 24px; color: var(--text-sec); font-size: 13px; }
 .proj-list-empty.hidden { display: none; }
 .alert-banner { display: flex; gap: 8px; align-items: flex-start; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: var(--text-sec); flex-shrink: 0; }
-.alert-banner--info { background: var(--info-bg); }
+.alert-banner--info { background: var(--info-bg); color: var(--info-text); }
 .alert-banner--warn { background: var(--warn-bg); }
 .alert-banner--neutral { background: var(--neutral-bg); }
 .alert-banner__icon {
@@ -1313,7 +1314,11 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
   margin-top: 2px; /* (13px × 1.5 − 16px) / 2，与首行文字垂直居中 */
 }
 .alert-banner__text { flex: 1; min-width: 0; }
-.alert-banner--info .alert-banner__icon { color: var(--info-text); }
+.alert-banner--picker-tip {
+  margin: 0;
+  border-radius: 0;
+  flex-shrink: 0;
+}
 .alert-banner--warn .alert-banner__icon { color: var(--warn-text); }
 .alert-banner--neutral .alert-banner__icon { color: var(--neutral-text); }
 .proj-form-stack { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 16px; }
@@ -1644,7 +1649,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <span class="title" id="projectPickerTitle">选择项目</span>
             <button type="button" class="title-link" id="btnManagePriceCatalog">管理价目表</button>
           </div>
-          <div class="mp-tip hidden" id="projPickTip"><svg class="tip-info-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span id="projPickTipText">已全选所有项目。不需要的项目，关闭右侧开关即可排除。</span></div>
+          <div class="alert-banner alert-banner--info alert-banner--picker-tip hidden" id="projPickTip"><svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span class="alert-banner__text" id="projPickTipText">已全选所有项目。灰色开关=纳入，橙色=排除；单独设次数请点项目名称。</span></div>
           <div class="page-body" id="projectList"></div>
           <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnConfirmProjects">确定</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
         </div>
@@ -1654,7 +1659,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title">选择折扣项目</span>
           </div>
-          <div class="mp-tip hidden" id="mpPickTip"><svg class="tip-info-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span id="mpPickTipText">已全选所有项目。不需要折扣的项目，关闭右侧开关即可排除。</span></div>
+          <div class="alert-banner alert-banner--info alert-banner--picker-tip hidden" id="mpPickTip"><svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span class="alert-banner__text" id="mpPickTipText">已全选所有项目。灰色开关=纳入，橙色=排除；单独设折扣请点项目名称。</span></div>
           <div class="page-body" id="memberPriceProjectList"></div>
           <div class="bottom-bar bottom-bar--dual">
             <div class="bottom-bar__action">
@@ -7028,7 +7033,7 @@ function syncProjectPickTipText() {
   if (!el) return;
   el.classList.toggle('hidden', !state.pickerAllOn);
   if (textEl && state.pickerAllOn) {
-    textEl.textContent = '已全选所有项目。「全部」下方灰色开关表示已纳入；打开橙色开关可排除。需单独设置次数的，点击项目名称展开。';
+    textEl.textContent = '已全选所有项目。灰色开关=纳入，橙色=排除；单独设次数请点项目名称。';
   }
 }
 
@@ -7038,7 +7043,7 @@ function syncMpPickTipText() {
   if (!el) return;
   el.classList.toggle('hidden', !state.mpPickerAllOn);
   if (textEl && state.mpPickerAllOn) {
-    textEl.textContent = '已全选所有项目。「全部」下方灰色开关表示已纳入；打开橙色开关可排除。需单独设置折扣的，点击项目名称展开。';
+    textEl.textContent = '已全选所有项目。灰色开关=纳入，橙色=排除；单独设折扣请点项目名称。';
   }
 }
 
