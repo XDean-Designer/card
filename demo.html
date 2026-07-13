@@ -974,6 +974,18 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   color: var(--switch-qty-on);
 }
 .form-hint--emph > span { flex: 1; min-width: 0; }
+.form-row--balance-face { align-items: flex-start; }
+.balance-face-trail {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  flex: 1; min-width: 0;
+}
+.balance-face-trail > #fFaceValue { color: var(--text); }
+.balance-gift-row { display: inline-flex; align-items: center; gap: 4px; }
+.balance-gift-label { font-size: 12px; color: var(--text-sec); line-height: 1.4; flex-shrink: 0; }
+.balance-gift-input {
+  flex: 0 0 auto; width: auto; min-width: 40px; max-width: 120px;
+  text-align: right; field-sizing: content;
+}
 .balance-permanent-tag { font-size: 11px; color: var(--text-sec); margin-left: 6px; font-weight: 500; }
 .proj-tag-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 10px; min-height: 4px; }
 .proj-tag-list:empty { display: none; }
@@ -1033,12 +1045,18 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .proj-pick-sub { display: block; font-size: 11px; color: var(--text-sec); margin-top: 2px; }
 .proj-pick-block:last-child { border-bottom: none; }
 .proj-pick-batch-hint {
-  margin: 0; padding: 8px 16px 4px; font-size: 11px; color: var(--text-sec); line-height: 1.55;
+  margin: 0; padding: 8px 0 4px 16px; font-size: 11px; color: var(--text-sec); line-height: 1.55;
 }
 .proj-pick-section-title {
+  display: flex; align-items: center; gap: 6px;
   padding: 10px 0 6px; font-size: 12px; font-weight: 600; color: var(--text-sec);
-  border-bottom: 1px solid var(--bg-page);
+  border-bottom: 1px solid var(--bg-page); text-align: left;
 }
+.proj-pick-section-title::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+.proj-qty-dual--batch { padding-left: 0; }
 .proj-pick-mode-head {
   width: calc(100% + 32px); margin: 0 -16px 0; flex-shrink: 0;
   border-bottom: 1px solid var(--bg-page); background: var(--card);
@@ -1338,6 +1356,9 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
 .proj-form-row .suffix { font-size: 14px; color: var(--text-sec); flex-shrink: 0; }
 .proj-form-row .hint { font-size: 12px; color: var(--text-sec); margin-top: 8px; width: 100%; }
 .proj-form-row.is-link { cursor: pointer; }
+.proj-form-row.is-locked { cursor: not-allowed; }
+.proj-form-row.is-locked .switch[disabled],
+.proj-form-row.is-locked input:disabled { pointer-events: none; }
 .collapse-head { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: none; border: none; cursor: pointer; font-family: inherit; text-align: left; }
 .collapse-head .title { font-size: 14px; color: var(--text); display: block; }
 .collapse-head .sub { font-size: 12px; color: var(--text-sec); margin-top: 4px; display: block; }
@@ -1482,8 +1503,16 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandBalance">
                   <div class="benefit-expand__inner benefit-tree">
                   <div class="form-section benefit-tree-node" id="secBalance">
-                    <div class="form-row"><span class="label">面值金额</span><input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" /></div>
-                    <div class="form-row"><span class="label">赠送</span><input class="value input-amount" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="请输入" /></div>
+                    <div class="form-row form-row--balance-face">
+                      <span class="label">面值金额</span>
+                      <div class="balance-face-trail">
+                        <input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" />
+                        <div class="balance-gift-row">
+                          <span class="balance-gift-label">赠送</span>
+                          <input class="value input-amount balance-gift-input" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="0" />
+                        </div>
+                      </div>
+                    </div>
                     <div class="form-hint form-hint--emph">
                       <svg class="tip-info-icon tip-info-icon--emph" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>
                       <span id="balancePermanentHint">面值永久有效，不受卡级有效期限约束</span>
@@ -1908,6 +1937,14 @@ const PROJ_EDIT_NOTICE = {
   normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
   bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片外不可修改，且不可删除' },
   'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
+};
+const PROJ_LOCK_TOAST = {
+  name: '该项目已绑定会员卡，项目名称不可修改',
+  onSale: '该项目已绑定会员卡，在售状态不可修改',
+  bookable_bound: '该项目已绑定会员卡，预约设置不可修改',
+  bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
+  pinned: '该项目已绑定会员卡，置顶设置不可修改',
+  delete: '该项目已绑定会员卡，不可删除',
 };
 let projDurDraft = { hours: 0, minutes: 30 };
 let projDurWheelTimer = null;
@@ -3136,6 +3173,7 @@ function getCardValiditySnapshot() {
 function syncCardValidityDisplay() {
   const el = document.getElementById('cardValidityDisplay');
   if (el) el.textContent = computeStep1ValidityLabel(getCardValiditySnapshot());
+  syncBalancePermanentHint();
 }
 
 function pickCardValidityFields(obj) {
@@ -4307,8 +4345,46 @@ function projProjectToForm(p) {
   return { name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false };
 }
 
+function projFormRowAttrs(extraClass, locked, toast) {
+  const cls = ['proj-form-row', extraClass, locked ? 'is-locked' : ''].filter(Boolean).join(' ');
+  const toastAttr = locked ? ` data-lock-toast="${escapeAttr(toast)}"` : '';
+  return ` class="${cls}"${toastAttr}`;
+}
+
+function projWireLockToasts(container) {
+  if (container.dataset.lockToastWired) return;
+  container.dataset.lockToastWired = '1';
+  container.addEventListener('click', e => {
+    const row = e.target.closest('.proj-form-row.is-locked[data-lock-toast]');
+    if (!row?.dataset.lockToast) return;
+    showToast(row.dataset.lockToast, true);
+  });
+}
+
+function projSyncBookableLock(container, bound) {
+  const bookableBtn = container.querySelector('#fProjBookable');
+  const bookableRow = bookableBtn?.closest('.proj-form-row');
+  if (!bookableBtn || !bookableRow || bound) return;
+  const offSale = !state.projFormState.onSale;
+  if (offSale) {
+    bookableBtn.disabled = true;
+    state.projFormState.bookable = false;
+    bookableBtn.classList.remove('on');
+    bookableRow.classList.add('is-locked');
+    bookableRow.dataset.lockToast = PROJ_LOCK_TOAST.bookable_offSale;
+  } else {
+    bookableBtn.disabled = false;
+    bookableRow.classList.remove('is-locked');
+    delete bookableRow.dataset.lockToast;
+  }
+}
+
 function projRenderForm(container, mode) {
-  const locked = mode === 'edit' && getCatalogProjects().find(p => p.id === state.projEditingId)?.boundToCard;
+  const p = mode === 'edit' ? getCatalogProjects().find(x => x.id === state.projEditingId) : null;
+  const bound = !!p?.boundToCard;
+  const offSale = !!p && !p.onSale;
+  const lockBookable = bound || offSale;
+  const lockBookableToast = bound ? PROJ_LOCK_TOAST.bookable_bound : PROJ_LOCK_TOAST.bookable_offSale;
   const isEdit = mode === 'edit';
   const reqCls = isEdit ? '' : ' req';
   const s = state.projFormState;
@@ -4318,7 +4394,7 @@ function projRenderForm(container, mode) {
       <div>
         <div class="proj-section-label">基本信息</div>
         <div class="proj-form-section">
-          <div class="proj-form-row"><span class="label${reqCls}">项目名称</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${locked ? 'disabled' : ''}></div></div>
+          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">项目名称</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
           <div class="proj-form-row"><span class="label${reqCls}">项目价格</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="0" value="${escapeAttr(s.price)}"><span class="suffix">元</span></div></div>
           <div class="proj-form-row is-link" id="projDurRow"><span class="label">项目时长</span><div class="field"><span class="field-value" id="fDurDisplay">${escapeHtml(projFormatDurationText(s.duration))}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#929292" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
         </div>
@@ -4326,8 +4402,8 @@ function projRenderForm(container, mode) {
       <div>
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
-          <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale" ${locked ? 'disabled' : ''}></button></div></div>
-          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${locked ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>
+          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.onSale)}><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale" ${bound ? 'disabled' : ''}></button></div></div>
+          <div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>
         </div>
       </div>
       <div>
@@ -4337,25 +4413,32 @@ function projRenderForm(container, mode) {
             <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">项目图片（选填，用于顾客端展示）</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
             <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
           </div>
-          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned" ${locked ? 'disabled' : ''}></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
+          <div${projFormRowAttrs('col', bound, PROJ_LOCK_TOAST.pinned)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned" ${bound ? 'disabled' : ''}></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
         </div>
       </div>
     </div>`;
-  projBindFormEvents(container, locked);
+  projBindFormEvents(container, { bound, offSale });
 }
 
-function projBindFormEvents(container, locked) {
-  const bindSwitch = (id, key) => {
+function projBindFormEvents(container, lockCtx) {
+  const bound = !!lockCtx?.bound;
+  const offSale = !!lockCtx?.offSale;
+  const bindSwitch = (id, key, opts = {}) => {
     const el = container.querySelector(id);
-    if (!el || el.disabled) return;
+    if (!el || opts.disabled) return;
     el.addEventListener('click', () => {
       state.projFormState[key] = !state.projFormState[key];
       el.classList.toggle('on', state.projFormState[key]);
+      if (opts.afterToggle) opts.afterToggle();
     });
   };
-  bindSwitch('#fProjOnSale', 'onSale');
-  bindSwitch('#fProjBookable', 'bookable');
-  bindSwitch('#fProjPinned', 'pinned');
+  bindSwitch('#fProjOnSale', 'onSale', {
+    disabled: bound,
+    afterToggle: () => projSyncBookableLock(container, bound),
+  });
+  bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
+  bindSwitch('#fProjPinned', 'pinned', { disabled: bound });
+  projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
@@ -4415,7 +4498,7 @@ function projOpenEdit(id) {
   state.projFormState = projProjectToForm(p);
   projUpdateEditNotice(p);
   const delBtn = document.getElementById('btnProjDelete');
-  if (delBtn) delBtn.disabled = !!p.boundToCard;
+  if (delBtn) delBtn.disabled = false;
   projRenderForm(document.getElementById('projFormEditBody'), 'edit');
   projShowScreen('screen-p-edit');
 }
@@ -4455,7 +4538,7 @@ function projSaveForm() {
 
 function projOpenDeleteDialog() {
   const p = getCatalogProjects().find(x => x.id === state.projEditingId);
-  if (p?.boundToCard) { showToast('已绑卡，不可删除', true); return; }
+  if (p?.boundToCard) { showToast(PROJ_LOCK_TOAST.delete, true); return; }
   document.getElementById('projDialogMask')?.classList.add('show');
 }
 
@@ -5215,6 +5298,14 @@ function syncStep1ValidityScope() {
   const hasTimed = templateHasTimedBenefits({ benefits: state.benefits });
   const reqEl = document.getElementById('cardValidityReq');
   if (reqEl) reqEl.classList.toggle('hidden', !hasTimed);
+  syncBalancePermanentHint();
+}
+
+function syncBalancePermanentHint() {
+  const hint = document.querySelector('#secBalance .form-hint--emph');
+  if (!hint) return;
+  const show = state.benefits.balance && state.cardValidityKey !== 'permanent';
+  hint.classList.toggle('hidden', !show);
 }
 
 function syncStep1UI() {
@@ -5235,6 +5326,7 @@ function syncStep2UI() {
   document.getElementById('benProjectDiscount').checked = state.benefits.projectDiscount;
   applyBenefitVisibility();
   syncColorPreview();
+  syncBalancePermanentHint();
 }
 
 function readStep2Benefits() {
@@ -7553,6 +7645,7 @@ function validateMemberPriceDraft() {
 }
 
 function openMemberPriceFlow() {
+  ensureDemoFilled();
   initMemberPricePickerFromState();
   renderMemberPriceProjectList();
   showOnlyScreen('screen4');
@@ -7685,6 +7778,7 @@ function confirmMemberPriceList() {
 
 function openProjectPicker() {
   closeAllFlowOverlays();
+  ensureDemoFilled();
   initProjectPickerFromItems();
   document.getElementById('projectPickerTitle').textContent = '选择项目';
   renderProjectList();
