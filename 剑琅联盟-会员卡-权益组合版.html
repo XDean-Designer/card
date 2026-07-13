@@ -27,6 +27,9 @@
   --success: #2BA471; --success-soft: #E8F8F2;
   --bg-page: #F7F7F7; --card: #FFFFFF; --text: #333333; --text-sec: #929292;
   --border: #D7D7D5; --disabled: #EDEDED;
+  --info-bg: #E7F1FF; --info-text: #1A70FE;
+  --warn-bg: #FFF8E6; --warn-text: #E37318;
+  --neutral-bg: #EDEDED; --neutral-text: #929292;
   --font-data: "TCloudNumber", "DIN Alternate", "Helvetica Neue", monospace;
   --phone-w: 390px; --phone-h: 844px; --phone-scale: 1.5;
   --phone-display-w: calc(var(--phone-w) * var(--phone-scale));
@@ -419,7 +422,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .benefit-expand .mp-tag-list { padding: 2px 0 12px; }
 .phone-shell--success {
   background:
-    linear-gradient(180deg, rgba(83, 255, 114, 0.43) 0%, rgba(224, 251, 165, 0.43) 24.05%, rgba(247, 247, 247, 0.43) 48.1%),
+    linear-gradient(180deg, rgba(83, 255, 114, 0.22) 0%, rgba(224, 251, 165, 0.22) 24.052%, rgba(247, 247, 247, 0.22) 48.104%),
     #F7F7F7;
 }
 .phone-shell--success .status-bar { background: transparent; }
@@ -1240,6 +1243,101 @@ html.figma-capture-list-active .page-body,
 html.figma-capture-issue-success .page-body { overflow: visible; flex: none; min-height: auto; }
 html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
 html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
+
+/* Price catalog screens */
+.table-card.hidden { display: none; }
+.proj-list-toolbar { padding: 12px 16px 0; background: var(--bg-page); flex-shrink: 0; }
+.proj-search-row { display: flex; gap: 8px; align-items: center; }
+.proj-search-box { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--card); border-radius: 8px; padding: 0 12px; height: 36px; border: 1px solid var(--border); }
+.proj-search-box:focus-within { border-color: var(--brand); }
+.proj-search-box input { flex: 1; border: none; background: none; font-size: 14px; font-family: inherit; outline: none; color: var(--text); }
+.proj-search-box input::placeholder { color: var(--text-sec); }
+.btn-proj-add { flex-shrink: 0; height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.proj-list-meta { font-size: 11px; color: var(--text-sec); margin: 8px 0 0; }
+.table-card { margin: 12px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; }
+.table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 48px 76px 52px; column-gap: 12px; padding-left: 16px; padding-right: 16px; }
+.table-row { align-items: center; min-height: 44px; padding-top: 8px; padding-bottom: 8px; cursor: pointer; font-size: 14px; }
+.table-row:active { background: var(--bg-page); }
+.table-row.is-off-sale .name-text, .table-row.is-off-sale .dur, .table-row.is-off-sale .price { color: var(--text-sec); }
+.table-head { padding-top: 12px; padding-bottom: 8px; color: var(--text-sec); font-size: 12px; border-bottom: 1px solid var(--border); }
+.table-head span:nth-child(2), .table-head span:nth-child(3) { text-align: right; }
+.table-head span:nth-child(4) { text-align: center; }
+.table-row .name { min-width: 0; font-weight: 500; }
+.table-row .name-text { display: inline; white-space: nowrap; }
+.table-row .name-text.is-long { white-space: normal; word-break: break-word; }
+.pin-tag { display: inline-flex; align-items: center; vertical-align: middle; margin-left: 4px; font-size: 11px; font-weight: 500; color: var(--brand); background: var(--brand-soft); padding: 3px 8px; border-radius: 999px; }
+.table-row .dur { color: var(--text-sec); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.table-row .price { text-align: right; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.price-num { font-family: var(--font-data); font-weight: 700; }
+.price-num .yen { font-family: inherit; font-weight: 400; margin-right: 2px; }
+.sale-cell { display: flex; justify-content: center; align-items: center; }
+/* Switch — price catalog toggles (on-sale / bookable / pinned) */
+.switch {
+  width: 44px; height: 26px; border-radius: 13px; background: var(--disabled); position: relative;
+  cursor: pointer; transition: background .2s; flex-shrink: 0; border: none; padding: 0;
+}
+.switch::after {
+  content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; top: 2px; left: 2px; transition: transform .2s;
+}
+.switch.on { background: var(--brand); }
+.switch.on::after { transform: translateX(18px); }
+.switch:disabled { opacity: .5; cursor: not-allowed; }
+.sale-cell .switch { transform: scale(.92); transform-origin: center; }
+.proj-list-empty { text-align: center; padding: 48px 24px; color: var(--text-sec); font-size: 13px; }
+.proj-list-empty.hidden { display: none; }
+.alert-banner { display: flex; gap: 8px; align-items: flex-start; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: var(--text-sec); flex-shrink: 0; }
+.alert-banner--info { background: var(--info-bg); }
+.alert-banner--warn { background: var(--warn-bg); }
+.alert-banner--neutral { background: var(--neutral-bg); }
+.alert-banner__icon {
+  flex-shrink: 0; display: block; width: 16px; height: 16px;
+  margin-top: 2px; /* (13px × 1.5 − 16px) / 2，与首行文字垂直居中 */
+}
+.alert-banner__text { flex: 1; min-width: 0; }
+.alert-banner--info .alert-banner__icon { color: var(--info-text); }
+.alert-banner--warn .alert-banner__icon { color: var(--warn-text); }
+.alert-banner--neutral .alert-banner__icon { color: var(--neutral-text); }
+.proj-form-stack { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 16px; }
+.proj-section-label { font-size: 12px; color: var(--text-sec); margin-bottom: 8px; padding-left: 4px; }
+.proj-form-section { background: var(--card); border-radius: 12px; overflow: hidden; }
+.proj-form-row { display: flex; align-items: center; min-height: 56px; padding: 0 16px; border-bottom: 1px solid var(--border); }
+.proj-form-row:last-child { border-bottom: none; }
+.proj-form-row.col { flex-direction: column; align-items: stretch; padding: 12px 16px; min-height: 0; }
+.proj-form-row .label { font-size: 14px; flex-shrink: 0; }
+.proj-form-row .label.req::before { content: "*"; color: var(--brand); margin-right: 2px; }
+.proj-form-row .field { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; }
+.proj-form-row .field-value { font-size: 14px; color: var(--text); }
+.proj-form-row input[type="text"], .proj-form-row .input-amount { border: none; text-align: right; font-size: 14px; font-family: inherit; width: 100%; max-width: 200px; outline: none; color: var(--text); background: transparent; }
+.proj-form-row .input-amount[readonly] { cursor: pointer; caret-color: transparent; font-family: var(--font-data); }
+.proj-form-row input::placeholder { color: var(--text-sec); }
+.proj-form-row input:disabled { color: var(--text-sec); }
+.proj-form-row .suffix { font-size: 14px; color: var(--text-sec); flex-shrink: 0; }
+.proj-form-row .hint { font-size: 12px; color: var(--text-sec); margin-top: 8px; width: 100%; }
+.proj-form-row.is-link { cursor: pointer; }
+.collapse-head { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: none; border: none; cursor: pointer; font-family: inherit; text-align: left; }
+.collapse-head .title { font-size: 14px; color: var(--text); display: block; }
+.collapse-head .sub { font-size: 12px; color: var(--text-sec); margin-top: 4px; display: block; }
+.collapse-head .chev { color: var(--text-sec); transition: transform .2s; flex-shrink: 0; }
+.collapse-head.open .chev { transform: rotate(180deg); }
+.collapse-body { display: none; padding: 0 16px 16px; }
+.collapse-body.open { display: block; }
+.img-upload { width: 78px; height: 78px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--bg-page); border: 1px dashed var(--border); }
+.img-upload.has-img { font-size: 11px; color: var(--text-sec); padding: 8px; text-align: center; border-style: solid; }
+.img-upload__plus { position: relative; width: 24px; height: 24px; flex-shrink: 0; }
+.img-upload__plus::before, .img-upload__plus::after { content: ""; position: absolute; background: var(--text-sec); border-radius: 1px; }
+.img-upload__plus::before { left: 7px; top: 11px; width: 10px; height: 2px; }
+.img-upload__plus::after { left: 11px; top: 7px; width: 2px; height: 10px; }
+#durPickerMask.open { z-index: 45; }
+.dialog-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 50; display: none; align-items: center; justify-content: center; padding: 0 32px; }
+.dialog-mask.show { display: flex; }
+.dialog { width: 100%; max-width: 326px; background: var(--card); border-radius: 16px; padding: 20px; }
+.dialog__title { font-size: 17px; font-weight: 500; text-align: center; margin-bottom: 8px; }
+.dialog__body { font-size: 16px; line-height: 24px; color: var(--text-sec); text-align: center; margin-bottom: 8px; }
+.dialog__actions { display: flex; gap: 12px; margin-top: 8px; }
+.dialog__actions .btn-main { flex: 1; }
+.page-title-bar .title-link { grid-column: 3; justify-self: end; border: none; background: none; color: var(--brand); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; padding: 0 8px; white-space: nowrap; }
+
 html.figma-capture-list-active .member-card-item__expand { display: none !important; }
 </style>
 <script>
@@ -1264,12 +1362,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <button type="button" class="on" id="btnDemoEmpty">无数据</button>
         <button type="button" id="btnDemoFilled">有数据</button>
       </div>
-      <p>有数据时注入 5 张演示卡，并回到列表首页。</p>
+      <p>有数据时注入 8 张演示卡 + 18 条价目表项目（绑卡状态由卡权益自动同步），并回到列表首页。</p>
     </div>
     <div class="flow-map-panel" id="flowMapPanel">
       <h3>功能链路</h3>
       <div id="flowMapBody"></div>
-      <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示上下文。Sheet/弹窗（选会员、退卡估值等）请从列表或详情进入。</p>
+      <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示卡 + 价目表项目。Sheet/弹窗（选会员、退卡估值、价格键盘、时长滚轮等）请从列表或详情进入。</p>
     </div>
     <a class="doc-link-entry" href="剑琅联盟-会员卡逻辑梳理.html" target="_blank" rel="noopener noreferrer">
       逻辑梳理文档
@@ -1506,6 +1604,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="form-section tpl-detail-section">
                 <div class="section-head" style="padding-top:8px">卡面信息</div>
                 <div id="tplDetailFaceList"></div>
+                <div class="form-row clickable" id="rowLinkedProjects" style="margin-top:0">
+                  <span class="label">关联项目</span>
+                  <span class="form-row__trail"><span class="value has-val" id="linkedProjectsSummary">查看价目表</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span></span>
+                </div>
               </div>
             </div>
           </div>
@@ -1522,6 +1624,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromPicker" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title" id="projectPickerTitle">选择项目</span>
+            <button type="button" class="title-link" id="btnManagePriceCatalog">管理价目表</button>
           </div>
           <div class="page-body" id="projectList"></div>
           <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnConfirmProjects">确定</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
@@ -1577,6 +1680,83 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="picker-foot picker-foot--row">
               <button type="button" class="btn-main secondary" id="btnValidityCancel">取消</button>
               <button type="button" class="btn-main" id="btnValidityOk">确定</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="screen hidden" id="screen-p-list">
+          <header class="page-title-bar">
+            <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="title">价目表</span>
+          </header>
+          <div class="proj-list-toolbar">
+            <div class="proj-search-row">
+              <div class="proj-search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#929292" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                <input type="search" id="projSearchInput" placeholder="搜索项目名称" autocomplete="off">
+              </div>
+              <button type="button" class="btn-proj-add" id="btnProjGoAdd">+ 添加项目</button>
+            </div>
+            <div class="proj-list-meta" id="projListMeta">共 0 项 · 在售优先 · 置顶优先</div>
+          </div>
+          <div class="page-body">
+            <div class="table-card" id="projTableCard">
+              <div class="table-head"><span>名称</span><span>时长</span><span>价格</span><span>在售</span></div>
+              <div id="projProjectTable"></div>
+            </div>
+            <div class="proj-list-empty hidden" id="projListEmpty">暂无匹配项目</div>
+          </div>
+        </div>
+        <div class="screen hidden" id="screen-p-add">
+          <header class="page-title-bar">
+            <button type="button" class="back" id="projBackFromAdd" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="title">新增项目</span>
+          </header>
+          <div class="page-body" id="projFormAddBody"></div>
+          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnProjSaveAdd">保存</button></div><div class="bottom-bar__safe"></div></div>
+        </div>
+        <div class="screen hidden" id="screen-p-edit">
+          <header class="page-title-bar">
+            <button type="button" class="back" id="projBackFromEdit" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="title">项目详情</span>
+          </header>
+          <div class="alert-banner alert-banner--info hidden" id="projEditNotice"></div>
+          <div class="page-body" id="projFormEditBody"></div>
+          <div class="bottom-bar bottom-bar--dual">
+            <div class="bottom-bar__action">
+              <button type="button" class="btn-main secondary" id="btnProjDelete">删除</button>
+              <button type="button" class="btn-main" id="btnProjSaveEdit">保存</button>
+            </div>
+            <div class="bottom-bar__safe"></div>
+          </div>
+        </div>
+        <div class="picker-mask picker-mask--bottom" id="durPickerMask">
+          <div class="picker-sheet">
+            <div class="picker-head picker-head--validity"><span class="picker-head__title-main">项目时长</span></div>
+            <div class="validity-sheet-body">
+              <div class="validity-chip-row validity-chip-row--presets" id="durChipRow"></div>
+              <div class="ios-picker" id="durHmPicker">
+                <div class="ios-picker-highlight"></div>
+                <div class="ios-picker-cols">
+                  <div class="ios-picker-col" id="durHourCol"></div>
+                  <div class="ios-picker-col" id="durMinCol"></div>
+                </div>
+              </div>
+            </div>
+            <div class="picker-foot picker-foot--row">
+              <button type="button" class="btn-main secondary" id="btnDurCancel">取消</button>
+              <button type="button" class="btn-main" id="btnDurOk">确定</button>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-mask" id="projDialogMask">
+          <div class="dialog">
+            <div class="dialog__title">确认删除？</div>
+            <div class="dialog__body">删除后不可恢复，是否继续？</div>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main secondary" id="projDialogCancel">取消</button>
+              <button type="button" class="btn-main" id="projDialogConfirm">删除</button>
             </div>
           </div>
         </div>
@@ -1685,24 +1865,103 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
 </div>
 
 <script>
-const PROJECTS = [
-  '洗剪吹', '精致剪发', '时尚洗吹', '烫发', '染发', '漂发',
-  '头皮护理', '深层滋养', '蛋白矫正', '摩根烫', '电棒烫',
-  '女士造型', '儿童剪发', '接发', '头疗',
+const PROJ_DEMO_IDS = { bound: 'p4', normal: 'p16', offSale: 'p14' };
+const PROJ_DEFAULT_CATEGORY = '其他';
+const PROJ_IOS_PICKER_ITEM_H = 44;
+const PROJ_DUR_HOUR_MAX = 8;
+const PROJ_DUR_MIN_STEP = 5;
+const PROJ_DUR_CHIP_PRESETS = [
+  { label: '30分', minutes: 30 },
+  { label: '1小时', minutes: 60 },
+  { label: '1.5小时', minutes: 90 },
+  { label: '2小时', minutes: 120 },
 ];
-const PROJECT_PRICES = {
-  '洗剪吹': 68, '精致剪发': 98, '时尚洗吹': 58, '儿童剪发': 48,
-  '烫发': 398, '摩根烫': 458, '电棒烫': 428,
-  '染发': 358, '漂发': 288,
-  '头皮护理': 168, '深层滋养': 198, '蛋白矫正': 598, '头疗': 138,
-  '女士造型': 128, '时尚造型': 128,
-  '接发': 888,
+const PROJ_IMG_PLUS = '<span class="img-upload__plus" aria-hidden="true"></span>';
+const PROJ_INFO_ICON = '<svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>';
+const PROJ_WARN_ICON = '<svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2L14.2 13H1.8L8 2.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 6.4V9.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>';
+const PROJ_CHEV_ICON = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+const PROJ_EDIT_NOTICE = {
+  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
+  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片外不可修改，且不可删除' },
+  'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
 };
+let projDurDraft = { hours: 0, minutes: 30 };
+let projDurWheelTimer = null;
 
-function formatProjectPrice(name) {
-  const p = PROJECT_PRICES[name];
-  return p != null ? `¥${p}` : '';
+function seedProjectCatalog() {
+  return [
+    { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
+    { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, pinned: true, hasImage: false, category: '剪发' },
+    { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
+    { id: 'p4', name: '儿童剪发', price: 48, duration: 35, onSale: true, bookable: true, pinned: false, hasImage: false, category: '剪发' },
+    { id: 'p5', name: '女士造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
+    { id: 'p6', name: '染发', price: 358, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p7', name: '漂发', price: 288, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p8', name: '烫发', price: 398, duration: 150, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p9', name: '摩根烫', price: 458, duration: 150, onSale: true, bookable: false, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p10', name: '电棒烫', price: 428, duration: 150, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p11', name: '深层滋养', price: 198, duration: 75, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
+    { id: 'p12', name: '蛋白矫正', price: 598, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
+    { id: 'p13', name: '头疗', price: 138, duration: 50, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
+    { id: 'p14', name: '接发', price: 888, duration: 180, onSale: false, bookable: false, pinned: false, hasImage: false, category: '造型' },
+    { id: 'p15', name: '头皮护理', price: 168, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: true, category: '护理' },
+    { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
+    { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
+    { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, pinned: true, hasImage: false, category: '烫染' },
+  ].map(p => ({ ...p, boundToCard: false, boundTemplateIds: [], boundTemplateId: null, boundTemplateNames: [] }));
 }
+
+function collectTemplateProjectRefs(templates) {
+  const refs = {};
+  const add = (name, tplId) => {
+    if (!name || !tplId) return;
+    if (!refs[name]) refs[name] = new Set();
+    refs[name].add(tplId);
+  };
+  for (const tpl of templates || []) {
+    if (tpl.benefits?.timesOrValidity && tpl.projectItems?.length) {
+      tpl.projectItems.forEach(item => add(item.name, tpl.id));
+    }
+    if (tpl.benefits?.projectDiscount && tpl.memberPrices) {
+      Object.keys(tpl.memberPrices).forEach(name => add(name, tpl.id));
+    }
+  }
+  return refs;
+}
+
+function syncProjectCatalogBindings() {
+  const refs = collectTemplateProjectRefs(state.templates);
+  for (const p of state.projectCatalog || []) {
+    const ids = refs[p.name] ? [...refs[p.name]] : [];
+    p.boundToCard = ids.length > 0;
+    p.boundTemplateIds = ids;
+    p.boundTemplateId = ids[0] || null;
+    p.boundTemplateNames = ids.map(id => getTemplateById(id)?.name || id);
+  }
+}
+
+function getCatalogProjects() { return state.projectCatalog || []; }
+function getProjectPrice(name) {
+  const p = getCatalogProjects().find(x => x.name === name);
+  return p != null ? p.price : 0;
+}
+function getOnSaleProjectNames() {
+  return getCatalogProjects().filter(p => p.onSale).map(p => p.name);
+}
+function getAllProjectNamesForPicker() {
+  return [...getCatalogProjects()]
+    .filter(p => p.onSale)
+    .sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return a.name.localeCompare(b.name, 'zh-CN');
+    })
+    .map(p => p.name);
+}
+function formatProjectPrice(name) {
+  const p = getProjectPrice(name);
+  return p != null && p > 0 ? `¥${p}` : '';
+}
+
 const VALIDITY_LABELS = { permanent: '永久有效', '1y': '1 年', '6m': '6 月' };
 const DEFAULT_AUDIENCE_OPTIONS = [
   { key: 'all', label: '全部', fixed: true },
@@ -2516,6 +2775,11 @@ const state = {
   cardColor: 'brand_red',
   returnAfterFlow: 'list',
   demoListMode: 'empty',
+  projectCatalog: [],
+  navStack: [],
+  priceCatalogReturn: null,
+  projEditingId: null,
+  projFormState: null,
   editingAudienceKey: null,
   saveInFlight: false,
   issueTargetTemplateId: null,
@@ -3089,10 +3353,10 @@ function computeProjectRefundLine(pl, item, alloc) {
 /** 退卡估值：各权益名义价值（统一分摊池，与 Q3 口径 2 / Q4 对齐） */
 function getDiscountLineNominalWeight(name) {
   if (name === MP_BATCH_KEY) {
-    const prices = Object.values(PROJECT_PRICES);
+    const prices = getOnSaleProjectNames().map(getProjectPrice);
     return prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
   }
-  return PROJECT_PRICES[name] || 0;
+  return getProjectPrice(name) || 0;
 }
 
 function buildRefundNominalPool(tpl) {
@@ -3100,7 +3364,7 @@ function buildRefundNominalPool(tpl) {
   if (tpl.benefits?.balance) pool.balanceNominal = getTemplateFaceTotal(tpl);
   if (tpl.benefits?.timesOrValidity) {
     normalizeProjectItemsFromTpl(tpl).filter(i => !i.unlimited).forEach(item => {
-      const price = PROJECT_PRICES[item.name] || 0;
+      const price = getProjectPrice(item.name) || 0;
       const times = (item.purchaseQty || 0) + (item.giftQty || 0) || 1;
       pool.projects.push({ item, weight: price * times });
     });
@@ -3124,19 +3388,19 @@ function sumRefundNominalPool(pool) {
 function resolveDiscountPaidPrice(projectName, rule) {
   const r = normalizeDiscountRule(rule);
   if (r.mode === 'fixed') return parseAmount(r.amount);
-  const original = PROJECT_PRICES[projectName] || 0;
+  const original = getProjectPrice(projectName) || 0;
   const multiplier = (r.tickIndex ?? DISCOUNT_TICK_MAX) / DISCOUNT_TICK_MAX;
   return roundMoney(original * multiplier);
 }
 
 function resolveDiscountSavings(projectName, rule) {
-  const original = PROJECT_PRICES[projectName] || 0;
+  const original = getProjectPrice(projectName) || 0;
   const paid = resolveDiscountPaidPrice(projectName, rule);
   return Math.max(0, roundMoney(original - paid));
 }
 
 function resolveBatchDiscountSavings(rule) {
-  const names = Object.keys(PROJECT_PRICES);
+  const names = getOnSaleProjectNames();
   if (!names.length) return 0;
   const total = names.reduce((sum, name) => sum + resolveDiscountSavings(name, rule), 0);
   return roundMoney(total / names.length);
@@ -3251,7 +3515,7 @@ function computeSuggestedRefundRetail(tpl, meta) {
 
   if (tpl.benefits?.timesOrValidity) {
     normalizeProjectItemsFromTpl(tpl).filter(i => !i.unlimited).forEach(item => {
-      const price = PROJECT_PRICES[item.name] || 0;
+      const price = getProjectPrice(item.name) || 0;
       const pl = ledger.projects?.[item.name] || {
         purchaseRemaining: item.purchaseQty,
         giftRemaining: item.giftQty,
@@ -3764,9 +4028,478 @@ function benefitLabels(benefits) {
   return BENEFIT_DEFS.filter(d => benefits[d.key]).map(d => d.label);
 }
 
+function projUid() { return 'p' + Date.now().toString(36); }
+
+function projFormatDurationText(mins) {
+  const m = Math.max(0, parseInt(mins, 10) || 0);
+  const h = Math.floor(m / 60);
+  const r = m % 60;
+  if (h > 0 && r > 0) return `${h}小时${r}分`;
+  if (h > 0) return `${h}小时`;
+  return `${r}分`;
+}
+
+function projMinutesToWheel(total) {
+  const capped = Math.min(PROJ_DUR_HOUR_MAX * 60 + 55, Math.max(0, parseInt(total, 10) || 0));
+  let hours = Math.floor(capped / 60);
+  let minutes = capped % 60;
+  minutes = Math.round(minutes / PROJ_DUR_MIN_STEP) * PROJ_DUR_MIN_STEP;
+  if (minutes >= 60) { hours += 1; minutes = 0; }
+  if (hours > PROJ_DUR_HOUR_MAX) { hours = PROJ_DUR_HOUR_MAX; minutes = 55; }
+  return { hours, minutes };
+}
+
+function projBuildIosColHtml(min, max, suffix) {
+  return Array.from({ length: max - min + 1 }, (_, i) => {
+    const v = min + i;
+    return `<div class="ios-picker-item" data-value="${v}">${v}${suffix}</div>`;
+  }).join('');
+}
+
+function projBuildIosMinColHtml() {
+  const items = [];
+  for (let m = 0; m <= 55; m += PROJ_DUR_MIN_STEP) {
+    items.push(`<div class="ios-picker-item" data-value="${m}">${m}分</div>`);
+  }
+  return items.join('');
+}
+
+function projGetIosColValue(col) {
+  if (!col) return 0;
+  const idx = Math.round(col.scrollTop / PROJ_IOS_PICKER_ITEM_H);
+  const items = col.querySelectorAll('.ios-picker-item');
+  const el = items[Math.max(0, Math.min(items.length - 1, idx))];
+  return parseInt(el?.dataset.value, 10) || 0;
+}
+
+function projSyncIosColActive(col) {
+  if (!col) return;
+  const idx = Math.round(col.scrollTop / PROJ_IOS_PICKER_ITEM_H);
+  col.querySelectorAll('.ios-picker-item').forEach((el, i) => {
+    el.classList.toggle('is-active', i === idx);
+    el.classList.toggle('is-near', Math.abs(i - idx) === 1);
+  });
+}
+
+function projScrollIosColTo(col, value) {
+  if (!col) return;
+  const items = [...col.querySelectorAll('.ios-picker-item')];
+  const idx = Math.max(0, items.findIndex(el => parseInt(el.dataset.value, 10) === value));
+  col.scrollTop = idx * PROJ_IOS_PICKER_ITEM_H;
+  projSyncIosColActive(col);
+}
+
+function projSnapIosColToNearest(col, opts = {}) {
+  if (!col) return;
+  const idx = Math.round(col.scrollTop / PROJ_IOS_PICKER_ITEM_H);
+  const top = idx * PROJ_IOS_PICKER_ITEM_H;
+  if (opts.smooth && typeof col.scrollTo === 'function') col.scrollTo({ top, behavior: 'smooth' });
+  else { col.scrollTop = top; projSyncIosColActive(col); }
+}
+
+function projWireIosCol(col, onScroll) {
+  if (!col || col.dataset.projWired) return;
+  col.dataset.projWired = '1';
+  col.addEventListener('scroll', () => {
+    projSyncIosColActive(col);
+    clearTimeout(projDurWheelTimer);
+    projDurWheelTimer = setTimeout(() => {
+      projSnapIosColToNearest(col);
+      onScroll();
+      projSyncIosColActive(col);
+    }, 80);
+  }, { passive: true });
+  col.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+}
+
+function projWireIosColMouseDrag(col) {
+  if (!col || col.dataset.projDragWired) return;
+  col.dataset.projDragWired = '1';
+  let dragging = false, startY = 0, startScrollTop = 0, activePointerId = null, dragRafId = null;
+  const endDrag = e => {
+    if (!dragging || e.pointerId !== activePointerId) return;
+    dragging = false;
+    if (dragRafId) { cancelAnimationFrame(dragRafId); dragRafId = null; }
+    col.classList.remove('is-dragging');
+    try { col.releasePointerCapture(activePointerId); } catch (_) {}
+    activePointerId = null;
+    projSnapIosColToNearest(col, { smooth: true });
+  };
+  col.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    dragging = true;
+    activePointerId = e.pointerId;
+    startY = e.clientY;
+    startScrollTop = col.scrollTop;
+    col.classList.add('is-dragging');
+    col.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  col.addEventListener('pointermove', e => {
+    if (!dragging || e.pointerId !== activePointerId) return;
+    const nextTop = startScrollTop - (e.clientY - startY);
+    if (dragRafId) cancelAnimationFrame(dragRafId);
+    dragRafId = requestAnimationFrame(() => { col.scrollTop = nextTop; projSyncIosColActive(col); dragRafId = null; });
+    e.preventDefault();
+  });
+  col.addEventListener('pointerup', endDrag);
+  col.addEventListener('pointercancel', endDrag);
+}
+
+function projReadDurFromWheels() {
+  projDurDraft.hours = projGetIosColValue(document.getElementById('durHourCol'));
+  projDurDraft.minutes = projGetIosColValue(document.getElementById('durMinCol'));
+}
+
+function projScrollDurWheels() {
+  projScrollIosColTo(document.getElementById('durHourCol'), projDurDraft.hours);
+  projScrollIosColTo(document.getElementById('durMinCol'), projDurDraft.minutes);
+}
+
+function projRenderDurChips() {
+  const row = document.getElementById('durChipRow');
+  if (!row) return;
+  const total = projDurDraft.hours * 60 + projDurDraft.minutes;
+  row.innerHTML = PROJ_DUR_CHIP_PRESETS.map(p =>
+    `<button type="button" class="validity-chip ${total === p.minutes ? 'on' : ''}" data-dur-chip="${p.minutes}">${p.label}</button>`
+  ).join('');
+  row.querySelectorAll('[data-dur-chip]').forEach(btn => {
+    btn.onclick = () => {
+      const w = projMinutesToWheel(+btn.dataset.durChip);
+      projDurDraft.hours = w.hours;
+      projDurDraft.minutes = w.minutes;
+      projScrollDurWheels();
+      projRenderDurChips();
+    };
+  });
+}
+
+function initProjDurPicker() {
+  const hourCol = document.getElementById('durHourCol');
+  const minCol = document.getElementById('durMinCol');
+  if (!hourCol || !minCol) return;
+  hourCol.innerHTML = projBuildIosColHtml(0, PROJ_DUR_HOUR_MAX, '小时');
+  minCol.innerHTML = projBuildIosMinColHtml();
+  projWireIosCol(hourCol, () => { projReadDurFromWheels(); projRenderDurChips(); });
+  projWireIosCol(minCol, () => { projReadDurFromWheels(); projRenderDurChips(); });
+  projWireIosColMouseDrag(hourCol);
+  projWireIosColMouseDrag(minCol);
+}
+
+function openDurPicker() {
+  closeAmountKeypad();
+  projDurDraft = projMinutesToWheel(state.projFormState?.duration || 30);
+  projScrollDurWheels();
+  projRenderDurChips();
+  document.getElementById('durPickerMask')?.classList.add('open');
+}
+
+function closeDurPicker() {
+  document.getElementById('durPickerMask')?.classList.remove('open');
+}
+
+function confirmDurPicker() {
+  projReadDurFromWheels();
+  const total = projDurDraft.hours * 60 + projDurDraft.minutes;
+  if (total < PROJ_DUR_MIN_STEP) { showToast('时长至少5分钟', true); return; }
+  if (state.projFormState) state.projFormState.duration = total;
+  closeDurPicker();
+  const bodySel = state.projEditingId ? '#projFormEditBody' : '#projFormAddBody';
+  const dispEl = document.querySelector(`${bodySel} #fDurDisplay`);
+  if (dispEl && state.projFormState) dispEl.textContent = projFormatDurationText(state.projFormState.duration);
+}
+
+function closeProjDeleteDialog() {
+  document.getElementById('projDialogMask')?.classList.remove('show');
+}
+
+function projFormatPriceHtml(n) {
+  return `<span class="price-num"><span class="yen">¥</span>${escapeHtml(String(n))}</span>`;
+}
+
+function projSortCatalog(list) {
+  return [...list].sort((a, b) => {
+    if (a.onSale !== b.onSale) return a.onSale ? -1 : 1;
+    if (a.onSale && b.onSale && a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return a.name.localeCompare(b.name, 'zh-CN');
+  });
+}
+
+function projShowScreen(screenId) {
+  showOnlyScreen(screenId);
+}
+
+function projRenderList() {
+  const q = (document.getElementById('projSearchInput')?.value || '').trim().toLowerCase();
+  let list = projSortCatalog(getCatalogProjects());
+  if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
+  const meta = document.getElementById('projListMeta');
+  if (meta) meta.textContent = `共 ${getCatalogProjects().length} 项 · 在售优先 · 置顶优先` + (q ? ` · 筛选 ${list.length} 项` : '');
+  const tbody = document.getElementById('projProjectTable');
+  const tableCard = document.getElementById('projTableCard');
+  const listEmpty = document.getElementById('projListEmpty');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!list.length) {
+    tableCard?.classList.toggle('hidden', !getCatalogProjects().length);
+    listEmpty?.classList.remove('hidden');
+    if (listEmpty) listEmpty.textContent = q ? '暂无匹配项目' : '暂无项目，点击右上角添加';
+    return;
+  }
+  tableCard?.classList.remove('hidden');
+  listEmpty?.classList.add('hidden');
+  list.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'table-row' + (p.onSale ? '' : ' is-off-sale');
+    const longName = p.name.length > 8;
+    row.innerHTML = `
+      <div class="name"><span class="name-text${longName ? ' is-long' : ''}">${escapeHtml(p.name)}</span>${p.pinned ? '<span class="pin-tag">置顶</span>' : ''}</div>
+      <div class="dur">${p.duration}分</div>
+      <div class="price">${projFormatPriceHtml(p.price)}</div>
+      <div class="sale-cell"><button type="button" class="switch ${p.onSale ? 'on' : ''}" data-sale-switch aria-label="在售" ${p.boundToCard ? 'disabled' : ''}></button></div>`;
+    row.querySelector('[data-sale-switch]')?.addEventListener('click', e => {
+      e.stopPropagation();
+      const proj = state.projectCatalog.find(x => x.id === p.id);
+      if (!proj || proj.boundToCard) return;
+      proj.onSale = !proj.onSale;
+      projRenderList();
+      if (state.priceCatalogReturn === 'screen2') renderProjectList();
+    });
+    row.addEventListener('click', () => projOpenEdit(p.id));
+    tbody.appendChild(row);
+  });
+}
+
+function projDefaultForm() {
+  return { name: '', price: '', duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, imageExpanded: false };
+}
+
+function projProjectToForm(p) {
+  return { name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false };
+}
+
+function projRenderForm(container, mode) {
+  const locked = mode === 'edit' && getCatalogProjects().find(p => p.id === state.projEditingId)?.boundToCard;
+  const isEdit = mode === 'edit';
+  const reqCls = isEdit ? '' : ' req';
+  const s = state.projFormState;
+  if (!container || !s) return;
+  container.innerHTML = `
+    <div class="proj-form-stack">
+      <div>
+        <div class="proj-section-label">基本信息</div>
+        <div class="proj-form-section">
+          <div class="proj-form-row"><span class="label${reqCls}">项目名称</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${locked ? 'disabled' : ''}></div></div>
+          <div class="proj-form-row"><span class="label${reqCls}">项目价格</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="0" value="${escapeAttr(s.price)}"><span class="suffix">元</span></div></div>
+          <div class="proj-form-row is-link" id="projDurRow"><span class="label">项目时长</span><div class="field"><span class="field-value" id="fDurDisplay">${escapeHtml(projFormatDurationText(s.duration))}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#929292" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="proj-section-label">售卖设置</div>
+        <div class="proj-form-section">
+          <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale" ${locked ? 'disabled' : ''}></button></div></div>
+          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${locked ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="proj-section-label">高级</div>
+        <div class="proj-form-section">
+          <div class="proj-form-row col" style="padding:0">
+            <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">项目图片（选填，用于顾客端展示）</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
+            <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
+          </div>
+          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned" ${locked ? 'disabled' : ''}></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
+        </div>
+      </div>
+    </div>`;
+  projBindFormEvents(container, locked);
+}
+
+function projBindFormEvents(container, locked) {
+  const bindSwitch = (id, key) => {
+    const el = container.querySelector(id);
+    if (!el || el.disabled) return;
+    el.addEventListener('click', () => {
+      state.projFormState[key] = !state.projFormState[key];
+      el.classList.toggle('on', state.projFormState[key]);
+    });
+  };
+  bindSwitch('#fProjOnSale', 'onSale');
+  bindSwitch('#fProjBookable', 'bookable');
+  bindSwitch('#fProjPinned', 'pinned');
+  container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
+  const priceEl = container.querySelector('#fPrice');
+  if (priceEl) {
+    priceEl.setAttribute('readonly', 'readonly');
+    if (!priceEl.dataset.amountKeypadWired) {
+      priceEl.dataset.amountKeypadWired = '1';
+      priceEl.addEventListener('click', e => { e.preventDefault(); openAmountKeypad(priceEl); });
+      priceEl.addEventListener('focus', e => { e.preventDefault(); priceEl.blur(); openAmountKeypad(priceEl); });
+    }
+  }
+  container.querySelector('#projDurRow')?.addEventListener('click', () => openDurPicker());
+  container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
+    state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
+    container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
+    container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
+  });
+  container.querySelector('#projImgUpload')?.addEventListener('click', e => {
+    e.stopPropagation();
+    state.projFormState.hasImage = !state.projFormState.hasImage;
+    const el = container.querySelector('#projImgUpload');
+    if (!el) return;
+    el.classList.toggle('has-img', state.projFormState.hasImage);
+    el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
+    const sub = container.querySelector('#projImgCollapse .sub');
+    if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
+    showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
+  });
+}
+
+function projOpenAdd() {
+  state.projEditingId = null;
+  state.projFormState = projDefaultForm();
+  projRenderForm(document.getElementById('projFormAddBody'), 'add');
+  projShowScreen('screen-p-add');
+}
+
+function projGetEditNoticeKey(p) {
+  if (p.boundToCard) return 'bound';
+  if (!p.onSale) return 'off-sale';
+  return 'normal';
+}
+
+function projUpdateEditNotice(p) {
+  const key = projGetEditNoticeKey(p);
+  const cfg = PROJ_EDIT_NOTICE[key];
+  const el = document.getElementById('projEditNotice');
+  if (!el || !cfg) return;
+  el.className = `alert-banner alert-banner--${cfg.variant}`;
+  el.innerHTML = `${cfg.icon}<span class="alert-banner__text">${escapeHtml(cfg.text)}</span>`;
+  el.classList.remove('hidden');
+}
+
+function projOpenEdit(id) {
+  state.projEditingId = id;
+  const p = getCatalogProjects().find(x => x.id === id);
+  if (!p) return;
+  state.projFormState = projProjectToForm(p);
+  projUpdateEditNotice(p);
+  const delBtn = document.getElementById('btnProjDelete');
+  if (delBtn) delBtn.disabled = !!p.boundToCard;
+  projRenderForm(document.getElementById('projFormEditBody'), 'edit');
+  projShowScreen('screen-p-edit');
+}
+
+function projValidateForm() {
+  const name = (state.projFormState?.name || '').trim();
+  const price = parseFloat(state.projFormState?.price);
+  if (!name) { showToast('请填写项目名称', true); return false; }
+  if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
+  return true;
+}
+
+function projSaveForm() {
+  if (!projValidateForm()) return;
+  const payload = {
+    name: state.projFormState.name.trim(),
+    price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
+    duration: state.projFormState.duration,
+    onSale: state.projFormState.onSale,
+    bookable: state.projFormState.bookable,
+    pinned: state.projFormState.pinned,
+    hasImage: state.projFormState.hasImage,
+    category: PROJ_DEFAULT_CATEGORY,
+  };
+  if (state.projEditingId) {
+    const idx = state.projectCatalog.findIndex(p => p.id === state.projEditingId);
+    if (idx >= 0) state.projectCatalog[idx] = { ...state.projectCatalog[idx], ...payload };
+    showToast('保存成功');
+  } else {
+    state.projectCatalog.push({ id: projUid(), boundToCard: false, ...payload });
+    showToast('项目已创建');
+  }
+  projRenderList();
+  if (state.priceCatalogReturn === 'screen2') renderProjectList();
+  projShowScreen('screen-p-list');
+}
+
+function projOpenDeleteDialog() {
+  const p = getCatalogProjects().find(x => x.id === state.projEditingId);
+  if (p?.boundToCard) { showToast('已绑卡，不可删除', true); return; }
+  document.getElementById('projDialogMask')?.classList.add('show');
+}
+
+function openPriceCatalog(fromScreen) {
+  closeAllFlowOverlays();
+  state.priceCatalogReturn = fromScreen || 'screen0';
+  state.navStack.push(state.priceCatalogReturn);
+  const search = document.getElementById('projSearchInput');
+  if (search) search.value = '';
+  projRenderList();
+  projShowScreen('screen-p-list');
+}
+
+function projBackFromCatalog() {
+  closeAllFlowOverlays();
+  state.navStack.pop();
+  const from = state.priceCatalogReturn || 'screen0';
+  if (from === 'screen2') {
+    renderProjectList();
+    showOnlyScreen('screen2');
+  } else if (from === 'screen6') {
+    showOnlyScreen('screen6');
+  } else if (from === 'screen4' || from === 'screen5') {
+    showOnlyScreen(from);
+  } else {
+    setStep(0);
+  }
+  syncFlowMapFromAppState();
+}
+
+function projBackToList() {
+  closeAllFlowOverlays();
+  projRenderList();
+  projShowScreen('screen-p-list');
+}
+
+function wireProjCatalogModule() {
+  document.getElementById('projSearchInput')?.addEventListener('input', projRenderList);
+  document.getElementById('btnProjGoAdd')?.addEventListener('click', projOpenAdd);
+  document.getElementById('projBackFromList')?.addEventListener('click', projBackFromCatalog);
+  document.getElementById('projBackFromAdd')?.addEventListener('click', projBackToList);
+  document.getElementById('projBackFromEdit')?.addEventListener('click', projBackToList);
+  document.getElementById('btnProjSaveAdd')?.addEventListener('click', projSaveForm);
+  document.getElementById('btnProjSaveEdit')?.addEventListener('click', projSaveForm);
+  document.getElementById('btnProjDelete')?.addEventListener('click', projOpenDeleteDialog);
+  document.getElementById('projDialogCancel')?.addEventListener('click', closeProjDeleteDialog);
+  document.getElementById('projDialogMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('projDialogMask')) closeProjDeleteDialog();
+  });
+  document.getElementById('projDialogConfirm')?.addEventListener('click', () => {
+    state.projectCatalog = state.projectCatalog.filter(x => x.id !== state.projEditingId);
+    closeProjDeleteDialog();
+    projRenderList();
+    if (state.priceCatalogReturn === 'screen2') renderProjectList();
+    projShowScreen('screen-p-list');
+    showToast('已删除');
+  });
+  document.getElementById('btnDurCancel')?.addEventListener('click', closeDurPicker);
+  document.getElementById('btnDurOk')?.addEventListener('click', confirmDurPicker);
+  document.getElementById('durPickerMask')?.addEventListener('click', e => {
+    if (e.target.id === 'durPickerMask') closeDurPicker();
+  });
+  document.getElementById('btnManagePriceCatalog')?.addEventListener('click', () => openPriceCatalog('screen2'));
+  document.getElementById('rowLinkedProjects')?.addEventListener('click', () => openPriceCatalog('screen6'));
+  initProjDurPicker();
+}
+
 function showOnlyScreen(id) {
   document.querySelectorAll('.phone .screen').forEach(el => {
-    el.classList.toggle('hidden', el.id !== id);
+    const isPrice = el.id.startsWith('screen-p-');
+    const isTargetPrice = id.startsWith('screen-p-');
+    if (isTargetPrice) el.classList.toggle('hidden', el.id !== id);
+    else el.classList.toggle('hidden', el.id !== id || isPrice);
   });
   const shell = document.querySelector('.phone-shell');
   if (shell) shell.classList.toggle('phone-shell--success', id === 'screen7' || id === 'screen8');
@@ -3775,6 +4508,9 @@ function showOnlyScreen(id) {
 
 function closeAllFlowOverlays() {
   document.querySelectorAll('.picker-mask.open').forEach(el => el.classList.remove('open'));
+  document.getElementById('projDialogMask')?.classList.remove('show');
+  closeAmountKeypad();
+  closeDurPicker();
 }
 
 function ensureDemoFilled() {
@@ -3801,6 +4537,17 @@ function seedCreateFormFromPreset() {
 }
 
 const FLOW_MAP_GROUPS = [
+  {
+    title: '价目表 / 项目',
+    nodes: [
+      { id: 'price-list-empty', label: '价目表 · 空态', screen: 'screen-p-list' },
+      { id: 'price-list-filled', label: '价目表 · 有数据', screen: 'screen-p-list' },
+      { id: 'price-add', label: '新增项目 · 空表单', screen: 'screen-p-add' },
+      { id: 'price-edit-normal', label: '项目详情 · 普通', screen: 'screen-p-edit' },
+      { id: 'price-edit-bound', label: '项目详情 · 绑卡锁定', screen: 'screen-p-edit' },
+      { id: 'price-edit-off-sale', label: '项目详情 · 已下架', screen: 'screen-p-edit' },
+    ],
+  },
   {
     title: '列表',
     nodes: [
@@ -3898,6 +4645,32 @@ const FLOW_NAV = {
     seedCreateFormFromPreset();
     openMemberPriceConfigForProject('洗剪吹');
   },
+  'price-list-empty'() {
+    applyDemoListState('empty');
+    projShowScreen('screen-p-list');
+    setFlowNavHighlight('price-list-empty');
+  },
+  'price-list-filled'() {
+    ensureDemoFilled();
+    projRenderList();
+    projShowScreen('screen-p-list');
+  },
+  'price-add'() {
+    ensureDemoFilled();
+    projOpenAdd();
+  },
+  'price-edit-normal'() {
+    ensureDemoFilled();
+    projOpenEdit(PROJ_DEMO_IDS.normal);
+  },
+  'price-edit-bound'() {
+    ensureDemoFilled();
+    projOpenEdit(PROJ_DEMO_IDS.bound);
+  },
+  'price-edit-off-sale'() {
+    ensureDemoFilled();
+    projOpenEdit(PROJ_DEMO_IDS.offSale);
+  },
 };
 
 function setFlowNavHighlight(id) {
@@ -3923,6 +4696,15 @@ function syncFlowMapFromAppState() {
   } else if (visibleScreen === 'screen2') id = 'pick-projects';
   else if (visibleScreen === 'screen4') id = 'pick-discount-list';
   else if (visibleScreen === 'screen5') id = 'pick-discount-config';
+  else if (visibleScreen === 'screen-p-list') {
+    id = state.demoListMode === 'filled' && getCatalogProjects().length ? 'price-list-filled' : 'price-list-empty';
+  } else if (visibleScreen === 'screen-p-add') id = 'price-add';
+  else if (visibleScreen === 'screen-p-edit' && state.projEditingId) {
+    const p = getCatalogProjects().find(x => x.id === state.projEditingId);
+    if (p?.boundToCard) id = 'price-edit-bound';
+    else if (p && !p.onSale) id = 'price-edit-off-sale';
+    else id = 'price-edit-normal';
+  }
   if (id) setFlowNavHighlight(id);
 }
 
@@ -4304,12 +5086,13 @@ function appendAmountKeypadKey(key) {
 }
 
 function openAmountKeypad(el) {
-  if (!el) return;
+  if (!el || el.disabled) return;
+  closeDurPicker();
   state.amountKeypadTarget = el;
   state.amountKeypadMode = getAmountKeypadMode(el);
   state.amountKeypadBuffer = el.value || '';
   const titleEl = document.getElementById('amountKeypadTitle');
-  if (titleEl) titleEl.textContent = state.amountKeypadMode === 'integer' ? '输入天数' : '输入金额';
+  if (titleEl) titleEl.textContent = el.id === 'fPrice' ? '项目价格' : (state.amountKeypadMode === 'integer' ? '输入天数' : '输入金额');
   updateAmountKeypadDisplay();
   renderAmountKeypadKeys();
   document.getElementById('amountKeypadMask')?.classList.add('open');
@@ -4325,6 +5108,7 @@ function confirmAmountKeypad() {
   const el = state.amountKeypadTarget;
   if (!el) { closeAmountKeypad(); return; }
   el.value = state.amountKeypadBuffer || '';
+  if (el.id === 'fPrice' && state.projFormState) state.projFormState.price = el.value;
   if (state.amountKeypadMode === 'decimal') clampNonNegativeAmountInput(el);
   else clampIntegerAmountInput(el);
   el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -5333,6 +6117,8 @@ function saveTemplate() {
     state.lastCreatedTemplateId = id;
     showCreateSuccess(id);
   }
+  syncProjectCatalogBindings();
+  projRenderList();
   state.saveInFlight = false;
 }
 
@@ -5956,10 +6742,10 @@ function normalizeMemberPricesFromTpl(prices) {
     Object.entries(prices || {}).map(([k, v]) => [k, normalizeDiscountRule(v)])
   );
   if (normalized[MP_BATCH_KEY]) return { [MP_BATCH_KEY]: normalized[MP_BATCH_KEY] };
-  const configured = PROJECTS.filter(p => normalized[p]);
-  if (configured.length === PROJECTS.length) {
-    const first = normalized[PROJECTS[0]];
-    if (PROJECTS.every(p => memberPriceRulesEqual(normalized[p], first))) {
+  const configured = getAllProjectNamesForPicker().filter(p => normalized[p]);
+  if (configured.length === getAllProjectNamesForPicker().length) {
+    const first = normalized[getAllProjectNamesForPicker()[0]];
+    if (getAllProjectNamesForPicker().every(p => memberPriceRulesEqual(normalized[p], first))) {
       return { [MP_BATCH_KEY]: first };
     }
   }
@@ -5990,7 +6776,7 @@ function getMemberPriceAllRowMeta() {
   if (state.memberPrices[MP_BATCH_KEY]) {
     return { text: formatMemberPriceDisplay(state.memberPrices[MP_BATCH_KEY]), hasVal: true };
   }
-  const configured = PROJECTS.filter(p => state.memberPrices[p]);
+  const configured = getAllProjectNamesForPicker().filter(p => state.memberPrices[p]);
   if (!configured.length) return { text: '未设置', hasVal: false };
   return { text: `已设 ${configured.length} 项`, hasVal: true };
 }
@@ -5999,7 +6785,7 @@ function inferBatchMemberPriceRule() {
   if (state.memberPrices[MP_BATCH_KEY]) {
     return normalizeDiscountRule(state.memberPrices[MP_BATCH_KEY]);
   }
-  const configured = PROJECTS.filter(p => state.memberPrices[p]);
+  const configured = getAllProjectNamesForPicker().filter(p => state.memberPrices[p]);
   if (configured.length === 1) return normalizeDiscountRule(state.memberPrices[configured[0]]);
   return { mode: 'discount', tickIndex: DISCOUNT_TICK_MAX };
 }
@@ -6032,7 +6818,7 @@ function inheritMpBatchDraftToRemaining() {
   if (!state.mpPickerBatchDraft) return;
   const batchRule = normalizeDiscountRule(state.mpPickerBatchDraft);
   if (!isMpDiscountRuleConfigured(batchRule)) return;
-  PROJECTS.forEach(p => {
+  getAllProjectNamesForPicker().forEach(p => {
     const included = isMpPickerExclude() ? !state.mpPickerOn[p] : !!state.mpPickerOn[p];
     if (included) {
       state.mpPickerDrafts[p] = normalizeDiscountRule(batchRule);
@@ -6050,13 +6836,13 @@ function isMpPickerExclude() {
 }
 
 function getProjectPickerIncluded() {
-  if (isProjectPickerExclude()) return PROJECTS.filter(p => !state.pickerProjectOn[p]);
-  return PROJECTS.filter(p => state.pickerProjectOn[p]);
+  if (isProjectPickerExclude()) return getAllProjectNamesForPicker().filter(p => !state.pickerProjectOn[p]);
+  return getAllProjectNamesForPicker().filter(p => state.pickerProjectOn[p]);
 }
 
 function getMpPickerIncluded() {
-  if (isMpPickerExclude()) return PROJECTS.filter(p => !state.mpPickerOn[p]);
-  return PROJECTS.filter(p => state.mpPickerOn[p]);
+  if (isMpPickerExclude()) return getAllProjectNamesForPicker().filter(p => !state.mpPickerOn[p]);
+  return getAllProjectNamesForPicker().filter(p => state.mpPickerOn[p]);
 }
 
 function projPickModeTabsHtml(pickerType) {
@@ -6099,12 +6885,12 @@ function recalcProjectPickAllFlag() {
     state.pickerAllOn = false;
     return;
   }
-  state.pickerAllOn = PROJECTS.length > 0 && PROJECTS.every(p => state.pickerProjectOn[p]);
+  state.pickerAllOn = getAllProjectNamesForPicker().length > 0 && getAllProjectNamesForPicker().every(p => state.pickerProjectOn[p]);
 }
 
 function recalcMpPickAllFlag() {
   if (isMpPickerExclude()) return;
-  state.mpPickerAllOn = PROJECTS.length > 0 && PROJECTS.every(p => state.mpPickerOn[p]);
+  state.mpPickerAllOn = getAllProjectNamesForPicker().length > 0 && getAllProjectNamesForPicker().every(p => state.mpPickerOn[p]);
   if (!state.mpPickerAllOn) state.mpPickerAllExpanded = false;
 }
 
@@ -6112,7 +6898,7 @@ function setPickerSelectionMode(pickerType, newMode) {
   const modeKey = pickerType === 'project' ? 'pickerSelectionMode' : 'mpPickerSelectionMode';
   if (state[modeKey] === newMode) return;
   if (pickerType === 'project') {
-    PROJECTS.forEach(p => {
+    getAllProjectNamesForPicker().forEach(p => {
       state.pickerProjectOn[p] = !state.pickerProjectOn[p];
     });
     state.pickerProjectExpanded = {};
@@ -6122,13 +6908,13 @@ function setPickerSelectionMode(pickerType, newMode) {
     return;
   }
   const keepBatch = state.mpPickerAllOn;
-  PROJECTS.forEach(p => {
+  getAllProjectNamesForPicker().forEach(p => {
     state.mpPickerOn[p] = !state.mpPickerOn[p];
   });
   state.mpPickerExpanded = {};
   state.mpPickerSelectionMode = newMode;
   if (newMode === 'exclude' && keepBatch) {
-    PROJECTS.forEach(p => { state.mpPickerOn[p] = false; });
+    getAllProjectNamesForPicker().forEach(p => { state.mpPickerOn[p] = false; });
     state.mpPickerAllOn = true;
     state.mpPickerAllExpanded = true;
     inheritMpBatchDraftToRemaining();
@@ -6163,7 +6949,7 @@ function initProjectPickerFromItems() {
       unlimited: !!item.unlimited,
     };
   });
-  if (PROJECTS.length && PROJECTS.every(p => state.pickerProjectOn[p])) state.pickerAllOn = true;
+  if (getAllProjectNamesForPicker().length && getAllProjectNamesForPicker().every(p => state.pickerProjectOn[p])) state.pickerAllOn = true;
 }
 
 function initMemberPricePickerFromState() {
@@ -6178,16 +6964,16 @@ function initMemberPricePickerFromState() {
   if (prices[MP_BATCH_KEY]) {
     state.mpPickerAllOn = true;
     state.mpPickerBatchDraft = normalizeDiscountRule(prices[MP_BATCH_KEY]);
-    PROJECTS.forEach(p => { state.mpPickerOn[p] = true; });
+    getAllProjectNamesForPicker().forEach(p => { state.mpPickerOn[p] = true; });
     return;
   }
-  PROJECTS.forEach(p => {
+  getAllProjectNamesForPicker().forEach(p => {
     if (prices[p]) {
       state.mpPickerOn[p] = true;
       state.mpPickerDrafts[p] = normalizeDiscountRule(prices[p]);
     }
   });
-  if (PROJECTS.length && PROJECTS.every(p => state.mpPickerOn[p])) state.mpPickerAllOn = true;
+  if (getAllProjectNamesForPicker().length && getAllProjectNamesForPicker().every(p => state.mpPickerOn[p])) state.mpPickerAllOn = true;
 }
 
 function projPickAllRowHtml(mode) {
@@ -6221,12 +7007,12 @@ function setProjectPickAll(checked) {
   if (isProjectPickerExclude()) return;
   state.pickerAllOn = checked;
   if (checked) {
-    PROJECTS.forEach(p => {
+    getAllProjectNamesForPicker().forEach(p => {
       state.pickerProjectOn[p] = true;
       getProjectPickDraft(p);
     });
   } else {
-    PROJECTS.forEach(p => {
+    getAllProjectNamesForPicker().forEach(p => {
       state.pickerProjectOn[p] = false;
       state.pickerProjectExpanded[p] = false;
     });
@@ -6240,7 +7026,7 @@ function setMpPickAll(checked) {
     state.mpPickerAllExpanded = true;
     inheritMpBatchDraftToRemaining();
     if (!isMpPickerExclude()) {
-      PROJECTS.forEach(p => {
+      getAllProjectNamesForPicker().forEach(p => {
         state.mpPickerOn[p] = true;
         state.mpPickerExpanded[p] = false;
       });
@@ -6249,7 +7035,7 @@ function setMpPickAll(checked) {
     state.mpPickerAllExpanded = false;
     state.mpPickerBatchDraft = null;
     if (!isMpPickerExclude()) {
-      PROJECTS.forEach(p => {
+      getAllProjectNamesForPicker().forEach(p => {
         state.mpPickerOn[p] = false;
         state.mpPickerExpanded[p] = false;
       });
@@ -6411,7 +7197,7 @@ function wireProjPickList(container, mode) {
         inheritMpBatchDraftToRemaining();
       });
     }
-    PROJECTS.forEach(p => {
+    getAllProjectNamesForPicker().forEach(p => {
       if (!state.mpPickerOn[p] || !state.mpPickerExpanded[p] || state.mpPickerAllOn) return;
       wireMpConfigBlock(container, p, () => getMpPickDraft(p), rule => { state.mpPickerDrafts[p] = rule; });
     });
@@ -6427,7 +7213,7 @@ function renderMemberPriceProjectList() {
   container.classList.toggle('proj-pick-list--exclude', isMpPickerExclude());
   let html = projPickModeTabsHtml('discount');
   html += projPickAllRowHtml('discount');
-  PROJECTS.forEach(p => {
+  getAllProjectNamesForPicker().forEach(p => {
     const price = formatProjectPrice(p);
     const excluded = isMpPickerExclude() && !!state.mpPickerOn[p];
     const isOn = isMpPickerExclude() ? excluded : !!state.mpPickerOn[p];
@@ -6589,7 +7375,7 @@ function confirmMemberPriceList() {
       renderMemberPriceProjectList();
       return;
     }
-    if (selected.length === PROJECTS.length) {
+    if (selected.length === getAllProjectNamesForPicker().length) {
       state.memberPrices = { [MP_BATCH_KEY]: batchRule };
     } else {
       state.memberPrices = Object.fromEntries(selected.map(p => [p, batchRule]));
@@ -6616,7 +7402,7 @@ function confirmMemberPriceList() {
     }
   }
   const normalized = Object.fromEntries(selected.map(p => [p, normalizeDiscountRule(getMpPickDraft(p))]));
-  if (selected.length === PROJECTS.length) {
+  if (selected.length === getAllProjectNamesForPicker().length) {
     const first = normalized[selected[0]];
     if (selected.every(p => memberPriceRulesEqual(normalized[p], first))) {
       state.memberPrices = { [MP_BATCH_KEY]: first };
@@ -6631,6 +7417,7 @@ function confirmMemberPriceList() {
 }
 
 function openProjectPicker() {
+  closeAllFlowOverlays();
   initProjectPickerFromItems();
   document.getElementById('projectPickerTitle').textContent = '选择项目';
   renderProjectList();
@@ -6658,7 +7445,7 @@ function renderProjectList() {
   container.classList.toggle('proj-pick-list--exclude', isProjectPickerExclude());
   let html = projPickModeTabsHtml('project');
   html += projPickAllRowHtml('project');
-  PROJECTS.forEach(p => {
+  getAllProjectNamesForPicker().forEach(p => {
     const price = formatProjectPrice(p);
     const excluded = isProjectPickerExclude() && !!state.pickerProjectOn[p];
     const isOn = isProjectPickerExclude() ? excluded : !!state.pickerProjectOn[p];
@@ -6786,12 +7573,19 @@ function isFigmaCaptureIssueSuccess() {
 }
 
 function applyDemoListState(mode) {
-  if (state.demoListMode === mode) {
-    if (state.step !== 0) setStep(0);
-    return;
-  }
+  closeAllFlowOverlays();
+  const changed = state.demoListMode !== mode;
   state.demoListMode = mode;
   state.templates = mode === 'filled' ? buildDemoTemplates() : [];
+  state.projectCatalog = mode === 'filled' ? seedProjectCatalog() : [];
+  if (mode === 'filled') syncProjectCatalogBindings();
+  state.navStack = [];
+  state.projEditingId = null;
+  state.projFormState = null;
+  state.priceCatalogReturn = null;
+  const search = document.getElementById('projSearchInput');
+  if (search) search.value = '';
+  projRenderList();
   state.memberHoldings = {};
   state.memberHoldingsInvalid = {};
   state.holderMeta = {};
@@ -6812,6 +7606,11 @@ function resetAll() {
   state.demoListMode = 'empty';
   syncDemoStateButtons();
   state.templates = [];
+  state.projectCatalog = [];
+  state.navStack = [];
+  state.projEditingId = null;
+  state.projFormState = null;
+  state.priceCatalogReturn = null;
   state.memberHoldings = {};
   state.memberHoldingsInvalid = {};
   state.holderMeta = {};
@@ -6957,6 +7756,7 @@ document.getElementById('refundCardMask').addEventListener('click', e => {
 });
 wireIssuePickerControls();
 wireValidityPickerControls();
+wireProjCatalogModule();
 document.querySelector('.phone')?.addEventListener('click', e => {
   const btn = e.target.closest('.member-card-item__expand');
   if (!btn) return;
