@@ -699,6 +699,25 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .picker-foot { padding: 12px 16px var(--safe-bottom); border-top: none; }
 .picker-list--safe-bottom { padding-bottom: var(--safe-bottom) !important; }
 #projectList { padding: 0 16px 8px; background: var(--card); }
+#projectList.proj-pick-list--all-mode,
+#memberPriceProjectList.proj-pick-list--all-mode,
+#projectList.proj-pick-list--item-cards,
+#memberPriceProjectList.proj-pick-list--item-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-page);
+}
+.proj-pick-card {
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0 16px;
+  flex-shrink: 0;
+  min-height: min-content;
+}
+.proj-pick-card .proj-pick-block:last-child { border-bottom: none; }
 .picker-item--proj { justify-content: space-between; gap: 12px; cursor: pointer; }
 .picker-item--select-all { font-weight: 600; border-bottom: 1px solid var(--border) !important; }
 .proj-item-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
@@ -707,6 +726,18 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .proj-switch input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
 .proj-item-name { flex: 1; min-width: 0; font-size: 14px; display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .proj-item-price { font-size: 13px; color: var(--text-sec); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.proj-item-price__discount {
+  font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums;
+}
+.proj-item-price__original {
+  font-size: 12px; color: var(--text-sec); text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+.proj-item-price__sep { color: var(--text-sec); }
+.proj-item-price__qty {
+  font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums;
+}
+.proj-item-price__catalog { font-variant-numeric: tabular-nums; }
 .proj-switch__track {
   position: relative;
   display: block; width: 44px; height: 26px; border-radius: 13px; background: var(--disabled);
@@ -824,6 +855,18 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .mp-mode-val { flex: 1; min-width: 0; display: flex; justify-content: flex-end; align-items: center; }
 .mp-mode-val__discount {
   font-size: 14px; font-weight: 600; color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+.mp-price-compare {
+  display: flex; align-items: baseline; justify-content: flex-end; gap: 8px;
+  margin: -2px 0 10px;
+}
+.mp-price-compare__paid {
+  font-size: 16px; font-weight: 600; color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.mp-price-compare__original {
+  font-size: 12px; color: var(--text-sec); text-decoration: line-through;
   font-variant-numeric: tabular-nums;
 }
 .mp-config-block .mp-validity-row {
@@ -1090,12 +1133,12 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   padding: 0 16px 8px; background: var(--card);
 }
 .proj-qty-panel:first-of-type { padding-top: 4px; }
-.proj-qty-panel--sub { padding-left: 42px; }
 .proj-qty-panel.is-disabled .qty-stepper { opacity: 0.42; pointer-events: none; }
 .proj-mode-head {
   display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
   cursor: pointer; min-width: 0;
 }
+.proj-mode-head--plain { cursor: default; }
 .proj-mode-radio-wrap {
   position: relative; flex-shrink: 0; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center;
 }
@@ -1245,6 +1288,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .ruler--pill .discount-ruler__mark {
   position: absolute; top: 12px; transform: translateX(-50%);
   font-size: 11px; font-weight: 500; color: var(--text-sec); white-space: nowrap;
+}
+.ruler--pill .discount-ruler__mark--retail {
+  color: var(--text-sec); font-weight: 400;
 }
 .ruler--pill .discount-ruler__thumb {
   position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; margin-left: -11px;
@@ -3147,6 +3193,19 @@ function formatProjectQtySummary(item) {
   return `${purchase}次`;
 }
 
+function buildProjectPickRowMetaHtml(projectName, draft, showQtySummary) {
+  const price = formatProjectPrice(projectName);
+  const pricePart = price ? `<span class="proj-item-price__catalog">${escapeHtml(price)}</span>` : '';
+  const qtyPart = showQtySummary
+    ? `<span class="proj-item-price__qty">${escapeHtml(formatProjectQtySummary(draft))}</span>`
+    : '';
+  if (!pricePart && !qtyPart) return '';
+  if (pricePart && qtyPart) {
+    return `<span class="proj-item-price">${pricePart}<span class="proj-item-price__sep"> · </span>${qtyPart}</span>`;
+  }
+  return `<span class="proj-item-price">${pricePart || qtyPart}</span>`;
+}
+
 function resetCardValidity() {
   state.cardValidityKey = 'permanent';
   state.cardValidityDays = null;
@@ -3458,6 +3517,58 @@ function resolveDiscountPaidPrice(projectName, rule) {
   const original = getProjectPrice(projectName) || 0;
   const multiplier = (r.tickIndex ?? DISCOUNT_TICK_MAX) / DISCOUNT_TICK_MAX;
   return roundMoney(original * multiplier);
+}
+
+function getMpCatalogOriginalPrice(project) {
+  if (project !== MP_BATCH_KEY) return getProjectPrice(project) || 0;
+  const names = getOnSaleProjectNames();
+  if (!names.length) return 0;
+  const total = names.reduce((sum, n) => sum + (getProjectPrice(n) || 0), 0);
+  return roundMoney(total / names.length);
+}
+
+function resolveMpDisplayPaidPrice(project, rule) {
+  if (project !== MP_BATCH_KEY) return resolveDiscountPaidPrice(project, rule);
+  const names = getOnSaleProjectNames();
+  if (!names.length) return 0;
+  const total = names.reduce((sum, n) => sum + resolveDiscountPaidPrice(n, rule), 0);
+  return roundMoney(total / names.length);
+}
+
+function buildMpPriceCompareHtml(project, draft) {
+  const original = getMpCatalogOriginalPrice(project);
+  if (original <= 0) return '';
+  const paid = resolveMpDisplayPaidPrice(project, normalizeDiscountRule(draft));
+  return `<div class="mp-price-compare" data-mp-price-compare>
+    <span class="mp-price-compare__paid">${escapeHtml(formatMoneyDisplay(paid))}</span>
+    <span class="mp-price-compare__original">原价 ${escapeHtml(formatMoneyDisplay(original))}</span>
+  </div>`;
+}
+
+function updateMpPriceCompare(block, project, draft) {
+  const el = block?.querySelector('[data-mp-price-compare]');
+  if (!el) return;
+  const original = getMpCatalogOriginalPrice(project);
+  if (original <= 0) {
+    el.innerHTML = '';
+    return;
+  }
+  const paid = resolveMpDisplayPaidPrice(project, normalizeDiscountRule(draft));
+  el.innerHTML = `<span class="mp-price-compare__paid">${escapeHtml(formatMoneyDisplay(paid))}</span><span class="mp-price-compare__original">原价 ${escapeHtml(formatMoneyDisplay(original))}</span>`;
+}
+
+function buildMpPickRowPriceHtml(projectName, rule) {
+  const original = getProjectPrice(projectName) || 0;
+  const originalPart = original > 0
+    ? `<span class="proj-item-price__original">原价 ${escapeHtml(formatMoneyDisplay(original))}</span>`
+    : '';
+  const hasDiscount = rule && isMpDiscountRuleConfigured(rule);
+  if (!hasDiscount) {
+    return originalPart ? `<span class="proj-item-price">${originalPart}</span>` : '';
+  }
+  const discountPart = `<span class="proj-item-price__discount">${escapeHtml(formatMemberPriceDisplay(rule))}</span>`;
+  if (!originalPart) return `<span class="proj-item-price">${discountPart}</span>`;
+  return `<span class="proj-item-price">${discountPart}<span class="proj-item-price__sep"> · </span>${originalPart}</span>`;
 }
 
 function resolveDiscountSavings(projectName, rule) {
@@ -3972,7 +4083,8 @@ function buildSnapRulerHtml(opts) {
     const isAnchor = labeledSet.has(i);
     tickParts.push(`<span class="discount-ruler__tick${isAnchor ? ' is-anchor' : ''}" style="left:${left}%"></span>`);
     if (isAnchor && labelMap[i]) {
-      tickParts.push(`<span class="discount-ruler__mark" style="left:${left}%">${labelMap[i]}</span>`);
+      const markClass = labelMap[i] === '原价' ? ' discount-ruler__mark--retail' : '';
+      tickParts.push(`<span class="discount-ruler__mark${markClass}" style="left:${left}%">${labelMap[i]}</span>`);
     }
   }
   return `<div class="discount-ruler ruler--pill" ${dataAttr}="${escapeAttr(String(dataValue))}" data-tick="${tick}" data-tick-max="${tickMax}">
@@ -7243,8 +7355,11 @@ function buildProjectBatchQtyHtml() {
       </label>
       ${projQtyStepperHtml(key, 'purchase', draft.purchaseQty, 0)}
     </div>
-    <div class="proj-qty-panel proj-qty-panel--sub${unlimited ? ' is-disabled' : ''}">
-      <span class="proj-qty-label">赠送次数</span>
+    <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
+      <span class="proj-mode-head proj-mode-head--plain">
+        <span class="proj-mode-radio-wrap" aria-hidden="true"></span>
+        <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">赠送次数</span>
+      </span>
       ${projQtyStepperHtml(key, 'gift', draft.giftQty, 0)}
     </div>
     <div class="proj-qty-panel">
@@ -7340,6 +7455,7 @@ function buildMpConfigBlockHtml(project, draft, opts = {}) {
   const stackAttr = d.mode === 'discount' ? ' data-ruler-stack' : '';
   const nameHtml = project === MP_BATCH_KEY ? '全部项目' : escapeHtml(project);
   const hintHtml = project === MP_BATCH_KEY ? '<p class="mp-config-block__hint">确认后将应用于所有适用项目</p>' : '';
+  const priceCompareHtml = buildMpPriceCompareHtml(project, d);
   return `<div class="mp-config-block"${stackAttr} data-mp-proj="${safeName}">
     <div class="mp-config-block__name">${nameHtml}</div>
     ${hintHtml}
@@ -7350,6 +7466,7 @@ function buildMpConfigBlockHtml(project, draft, opts = {}) {
       </div>
       <div class="mp-mode-val">${modeValHtml}</div>
     </div>
+    ${priceCompareHtml}
     ${rulerHtml}
   </div>`;
 }
@@ -7371,12 +7488,14 @@ function wireMpConfigBlock(root, project, getDraft, setDraft) {
     inp.addEventListener('input', () => {
       const prev = normalizeDiscountRule(getDraft());
       setDraft({ ...prev, mode: 'fixed', amount: inp.value.trim() });
+      updateMpPriceCompare(block, project, getDraft());
     });
   });
   block.querySelectorAll('.discount-ruler').forEach(el => {
     wireDiscountRuler(el, tick => {
       const prev = normalizeDiscountRule(getDraft());
       setDraft({ ...prev, mode: 'discount', tickIndex: tick });
+      updateMpPriceCompare(block, project, getDraft());
     });
   });
 }
@@ -7404,7 +7523,12 @@ function wireProjPickRowMain(container, mode) {
       }
       if (mode === 'project') {
         if (state.pickerAllOn) {
-          if (state.pickerProjectExcluded[key] || state.pickerProjectExpanded[key]) return;
+          if (state.pickerProjectExcluded[key]) return;
+          if (state.pickerProjectExpanded[key]) {
+            state.pickerProjectExpanded[key] = false;
+            renderProjectList();
+            return;
+          }
           state.pickerProjectExpanded[key] = true;
           state.pickerProjectDrafts[key] = { ...getProjectPickBatchDraft() };
           renderProjectList();
@@ -7421,13 +7545,18 @@ function wireProjPickRowMain(container, mode) {
         } else if (!state.pickerProjectExpanded[key]) {
           state.pickerProjectExpanded[key] = true;
         } else {
-          return;
+          state.pickerProjectExpanded[key] = false;
         }
         renderProjectList();
         return;
       }
       if (state.mpPickerAllOn) {
-        if (state.mpPickerExcluded[key] || state.mpPickerExpanded[key]) return;
+        if (state.mpPickerExcluded[key]) return;
+        if (state.mpPickerExpanded[key]) {
+          state.mpPickerExpanded[key] = false;
+          renderMemberPriceProjectList();
+          return;
+        }
         state.mpPickerExpanded[key] = true;
         if (!state.mpPickerDrafts[key]) state.mpPickerDrafts[key] = normalizeDiscountRule(getMpPickBatchDraft());
         renderMemberPriceProjectList();
@@ -7444,7 +7573,7 @@ function wireProjPickRowMain(container, mode) {
       } else if (!state.mpPickerExpanded[key]) {
         state.mpPickerExpanded[key] = true;
       } else {
-        return;
+        state.mpPickerExpanded[key] = false;
       }
       renderMemberPriceProjectList();
     });
@@ -7532,43 +7661,52 @@ function wireProjPickList(container, mode) {
 function renderMemberPriceProjectList() {
   syncMpPickTipText();
   const container = document.getElementById('memberPriceProjectList');
-  container.classList.toggle('proj-pick-list--all-mode', state.mpPickerAllOn);
-  let html = projPickAllRowHtml('discount');
-  if (state.mpPickerAllOn) html += projPickSectionTitleHtml();
+  const allOn = state.mpPickerAllOn;
+  container.classList.toggle('proj-pick-list--all-mode', allOn);
+  container.classList.toggle('proj-pick-list--item-cards', !allOn);
+  let itemsHtml = '';
   getAllProjectNamesForPicker().forEach(p => {
-    const price = formatProjectPrice(p);
     const included = isMpIncluded(p);
-    const excluded = state.mpPickerAllOn && !!state.mpPickerExcluded[p];
+    const excluded = allOn && !!state.mpPickerExcluded[p];
     const switchOn = mpSwitchChecked(p);
-    const expanded = state.mpPickerAllOn
+    const expanded = allOn
       ? (included && !!state.mpPickerExpanded[p])
       : (!!state.mpPickerOn[p] && !!state.mpPickerExpanded[p]);
-    const draft = state.mpPickerAllOn && !state.mpPickerOverride[p]
-      ? getMpPickBatchDraft()
-      : getMpPickDraft(p);
-    let summary = '';
+    let rowPriceHtml = '';
     if (included && !expanded) {
-      if (state.mpPickerAllOn) {
-        summary = state.mpPickerOverride[p]
-          ? formatMemberPriceDisplay(getMpPickDraft(p))
-          : formatMemberPriceDisplay(getMpPickBatchDraft());
+      let rule = null;
+      if (allOn) {
+        rule = state.mpPickerOverride[p] ? getMpPickDraft(p) : getMpPickBatchDraft();
       } else if (isMpDiscountRuleConfigured(getMpPickDraft(p))) {
-        summary = formatMemberPriceDisplay(getMpPickDraft(p));
+        rule = getMpPickDraft(p);
       }
+      if (rule && isMpDiscountRuleConfigured(rule)) {
+        rowPriceHtml = buildMpPickRowPriceHtml(p, rule);
+      } else {
+        const price = formatProjectPrice(p);
+        rowPriceHtml = price ? `<span class="proj-item-price">${escapeHtml(price)}</span>` : '';
+      }
+    } else {
+      const price = formatProjectPrice(p);
+      rowPriceHtml = price ? `<span class="proj-item-price">${escapeHtml(price)}</span>` : '';
     }
     const blockClass = excluded ? ' proj-pick-block--excluded' : '';
-    html += `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
+    const blockHtml = `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main" data-proj-row-main>
           <span class="proj-item-name">${escapeHtml(p)}</span>
-          ${price ? `<span class="proj-item-price">${price}${summary ? ` · ${escapeHtml(summary)}` : ''}</span>` : ''}
+          ${rowPriceHtml}
         </span>
         ${projPickSwitchHtml(p, switchOn)}
       </div>
       ${expanded ? `<div class="proj-config-panel">${buildMpConfigBlockHtml(p, getMpPickDraft(p))}</div>` : ''}
     </div>`;
+    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card">${blockHtml}</div>`;
   });
-  container.innerHTML = html;
+  const allHtml = projPickAllRowHtml('discount');
+  container.innerHTML = allOn
+    ? `<div class="proj-pick-card">${allHtml}</div><div class="proj-pick-card">${projPickSectionTitleHtml()}${itemsHtml}</div>`
+    : `<div class="proj-pick-card">${allHtml}</div>${itemsHtml}`;
   wireProjPickList(container, 'discount');
 }
 
@@ -7804,25 +7942,27 @@ function projQtyStepperHtml(proj, kind, value, minVal) {
 function renderProjectList() {
   syncProjectPickTipText();
   const container = document.getElementById('projectList');
-  container.classList.toggle('proj-pick-list--all-mode', state.pickerAllOn);
-  let html = projPickAllRowHtml('project');
-  if (state.pickerAllOn) html += projPickSectionTitleHtml();
+  const allOn = state.pickerAllOn;
+  container.classList.toggle('proj-pick-list--all-mode', allOn);
+  container.classList.toggle('proj-pick-list--item-cards', !allOn);
+  let itemsHtml = '';
   getAllProjectNamesForPicker().forEach(p => {
-    const price = formatProjectPrice(p);
     const included = isProjectIncluded(p);
-    const excluded = state.pickerAllOn && !!state.pickerProjectExcluded[p];
+    const excluded = allOn && !!state.pickerProjectExcluded[p];
     const switchOn = projectSwitchChecked(p);
     const expanded = included && !!state.pickerProjectExpanded[p];
     const draft = expanded
       ? (state.pickerProjectDrafts[p] || getProjectPickBatchDraft())
       : getProjectPickDraft(p);
     const unlimited = !!draft.unlimited;
+    const showQtySummary = included && !expanded;
+    const rowMetaHtml = buildProjectPickRowMetaHtml(p, draft, showQtySummary);
     const blockClass = excluded ? ' proj-pick-block--excluded' : '';
-    html += `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
+    const blockHtml = `<div class="proj-pick-block${blockClass}" data-proj-block="${escapeAttr(p)}">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main" data-proj-row-main>
           <span class="proj-item-name">${escapeHtml(p)}</span>
-          ${price ? `<span class="proj-item-price">${price}</span>` : ''}
+          ${rowMetaHtml}
         </span>
         ${projPickSwitchHtml(p, switchOn)}
       </div>
@@ -7834,8 +7974,11 @@ function renderProjectList() {
           </label>
           ${projQtyStepperHtml(p, 'purchase', draft.purchaseQty, 0)}
         </div>
-        <div class="proj-qty-panel proj-qty-panel--sub${unlimited ? ' is-disabled' : ''}">
-          <span class="proj-qty-label">赠送次数</span>
+        <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
+          <span class="proj-mode-head proj-mode-head--plain">
+            <span class="proj-mode-radio-wrap" aria-hidden="true"></span>
+            <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">赠送次数</span>
+          </span>
           ${projQtyStepperHtml(p, 'gift', draft.giftQty, 0)}
         </div>
         <div class="proj-qty-panel">
@@ -7846,8 +7989,12 @@ function renderProjectList() {
         </div>
       </div>` : ''}
     </div>`;
+    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card">${blockHtml}</div>`;
   });
-  container.innerHTML = html;
+  const allHtml = projPickAllRowHtml('project');
+  container.innerHTML = allOn
+    ? `<div class="proj-pick-card">${allHtml}</div><div class="proj-pick-card">${projPickSectionTitleHtml()}${itemsHtml}</div>`
+    : `<div class="proj-pick-card">${allHtml}</div>${itemsHtml}`;
   wireProjPickList(container, 'project');
 }
 
