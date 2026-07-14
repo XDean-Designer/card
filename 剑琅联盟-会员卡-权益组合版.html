@@ -106,7 +106,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .demo-state-btns button.on { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 600; }
 .demo-state-bar p { font-size: 11px; color: var(--text-sec); margin-top: 8px; line-height: 1.5; }
-.phone-wrap { flex-shrink: 0; width: var(--phone-w); transform: scale(var(--phone-scale)); transform-origin: top center; }
+.phone-wrap { flex-shrink: 0; width: var(--phone-w); position: relative; transform: scale(var(--phone-scale)); transform-origin: top center; }
 .phone-scale-slot { width: var(--phone-display-w); height: calc(var(--phone-display-h) + 28px); flex-shrink: 0; display: flex; justify-content: center; overflow: visible; }
 .phone-label { text-align: center; font-size: 12px; color: var(--text-sec); margin-bottom: 8px; }
 .phone { width: var(--phone-w); height: var(--phone-h); overflow: hidden; position: relative; background: var(--bg-page); border: 1px solid var(--border); }
@@ -716,6 +716,39 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   padding: 0 16px;
   flex-shrink: 0;
   min-height: min-content;
+}
+.proj-pick-card[data-proj-drag-card]:not([data-proj-pinned]) { cursor: grab; touch-action: pan-y; }
+.proj-pick-card.is-dragging {
+  position: absolute;
+  z-index: 10000;
+  cursor: grabbing;
+  background: var(--card);
+  border-radius: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: scale(1.06);
+  touch-action: none;
+  margin: 0 !important;
+  pointer-events: none;
+  opacity: 1 !important;
+  overflow: hidden;
+  padding: 0 16px;
+}
+.proj-pick-drag-placeholder {
+  flex-shrink: 0;
+  border-radius: 12px;
+  border: 1.5px dashed var(--brand-border);
+  background: transparent;
+  box-sizing: border-box;
+}
+.proj-pick-list--item-cards.is-reordering > .proj-pick-card:not(.is-dragging) {
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+.proj-pick-list--item-cards.is-reordering {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 .proj-pick-card .proj-pick-block:last-child { border-bottom: none; }
 .picker-item--proj { justify-content: space-between; gap: 12px; cursor: pointer; }
@@ -2055,13 +2088,35 @@ function getProjectPrice(name) {
 function getOnSaleProjectNames() {
   return getCatalogProjects().filter(p => p.onSale).map(p => p.name);
 }
+function compareCatalogPickerOrder(a, b) {
+  if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+  const ao = a.sortOrder ?? 0;
+  const bo = b.sortOrder ?? 0;
+  if (ao !== bo) return ao - bo;
+  return a.name.localeCompare(b.name, 'zh-CN');
+}
+function ensureCatalogSortOrder() {
+  const projects = getCatalogProjects();
+  if (!projects.some(p => p.sortOrder == null)) return;
+  const pinned = projects.filter(p => p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+  const nonPinned = projects.filter(p => !p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+  pinned.forEach((p, i) => { p.sortOrder = i; });
+  nonPinned.forEach((p, i) => { p.sortOrder = pinned.length + i; });
+}
+function nextCatalogSortOrder() {
+  ensureCatalogSortOrder();
+  const max = Math.max(-1, ...getCatalogProjects().map(p => p.sortOrder ?? 0));
+  return max + 1;
+}
+function isCatalogProjectPinned(name) {
+  const p = getCatalogProjects().find(x => x.name === name);
+  return !!p?.pinned;
+}
 function getAllProjectNamesForPicker() {
+  ensureCatalogSortOrder();
   return [...getCatalogProjects()]
     .filter(p => p.onSale)
-    .sort((a, b) => {
-      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-      return a.name.localeCompare(b.name, 'zh-CN');
-    })
+    .sort(compareCatalogPickerOrder)
     .map(p => p.name);
 }
 function formatProjectPrice(name) {
@@ -4397,9 +4452,16 @@ function projFormatPriceHtml(n) {
 }
 
 function projSortCatalog(list) {
+  ensureCatalogSortOrder();
   return [...list].sort((a, b) => {
     if (a.onSale !== b.onSale) return a.onSale ? -1 : 1;
-    if (a.onSale && b.onSale && a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    if (a.onSale && b.onSale) {
+      const cmp = compareCatalogPickerOrder(a, b);
+      if (cmp !== 0) return cmp;
+    }
+    const ao = a.sortOrder ?? 0;
+    const bo = b.sortOrder ?? 0;
+    if (ao !== bo) return ao - bo;
     return a.name.localeCompare(b.name, 'zh-CN');
   });
 }
@@ -4640,7 +4702,7 @@ function projSaveForm() {
     if (idx >= 0) state.projectCatalog[idx] = { ...state.projectCatalog[idx], ...payload };
     showToast('保存成功');
   } else {
-    state.projectCatalog.push({ id: projUid(), boundToCard: false, ...payload });
+    state.projectCatalog.push({ id: projUid(), boundToCard: false, sortOrder: nextCatalogSortOrder(), ...payload });
     showToast('项目已创建');
   }
   projRenderList();
@@ -7380,7 +7442,7 @@ function projPickAllRowHtml(mode) {
   const batchPanel = allExpanded
     ? (mode === 'project'
       ? `<div class="proj-config-panel">${buildProjectBatchQtyHtml()}</div>`
-      : `<div class="proj-config-panel">${buildMpConfigBlockHtml(MP_BATCH_KEY, getMpPickBatchDraft())}</div>`)
+      : `<div class="proj-config-panel">${buildMpConfigBlockHtml(MP_BATCH_KEY, getMpPickBatchDraft(), { hidePriceCompare: true })}</div>`)
     : '';
   return `<div class="proj-pick-block proj-pick-block--all" data-proj-block="${PROJ_PICK_ALL}">
     <div class="picker-item picker-item--proj">
@@ -7455,7 +7517,7 @@ function buildMpConfigBlockHtml(project, draft, opts = {}) {
   const stackAttr = d.mode === 'discount' ? ' data-ruler-stack' : '';
   const nameHtml = project === MP_BATCH_KEY ? '全部项目' : escapeHtml(project);
   const hintHtml = project === MP_BATCH_KEY ? '<p class="mp-config-block__hint">确认后将应用于所有适用项目</p>' : '';
-  const priceCompareHtml = buildMpPriceCompareHtml(project, d);
+  const priceCompareHtml = opts.hidePriceCompare ? '' : buildMpPriceCompareHtml(project, d);
   return `<div class="mp-config-block"${stackAttr} data-mp-proj="${safeName}">
     <div class="mp-config-block__name">${nameHtml}</div>
     ${hintHtml}
@@ -7580,6 +7642,230 @@ function wireProjPickRowMain(container, mode) {
   });
 }
 
+function projPickDragCardAttrs(name) {
+  const pinned = isCatalogProjectPinned(name);
+  return ` data-proj-drag-card data-proj-name="${escapeAttr(name)}"${pinned ? ' data-proj-pinned="1"' : ''}`;
+}
+
+const PROJ_PICK_LONG_PRESS_MS = 400;
+const PROJ_PICK_DRAG_MOVE_PX = 8;
+
+function getProjPickDragMount() {
+  return document.querySelector('.phone-wrap') || document.body;
+}
+
+function getPhoneWrapScale() {
+  const mount = document.querySelector('.phone-wrap');
+  if (!mount) return 1;
+  const tr = getComputedStyle(mount).transform;
+  if (!tr || tr === 'none') return 1;
+  if (tr.startsWith('matrix')) {
+    const vals = tr.slice(7, -1).split(',').map(v => parseFloat(v.trim()));
+    return vals[0] || 1;
+  }
+  const m = tr.match(/scale\(([\d.]+)/);
+  return m ? parseFloat(m[1]) : 1;
+}
+
+function projPickDragIgnoresTarget(target) {
+  return !!target.closest('.proj-switch, .proj-config-panel, .qty-stepper, .mp-config-block, input, button, label.radio-opt, .discount-ruler, .proj-mode-head');
+}
+
+function commitProjPickDragOrder(container) {
+  const cards = [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])')];
+  if (!cards.length) return false;
+  const names = cards.map(c => c.dataset.projName).filter(Boolean);
+  const pinned = getCatalogProjects().filter(p => p.onSale && p.pinned).sort(compareCatalogPickerOrder);
+  let changed = false;
+  pinned.forEach((p, i) => {
+    if (p.sortOrder !== i) { p.sortOrder = i; changed = true; }
+  });
+  const base = pinned.length;
+  names.forEach((name, i) => {
+    const p = getCatalogProjects().find(x => x.name === name);
+    if (!p || p.pinned) return;
+    const next = base + i;
+    if (p.sortOrder !== next) { p.sortOrder = next; changed = true; }
+  });
+  return changed;
+}
+
+function wireProjPickDragReorder(container, mode) {
+  if (!container.classList.contains('proj-pick-list--item-cards')) return;
+  container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])').forEach(card => {
+    if (card.dataset.dragWired === '1') return;
+    card.dataset.dragWired = '1';
+    let pressTimer = null;
+    let dragging = false;
+    let activePointerId = null;
+    let pressStartY = 0;
+    let dragStartY = 0;
+    let dragStartLocalTop = 0;
+    let dragScale = 1;
+    let dragMount = null;
+    let dragCard = null;
+    let placeholder = null;
+    let suppressClick = false;
+
+    const clearPress = () => {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    };
+
+    const getDraggableCards = () => [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])')];
+
+    const updatePlaceholderIndex = clientY => {
+      if (!placeholder) return;
+      const slots = [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned]), .proj-pick-drag-placeholder')];
+      let insertBefore = null;
+      for (const slot of slots) {
+        if (slot === placeholder) continue;
+        const rect = slot.getBoundingClientRect();
+        if (clientY < rect.top + rect.height / 2) {
+          insertBefore = slot;
+          break;
+        }
+      }
+      if (insertBefore) container.insertBefore(placeholder, insertBefore);
+      else {
+        const draggables = getDraggableCards();
+        const last = draggables[draggables.length - 1];
+        if (last) container.insertBefore(placeholder, last.nextElementSibling);
+      }
+    };
+
+    const clearDragStyles = () => {
+      dragCard?.classList.remove('is-dragging');
+      container.classList.remove('is-reordering');
+      if (!dragCard) return;
+      dragCard.style.position = '';
+      dragCard.style.top = '';
+      dragCard.style.left = '';
+      dragCard.style.width = '';
+      dragCard.style.margin = '';
+      dragCard.style.zIndex = '';
+      dragCard.style.background = '';
+    };
+
+    const onDocPointerMove = e => {
+      if (!dragging || e.pointerId !== activePointerId || !dragCard) return;
+      e.preventDefault();
+      dragCard.style.top = `${dragStartLocalTop + (e.clientY - dragStartY) / dragScale}px`;
+      updatePlaceholderIndex(e.clientY);
+    };
+
+    const detachDocListeners = () => {
+      document.removeEventListener('pointermove', onDocPointerMove);
+      document.removeEventListener('pointerup', onDocPointerEnd);
+      document.removeEventListener('pointercancel', onDocPointerEnd);
+    };
+
+    const endDrag = (commit, pointerId) => {
+      if (!dragging) return;
+      dragging = false;
+      clearPress();
+      detachDocListeners();
+      if (placeholder && dragCard) container.insertBefore(dragCard, placeholder);
+      placeholder?.remove();
+      placeholder = null;
+      clearDragStyles();
+      if (pointerId != null) {
+        try { dragCard?.releasePointerCapture(pointerId); } catch (_) {}
+      }
+      const changed = commit && commitProjPickDragOrder(container);
+      dragCard = null;
+      activePointerId = null;
+      if (changed) {
+        const priceList = document.getElementById('screen-p-list');
+        if (priceList && !priceList.classList.contains('hidden')) projRenderList();
+        if (mode === 'project') renderProjectList();
+        else renderMemberPriceProjectList();
+      }
+    };
+
+    const onDocPointerEnd = e => {
+      if (e.pointerId !== activePointerId) return;
+      endDrag(true, e.pointerId);
+    };
+
+    const startDrag = (e) => {
+      dragging = true;
+      dragCard = card;
+      suppressClick = true;
+      activePointerId = e.pointerId;
+      dragStartY = e.clientY;
+      dragScale = getPhoneWrapScale();
+      dragMount = getProjPickDragMount();
+      const mountRect = dragMount.getBoundingClientRect();
+      const rect = card.getBoundingClientRect();
+      dragStartLocalTop = (rect.top - mountRect.top) / dragScale;
+      placeholder = document.createElement('div');
+      placeholder.className = 'proj-pick-drag-placeholder';
+      placeholder.style.height = `${rect.height / dragScale}px`;
+      container.insertBefore(placeholder, card);
+      dragMount.appendChild(card);
+      card.classList.add('is-dragging');
+      container.classList.add('is-reordering');
+      card.style.width = `${rect.width / dragScale}px`;
+      card.style.left = `${(rect.left - mountRect.left) / dragScale}px`;
+      card.style.top = `${dragStartLocalTop}px`;
+      card.style.position = 'absolute';
+      card.style.margin = '0';
+      card.style.zIndex = '10000';
+      card.style.background = 'var(--card)';
+      document.addEventListener('pointermove', onDocPointerMove, { passive: false });
+      document.addEventListener('pointerup', onDocPointerEnd);
+      document.addEventListener('pointercancel', onDocPointerEnd);
+      try { card.setPointerCapture(e.pointerId); } catch (_) {}
+      if (navigator.vibrate) navigator.vibrate(10);
+    };
+
+    card.addEventListener('pointerdown', e => {
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      if (projPickDragIgnoresTarget(e.target)) return;
+      if (card.querySelector('.proj-config-panel')) return;
+      activePointerId = e.pointerId;
+      pressStartY = e.clientY;
+      suppressClick = false;
+      clearPress();
+      const downEvent = e;
+      pressTimer = setTimeout(() => startDrag(downEvent), PROJ_PICK_LONG_PRESS_MS);
+    });
+
+    card.addEventListener('pointermove', e => {
+      if (e.pointerId !== activePointerId) return;
+      if (!dragging && pressTimer && Math.abs(e.clientY - pressStartY) > PROJ_PICK_DRAG_MOVE_PX) {
+        clearPress();
+        activePointerId = null;
+      }
+    });
+
+    card.addEventListener('pointerup', e => {
+      if (e.pointerId !== activePointerId) return;
+      if (!dragging) {
+        clearPress();
+        activePointerId = null;
+      }
+    });
+
+    card.addEventListener('pointercancel', e => {
+      if (e.pointerId !== activePointerId) return;
+      if (dragging) endDrag(false, e.pointerId);
+      else {
+        clearPress();
+        activePointerId = null;
+      }
+    });
+
+    card.addEventListener('click', e => {
+      if (suppressClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        suppressClick = false;
+      }
+    }, true);
+  });
+}
+
 function wireProjPickList(container, mode) {
   container.querySelectorAll('.proj-switch').forEach(wrap => {
     wrap.addEventListener('click', e => e.stopPropagation());
@@ -7656,6 +7942,7 @@ function wireProjPickList(container, mode) {
     wireNonNegativeAmountInputs(container);
     wireAmountKeypadInputs(container);
   }
+  wireProjPickDragReorder(container, mode);
 }
 
 function renderMemberPriceProjectList() {
@@ -7701,7 +7988,7 @@ function renderMemberPriceProjectList() {
       </div>
       ${expanded ? `<div class="proj-config-panel">${buildMpConfigBlockHtml(p, getMpPickDraft(p))}</div>` : ''}
     </div>`;
-    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card">${blockHtml}</div>`;
+    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>${blockHtml}</div>`;
   });
   const allHtml = projPickAllRowHtml('discount');
   container.innerHTML = allOn
@@ -7989,7 +8276,7 @@ function renderProjectList() {
         </div>
       </div>` : ''}
     </div>`;
-    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card">${blockHtml}</div>`;
+    itemsHtml += allOn ? blockHtml : `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>${blockHtml}</div>`;
   });
   const allHtml = projPickAllRowHtml('project');
   container.innerHTML = allOn
