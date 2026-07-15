@@ -344,7 +344,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <div class="scheme-grid">
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">alloc_pool · 均值模式（默认）</span><span class="scheme-badge locked">Q3 对齐</span></div>
-            <p>员工业绩按 Q3：余额/次数合并计池分摊，折扣按折后实收。</p>
+            <p>员工业绩按 Step3 文案（产品目标，见 Q3）：余额/次数合并计池分摊，折扣按折后实收。<strong>原型未执行。</strong></p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">retail · 减值模式</span></div>
@@ -370,16 +370,20 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">减值模式 · 消耗及退卡（界面摘要）</span></div>
-            <p>· 项目、折扣按挂牌价计消耗价值；有面值时余额按面值折算办卡实付</p>
+            <p>· 项目、折扣按挂牌价计消耗价值（界面文案）</p>
+            <p>· 有面值时余额按面值折算办卡实付</p>
             <p>· 纯折扣卡按累计已享优惠</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px">引擎精确口径：仅<strong>项目</strong>按挂牌价×次数；<strong>折扣</strong>一律累计已享优惠（见 Q4）。</p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">均值模式 · 业绩结算（界面摘要）</span></div>
             <p>· 员工业绩 = 扣款额 ×（办卡实付 ÷ 初始面值）；次数按购卡分摊到每次；折扣按折后实收</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px">以上为 Step3 展示文案；原型<strong>无计绩 runtime</strong>（见 Q3）。</p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">减值模式 · 业绩结算（界面摘要）</span></div>
             <p>· 不论余额 / 次数 / 折扣，员工业绩均按当次服务挂牌价计</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px">以上为 Step3 展示文案；原型<strong>无计绩 runtime</strong>（见 Q3）。</p>
           </div>
         </div>
       </div>
@@ -441,42 +445,43 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
     <section class="section" id="q3">
       <h2>问题 3 · 如何计算会员卡消费造成的店员劳动业绩？</h2>
       <p class="sub">均值模式 / 减值模式（<code>performanceRule</code>）</p>
+      <div class="callout warn"><strong>产品目标 · 原型未实现运算：</strong>当前原型<strong>仅</strong>在 Step3 展示业绩选项文案，并持久化 <code>usagePolicy.performanceRule</code>；<strong>无</strong>核销流水、无 <code>劳动业绩金额</code> 写入、无按模式分叉的计绩函数。下文公式与案例为产品口径留存，不得视为已上线引擎。</div>
 
       <div class="block">
-        <h3><span class="dot state"></span>现状</h3>
+        <h3><span class="dot state"></span>现状（原型）</h3>
         <ul>
-          <li>详情运营数据展示：办卡总额、持卡余额、项目消费次数等<strong>门店经营指标</strong>。</li>
-          <li>消费核销、服务单、店员分成<strong>未在原型中建模</strong>。</li>
-          <li>同一笔服务可能走：余额支付、次卡抵扣、折扣价支付，价值认定不同。</li>
+          <li>Step3「业绩结算规则」可选均值 / 减值；卡面摘要展示「均值计绩 / 减值计绩」。</li>
+          <li>详情运营数据展示办卡总额、持卡余额、项目消费次数等<strong>经营指标</strong>；与劳动业绩金额无关。</li>
+          <li>消费核销、服务单、店员分成、<code>performanceRule</code> 分支计算<strong>均未建模</strong>。</li>
         </ul>
-        <h3><span class="dot gap"></span>核心矛盾</h3>
+        <h3><span class="dot gap"></span>产品待解决矛盾</h3>
         <ul>
-          <li><strong>劳动业绩</strong>通常按服务「产值」计，但卡消费未产生当期现金流水。</li>
-          <li>组合卡一次办卡多项权益，需避免「一次消费重复计绩」或「计绩为 0」。</li>
-          <li>计绩口径需与 Q4 退卡估值共用同一套「权益账面价值」账本。</li>
+          <li><strong>劳动业绩</strong>通常按服务「产值」计，但卡消费未必产生当期现金流水。</li>
+          <li>组合卡一次办卡多项权益，需约定避免「一次消费重复计绩」或「计绩为 0」。</li>
+          <li>正式环境宜与退卡账本字段对齐；<strong>当前原型退卡引擎不读取 <code>performanceRule</code></strong>。</li>
         </ul>
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>均值模式 · 按权益类型分计</h3>
+        <h3><span class="dot rec"></span>均值模式 · 按权益类型分计 <span class="scheme-badge locked">产品目标</span></h3>
         <div class="scheme is-rec" style="margin-top:0;border:none;padding:0;background:transparent">
-          <div class="scheme-head"><span class="name">余额 / 次数 / 折扣分计 · 赠送与购买合并计池</span><span class="scheme-badge locked">默认 · alloc_pool</span></div>
+          <div class="scheme-head"><span class="name">余额 / 次数 / 折扣分计 · 赠送与购买合并计池</span><span class="scheme-badge locked">alloc_pool · 未实现</span></div>
         </div>
         <ul style="margin-top:12px">
           <li><strong>余额消费</strong>：充值余额与赠送余额<strong>合并计算</strong>；业绩 = 扣款额 ×（办卡实付 / 办卡总面值），总面值 = 充值 + 赠送。</li>
           <li><strong>次数消费</strong>：购买次数与赠送次数<strong>合并计池</strong>；单次摊销 = 该项目分摊实付 /（购买次数 + 赠送次数）；无论扣减购买次或赠送次，业绩均 = 单次摊销 × 本次次数。</li>
           <li><strong>折扣消费</strong>：业绩 = 折后实收金额。</li>
-          <li><strong>组合卡分摊</strong>：办卡实付按各权益<strong>名义价值</strong>在<strong>统一分摊池</strong>中一次分配（见 Q4 均值模式）。纯项目卡时，实付即按「价目表原价 × 配置次数」比例分摊到各项目；含面值/折扣时，余额总面值、各项目名义价值、各折扣线名义权重<strong>共同参与分母</strong>，避免重复计价。</li>
-          <li>计绩触发点：核销成功时写入 <code>劳动业绩金额</code>；账本字段与 Q4 退卡共用。</li>
+          <li><strong>组合卡分摊</strong>（产品设想）：办卡实付按各权益名义价值在统一分摊池分配（分摊细节以 Q4 退卡引擎为准时可对接）；原型<strong>尚未</strong>落地计绩分摊。</li>
+          <li>计绩触发点（产品设想）：核销成功时写入 <code>劳动业绩金额</code> —— <strong>原型无此字段与写入</strong>。</li>
         </ul>
         <div class="table-wrap">
           <table class="data">
             <thead>
-              <tr><th>支付来源</th><th>劳动业绩公式</th><th>要点</th></tr>
+              <tr><th>支付来源</th><th>劳动业绩公式（产品目标）</th><th>要点</th></tr>
             </thead>
             <tbody>
-              <tr><td>余额（充值 + 赠送合并）</td><td><code>扣款额 × 办卡实付 / (充值+赠送)</code></td><td>赠送余额消耗计绩低于等额充值，口径统一</td></tr>
-              <tr><td>项目次数（购买 + 赠送合并）</td><td><code>(分摊实付 / (购次+赠次)) × 本次次数</code></td><td>赠送次与购买次<strong>同额计绩</strong></td></tr>
+              <tr><td>余额（充值 + 赠送合并）</td><td><code>扣款额 × 办卡实付 / (充值+赠送)</code></td><td>与 Step3 均值计绩文案一致</td></tr>
+              <tr><td>项目次数（购买 + 赠送合并）</td><td><code>(分摊实付 / (购次+赠次)) × 本次次数</code></td><td>赠送次与购买次同额计绩</td></tr>
               <tr><td>折扣权益</td><td><code>折后实收金额</code></td><td>按当次服务实收计</td></tr>
             </tbody>
           </table>
@@ -484,33 +489,32 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>减值模式 · 价目表原价计绩</h3>
+        <h3><span class="dot rec"></span>减值模式 · 价目表原价计绩 <span class="scheme-badge locked">产品目标</span></h3>
         <div class="scheme is-rec" style="margin-top:0;border:none;padding:0;background:transparent">
-          <div class="scheme-head"><span class="name">不论支付来源，统一按挂牌价计绩</span><span class="scheme-badge locked">retail</span></div>
-          <p>模板 <code>usagePolicy.performanceRule = retail</code> 时启用；<strong>覆盖</strong>均值模式上表全部分项公式。</p>
+          <div class="scheme-head"><span class="name">不论支付来源，统一按挂牌价计绩</span><span class="scheme-badge locked">retail · 未实现</span></div>
+          <p>模板 <code>usagePolicy.performanceRule = retail</code> 时启用（产品目标）；原型仅存字段，不执行公式。</p>
         </div>
         <ul style="margin-top:12px">
           <li><strong>统一规则</strong>：单次服务劳动业绩 = 当次服务项目在价目表中的<strong>原价</strong>（与扣款额、办卡分摊、折后实收无关）。</li>
-          <li><strong>余额 / 次数 / 折扣</strong>：均取同一价目表字段；组合卡亦不再按分摊实付或折后价拆算。</li>
-          <li>计绩触发点与账本字段与均值模式相同；仅<strong>劳动业绩金额</strong>计算公式不同。</li>
+          <li><strong>余额 / 次数 / 折扣</strong>：均取同一价目表字段。</li>
         </ul>
         <div class="table-wrap">
           <table class="data">
             <thead>
-              <tr><th>支付来源</th><th>劳动业绩公式（减值模式）</th><th>与均值模式差异</th></tr>
+              <tr><th>支付来源</th><th>劳动业绩公式（减值 · 产品目标）</th><th>与均值差异</th></tr>
             </thead>
             <tbody>
               <tr><td>余额 / 项目次数 / 折扣</td><td><code>价目表[当次项目] 原价</code></td><td>不折算实付分摊、不取折后实收</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout ok"><strong>与 Q4 对齐：</strong>均值模式（<code>alloc_pool</code>）下计绩与退卡共用分摊池；减值模式（<code>retail</code>）下计绩按挂牌价、退卡按 Q4 减值模式规则（项目/折扣按原价，余额同均值折算）。</div>
-        <div class="callout info"><strong>价目表来源（原型）：</strong>权益组合版演示包内置 <code>PROJECT_PRICES</code>（如洗剪吹 68、头皮护理 168、时尚造型 128、烫发 398、染发 358 等）；正式环境应对接门店价目表，本文算例数字均按该原型价目表重算。</div>
+        <div class="callout info"><strong>与退卡的关系（原型）：</strong>退卡只读 <code>refundRule</code>；计绩规则与退卡<strong>未共用运行时账本</strong>。退卡折扣消耗见 Q4（累计已享优惠），勿与「减值计绩按挂牌价」混淆。</div>
+        <div class="callout info"><strong>价目表来源（原型）：</strong><code>card/demo.html</code> 价目表种子价（如洗剪吹 68、烫发 398、染发 358 等）。</div>
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>代表性案例推演</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">以下案例先按<strong>均值模式</strong>逐步推演，末尾附<strong>均值 vs 减值</strong>对比表；金额单位：元，次数单位：次。</p>
+        <h3><span class="dot rec"></span>代表性案例推演 <span class="scheme-badge locked">产品目标示意</span></h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px">下列案例<strong>不能</strong>在原型中跑通计绩；仅说明产品公式。金额单位：元。</p>
 
         <div class="case-study">
           <div class="case-study__head">
@@ -628,7 +632,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <div class="case-study">
           <div class="case-study__head">
             <div class="case-study__title">案例 4 · 纯折扣卡（烫染会员价）</div>
-            <div class="case-study__meta">办卡实付 599 · 染发会员价 299 · 价目表染发原价 398 · 消费：使用折扣权益染发 1 次</div>
+            <div class="case-study__meta">办卡实付 599 · 染发会员价 299 · 价目表染发原价 358 · 消费：使用折扣权益染发 1 次</div>
           </div>
           <div class="case-study__body">
             <div class="case-step">
@@ -650,24 +654,10 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
               <div class="case-step__label">③ 均值 vs 减值对比</div>
               <div class="table-wrap"><table class="data"><thead><tr><th>模式</th><th>计算</th><th>劳动业绩</th><th>差异说明</th></tr></thead><tbody>
                 <tr><td>均值模式</td><td>折后实收</td><td><strong>299.00</strong></td><td>按会员价实收计绩</td></tr>
-                <tr><td>减值模式</td><td>染发价目表 398</td><td><strong>398.00</strong></td><td>按挂牌原价计绩，不含折扣让渡</td></tr>
+                <tr><td>减值模式</td><td>染发价目表 358</td><td><strong>358.00</strong></td><td>按挂牌原价计绩，不含折扣让渡</td></tr>
               </tbody></table></div>
             </div>
-            <p style="margin-top:10px;font-size:12px;color:var(--muted)">说明：折扣卡购卡费 599 的摊销与退卡估值在 Q4 中另按权益使用情况核算；单次服务计绩仅取当次规则结果。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="block">
-        <h3><span class="dot rec"></span>补充规则</h3>
-        <div class="scheme-grid">
-          <div class="scheme is-rec">
-            <div class="scheme-head"><span class="name">折扣权益 · 退卡按累计已享优惠</span></div>
-            <p>组合卡中折扣线仍纳入<strong>统一名义价值池</strong>（用于算该线分摊实付与剩余明细），但<strong>消耗价值</strong>按累计已享优惠计：</p>
-            <p><code>消耗价值 = Σ(原价 − 折后实付)</code>（账本 <code>savedTotal</code>） · <code>剩余价值 = max(0, 分摊实付 − 消耗价值)</code></p>
-            <p>建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>，不以 Σ剩余封顶。</p>
-            <p class="pros">与 Step3「纯折扣卡按累计已享优惠」副标题一致；均值/减值折扣线口径统一。</p>
-            <p class="cons">需能核算每次折扣的已省金额（固定价或折率 × 价目表原价）。</p>
+            <p style="margin-top:10px;font-size:12px;color:var(--muted)">说明：购卡费摊销与退卡估值见 Q4；上表仅为产品计绩目标示意。</p>
           </div>
         </div>
       </div>
@@ -681,16 +671,16 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       <div class="block">
         <h3><span class="dot state"></span>现状</h3>
         <ul>
-          <li>「退卡/延期」Tab 支持<strong>退卡估值 Sheet</strong>：展示办卡实付、<strong>消耗价值</strong>、权益剩余明细（右对齐；有消耗的行额外显示该项消耗价值）、系统建议退款、可编辑实际退款（单位：元）。</li>
-          <li>Sheet 副标题标注策略：<code>· 均值退卡</code> / <code>· 减值退卡</code>。</li>
-          <li>原型已支持退卡估值 Sheet 演示（含多场景持卡样本，见 10 张演示卡）。</li>
-          <li>手续费规则、超额退款审批、退卡备注等<strong>尚未实现</strong>（人工确认环节部分能力）。</li>
+          <li>「退卡/延期」Tab 支持<strong>退卡估值 Sheet</strong>：办卡实付、<strong>消耗价值</strong>、权益剩余明细（有消耗时剩余价值下方显示「消耗」）、系统建议退款、可编辑实际退款（单位：元）。</li>
+          <li>Sheet 副标题标注策略：<code>· 均值退卡</code> / <code>· 减值退卡</code>（仅由 <code>refundRule</code> 决定）。</li>
+          <li>运算入口：<code>computeSuggestedRefund</code> → <code>computeSuggestedRefundAllocPool</code> / <code>computeSuggestedRefundRetail</code>（原型 <code>card/demo.html</code>）。</li>
+          <li>手续费、超额退款审批、退卡备注、高于建议需授权等<strong>均未实现</strong>；店员可手工改实际退款，无拦截。</li>
         </ul>
-        <div class="callout info"><strong>用语：</strong>界面与汇总字段统一使用「<strong>消耗价值</strong>」；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>，与 Step3 副标题一致。</div>
+        <div class="callout info"><strong>用语：</strong>界面与汇总字段统一使用「<strong>消耗价值</strong>」；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>；Sheet 展示的 Σ剩余价值<strong>不参与</strong>封顶。</div>
         <h3><span class="dot gap"></span>核心矛盾</h3>
         <ul>
-          <li>退卡需回答：<strong>消耗价值</strong> + <strong>剩余价值 / 建议退款</strong> + <strong>实际退款</strong>（可人工调整）。</li>
-          <li>须与 Q3 业绩规则共用账本，避免「计绩一套、退卡另一套」。</li>
+          <li>退卡需回答：<strong>消耗价值</strong> + <strong>剩余价值（明细）</strong> + <strong>建议退款</strong> + <strong>实际退款</strong>（可人工调整）。</li>
+          <li>与业绩：原型<strong>不</strong>共用计绩 runtime；正式环境是否对齐见 Q3 产品目标。</li>
         </ul>
       </div>
 
@@ -701,32 +691,43 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           <p>退卡核心量是<strong>消耗价值</strong>（非「面值」本身）：建议退款由<strong>办卡实付 − 消耗价值</strong>得出，且<strong>不得超过办卡实付</strong>。店员可确认或调低<strong>实际退款</strong>。</p>
         </div>
 
-        <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">产品口径（与 Step3 副标题一致）</h3>
+        <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">产品口径（Step3 文案 + 引擎补全）</h3>
         <div class="table-wrap" style="margin-top:8px">
           <table class="data">
             <thead>
-              <tr><th>场景</th><th>消耗价值</th><th>说明</th></tr>
+              <tr><th>场景</th><th>消耗价值（引擎）</th><th>说明</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>有面值（含纯面值）</td>
-                <td><code>消耗价值 = 消耗面值 ×（办卡实付 ÷ 初始面值）</code></td>
-                <td>初始面值 = 充值 + 赠送；消费先扣充值面值再扣赠送</td>
+                <td>有面值</td>
+                <td>充值/赠送<strong>分系数</strong>：已用充值 × (余额分摊/充值面值) + 已用赠送 × (余额分摊/总面值)</td>
+                <td>纯面值且仅扣充值、充值面值=实付时，系数可为 1；Step3「消耗面值×实付÷初始面值」为简化句</td>
               </tr>
               <tr>
-                <td>纯折扣 / 折扣线</td>
-                <td><code>消耗价值 = 累计已享优惠</code></td>
-                <td>与 Step3 副标题一致；减值模式同述</td>
+                <td>项目次数</td>
+                <td><code>已用次数 ×（该项目分摊实付 ÷ 购+赠总次数）</code></td>
+                <td>均值模式；减值见下表挂牌价×次数</td>
+              </tr>
+              <tr>
+                <td>折扣线</td>
+                <td><code>累计已享优惠 Σ(原价 − 折后实付)</code>（<code>savedTotal</code>）</td>
+                <td>均值 / 减值相同</td>
               </tr>
               <tr>
                 <td>建议退款</td>
-                <td><code>建议退款 = 办卡实付 − 消耗价值</code></td>
-                <td>与 Step3 副标题一致；不得超过办卡实付</td>
+                <td><code>max(0, 办卡实付 − Σ消耗价值)</code></td>
+                <td>不以 Σ剩余封顶</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="callout info" style="margin-top:10px"><strong>与引擎一致：</strong>组合卡项目次数仍按购卡分摊摊销；折扣线（均值/减值）均为累计已享优惠；建议退款均为 <code>max(0, 办卡实付 − Σ消耗价值)</code>。Sheet 仍可展示各线「剩余价值」作明细，但不参与封顶。</div>
+        <div class="callout info" style="margin-top:10px"><strong>引擎一致：</strong>名义价值池用于余额/项目摊销与折扣线「剩余 = max(0, 分摊实付 − 已省)」；建议退款只看 Σ消耗。</div>
+
+        <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">折扣线 · 累计已享优惠（引擎）</h3>
+        <div class="scheme is-rec" style="margin-top:8px">
+          <div class="scheme-head"><span class="name">均值 / 减值共用</span></div>
+          <p>折扣线计入名义价值池（分摊实付 / 剩余明细）；消耗价值 = <code>Σ(原价 − 折后实付)</code>。折率档：<code>paid = 原价 × tickIndex / 20</code>（如 17 → 8.5 折）；固定价取配置金额。次数为 number 的账本自动 <code>savedTotal = 次数 × 单次已省</code>。</p>
+        </div>
 
         <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">引擎实现 · 名义价值池（组合卡分摊）</h3>
         <p style="font-size:13px;margin-top:6px">多权益组合时，须先把办卡实付一次分到各权益线，再套用上表；否则会出现「各线各自用满实付」的重复计价。实现函数 <code>buildRefundNominalPool</code> / <code>computeSuggestedRefundAllocPool</code>：</p>
@@ -765,25 +766,24 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           </table>
         </div>
         <ul style="margin-top:12px">
-          <li><strong>人工确认</strong>：店员可下调「实际退款」（单位：元）；高于建议需授权（原型未实现）。</li>
-          <li><strong>退卡后</strong>：持卡失效、权益清零、写退卡流水，联动「当前有效」等运营指标。</li>
+          <li><strong>人工确认</strong>：店员可改「实际退款」（单位：元）；原型<strong>无</strong>高于建议需授权。</li>
+          <li><strong>退卡后</strong>：持卡失效、权益清零（演示逻辑），联动「当前有效」等指标。</li>
         </ul>
-        <div class="mermaid-box">退卡估值流程（均值 · 原型）
+        <div class="mermaid-box">退卡估值流程（原型已实现）
 
-  1. 读取持卡账本（办卡实付、各权益剩余/已用 · 含赠送）
+  1. 读取持卡账本（办卡实付、各权益剩余/已用）
   2. 构建名义价值池 → 名义合计
-  3. 分项计算 消耗价值 / 剩余价值
+  3. 分项计算 消耗价值 / 剩余价值（Sheet 明细）
   4. 建议退款 = max(0, 办卡实付 − Σ消耗价值)
-  5. Sheet：办卡实付 · 消耗价值 · 权益剩余明细（有消耗显示分项消耗，金额右对齐）· 建议退款
-  6. 店员确认/修改 实际退款（元）
-  7. 写退卡流水 + 更新运营指标</div>
+  5. Sheet 展示 · 店员可改实际退款
+  6. 确认后退卡生效</div>
         <div class="callout warn"><strong>反例（已修复）：</strong>若余额按「实付/总面值」、项目又按「实付×项目比例」各自独立用满实付，组合卡会重复加计。组合卡必须<strong>共享同一名义合计分母</strong>。</div>
       </div>
 
       <div class="block">
         <h3><span class="dot rec"></span>减值模式 · 消耗价值算法</h3>
         <div class="scheme is-rec" style="margin-top:0;border:none;padding:0;background:transparent">
-          <div class="scheme-head"><span class="name">项目 / 折扣按挂牌价，余额同均值折算</span><span class="scheme-badge locked">retail</span></div>
+          <div class="scheme-head"><span class="name">项目按挂牌价 · 折扣按已享优惠 · 余额同均值</span><span class="scheme-badge locked">retail</span></div>
           <p>模板 <code>usagePolicy.refundRule = retail</code> 时启用。建议退款同样：<code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
         </div>
         <div class="table-wrap" style="margin-top:14px">
@@ -816,17 +816,17 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             </tbody>
           </table>
         </div>
-        <div class="callout ok"><strong>与 Q3 对齐：</strong>减值模式下员工业绩按挂牌价计；退卡项目/折扣按挂牌价与已省优惠计<strong>消耗价值</strong>，二者独立但均受 <code>usagePolicy</code> 控制。</div>
+        <div class="callout ok"><strong>与计绩解耦（原型）：</strong>退卡只执行 <code>refundRule</code>；减值退卡下「项目挂牌价 × 已用」与「折扣累计已享优惠」并存。业绩 <code>performanceRule</code> 见 Q3（未实现）。</div>
       </div>
 
       <div class="block" id="q4-cases">
         <h3><span class="dot rec"></span>场景算例 · 双模式推演</h3>
-        <p style="font-size:13px;margin-bottom:12px">以下算例均给出<strong>均值模式</strong>逐步推演，并以对比表并列<strong>减值模式</strong>结果；价目表采用原型 <code>PROJECT_PRICES</code>。</p>
+        <p style="font-size:13px;margin-bottom:12px">以下算例按<strong>退卡引擎</strong>推演；价目表与 <code>card/demo.html</code> 种子价一致。</p>
         <ul>
           <li><strong>消费顺序</strong>：余额先扣充值面值再扣赠送；项目先扣购买次再扣赠送次（账本分项记录 <code>rechargeUsed/giftUsed</code>、<code>purchaseUsed/giftUsed</code>）。</li>
           <li><strong>合并计池</strong>：退卡摊销仍共用单价；扣减赠送同样减少可退账面，<strong>不因「扣的是赠送」而免扣</strong>，但须遵守上述消费顺序。</li>
           <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一名义价值合计</strong>（含余额/折扣权重）。</li>
-          <li><strong>建议退款可为 0</strong>：系统允许低退款甚至 0；店员可在人工确认环节调低并填原因。</li>
+          <li><strong>建议退款可为 0</strong>：系统允许；店员可在确认环节调低实际退款（无审批拦截）。</li>
         </ul>
 
         <div class="case-study">
@@ -881,8 +881,8 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
 
         <div class="case-study">
           <div class="case-study__head">
-            <div class="case-study__title">算例 C · 纯项目组合 · 洗剪吹先用购买次数</div>
-            <div class="case-study__meta">实付 2000 · 洗剪吹 10+2 赠 · 头皮 3 · 造型 2 · 洗剪吹已用购买 2 次</div>
+            <div class="case-study__title">算例 C · 示意三项目卡（非当前尊享模板）</div>
+            <div class="case-study__meta">示意：实付 2000 · 仅洗剪吹 10+2 赠 / 头皮 3 / 造型 2 · 洗剪吹已用购买 2 次 · <strong>不绑定</strong>现网 <code>demo_vip_combo</code>（现模板洗剪吹无赠次且权益远不止三项）</div>
           </div>
           <div class="case-study__body">
             <div class="table-wrap"><table class="data"><thead><tr><th>步骤</th><th>计算</th><th>结果</th></tr></thead><tbody>
@@ -902,36 +902,37 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
                 <tr><td>减值模式</td><td>68×2 = 136.00</td><td>68×10 + 168×3 + 128×2 = 1,440.00</td><td><strong>1,864.00</strong>（2000−136）</td><td>消耗按挂牌价；建议退可高于账面剩余合计</td></tr>
               </tbody></table></div>
             </div>
-            <p style="margin-top:8px;font-size:12px;color:var(--muted)">说明：建议退款按「实付 − 消耗」口径，可高于 Σ账面剩余（本例减值 1,864 &gt; 剩余 1,440）。</p>
+            <p style="margin-top:8px;font-size:12px;color:var(--muted)">说明：本算例用于验证均值「三分摊项目」公式；建议退款口径为实付−消耗（可高于账面 Σ剩余，如减值 1864 &gt; 1440）。现网尊享卡请看算例 D。</p>
           </div>
         </div>
 
         <div class="case-study">
           <div class="case-study__head">
-            <div class="case-study__title">算例 D · 尊享组合卡（面值+项目+折扣）</div>
-            <div class="case-study__meta">实付 2000 · 面值 2500 · 洗剪吹10/头皮3/造型2 · 烫发8.5折+染发299 · 赠送余额已用 500 · 烫发折扣 2 次 · 染发折扣 1 次</div>
+            <div class="case-study__title">算例 D · 尊享组合卡（现模板 · m14）</div>
+            <div class="case-study__meta">实付 2000 · 面值 2500（充 2000+赠 500）· 10 项目 + 10 折扣线 · 账本：赠送余额已用 500 · 烫发折扣 2 次 · 染发折扣 1 次 · 项目未消费 · 对照 <code>demo_vip_combo:m14</code></div>
           </div>
           <div class="case-study__body">
             <div class="table-wrap"><table class="data"><thead><tr><th>步骤</th><th>权益 / 计算</th><th>权重 / 结果</th></tr></thead><tbody>
-              <tr><td>① 名义价值合计</td><td>2500+680+504+256+398+358</td><td><strong>4,696</strong></td></tr>
-              <tr><td>② 分摊系数</td><td>2,000 ÷ 4,696</td><td>≈ 0.4259</td></tr>
-              <tr><td>② 余额 消耗价值 / 剩余价值</td><td>500×(余额分摊/总面值) · 2000×(余额分摊/充值面值)</td><td>212.95 / 1,064.74</td></tr>
-              <tr><td>③ 项目 剩余价值 合计</td><td>2,000 × (680+504+256)÷4,696（未消费）</td><td>≈ 613.29</td></tr>
-              <tr><td>④ 烫发 分摊实付</td><td>2,000 × 398÷4,696</td><td>≈ 169.51</td></tr>
-              <tr><td>④ 烫发 消耗价值 / 剩余价值</td><td>已省 (398−338.3)×2 · 169.51−119.40</td><td>119.40 / 50.11</td></tr>
-              <tr><td>④ 染发 分摊实付</td><td>2,000 × 358÷4,696</td><td>≈ 152.47</td></tr>
-              <tr><td>④ 染发 消耗价值 / 剩余价值</td><td>已省 (358−299)×1 · 152.47−59.00</td><td>59.00 / 93.47</td></tr>
-              <tr><td>⑤ 建议退款</td><td>办卡实付 − 消耗价值 = 2000−(212.95+178.40)</td><td><strong>≈ 1,608.65 元</strong></td></tr>
+              <tr><td>① 名义价值合计</td><td>余额 2500 + 项目权重 5238 + 折扣权重 2660</td><td><strong>10,398</strong></td></tr>
+              <tr><td>② 余额分摊实付</td><td>2,000 × 2500÷10398</td><td>≈ 480.86</td></tr>
+              <tr><td>② 余额 消耗 / 剩余</td><td>赠送已用 500×(480.86/2500)；充值剩余 2000×(480.86/2000)</td><td>96.17 / 480.86</td></tr>
+              <tr><td>③ 项目</td><td>本样本项目未消费 → 项目消耗 0；剩余份额仍进明细</td><td>消耗 0</td></tr>
+              <tr><td>④ 烫发 已省</td><td>(398−338.3)×2（8.5 折）</td><td>119.40</td></tr>
+              <tr><td>④ 烫发 分摊 / 剩余</td><td>分摊 2,000×398÷10398≈76.55；剩余 max(0,76.55−119.40)</td><td>0.00</td></tr>
+              <tr><td>④ 染发 已省</td><td>(358−299)×1</td><td>59.00</td></tr>
+              <tr><td>④ 染发 分摊 / 剩余</td><td>分摊 ≈68.86；剩余 max(0,68.86−59)</td><td>9.86</td></tr>
+              <tr><td>④ 折扣消耗合计</td><td>119.40 + 59.00</td><td>178.40</td></tr>
+              <tr><td>⑤ 建议退款</td><td>max(0, 2000 − (96.17+178.40))</td><td><strong>1,725.43 元</strong></td></tr>
             </tbody></table></div>
-            <div class="case-result"><strong>建议应退（均值模式）≈ 1,608.65 元</strong>；折扣消耗价值 178.40 元（累计已享优惠：烫发 59.7×2 + 染发 59×1），与余额/项目共享名义价值合计 4,696。</div>
+            <div class="case-result"><strong>建议应退（均值）= 1,725.43 元</strong>；本样本无项目消耗，减值模式同公式下建议退亦为 <strong>1,725.43</strong>（余额同均值、折扣同 savedTotal、项目消耗同为 0）。</div>
             <div class="case-step" style="margin-top:12px">
-              <div class="case-step__label">均值 vs 减值对比</div>
-              <div class="table-wrap"><table class="data"><thead><tr><th>模式</th><th>消耗价值</th><th>剩余价值（要点）</th><th>建议退款</th><th>差异说明</th></tr></thead><tbody>
-                <tr><td>均值模式</td><td>391.35</td><td>余额 1,064.74 + 项目 613.29 + 折扣 143.58</td><td><strong>≈ 1,608.65</strong>（2000−391.35）</td><td>折扣按累计已享优惠；项目未用故项目消耗为 0</td></tr>
-                <tr><td>减值模式</td><td>391.35</td><td>余额 1,064.74 + 项目 1,440 + 折扣 143.58</td><td><strong>≈ 1,608.65</strong>（2000−391.35）</td><td>本样本无项目消耗，折扣口径相同，建议退一致</td></tr>
+              <div class="case-step__label">均值 vs 减值（本账本）</div>
+              <div class="table-wrap"><table class="data"><thead><tr><th>模式</th><th>消耗价值</th><th>建议退款</th><th>差异说明</th></tr></thead><tbody>
+                <tr><td>均值模式</td><td>274.57</td><td><strong>1,725.43</strong></td><td>折扣按累计已享优惠；名义池含全部 10+10 线</td></tr>
+                <tr><td>减值模式</td><td>274.57</td><td><strong>1,725.43</strong></td><td>本样本无项目已用，故与均值建议退相同；若有项目已用则按挂牌价×次数计入消耗</td></tr>
               </tbody></table></div>
             </div>
-            <p style="margin-top:8px;font-size:12px;color:var(--muted)">零消费对照：同卡型成员 m15 全部权益未使用时，两种模式建议退款均为办卡实付 2,000 元。原型对照：褚女士 · <code>demo_vip_combo:m14</code>。</p>
+            <p style="margin-top:8px;font-size:12px;color:var(--muted)">零消费对照：同卡型 m15 未使用时建议退 = 办卡实付 2,000。函数：<code>buildRefundNominalPool</code>、<code>computeSuggestedRefundAllocPool</code>。</p>
           </div>
         </div>
 
@@ -961,12 +962,12 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             <p><strong>不支持部分退</strong>（仅退余额或仅退某项目）。退卡即整卡失效、权益清零，简化账本与 UI。</p>
           </div>
         </div>
-        <div class="callout info"><strong>与 Q3 联动：</strong>折扣线退卡估值与劳动业绩「折后实收计绩」相互独立——计绩看当次实收，退卡看购卡费分摊份额的剩余。</div>
-        <div class="callout info"><strong>原型对照：</strong>实现见 <code>buildRefundNominalPool</code>、<code>computeSuggestedRefundAllocPool</code>、<code>computeSuggestedRefundRetail</code>；策略字段 <code>usagePolicy.refundRule</code>。</div>
+        <div class="callout info"><strong>与计绩：</strong>退卡结果不写入劳动业绩；Q3 计绩为产品目标示意。</div>
+        <div class="callout info"><strong>原型对照：</strong><code>card/demo.html</code> 中 <code>buildRefundNominalPool</code>、<code>computeSuggestedRefundAllocPool</code>、<code>computeSuggestedRefundRetail</code>；策略字段 <code>usagePolicy.refundRule</code>。</div>
       </div>
       <p class="footer-note">
         文档路径：剑琅联盟-卡模板演示包/剑琅联盟-会员卡逻辑梳理.html ·
-        对照原型：剑琅联盟-会员卡-权益组合版.html
+        对照原型：card/demo.html（同步副本：剑琅联盟-会员卡-权益组合版.html）
       </p>
     </section>
 
