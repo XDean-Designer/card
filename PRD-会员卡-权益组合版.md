@@ -385,6 +385,6 @@
 | 交互原型 | `card/demo.html` |
 | 逻辑与算例 | `card/logic.html` |
 | **评审可视化页** | **`card/prd-review.html`** |
-| **研发最小开工包** | **`card/docs/`**（范围 · 模型 · 接口 · 规则 · 页面 · 验收） |
+| **研发最小开工包** | **`card/docs/index.html`**（HTML 浏览；`.md` 为源文件） |
 | 在线演示 | https://xdean-designer.github.io/card/ |
 | 本 PRD | `card/PRD-会员卡-权益组合版.md` |
