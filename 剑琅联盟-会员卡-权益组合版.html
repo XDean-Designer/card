@@ -394,23 +394,85 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .guide-hint { margin: 12px 16px; padding: 10px 12px; background: var(--bg-page); border-radius: 8px; font-size: 12px; color: var(--text-sec); line-height: 1.65; }
 .guide-group { margin: 0 16px 14px; background: var(--card); border-radius: 12px; border: none; overflow: hidden; }
 .guide-group-head { padding: 10px 14px 8px; font-size: 12px; font-weight: 600; color: var(--text-sec); }
-.benefit-check { display: block; padding: 14px; border-top: 1px solid var(--bg-page); cursor: pointer; }
+.benefit-check {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 14px; border-top: 1px solid var(--bg-page); cursor: default;
+}
 .benefit-check:first-of-type { border-top: none; }
-.benefit-check__row { display: flex; align-items: center; gap: 12px; }
-.benefit-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--brand); flex-shrink: 0; cursor: pointer; }
-.benefit-check__title { font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--text); }
-.benefit-check__desc { display: block; margin: 6px 0 0 30px; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
-.guide-group.benefit-blocks .benefit-check { padding: 14px 14px 8px; }
-.guide-group.benefit-blocks .benefit-check__desc { margin: 4px 0 0 30px; }
+.benefit-check__main { flex: 1; min-width: 0; }
+.benefit-check__title { display: block; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--text); }
+.benefit-check__desc { display: block; margin: 4px 0 0; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+.benefit-check .switch { margin-top: 2px; flex-shrink: 0; }
+.guide-group.benefit-blocks .benefit-check { padding: 14px 14px 10px; }
 .guide-group.benefit-blocks .benefit-expand--tree .benefit-expand__inner {
-  margin: 3px 16px 12px 44px; padding: 4px 0 6px;
+  margin: 2px 16px 10px; padding: 2px 0 4px;
 }
 .benefit-block { border-top: 1px solid var(--bg-page); }
 .benefit-block:first-child { border-top: none; }
 .benefit-expand { background: transparent; border-left: none; margin: 0; padding: 0; }
 .benefit-expand.hidden { display: none !important; }
 .benefit-expand--tree .benefit-expand__inner {
-  position: relative; margin: 6px 16px 14px 44px; padding: 6px 0 8px;
+  position: relative; margin: 3px 16px 10px; padding: 3px 0 4px;
+}
+.btn-add-benefit {
+  display: flex; align-items: center; justify-content: center; width: 100%;
+  min-height: 40px; margin: 8px 0 4px; padding: 0 12px;
+  border: 1px solid var(--brand); border-radius: 10px; background: transparent;
+  color: var(--brand); font-size: 14px; font-weight: 600; font-family: inherit;
+  cursor: pointer; box-sizing: border-box;
+}
+.btn-add-benefit:active { opacity: .88; background: var(--brand-soft); }
+.step2-benefit-cards {
+  display: flex; flex-direction: column; gap: 10px; margin: 0 0 4px;
+}
+.step2-benefit-card {
+  position: relative; display: flex; align-items: stretch;
+  width: 100%; box-sizing: border-box; min-height: 70px;
+  padding: 12px 61px 12px 14px;
+  border: none; border-radius: 12px; background: var(--card); overflow: hidden;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+.step2-benefit-card:active { filter: brightness(.99); }
+.step2-benefit-card__body {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;
+  text-align: left; border: none; background: transparent; padding: 0;
+  font-family: inherit; color: inherit; pointer-events: none;
+}
+.step2-benefit-card__title {
+  display: block; font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.step2-benefit-card__meta {
+  display: block; position: relative; margin-top: 4px; padding-top: 5px;
+  border-top: none;
+  font-size: 12px; font-weight: 400; color: var(--text-sec); line-height: 1.45;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Figma 40:80：顶部分割线宽=文案列（非整卡），横向渐变 #929292 两端淡、中间实 */
+.step2-benefit-card__meta::before {
+  content: '';
+  position: absolute; left: 0; top: 0;
+  width: 100%; max-width: 248px; height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(146, 146, 146, 0.075) 0%,
+    rgba(146, 146, 146, 0.25) 49%,
+    rgba(146, 146, 146, 0.075) 100%
+  );
+  pointer-events: none;
+}
+.step2-benefit-card__rm {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 61px; z-index: 1;
+  border: none; padding: 0 12px 0 0; margin: 0; cursor: pointer;
+  border-radius: 50px 0 0 50px;
+  background: linear-gradient(270deg, rgba(244, 244, 244, 0) 0%, rgba(244, 244, 244, 0.8) 100%);
+  display: inline-flex; align-items: center; justify-content: flex-end;
+  box-sizing: border-box;
+}
+.step2-benefit-card__rm:active { filter: brightness(.97); }
+.step2-benefit-card__rm img {
+  display: block; width: 16px; height: 18px; margin-right: 8px; pointer-events: none;
 }
 .benefit-tree-node { position: relative; }
 .benefit-expand .form-section {
@@ -418,20 +480,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   box-shadow: none; border: none;
 }
 .benefit-expand .form-row {
-  background: transparent; padding: 14px 0; padding-left: 0; padding-right: 0;
-  min-height: 50px; border-bottom: none;
+  background: transparent; padding: 7px 0; padding-left: 0; padding-right: 0;
+  min-height: 44px; border-bottom: none;
 }
 .benefit-expand .form-row + .form-row,
 .benefit-expand .proj-tag-list + .form-row { border-top: 1px solid #F5F5F7; }
-.benefit-expand-field { padding: 10px 0 14px; }
+.benefit-expand-field { padding: 5px 0 7px; }
 .benefit-expand-field__head {
   display: flex; align-items: center; justify-content: space-between;
-  font-size: 15px; margin-bottom: 12px;
+  font-size: 15px; margin-bottom: 6px;
 }
 .benefit-expand-field__head .label { color: var(--text); font-weight: 400; font-size: 15px; }
 .benefit-expand-field__val { font-size: 13px; color: var(--brand); font-weight: 600; }
-.benefit-expand .proj-tag-list { padding: 2px 0 12px; }
-.benefit-expand .mp-tag-list { padding: 2px 0 12px; }
+.benefit-expand .proj-tag-list { padding: 2px 0 6px; }
+.benefit-expand .mp-tag-list { padding: 2px 0 6px; }
 .phone-shell--success {
   background:
     linear-gradient(180deg, rgba(83, 255, 114, 0.22) 0%, rgba(224, 251, 165, 0.22) 24.052%, rgba(247, 247, 247, 0.22) 48.104%),
@@ -1121,12 +1183,23 @@ input[type=number]::-webkit-inner-spin-button {
   display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
   flex: 1; min-width: 0;
 }
-.balance-face-trail > #fFaceValue { color: var(--text); }
+.balance-amount-field {
+  display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;
+  min-width: 0;
+}
+.balance-amount-field #fFaceValue {
+  color: var(--text); text-align: right; flex: 0 1 auto;
+  width: auto; min-width: 64px; max-width: 140px; field-sizing: content;
+}
+.balance-amount-field .suffix,
+.balance-gift-row .suffix {
+  font-size: 14px; color: var(--text-sec); flex-shrink: 0; line-height: 1.4;
+}
 .balance-gift-row { display: inline-flex; align-items: center; gap: 4px; }
 .balance-gift-label { font-size: 12px; color: var(--text-sec); line-height: 1.4; flex-shrink: 0; }
 .balance-gift-input {
   flex: 0 0 auto; width: auto; min-width: 40px; max-width: 120px;
-  text-align: right; field-sizing: content;
+  text-align: right; field-sizing: content; color: var(--text);
 }
 .balance-permanent-tag { font-size: 11px; color: var(--text-sec); margin-left: 6px; font-weight: 500; }
 .proj-tag-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; min-height: 4px; }
@@ -1451,31 +1524,43 @@ input[type=number]::-webkit-inner-spin-button {
 .ruler-block { padding: 0 0 4px; }
 .ruler-block .ruler--pill { padding-bottom: 38px; }
 
-/* Figma capture: ?figma=list-active | issue-success — phone-only */
+/* Figma capture: ?figma=list-active | issue-success | step2 — phone-only */
 html.figma-capture-list-active,
-html.figma-capture-issue-success { --phone-scale: 1; }
+html.figma-capture-issue-success,
+html.figma-capture-step2 { --phone-scale: 1; }
 html.figma-capture-list-active body,
-html.figma-capture-issue-success body { background: var(--bg-page); }
+html.figma-capture-issue-success body,
+html.figma-capture-step2 body { background: var(--bg-page); }
 html.figma-capture-list-active .shell,
-html.figma-capture-issue-success .shell { max-width: none; margin: 0; padding: 0; display: block; }
+html.figma-capture-issue-success .shell,
+html.figma-capture-step2 .shell { max-width: none; margin: 0; padding: 0; display: block; }
 html.figma-capture-list-active .toolbar,
-html.figma-capture-issue-success .toolbar { display: none !important; }
+html.figma-capture-issue-success .toolbar,
+html.figma-capture-step2 .toolbar { display: none !important; }
 html.figma-capture-list-active .phone-label,
-html.figma-capture-issue-success .phone-label { display: none !important; }
+html.figma-capture-issue-success .phone-label,
+html.figma-capture-step2 .phone-label { display: none !important; }
 html.figma-capture-list-active .phone-scale-slot,
-html.figma-capture-issue-success .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
+html.figma-capture-issue-success .phone-scale-slot,
+html.figma-capture-step2 .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
 html.figma-capture-list-active .phone-wrap,
-html.figma-capture-issue-success .phone-wrap { transform: none; }
+html.figma-capture-issue-success .phone-wrap,
+html.figma-capture-step2 .phone-wrap { transform: none; }
 html.figma-capture-list-active .phone,
-html.figma-capture-issue-success .phone { height: auto; min-height: var(--phone-h); overflow: visible; border: none; }
+html.figma-capture-issue-success .phone,
+html.figma-capture-step2 .phone { height: auto; min-height: var(--phone-h); overflow: visible; border: none; }
 html.figma-capture-list-active .phone-shell,
-html.figma-capture-issue-success .phone-shell { height: auto; overflow: visible; }
+html.figma-capture-issue-success .phone-shell,
+html.figma-capture-step2 .phone-shell { height: auto; overflow: visible; }
 html.figma-capture-list-active .screen,
-html.figma-capture-issue-success .screen { overflow: visible; min-height: auto; flex: none; }
+html.figma-capture-issue-success .screen,
+html.figma-capture-step2 .screen { overflow: visible; min-height: auto; flex: none; }
 html.figma-capture-list-active .page-body,
-html.figma-capture-issue-success .page-body { overflow: visible; flex: none; min-height: auto; }
+html.figma-capture-issue-success .page-body,
+html.figma-capture-step2 .page-body { overflow: visible; flex: none; min-height: auto; }
 html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
 html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
+html.figma-capture-step2 .bottom-bar { position: static; }
 
 /* Price catalog screens */
 .table-card.hidden { display: none; }
@@ -1722,7 +1807,10 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
 .page-title-bar .title-link { grid-column: 3; justify-self: end; border: none; background: none; color: var(--brand); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; padding: 0 8px; white-space: nowrap; }
 .pick-select-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  flex-shrink: 0; padding: 10px 16px 4px; background: var(--bg-page);
+  flex-shrink: 0; padding: 14px 16px 10px; background: transparent;
+}
+.pick-select-bar__title {
+  font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3;
 }
 .pick-select-bar__count {
   font-size: 12px; color: var(--text-sec); line-height: 1.4; font-variant-numeric: tabular-nums;
@@ -1732,8 +1820,58 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
   border: none; background: none; color: var(--brand); font-size: 14px; font-weight: 500;
   cursor: pointer; font-family: inherit; padding: 4px 0;
 }
-.page-body--pick { display: flex; flex-direction: column; min-height: 0; padding: 0; }
-.page-body--pick .proj-pick-list--plain { flex: 1; min-height: 0; overflow: auto; padding: 8px 16px 16px; }
+.page-body--pick {
+  display: flex; flex-direction: column; gap: 12px; min-height: 0;
+  padding: 12px 16px 24px; background: var(--bg-page);
+  overflow: auto; -webkit-overflow-scrolling: touch;
+}
+.pick-section-card {
+  margin: 0; padding: 0; width: 100%; box-sizing: border-box;
+  background: var(--card); border: none; border-radius: 12px;
+  overflow: hidden; flex-shrink: 0; min-height: min-content;
+}
+.page-body--pick .proj-pick-list--plain {
+  flex: 0 0 auto; min-height: 0; overflow: visible; padding: 0 0 10px;
+}
+.pick-section-card .proj-pick-list--plain .proj-pick-card {
+  background: transparent; border-radius: 0; margin-bottom: 0;
+  box-shadow: none; border-bottom: 1px solid #F5F5F7;
+  overflow: visible; min-height: min-content;
+}
+.pick-section-card .proj-pick-list--plain .proj-pick-card:last-child,
+.pick-section-card .proj-pick-list--plain .proj-pick-card:last-child .picker-item {
+  border-bottom: none;
+}
+.pick-section-card .pick-params-section__title {
+  font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3;
+  margin: 0; padding: 14px 16px 0;
+}
+.pick-section-card .pick-params-section__body {
+  padding: 8px 16px 20px; overflow: visible; min-height: min-content;
+}
+.pick-section-card .pick-params-section__body .proj-qty-dual {
+  margin: 0; padding-left: 0; overflow: visible;
+}
+.pick-section-card .pick-params-section__body .proj-qty-panel {
+  padding-left: 0; padding-right: 0; padding-bottom: 10px;
+}
+.pick-section-card .pick-params-section__body .proj-qty-panel:last-child {
+  padding-bottom: 4px;
+}
+.pick-section-card .pick-params-section__body .mp-config-block {
+  margin: 0; padding: 0; border: none; background: transparent; overflow: visible;
+}
+.pick-section-card .mp-ruler-wrap,
+.pick-section-card .ruler-block {
+  margin-top: 8px; overflow: visible;
+}
+.pick-section-card .ruler-block .ruler--pill,
+.pick-section-card .mp-ruler-wrap .ruler--pill {
+  padding-bottom: 40px;
+}
+.pick-confirm-inline {
+  margin: 4px 0 0; width: 100%; box-sizing: border-box; flex-shrink: 0;
+}
 .benefit-setup-list { display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 24px; background: var(--bg-page); }
 .benefit-param-card {
   background: var(--card); border-radius: 12px; border: none; box-shadow: none;
@@ -1895,11 +2033,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                       <input type="text" class="duration-input__num" data-duration-num inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="请输入" />
                     </div>
                     <div class="duration-input__units" data-duration-units>
-                      <span class="duration-seg-indicator" style="width:calc((100% - 4px) / 4);transform:translateX(100%)" aria-hidden="true"></span>
+                      <span class="duration-seg-indicator" style="width:calc((100% - 4px) / 4);transform:translateX(300%)" aria-hidden="true"></span>
                       <button type="button" class="duration-input__unit" data-duration-unit="day">日</button>
-                      <button type="button" class="duration-input__unit is-active" data-duration-unit="month">月</button>
+                      <button type="button" class="duration-input__unit" data-duration-unit="month">月</button>
                       <button type="button" class="duration-input__unit" data-duration-unit="year">年</button>
-                      <button type="button" class="duration-input__unit" data-duration-unit="permanent">永久</button>
+                      <button type="button" class="duration-input__unit is-active" data-duration-unit="permanent">永久</button>
                     </div>
                   </div>
                 </div>
@@ -1941,17 +2079,27 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-body">
             <div class="guide-group benefit-blocks">
               <div class="benefit-block" id="blockBalance">
-                <label class="benefit-check"><span class="benefit-check__row"><input type="checkbox" id="benBalance" /><span class="benefit-check__title">面值</span></span><span class="benefit-check__desc">购买与赠送的余额，面值永久有效，不受卡级有效期限约束</span></label>
+                <div class="benefit-check">
+                  <div class="benefit-check__main">
+                    <span class="benefit-check__title">面值</span>
+                    <span class="benefit-check__desc">购买与赠送的余额，面值永久有效</span>
+                  </div>
+                  <button type="button" class="switch" id="benBalance" role="switch" aria-checked="false" aria-label="面值"></button>
+                </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandBalance">
                   <div class="benefit-expand__inner benefit-tree">
                   <div class="form-section benefit-tree-node" id="secBalance">
                     <div class="form-row form-row--balance-face">
                       <span class="label">面值金额</span>
                       <div class="balance-face-trail">
-                        <input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" />
+                        <div class="balance-amount-field">
+                          <input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" />
+                          <span class="suffix">元</span>
+                        </div>
                         <div class="balance-gift-row">
                           <span class="balance-gift-label">赠送</span>
                           <input class="value input-amount balance-gift-input" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="0" />
+                          <span class="suffix">元</span>
                         </div>
                       </div>
                     </div>
@@ -1960,26 +2108,32 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
               </div>
               <div class="benefit-block" id="blockTimesValidity">
-                <label class="benefit-check"><span class="benefit-check__row"><input type="checkbox" id="benTimesOrValidity" /><span class="benefit-check__title">项目</span></span><span class="benefit-check__desc">包含、赠送项目的次数</span></label>
+                <div class="benefit-check">
+                  <div class="benefit-check__main">
+                    <span class="benefit-check__title">项目</span>
+                    <span class="benefit-check__desc">包含、赠送项目的次数</span>
+                  </div>
+                  <button type="button" class="switch" id="benTimesOrValidity" role="switch" aria-checked="false" aria-label="项目"></button>
+                </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandTimesValidity">
                   <div class="benefit-expand__inner benefit-tree">
-                  <div id="wrapTimesValidity">
-                    <div class="form-section" id="secTimes">
-                      <div class="form-row clickable form-row--add-proj benefit-tree-node" id="rowProjects"><span class="label">选择项目</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-                      <div class="proj-tag-list" id="projectItemTags"></div>
-                    </div>
-                  </div>
+                    <div id="projectBenefitCardsStep2" class="step2-benefit-cards"></div>
+                    <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">+添加项目权益</button>
                   </div>
                 </div>
               </div>
               <div class="benefit-block" id="blockDiscount">
-                <label class="benefit-check"><span class="benefit-check__row"><input type="checkbox" id="benProjectDiscount" /><span class="benefit-check__title">折扣</span></span><span class="benefit-check__desc">比例或定额折扣</span></label>
+                <div class="benefit-check">
+                  <div class="benefit-check__main">
+                    <span class="benefit-check__title">折扣</span>
+                    <span class="benefit-check__desc">比例或定额折扣</span>
+                  </div>
+                  <button type="button" class="switch" id="benProjectDiscount" role="switch" aria-checked="false" aria-label="折扣"></button>
+                </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandDiscount">
                   <div class="benefit-expand__inner benefit-tree">
-                  <div class="form-section benefit-tree-node" id="secDiscount">
-                    <div class="form-row clickable form-row--add-proj benefit-tree-node" id="rowMemberPrice"><span class="label">设置折扣</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></div>
-                    <div class="mp-tag-list" id="memberPriceTags"></div>
-                  </div>
+                    <div id="discountBenefitCardsStep2" class="step2-benefit-cards"></div>
+                    <button type="button" class="btn-add-benefit" id="btnAddDiscountBenefitStep2">+添加折扣权益</button>
                   </div>
                 </div>
               </div>
@@ -2111,60 +2265,58 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
 
-        <div class="screen hidden" id="screen2setup">
-          <div class="page-title-bar">
-            <button type="button" class="back" id="backFromProjSetup" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <span class="title">设置项目</span>
-          </div>
-          <div class="page-body benefit-setup-list" id="projectBenefitCardsList"></div>
-          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnAddProjectBenefit">添加权益</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
-        </div>
+        <div class="screen hidden" id="screen2setup" aria-hidden="true"></div>
 
         <div class="screen hidden" id="screen2">
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromPicker" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <span class="title" id="projectPickerTitle">选择项目</span>
+            <span class="title" id="projectPickerTitle">添加项目权益</span>
             <button type="button" class="title-link" id="btnManagePriceCatalog">管理价目表</button>
           </div>
           <div class="page-body page-body--pick">
-            <div class="pick-select-bar">
-              <span class="pick-select-bar__count" id="projPickSelectedCount">已选 0 项</span>
-              <div class="pick-select-bar__btns">
-                <button type="button" class="pick-select-bar__btn" id="btnProjPickInvert">反选</button>
-                <button type="button" class="pick-select-bar__btn" id="btnProjPickSelectAll">全选</button>
+            <div class="pick-section-card">
+              <div class="pick-select-bar">
+                <span class="pick-select-bar__title" id="projPickSelectedCount">适用项目</span>
+                <div class="pick-select-bar__btns">
+                  <button type="button" class="pick-select-bar__btn" id="btnProjPickInvert">反选</button>
+                  <button type="button" class="pick-select-bar__btn" id="btnProjPickSelectAll">全选</button>
+                </div>
               </div>
+              <div class="proj-pick-list--plain" id="projectList"></div>
             </div>
-            <div class="proj-pick-list--plain" id="projectList"></div>
+            <div class="pick-section-card">
+              <div class="pick-params-section__title">权益参数</div>
+              <div class="pick-params-section__body" id="projectPickParams"></div>
+            </div>
+            <button type="button" class="btn-main pick-confirm-inline" id="btnConfirmProjects">确定</button>
           </div>
-          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnConfirmProjects">确定</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
         </div>
 
-        <div class="screen hidden" id="screen4setup">
-          <div class="page-title-bar">
-            <button type="button" class="back" id="backFromDiscSetup" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <span class="title">设置折扣</span>
-          </div>
-          <div class="mp-tip"><svg class="tip-info-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg><span>默认原价，可拖动标尺调整折扣；也可选「固定金额」输入会员价。</span></div>
-          <div class="page-body benefit-setup-list" id="discountBenefitCardsList"></div>
-          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnAddDiscountBenefit">添加权益</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
-        </div>
+        <div class="screen hidden" id="screen4setup" aria-hidden="true"></div>
 
         <div class="screen hidden" id="screen4">
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <span class="title">选择项目</span>
+            <span class="title" id="discountPickerTitle">添加折扣权益</span>
+            <button type="button" class="title-link" id="btnManagePriceCatalogDisc">管理价目表</button>
           </div>
           <div class="page-body page-body--pick">
-            <div class="pick-select-bar">
-              <span class="pick-select-bar__count" id="discPickSelectedCount">已选 0 项</span>
-              <div class="pick-select-bar__btns">
-                <button type="button" class="pick-select-bar__btn" id="btnDiscPickInvert">反选</button>
-                <button type="button" class="pick-select-bar__btn" id="btnDiscPickSelectAll">全选</button>
+            <div class="pick-section-card">
+              <div class="pick-select-bar">
+                <span class="pick-select-bar__title" id="discPickSelectedCount">适用项目</span>
+                <div class="pick-select-bar__btns">
+                  <button type="button" class="pick-select-bar__btn" id="btnDiscPickInvert">反选</button>
+                  <button type="button" class="pick-select-bar__btn" id="btnDiscPickSelectAll">全选</button>
+                </div>
               </div>
+              <div class="proj-pick-list--plain" id="memberPriceProjectList"></div>
             </div>
-            <div class="proj-pick-list--plain" id="memberPriceProjectList"></div>
+            <div class="pick-section-card">
+              <div class="pick-params-section__title">权益参数</div>
+              <div class="pick-params-section__body" id="discountPickParams"></div>
+            </div>
+            <button type="button" class="btn-main pick-confirm-inline" id="btnConfirmMpList">确定</button>
           </div>
-          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnConfirmMpList">确定</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
         </div>
 
         <div class="screen hidden" id="screen5" aria-hidden="true"></div>
@@ -3092,6 +3244,7 @@ const OPTIMIZATION_LOG = [
   '价目表行间划线：左右缩进 16px，颜色 #EBEBEB（浅于表头底边）',
   '价目表名称色图例：色点 + 普通 / 已绑卡 / 已下架',
   '选择项目：内容区左上显示「已选 N 项」（项目/折扣双页）',
+  'Step1 有效期限默认「永久」；Step2 权益展开区间距减半；删面值「不受卡级有效期限约束」文案',
   '卡面交互：列表展开按钮不再误进详情；详情卡面信息全量展示；「适用项目」改「项目」',
   '已下架卡：列表「在售/已下架」分段；可查看详情、克隆、重新上架、已持卡管理',
   'PageTabs 规范：列表与办卡弹层 Tab 改为 48px 白底 + 32×3 底部指示条',
@@ -3389,6 +3542,10 @@ const state = {
   discBenefitEditingCardId: null,
   projBenefitFocusCardId: null,
   discBenefitFocusCardId: null,
+  projBenefitDraft: null,
+  projBenefitIsNew: false,
+  discBenefitDraft: null,
+  discBenefitIsNew: false,
   simpleProjPickOn: {},
   simpleDiscPickOn: {},
   pickerProjectOn: {},
@@ -3409,11 +3566,11 @@ const state = {
   mpPickerAllExpanded: false,
   mpPickerBatchDraft: null,
   mpPickerSelectionMode: 'include',
-  cardValidityKey: 'custom',
+  cardValidityKey: 'permanent',
   cardValidityDays: null,
   cardValidityMonths: null,
-  cardValidityCustomUnit: 'months',
-  cardValidityUnit: 'month',
+  cardValidityCustomUnit: 'days',
+  cardValidityUnit: 'permanent',
   cardValidityAmount: null,
   uiScreen: 'form',
   formMode: 'create',
@@ -3970,12 +4127,12 @@ function buildProjectPickRowMetaHtml(projectName, draft, showQtySummary) {
 }
 
 function resetCardValidity() {
-  state.cardValidityUnit = 'month';
+  state.cardValidityUnit = 'permanent';
   state.cardValidityAmount = null;
-  state.cardValidityKey = 'custom';
+  state.cardValidityKey = 'permanent';
   state.cardValidityDays = null;
   state.cardValidityMonths = null;
-  state.cardValidityCustomUnit = 'months';
+  state.cardValidityCustomUnit = 'days';
 }
 
 function applyCardValidity({ key, days, months, customUnit }) {
@@ -5614,7 +5771,13 @@ function projSaveForm() {
     showToast('项目已创建');
   }
   projRenderList();
-  if (state.priceCatalogReturn === 'screen2') renderProjectList();
+  if (state.priceCatalogReturn === 'screen2') {
+    renderProjectList();
+    if (state.projBenefitDraft) renderProjectPickParams();
+  } else if (state.priceCatalogReturn === 'screen4') {
+    renderMemberPriceProjectList();
+    if (state.discBenefitDraft) renderDiscountPickParams();
+  }
   projShowScreen('screen-p-list');
 }
 
@@ -5641,10 +5804,15 @@ function projBackFromCatalog() {
   const from = state.priceCatalogReturn || 'screen0';
   if (from === 'screen2') {
     renderProjectList();
+    if (state.projBenefitDraft) renderProjectPickParams();
     showOnlyScreen('screen2');
   } else if (from === 'screen6') {
     showOnlyScreen('screen6');
-  } else if (from === 'screen4' || from === 'screen5') {
+  } else if (from === 'screen4') {
+    renderMemberPriceProjectList();
+    if (state.discBenefitDraft) renderDiscountPickParams();
+    showOnlyScreen('screen4');
+  } else if (from === 'screen5') {
     showOnlyScreen(from);
   } else {
     setStep(0);
@@ -5697,6 +5865,7 @@ function wireProjCatalogModule() {
     if (e.target.id === 'durPickerMask') closeDurPicker();
   });
   document.getElementById('btnManagePriceCatalog')?.addEventListener('click', () => openPriceCatalog('screen2'));
+  document.getElementById('btnManagePriceCatalogDisc')?.addEventListener('click', () => openPriceCatalog('screen4'));
   document.getElementById('rowLinkedProjects')?.addEventListener('click', () => openPriceCatalog('screen6'));
   initProjDurPicker();
 }
@@ -5789,10 +5958,8 @@ const FLOW_MAP_GROUPS = [
   {
     title: '权益配置子页',
     nodes: [
-      { id: 'setup-projects', label: '设置项目', screen: 'screen2setup' },
-      { id: 'pick-projects', label: '选择项目', screen: 'screen2' },
-      { id: 'setup-discount', label: '设置折扣', screen: 'screen4setup' },
-      { id: 'pick-discount-list', label: '选择项目', screen: 'screen4' },
+      { id: 'pick-projects', label: '添加项目权益', screen: 'screen2' },
+      { id: 'pick-discount-list', label: '添加折扣权益', screen: 'screen4' },
     ],
   },
 ];
@@ -5840,33 +6007,17 @@ const FLOW_NAV = {
     closeAllFlowOverlays();
     showIssueSuccess('demo_vip_combo', ['m11']);
   },
-  'setup-projects'() {
-    closeAllFlowOverlays();
-    ensureDemoFilled();
-    seedCreateFormFromPreset();
-    openProjectSetup();
-  },
   'pick-projects'() {
     closeAllFlowOverlays();
     ensureDemoFilled();
     seedCreateFormFromPreset();
-    const card = state.projectBenefitCards[0];
-    if (card) openProjectPickerForCard(card.id);
-    else openProjectSetup();
-  },
-  'setup-discount'() {
-    closeAllFlowOverlays();
-    ensureDemoFilled();
-    seedCreateFormFromPreset();
-    openDiscountSetup();
+    openAddProjectBenefit();
   },
   'pick-discount-list'() {
     closeAllFlowOverlays();
     ensureDemoFilled();
     seedCreateFormFromPreset();
-    const card = state.discountBenefitCards[0];
-    if (card) openDiscountPickerForCard(card.id);
-    else openDiscountSetup();
+    openAddDiscountBenefit();
   },
   'price-list-empty'() {
     applyDemoListState('empty');
@@ -5916,9 +6067,7 @@ function syncFlowMapFromAppState() {
   else if (visibleScreen === 'screen6') {
     const t = getTemplateById(state.viewingTemplateId);
     id = t?.shelved ? 'detail-shelved' : 'detail-active';
-  } else if (visibleScreen === 'screen2setup') id = 'setup-projects';
-  else if (visibleScreen === 'screen2') id = 'pick-projects';
-  else if (visibleScreen === 'screen4setup') id = 'setup-discount';
+  } else if (visibleScreen === 'screen2') id = 'pick-projects';
   else if (visibleScreen === 'screen4') id = 'pick-discount-list';
   else if (visibleScreen === 'screen-p-list') {
     id = state.demoListMode === 'filled' && getCatalogProjects().length ? 'price-list-filled' : 'price-list-empty';
@@ -6044,6 +6193,7 @@ function setStep(n) {
   if (n === 1) {
     syncDuplicateBanner();
     syncStep1ValidityScope();
+    syncCardValidityDisplay();
   }
   if (n === 2) {
     syncStep2BalanceFields();
@@ -6423,19 +6573,28 @@ function syncStep1UI() {
   syncColorPreview();
 }
 
+function setBenefitSwitchOn(id, on) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('on', !!on);
+  el.setAttribute('aria-checked', on ? 'true' : 'false');
+}
+
 function syncStep2UI() {
-  document.getElementById('benBalance').checked = state.benefits.balance;
-  document.getElementById('benTimesOrValidity').checked = state.benefits.timesOrValidity;
-  document.getElementById('benProjectDiscount').checked = state.benefits.projectDiscount;
+  setBenefitSwitchOn('benBalance', state.benefits.balance);
+  setBenefitSwitchOn('benTimesOrValidity', state.benefits.timesOrValidity);
+  setBenefitSwitchOn('benProjectDiscount', state.benefits.projectDiscount);
   applyBenefitVisibility();
+  renderProjectItemTags();
+  syncMemberPriceDisplay();
   syncColorPreview();
 }
 
 function readStep2Benefits() {
   return {
-    balance: document.getElementById('benBalance').checked,
-    timesOrValidity: document.getElementById('benTimesOrValidity').checked,
-    projectDiscount: document.getElementById('benProjectDiscount').checked,
+    balance: document.getElementById('benBalance')?.classList.contains('on'),
+    timesOrValidity: document.getElementById('benTimesOrValidity')?.classList.contains('on'),
+    projectDiscount: document.getElementById('benProjectDiscount')?.classList.contains('on'),
   };
 }
 
@@ -6456,14 +6615,10 @@ function applyBenefitDiff(oldB, newB) {
     if (giftEl) giftEl.value = '';
   }
   if (oldB.timesOrValidity && !newB.timesOrValidity) {
-    state.projectItems = [];
-    state.projectBenefitCards = [];
-    renderProjectItemTags();
+    /* E2: switch off only collapses; keep project benefit cards */
   }
   if (oldB.projectDiscount && !newB.projectDiscount) {
-    state.memberPrices = {};
-    state.discountBenefitCards = [];
-    syncMemberPriceDisplay();
+    /* E2: switch off only collapses; keep discount benefit cards */
   }
 }
 
@@ -7966,7 +8121,8 @@ function defaultDiscountBenefitCard() {
 function formatProjectScopeSummary(projects) {
   if (!projects?.length) return '未选择';
   if (projects.length === 1) return projects[0];
-  return `${projects[0]} 等${projects.length}项`;
+  if (projects.length === 2) return `${projects[0]}、${projects[1]}`;
+  return `${projects[0]}、${projects[1]} 等${projects.length}项`;
 }
 
 function projectItemsToBenefitCards(items) {
@@ -8079,25 +8235,35 @@ function getDiscountBenefitCard(id) {
 const PROJ_SCOPE_CHEV = '<span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TAG_CHEV = '<span class="proj-tag__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+const BENEFIT_CARD_TRASH_ICON = '<img src="assets/benefit-card-trash.svg" alt="" width="16" height="18" />';
 
 function renderProjectItemTags() {
-  const el = document.getElementById('projectItemTags');
+  const el = document.getElementById('projectBenefitCardsStep2');
   if (!el) return;
   ensureProjectBenefitCardsFromItems();
   const saved = state.projectBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card => {
     const qtyItem = { unlimited: card.unlimited, purchaseQty: card.purchaseQty, giftQty: card.giftQty };
-    return `<span class="proj-tag proj-tag--clickable" data-benefit-card-id="${escapeAttr(card.id)}" role="button" tabindex="0">
-      <span class="proj-tag__name">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
-      <span class="proj-tag__qty">${escapeHtml(formatProjectQtySummary(qtyItem))}</span>
-      ${BENEFIT_TAG_CHEV}
-    </span>`;
+    return `<div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+      <div class="step2-benefit-card__body">
+        <span class="step2-benefit-card__title">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
+        <span class="step2-benefit-card__meta">${escapeHtml(formatProjectQtySummary(qtyItem))}</span>
+      </div>
+      <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_TRASH_ICON}</button>
+    </div>`;
   }).join('');
-  el.querySelectorAll('[data-benefit-card-id]').forEach(tag => {
-    const open = () => openProjectSetup(tag.dataset.benefitCardId);
-    tag.addEventListener('click', open);
-    tag.addEventListener('keydown', e => {
+  el.querySelectorAll('[data-edit-project-card]').forEach(cardEl => {
+    const open = () => openEditProjectBenefit(cardEl.dataset.editProjectCard);
+    cardEl.addEventListener('click', open);
+    cardEl.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+  el.querySelectorAll('[data-rm-project-card]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      removeProjectBenefitCard(btn.dataset.rmProjectCard);
     });
   });
 }
@@ -8133,22 +8299,31 @@ function normalizeMemberPricesFromTpl(prices) {
 }
 
 function renderMemberPriceTags() {
-  const el = document.getElementById('memberPriceTags');
+  const el = document.getElementById('discountBenefitCardsStep2');
   if (!el) return;
   ensureDiscountBenefitCardsFromPrices();
   const saved = state.discountBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card =>
-    `<span class="mp-tag mp-tag--clickable" data-discount-card-id="${escapeAttr(card.id)}" role="button" tabindex="0">
-      <span class="mp-tag__name">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
-      <span class="mp-tag__val">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
-      ${BENEFIT_TAG_CHEV}
-    </span>`
+    `<div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+      <div class="step2-benefit-card__body">
+        <span class="step2-benefit-card__title">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
+        <span class="step2-benefit-card__meta">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+      </div>
+      <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_TRASH_ICON}</button>
+    </div>`
   ).join('');
-  el.querySelectorAll('[data-discount-card-id]').forEach(tag => {
-    const open = () => openDiscountSetup(tag.dataset.discountCardId);
-    tag.addEventListener('click', open);
-    tag.addEventListener('keydown', e => {
+  el.querySelectorAll('[data-edit-discount-card]').forEach(cardEl => {
+    const open = () => openEditDiscountBenefit(cardEl.dataset.editDiscountCard);
+    cardEl.addEventListener('click', open);
+    cardEl.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+  el.querySelectorAll('[data-rm-discount-card]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      removeDiscountBenefitCard(btn.dataset.rmDiscountCard);
     });
   });
 }
@@ -8174,9 +8349,7 @@ function getSimplePickSelected(mode) {
 }
 
 function updateSimplePickCount(mode) {
-  const el = document.getElementById(mode === 'project' ? 'projPickSelectedCount' : 'discPickSelectedCount');
-  if (!el) return;
-  el.textContent = `已选 ${getSimplePickSelected(mode).length} 项`;
+  /* 标题固定为「适用项目」，不再显示已选计数 */
 }
 
 function selectAllSimplePick(mode) {
@@ -8292,10 +8465,8 @@ function saveProjectBenefitCard(cardId) {
   const card = getProjectBenefitCard(cardId);
   if (!card || !validateProjectBenefitCardDraft(card)) return;
   card.saved = true;
-  // 保存后不自动追加新卡；去掉未选项目的空白草稿，仅点「添加权益」再新建
   pruneEmptyBenefitDrafts('project');
   syncProjectItemsFromBenefitCards();
-  renderProjectBenefitCards();
   renderProjectItemTags();
   showToast('已保存');
 }
@@ -8307,7 +8478,6 @@ function saveDiscountBenefitCard(cardId) {
   card.saved = true;
   pruneEmptyBenefitDrafts('discount');
   syncMemberPricesFromBenefitCards();
-  renderDiscountBenefitCards();
   syncMemberPriceDisplay();
   showToast('已保存');
 }
@@ -8333,14 +8503,12 @@ function pruneEmptyBenefitDrafts(kind) {
 function removeProjectBenefitCard(cardId) {
   state.projectBenefitCards = state.projectBenefitCards.filter(c => c.id !== cardId);
   syncProjectItemsFromBenefitCards();
-  renderProjectBenefitCards();
   renderProjectItemTags();
 }
 
 function removeDiscountBenefitCard(cardId) {
   state.discountBenefitCards = state.discountBenefitCards.filter(c => c.id !== cardId);
   syncMemberPricesFromBenefitCards();
-  renderDiscountBenefitCards();
   syncMemberPriceDisplay();
 }
 
@@ -8469,26 +8637,126 @@ function renderDiscountBenefitCards() {
   }
 }
 
-function openProjectSetup(focusCardId) {
-  closeAllFlowOverlays();
-  ensureDemoFilled();
-  ensureProjectBenefitCardsFromItems();
-  pruneExtraEmptyBenefitDrafts('project', focusCardId);
-  state.projBenefitFocusCardId = focusCardId || null;
-  renderProjectBenefitCards();
-  showOnlyScreen('screen2setup');
+function cloneProjectBenefitCard(card) {
+  return {
+    id: card.id,
+    projects: [...(card.projects || [])],
+    purchaseQty: card.purchaseQty,
+    giftQty: card.giftQty,
+    unlimited: !!card.unlimited,
+    saved: !!card.saved,
+  };
+}
+
+function cloneDiscountBenefitCard(card) {
+  return {
+    id: card.id,
+    projects: [...(card.projects || [])],
+    rule: normalizeDiscountRule(card.rule),
+    saved: !!card.saved,
+  };
+}
+
+function renderProjectPickParams() {
+  const host = document.getElementById('projectPickParams');
+  const draft = state.projBenefitDraft;
+  if (!host || !draft) return;
+  host.innerHTML = buildProjQtyParamsHtml('draft', draft);
+  wireBenefitCardQty(
+    host,
+    'draft',
+    () => state.projBenefitDraft,
+    next => { Object.assign(state.projBenefitDraft, next); },
+    renderProjectPickParams,
+  );
+}
+
+function renderDiscountPickParams() {
+  const host = document.getElementById('discountPickParams');
+  const draft = state.discBenefitDraft;
+  if (!host || !draft) return;
+  host.innerHTML = buildMpConfigBlockHtml('draft', draft.rule, { hideName: true, hidePriceCompare: true });
+  wireMpConfigBlock(host, 'draft', () => state.discBenefitDraft.rule, rule => {
+    state.discBenefitDraft.rule = rule;
+  }, () => renderDiscountPickParams());
+  wireNonNegativeAmountInputs(host);
+  wireAmountKeypadInputs(host);
+}
+
+function showProjectBenefitEditor() {
+  const draft = state.projBenefitDraft;
+  const titleEl = document.getElementById('projectPickerTitle');
+  if (titleEl) titleEl.textContent = state.projBenefitIsNew ? '添加项目权益' : '编辑项目权益';
+  initSimpleProjPick(draft?.projects || []);
+  renderProjectList();
+  renderProjectPickParams();
+  showOnlyScreen('screen2');
   syncFlowMapFromAppState();
 }
 
-function openDiscountSetup(focusCardId) {
+function showDiscountBenefitEditor() {
+  const draft = state.discBenefitDraft;
+  const titleEl = document.getElementById('discountPickerTitle');
+  if (titleEl) titleEl.textContent = state.discBenefitIsNew ? '添加折扣权益' : '编辑折扣权益';
+  initSimpleDiscPick(draft?.projects || []);
+  renderMemberPriceProjectList();
+  renderDiscountPickParams();
+  showOnlyScreen('screen4');
+  syncFlowMapFromAppState();
+}
+
+function openAddProjectBenefit() {
+  closeAllFlowOverlays();
+  ensureDemoFilled();
+  ensureProjectBenefitCardsFromItems();
+  state.projBenefitDraft = defaultProjectBenefitCard();
+  state.projBenefitIsNew = true;
+  state.projBenefitEditingCardId = state.projBenefitDraft.id;
+  showProjectBenefitEditor();
+}
+
+function openEditProjectBenefit(cardId) {
+  closeAllFlowOverlays();
+  ensureDemoFilled();
+  ensureProjectBenefitCardsFromItems();
+  const card = getProjectBenefitCard(cardId);
+  if (!card) return;
+  state.projBenefitDraft = cloneProjectBenefitCard(card);
+  state.projBenefitIsNew = false;
+  state.projBenefitEditingCardId = cardId;
+  showProjectBenefitEditor();
+}
+
+function openAddDiscountBenefit() {
   closeAllFlowOverlays();
   ensureDemoFilled();
   ensureDiscountBenefitCardsFromPrices();
-  pruneExtraEmptyBenefitDrafts('discount', focusCardId);
-  state.discBenefitFocusCardId = focusCardId || null;
-  renderDiscountBenefitCards();
-  showOnlyScreen('screen4setup');
-  syncFlowMapFromAppState();
+  state.discBenefitDraft = defaultDiscountBenefitCard();
+  state.discBenefitIsNew = true;
+  state.discBenefitEditingCardId = state.discBenefitDraft.id;
+  showDiscountBenefitEditor();
+}
+
+function openEditDiscountBenefit(cardId) {
+  closeAllFlowOverlays();
+  ensureDemoFilled();
+  ensureDiscountBenefitCardsFromPrices();
+  const card = getDiscountBenefitCard(cardId);
+  if (!card) return;
+  state.discBenefitDraft = cloneDiscountBenefitCard(card);
+  state.discBenefitIsNew = false;
+  state.discBenefitEditingCardId = cardId;
+  showDiscountBenefitEditor();
+}
+
+function openProjectSetup(focusCardId) {
+  if (focusCardId) openEditProjectBenefit(focusCardId);
+  else openAddProjectBenefit();
+}
+
+function openDiscountSetup(focusCardId) {
+  if (focusCardId) openEditDiscountBenefit(focusCardId);
+  else openAddDiscountBenefit();
 }
 
 function pruneExtraEmptyBenefitDrafts(kind, keepId) {
@@ -8501,45 +8769,33 @@ function pruneExtraEmptyBenefitDrafts(kind, keepId) {
 }
 
 function openProjectPickerForCard(cardId) {
-  const card = getProjectBenefitCard(cardId);
-  if (!card) return;
-  state.projBenefitEditingCardId = cardId;
-  initSimpleProjPick(card.projects);
-  renderProjectList();
-  showOnlyScreen('screen2');
+  openEditProjectBenefit(cardId);
 }
 
 function openDiscountPickerForCard(cardId) {
-  const card = getDiscountBenefitCard(cardId);
-  if (!card) return;
-  state.discBenefitEditingCardId = cardId;
-  initSimpleDiscPick(card.projects);
-  renderMemberPriceProjectList();
-  showOnlyScreen('screen4');
+  openEditDiscountBenefit(cardId);
 }
 
 function addProjectBenefitCard() {
-  const hasBlank = state.projectBenefitCards.some(c => !c.saved && !(c.projects && c.projects.length));
-  if (hasBlank) {
-    showToast('请先完成当前空白权益后再添加', true);
-    return;
-  }
-  const card = defaultProjectBenefitCard();
-  state.projectBenefitCards.push(card);
-  state.projBenefitFocusCardId = card.id;
-  renderProjectBenefitCards();
+  openAddProjectBenefit();
 }
 
 function addDiscountBenefitCard() {
-  const hasBlank = state.discountBenefitCards.some(c => !c.saved && !(c.projects && c.projects.length));
-  if (hasBlank) {
-    showToast('请先完成当前空白权益后再添加', true);
-    return;
-  }
-  const card = defaultDiscountBenefitCard();
-  state.discountBenefitCards.push(card);
-  state.discBenefitFocusCardId = card.id;
-  renderDiscountBenefitCards();
+  openAddDiscountBenefit();
+}
+
+function cancelProjectBenefitEditor() {
+  state.projBenefitDraft = null;
+  state.projBenefitEditingCardId = null;
+  state.projBenefitIsNew = false;
+  returnToForm();
+}
+
+function cancelDiscountBenefitEditor() {
+  state.discBenefitDraft = null;
+  state.discBenefitEditingCardId = null;
+  state.discBenefitIsNew = false;
+  returnToForm();
 }
 
 function wireSimpleProjectPicker(container, mode) {
@@ -9021,10 +9277,11 @@ function buildMpConfigBlockHtml(project, draft, opts = {}) {
   </div>`;
 }
 
-function wireMpConfigBlock(root, project, getDraft, setDraft) {
+function wireMpConfigBlock(root, project, getDraft, setDraft, onRerender) {
   const block = root.querySelector(`[data-mp-proj="${escapeAttr(project)}"]`);
   if (!block) return;
   const isDiscountSetup = root.id === 'discountBenefitCardsList';
+  const isDiscountPick = root.id === 'discountPickParams';
   const markDiscountEdited = () => {
     if (!isDiscountSetup) return;
     const card = getDiscountBenefitCard(project);
@@ -9035,6 +9292,13 @@ function wireMpConfigBlock(root, project, getDraft, setDraft) {
       syncMemberPriceDisplay();
     }
   };
+  const rerender = () => {
+    if (typeof onRerender === 'function') onRerender();
+    else if (root.id === 'memberPriceConfigList') renderMemberPriceConfig();
+    else if (isDiscountSetup) renderDiscountBenefitCards();
+    else if (isDiscountPick) renderDiscountPickParams();
+    else renderMemberPriceProjectList();
+  };
   block.querySelectorAll('input[type="radio"][name^="mpmode_"]').forEach(r => {
     r.addEventListener('change', () => {
       const prev = normalizeDiscountRule(getDraft());
@@ -9042,9 +9306,7 @@ function wireMpConfigBlock(root, project, getDraft, setDraft) {
         ? { mode: 'fixed', amount: prev.mode === 'fixed' ? prev.amount : '' }
         : { mode: 'discount', tickIndex: prev.mode === 'discount' ? prev.tickIndex : DISCOUNT_TICK_DEFAULT });
       markDiscountEdited();
-      if (root.id === 'memberPriceConfigList') renderMemberPriceConfig();
-      else if (isDiscountSetup) renderDiscountBenefitCards();
-      else renderMemberPriceProjectList();
+      rerender();
     });
   });
   block.querySelectorAll('[data-mp-fixed]').forEach(inp => {
@@ -9619,27 +9881,8 @@ function clearAllMemberPrices(stayOnList) {
   } else returnToForm();
 }
 
-function confirmMemberPriceList() {
-  const selected = getSimplePickSelected('discount');
-  if (!selected.length) {
-    showToast('请至少选择一个项目', true);
-    return;
-  }
-  const card = getDiscountBenefitCard(state.discBenefitEditingCardId);
-  if (!card) {
-    showOnlyScreen('screen4setup');
-    return;
-  }
-  card.projects = selected;
-  card.saved = false;
-  syncMemberPricesFromBenefitCards();
-  syncMemberPriceDisplay();
-  renderDiscountBenefitCards();
-  showOnlyScreen('screen4setup');
-}
-
 function openProjectPicker() {
-  openProjectSetup();
+  openAddProjectBenefit();
 }
 
 function projModeRadioHtml(mode, checked, proj) {
@@ -9681,21 +9924,59 @@ function renderProjectList() {
 
 function confirmProjectPick() {
   const selected = getSimplePickSelected('project');
-  if (!selected.length) {
-    showToast('请至少选择一个项目', true);
+  const draft = state.projBenefitDraft;
+  if (!draft) {
+    returnToForm();
     return;
   }
-  const card = getProjectBenefitCard(state.projBenefitEditingCardId);
-  if (!card) {
-    showOnlyScreen('screen2setup');
-    return;
+  draft.projects = selected;
+  if (!validateProjectBenefitCardDraft(draft)) return;
+  draft.saved = true;
+  const wasNew = state.projBenefitIsNew;
+  if (wasNew) {
+    state.projectBenefitCards.push(cloneProjectBenefitCard(draft));
+  } else {
+    const idx = state.projectBenefitCards.findIndex(c => c.id === state.projBenefitEditingCardId);
+    if (idx >= 0) state.projectBenefitCards[idx] = cloneProjectBenefitCard(draft);
+    else state.projectBenefitCards.push(cloneProjectBenefitCard(draft));
   }
-  card.projects = selected;
-  card.saved = false;
+  pruneEmptyBenefitDrafts('project');
   syncProjectItemsFromBenefitCards();
+  state.projBenefitDraft = null;
+  state.projBenefitEditingCardId = null;
+  state.projBenefitIsNew = false;
   renderProjectItemTags();
-  renderProjectBenefitCards();
-  showOnlyScreen('screen2setup');
+  returnToForm();
+  showToast(wasNew ? '已添加项目权益' : '已保存项目权益');
+}
+
+function confirmMemberPriceList() {
+  const selected = getSimplePickSelected('discount');
+  const draft = state.discBenefitDraft;
+  if (!draft) {
+    returnToForm();
+    return;
+  }
+  draft.projects = selected;
+  draft.rule = normalizeDiscountRule(draft.rule);
+  if (!validateDiscountBenefitCardDraft(draft)) return;
+  draft.saved = true;
+  const wasNew = state.discBenefitIsNew;
+  if (wasNew) {
+    state.discountBenefitCards.push(cloneDiscountBenefitCard(draft));
+  } else {
+    const idx = state.discountBenefitCards.findIndex(c => c.id === state.discBenefitEditingCardId);
+    if (idx >= 0) state.discountBenefitCards[idx] = cloneDiscountBenefitCard(draft);
+    else state.discountBenefitCards.push(cloneDiscountBenefitCard(draft));
+  }
+  pruneEmptyBenefitDrafts('discount');
+  syncMemberPricesFromBenefitCards();
+  state.discBenefitDraft = null;
+  state.discBenefitEditingCardId = null;
+  state.discBenefitIsNew = false;
+  syncMemberPriceDisplay();
+  returnToForm();
+  showToast(wasNew ? '已添加折扣权益' : '已保存折扣权益');
 }
 
 function buildDemoTemplates() {
@@ -9747,6 +10028,21 @@ function applyFigmaCaptureIssueSuccess() {
 
 function isFigmaCaptureIssueSuccess() {
   return new URLSearchParams(location.search).get('figma') === 'issue-success';
+}
+
+function applyFigmaCaptureStep2() {
+  document.documentElement.classList.add('figma-capture-step2');
+  ensureDemoFilled();
+  seedCreateFormFromPreset();
+  setStep(2);
+  syncStep2UI();
+  applyBenefitVisibility();
+  renderProjectItemTags();
+  syncMemberPriceDisplay();
+}
+
+function isFigmaCaptureStep2() {
+  return new URLSearchParams(location.search).get('figma') === 'step2';
 }
 
 function applyDemoListState(mode) {
@@ -9892,23 +10188,13 @@ wireGiftAmountInput();
 wireNonNegativeAmountInputs(document);
 wireAmountKeypadInputs(document);
 wireAmountKeypadControls();
-document.getElementById('rowMemberPrice').onclick = openMemberPriceFlow;
-document.getElementById('rowProjects').onclick = () => openProjectSetup();
-document.getElementById('backFromProjSetup').onclick = () => {
-  syncProjectItemsFromBenefitCards();
-  returnToForm();
-};
-document.getElementById('backFromDiscSetup').onclick = () => {
-  syncMemberPricesFromBenefitCards();
-  returnToForm();
-};
-document.getElementById('btnAddProjectBenefit').onclick = addProjectBenefitCard;
-document.getElementById('btnAddDiscountBenefit').onclick = addDiscountBenefitCard;
-document.getElementById('backFromPicker').onclick = () => showOnlyScreen('screen2setup');
+document.getElementById('btnAddProjectBenefitStep2').onclick = openAddProjectBenefit;
+document.getElementById('btnAddDiscountBenefitStep2').onclick = openAddDiscountBenefit;
+document.getElementById('backFromPicker').onclick = cancelProjectBenefitEditor;
 document.getElementById('btnConfirmProjects').onclick = confirmProjectPick;
 document.getElementById('btnProjPickSelectAll').onclick = () => selectAllSimplePick('project');
 document.getElementById('btnProjPickInvert').onclick = () => invertSimplePick('project');
-document.getElementById('backFromMpPick').onclick = () => showOnlyScreen('screen4setup');
+document.getElementById('backFromMpPick').onclick = cancelDiscountBenefitEditor;
 document.getElementById('btnConfirmMpList').onclick = confirmMemberPriceList;
 document.getElementById('btnDiscPickSelectAll').onclick = () => selectAllSimplePick('discount');
 document.getElementById('btnDiscPickInvert').onclick = () => invertSimplePick('discount');
@@ -9918,12 +10204,18 @@ document.getElementById('btnDemoFilled').onclick = () => applyDemoListState('fil
 initColorSwatches();
 renderFlowMap();
 ['benBalance', 'benTimesOrValidity', 'benProjectDiscount'].forEach(id => {
-  document.getElementById(id).addEventListener('change', onBenefitCheckChange);
+  document.getElementById(id).addEventListener('click', () => {
+    const el = document.getElementById(id);
+    setBenefitSwitchOn(id, !el.classList.contains('on'));
+    onBenefitCheckChange();
+  });
 });
 if (isFigmaCaptureListActive()) {
   applyFigmaCaptureListActive();
 } else if (isFigmaCaptureIssueSuccess()) {
   applyFigmaCaptureIssueSuccess();
+} else if (isFigmaCaptureStep2()) {
+  applyFigmaCaptureStep2();
 } else {
   setStep(0);
   syncDemoStateButtons();
