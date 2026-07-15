@@ -97,6 +97,8 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: var(--text-sec); line-height: 1.45;
 }
 .doc-link-entry:hover .doc-link-entry__hint { color: var(--text-sec); }
+.doc-link-stack { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.doc-link-stack .doc-link-entry { margin-top: 0; }
 .demo-state-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 13px; }
 .demo-state-bar h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
 .demo-state-btns { display: flex; gap: 8px; }
@@ -1818,15 +1820,29 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <p>有数据时注入 10 张演示卡 + 18 条价目表项目（绑卡状态由卡权益自动同步），并回到列表首页。</p>
     </div>
+    <div class="doc-link-stack">
+      <a class="doc-link-entry" href="logic.html" target="_blank" rel="noopener noreferrer">
+        逻辑梳理文档
+        <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例 · 在新标签页打开</span>
+      </a>
+      <a class="doc-link-entry" href="prd-review.html" target="_blank" rel="noopener noreferrer">
+        PRD 评审页
+        <span class="doc-link-entry__hint">可视化范围与退卡对照 · 投屏用</span>
+      </a>
+      <a class="doc-link-entry" href="PRD-会员卡-权益组合版.md" target="_blank" rel="noopener noreferrer">
+        PRD 全文
+        <span class="doc-link-entry__hint">产品准稿 Markdown · 新标签打开</span>
+      </a>
+      <a class="doc-link-entry" href="docs/README.md" target="_blank" rel="noopener noreferrer">
+        研发开工包
+        <span class="doc-link-entry__hint">范围 · 模型 · 接口 · 规则 · 页面 · 验收</span>
+      </a>
+    </div>
     <div class="flow-map-panel" id="flowMapPanel">
       <h3>功能链路</h3>
       <div id="flowMapBody"></div>
       <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示卡 + 价目表项目。Sheet/弹窗（选会员、退卡估值、价格键盘、时长滚轮等）请从列表或详情进入。</p>
     </div>
-    <a class="doc-link-entry" href="logic.html" target="_blank" rel="noopener noreferrer">
-      逻辑梳理文档
-      <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例 · 在新标签页打开</span>
-    </a>
   </aside>
 
   <div class="phone-scale-slot">
