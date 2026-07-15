@@ -1484,11 +1484,26 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
 .proj-search-box input { flex: 1; border: none; background: none; font-size: 14px; font-family: inherit; outline: none; color: var(--text); }
 .proj-search-box input::placeholder { color: var(--text-sec); }
 .btn-proj-add { flex-shrink: 0; height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
-.proj-list-meta { font-size: 11px; color: var(--text-sec); margin: 8px 0 0; line-height: 1.4; }
+.proj-list-meta-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin: 8px 0 0; min-height: 16px;
+}
+.proj-list-meta { font-size: 11px; color: var(--text-sec); line-height: 1.4; flex-shrink: 0; }
+.proj-name-legend {
+  display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px;
+  font-size: 11px; color: var(--text-sec); line-height: 1.4;
+}
+.proj-name-legend__item { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.proj-name-legend__dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.proj-name-legend__dot.is-normal { background: var(--text); }
+.proj-name-legend__dot.is-bound { background: var(--warn-text); }
+.proj-name-legend__dot.is-off { background: var(--text-sec); }
 .table-card { margin: 12px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; }
 .table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 52px 72px 48px; column-gap: 10px; padding-left: 16px; padding-right: 12px; }
 .table-row-swipe { position: relative; overflow: hidden; background: var(--card); }
-.table-row-swipe:last-child .table-row { box-shadow: none; }
+.table-row-swipe:last-child .table-row::after { display: none; }
 .table-row-actions {
   position: absolute; top: 0; right: 0; bottom: 0; display: flex; align-items: stretch; z-index: 0;
 }
@@ -1503,7 +1518,11 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
   position: relative; z-index: 1; align-items: center; min-height: 52px; padding-top: 10px; padding-bottom: 10px;
   cursor: pointer; font-size: 14px; touch-action: pan-y; background: var(--card);
   transition: transform .2s ease; will-change: transform;
-  box-shadow: inset 0 -1px 0 var(--border);
+}
+/* 行间划线：左右各 16px 缩进，比表头底边（--border）更淡 */
+.table-row::after {
+  content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px;
+  background: #EBEBEB; pointer-events: none;
 }
 .table-row:active { background: var(--bg-page); }
 .table-row-swipe.is-off-sale .name-text:not(.is-bound),
@@ -1517,7 +1536,8 @@ html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { disp
   background: var(--card); box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 8px;
   pointer-events: none; overflow: visible;
 }
-.table-row-swipe.is-dragging .table-row { transform: none !important; box-shadow: none; }
+.table-row-swipe.is-dragging .table-row { transform: none !important; }
+.table-row-swipe.is-dragging .table-row::after { display: none; }
 .table-row-drag-placeholder {
   min-height: 52px; margin: 0; background: var(--bg-page); border-radius: 8px;
   border: 1px dashed var(--border);
@@ -2136,7 +2156,14 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </div>
               <button type="button" class="btn-proj-add" id="btnProjGoAdd">+ 添加项目</button>
             </div>
-            <div class="proj-list-meta" id="projListMeta">共 0 项</div>
+            <div class="proj-list-meta-row">
+              <div class="proj-list-meta" id="projListMeta">共 0 项</div>
+              <div class="proj-name-legend" aria-label="项目名称颜色说明">
+                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-normal" aria-hidden="true"></i>普通</span>
+                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-bound" aria-hidden="true"></i>已绑卡</span>
+                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-off" aria-hidden="true"></i>已下架</span>
+              </div>
+            </div>
           </div>
           <div class="page-body">
             <div class="table-card" id="projTableCard">
@@ -3036,6 +3063,8 @@ const OPTIMIZATION_LOG = [
   '顶部提示条文色对齐左侧图标：warn/neutral/克隆条随语义色；图标与正文 inherit',
   '退卡估值明细：右侧改为上剩余价值、下消耗金额',
   '设置折扣：标尺默认回到「原价」（拖动后才算已配置优惠）',
+  '价目表行间划线：左右缩进 16px，颜色 #EBEBEB（浅于表头底边）',
+  '价目表名称色图例：色点 + 普通 / 已绑卡 / 已下架',
   '卡面交互：列表展开按钮不再误进详情；详情卡面信息全量展示；「适用项目」改「项目」',
   '已下架卡：列表「在售/已下架」分段；可查看详情、克隆、重新上架、已持卡管理',
   'PageTabs 规范：列表与办卡弹层 Tab 改为 48px 白底 + 32×3 底部指示条',
