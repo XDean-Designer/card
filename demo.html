@@ -139,7 +139,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .phone-step-bar__text { font-size: 12px; color: var(--text-sec); line-height: 1.45; }
 .phone-step-bar__text strong { color: var(--text); font-weight: 600; }
 .btn-main.btn-outline-brand {
-  background: var(--card); color: var(--brand); border: 1px solid var(--brand); line-height: 1.2;
+  background: transparent; color: var(--brand); border: 1px solid var(--brand); line-height: 1.2;
 }
 .detail-bar-actions {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 2;
@@ -2414,7 +2414,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="proj-list-empty hidden" id="projListEmpty">
               <p class="proj-list-empty__title" id="projListEmptyTitle">暂无项目</p>
               <p class="proj-list-empty__hint" id="projListEmptyHint">添加后可在「选择项目」与办卡中使用</p>
-              <button type="button" class="btn-main" id="btnProjEmptyAdd">添加项目</button>
+              <button type="button" class="btn-main btn-outline-brand" id="btnProjEmptyAdd">添加项目</button>
             </div>
           </div>
         </div>
@@ -5831,7 +5831,10 @@ function projUpdateEditNotice(p) {
 function projOpenEdit(id) {
   state.projEditingId = id;
   const p = getCatalogProjects().find(x => x.id === id);
-  if (!p) return;
+  if (!p) {
+    showToast('未找到该项目，请先切换「有数据」', true);
+    return;
+  }
   state.projFormState = projProjectToForm(p);
   projUpdateEditNotice(p);
   const delBtn = document.getElementById('btnProjDelete');
@@ -6009,12 +6012,13 @@ function ensureDemoFilled() {
   }
   if (!getCatalogProjects().length) {
     state.projectCatalog = seedProjectCatalog();
-    syncProjectCatalogBindings();
   }
   if (!state.templates.length) {
     state.templates = buildDemoTemplates();
     if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
   }
+  /* 须在 templates 就绪后再同步，否则绑卡标记会全为 false */
+  syncProjectCatalogBindings();
 }
 
 function getVipComboPreset() {
@@ -6157,17 +6161,54 @@ const FLOW_NAV = {
   },
   'price-edit-normal'() {
     ensureDemoFilled();
-    projOpenEdit(PROJ_DEMO_IDS.normal);
+    const p = resolveProjDemoTarget('normal');
+    if (p) projOpenEdit(p.id);
   },
   'price-edit-bound'() {
     ensureDemoFilled();
-    projOpenEdit(PROJ_DEMO_IDS.bound);
+    const p = resolveProjDemoTarget('bound');
+    if (p) projOpenEdit(p.id);
   },
   'price-edit-off-sale'() {
     ensureDemoFilled();
-    projOpenEdit(PROJ_DEMO_IDS.offSale);
+    const p = resolveProjDemoTarget('offSale');
+    if (p) projOpenEdit(p.id);
   },
 };
+
+/** 功能链路演示项：优先固定 ID，缺失或状态不符时回退匹配 */
+function resolveProjDemoTarget(kind) {
+  const preferredId = PROJ_DEMO_IDS[kind];
+  const match = {
+    bound: x => x.boundToCard && x.onSale,
+    offSale: x => !x.onSale,
+    normal: x => !x.boundToCard && x.onSale,
+  }[kind];
+
+  const pick = () => {
+    let p = preferredId ? getCatalogProjects().find(x => x.id === preferredId) : null;
+    if (p && match && !match(p)) p = null;
+    if (!p && match) p = getCatalogProjects().find(match);
+    return p || null;
+  };
+
+  let p = pick();
+  if (!p) {
+    /* 强制重建演示价目表 + 卡模板，避免「有目录无演示卡」或绑卡未同步导致入口失效 */
+    state.projectCatalog = seedProjectCatalog();
+    state.templates = buildDemoTemplates();
+    if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
+    state.demoListMode = 'filled';
+    syncDemoStateButtons();
+    syncProjectCatalogBindings();
+    p = pick();
+  }
+  if (!p) {
+    const tip = { bound: '绑卡锁定', offSale: '已下架', normal: '普通' }[kind] || '目标';
+    showToast(`未找到「项目详情 · ${tip}」演示项`, true);
+  }
+  return p;
+}
 
 function setFlowNavHighlight(id) {
   state.flowNavHighlight = id || null;
