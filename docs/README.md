@@ -1,6 +1,6 @@
 # 研发最小可开工包 · 会员卡权益组合版
 
-> **在线 / 演示请打开 [`index.html`](./index.html)**（左侧切换各文档）。GitHub Pages 无法把 `.md` 渲染成可导航站点，`.md` 仅作源文件维护。
+> **在线 / 演示请打开 [`guide.html`](./guide.html)**（左侧切换各文档）。旧 `index.html` 仅作跳转。GitHub Pages 无法把 `.md` 渲染成可导航站点，`.md` 仅作源文件维护。
 
 面向前后端联调与估点的**最小文档集**。业务范围以产品 PRD 为准；规则以实现说明书 + 算例为准；原型仅作交互参考。
 
@@ -21,7 +21,7 @@
 
 ## 在线入口
 
-- **开工包站点**：https://xdean-designer.github.io/card/docs/
+- **开工包站点**：https://xdean-designer.github.io/card/docs/guide.html
 - 演示：https://xdean-designer.github.io/card/
 - 原型：https://xdean-designer.github.io/card/demo.html
 - 逻辑：https://xdean-designer.github.io/card/logic.html

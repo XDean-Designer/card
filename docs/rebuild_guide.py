@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Rebuild docs/index.html with valid JSON bundle + working nav."""
+"""Rebuild docs/guide.html — sole browsable docs hub (do not use index.html as hub)."""
 from pathlib import Path
 import json
 import re
 
-DOCS_DIR = Path(r"d:\RTB优化工程\card\docs")
+DOCS_DIR = Path(__file__).resolve().parent
+OUT_NAME = "guide.html"
 FILES = [
     "README.md",
     "00-scope.md",
@@ -17,9 +18,6 @@ FILES = [
 
 bundle = {name: (DOCS_DIR / name).read_text(encoding="utf-8") for name in FILES}
 bundle_json = json.dumps(bundle, ensure_ascii=False, separators=(",", ":"))
-
-# Sanity: must be one line / no raw newlines that break HTML if we put in script
-assert "\n" not in bundle_json or True  # json.dumps escapes newlines as \n
 assert "</script>" not in bundle_json.lower()
 
 APP_JS = r'''
@@ -50,15 +48,13 @@ APP_JS = r'''
   }
 
   function rewriteHref(href) {
-    let h = href;
-    // ./00-scope.md -> #00-scope
-    if (/^\.\/[\w.-]+\.md$/.test(h)) {
-      return '#' + h.slice(2).replace(/\.md$/, '');
+    if (/^\.\/[\w.-]+\.md$/.test(href)) {
+      return '#' + href.slice(2).replace(/\.md$/, '');
     }
-    // ./index.html#00-scope or index.html#00-scope -> #00-scope
-    const m = h.match(/^(?:\.\/)?index\.html#(home|[\w.-]+)$/);
+    const m = href.match(/^(?:\.\/)?(?:index|guide)\.html#(home|[\w.-]+)$/);
     if (m) return '#' + m[1];
-    return h;
+    if (/^#(home|[\w.-]+)$/.test(href)) return href;
+    return href;
   }
 
   function inlineFormat(text) {
@@ -200,7 +196,7 @@ APP_JS = r'''
     }
   }
 
-  async function loadDoc() {
+  function loadDoc() {
     const key = currentKey();
     const meta = DOCS[key] || DOCS.home;
     document.getElementById('pageTitle').textContent = meta.title;
@@ -208,33 +204,24 @@ APP_JS = r'''
       a.classList.toggle('is-on', a.dataset.doc === key || (key === 'home' && a.dataset.doc === 'home'));
     });
     const el = document.getElementById('content');
-    el.className = 'article md loading';
-    el.textContent = '加载中…';
-    try {
-      let text = (window.__DOCS_BUNDLE__ && window.__DOCS_BUNDLE__[meta.file]) || null;
-      if (!text) {
-        const res = await fetch(meta.file, { cache: 'no-cache' });
-        if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
-        text = await res.text();
-      }
-      el.className = 'article md';
-      el.innerHTML = renderMarkdown(text);
-      el.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (ev) => {
-          const href = a.getAttribute('href') || '';
-          if (href.startsWith('#') && href.length > 1) {
-            ev.preventDefault();
-            navigateTo(href.slice(1));
-          }
-        });
-      });
-      window.scrollTo(0, 0);
-    } catch (err) {
+    const text = (window.__DOCS_BUNDLE__ && window.__DOCS_BUNDLE__[meta.file]) || '';
+    if (!text) {
       el.className = 'article error';
-      el.innerHTML = '<p>无法加载 <code>' + escapeHtml(meta.file) + '</code>。</p>' +
-        '<p>' + escapeHtml(String(err.message || err)) + '</p>' +
-        '<p>请使用本地 HTTP 服务或 GitHub Pages 打开（不要用 file://）。</p>';
+      el.innerHTML = '<p>未找到文档 <code>' + escapeHtml(meta.file) + '</code>。请运行 <code>python rebuild_guide.py</code> 重建本页。</p>';
+      return;
     }
+    el.className = 'article md';
+    el.innerHTML = renderMarkdown(text);
+    el.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (ev) => {
+        const href = a.getAttribute('href') || '';
+        if (href.startsWith('#') && href.length > 1) {
+          ev.preventDefault();
+          navigateTo(href.slice(1));
+        }
+      });
+    });
+    window.scrollTo(0, 0);
   }
 
   document.querySelectorAll('.nav a.doc').forEach(a => {
@@ -300,7 +287,6 @@ SHELL = r'''<!DOCTYPE html>
       background: var(--card); border: 1px solid var(--line); border-radius: 14px;
       padding: 22px 24px 28px; min-height: 320px;
     }
-    .article.loading { color: var(--muted); }
     .article.error { color: var(--brand); }
     .md h1 { font-size: 22px; margin: 0 0 14px; color: var(--ink); }
     .md h2 { font-size: 17px; margin: 22px 0 10px; color: var(--ink); padding-top: 4px; border-top: 1px solid var(--line); }
@@ -364,7 +350,7 @@ SHELL = r'''<!DOCTYPE html>
     <main class="main">
       <header class="hero">
         <h1 id="pageTitle">研发开工包</h1>
-        <p id="pageHint">点击左侧文档切换；内容已内嵌，本地直接打开亦可浏览。</p>
+        <p id="pageHint">新入口 guide.html · 左侧切换文档 · 内容已内嵌</p>
       </header>
       <article class="article md" id="content">加载中…</article>
     </main>
@@ -379,23 +365,35 @@ SHELL = r'''<!DOCTYPE html>
 </html>
 '''
 
-out = DOCS_DIR / "index.html"
+out = DOCS_DIR / OUT_NAME
 out.write_text(SHELL, encoding="utf-8")
 
-# verify
+# Redirect stub — old index.html is retired as hub
+redirect = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=guide.html" />
+  <link rel="canonical" href="guide.html" />
+  <title>入口已迁移 · 研发开工包</title>
+  <script>
+    location.replace('guide.html' + (location.hash || ''));
+  </script>
+</head>
+<body>
+  <p style="font-family: system-ui, sans-serif; padding: 24px;">
+    文档浏览入口已迁至 <a href="guide.html">guide.html</a>（本页不再承载文档内容）。
+  </p>
+</body>
+</html>
+'''
+(DOCS_DIR / "index.html").write_text(redirect, encoding="utf-8")
+
 text = out.read_text(encoding="utf-8")
 m = re.search(r'id="docs-bundle">(.*?)</script>', text, re.S)
 d = json.loads(m.group(1))
 assert set(d.keys()) == set(FILES)
-# bundle must be before app loadDoc and must not contain raw line breaks that split script
-bundle_pos = text.find('id="docs-bundle"')
-app_pos = text.find("function currentKey")
-assert bundle_pos < app_pos
-# second script must be valid-ish: no assignment with raw newlines after =
+assert text.find('id="docs-bundle"') < text.find("function currentKey")
 assert text.count("<script") == 2
-report = DOCS_DIR / "check.txt"
-report.write_text(
-    f"wrote {out}\nsize={len(text)}\nkeys={list(d.keys())}\n04={len(d['04-page-map.md'])}\n",
-    encoding="utf-8",
-)
-print("OK", out, "size", len(text))
+print("OK", out, "size", len(text), "keys", len(d))
+print("OK redirect ->", DOCS_DIR / "index.html")
