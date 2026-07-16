@@ -6,12 +6,12 @@
 
 | 文档 | 用途 | 主读者 | 浏览 |
 |------|------|--------|------|
-| [00-scope.md](./00-scope.md) | 本期做 / 不做 | 全员 | [在站点中打开](./index.html#00-scope) |
-| [01-data-model.md](./01-data-model.md) | 实体、字段、状态、快照 | 后端为主 | [在站点中打开](./index.html#01-data-model) |
-| [02-api-catalog.md](./02-api-catalog.md) | 接口目录与请求/响应草案 | 前后端 | [在站点中打开](./index.html#02-api-catalog) |
-| [03-rules-cases.md](./03-rules-cases.md) | 延期/退卡公式与验收算例 | 后端 + QA | [在站点中打开](./index.html#03-rules-cases) |
-| [04-page-map.md](./04-page-map.md) | 原型页面 ↔ 能力 ↔ 接口 | 前端为主 | [在站点中打开](./index.html#04-page-map) |
-| [05-acceptance.md](./05-acceptance.md) | 本期 P0 验收清单 | QA + 产品 | [在站点中打开](./index.html#05-acceptance) |
+| [00-scope.md](./00-scope.md) | 本期做 / 不做 | 全员 | [在站点中打开](#00-scope) |
+| [01-data-model.md](./01-data-model.md) | 实体、字段、状态、快照 | 后端为主 | [在站点中打开](#01-data-model) |
+| [02-api-catalog.md](./02-api-catalog.md) | 接口目录与请求/响应草案 | 前后端 | [在站点中打开](#02-api-catalog) |
+| [03-rules-cases.md](./03-rules-cases.md) | 延期/退卡公式与验收算例 | 后端 + QA | [在站点中打开](#03-rules-cases) |
+| [04-page-map.md](./04-page-map.md) | 原型页面 ↔ 能力 ↔ 接口 | 前端为主 | [在站点中打开](#04-page-map) |
+| [05-acceptance.md](./05-acceptance.md) | 本期 P0 验收清单 | QA + 产品 | [在站点中打开](#05-acceptance) |
 
 ## 权威源优先级
 

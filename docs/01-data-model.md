@@ -42,10 +42,12 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 | projectItems | ProjectItem[] | 条件 | `timesOrValidity` 时至少 1 项 |
 | memberPrices | map | 条件 | key = 项目名或 `__ALL__`；`projectDiscount` 时必有 |
 | usagePolicy | UsagePolicy | 是 | 见下 |
-| cardValidity | Validity | 是 | 卡级有效期；仅约束项目/折扣 |
+| cardValidity | Validity | 是 | 卡级有效期；仅约束项目/折扣；**默认永久** |
 | stats.validCardCount | int | 算 | **锁定关键**：>0 不可编辑规则字段 |
 
 \* 无面值的纯项目/折扣卡仍有「购买金额」作为办卡实付。
+
+> **原型编辑态**：Step2 以 `projectBenefitCards[]` / `discountBenefitCards[]` 分组编辑（同次数或同折扣规则可绑多项目合成一张卡），保存时展开为 `projectItems` / `memberPrices`。落库以展开后字段为准。
 
 ### ProjectItem
 
@@ -71,15 +73,17 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 
 | 字段 | 枚举 | 默认 | 说明 |
 |------|------|------|------|
-| refundRule | `alloc_pool` \| `retail` | `alloc_pool` | 均值退卡 / 减值退卡 |
-| performanceRule | `alloc_pool` \| `retail` | `alloc_pool` | **本期只存不运算** |
+| refundRule | `alloc_pool` \| `retail` | `alloc_pool` | 退卡：界面「均值模式」/「减值模式」 |
+| performanceRule | `alloc_pool` \| `retail` | `alloc_pool` | 业绩：界面「均值模式」/「原价模式」；**本期只存不运算** |
+
+> 枚举值两端相同；界面文案按轨区分（退卡 retail≠业绩 retail 的中文名）。原型 Step3 各选项附一行公式提示。
 
 ### Validity（卡有效期）
 
 | 形态 | 说明 |
 |------|------|
-| permanent | 项目/折扣亦视为不设到期 |
-| 预设 / 自定义 日/月/年 | 办卡日写入 `cardExpireAt` |
+| permanent | 项目/折扣亦视为不设到期；**含不限次项目时不可为永久**（前端弹窗拦截，见 `04`） |
+| 日 / 月 / 年 | 办卡日写入 `cardExpireAt` |
 
 ---
 
