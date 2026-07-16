@@ -6002,7 +6002,19 @@ function closeAllFlowOverlays() {
 }
 
 function ensureDemoFilled() {
-  if (state.demoListMode !== 'filled') applyDemoListState('filled');
+  /* 仅保证价目表可用，不打断进行中的建卡表单 */
+  if (state.demoListMode !== 'filled') {
+    state.demoListMode = 'filled';
+    syncDemoStateButtons();
+  }
+  if (!getCatalogProjects().length) {
+    state.projectCatalog = seedProjectCatalog();
+    syncProjectCatalogBindings();
+  }
+  if (!state.templates.length) {
+    state.templates = buildDemoTemplates();
+    if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
+  }
 }
 
 function getVipComboPreset() {
@@ -8223,9 +8235,23 @@ function performRefundCard() {
   }
 }
 
-function returnToForm() {
-  applyBenefitVisibility();
+function returnToForm(expandKind) {
+  if (expandKind === 'project') {
+    state.benefits = { ...state.benefits, timesOrValidity: true };
+  } else if (expandKind === 'discount') {
+    state.benefits = { ...state.benefits, projectDiscount: true };
+  }
   setStep(2);
+  const blockId = expandKind === 'project'
+    ? 'blockTimesValidity'
+    : expandKind === 'discount'
+      ? 'blockDiscount'
+      : null;
+  if (blockId) {
+    requestAnimationFrame(() => {
+      document.getElementById(blockId)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    });
+  }
 }
 
 function defaultProjectBenefitCard() {
@@ -8844,6 +8870,7 @@ function openAddProjectBenefit() {
   closeAllFlowOverlays();
   ensureDemoFilled();
   ensureProjectBenefitCardsFromItems();
+  state.benefits = { ...state.benefits, timesOrValidity: true };
   state.projBenefitDraft = defaultProjectBenefitCard();
   state.projBenefitIsNew = true;
   state.projBenefitEditingCardId = state.projBenefitDraft.id;
@@ -8856,6 +8883,7 @@ function openEditProjectBenefit(cardId) {
   ensureProjectBenefitCardsFromItems();
   const card = getProjectBenefitCard(cardId);
   if (!card) return;
+  state.benefits = { ...state.benefits, timesOrValidity: true };
   state.projBenefitDraft = cloneProjectBenefitCard(card);
   state.projBenefitIsNew = false;
   state.projBenefitEditingCardId = cardId;
@@ -8866,6 +8894,7 @@ function openAddDiscountBenefit() {
   closeAllFlowOverlays();
   ensureDemoFilled();
   ensureDiscountBenefitCardsFromPrices();
+  state.benefits = { ...state.benefits, projectDiscount: true };
   state.discBenefitDraft = defaultDiscountBenefitCard();
   state.discBenefitIsNew = true;
   state.discBenefitEditingCardId = state.discBenefitDraft.id;
@@ -8878,6 +8907,7 @@ function openEditDiscountBenefit(cardId) {
   ensureDiscountBenefitCardsFromPrices();
   const card = getDiscountBenefitCard(cardId);
   if (!card) return;
+  state.benefits = { ...state.benefits, projectDiscount: true };
   state.discBenefitDraft = cloneDiscountBenefitCard(card);
   state.discBenefitIsNew = false;
   state.discBenefitEditingCardId = cardId;
@@ -8923,14 +8953,14 @@ function cancelProjectBenefitEditor() {
   state.projBenefitDraft = null;
   state.projBenefitEditingCardId = null;
   state.projBenefitIsNew = false;
-  returnToForm();
+  returnToForm('project');
 }
 
 function cancelDiscountBenefitEditor() {
   state.discBenefitDraft = null;
   state.discBenefitEditingCardId = null;
   state.discBenefitIsNew = false;
-  returnToForm();
+  returnToForm('discount');
 }
 
 function wireSimpleProjectPicker(container, mode) {
@@ -10067,7 +10097,7 @@ function confirmProjectPick() {
   const selected = getSimplePickSelected('project');
   const draft = state.projBenefitDraft;
   if (!draft) {
-    returnToForm();
+    returnToForm('project');
     return;
   }
   draft.projects = selected;
@@ -10087,7 +10117,7 @@ function confirmProjectPick() {
   state.projBenefitEditingCardId = null;
   state.projBenefitIsNew = false;
   renderProjectItemTags();
-  returnToForm();
+  returnToForm('project');
   showToast(wasNew ? '已添加项目权益' : '已保存项目权益');
 }
 
@@ -10095,7 +10125,7 @@ function confirmMemberPriceList() {
   const selected = getSimplePickSelected('discount');
   const draft = state.discBenefitDraft;
   if (!draft) {
-    returnToForm();
+    returnToForm('discount');
     return;
   }
   draft.projects = selected;
@@ -10116,7 +10146,7 @@ function confirmMemberPriceList() {
   state.discBenefitEditingCardId = null;
   state.discBenefitIsNew = false;
   syncMemberPriceDisplay();
-  returnToForm();
+  returnToForm('discount');
   showToast(wasNew ? '已添加折扣权益' : '已保存折扣权益');
 }
 
