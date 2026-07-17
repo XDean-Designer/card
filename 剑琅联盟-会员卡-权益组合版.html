@@ -1288,7 +1288,7 @@ input[type=number]::-webkit-inner-spin-button {
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .policy-option__hint-total {
-  display: inline-flex; align-items: center; gap: 2px; vertical-align: baseline;
+  display: inline-flex; align-items: center; gap: 2px; vertical-align: middle;
 }
 .policy-option__value-help {
   display: inline-flex; align-items: center; justify-content: center;
@@ -3510,6 +3510,7 @@ const OPTIMIZATION_LOG = [
   'Step2 权益卡撕口：修复 mask 半高 intersect 导致整卡被裁没，改为双层 100% 高度打孔',
   'Step2 权益卡投影：阴影移到无 mask 外层 wrap，避免 mask 裁掉 drop-shadow',
   'Step2 权益卡虚线：改为 14px 周期 repeat-y 平铺，高卡片两端不再因固定 SVG 拉伸而丢失',
+  'Step3 副标题：问号图标由基线对齐改为文字中轴居中，保持 12px 尺寸与原有间距',
 ];
 
 const STATS_HELP_ITEMS = [
