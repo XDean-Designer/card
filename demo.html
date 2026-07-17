@@ -2364,11 +2364,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-body page-body--usage-policy">
             <div class="usage-policy-cards">
               <div class="usage-policy-card">
-                <div class="section-head">消耗及退卡规则</div>
+                <div class="section-head">消耗及退卡计算规则</div>
                 <div id="refundPolicyOptions" class="policy-options"></div>
               </div>
               <div class="usage-policy-card">
-                <div class="section-head">业绩结算规则</div>
+                <div class="section-head">业绩计算规则</div>
                 <div id="performancePolicyOptions" class="policy-options"></div>
               </div>
             </div>
@@ -3511,6 +3511,12 @@ const OPTIMIZATION_LOG = [
   'Step2 权益卡投影：阴影移到无 mask 外层 wrap，避免 mask 裁掉 drop-shadow',
   'Step2 权益卡虚线：改为 14px 周期 repeat-y 平铺，高卡片两端不再因固定 SVG 拉伸而丢失',
   'Step3 副标题：问号图标由基线对齐改为文字中轴居中，保持 12px 尺寸与原有间距',
+  'Step3 文案：消耗及退卡规则→消耗及退卡计算规则；业绩结算规则→业绩计算规则',
+  '均值纯折扣消耗：有期限按已过天数/总天数摊销（同不限次）；永久仍按累计已享折扣优惠；已享优惠作信息行不计入消耗',
+  '项目次数文案：购买次数→权益次数；次数范围→计次模式；次数模式→次数设置',
+  '添加权益项目列表：项目权益与折扣权益列表均移除价格，仅保留项目名称、置顶标识与选择开关',
+  '均值纯折扣：永久有效也按时间摊销，有效期按 3 年（1095 天）折算；已享优惠仍不计入消耗',
+  '计算说明弹窗：去掉纯折扣说明中「累计已享折扣优惠仅作参考，不计入消耗」一句',
 ];
 
 const STATS_HELP_ITEMS = [
@@ -3632,7 +3638,7 @@ const QUICK_TEMPLATES = [
         '染发': { mode: 'fixed', amount: '299' },
       },
       cardColor: 'purple',
-      cardDesc: '演示用·均值纯折扣：消耗按累计已享优惠；可与「减值烫染卡」对照；含参考费用',
+      cardDesc: '演示用·均值有期限纯折扣：消耗按已过天数/总天数摊销；可与「减值烫染卡」对照；含参考费用',
     },
   },
   {
@@ -4795,14 +4801,20 @@ function getHolderValiditySpanDays(tpl, meta) {
   return null;
 }
 
-function computeUnlimitedTimeRefundLine(meta, purchaseAlloc, tpl) {
+/** 永久有效纯折扣：均值消耗按 3 年折算（与年→天换算一致：3×365） */
+const PURE_DISCOUNT_PERMANENT_SPAN_DAYS = 3 * 365;
+
+function computeUnlimitedTimeRefundLine(meta, purchaseAlloc, tpl, opts = {}) {
+  const kindLabel = opts.kindLabel || '不限次';
   const alloc = roundMoney(purchaseAlloc || 0);
-  const totalDays = getHolderValiditySpanDays(tpl, meta);
+  const totalDays = opts.totalDays != null
+    ? opts.totalDays
+    : getHolderValiditySpanDays(tpl, meta);
   if (!totalDays || totalDays <= 0) {
     return {
       usedVal: 0,
       remVal: alloc,
-      detail: '不限次 · 有效期未知，暂按未消耗',
+      detail: `${kindLabel} · 有效期未知，暂按未消耗`,
       totalDays: 0,
       elapsedDays: 0,
     };
@@ -4817,7 +4829,7 @@ function computeUnlimitedTimeRefundLine(meta, purchaseAlloc, tpl) {
   return {
     usedVal,
     remVal,
-    detail: `不限次 · 已过 ${elapsedDays}/${totalDays} 天 · 按时间摊销`,
+    detail: `${kindLabel} · 已过 ${elapsedDays}/${totalDays} 天 · 按时间摊销`,
     totalDays,
     elapsedDays,
   };
@@ -4937,23 +4949,37 @@ function computeSuggestedRefundAllocPool(tpl, meta) {
   const nominalPool = buildRefundNominalPool(tpl);
   const faceProjectTotal = sumFaceProjectNominalPool(nominalPool);
 
-  // 纯折扣卡：消耗价值 = 折扣优惠金额；不分摊实付
+  // 纯折扣卡（均值）：消耗 = 办卡实付 ×（已过天数 ÷ 有效总天数）；
+  // 永久有效按 3 年（1095 天）折算；已享优惠仅作信息行，不计入消耗
   if (isPureDiscountTemplate(tpl)) {
-    const { usedVal, count } = sumDiscountSavedTotal(tpl, ledger);
+    const { usedVal: savedVal, count } = sumDiscountSavedTotal(tpl, ledger);
+    const permanent = isTemplatePermanent(tpl);
+    const ur = computeUnlimitedTimeRefundLine(meta, purchase, tpl, permanent
+      ? {
+          kindLabel: '纯折扣（永久按 3 年折算）',
+          totalDays: PURE_DISCOUNT_PERMANENT_SPAN_DAYS,
+        }
+      : { kindLabel: '纯折扣' });
+    lines.push({
+      kind: 'time',
+      label: '期限摊销',
+      detail: ur.detail,
+      used: ur.usedVal,
+      remain: ur.remVal,
+    });
     lines.push({
       kind: 'discount',
       label: '折扣优惠',
-      detail: `累计已享优惠 ${formatMoneyDisplay(usedVal)}（${count} 次）`,
-      used: usedVal,
+      detail: `累计已享优惠 ${formatMoneyDisplay(savedVal)}（${count} 次）· 不计入消耗`,
+      used: 0,
       remain: 0,
     });
-    const sumConsumed = usedVal;
     return {
       purchaseAmount: purchase,
-      consumedTotal: sumConsumed,
-      suggestedRefund: roundMoney(Math.max(0, purchase - sumConsumed)),
+      consumedTotal: ur.usedVal,
+      suggestedRefund: roundMoney(Math.max(0, purchase - ur.usedVal)),
       lines,
-      remainingTotal: 0,
+      remainingTotal: ur.remVal,
     };
   }
 
@@ -6758,10 +6784,14 @@ function getStep3ValueSummary() {
     projectNominal: roundMoney(projectNominal),
     weightTotal: roundMoney(weightTotal),
     pureDiscount: isPureDiscountTemplate(tpl),
+    pureDiscountTimed: isPureDiscountTemplate(tpl) && !isTemplatePermanent(tpl),
+    pureDiscountPermanent: isPureDiscountTemplate(tpl) && isTemplatePermanent(tpl),
     unlimitedFixedTerm: isUnlimitedFixedTermTemplate(tpl),
     unlimitedOnly: isUnlimitedFixedTermTemplate(tpl) && weightTotal <= 0,
     unlimitedNames: listUnlimitedProjectNames(tpl),
-    validityDays: getTemplateValidityDays(tpl),
+    validityDays: isPureDiscountTemplate(tpl) && isTemplatePermanent(tpl)
+      ? PURE_DISCOUNT_PERMANENT_SPAN_DAYS
+      : getTemplateValidityDays(tpl),
   };
 }
 
@@ -6770,6 +6800,19 @@ function renderUsagePolicyHintHtml(field, opt) {
     const values = getStep3ValueSummary();
     const resultLabel = field === 'refundRule' ? '消耗价值' : '员工业绩';
     if (values.pureDiscount) {
+      if (field === 'refundRule') {
+        const daysText = values.pureDiscountPermanent
+          ? `${PURE_DISCOUNT_PERMANENT_SPAN_DAYS} 天（永久按 3 年折算）`
+          : (values.validityDays ? `${values.validityDays} 天` : '卡有效天数');
+        return `<ul class="policy-option__hint">
+          <li class="policy-option__hint-item">
+            消耗价值 = 办卡实付 ×（已过天数 ÷ ${escapeHtml(daysText)}）
+            <span class="policy-option__hint-total">
+              <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
+            </span>
+          </li>
+        </ul>`;
+      }
       return `<ul class="policy-option__hint">
         <li class="policy-option__hint-item">
           ${resultLabel} = 折扣优惠金额
@@ -6826,18 +6869,28 @@ function openUsageValueDetail() {
   if (!body || !mask) return;
 
   if (values.pureDiscount) {
-    if (titleEl) titleEl.textContent = '纯折扣卡计算说明';
+    const isPermanent = !!values.pureDiscountPermanent;
+    if (titleEl) titleEl.textContent = isPermanent ? '永久纯折扣卡计算说明' : '有期限纯折扣卡计算说明';
+    const daysText = isPermanent
+      ? `${PURE_DISCOUNT_PERMANENT_SPAN_DAYS} 天（永久按 3 年折算）`
+      : (values.validityDays ? `${values.validityDays} 天` : '卡有效总天数');
     body.innerHTML = `<div class="usage-value-detail">
       <div class="usage-value-detail__row">
         <span>办卡实付</span>
         <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.purchase))}</span>
       </div>
+      <div class="usage-value-detail__row">
+        <span>有效总天数</span>
+        <span class="usage-value-detail__value">${escapeHtml(daysText)}</span>
+      </div>
       <div class="usage-value-detail__row usage-value-detail__row--total">
         <span>消耗价值</span>
-        <span class="usage-value-detail__value">折扣优惠金额</span>
+        <span class="usage-value-detail__value">实付 × 已过/总天数</span>
       </div>
     </div>
-    <p class="usage-value-detail__note">纯折扣卡不使用面值/项目权重分母。消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)；建议退款 = max(0, 办卡实付 − 累计已享优惠)。</p>`;
+    <p class="usage-value-detail__note">${isPermanent
+      ? '永久有效纯折扣（均值）：消耗价值 = 办卡实付 ×（已过天数 ÷ 1095 天），有效期按 3 年折算；已过满 3 年按满额消耗。'
+      : '有期限纯折扣（均值）：消耗价值 = 办卡实付 ×（已过天数 ÷ 有效总天数），与有期限不限次卡一致。'}</p>`;
     mask.classList.add('show');
     return;
   }
@@ -9295,7 +9348,7 @@ function buildProjQtyParamsHtml(cardId, draft) {
     ? '不限次时不可选'
     : '所选项目任意混用，共享同一次数池';
   return `<div class="proj-qty-dual${unlimited ? ' is-unlimited' : ''}" data-proj-block="${escapeAttr(cardId)}">
-    <div class="proj-qty-group-label">次数范围</div>
+    <div class="proj-qty-group-label">计次模式</div>
     <div class="proj-qty-panel">
       <label class="proj-mode-head">
         ${projQtyScopeRadioHtml('per_item', scope === 'per_item', cardId)}
@@ -9311,11 +9364,11 @@ function buildProjQtyParamsHtml(cardId, draft) {
       <span class="proj-qty-scope-tip">${escapeHtml(tipShared)}</span>
     </div>
     <div class="proj-qty-group-divider" role="separator"></div>
-    <div class="proj-qty-group-label">次数模式</div>
+    <div class="proj-qty-group-label">次数设置</div>
     <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
       <label class="proj-mode-head">
         ${projModeRadioHtml('times', !unlimited, cardId)}
-        <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">购买次数</span>
+        <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">权益次数</span>
       </label>
       ${projQtyStepperHtml(cardId, 'purchase', draft.purchaseQty, 0)}
     </div>
@@ -10147,7 +10200,7 @@ function buildProjectBatchQtyHtml() {
     <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
       <label class="proj-mode-head">
         ${projModeRadioHtml('times', !unlimited, key)}
-        <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">购买次数</span>
+        <span class="proj-qty-label${!unlimited ? ' is-active' : ''}">权益次数</span>
       </label>
       ${projQtyStepperHtml(key, 'purchase', draft.purchaseQty, 0)}
     </div>
@@ -10742,14 +10795,11 @@ function renderMemberPriceProjectList() {
   const container = document.getElementById('memberPriceProjectList');
   if (!container) return;
   container.innerHTML = getAllProjectNamesForPicker().map(p => {
-    const price = formatProjectPrice(p);
-    const priceHtml = price ? `<span class="proj-item-price">${escapeHtml(price)}</span>` : '';
     const checked = !!state.simpleDiscPickOn[p];
     return `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}${isCatalogProjectPinned(p) ? pinTagHtml() : ''}</span>
-          ${priceHtml}
         </span>
         ${projPickSwitchHtml(p, checked)}
       </div>
@@ -10915,14 +10965,11 @@ function renderProjectList() {
   const container = document.getElementById('projectList');
   if (!container) return;
   container.innerHTML = getAllProjectNamesForPicker().map(p => {
-    const price = formatProjectPrice(p);
-    const priceHtml = price ? `<span class="proj-item-price">${escapeHtml(price)}</span>` : '';
     const checked = !!state.simpleProjPickOn[p];
     return `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}${isCatalogProjectPinned(p) ? pinTagHtml() : ''}</span>
-          ${priceHtml}
         </span>
         ${projPickSwitchHtml(p, checked)}
       </div>
