@@ -401,6 +401,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item__value.is-preline { white-space: pre-line; line-height: 1.45; }
 .guide-hint { margin: 12px 16px; padding: 10px 12px; background: var(--bg-page); border-radius: 8px; font-size: 12px; color: var(--text-sec); line-height: 1.65; }
 .guide-group { margin: 0 16px 14px; background: var(--card); border-radius: 12px; border: none; overflow: hidden; }
+.guide-group.benefit-blocks { overflow: visible; }
 .guide-group-head { padding: 10px 14px 8px; font-size: 12px; font-weight: 600; color: var(--text-sec); }
 /* Step2：步骤条与权益内容卡间距 16px */
 #screen9 .page-body { padding-top: 16px; background: var(--bg-page); }
@@ -434,29 +435,55 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .btn-add-benefit:active { opacity: .88; background: var(--brand-soft); }
 .step2-benefit-cards {
   display: flex; flex-direction: column; gap: 10px; margin: 0 0 4px;
+  padding: 2px 1px 6px; /* 给外层 drop-shadow 留出空间 */
 }
+/* 阴影必须在无 mask 的外层：同元素上的 mask 会裁掉 drop-shadow */
+.step2-benefit-card-wrap {
+  --ticket-shadow:
+    drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.04))
+    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.04));
+  filter: var(--ticket-shadow);
+  border-radius: 12px;
+}
+.step2-benefit-card-wrap:active { filter: brightness(.99) var(--ticket-shadow); }
 .step2-benefit-card {
+  --ticket-notch-r: 5px;
+  --ticket-cut-x: calc(100% - 132px);
   position: relative; display: flex; align-items: stretch;
   width: 100%; box-sizing: border-box; min-height: 72px;
   padding: 14px 36px 14px 14px;
-  border: none; border-radius: 12px; background: var(--card); overflow: hidden;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: none; border-radius: 12px; background: var(--card); overflow: visible;
+  box-shadow: none;
   cursor: pointer;
+  /* 两层 mask 必须都是 100% 高度；半高会在 intersect 后只剩中间一条缝 */
+  -webkit-mask-image:
+    radial-gradient(circle at var(--ticket-cut-x) 0, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px)),
+    radial-gradient(circle at var(--ticket-cut-x) 100%, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px));
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(circle at var(--ticket-cut-x) 0, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px)),
+    radial-gradient(circle at var(--ticket-cut-x) 100%, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px));
+  mask-size: 100% 100%, 100% 100%;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
 }
 .step2-benefit-card::before {
   content: '';
   position: absolute; top: 0; right: 0; bottom: 0;
   width: 132px; box-sizing: border-box;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      rgba(146, 146, 146, 0.35) 0 7px,
-      transparent 7px 14px
-    ) left top / 1px 100% no-repeat,
+  padding-block: var(--ticket-notch-r);
+  /* 虚线 14px(7+7) 周期平铺；content-box 裁在缺口之间，高卡片两端不再丢失 */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='14' viewBox='0 0 2 14'%3E%3Cline x1='1' y1='1.5' x2='1' y2='5.5' stroke='%23e3e3e3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"),
     linear-gradient(180deg, rgba(234, 234, 234, 0.5) 0%, rgba(236, 236, 236, 0.25) 100%);
+  background-position: -1px 0, 0 0;
+  background-size: 2px 14px, 100% 100%;
+  background-repeat: repeat-y, no-repeat;
+  background-clip: content-box, border-box;
   pointer-events: none;
 }
-.step2-benefit-card:active { filter: brightness(.99); }
 .step2-benefit-card__body {
   position: relative; z-index: 1;
   flex: 1; min-width: 0; display: flex; align-items: stretch;
@@ -3477,6 +3504,12 @@ const OPTIMIZATION_LOG = [
   'Step2 权益卡：同步 Figma 新样式（右侧灰色渐变、虚线分隔、白底 20px 删除按钮、65/35 内容比例）',
   'Step2 权益卡细化：右侧渐变/虚线透明度降低，数值改 #7C7C7C，删除按钮增加半透明品牌红描边',
   'Step2 权益卡虚线：按 Figma dashPattern [7,7] 精确还原（1px / #929292 35% / 方端）',
+  'Step2 权益卡虚线：同步 Figma 最新参数（2px / #E3E3E3 / dashPattern [7,7] / 圆端 / 居中描边）',
+  'Step2 权益卡撕口：虚线上下端增加 10px 圆润内凹缺口，项目与折扣权益卡保持一致',
+  'Step2 权益卡撕口：改为 mask 真实裁切轮廓（去掉白色遮盖点），阴影改 drop-shadow 跟随缺口',
+  'Step2 权益卡撕口：修复 mask 半高 intersect 导致整卡被裁没，改为双层 100% 高度打孔',
+  'Step2 权益卡投影：阴影移到无 mask 外层 wrap，避免 mask 裁掉 drop-shadow',
+  'Step2 权益卡虚线：改为 14px 周期 repeat-y 平铺，高卡片两端不再因固定 SVG 拉伸而丢失',
 ];
 
 const STATS_HELP_ITEMS = [
@@ -9099,16 +9132,18 @@ function renderProjectItemTags() {
   ensureProjectBenefitCardsFromItems();
   const saved = state.projectBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card => {
-    return `<div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
-      <div class="step2-benefit-card__body">
-        <div class="step2-benefit-card__main">
-          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+    return `<div class="step2-benefit-card-wrap">
+      <div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+        <div class="step2-benefit-card__body">
+          <div class="step2-benefit-card__main">
+            <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+          </div>
+          <div class="step2-benefit-card__side">
+            ${formatBenefitCardQtyMetaHtml(card)}
+          </div>
         </div>
-        <div class="step2-benefit-card__side">
-          ${formatBenefitCardQtyMetaHtml(card)}
-        </div>
+        <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
       </div>
-      <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
     </div>`;
   }).join('');
   el.querySelectorAll('[data-edit-project-card]').forEach(cardEl => {
@@ -9163,16 +9198,18 @@ function renderMemberPriceTags() {
   ensureDiscountBenefitCardsFromPrices();
   const saved = state.discountBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card =>
-    `<div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
-      <div class="step2-benefit-card__body">
-        <div class="step2-benefit-card__main">
-          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+    `<div class="step2-benefit-card-wrap">
+      <div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+        <div class="step2-benefit-card__body">
+          <div class="step2-benefit-card__main">
+            <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+          </div>
+          <div class="step2-benefit-card__side">
+            <span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+          </div>
         </div>
-        <div class="step2-benefit-card__side">
-          <span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
-        </div>
+        <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
       </div>
-      <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
     </div>`
   ).join('');
   el.querySelectorAll('[data-edit-discount-card]').forEach(cardEl => {
