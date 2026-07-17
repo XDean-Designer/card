@@ -399,7 +399,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul>
           <li>选择会员弹窗 Tab：「<strong>办卡</strong>」/「<strong>退卡/延期</strong>」。在「退卡/延期」中对已持卡提供<strong>行内延期</strong>：时长控件（日 / 月 / 年 / 永久）+ 数值；确认后写入 <code>卡到期日</code>，失效卡可复活。</li>
           <li>列表卡面主按钮文案为「<strong>办卡/退卡</strong>」，进入同一选择会员弹窗。</li>
-          <li><strong>含「折扣」权益的卡</strong>（如烫染会员价卡、尊享组合卡、减值烫染卡）：延期面板展示<strong>延期费用</strong>（单位：元），默认按<strong>折扣权益分摊购卡价</strong> × 延期天数 ÷ 原有效期折算（纯折扣卡等价于整卡购卡价）；商家可改价或填 0 免费；写入独立延期流水，<strong>不计入办卡总额</strong>。</li>
+          <li><strong>含「折扣」权益的卡</strong>（如烫染会员价卡、尊享组合卡、减值烫染卡）：延期面板展示<strong>参考费用</strong>（单位：元），默认按<strong>办卡实付 × 延期天数 ÷ 原有效期</strong>折算；商家可改价或填 0 免费；写入独立延期流水，<strong>不计入办卡总额</strong>。</li>
           <li>仅含面值或项目次数、<strong>无折扣</strong>的卡（如新客首开、儿童次卡、全年洗吹、永久储值）：延期<strong>免费</strong>，不产生延期订单；纯面值且卡永久有效时不展示延期入口。</li>
         </ul>
         <h3><span class="dot gap"></span>结论（由 Q1 推导）</h3>
@@ -427,7 +427,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">延期费用 · 无折扣免费，含折扣卡收费</span></div>
             <p><strong>无「折扣」权益</strong>（仅面值 / 仅项目次数）：延期免费，不产生订单。</p>
-            <p><strong>含「折扣」权益的卡</strong>（含纯折扣卡与组合卡）：延期时展示费用字段，默认金额为<strong>折扣权益分摊购卡价 × 延期天数 ÷ 原有效期</strong>（与 Q4 名义价值池折扣权重一致）；<strong>金额由商家自行填写</strong>，可填 0 免费；生成独立「延期订单/流水」，<strong>不计入办卡总额、办卡次数</strong>。</p>
+            <p><strong>含「折扣」权益的卡</strong>（含纯折扣卡与组合卡）：延期时展示费用字段，默认金额为<strong>办卡实付 × 延期天数 ÷ 原有效期</strong>；<strong>金额由商家自行填写</strong>，可填 0 免费；生成独立「延期订单/流水」，<strong>不计入办卡总额、办卡次数</strong>。</p>
             <p class="pros">折扣权益无次数可消耗，延期实质为续享会员价，收费合理；组合卡仅对折扣部分折算，避免与余额/次卡重复计费。</p>
             <p class="cons">原型已支持含折扣卡延期收费；需在正式环境对接延期订单与支付。</p>
           </div>
@@ -738,24 +738,29 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             </thead>
             <tbody>
               <tr>
-                <td>① 名义价值池</td>
-                <td><code>余额名义 = 充值+赠送总面值</code><br><code>项目权重[i] = 价目表单价 × (购次+赠次)</code><br><code>折扣权重[k] = 价目表单价（或全部项目均价）</code><br><code>名义合计 = Σ 权重</code></td>
-                <td>不限次项目不参与；权重为 0 的折扣线跳过</td>
+                <td>① 权益权重池（均值分母）</td>
+                <td><code>面值权重 = 充值+赠送总面值</code><br><code>项目权重[i] = 价目表单价 × (购次+赠次)</code>（仅有限次）<br><code>权重合计 = 面值权重 + Σ项目权重</code></td>
+                <td><strong>不含折扣权重、不含不限次</strong>；Step3 展示为「面值权重+项目权重」</td>
               </tr>
               <tr>
                 <td>② 余额 · 消耗价值</td>
-                <td><code>余额分摊实付 = 办卡实付 × (余额名义 / 名义合计)</code><br><code>消耗价值 = 已用充值 × (余额分摊实付 / 充值面值) + 已用赠送 × (余额分摊实付 / 总面值)</code><br><code>剩余价值</code>同理用剩余充值/赠送折算</td>
-                <td>纯面值时名义合计=总面值，简化为「消耗面值 × 实付 ÷ 初始面值」口径</td>
+                <td><code>余额分摊实付 = 办卡实付 × (面值权重 / 权重合计)</code><br><code>消耗价值 = 已用充值 × (余额分摊实付 / 充值面值) + 已用赠送 × (余额分摊实付 / 总面值)</code><br><code>剩余价值</code>同理用剩余充值/赠送折算</td>
+                <td>纯面值时权重合计=总面值</td>
               </tr>
               <tr>
-                <td>③ 项目 · 消耗价值</td>
-                <td><code>分摊实付 = 办卡实付 × (项目权重 / 名义合计)</code><br><code>单次摊销 = 分摊实付 / (购次+赠次)</code><br><code>消耗价值 = 已用次数 × 单次摊销</code></td>
+                <td>③ 有限次项目 · 消耗价值</td>
+                <td><code>分摊实付 = 办卡实付 × (项目权重 / 权重合计)</code><br><code>单次摊销 = 分摊实付 / (购次+赠次)</code><br><code>消耗价值 = 已用次数 × 单次摊销</code></td>
                 <td>购/赠同单价</td>
               </tr>
               <tr>
                 <td>④ 折扣 · 消耗价值</td>
-                <td><code>分摊实付 = 办卡实付 × (折扣权重 / 名义合计)</code><br><code>消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)</code>（账本 <code>savedTotal</code>）<br><code>剩余价值 = max(0, 分摊实付 − 消耗价值)</code></td>
-                <td>与减值折扣口径相同；纯折扣卡时名义合计仅含折扣权重</td>
+                <td><code>不占购卡实付份额</code><br><code>消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)</code><br><code>剩余价值 = 0</code></td>
+                <td>纯折扣卡：建议退款 = max(0, 办卡实付 − 已享优惠)</td>
+              </tr>
+              <tr>
+                <td>④b 固定期限不限次</td>
+                <td>若权重合计为 0：<code>消耗价值 = 办卡实付 × (已过天数 / 有效总天数)</code><br>若已有面值/有限次权重：实付已分完，不限次不再另占份额<br>劳动业绩（均值）= <strong>价目表原价</strong></td>
+                <td>永久不限次不走时间摊销</td>
               </tr>
               <tr>
                 <td>⑤ 建议退款</td>
@@ -825,7 +830,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul>
           <li><strong>消费顺序</strong>：余额先扣充值面值再扣赠送；项目先扣购买次再扣赠送次（账本分项记录 <code>rechargeUsed/giftUsed</code>、<code>purchaseUsed/giftUsed</code>）。</li>
           <li><strong>合并计池</strong>：退卡摊销仍共用单价；扣减赠送同样减少可退账面，<strong>不因「扣的是赠送」而免扣</strong>，但须遵守上述消费顺序。</li>
-          <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一名义价值合计</strong>（含余额/折扣权重）。</li>
+          <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一权益权重合计</strong>（面值权重 + 有限次项目权重；不含折扣）。</li>
           <li><strong>建议退款可为 0</strong>：系统允许；店员可在确认环节调低实际退款（无审批拦截）。</li>
         </ul>
 

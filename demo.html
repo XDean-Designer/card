@@ -218,6 +218,11 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: var(--bg-page);
   padding: 8px 12px 12px;
 }
+.tpl-detail-section--face { background: var(--bg-page); }
+.tpl-detail-section--face .section-head--detail,
+.tpl-detail-section--stats .section-head--detail {
+  background: var(--card);
+}
 .stats-card {
   background: var(--card);
   border-radius: 10px;
@@ -330,11 +335,13 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   font-size: 11px; font-weight: 500; color: var(--brand); cursor: pointer; font-family: inherit; line-height: 1.4;
 }
 .member-card-item__expand:active { opacity: .75; }
-.detail-face-grid-section { border-bottom: 1px solid var(--bg-page); }
-.detail-face-grid-section:last-child { border-bottom: none; }
-.detail-face-grid-section__label { min-height: 40px; align-items: flex-start; padding-top: 12px; padding-bottom: 4px; }
-.detail-face-grid-section__label .label { padding-top: 2px; }
-.detail-face-grid-section__body { padding: 0 16px 12px; }
+.detail-face-grid-section { border-bottom: none; }
+.detail-face-grid-section__label {
+  min-height: 40px; align-items: flex-start; padding-top: 12px; padding-bottom: 4px;
+  border-bottom: none;
+}
+.detail-face-grid-section__label .label { padding-top: 2px; font-weight: 600; }
+.detail-face-grid-section__body { padding: 4px 16px 12px; }
 .detail-face-grid-section__body .member-card-item__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
 .detail-face-grid-section__body .member-card-item__expand { font-size: 12px; margin-top: 6px; }
 .stats-card--projects { padding-bottom: 4px; }
@@ -430,52 +437,77 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .step2-benefit-card {
   position: relative; display: flex; align-items: stretch;
-  width: 100%; box-sizing: border-box; min-height: 70px;
-  padding: 12px 61px 12px 14px;
+  width: 100%; box-sizing: border-box; min-height: 72px;
+  padding: 14px 36px 14px 14px;
   border: none; border-radius: 12px; background: var(--card); overflow: hidden;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.04);
   cursor: pointer;
 }
+.step2-benefit-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 132px; box-sizing: border-box;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(146, 146, 146, 0.35) 0 7px,
+      transparent 7px 14px
+    ) left top / 1px 100% no-repeat,
+    linear-gradient(180deg, rgba(234, 234, 234, 0.5) 0%, rgba(236, 236, 236, 0.25) 100%);
+  pointer-events: none;
+}
 .step2-benefit-card:active { filter: brightness(.99); }
 .step2-benefit-card__body {
-  flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;
+  position: relative; z-index: 1;
+  flex: 1; min-width: 0; display: flex; align-items: stretch;
   text-align: left; border: none; background: transparent; padding: 0;
   font-family: inherit; color: inherit; pointer-events: none;
 }
-.step2-benefit-card__title {
-  display: block; font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4;
-  white-space: normal; overflow: visible; overflow-wrap: anywhere; word-break: break-word;
+.step2-benefit-card__main {
+  flex: 0 1 65.055%; min-width: 0; display: flex; align-items: center;
+  padding-right: 12px;
 }
-.step2-benefit-card__meta {
-  display: block; position: relative; margin-top: 4px; padding-top: 5px;
-  border-top: none;
-  font-size: 12px; font-weight: 400; color: var(--text-sec); line-height: 1.45;
-  white-space: nowrap; overflow: hidden; text-overflow: clip;
-}
-/* Figma 40:80：顶部分割线宽=文案列（非整卡），横向渐变 #929292 两端淡、中间实 */
-.step2-benefit-card__meta::before {
-  content: '';
-  position: absolute; left: 0; top: 0;
-  width: 100%; max-width: 248px; height: 1px;
-  background: linear-gradient(
-    90deg,
-    rgba(146, 146, 146, 0.075) 0%,
-    rgba(146, 146, 146, 0.25) 49%,
-    rgba(146, 146, 146, 0.075) 100%
-  );
-  pointer-events: none;
-}
-.step2-benefit-card__rm {
-  position: absolute; right: 0; top: 0; bottom: 0; width: 61px; z-index: 1;
-  border: none; padding: 0 12px 0 0; margin: 0; cursor: pointer;
-  border-radius: 50px 0 0 50px;
-  background: linear-gradient(270deg, rgba(244, 244, 244, 0) 0%, rgba(244, 244, 244, 0.8) 100%);
-  display: inline-flex; align-items: center; justify-content: flex-end;
+.step2-benefit-card__side {
+  flex: 0 1 34.945%; min-width: 0; display: flex; align-items: center; justify-content: center;
+  padding-left: 12px;
   box-sizing: border-box;
 }
-.step2-benefit-card__rm:active { filter: brightness(.97); }
-.step2-benefit-card__rm img {
-  display: block; width: 16px; height: 18px; margin-right: 8px; pointer-events: none;
+.step2-benefit-card__title {
+  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; row-gap: 2px;
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4;
+  white-space: normal; overflow: visible; width: 100%;
+}
+.step2-benefit-card__proj {
+  flex-shrink: 0; max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
+}
+.step2-benefit-card__meta {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; width: 100%;
+  color: #7C7C7C; text-align: center;
+  white-space: normal; overflow-wrap: anywhere; word-break: break-word;
+}
+.step2-benefit-card__meta-scope {
+  display: block; font-size: 12px; font-weight: 500; line-height: 1.3; color: #7C7C7C;
+}
+.step2-benefit-card__meta-qty {
+  display: block; font-size: 15px; font-weight: 600; line-height: 1.35; color: #7C7C7C;
+}
+.step2-benefit-card__meta--single {
+  font-size: 15px; font-weight: 600; line-height: 1.35; color: #7C7C7C;
+}
+.step2-benefit-card__rm {
+  position: absolute; top: 8px; right: 9px; z-index: 2;
+  width: 20px; height: 20px; padding: 1px; margin: 0;
+  border: 1px solid rgba(243, 47, 65, 0.8); border-radius: 50%;
+  background: #fff; color: var(--brand); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box;
+}
+.step2-benefit-card__rm:active {
+  background: var(--brand-soft); color: var(--brand); filter: brightness(.97);
+}
+.step2-benefit-card__rm svg {
+  display: block; width: 10px; height: 10px; pointer-events: none;
 }
 .benefit-tree-node { position: relative; }
 .benefit-expand .form-section {
@@ -685,6 +717,17 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .form-row.clickable > * { pointer-events: none; }
 .section-head { padding: 12px 16px 4px; font-size: 12px; color: var(--text-sec); font-weight: 600; }
 .section-head--with-help { display: flex; align-items: center; gap: 6px; }
+.section-head--detail {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 16px 10px;
+  font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3;
+}
+.section-head--detail::before {
+  content: '';
+  width: 3px; height: 14px; border-radius: 2px;
+  background: var(--brand); flex-shrink: 0;
+}
+.section-head--detail.section-head--with-help { gap: 8px; }
 .section-head__help {
   display: inline-flex; align-items: center; justify-content: center;
   width: 16px; height: 16px; padding: 0; border: none; background: transparent;
@@ -1079,6 +1122,15 @@ input[type=number]::-webkit-inner-spin-button {
   color: var(--text-sec); cursor: pointer; font-family: inherit; line-height: 28px; text-align: center;
 }
 .duration-input__unit.is-active { color: #fff; font-weight: 600; }
+.unlimited-validity-dialog__dur { display: flex; justify-content: center; margin: 16px 0 4px; }
+.unlimited-validity-dialog__dur .duration-input { margin-left: 0; width: 166px; }
+.unlimited-validity-dialog__dur .duration-input__units {
+  flex: 0 0 90px; width: 90px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.unlimited-validity-dialog__dur .duration-seg-indicator {
+  width: calc((100% - 4px) / 3);
+}
 .issue-extend-block { padding: 0 0 12px; margin-bottom: 12px; border-bottom: 1px solid var(--bg-page); }
 .issue-extend-block__label { font-size: 12px; font-weight: 600; color: var(--text-sec); }
 .issue-extend-duration { margin-top: 8px; }
@@ -1204,6 +1256,46 @@ input[type=number]::-webkit-inner-spin-button {
   content: ''; position: absolute; left: 0; top: 0.55em;
   width: 4px; height: 4px; border-radius: 50%; background: var(--text-sec);
 }
+.policy-option__hint-amount {
+  color: var(--text); font-weight: 600; font-family: var(--font-data);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.policy-option__hint-total {
+  display: inline-flex; align-items: center; gap: 2px; vertical-align: baseline;
+}
+.policy-option__value-help {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 12px; height: 12px; margin: 0; padding: 0;
+  border: 1px solid var(--text-sec); border-radius: 50%;
+  background: transparent; color: var(--text-sec);
+  font-size: 8px; font-weight: 600; line-height: 1;
+  font-family: inherit; cursor: pointer; flex-shrink: 0;
+}
+.policy-option__value-help:active { opacity: .7; }
+.usage-value-detail {
+  margin: 12px 0 4px; padding: 0; text-align: left;
+  border-top: 1px solid var(--bg-page);
+}
+.usage-value-detail__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 42px; border-bottom: 1px solid var(--bg-page);
+  font-size: 14px; color: var(--text-sec);
+}
+.usage-value-detail__value {
+  color: var(--text); font-weight: 600; font-family: var(--font-data);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.usage-value-detail__row--total {
+  margin-top: 4px; border-bottom: none; font-weight: 600; color: var(--text);
+}
+.usage-value-detail__row--total .usage-value-detail__value {
+  color: var(--brand); font-size: 16px;
+}
+.usage-value-detail-dialog .dialog__body { margin-bottom: 0; }
+.usage-value-detail__note {
+  margin: 8px 0 0; font-size: 12px; line-height: 1.5;
+  color: var(--text-sec); text-align: left;
+}
 .form-hint { font-size: 12px; color: var(--text-sec); padding: 0 16px 8px; line-height: 1.55; }
 .form-hint--emph {
   display: flex; align-items: flex-start; gap: 8px;
@@ -1236,6 +1328,7 @@ input[type=number]::-webkit-inner-spin-button {
 .balance-gift-input {
   flex: 0 0 auto; width: auto; min-width: 40px; max-width: 120px;
   text-align: right; field-sizing: content; color: var(--text);
+  cursor: default; caret-color: transparent; pointer-events: none;
 }
 .balance-permanent-tag { font-size: 11px; color: var(--text-sec); margin-left: 6px; font-weight: 500; }
 .proj-tag-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; min-height: 4px; }
@@ -1352,12 +1445,27 @@ input[type=number]::-webkit-inner-spin-button {
 .proj-pick-block--excluded .proj-switch__track { opacity: .85; }
 .proj-qty-dual { background: var(--card); padding-left: 12px; }
 .proj-qty-dual.hidden { display: none !important; }
+.proj-qty-group-label {
+  margin: 0; padding: 10px 16px 2px 4px;
+  font-size: 12px; font-weight: 600; color: var(--text-sec); line-height: 1.3;
+}
+.proj-qty-group-label:first-child { padding-top: 4px; }
+.proj-qty-group-divider {
+  display: block; height: 1px; margin: 10px 16px 8px 4px;
+  border: none; background: var(--border); flex-shrink: 0;
+}
+.proj-qty-scope-tip {
+  flex: 1; min-width: 0; margin: 0; padding: 0;
+  text-align: right; font-size: 11px; color: var(--text-sec);
+  line-height: 1.35; font-weight: 400;
+}
 .proj-qty-panel {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   padding: 0 16px 8px; background: var(--card);
 }
-.proj-qty-panel:first-of-type { padding-top: 4px; }
-.proj-qty-panel.is-disabled .qty-stepper { opacity: 0.42; pointer-events: none; }
+.proj-qty-panel.is-disabled { opacity: 0.45; }
+.proj-qty-panel.is-disabled .qty-stepper { pointer-events: none; }
+.proj-qty-panel.is-disabled .proj-mode-head { pointer-events: none; cursor: default; }
 .proj-mode-head {
   display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
   cursor: pointer; min-width: 0;
@@ -1366,14 +1474,17 @@ input[type=number]::-webkit-inner-spin-button {
 .proj-mode-radio-wrap {
   position: relative; flex-shrink: 0; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center;
 }
-.proj-mode-radio {
+.proj-mode-radio,
+.proj-scope-radio {
   position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
 }
 .proj-mode-radio__visual {
   width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--brand);
   display: flex; align-items: center; justify-content: center; pointer-events: none; box-sizing: border-box;
 }
-.proj-mode-radio:checked + .proj-mode-radio__visual::after {
+.proj-mode-radio:checked + .proj-mode-radio__visual::after,
+.proj-scope-radio:checked + .proj-mode-radio__visual::after {
   content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--brand);
 }
 .proj-qty-label { font-size: 13px; line-height: 28px; color: var(--text-sec); flex-shrink: 0; }
@@ -1907,6 +2018,12 @@ html.figma-capture-step2 .bottom-bar { position: static; }
 .pick-section-card .pick-params-section__body .proj-qty-dual {
   margin: 0; padding-left: 0; overflow: visible;
 }
+.pick-section-card .pick-params-section__body .proj-qty-group-label {
+  padding-left: 0; padding-right: 0;
+}
+.pick-section-card .pick-params-section__body .proj-qty-group-divider {
+  margin-left: 0; margin-right: 0;
+}
 .pick-section-card .pick-params-section__body .proj-qty-panel {
   padding-left: 0; padding-right: 0; padding-bottom: 10px;
 }
@@ -1961,10 +2078,16 @@ html.figma-capture-step2 .bottom-bar { position: static; }
 .benefit-param-card__params .proj-qty-dual {
   border-top: none; padding: 4px 0 8px; background: transparent;
 }
+.benefit-param-card__params .proj-qty-group-label {
+  padding: 8px 16px 2px;
+}
+.benefit-param-card__params .proj-qty-group-label:first-child { padding-top: 4px; }
+.benefit-param-card__params .proj-qty-group-divider {
+  margin: 10px 16px 8px;
+}
 .benefit-param-card__params .proj-qty-panel {
   min-height: 44px; padding: 8px 16px; box-sizing: border-box;
 }
-.benefit-param-card__params .proj-qty-panel:first-of-type { padding-top: 10px; }
 .benefit-param-card__params .mp-config-block {
   border: none; border-top: none; border-bottom: none;
   padding: 8px 16px 12px; background: transparent; overflow: visible;
@@ -2156,7 +2279,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                         </div>
                         <div class="balance-gift-row">
                           <span class="balance-gift-label">赠送</span>
-                          <input class="value input-amount balance-gift-input" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="0" />
+                          <input class="value input-amount balance-gift-input" id="fGiftAmount" type="number" min="0" step="0.01" placeholder="0" readonly tabindex="-1" data-no-amount-keypad aria-readonly="true" />
                           <span class="suffix">元</span>
                         </div>
                       </div>
@@ -2290,13 +2413,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
                 <div class="detail-bar-actions">
                   <span class="detail-shelf-status hidden" id="tplDetailShelvedBadge">已下架</span>
-                  <button type="button" class="detail-clone-btn hidden" id="btnDetailCloneTop">克隆</button>
+                  <button type="button" class="detail-clone-btn hidden" id="btnDetailCloneTop">复制建卡</button>
                   <button type="button" class="detail-shelf-btn" id="btnShelfTemplate">下架</button>
                   <button type="button" class="detail-edit-btn" id="btnEditTemplate">编辑</button>
                 </div>
               </div>
               <div class="form-section tpl-detail-section tpl-detail-section--stats">
-                <div class="section-head section-head--with-help" style="padding-top:8px">
+                <div class="section-head section-head--detail section-head--with-help">
                   <span>运营数据</span>
                   <button type="button" class="section-head__help" id="btnStatsHelp" aria-label="运营数据说明">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
@@ -2304,13 +2427,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
                 <div class="tpl-detail-stats-cards" id="tplDetailStatsList"></div>
               </div>
-              <div class="form-section tpl-detail-section">
-                <div class="section-head" style="padding-top:8px">卡面信息</div>
-                <div id="tplDetailFaceList"></div>
-                <div class="form-row clickable" id="rowLinkedProjects" style="margin-top:0">
-                  <span class="label">关联项目</span>
-                  <span class="form-row__trail"><span class="value has-val" id="linkedProjectsSummary">查看价目表</span><span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span></span>
-                </div>
+              <div class="form-section tpl-detail-section tpl-detail-section--face">
+                <div class="section-head section-head--detail">卡面信息</div>
+                <div class="tpl-detail-stats-cards" id="tplDetailFaceList"></div>
               </div>
             </div>
           </div>
@@ -2472,10 +2591,33 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         </div>
         <div class="dialog-mask" id="unlimitedValidityDialogMask">
           <div class="dialog">
-            <div class="dialog__body dialog__body--solo">不限次项目须先设置卡有效期（不可为永久）</div>
+            <div class="dialog__title">设置有效期限</div>
+            <div class="dialog__body">不限次项目不可使用永久有效，请在此设置卡有效期。</div>
+            <div class="unlimited-validity-dialog__dur">
+              <div class="duration-input" id="unlimitedValidityDuration" data-duration-id="unlimitedValidity" style="width:166px">
+                <div class="duration-input__field" data-duration-field>
+                  <input type="text" class="duration-input__num" data-duration-num inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="请输入" />
+                </div>
+                <div class="duration-input__units" data-duration-units style="grid-template-columns:repeat(3,1fr);flex:0 0 90px;width:90px">
+                  <span class="duration-seg-indicator" style="width:calc((100% - 4px) / 3);transform:translateX(200%)" aria-hidden="true"></span>
+                  <button type="button" class="duration-input__unit" data-duration-unit="day">日</button>
+                  <button type="button" class="duration-input__unit" data-duration-unit="month">月</button>
+                  <button type="button" class="duration-input__unit is-active" data-duration-unit="year">年</button>
+                </div>
+              </div>
+            </div>
             <div class="dialog__actions">
               <button type="button" class="btn-main secondary" id="unlimitedValidityCancel">取消</button>
-              <button type="button" class="btn-main" id="unlimitedValidityGoSet">去设置</button>
+              <button type="button" class="btn-main" id="unlimitedValidityConfirm">确定</button>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-mask" id="usageValueDetailMask">
+          <div class="dialog usage-value-detail-dialog">
+            <div class="dialog__title">总权益面值计算明细</div>
+            <div class="dialog__body" id="usageValueDetailBody"></div>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main" id="usageValueDetailOk">知道了</button>
             </div>
           </div>
         </div>
@@ -3289,8 +3431,8 @@ const OPTIMIZATION_LOG = [
   '面值永久有效：不受卡级有效期约束；期限仅约束项目与折扣权益',
   '退卡双轨：retail 模式项目按价目表原价×次数、折扣按已省优惠额折算',
   '演示数据：新增「原价策略演示卡」；默认 6 卡均为 alloc_pool',
-  '含折扣卡延期：展示延期费用（折扣分摊购卡价×延期天数÷原有效期），可改 0 免费；独立延期流水',
-  '修复延期费用：金额键盘 z-index 高于办卡弹窗；未选时长前禁用费用框并自动折算',
+  '含折扣卡延期：展示参考费用（折扣分摊购卡价×延期天数÷原有效期），可改 0 免费；独立延期流水',
+  '修复参考费用：金额键盘 z-index 高于办卡弹窗；未选时长前禁用费用框并自动折算',
   '延期收费范围：凡含折扣权益的卡均展示费用；组合卡按名义价值池折扣权重分摊购卡价',
   '选择项目/折扣项目：「全部」switch 绿/灰；排除区项目 switch 灰/橙；关全部恢复正向绿/灰',
   '折扣项目列表：补全左右边距；点「全部」展开统一折扣设置',
@@ -3323,6 +3465,18 @@ const OPTIMIZATION_LOG = [
   '用卡策略：退卡 retail 文案为「减值模式」；业绩 retail 文案为「原价模式」',
   '列表卡面：权益区「期限」区块仅展示期限值（1年/永久有效等；纯储值卡为永久有效）',
   '列表卡面：期限值改用思源黑体（Source Han Sans SC），不再使用数字字体',
+  'Step3/均值：分母改为面值权重+有限次项目权重（不含折扣）；纯折扣卡消耗=折扣优惠金额',
+  '固定期限不限次：独占实付时按已过天数/总天数摊销；不限次劳动业绩按价目表原价',
+  '含折扣延期参考费用：基数改为整卡办卡实付；折扣线不再占购卡实付可退份额',
+  'Step3 普通卡副标题/明细恢复「总权益面值」文案；纯折扣与固定期限不限次仍用专用公式',
+  '纯折扣识别：持久化 faceAmount（含 0）；面值开关开但面值为 0 时 Step3 显示折扣优惠公式',
+  '永久+不限次：弹窗内直接设置有效期（日/月/年，默认1年），确定即写回并选中不限次，不再跳回 Step1',
+  'Step3 均值副标题：纯折扣卡与固定期限不限次卡仅保留第一条公式行，去掉办卡实付/建议退款说明行',
+  '文案：克隆→复制建卡；系统建议退款→建议退款；Step2 赠送金额只读展示（仍由面值−购买联动）',
+  '详情页：卡面信息改为运营数据同款灰底白卡片分组；运营数据/卡面信息标题加粗+左侧品牌红竖条',
+  'Step2 权益卡：同步 Figma 新样式（右侧灰色渐变、虚线分隔、白底 20px 删除按钮、65/35 内容比例）',
+  'Step2 权益卡细化：右侧渐变/虚线透明度降低，数值改 #7C7C7C，删除按钮增加半透明品牌红描边',
+  'Step2 权益卡虚线：按 Figma dashPattern [7,7] 精确还原（1px / #929292 35% / 方端）',
 ];
 
 const STATS_HELP_ITEMS = [
@@ -3396,7 +3550,7 @@ const QUICK_TEMPLATES = [
   {
     id: 'old_renew',
     title: '老客续充',
-    desc: '均值·面值+折扣 · 含延期费用',
+    desc: '均值·面值+折扣 · 含参考费用',
     icon: '💝',
     preset: {
       name: '老客续充卡',
@@ -3409,7 +3563,7 @@ const QUICK_TEMPLATES = [
         '洗剪吹': { tickIndex: 16 },
       },
       cardColor: 'gold',
-      cardDesc: '演示用·含折扣：退卡/延期 Tab 可看延期费用；推荐 m7/m8',
+      cardDesc: '演示用·含折扣：退卡/延期 Tab 可看参考费用；推荐 m7/m8',
     },
   },
   {
@@ -3444,7 +3598,7 @@ const QUICK_TEMPLATES = [
         '染发': { mode: 'fixed', amount: '299' },
       },
       cardColor: 'purple',
-      cardDesc: '演示用·均值纯折扣：消耗按累计已享优惠；可与「减值烫染卡」对照；含延期费用',
+      cardDesc: '演示用·均值纯折扣：消耗按累计已享优惠；可与「减值烫染卡」对照；含参考费用',
     },
   },
   {
@@ -4162,13 +4316,48 @@ function normalizeProjectItemFields(item) {
     purchaseQty = 0;
     giftQty = 0;
   }
+  const qtyScope = item.qtyScope === 'shared' && !unlimited ? 'shared' : 'per_item';
   return {
     id: item.id,
     name: item.name,
     unlimited,
     purchaseQty,
     giftQty,
+    qtyScope,
+    sharedGroupId: qtyScope === 'shared' ? (item.sharedGroupId || null) : null,
   };
+}
+
+function normalizeQtyScope(raw, opts = {}) {
+  const unlimited = !!opts.unlimited;
+  if (unlimited) return 'per_item';
+  return raw === 'shared' ? 'shared' : 'per_item';
+}
+
+function formatBenefitCardQtyScopeLabel(card) {
+  const scope = normalizeQtyScope(card.qtyScope, {
+    projectCount: card.projects?.length || 0,
+    unlimited: card.unlimited,
+  });
+  return scope === 'shared' ? '共计' : '每项';
+}
+
+function formatBenefitCardQtyValue(card) {
+  if (card.unlimited) return '不限次';
+  const purchase = card.purchaseQty ?? 0;
+  const gift = card.giftQty ?? 0;
+  return gift > 0 ? `${purchase}次+送${gift}次` : `${purchase}次`;
+}
+
+function formatBenefitCardQtySummary(card) {
+  return `${formatBenefitCardQtyScopeLabel(card)}${formatBenefitCardQtyValue(card)}`;
+}
+
+function formatBenefitCardQtyMetaHtml(card) {
+  return `<span class="step2-benefit-card__meta">
+    <span class="step2-benefit-card__meta-scope">${escapeHtml(formatBenefitCardQtyScopeLabel(card))}</span>
+    <span class="step2-benefit-card__meta-qty">${escapeHtml(formatBenefitCardQtyValue(card))}</span>
+  </span>`;
 }
 
 function formatProjectQtySummary(item) {
@@ -4254,13 +4443,8 @@ function templateHasDiscountBenefit(tpl) {
 function getDiscountExtendFeeBase(tpl) {
   const purchase = parseAmount(tpl?.recharge);
   if (!purchase || !templateHasDiscountBenefit(tpl)) return 0;
-  const pool = buildRefundNominalPool(tpl);
-  const totalNominal = sumRefundNominalPool(pool);
-  if (!totalNominal) return purchase;
-  let discountNominal = 0;
-  pool.discounts.forEach(d => { discountNominal += d.weight; });
-  if (!discountNominal) return 0;
-  return roundMoney(purchase * (discountNominal / totalNominal));
+  // 含折扣卡：参考费用基数 = 整卡办卡实付（不再按折扣权重从名义池切分）
+  return purchase;
 }
 
 function getTemplateValidityDays(tpl) {
@@ -4378,8 +4562,22 @@ function buildInitialHolderLedger(tpl) {
     };
   }
   if (tpl.benefits?.timesOrValidity) {
+    const sharedSeen = new Set();
     normalizeProjectItemsFromTpl(tpl).forEach(item => {
       if (item.unlimited) return;
+      if (item.qtyScope === 'shared' && item.sharedGroupId) {
+        const primary = !sharedSeen.has(item.sharedGroupId);
+        if (primary) sharedSeen.add(item.sharedGroupId);
+        ledger.projects[item.name] = {
+          purchaseRemaining: primary ? (item.purchaseQty || 0) : 0,
+          giftRemaining: primary ? (item.giftQty || 0) : 0,
+          purchaseUsed: 0,
+          giftUsed: 0,
+          sharedGroupId: item.sharedGroupId,
+          sharedPoolPrimary: primary,
+        };
+        return;
+      }
       ledger.projects[item.name] = {
         purchaseRemaining: item.purchaseQty || 0,
         giftRemaining: item.giftQty || 0,
@@ -4466,7 +4664,7 @@ function computeProjectRefundLine(pl, item, alloc) {
   };
 }
 
-/** 退卡估值：各权益名义价值（统一分摊池，与 Q3 口径 2 / Q4 对齐） */
+/** 退卡估值：构建权益池。均值分母仅用面值+有限次项目；折扣列表仍用于已省优惠明细 */
 function getDiscountLineNominalWeight(name) {
   if (name === MP_BATCH_KEY) {
     const prices = getOnSaleProjectNames().map(getProjectPrice);
@@ -4479,7 +4677,24 @@ function buildRefundNominalPool(tpl) {
   const pool = { balanceNominal: 0, projects: [], discounts: [] };
   if (tpl.benefits?.balance) pool.balanceNominal = getTemplateFaceTotal(tpl);
   if (tpl.benefits?.timesOrValidity) {
+    const sharedDone = new Set();
     normalizeProjectItemsFromTpl(tpl).filter(i => !i.unlimited).forEach(item => {
+      if (item.qtyScope === 'shared' && item.sharedGroupId) {
+        if (sharedDone.has(item.sharedGroupId)) return;
+        sharedDone.add(item.sharedGroupId);
+        const groupItems = normalizeProjectItemsFromTpl(tpl).filter(
+          i => i.sharedGroupId === item.sharedGroupId && !i.unlimited
+        );
+        const prices = groupItems.map(i => getProjectPrice(i.name) || 0);
+        const avg = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
+        const times = (item.purchaseQty || 0) + (item.giftQty || 0) || 1;
+        pool.projects.push({
+          item,
+          weight: avg * times,
+          sharedNames: groupItems.map(i => i.name),
+        });
+        return;
+      }
       const price = getProjectPrice(item.name) || 0;
       const times = (item.purchaseQty || 0) + (item.giftQty || 0) || 1;
       pool.projects.push({ item, weight: price * times });
@@ -4499,6 +4714,90 @@ function sumRefundNominalPool(pool) {
   pool.projects.forEach(p => { total += p.weight; });
   pool.discounts.forEach(d => { total += d.weight; });
   return total;
+}
+
+/** 均值分母：仅面值权重 + 有限次项目权重（不含折扣、不含不限次） */
+function sumFaceProjectNominalPool(pool) {
+  let total = pool.balanceNominal || 0;
+  pool.projects.forEach(p => { total += p.weight; });
+  return total;
+}
+
+function templateHasLimitedProjects(tpl) {
+  if (!tpl?.benefits?.timesOrValidity) return false;
+  return normalizeProjectItemsFromTpl(tpl).some(i => !i.unlimited);
+}
+
+function templateHasUnlimitedProjects(tpl) {
+  if (!tpl?.benefits?.timesOrValidity) return false;
+  return normalizeProjectItemsFromTpl(tpl).some(i => !!i.unlimited);
+}
+
+function isPureDiscountTemplate(tpl) {
+  if (!templateHasDiscountBenefit(tpl)) return false;
+  if (templateHasLimitedProjects(tpl) || templateHasUnlimitedProjects(tpl)) return false;
+  // 未开面值，或面值合计为 0：视为纯折扣（面值开关开着但金额为 0 也算）
+  if (!tpl?.benefits?.balance) return true;
+  return getTemplateFaceTotal(tpl) <= 0;
+}
+
+function isUnlimitedFixedTermTemplate(tpl) {
+  return templateHasUnlimitedProjects(tpl) && !isTemplatePermanent(tpl);
+}
+
+function listUnlimitedProjectNames(tpl) {
+  if (!tpl?.benefits?.timesOrValidity) return [];
+  return normalizeProjectItemsFromTpl(tpl).filter(i => i.unlimited).map(i => i.name);
+}
+
+function getHolderValiditySpanDays(tpl, meta) {
+  const fromTpl = getTemplateValidityDays(tpl);
+  if (fromTpl) return fromTpl;
+  if (meta?.issuedAt && meta?.cardExpireAt) {
+    const issued = startOfDayMs(meta.issuedAt);
+    const expire = startOfDayMs(meta.cardExpireAt);
+    if (expire > issued) return Math.round((expire - issued) / 86400000);
+  }
+  return null;
+}
+
+function computeUnlimitedTimeRefundLine(meta, purchaseAlloc, tpl) {
+  const alloc = roundMoney(purchaseAlloc || 0);
+  const totalDays = getHolderValiditySpanDays(tpl, meta);
+  if (!totalDays || totalDays <= 0) {
+    return {
+      usedVal: 0,
+      remVal: alloc,
+      detail: '不限次 · 有效期未知，暂按未消耗',
+      totalDays: 0,
+      elapsedDays: 0,
+    };
+  }
+  const issued = startOfDayMs(meta?.issuedAt || Date.now());
+  const asOf = startOfDayMs(Date.now());
+  let elapsedDays = Math.round((asOf - issued) / 86400000);
+  if (elapsedDays < 0) elapsedDays = 0;
+  if (elapsedDays > totalDays) elapsedDays = totalDays;
+  const usedVal = roundMoney(alloc * elapsedDays / totalDays);
+  const remVal = roundMoney(Math.max(0, alloc - usedVal));
+  return {
+    usedVal,
+    remVal,
+    detail: `不限次 · 已过 ${elapsedDays}/${totalDays} 天 · 按时间摊销`,
+    totalDays,
+    elapsedDays,
+  };
+}
+
+function sumDiscountSavedTotal(tpl, ledger) {
+  let usedVal = 0;
+  let count = 0;
+  Object.keys(tpl.memberPrices || {}).forEach(key => {
+    const entry = normalizeDiscountLedgerEntry(ledger?.discountUses?.[key], key, tpl);
+    usedVal += entry.savedTotal || 0;
+    count += entry.count || 0;
+  });
+  return { usedVal: roundMoney(usedVal), count };
 }
 
 function resolveDiscountPaidPrice(projectName, rule) {
@@ -4602,11 +4901,33 @@ function computeSuggestedRefundAllocPool(tpl, meta) {
   const lines = [];
   const ledger = meta?.ledger || {};
   const nominalPool = buildRefundNominalPool(tpl);
-  const totalNominal = sumRefundNominalPool(nominalPool) || 1;
+  const faceProjectTotal = sumFaceProjectNominalPool(nominalPool);
 
-  if (tpl.benefits?.balance && ledger.balance && nominalPool.balanceNominal > 0) {
+  // 纯折扣卡：消耗价值 = 折扣优惠金额；不分摊实付
+  if (isPureDiscountTemplate(tpl)) {
+    const { usedVal, count } = sumDiscountSavedTotal(tpl, ledger);
+    lines.push({
+      kind: 'discount',
+      label: '折扣优惠',
+      detail: `累计已享优惠 ${formatMoneyDisplay(usedVal)}（${count} 次）`,
+      used: usedVal,
+      remain: 0,
+    });
+    const sumConsumed = usedVal;
+    return {
+      purchaseAmount: purchase,
+      consumedTotal: sumConsumed,
+      suggestedRefund: roundMoney(Math.max(0, purchase - sumConsumed)),
+      lines,
+      remainingTotal: 0,
+    };
+  }
+
+  const allocDenom = faceProjectTotal > 0 ? faceProjectTotal : 1;
+
+  if (tpl.benefits?.balance && ledger.balance && nominalPool.balanceNominal > 0 && faceProjectTotal > 0) {
     const faceTotal = nominalPool.balanceNominal;
-    const br = computeBalanceRefundLine(tpl, ledger.balance, purchase, totalNominal, faceTotal);
+    const br = computeBalanceRefundLine(tpl, ledger.balance, purchase, allocDenom, faceTotal);
     consumed += br.usedVal;
     remaining += br.remVal;
     lines.push({
@@ -4616,45 +4937,75 @@ function computeSuggestedRefundAllocPool(tpl, meta) {
     });
   }
 
-  if (tpl.benefits?.timesOrValidity) {
-    nominalPool.projects.forEach(({ item, weight }) => {
-      const alloc = purchase * (weight / totalNominal);
-      const pl = ledger.projects?.[item.name] || {
+  if (tpl.benefits?.timesOrValidity && faceProjectTotal > 0) {
+    nominalPool.projects.forEach(({ item, weight, sharedNames }) => {
+      const alloc = purchase * (weight / allocDenom);
+      let pl = ledger.projects?.[item.name] || {
         purchaseRemaining: item.purchaseQty,
         giftRemaining: item.giftQty,
         purchaseUsed: 0,
         giftUsed: 0,
       };
+      if (sharedNames?.length) {
+        pl = {
+          purchaseUsed: 0,
+          giftUsed: 0,
+          purchaseRemaining: 0,
+          giftRemaining: 0,
+        };
+        sharedNames.forEach(name => {
+          const row = ledger.projects?.[name];
+          if (!row) return;
+          pl.purchaseUsed += row.purchaseUsed || 0;
+          pl.giftUsed += row.giftUsed || 0;
+          pl.purchaseRemaining += row.purchaseRemaining || 0;
+          pl.giftRemaining += row.giftRemaining || 0;
+        });
+      }
       const pr = computeProjectRefundLine(pl, item, alloc);
       consumed += pr.usedVal;
       remaining += pr.remVal;
       lines.push({
-        kind: 'project', label: item.name,
+        kind: 'project',
+        label: sharedNames?.length ? `共计 · ${sharedNames.join('、')}` : item.name,
         detail: pr.detail,
         used: pr.usedVal, remain: pr.remVal,
       });
     });
   }
 
+  // 固定期限不限次：权重池为空时，剩余（即全部）实付按时间摊销；
+  // 若已有面值/有限次权重，实付已分完，不限次不再另占份额（劳动业绩按价目表原价，见 Step3）。
+  if (isUnlimitedFixedTermTemplate(tpl) && faceProjectTotal <= 0) {
+    const names = listUnlimitedProjectNames(tpl);
+    const ur = computeUnlimitedTimeRefundLine(meta, purchase, tpl);
+    consumed += ur.usedVal;
+    remaining += ur.remVal;
+    lines.push({
+      kind: 'unlimited',
+      label: names.length ? `不限次 · ${names.join('、')}` : '不限次项目',
+      detail: ur.detail,
+      used: ur.usedVal,
+      remain: ur.remVal,
+    });
+  }
+
+  // 折扣：不占实付分摊；消耗 = 已省优惠；剩余价值 = 0
   if (tpl.benefits?.projectDiscount && nominalPool.discounts.length) {
-    nominalPool.discounts.forEach(({ key, label, weight }) => {
-      const alloc = purchase * (weight / totalNominal);
+    nominalPool.discounts.forEach(({ key, label }) => {
       const entry = normalizeDiscountLedgerEntry(ledger.discountUses?.[key], key, tpl);
       const usedVal = roundMoney(entry.savedTotal);
-      const remVal = roundMoney(Math.max(0, alloc - usedVal));
       consumed += usedVal;
-      remaining += remVal;
       lines.push({
         kind: 'discount', label,
-        detail: `已省优惠 ${formatMoneyDisplay(usedVal)}（${entry.count} 次）· 剩余可退 ${formatMoneyDisplay(remVal)}`,
-        used: usedVal, remain: remVal,
+        detail: `已省优惠 ${formatMoneyDisplay(usedVal)}（${entry.count} 次）· 不占购卡实付份额`,
+        used: usedVal, remain: 0,
       });
     });
   }
 
   const sumRemaining = roundMoney(remaining);
   const sumConsumed = roundMoney(consumed);
-  // 与 Step3 副标题一致：建议退款 = 办卡实付 − 消耗价值（不低于 0）；不再与 Σ剩余取 min
   const suggested = roundMoney(Math.max(0, purchase - sumConsumed));
   return { purchaseAmount: purchase, consumedTotal: sumConsumed, suggestedRefund: suggested, lines, remainingTotal: sumRemaining };
 }
@@ -4666,7 +5017,8 @@ function computeSuggestedRefundRetail(tpl, meta) {
   const lines = [];
   const ledger = meta?.ledger || {};
   const nominalPool = buildRefundNominalPool(tpl);
-  const totalNominal = sumRefundNominalPool(nominalPool) || 1;
+  const faceProjectTotal = sumFaceProjectNominalPool(nominalPool);
+  const totalNominal = faceProjectTotal > 0 ? faceProjectTotal : 1;
 
   if (tpl.benefits?.balance && ledger.balance && nominalPool.balanceNominal > 0) {
     const faceTotal = nominalPool.balanceNominal;
@@ -4681,7 +5033,42 @@ function computeSuggestedRefundRetail(tpl, meta) {
   }
 
   if (tpl.benefits?.timesOrValidity) {
+    const sharedDone = new Set();
     normalizeProjectItemsFromTpl(tpl).filter(i => !i.unlimited).forEach(item => {
+      if (item.qtyScope === 'shared' && item.sharedGroupId) {
+        if (sharedDone.has(item.sharedGroupId)) return;
+        sharedDone.add(item.sharedGroupId);
+        const groupItems = normalizeProjectItemsFromTpl(tpl).filter(
+          i => i.sharedGroupId === item.sharedGroupId && !i.unlimited
+        );
+        const prices = groupItems.map(i => getProjectPrice(i.name) || 0);
+        const avg = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
+        let purchaseUsed = 0;
+        let giftUsed = 0;
+        let purchaseRem = 0;
+        let giftRem = 0;
+        groupItems.forEach(gi => {
+          const pl = ledger.projects?.[gi.name];
+          if (!pl) return;
+          purchaseUsed += pl.purchaseUsed || 0;
+          giftUsed += pl.giftUsed || 0;
+          purchaseRem += pl.purchaseRemaining || 0;
+          giftRem += pl.giftRemaining || 0;
+        });
+        const usedTimes = purchaseUsed + giftUsed;
+        const remTimes = purchaseRem + giftRem;
+        const usedVal = roundMoney(avg * usedTimes);
+        const remVal = roundMoney(avg * remTimes);
+        consumed += usedVal;
+        remaining += remVal;
+        lines.push({
+          kind: 'project',
+          label: `共计 · ${groupItems.map(i => i.name).join('、')}`,
+          detail: `均价 ${formatMoneyDisplay(avg)}/次 · 已用 ${usedTimes} 次 · 剩余 ${remTimes} 次`,
+          used: usedVal, remain: remVal,
+        });
+        return;
+      }
       const price = getProjectPrice(item.name) || 0;
       const pl = ledger.projects?.[item.name] || {
         purchaseRemaining: item.purchaseQty,
@@ -4712,17 +5099,14 @@ function computeSuggestedRefundRetail(tpl, meta) {
   }
 
   if (tpl.benefits?.projectDiscount && nominalPool.discounts.length) {
-    nominalPool.discounts.forEach(({ key, label, weight }) => {
-      const alloc = purchase * (weight / totalNominal);
+    nominalPool.discounts.forEach(({ key, label }) => {
       const entry = normalizeDiscountLedgerEntry(ledger.discountUses?.[key], key, tpl);
       const usedVal = roundMoney(entry.savedTotal);
-      const remVal = roundMoney(Math.max(0, alloc - usedVal));
       consumed += usedVal;
-      remaining += remVal;
       lines.push({
         kind: 'discount', label,
-        detail: `已省优惠 ${formatMoneyDisplay(usedVal)}（${entry.count} 次）· 剩余可退 ${formatMoneyDisplay(remVal)}`,
-        used: usedVal, remain: remVal,
+        detail: `已省优惠 ${formatMoneyDisplay(usedVal)}（${entry.count} 次）· 不占购卡实付份额`,
+        used: usedVal, remain: 0,
       });
     });
   }
@@ -4752,27 +5136,56 @@ function hasUnlimitedProjectBenefits() {
   return false;
 }
 
-/** 卡级为永久时选「不限次」→ 弹窗确认，不直接跳页 */
+/** 卡级为永久时选「不限次」→ 弹窗内直接设置有效期，不跳页 */
+let unlimitedValidityDialogState = null;
+
 function closeUnlimitedValidityDialog() {
   document.getElementById('unlimitedValidityDialogMask')?.classList.remove('show');
+  unlimitedValidityDialogState = null;
 }
 
-function openUnlimitedValidityDialog() {
+function openUnlimitedValidityDialog(onConfirm) {
+  unlimitedValidityDialogState = { unit: 'year', amount: 1, onConfirm };
+  const root = document.getElementById('unlimitedValidityDuration');
+  if (root) {
+    wireDurationInput(root, {
+      get: () => ({ unit: unlimitedValidityDialogState?.unit, amount: unlimitedValidityDialogState?.amount }),
+      set: ({ unit, amount }) => {
+        if (!unlimitedValidityDialogState) return;
+        unlimitedValidityDialogState.unit = unit;
+        unlimitedValidityDialogState.amount = amount;
+      },
+    });
+    syncDurationInputDom(root, 'year', 1);
+  }
   document.getElementById('unlimitedValidityDialogMask')?.classList.add('show');
 }
 
-function goSetValidityForUnlimited() {
+function confirmUnlimitedValidityDialog() {
+  const dlg = unlimitedValidityDialogState;
+  if (!dlg) return;
+  const amount = parseDurationAmount(dlg.amount);
+  if (!amount) {
+    showToast('请设置有效期限', true);
+    return;
+  }
+  const snap = durationFieldsToValiditySnap(dlg.unit, amount);
+  state.cardValidityUnit = dlg.unit;
+  state.cardValidityAmount = amount;
+  state.cardValidityKey = snap.validityKey;
+  state.cardValidityDays = snap.validityDays;
+  state.cardValidityMonths = snap.validityMonths;
+  state.cardValidityCustomUnit = snap.validityCustomUnit;
+  syncDurationInputDom(document.getElementById('cardValidityDuration'), state.cardValidityUnit, state.cardValidityAmount);
+  syncCardValidityDisplay();
+  const cb = dlg.onConfirm;
   closeUnlimitedValidityDialog();
-  setStep(1);
-  requestAnimationFrame(() => {
-    syncCardValidityDisplay();
-    document.getElementById('cardValidityDuration')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-  });
+  cb?.();
 }
 
-function forceNonPermanentValidityForUnlimited() {
+function forceNonPermanentValidityForUnlimited(onConfirm) {
   if (!isCardValidityPermanent()) return true;
-  openUnlimitedValidityDialog();
+  openUnlimitedValidityDialog(onConfirm);
   return false;
 }
 
@@ -4888,6 +5301,8 @@ function normalizeProjectItemsFromTpl(p) {
       unlimited: i.unlimited,
       qty: i.qty,
       isGift: i.isGift,
+      qtyScope: i.qtyScope,
+      sharedGroupId: i.sharedGroupId,
     }));
   } else if (p.projects?.length) {
     const qty = parseInt(p.times, 10) || 1;
@@ -5961,7 +6376,7 @@ function wireProjCatalogModule() {
     showToast('已删除');
   });
   document.getElementById('unlimitedValidityCancel')?.addEventListener('click', closeUnlimitedValidityDialog);
-  document.getElementById('unlimitedValidityGoSet')?.addEventListener('click', goSetValidityForUnlimited);
+  document.getElementById('unlimitedValidityConfirm')?.addEventListener('click', confirmUnlimitedValidityDialog);
   document.getElementById('unlimitedValidityDialogMask')?.addEventListener('click', e => {
     if (e.target === document.getElementById('unlimitedValidityDialogMask')) closeUnlimitedValidityDialog();
   });
@@ -5979,7 +6394,6 @@ function wireProjCatalogModule() {
   });
   document.getElementById('btnManagePriceCatalog')?.addEventListener('click', () => openPriceCatalog('screen2'));
   document.getElementById('btnManagePriceCatalogDisc')?.addEventListener('click', () => openPriceCatalog('screen4'));
-  document.getElementById('rowLinkedProjects')?.addEventListener('click', () => openPriceCatalog('screen6'));
   initProjDurPicker();
 }
 
@@ -6285,19 +6699,174 @@ function showToast(msg, _isWarn) {
 
 const CREATE_STEP_LABELS = ['基本信息', '权益组合', '用卡策略'];
 
+function getStep3DraftTemplate() {
+  const balanceOn = !!state.benefits.balance;
+  return {
+    recharge: document.getElementById('fRecharge')?.value.trim() || '',
+    giftAmount: balanceOn ? (document.getElementById('fGiftAmount')?.value ?? '') : '',
+    faceAmount: balanceOn ? (document.getElementById('fFaceValue')?.value ?? '') : '',
+    benefits: { ...state.benefits },
+    projectItems: state.projectItems,
+    memberPrices: state.memberPrices,
+    ...getCardValiditySnapshot(),
+  };
+}
+
+function getStep3ValueSummary() {
+  const tpl = getStep3DraftTemplate();
+  const pool = buildRefundNominalPool(tpl);
+  const projectNominal = pool.projects.reduce((sum, item) => sum + item.weight, 0);
+  const weightTotal = sumFaceProjectNominalPool(pool);
+  return {
+    tpl,
+    purchase: parseAmount(tpl.recharge),
+    balanceNominal: roundMoney(pool.balanceNominal || 0),
+    projectNominal: roundMoney(projectNominal),
+    weightTotal: roundMoney(weightTotal),
+    pureDiscount: isPureDiscountTemplate(tpl),
+    unlimitedFixedTerm: isUnlimitedFixedTermTemplate(tpl),
+    unlimitedOnly: isUnlimitedFixedTermTemplate(tpl) && weightTotal <= 0,
+    unlimitedNames: listUnlimitedProjectNames(tpl),
+    validityDays: getTemplateValidityDays(tpl),
+  };
+}
+
+function renderUsagePolicyHintHtml(field, opt) {
+  if (opt.id === 'alloc_pool') {
+    const values = getStep3ValueSummary();
+    const resultLabel = field === 'refundRule' ? '消耗价值' : '员工业绩';
+    if (values.pureDiscount) {
+      return `<ul class="policy-option__hint">
+        <li class="policy-option__hint-item">
+          ${resultLabel} = 折扣优惠金额
+          <span class="policy-option__hint-total">
+            <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
+          </span>
+        </li>
+      </ul>`;
+    }
+    if (values.unlimitedOnly) {
+      const daysText = values.validityDays ? `${values.validityDays} 天` : '卡有效天数';
+      return `<ul class="policy-option__hint">
+        <li class="policy-option__hint-item">
+          ${field === 'refundRule'
+            ? `消耗价值 = 办卡实付 ×（已过天数 ÷ ${escapeHtml(daysText)}）`
+            : '员工业绩 = 价目表原价（不限次按次服务）'}
+          <span class="policy-option__hint-total">
+            <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
+          </span>
+        </li>
+      </ul>`;
+    }
+    const perfExtra = values.unlimitedFixedTerm && field === 'performanceRule'
+      ? '<li class="policy-option__hint-item">不限次项目劳动业绩按价目表原价计</li>'
+      : '';
+    return `<ul class="policy-option__hint">
+      <li class="policy-option__hint-item">
+        ${resultLabel} = 项目面值 ×（办卡实付金额
+        <strong class="policy-option__hint-amount">${escapeHtml(formatMoneyDisplay(values.purchase))}</strong>
+        ÷ 总权益面值
+        <span class="policy-option__hint-total">
+          <strong class="policy-option__hint-amount">${escapeHtml(formatMoneyDisplay(values.weightTotal))}</strong>
+          <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看总权益面值计算明细">?</button>
+        </span>）
+      </li>
+      ${perfExtra}
+    </ul>`;
+  }
+  const hints = Array.isArray(opt.hints)
+    ? opt.hints
+    : String(opt.hint || '').split('\n').map(s => s.trim()).filter(Boolean);
+  return hints.length
+    ? `<ul class="policy-option__hint">${hints.map(h =>
+      `<li class="policy-option__hint-item">${escapeHtml(h)}</li>`
+    ).join('')}</ul>`
+    : '';
+}
+
+function openUsageValueDetail() {
+  const values = getStep3ValueSummary();
+  const body = document.getElementById('usageValueDetailBody');
+  const mask = document.getElementById('usageValueDetailMask');
+  const titleEl = document.querySelector('#usageValueDetailMask .dialog__title');
+  if (!body || !mask) return;
+
+  if (values.pureDiscount) {
+    if (titleEl) titleEl.textContent = '纯折扣卡计算说明';
+    body.innerHTML = `<div class="usage-value-detail">
+      <div class="usage-value-detail__row">
+        <span>办卡实付</span>
+        <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.purchase))}</span>
+      </div>
+      <div class="usage-value-detail__row usage-value-detail__row--total">
+        <span>消耗价值</span>
+        <span class="usage-value-detail__value">折扣优惠金额</span>
+      </div>
+    </div>
+    <p class="usage-value-detail__note">纯折扣卡不使用面值/项目权重分母。消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)；建议退款 = max(0, 办卡实付 − 累计已享优惠)。</p>`;
+    mask.classList.add('show');
+    return;
+  }
+
+  if (values.unlimitedOnly) {
+    if (titleEl) titleEl.textContent = '不限次卡计算说明';
+    const daysText = values.validityDays ? `${values.validityDays} 天` : '卡有效总天数';
+    const names = values.unlimitedNames?.length ? values.unlimitedNames.join('、') : '不限次项目';
+    body.innerHTML = `<div class="usage-value-detail">
+      <div class="usage-value-detail__row">
+        <span>适用项目</span>
+        <span class="usage-value-detail__value">${escapeHtml(names)}</span>
+      </div>
+      <div class="usage-value-detail__row">
+        <span>办卡实付</span>
+        <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.purchase))}</span>
+      </div>
+      <div class="usage-value-detail__row">
+        <span>有效期</span>
+        <span class="usage-value-detail__value">${escapeHtml(daysText)}</span>
+      </div>
+      <div class="usage-value-detail__row usage-value-detail__row--total">
+        <span>消耗价值</span>
+        <span class="usage-value-detail__value">实付 × 已过/总天数</span>
+      </div>
+    </div>
+    <p class="usage-value-detail__note">固定期限不限次：消耗价值 = 办卡实付 ×（已过天数 ÷ 有效总天数）；剩余价值按剩余天数折算。均值模式下不限次劳动业绩按价目表原价。</p>`;
+    mask.classList.add('show');
+    return;
+  }
+
+  if (titleEl) titleEl.textContent = '总权益面值计算明细';
+  const rows = [
+    ['面值权益', values.balanceNominal],
+    ['项目权益', values.projectNominal],
+  ];
+  const noteExtra = values.unlimitedFixedTerm
+    ? ' 本卡含不限次项目：实付已由面值/有限次权益分摊完毕时，不限次不再另占份额；不限次劳动业绩按价目表原价。'
+    : '';
+  body.innerHTML = `<div class="usage-value-detail">
+    ${rows.map(([label, value]) => `<div class="usage-value-detail__row">
+      <span>${label}</span>
+      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(value))}</span>
+    </div>`).join('')}
+    <div class="usage-value-detail__row usage-value-detail__row--total">
+      <span>总权益面值</span>
+      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.weightTotal))}</span>
+    </div>
+  </div>
+  <p class="usage-value-detail__note">总权益面值 = 面值权益 + 项目权益（有限次），不含折扣、不含不限次。折扣消耗按已享优惠计，不占购卡实付份额。${noteExtra}</p>`;
+  mask.classList.add('show');
+}
+
+function closeUsageValueDetail() {
+  document.getElementById('usageValueDetailMask')?.classList.remove('show');
+}
+
 function renderUsagePolicyOptionGroup(containerId, field, options) {
   const el = document.getElementById(containerId);
   if (!el) return;
   el.innerHTML = options.map(opt => {
     const active = state.usagePolicy[field] === opt.id ? ' is-active' : '';
-    const hints = Array.isArray(opt.hints)
-      ? opt.hints
-      : String(opt.hint || '').split('\n').map(s => s.trim()).filter(Boolean);
-    const hintHtml = hints.length
-      ? `<ul class="policy-option__hint">${hints.map(h =>
-        `<li class="policy-option__hint-item">${escapeHtml(h)}</li>`
-      ).join('')}</ul>`
-      : '';
+    const hintHtml = renderUsagePolicyHintHtml(field, opt);
     const checked = state.usagePolicy[field] === opt.id ? ' checked' : '';
     return `<label class="policy-option${active}">
       <div class="policy-option__head">
@@ -6316,12 +6885,19 @@ function renderUsagePolicyOptionGroup(containerId, field, options) {
   el.querySelectorAll('.policy-option__radio').forEach(input => {
     input.onchange = () => {
       if (!input.checked) return;
-      const f = input.nameAttribute('name')?.replace(/^usagePolicy_/, '');
+      const f = input.getAttribute('name')?.replace(/^usagePolicy_/, '');
       const v = input.value;
       if (!f || !v) return;
       state.usagePolicy[f] = v;
       renderUsagePolicyOptionGroup('refundPolicyOptions', 'refundRule', USAGE_POLICY_OPTIONS.refundRule);
       renderUsagePolicyOptionGroup('performancePolicyOptions', 'performanceRule', USAGE_POLICY_OPTIONS.performanceRule);
+    };
+  });
+  el.querySelectorAll('[data-usage-value-help]').forEach(btn => {
+    btn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      openUsageValueDetail();
     };
   });
 }
@@ -6440,6 +7016,11 @@ function formatMoneyDisplay(n) {
 
 function getTemplateFaceTotal(tpl) {
   if (!tpl?.benefits?.balance) return 0;
+  // 显式面值（含 0）：可表达「购买 2000 / 面值 0」的纯折扣场景
+  if (tpl.faceAmount != null && String(tpl.faceAmount).trim() !== '') {
+    return Math.max(0, parseAmount(tpl.faceAmount));
+  }
+  // 兼容旧数据：面值 = 购买 + 赠送（无法区分面值 0）
   const purchase = parseAmount(tpl?.recharge);
   const gift = parseGiftAmount(tpl?.giftAmount);
   if (!purchase && !gift) return 0;
@@ -6462,14 +7043,11 @@ function wireFaceValueInput() {
 
 function wireGiftAmountInput() {
   const el = document.getElementById('fGiftAmount');
-  if (!el || el.dataset.giftAmountWired) return;
-  el.dataset.giftAmountWired = '1';
-  const sync = () => {
-    clampNonNegativeAmountInput(el);
-    syncBalanceFromGift();
-  };
-  el.addEventListener('input', sync);
-  el.addEventListener('change', sync);
+  if (!el) return;
+  el.setAttribute('readonly', 'readonly');
+  el.setAttribute('tabindex', '-1');
+  el.setAttribute('data-no-amount-keypad', '');
+  el.setAttribute('aria-readonly', 'true');
 }
 
 function readBalancePurchase() {
@@ -6669,6 +7247,7 @@ function confirmAmountKeypad() {
 
 function wireAmountKeypadInputs(root) {
   (root || document).querySelectorAll('.input-amount, .mp-fixed-input, .issue-extend-custom-input').forEach(el => {
+    if (el.dataset.noAmountKeypad != null) return;
     if (el.dataset.amountKeypadWired) return;
     el.dataset.amountKeypadWired = '1';
     el.setAttribute('readonly', 'readonly');
@@ -6708,12 +7287,15 @@ function syncCardThemePreview() {
   if (!panel) return;
   const purchase = parseAmount(document.getElementById('fRecharge')?.value);
   let giftAmount = '';
+  let faceAmount = '';
   if (state.benefits.balance) {
     giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
+    faceAmount = formatGiftAmountInput(document.getElementById('fFaceValue')?.value ?? '');
   }
   const draft = {
     recharge: document.getElementById('fRecharge')?.value.trim() || '',
     giftAmount,
+    faceAmount,
     benefits: { ...state.benefits },
     projectItems: state.projectItems,
     memberPrices: state.memberPrices,
@@ -6886,7 +7468,7 @@ function syncDetailEditButton(t) {
   const locked = isTemplateEditLocked(t);
   btn.classList.toggle('is-disabled', locked);
   btn.setAttribute('aria-disabled', locked ? 'true' : 'false');
-  btn.title = locked ? '已有持卡，不可编辑；请克隆后修改' : '';
+  btn.title = locked ? '已有持卡，不可编辑；请复制建卡后修改' : '';
 }
 
 function syncDetailShell(t) {
@@ -6904,7 +7486,7 @@ function openEditFlow(id) {
   const t = getTemplateById(id);
   if (!t || t.shelved) return;
   if (isTemplateEditLocked(t)) {
-    showToast('已有持卡，不可编辑；请克隆后修改', true);
+    showToast('已有持卡，不可编辑；请复制建卡后修改', true);
     syncDetailEditButton(t);
     return;
   }
@@ -7199,7 +7781,7 @@ function renderMemberCardItemHtml(t, opts = {}) {
   const price = formatCardPurchasePrice(t);
   const priceHtml = `<span class="member-card-compact__price"><span class="member-card-compact__price-label">价格</span><span class="member-card-compact__price-val is-data">${escapeHtml(price.text)}</span></span>`;
   const acts = [];
-  if (showClone) acts.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}">+克隆</button>`);
+  if (showClone) acts.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}">+复制建卡</button>`);
   if (showIssue) acts.push(`<button type="button" class="card-face-act card-face-act--solid" data-issue-template="${escapeAttr(t.id)}">办卡/退卡</button>`);
   const footer = showFooter && acts.length
     ? `<div class="member-card-item__footer">${acts.join('')}</div>`
@@ -7247,7 +7829,7 @@ function renderEmptyState(kind) {
   if (kind === 'shelved') {
     return `<div class="list-empty-state">
       <p class="list-empty-state__title">暂无已下架会员卡</p>
-      <p class="list-empty-state__desc">下架后的卡会出现在这里，仍可查看详情、克隆或管理已持卡</p>
+      <p class="list-empty-state__desc">下架后的卡会出现在这里，仍可查看详情、复制建卡或管理已持卡</p>
     </div>`;
   }
   return `<div class="list-empty-state">
@@ -7381,10 +7963,25 @@ function renderDetailStatRow(label, value, isData) {
 }
 
 function renderDetailFaceGridSection(label, cellHtmlList) {
-  return `<div class="detail-face-grid-section">
-    <div class="form-row detail-face-grid-section__label"><span class="label">${escapeHtml(label)}</span></div>
-    <div class="detail-face-grid-section__body">${renderFullItemGrid(cellHtmlList)}</div>
+  return `<div class="stats-card">
+    <div class="detail-face-grid-section">
+      <div class="form-row detail-face-grid-section__label"><span class="label">${escapeHtml(label)}</span></div>
+      <div class="detail-face-grid-section__body">${renderFullItemGrid(cellHtmlList)}</div>
+    </div>
   </div>`;
+}
+
+function renderDetailFaceRowsCard(rowsHtml) {
+  if (!rowsHtml) return '';
+  return `<div class="stats-card">${rowsHtml}</div>`;
+}
+
+function renderDetailFacePlainRow(r) {
+  let val = r.value;
+  if (r.label === '折扣') {
+    val = formatMemberPriceFaceSummary(r._memberPrices) || '—';
+  }
+  return `<div class="form-row"><span class="label">${escapeHtml(r.label)}</span><span class="value de-equity-val${r.muted ? '' : ' has-val'}${r.data ? ' is-data' : ''}${r.label === '折扣' ? ' is-preline' : ''}">${escapeHtml(String(val))}</span></div>`;
 }
 
 function renderStatsProjectBlock(proj, s) {
@@ -7475,24 +8072,46 @@ function renderDetailFaceList(t) {
   const rows = buildCardFaceRows(t, { includeEmpty: true });
   const projects = normalizeProjectItemsFromTpl(t);
   const discountEntries = Object.entries(t.memberPrices || {});
-  document.getElementById('tplDetailFaceList').innerHTML = rows.map(r => {
+  const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送', '面值有效期']);
+  const FACE_OTHER_LABELS = new Set(['项目/折扣有效期', '用卡策略']);
+  const cards = [];
+  let balanceRows = '';
+  let otherRows = '';
+
+  rows.forEach(r => {
     if (r.label === '项目') {
-      if (!projects.length) return '';
+      if (!projects.length) return;
       const cells = projects.map(i => renderCardGridCell(escapeHtml(`${i.name} ${formatProjectQtySummary(i)}`)));
-      return renderDetailFaceGridSection('项目', cells);
+      cards.push(renderDetailFaceGridSection('项目', cells));
+      return;
     }
-    if (r.label === '折扣' && discountEntries.length) {
-      const cells = discountEntries.map(([p, rule]) =>
-        renderCardGridCell(escapeHtml(`${getMemberPriceLabel(p)} ${formatMemberPriceDisplay(rule)}`))
-      );
-      return renderDetailFaceGridSection('折扣', cells);
-    }
-    let val = r.value;
     if (r.label === '折扣') {
-      val = formatMemberPriceFaceSummary(t.memberPrices) || '—';
+      if (discountEntries.length) {
+        const cells = discountEntries.map(([p, rule]) =>
+          renderCardGridCell(escapeHtml(`${getMemberPriceLabel(p)} ${formatMemberPriceDisplay(rule)}`))
+        );
+        cards.push(renderDetailFaceGridSection('折扣', cells));
+        return;
+      }
+      cards.push(renderDetailFaceRowsCard(renderDetailFacePlainRow({ ...r, _memberPrices: t.memberPrices })));
+      return;
     }
-    return `<div class="form-row"><span class="label">${r.label}</span><span class="value de-equity-val${r.muted ? '' : ' has-val'}${r.data ? ' is-data' : ''}${r.label === '折扣' ? ' is-preline' : ''}">${escapeHtml(String(val))}</span></div>`;
-  }).join('');
+    if (FACE_BALANCE_LABELS.has(r.label)) {
+      balanceRows += renderDetailFacePlainRow(r);
+      return;
+    }
+    if (FACE_OTHER_LABELS.has(r.label)) {
+      otherRows += renderDetailFacePlainRow(r);
+      return;
+    }
+    otherRows += renderDetailFacePlainRow({ ...r, _memberPrices: t.memberPrices });
+  });
+
+  const htmlParts = [];
+  if (balanceRows) htmlParts.push(renderDetailFaceRowsCard(balanceRows));
+  htmlParts.push(...cards);
+  if (otherRows) htmlParts.push(renderDetailFaceRowsCard(otherRows));
+  document.getElementById('tplDetailFaceList').innerHTML = htmlParts.join('');
 }
 
 function openShelfConfirm() {
@@ -7529,21 +8148,27 @@ function performReshelfTemplate() {
 
 function sanitizeTemplatePayload(data) {
   const next = { ...data, benefits: { ...data.benefits } };
-  if (!next.benefits.balance) next.giftAmount = '';
+  if (!next.benefits.balance) {
+    next.giftAmount = '';
+    next.faceAmount = '';
+  }
   return next;
 }
 
 function getFormData() {
   const memberPrices = normalizeMemberPricesFromTpl(state.memberPrices);
   let giftAmount = '';
+  let faceAmount = '';
   if (state.benefits.balance) {
     giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
+    faceAmount = formatGiftAmountInput(document.getElementById('fFaceValue')?.value ?? '');
   }
   return sanitizeTemplatePayload({
     name: document.getElementById('fName').value.trim(),
     audience: [...normalizeAudience(state.audience)],
     recharge: document.getElementById('fRecharge').value.trim(),
     giftAmount,
+    faceAmount,
     memberPrices,
     projectItems: state.projectItems.map(i => ({ ...i })),
     benefits: { ...state.benefits },
@@ -7560,7 +8185,11 @@ function loadPresetIntoForm(p) {
   const giftEl = document.getElementById('fGiftAmount');
   if (faceEl) {
     if (p.benefits?.balance) {
-      faceEl.value = String(getTemplateFaceTotal(p));
+      if (p.faceAmount != null && String(p.faceAmount).trim() !== '') {
+        faceEl.value = formatGiftAmountInput(p.faceAmount);
+      } else {
+        faceEl.value = String(getTemplateFaceTotal({ ...p, faceAmount: undefined }));
+      }
     } else {
       faceEl.value = '';
     }
@@ -7663,7 +8292,7 @@ function saveTemplate() {
   const editingTpl = editingId ? getTemplate(editingId) : null;
   const isEditSave = state.formMode === 'edit' && editingTpl;
   if (isEditSave && isTemplateEditLocked(editingTpl)) {
-    showToast('已有持卡，不可编辑；请克隆后修改', true);
+    showToast('已有持卡，不可编辑；请复制建卡后修改', true);
     return;
   }
   state.saveInFlight = true;
@@ -7878,7 +8507,7 @@ function buildIssueExtendInlineHtml(memberId, tpl) {
   const feeValue = days ? state.issueExtendFee : '';
   const feeBlock = hasDiscount
     ? `<div class="issue-extend-row">
-        <span class="issue-extend-block__label">延期费用</span>
+        <span class="issue-extend-block__label">参考费用</span>
         <div class="issue-extend-fee">
           <input type="number" class="input-amount issue-extend-fee-input" data-extend-fee-input="${escapeAttr(memberId)}" min="0" step="0.01" placeholder="${escapeAttr(feePlaceholder)}" value="${escapeAttr(feeValue)}"${feeDisabled ? ' disabled' : ''} />
           <span class="suffix">元</span>
@@ -8154,7 +8783,7 @@ function confirmIssueExtend(memberId) {
     const feeRaw = String(state.issueExtendFee ?? '').trim();
     extendFee = feeRaw === '' ? parseAmount(computeExtendFeeDefault(tpl, extendDays)) : parseAmount(feeRaw);
     if (extendFee < 0) {
-      showToast('延期费用不能为负数', true);
+      showToast('参考费用不能为负数', true);
       return;
     }
   }
@@ -8216,7 +8845,7 @@ function renderRefundSheet(tpl, member) {
     <div class="refund-section-title">权益剩余明细</div>
     ${linesHtml}
     <div class="refund-suggest">
-      <div class="refund-suggest__label">系统建议退款</div>
+      <div class="refund-suggest__label">建议退款</div>
       <div class="refund-suggest__val">${escapeHtml(formatMoneyDisplay(calc.suggestedRefund))}</div>
     </div>
     <div class="refund-actual-row">
@@ -8303,6 +8932,7 @@ function defaultProjectBenefitCard() {
     purchaseQty: draft.purchaseQty,
     giftQty: draft.giftQty,
     unlimited: draft.unlimited,
+    qtyScope: 'per_item',
     saved: false,
   };
 }
@@ -8321,22 +8951,43 @@ function formatProjectScopeSummary(projects) {
   return projects.join('、');
 }
 
+function formatProjectScopeTitleHtml(projects) {
+  if (!projects?.length) return escapeHtml('未选择');
+  const allNames = getAllProjectNamesForPicker();
+  if (allNames.length && projects.length === allNames.length) {
+    const selected = new Set(projects);
+    if (allNames.every(name => selected.has(name))) return escapeHtml('全部项目');
+  }
+  return projects.map(name =>
+    `<span class="step2-benefit-card__proj">${escapeHtml(name)}</span>`
+  ).join('');
+}
+
 function projectItemsToBenefitCards(items) {
   const groups = new Map();
   for (const item of items || []) {
     const norm = normalizeProjectItemFields(item);
-    const key = `${norm.unlimited}|${norm.purchaseQty}|${norm.giftQty}`;
+    const scope = norm.qtyScope === 'shared' && norm.sharedGroupId ? 'shared' : 'per_item';
+    const key = scope === 'shared'
+      ? `shared|${norm.sharedGroupId}`
+      : `per|${norm.unlimited}|${norm.purchaseQty}|${norm.giftQty}`;
     if (!groups.has(key)) {
       groups.set(key, {
-        id: genId(),
+        id: scope === 'shared' ? (norm.sharedGroupId || genId()) : genId(),
         projects: [],
         purchaseQty: norm.purchaseQty,
         giftQty: norm.giftQty,
         unlimited: norm.unlimited,
+        qtyScope: scope,
         saved: true,
       });
     }
-    groups.get(key).projects.push(norm.name);
+    const g = groups.get(key);
+    if (!g.projects.includes(norm.name)) g.projects.push(norm.name);
+    if (scope === 'shared') {
+      g.purchaseQty = Math.max(g.purchaseQty || 0, norm.purchaseQty || 0);
+      g.giftQty = Math.max(g.giftQty || 0, norm.giftQty || 0);
+    }
   }
   return [...groups.values()];
 }
@@ -8344,6 +8995,11 @@ function projectItemsToBenefitCards(items) {
 function benefitCardsToProjectItems(cards) {
   const items = [];
   for (const card of (cards || []).filter(c => c.saved && c.projects?.length)) {
+    const scope = normalizeQtyScope(card.qtyScope, {
+      projectCount: card.projects.length,
+      unlimited: card.unlimited,
+    });
+    const sharedGroupId = scope === 'shared' ? card.id : null;
     for (const name of card.projects) {
       items.push(normalizeProjectItemFields({
         id: genId(),
@@ -8351,6 +9007,8 @@ function benefitCardsToProjectItems(cards) {
         purchaseQty: card.purchaseQty,
         giftQty: card.giftQty,
         unlimited: card.unlimited,
+        qtyScope: scope,
+        sharedGroupId,
       }));
     }
   }
@@ -8431,7 +9089,9 @@ function getDiscountBenefitCard(id) {
 const PROJ_SCOPE_CHEV = '<span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TAG_CHEV = '<span class="proj-tag__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
-const BENEFIT_CARD_TRASH_ICON = '<img src="assets/benefit-card-trash.svg" alt="" width="16" height="18" />';
+const BENEFIT_CARD_CLOSE_ICON = `<svg viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+  <path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`;
 
 function renderProjectItemTags() {
   const el = document.getElementById('projectBenefitCardsStep2');
@@ -8439,13 +9099,16 @@ function renderProjectItemTags() {
   ensureProjectBenefitCardsFromItems();
   const saved = state.projectBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card => {
-    const qtyItem = { unlimited: card.unlimited, purchaseQty: card.purchaseQty, giftQty: card.giftQty };
     return `<div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
       <div class="step2-benefit-card__body">
-        <span class="step2-benefit-card__title">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
-        <span class="step2-benefit-card__meta">${escapeHtml(formatProjectQtySummary(qtyItem))}</span>
+        <div class="step2-benefit-card__main">
+          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+        </div>
+        <div class="step2-benefit-card__side">
+          ${formatBenefitCardQtyMetaHtml(card)}
+        </div>
       </div>
-      <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_TRASH_ICON}</button>
+      <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
     </div>`;
   }).join('');
   el.querySelectorAll('[data-edit-project-card]').forEach(cardEl => {
@@ -8502,10 +9165,14 @@ function renderMemberPriceTags() {
   el.innerHTML = saved.map(card =>
     `<div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
       <div class="step2-benefit-card__body">
-        <span class="step2-benefit-card__title">${escapeHtml(formatProjectScopeSummary(card.projects))}</span>
-        <span class="step2-benefit-card__meta">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+        <div class="step2-benefit-card__main">
+          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+        </div>
+        <div class="step2-benefit-card__side">
+          <span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+        </div>
       </div>
-      <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_TRASH_ICON}</button>
+      <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_CARD_CLOSE_ICON}</button>
     </div>`
   ).join('');
   el.querySelectorAll('[data-edit-discount-card]').forEach(cardEl => {
@@ -8551,20 +9218,62 @@ function updateSimplePickCount(mode) {
 function selectAllSimplePick(mode) {
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
   getAllProjectNamesForPicker().forEach(p => { pickState[p] = true; });
-  if (mode === 'project') renderProjectList();
-  else renderMemberPriceProjectList();
+  if (mode === 'project') {
+    renderProjectList();
+    if (state.projBenefitDraft) {
+      state.projBenefitDraft.projects = getSimplePickSelected('project');
+      state.projBenefitDraft.qtyScope = normalizeQtyScope(state.projBenefitDraft.qtyScope, {
+        projectCount: state.projBenefitDraft.projects.length,
+        unlimited: state.projBenefitDraft.unlimited,
+      });
+      renderProjectPickParams();
+    }
+  } else renderMemberPriceProjectList();
 }
 
 function invertSimplePick(mode) {
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
   getAllProjectNamesForPicker().forEach(p => { pickState[p] = !pickState[p]; });
-  if (mode === 'project') renderProjectList();
-  else renderMemberPriceProjectList();
+  if (mode === 'project') {
+    renderProjectList();
+    if (state.projBenefitDraft) {
+      state.projBenefitDraft.projects = getSimplePickSelected('project');
+      state.projBenefitDraft.qtyScope = normalizeQtyScope(state.projBenefitDraft.qtyScope, {
+        projectCount: state.projBenefitDraft.projects.length,
+        unlimited: state.projBenefitDraft.unlimited,
+      });
+      renderProjectPickParams();
+    }
+  } else renderMemberPriceProjectList();
 }
 
 function buildProjQtyParamsHtml(cardId, draft) {
   const unlimited = !!draft.unlimited;
+  const scope = normalizeQtyScope(draft.qtyScope, { unlimited });
+  const tipPerItem = unlimited
+    ? '不限次按每个项目独立生效'
+    : '每个项目各自获得相同次数';
+  const tipShared = unlimited
+    ? '不限次时不可选'
+    : '所选项目任意混用，共享同一次数池';
   return `<div class="proj-qty-dual${unlimited ? ' is-unlimited' : ''}" data-proj-block="${escapeAttr(cardId)}">
+    <div class="proj-qty-group-label">次数范围</div>
+    <div class="proj-qty-panel">
+      <label class="proj-mode-head">
+        ${projQtyScopeRadioHtml('per_item', scope === 'per_item', cardId)}
+        <span class="proj-qty-label${scope === 'per_item' ? ' is-active' : ''}">每项</span>
+      </label>
+      <span class="proj-qty-scope-tip">${escapeHtml(tipPerItem)}</span>
+    </div>
+    <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
+      <label class="proj-mode-head">
+        ${projQtyScopeRadioHtml('shared', scope === 'shared', cardId, { disabled: unlimited })}
+        <span class="proj-qty-label${scope === 'shared' ? ' is-active' : ''}">共计</span>
+      </label>
+      <span class="proj-qty-scope-tip">${escapeHtml(tipShared)}</span>
+    </div>
+    <div class="proj-qty-group-divider" role="separator"></div>
+    <div class="proj-qty-group-label">次数模式</div>
     <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
       <label class="proj-mode-head">
         ${projModeRadioHtml('times', !unlimited, cardId)}
@@ -8617,16 +9326,33 @@ function wireBenefitCardQty(root, cardId, getDraft, setDraft, rerender) {
   };
   bindQty('purchase', 'purchaseQty', 0);
   bindQty('gift', 'giftQty', 0);
+  root.querySelectorAll(`[data-proj-block="${escapeAttr(cardId)}"] .proj-scope-radio`).forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (!radio.checked || radio.disabled) return;
+      const draft = { ...getDraft() };
+      draft.qtyScope = normalizeQtyScope(radio.value, { unlimited: draft.unlimited });
+      setDraft(draft);
+      rerender();
+    });
+  });
   root.querySelectorAll(`[data-proj-block="${escapeAttr(cardId)}"] .proj-mode-radio`).forEach(radio => {
     radio.addEventListener('change', () => {
       const draft = { ...getDraft() };
-      if (radio.value === 'unlimited' && !forceNonPermanentValidityForUnlimited()) {
+      if (radio.value === 'unlimited' && !forceNonPermanentValidityForUnlimited(() => {
+        const d = { ...getDraft() };
+        d.unlimited = true;
+        d.qtyScope = 'per_item';
+        setDraft(d);
+        rerender();
+      })) {
         draft.unlimited = false;
         setDraft(draft);
         rerender();
         return;
       }
       draft.unlimited = radio.value === 'unlimited';
+      if (draft.unlimited) draft.qtyScope = 'per_item';
+      else draft.qtyScope = normalizeQtyScope(draft.qtyScope, { unlimited: false });
       setDraft(draft);
       rerender();
     });
@@ -8728,9 +9454,11 @@ function renderProjectBenefitCards() {
     const saveClass = card.saved ? ' is-done' : '';
     const cardClass = card.saved ? ' is-saved' : '';
     const draft = {
+      projects: [...(card.projects || [])],
       purchaseQty: card.purchaseQty,
       giftQty: card.giftQty,
       unlimited: card.unlimited,
+      qtyScope: card.qtyScope || 'per_item',
     };
     return `<div class="benefit-param-card${cardClass}" data-benefit-card-id="${escapeAttr(card.id)}">
       <div class="benefit-param-card__head">
@@ -8754,14 +9482,20 @@ function renderProjectBenefitCards() {
       list,
       card.id,
       () => ({
+        projects: [...(card.projects || [])],
         purchaseQty: card.purchaseQty,
         giftQty: card.giftQty,
         unlimited: card.unlimited,
+        qtyScope: card.qtyScope || 'per_item',
       }),
       draft => {
         card.purchaseQty = draft.purchaseQty;
         card.giftQty = draft.giftQty;
         card.unlimited = draft.unlimited;
+        card.qtyScope = normalizeQtyScope(draft.qtyScope, {
+          projectCount: card.projects?.length || 0,
+          unlimited: draft.unlimited,
+        });
         if (card.saved) {
           card.saved = false;
           syncProjectItemsFromBenefitCards();
@@ -8846,6 +9580,10 @@ function cloneProjectBenefitCard(card) {
     purchaseQty: card.purchaseQty,
     giftQty: card.giftQty,
     unlimited: !!card.unlimited,
+    qtyScope: normalizeQtyScope(card.qtyScope, {
+      projectCount: card.projects?.length || 0,
+      unlimited: card.unlimited,
+    }),
     saved: !!card.saved,
   };
 }
@@ -9013,6 +9751,14 @@ function wireSimpleProjectPicker(container, mode) {
     sw.addEventListener('change', () => {
       pickState[sw.value] = sw.checked;
       updateSimplePickCount(mode);
+      if (mode === 'project' && state.projBenefitDraft) {
+        state.projBenefitDraft.projects = getSimplePickSelected('project');
+        state.projBenefitDraft.qtyScope = normalizeQtyScope(state.projBenefitDraft.qtyScope, {
+          projectCount: state.projBenefitDraft.projects.length,
+          unlimited: state.projBenefitDraft.unlimited,
+        });
+        renderProjectPickParams();
+      }
     });
   });
   container.querySelectorAll('.pin-tag').forEach(btn => {
@@ -9915,7 +10661,12 @@ function wireProjPickList(container, mode) {
         const proj = block?.dataset?.projBlock;
         if (!proj) return;
         const draft = ensureProjectPickWritable(proj);
-        if (radio.value === 'unlimited' && !forceNonPermanentValidityForUnlimited()) {
+        if (radio.value === 'unlimited' && !forceNonPermanentValidityForUnlimited(() => {
+          const d = ensureProjectPickWritable(proj);
+          d.unlimited = true;
+          if (proj === PROJ_PICK_ALL) inheritProjectBatchDraftToRemaining();
+          renderProjectList();
+        })) {
           draft.unlimited = false;
           if (proj === PROJ_PICK_ALL) inheritProjectBatchDraftToRemaining();
           renderProjectList();
@@ -10105,6 +10856,15 @@ function projModeRadioHtml(mode, checked, proj) {
   </span>`;
 }
 
+function projQtyScopeRadioHtml(mode, checked, proj, opts = {}) {
+  const safe = escapeAttr(proj || 'picker');
+  const disabled = opts.disabled ? ' disabled' : '';
+  return `<span class="proj-mode-radio-wrap">
+    <input type="radio" class="proj-scope-radio" name="pickerQtyScope_${safe}" value="${mode}" data-qty-scope="${safe}"${checked ? ' checked' : ''}${disabled} />
+    <span class="proj-mode-radio__visual" aria-hidden="true"></span>
+  </span>`;
+}
+
 function projQtyStepperHtml(proj, kind, value, minVal) {
   return `<div class="qty-stepper">
     <button type="button" class="qty-btn" data-${kind}-minus="${escapeAttr(proj)}">−</button>
@@ -10142,6 +10902,10 @@ function confirmProjectPick() {
     return;
   }
   draft.projects = selected;
+  draft.qtyScope = normalizeQtyScope(draft.qtyScope, {
+    projectCount: selected.length,
+    unlimited: draft.unlimited,
+  });
   if (!validateProjectBenefitCardDraft(draft)) return;
   draft.saved = true;
   const wasNew = state.projBenefitIsNew;
@@ -10248,6 +11012,7 @@ function applyFigmaCaptureStep2() {
   seedCreateFormFromPreset();
   setStep(2);
   syncStep2UI();
+  syncStep2BalanceFields();
   applyBenefitVisibility();
   renderProjectItemTags();
   syncMemberPriceDisplay();
@@ -10321,6 +11086,10 @@ document.getElementById('btnAddCard').onclick = openCreateFlow;
 document.getElementById('btnStep1Next').onclick = onStep1Next;
 document.getElementById('btnStep2Next').onclick = onStep2Next;
 document.getElementById('btnStep3Save').onclick = onStep3Save;
+document.getElementById('usageValueDetailOk').onclick = closeUsageValueDetail;
+document.getElementById('usageValueDetailMask').onclick = event => {
+  if (event.target.id === 'usageValueDetailMask') closeUsageValueDetail();
+};
 document.getElementById('btnSuccessBackList').onclick = () => setStep(0);
 document.getElementById('btnSuccessIssue').onclick = () => {
   if (state.lastCreatedTemplateId) openIssueMemberPicker(state.lastCreatedTemplateId);
@@ -10362,7 +11131,7 @@ document.getElementById('btnEditTemplate').onclick = () => {
   const t = getTemplateById(state.viewingTemplateId);
   if (!t || t.shelved) return;
   if (isTemplateEditLocked(t)) {
-    showToast('已有持卡，不可编辑；请克隆后修改', true);
+    showToast('已有持卡，不可编辑；请复制建卡后修改', true);
     return;
   }
   openEditFlow(state.viewingTemplateId);
