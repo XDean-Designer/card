@@ -218,11 +218,6 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: var(--bg-page);
   padding: 8px 12px 12px;
 }
-.tpl-detail-section--face { background: var(--bg-page); }
-.tpl-detail-section--face .section-head--detail,
-.tpl-detail-section--stats .section-head--detail {
-  background: var(--card);
-}
 .stats-card {
   background: var(--card);
   border-radius: 10px;
@@ -232,7 +227,43 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .stats-project-block + .stats-project-block { border-top: 1px solid var(--bg-page); }
 .stats-project-block__name { padding: 10px 16px 4px; font-size: 13px; font-weight: 600; color: var(--text); }
 .stats-project-block .form-row .label { padding-left: 8px; }
-.page-body--detail { padding-bottom: 12px; }
+.page-body--detail {
+  padding: 0 0 12px;
+  background: var(--bg-page);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tpl-detail-card-bar {
+  background: var(--card);
+  flex-shrink: 0;
+}
+.tpl-detail-card-bar .member-card-compact { width: 100%; }
+.tpl-detail-card-bar .member-card-compact__title { right: 148px; }
+.tpl-detail-card-bar .member-card-compact--shelved .member-card-compact__title { right: 196px; }
+.tpl-detail-section {
+  background: var(--card);
+  margin-bottom: 0;
+  flex-shrink: 0;
+  overflow: visible;
+}
+.tpl-detail-section .section-head--detail {
+  background: var(--card);
+  padding-bottom: 8px;
+}
+.tpl-detail-section .tpl-detail-stats-cards {
+  background: transparent;
+  padding: 0 0 8px;
+}
+.tpl-detail-section .stats-card {
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.tpl-detail-section .stats-card + .stats-card {
+  margin-top: 0;
+  border-top: 1px solid var(--bg-page);
+}
 .page-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 .bottom-bar {
   position: relative; flex-shrink: 0; display: flex; flex-direction: column;
@@ -670,11 +701,6 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .color-chip__swatch { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(0,0,0,.08); }
 .color-chip__label { font-size: 13px; color: var(--text); white-space: nowrap; }
 .member-card-item__meta { font-size: 10px; color: var(--text-sec); padding: 4px 12px 0; line-height: 1.4; }
-.tpl-detail-head-unit { background: var(--card); margin-bottom: 12px; }
-.tpl-detail-head-unit .form-section { margin-bottom: 0; }
-.tpl-detail-head-unit .member-card-compact { width: 100%; }
-.tpl-detail-head-unit .member-card-compact__title { right: 148px; }
-.tpl-detail-head-unit .member-card-compact--shelved .member-card-compact__title { right: 196px; }
 .duplicate-banner {
   display: flex; align-items: flex-start; gap: 10px;
   margin: 0; padding: 12px 16px; border-radius: 0; border: none;
@@ -1481,6 +1507,25 @@ input[type=number]::-webkit-inner-spin-button {
   display: block; height: 1px; margin: 10px 16px 8px 4px;
   border: none; background: var(--border); flex-shrink: 0;
 }
+.proj-qty-scope-row {
+  display: flex; align-items: center; gap: 32px;
+  padding: 4px 16px 10px; background: var(--card);
+}
+.proj-qty-scope-opt {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.proj-qty-scope-opt.is-disabled > .proj-mode-head {
+  opacity: 0.45; pointer-events: none; cursor: default;
+}
+.proj-qty-scope-help {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; margin: 0; padding: 0;
+  border: 1px solid var(--text-sec); border-radius: 50%;
+  background: transparent; color: var(--text-sec);
+  font-size: 9px; font-weight: 600; line-height: 1;
+  font-family: inherit; cursor: pointer; flex-shrink: 0;
+}
+.proj-qty-scope-help:active { opacity: .7; }
 .proj-qty-scope-tip {
   flex: 1; min-width: 0; margin: 0; padding: 0;
   text-align: right; font-size: 11px; color: var(--text-sec);
@@ -2054,6 +2099,9 @@ html.figma-capture-step2 .bottom-bar { position: static; }
 .pick-section-card .pick-params-section__body .proj-qty-panel {
   padding-left: 0; padding-right: 0; padding-bottom: 10px;
 }
+.pick-section-card .pick-params-section__body .proj-qty-scope-row {
+  padding-left: 0; padding-right: 0;
+}
 .pick-section-card .pick-params-section__body .proj-qty-panel:last-child {
   padding-bottom: 4px;
 }
@@ -2432,7 +2480,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <span class="title">会员卡详情</span>
           </div>
           <div class="page-body page-body--detail">
-            <div class="tpl-detail-head-unit">
+            <div class="tpl-detail-card-bar">
               <div class="member-card-compact" id="tplDetailBar">
                 <div class="member-card-compact__title">
                   <img class="member-card-compact__vip" src="assets/member-card-vip.svg" alt="" width="41" height="16" aria-hidden="true">
@@ -2445,19 +2493,19 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <button type="button" class="detail-edit-btn" id="btnEditTemplate">编辑</button>
                 </div>
               </div>
-              <div class="form-section tpl-detail-section tpl-detail-section--stats">
-                <div class="section-head section-head--detail section-head--with-help">
-                  <span>运营数据</span>
-                  <button type="button" class="section-head__help" id="btnStatsHelp" aria-label="运营数据说明">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
-                  </button>
-                </div>
-                <div class="tpl-detail-stats-cards" id="tplDetailStatsList"></div>
+            </div>
+            <div class="form-section tpl-detail-section tpl-detail-section--stats">
+              <div class="section-head section-head--detail section-head--with-help">
+                <span>运营数据</span>
+                <button type="button" class="section-head__help" id="btnStatsHelp" aria-label="运营数据说明">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
+                </button>
               </div>
-              <div class="form-section tpl-detail-section tpl-detail-section--face">
-                <div class="section-head section-head--detail">卡面信息</div>
-                <div class="tpl-detail-stats-cards" id="tplDetailFaceList"></div>
-              </div>
+              <div class="tpl-detail-stats-cards" id="tplDetailStatsList"></div>
+            </div>
+            <div class="form-section tpl-detail-section tpl-detail-section--face">
+              <div class="section-head section-head--detail">卡面信息</div>
+              <div class="tpl-detail-stats-cards" id="tplDetailFaceList"></div>
             </div>
           </div>
           <div class="bottom-bar bottom-bar--dual bottom-bar--detail-shelved hidden" id="detailShelvedBar">
@@ -2645,6 +2693,15 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="dialog__body" id="usageValueDetailBody"></div>
             <div class="dialog__actions">
               <button type="button" class="btn-main" id="usageValueDetailOk">知道了</button>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-mask" id="qtyScopeHelpMask">
+          <div class="dialog">
+            <div class="dialog__title" id="qtyScopeHelpTitle">计次模式说明</div>
+            <div class="dialog__body" id="qtyScopeHelpBody"></div>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main" id="qtyScopeHelpOk">知道了</button>
             </div>
           </div>
         </div>
@@ -3517,6 +3574,14 @@ const OPTIMIZATION_LOG = [
   '添加权益项目列表：项目权益与折扣权益列表均移除价格，仅保留项目名称、置顶标识与选择开关',
   '均值纯折扣：永久有效也按时间摊销，有效期按 3 年（1095 天）折算；已享优惠仍不计入消耗',
   '计算说明弹窗：去掉纯折扣说明中「累计已享折扣优惠仅作参考，不计入消耗」一句',
+  '已持卡管理：永久有效卡始终显示延期按钮；点击 toast「该卡永久有效，无需延期」，不展开延期面板',
+  '修复新客首开等纯面值卡：列表虽显示永久有效但未出延期按钮；按 isBalanceOnlyCard 同样展示并 toast',
+  '添加项目权益·计次模式：每项/共计横向排列；副标题改问号弹窗（当前状态文案）；不限次时问号仍可点',
+  'Step3 均值纯折扣业绩：员工业绩改为项目折后价格（原折扣优惠金额）',
+  'Step3 均值副标题：纯折扣/不限次消耗公式不再写具体天数，统一为「总有效期」；明细仍在 ? 弹窗',
+  '文案：有效总天数 / 卡有效总天数 → 总有效期',
+  '会员卡详情：卡头独立；运营数据/卡面信息两大板块外分、板内合并（细分割线），分组顺序不变',
+  '修复会员卡详情板块：flex 子项不可收缩 + 去掉 overflow 裁切，避免内容溢出白底/显示不全',
 ];
 
 const STATS_HELP_ITEMS = [
@@ -4949,7 +5014,7 @@ function computeSuggestedRefundAllocPool(tpl, meta) {
   const nominalPool = buildRefundNominalPool(tpl);
   const faceProjectTotal = sumFaceProjectNominalPool(nominalPool);
 
-  // 纯折扣卡（均值）：消耗 = 办卡实付 ×（已过天数 ÷ 有效总天数）；
+  // 纯折扣卡（均值）：消耗 = 办卡实付 ×（已过天数 ÷ 总有效期）；
   // 永久有效按 3 年（1095 天）折算；已享优惠仅作信息行，不计入消耗
   if (isPureDiscountTemplate(tpl)) {
     const { usedVal: savedVal, count } = sumDiscountSavedTotal(tpl, ledger);
@@ -6801,12 +6866,9 @@ function renderUsagePolicyHintHtml(field, opt) {
     const resultLabel = field === 'refundRule' ? '消耗价值' : '员工业绩';
     if (values.pureDiscount) {
       if (field === 'refundRule') {
-        const daysText = values.pureDiscountPermanent
-          ? `${PURE_DISCOUNT_PERMANENT_SPAN_DAYS} 天（永久按 3 年折算）`
-          : (values.validityDays ? `${values.validityDays} 天` : '卡有效天数');
         return `<ul class="policy-option__hint">
           <li class="policy-option__hint-item">
-            消耗价值 = 办卡实付 ×（已过天数 ÷ ${escapeHtml(daysText)}）
+            消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期）
             <span class="policy-option__hint-total">
               <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
             </span>
@@ -6815,7 +6877,7 @@ function renderUsagePolicyHintHtml(field, opt) {
       }
       return `<ul class="policy-option__hint">
         <li class="policy-option__hint-item">
-          ${resultLabel} = 折扣优惠金额
+          员工业绩 = 项目折后价格
           <span class="policy-option__hint-total">
             <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
           </span>
@@ -6823,11 +6885,10 @@ function renderUsagePolicyHintHtml(field, opt) {
       </ul>`;
     }
     if (values.unlimitedOnly) {
-      const daysText = values.validityDays ? `${values.validityDays} 天` : '卡有效天数';
       return `<ul class="policy-option__hint">
         <li class="policy-option__hint-item">
           ${field === 'refundRule'
-            ? `消耗价值 = 办卡实付 ×（已过天数 ÷ ${escapeHtml(daysText)}）`
+            ? '消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期）'
             : '员工业绩 = 价目表原价（不限次按次服务）'}
           <span class="policy-option__hint-total">
             <button type="button" class="policy-option__value-help" data-usage-value-help aria-label="查看计算说明">?</button>
@@ -6873,14 +6934,14 @@ function openUsageValueDetail() {
     if (titleEl) titleEl.textContent = isPermanent ? '永久纯折扣卡计算说明' : '有期限纯折扣卡计算说明';
     const daysText = isPermanent
       ? `${PURE_DISCOUNT_PERMANENT_SPAN_DAYS} 天（永久按 3 年折算）`
-      : (values.validityDays ? `${values.validityDays} 天` : '卡有效总天数');
+      : (values.validityDays ? `${values.validityDays} 天` : '总有效期');
     body.innerHTML = `<div class="usage-value-detail">
       <div class="usage-value-detail__row">
         <span>办卡实付</span>
         <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.purchase))}</span>
       </div>
       <div class="usage-value-detail__row">
-        <span>有效总天数</span>
+        <span>总有效期</span>
         <span class="usage-value-detail__value">${escapeHtml(daysText)}</span>
       </div>
       <div class="usage-value-detail__row usage-value-detail__row--total">
@@ -6890,14 +6951,14 @@ function openUsageValueDetail() {
     </div>
     <p class="usage-value-detail__note">${isPermanent
       ? '永久有效纯折扣（均值）：消耗价值 = 办卡实付 ×（已过天数 ÷ 1095 天），有效期按 3 年折算；已过满 3 年按满额消耗。'
-      : '有期限纯折扣（均值）：消耗价值 = 办卡实付 ×（已过天数 ÷ 有效总天数），与有期限不限次卡一致。'}</p>`;
+      : '有期限纯折扣（均值）：消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期），与有期限不限次卡一致。'}</p>`;
     mask.classList.add('show');
     return;
   }
 
   if (values.unlimitedOnly) {
     if (titleEl) titleEl.textContent = '不限次卡计算说明';
-    const daysText = values.validityDays ? `${values.validityDays} 天` : '卡有效总天数';
+    const daysText = values.validityDays ? `${values.validityDays} 天` : '总有效期';
     const names = values.unlimitedNames?.length ? values.unlimitedNames.join('、') : '不限次项目';
     body.innerHTML = `<div class="usage-value-detail">
       <div class="usage-value-detail__row">
@@ -6917,7 +6978,7 @@ function openUsageValueDetail() {
         <span class="usage-value-detail__value">实付 × 已过/总天数</span>
       </div>
     </div>
-    <p class="usage-value-detail__note">固定期限不限次：消耗价值 = 办卡实付 ×（已过天数 ÷ 有效总天数）；剩余价值按剩余天数折算。均值模式下不限次劳动业绩按价目表原价。</p>`;
+    <p class="usage-value-detail__note">固定期限不限次：消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期）；剩余价值按剩余天数折算。均值模式下不限次劳动业绩按价目表原价。</p>`;
     mask.classList.add('show');
     return;
   }
@@ -6946,6 +7007,20 @@ function openUsageValueDetail() {
 
 function closeUsageValueDetail() {
   document.getElementById('usageValueDetailMask')?.classList.remove('show');
+}
+
+function openQtyScopeHelp(title, body) {
+  const mask = document.getElementById('qtyScopeHelpMask');
+  const titleEl = document.getElementById('qtyScopeHelpTitle');
+  const bodyEl = document.getElementById('qtyScopeHelpBody');
+  if (!mask || !bodyEl) return;
+  if (titleEl) titleEl.textContent = title || '计次模式说明';
+  bodyEl.textContent = body || '';
+  mask.classList.add('show');
+}
+
+function closeQtyScopeHelp() {
+  document.getElementById('qtyScopeHelpMask')?.classList.remove('show');
 }
 
 function renderUsagePolicyOptionGroup(containerId, field, options) {
@@ -8129,7 +8204,7 @@ function renderDetailStatsList(t) {
 function renderStatsHelpBody() {
   const el = document.getElementById('statsHelpBody');
   if (!el) return;
-  const note = '<p class="stats-help-note">运营数据以卡片分组展示；持卡余额需配置面值权益，项目数据需配置项目权益且无项目时不显示对应卡片。</p>';
+  const note = '<p class="stats-help-note">运营数据以板块内部分组展示；持卡余额需配置面值权益，项目数据需配置项目权益且无项目时不显示对应分组。</p>';
   const items = STATS_HELP_ITEMS.map(item =>
     `<div class="stats-help-item"><div class="stats-help-item__term">${escapeHtml(item.term)}</div><div class="stats-help-item__def">${escapeHtml(item.def)}</div></div>`
   ).join('');
@@ -8650,8 +8725,8 @@ function wireIssuePickerControls() {
         e.preventDefault();
         const id = extendBtn.dataset.issueExtend;
         const tpl = getTemplateForHolderOps(state.issueTargetTemplateId);
-        if (tpl && isTemplatePermanent(tpl)) {
-          showToast('永久卡无需延期');
+        if (tpl && (isTemplatePermanent(tpl) || isBalanceOnlyCard(tpl))) {
+          showToast('该卡永久有效，无需延期');
           return;
         }
         if (state.issueExtendMemberId === id) {
@@ -8759,8 +8834,10 @@ function renderIssueMemberList() {
       const badge = invalid ? '已失效' : '已持卡';
       const meta = getHolderMeta(tid, m.id);
       const expireLine = formatHolderExpireLine(meta, tpl);
-      const showExtend = templateHasTimedBenefits(tpl);
-      const extendBtn = showExtend ? `<button type="button" class="issue-member-act issue-member-act--brand${extendOpen && !isTemplatePermanent(tpl) ? ' is-active' : ''}" data-issue-extend="${escapeAttr(m.id)}">延期</button>` : '';
+      // 纯面值卡列表展示为永久有效（面值不受卡级期限约束），须同样露出延期入口 + toast
+      const extendBlocked = isTemplatePermanent(tpl) || isBalanceOnlyCard(tpl);
+      const showExtend = templateHasTimedBenefits(tpl) || extendBlocked;
+      const extendBtn = showExtend ? `<button type="button" class="issue-member-act issue-member-act--brand${extendOpen && !extendBlocked ? ' is-active' : ''}" data-issue-extend="${escapeAttr(m.id)}">延期</button>` : '';
       return `<div class="issue-member-row--holder" data-holder-id="${escapeAttr(m.id)}">
         <span class="issue-member-row__avatar" style="background:${m.color}">${m.name.charAt(0)}</span>
         <span class="issue-member-row__main">
@@ -8772,7 +8849,7 @@ function renderIssueMemberList() {
           <button type="button" class="issue-member-act issue-member-act--brand" data-issue-refund="${escapeAttr(m.id)}">退卡</button>
           ${extendBtn}
         </span>
-      </div>${extendOpen && showExtend && !isTemplatePermanent(tpl) ? buildIssueExtendInlineHtml(m.id, tpl) : ''}`;
+      </div>${extendOpen && showExtend && !extendBlocked ? buildIssueExtendInlineHtml(m.id, tpl) : ''}`;
     }).join('')
     : '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">暂无会员持有该卡</p>';
   container.innerHTML = itemsHtml;
@@ -9349,19 +9426,21 @@ function buildProjQtyParamsHtml(cardId, draft) {
     : '所选项目任意混用，共享同一次数池';
   return `<div class="proj-qty-dual${unlimited ? ' is-unlimited' : ''}" data-proj-block="${escapeAttr(cardId)}">
     <div class="proj-qty-group-label">计次模式</div>
-    <div class="proj-qty-panel">
-      <label class="proj-mode-head">
-        ${projQtyScopeRadioHtml('per_item', scope === 'per_item', cardId)}
-        <span class="proj-qty-label${scope === 'per_item' ? ' is-active' : ''}">每项</span>
-      </label>
-      <span class="proj-qty-scope-tip">${escapeHtml(tipPerItem)}</span>
-    </div>
-    <div class="proj-qty-panel${unlimited ? ' is-disabled' : ''}">
-      <label class="proj-mode-head">
-        ${projQtyScopeRadioHtml('shared', scope === 'shared', cardId, { disabled: unlimited })}
-        <span class="proj-qty-label${scope === 'shared' ? ' is-active' : ''}">共计</span>
-      </label>
-      <span class="proj-qty-scope-tip">${escapeHtml(tipShared)}</span>
+    <div class="proj-qty-scope-row">
+      <div class="proj-qty-scope-opt">
+        <label class="proj-mode-head">
+          ${projQtyScopeRadioHtml('per_item', scope === 'per_item', cardId)}
+          <span class="proj-qty-label${scope === 'per_item' ? ' is-active' : ''}">每项</span>
+        </label>
+        <button type="button" class="proj-qty-scope-help" data-qty-scope-help="per_item" data-help-title="每项" data-help-body="${escapeAttr(tipPerItem)}" aria-label="每项说明">?</button>
+      </div>
+      <div class="proj-qty-scope-opt${unlimited ? ' is-disabled' : ''}">
+        <label class="proj-mode-head">
+          ${projQtyScopeRadioHtml('shared', scope === 'shared', cardId, { disabled: unlimited })}
+          <span class="proj-qty-label${scope === 'shared' ? ' is-active' : ''}">共计</span>
+        </label>
+        <button type="button" class="proj-qty-scope-help" data-qty-scope-help="shared" data-help-title="共计" data-help-body="${escapeAttr(tipShared)}" aria-label="共计说明">?</button>
+      </div>
     </div>
     <div class="proj-qty-group-divider" role="separator"></div>
     <div class="proj-qty-group-label">次数设置</div>
@@ -9446,6 +9525,13 @@ function wireBenefitCardQty(root, cardId, getDraft, setDraft, rerender) {
       else draft.qtyScope = normalizeQtyScope(draft.qtyScope, { unlimited: false });
       setDraft(draft);
       rerender();
+    });
+  });
+  root.querySelectorAll(`[data-proj-block="${escapeAttr(cardId)}"] .proj-qty-scope-help`).forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      openQtyScopeHelp(btn.dataset.helpTitle || '计次模式说明', btn.dataset.helpBody || '');
     });
   });
 }
@@ -11174,6 +11260,10 @@ document.getElementById('btnStep3Save').onclick = onStep3Save;
 document.getElementById('usageValueDetailOk').onclick = closeUsageValueDetail;
 document.getElementById('usageValueDetailMask').onclick = event => {
   if (event.target.id === 'usageValueDetailMask') closeUsageValueDetail();
+};
+document.getElementById('qtyScopeHelpOk').onclick = closeQtyScopeHelp;
+document.getElementById('qtyScopeHelpMask').onclick = event => {
+  if (event.target.id === 'qtyScopeHelpMask') closeQtyScopeHelp();
 };
 document.getElementById('btnSuccessBackList').onclick = () => setStep(0);
 document.getElementById('btnSuccessIssue').onclick = () => {

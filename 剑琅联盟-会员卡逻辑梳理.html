@@ -186,34 +186,34 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <h3><span class="dot rec"></span>锁定范围 · 全量只读</h3>
         <ul>
           <li>Step1 基本信息、Step2 权益组合、Step3 用卡策略<strong>均不可修改</strong>。</li>
-          <li><strong>仍允许</strong>：查看详情、上下架、克隆模板、为会员办卡/延期/退卡（对已持卡实例操作，不改模板）。</li>
+          <li><strong>仍允许</strong>：查看详情、上下架、复制建卡、为会员办卡/延期/退卡（对已持卡实例操作，不改模板）。</li>
           <li>保存接口：若 <code>validCardCount &gt; 0</code>，拒绝模板更新并返回业务错误码。</li>
         </ul>
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>改规则替代路径 · 克隆</h3>
+        <h3><span class="dot rec"></span>改规则替代路径 · 复制建卡</h3>
         <ul>
-          <li>需调整权益/有效期/策略时：使用<strong>克隆模板</strong> → 编辑新模板 → 保存为新卡型。</li>
+          <li>需调整权益/有效期/策略时：使用<strong>复制建卡</strong> → 编辑新模板 → 保存为新卡型。</li>
           <li><strong>新会员</strong>办理新模板；<strong>老会员</strong>仍绑定旧模板实例，账本与规则不变。</li>
           <li>旧模板可继续保留上架（老客续办/补录）或商家自行下架，<strong>不强制</strong>下架旧模板。</li>
-          <li>克隆产物记录 <code>duplicatedFrom</code>（可选），便于追溯来源，不影响实例计算。</li>
+          <li>复制建卡产物记录 <code>duplicatedFrom</code>（可选），便于追溯来源，不影响实例计算。</li>
         </ul>
         <div class="mermaid-box">编辑锁定决策
 
   打开模板详情
     ├─ 当前有效 = 0 → 「编辑」可用 → 进入 Step1–3 修改并保存
     └─ 当前有效 &gt; 0 → 「编辑」置灰
-          提示：已有持卡，不可编辑；请克隆后修改
-          可操作：克隆 / 下架 / 查看 / 已持卡管理</div>
+          提示：已有持卡，不可编辑；请复制建卡后修改
+          可操作：复制建卡 / 下架 / 查看 / 已持卡管理</div>
       </div>
 
       <div class="block">
         <h3><span class="dot rec"></span>界面表现</h3>
         <ul>
           <li>详情页保留「编辑」按钮；<code>当前有效 &gt; 0</code> 时按钮<strong>置灰不可点</strong>。</li>
-          <li>置灰态提示文案：<strong>「已有持卡，不可编辑；请克隆后修改」</strong>（点击或 hover 展示均可）。</li>
-          <li>「克隆」入口保持可用，与编辑按钮并列或置于同一操作区。</li>
+          <li>置灰态提示文案：<strong>「已有持卡，不可编辑；请复制建卡后修改」</strong>（点击或 hover 展示均可）。</li>
+          <li>「复制建卡」入口保持可用，与编辑按钮并列或置于同一操作区。</li>
         </ul>
         <div class="callout ok"><strong>与 Q1–Q4 衔接：</strong>模板锁定保证实例侧 <code>卡到期日</code>、权益结构、<code>usagePolicy</code> 在持卡期内不被后台篡改；计绩与退卡账本仍以办卡实例为准。</div>
       </div>
@@ -222,11 +222,11 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <h3><span class="dot rec"></span>下架模板 · 可见性与操作</h3>
         <ul>
           <li>列表页顶部<strong>「在售 / 已下架」</strong>分段切换；下架后从「在售」移除，进入「已下架」列表，<strong>不删除</strong>模板与运营数据。</li>
-          <li><strong>已下架列表</strong>：卡面可进详情；底部仅「克隆」（隐藏「办卡」）；彩色卡条内名称右侧展示「已下架」白底胶囊标签。</li>
-          <li><strong>已下架详情</strong>：运营数据、卡面信息只读展示；彩色顶栏右侧展示「已下架」态 +「克隆」（白底描边胶囊）；底部双按钮「重新上架 / 已持卡管理」。</li>
+          <li><strong>已下架列表</strong>：卡面可进详情；底部仅「复制建卡」（隐藏「办卡」）；彩色卡条内名称右侧展示「已下架」白底胶囊标签。</li>
+          <li><strong>已下架详情</strong>：运营数据、卡面信息只读展示；彩色顶栏右侧展示「已下架」态 +「复制建卡」（白底描边胶囊）；底部双按钮「重新上架 / 已持卡管理」。</li>
           <li><strong>新客办卡</strong>：已下架模板不可新办；<strong>已持卡</strong>仍可退卡、延期（实例操作，不改模板字段）。</li>
           <li><strong>重新上架</strong>：恢复至「在售」列表，新客可再次办理；已持卡实例不受影响。</li>
-          <li><strong>克隆</strong>：下架卡可克隆为新模板（记录 <code>duplicatedFrom</code>），新卡默认上架。</li>
+          <li><strong>复制建卡</strong>：下架卡可复制建卡为新模板（记录 <code>duplicatedFrom</code>），新卡默认上架。</li>
         </ul>
         <div class="callout info"><strong>演示数据：</strong>「有数据」注入 10 张卡；其中「儿童10次剪发」为已下架样例；另含永久储值、减值策略 / 减值烫染等对照卡。</div>
       </div>
@@ -265,6 +265,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           <li>面值余额<strong>永久有效</strong>，不受卡级到期约束；卡到期后仍可消费/退面值。</li>
           <li><strong>项目权益、折扣权益</strong>随卡级到期失效；到期当日硬失效，不设宽限期。</li>
           <li><strong>消费校验</strong>：面值消费不校验卡到期；项目/折扣须卡未过期（或永久）且次数/规则适用。</li>
+          <li><strong>不限次 × 永久</strong>：选不限次且卡有效期为永久时，居中弹窗「设置有效期限」（日/月/年）；取消则不保留不限次；确定写回卡有效期后继续。已有不限次时不可改回永久。</li>
           <li><strong>补录老卡</strong>：补录流程<strong>必填「原办卡日」</strong>；<code>卡到期日</code> = 原办卡日 + 当前模板卡有效期（永久模板则到期为空）。不以补录操作日代替原办卡日。</li>
           <li><strong>到期后处理</strong>：到期<strong>当日自动转「失效」</strong>，权益冻结，<strong>不设宽限期</strong>；恢复使用须通过 Q2「延期」或重新办卡；<strong>已失效卡允许延期复活</strong>（见 Q2）。</li>
         </ul>
@@ -305,7 +306,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
     <!-- 用卡策略 -->
     <section class="section" id="usage-policy">
       <h2>用卡策略 · Step3 配置项</h2>
-      <p class="sub">创建流程第三步必填；消耗退卡与业绩结算独立配置</p>
+      <p class="sub">创建流程第三步必填；消耗及退卡计算规则与业绩计算规则独立配置</p>
 
       <div class="block">
         <h3><span class="dot rec"></span>字段与流程</h3>
@@ -323,11 +324,11 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>消耗及退卡规则（refundRule）</h3>
+        <h3><span class="dot rec"></span>消耗及退卡计算规则（refundRule）</h3>
         <div class="scheme-grid">
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">alloc_pool · 均值模式（默认）</span><span class="scheme-badge locked">Q4 对齐</span></div>
-            <p>办卡实付在统一名义价值池中一次分摊；余额/项目按分摊折算，折扣按<strong>累计已享优惠</strong>计<strong>消耗价值</strong>；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
+            <p>办卡实付在<strong>面值+有限次项目</strong>名义池中分摊；组合卡折扣按<strong>累计已享优惠</strong>计消耗（不占实付份额）；<strong>纯折扣卡</strong>按办卡实付 ×（已过天数 ÷ 总有效期）时间摊销（永久按 1095 天）；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">retail · 减值模式</span></div>
@@ -340,15 +341,15 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>业绩结算规则（performanceRule）</h3>
+        <h3><span class="dot rec"></span>业绩计算规则（performanceRule）</h3>
         <div class="scheme-grid">
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">alloc_pool · 均值模式（默认）</span><span class="scheme-badge locked">Q3 对齐</span></div>
-            <p>员工业绩按 Step3 文案（产品目标，见 Q3）：余额/次数合并计池分摊，折扣按折后实收。<strong>原型未执行。</strong></p>
+            <p>Step3 文案：组合卡按「项目面值 ×（办卡实付 ÷ 总权益面值）」；纯折扣为「员工业绩 = 项目折后价格」；不限次独占为「价目表原价」。<strong>原型未执行计绩 runtime。</strong></p>
           </div>
           <div class="scheme is-rec">
-            <div class="scheme-head"><span class="name">retail · 减值模式</span></div>
-            <p>不论支付来源，员工业绩均按<strong>当次服务项目价目表挂牌价</strong>计（原型 Step3 展示说明，核销计绩待正式对接）。</p>
+            <div class="scheme-head"><span class="name">retail · 原价模式</span></div>
+            <p>员工业绩 = 项目面值（价目表挂牌价；原型 Step3 展示说明，核销计绩待正式对接）。</p>
           </div>
         </div>
         <div class="callout info"><strong>与 Q1 衔接：</strong>面值永久有效不影响策略配置；卡到期后项目/折扣失效，但面值仍可退卡估值（按所选 refundRule）。</div>
@@ -357,32 +358,33 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       <div class="block">
         <h3><span class="dot rec"></span>Step3 界面 · 说明方式</h3>
         <ul>
-          <li><strong>无 ⓘ 弹窗</strong>：计算方法直接写在各选项下方的<strong>条目副标题</strong>（小圆点分条）。</li>
-          <li>界面名称统一为「<strong>均值模式 / 减值模式</strong>」；代码仍用 <code>alloc_pool</code> / <code>retail</code>。</li>
-          <li>副标题与<strong>原型退卡引擎</strong>口径一致（见 Q4）。</li>
+          <li>分区标题：「<strong>消耗及退卡计算规则</strong>」「<strong>业绩计算规则</strong>」。</li>
+          <li>计算方法写在各选项下方副标题；关键场景带 <code>?</code> 打开明细弹窗。</li>
+          <li>退卡：界面「均值模式 / 减值模式」；业绩：界面「均值模式 / <strong>原价模式</strong>」；代码仍用 <code>alloc_pool</code> / <code>retail</code>。</li>
+          <li>纯折扣 / 不限次消耗副标题写「总有效期」，<strong>不</strong>直接写具体天数。</li>
         </ul>
         <div class="scheme-grid">
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">均值模式 · 消耗及退卡（界面摘要）</span></div>
-            <p>· 消耗价值 = 消耗面值 ×（办卡实付 ÷ 初始面值）</p>
-            <p>· 纯折扣卡按累计已享优惠</p>
+            <p>· 组合卡：消耗价值 = 项目面值 ×（办卡实付 ÷ 总权益面值）</p>
+            <p>· 纯折扣 / 固定期限不限次：消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期）</p>
             <p>· 建议退款 = 办卡实付 − 消耗价值</p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">减值模式 · 消耗及退卡（界面摘要）</span></div>
-            <p>· 项目、折扣按挂牌价计消耗价值（界面文案）</p>
-            <p>· 有面值时余额按面值折算办卡实付</p>
-            <p>· 纯折扣卡按累计已享优惠</p>
+            <p>· 消耗价值 = 项目面值（挂牌价口径）</p>
             <p style="font-size:12px;color:var(--muted);margin-top:6px">引擎精确口径：仅<strong>项目</strong>按挂牌价×次数；<strong>折扣</strong>一律累计已享优惠（见 Q4）。</p>
           </div>
           <div class="scheme is-rec">
-            <div class="scheme-head"><span class="name">均值模式 · 业绩结算（界面摘要）</span></div>
-            <p>· 员工业绩 = 扣款额 ×（办卡实付 ÷ 初始面值）；次数按购卡分摊到每次；折扣按折后实收</p>
+            <div class="scheme-head"><span class="name">均值模式 · 业绩计算（界面摘要）</span></div>
+            <p>· 组合卡：员工业绩 = 项目面值 ×（办卡实付 ÷ 总权益面值）</p>
+            <p>· 纯折扣：员工业绩 = 项目折后价格</p>
+            <p>· 不限次独占：员工业绩 = 价目表原价</p>
             <p style="font-size:12px;color:var(--muted);margin-top:6px">以上为 Step3 展示文案；原型<strong>无计绩 runtime</strong>（见 Q3）。</p>
           </div>
           <div class="scheme is-rec">
-            <div class="scheme-head"><span class="name">减值模式 · 业绩结算（界面摘要）</span></div>
-            <p>· 不论余额 / 次数 / 折扣，员工业绩均按当次服务挂牌价计</p>
+            <div class="scheme-head"><span class="name">原价模式 · 业绩计算（界面摘要）</span></div>
+            <p>· 员工业绩 = 项目面值</p>
             <p style="font-size:12px;color:var(--muted);margin-top:6px">以上为 Step3 展示文案；原型<strong>无计绩 runtime</strong>（见 Q3）。</p>
           </div>
         </div>
@@ -399,14 +401,15 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul>
           <li>选择会员弹窗 Tab：「<strong>办卡</strong>」/「<strong>退卡/延期</strong>」。在「退卡/延期」中对已持卡提供<strong>行内延期</strong>：时长控件（日 / 月 / 年 / 永久）+ 数值；确认后写入 <code>卡到期日</code>，失效卡可复活。</li>
           <li>列表卡面主按钮文案为「<strong>办卡/退卡</strong>」，进入同一选择会员弹窗。</li>
-          <li><strong>含「折扣」权益的卡</strong>（如烫染会员价卡、尊享组合卡、减值烫染卡）：延期面板展示<strong>参考费用</strong>（单位：元），默认按<strong>办卡实付 × 延期天数 ÷ 原有效期</strong>折算；商家可改价或填 0 免费；写入独立延期流水，<strong>不计入办卡总额</strong>。</li>
-          <li>仅含面值或项目次数、<strong>无折扣</strong>的卡（如新客首开、儿童次卡、全年洗吹、永久储值）：延期<strong>免费</strong>，不产生延期订单；纯面值且卡永久有效时不展示延期入口。</li>
+          <li><strong>含「折扣」权益的卡</strong>（如烫染会员价卡、尊享组合卡、减值烫染卡）：延期面板展示<strong>延期费用</strong>（单位：元），默认按<strong>折扣权益分摊购卡价</strong> × 延期天数 ÷ 原有效期折算（纯折扣卡等价于整卡购卡价）；商家可改价或填 0 免费；写入独立延期流水，<strong>不计入办卡总额</strong>。</li>
+          <li>仅含面值或项目次数、<strong>无折扣</strong>的卡（如新客首开、儿童次卡、全年洗吹）：延期<strong>免费</strong>，不产生延期订单。</li>
+          <li><strong>永久有效卡 / 纯面值卡</strong>（列表展示永久有效）：延期入口<strong>始终展示</strong>；点击 toast「该卡永久有效，无需延期」，不展开延期面板。</li>
         </ul>
         <h3><span class="dot gap"></span>结论（由 Q1 推导）</h3>
         <ul>
           <li>权益项已无独立有效期，<strong>延长卡有效期 = 延长全部权益可用期</strong>，无需再选延期范围。</li>
           <li>延期操作对象唯一：<code>卡到期日</code>（+N 天 / 月 / 年，或延为永久）。</li>
-          <li>卡模板为<strong>永久有效</strong>时，延期入口<strong>仅隐藏</strong>（不展示「无需延期」提示文案）。</li>
+          <li>卡模板为<strong>永久有效</strong>（含纯面值永久口径）时，延期入口<strong>仍展示</strong>，以 toast 说明无需延期（非隐藏）。</li>
         </ul>
       </div>
 
@@ -427,7 +430,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">延期费用 · 无折扣免费，含折扣卡收费</span></div>
             <p><strong>无「折扣」权益</strong>（仅面值 / 仅项目次数）：延期免费，不产生订单。</p>
-            <p><strong>含「折扣」权益的卡</strong>（含纯折扣卡与组合卡）：延期时展示费用字段，默认金额为<strong>办卡实付 × 延期天数 ÷ 原有效期</strong>；<strong>金额由商家自行填写</strong>，可填 0 免费；生成独立「延期订单/流水」，<strong>不计入办卡总额、办卡次数</strong>。</p>
+            <p><strong>含「折扣」权益的卡</strong>（含纯折扣卡与组合卡）：延期时展示费用字段，默认金额为<strong>折扣权益分摊购卡价 × 延期天数 ÷ 原有效期</strong>（与 Q4 名义价值池折扣权重一致）；<strong>金额由商家自行填写</strong>，可填 0 免费；生成独立「延期订单/流水」，<strong>不计入办卡总额、办卡次数</strong>。</p>
             <p class="pros">折扣权益无次数可消耗，延期实质为续享会员价，收费合理；组合卡仅对折扣部分折算，避免与余额/次卡重复计费。</p>
             <p class="cons">原型已支持含折扣卡延期收费；需在正式环境对接延期订单与支付。</p>
           </div>
@@ -444,14 +447,15 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
     <!-- Q3 -->
     <section class="section" id="q3">
       <h2>问题 3 · 如何计算会员卡消费造成的店员劳动业绩？</h2>
-      <p class="sub">均值模式 / 减值模式（<code>performanceRule</code>）</p>
+      <p class="sub">均值模式 / 原价模式（<code>performanceRule</code>）</p>
       <div class="callout warn"><strong>产品目标 · 原型未实现运算：</strong>当前原型<strong>仅</strong>在 Step3 展示业绩选项文案，并持久化 <code>usagePolicy.performanceRule</code>；<strong>无</strong>核销流水、无 <code>劳动业绩金额</code> 写入、无按模式分叉的计绩函数。下文公式与案例为产品口径留存，不得视为已上线引擎。</div>
 
       <div class="block">
         <h3><span class="dot state"></span>现状（原型）</h3>
         <ul>
-          <li>Step3「业绩结算规则」可选均值 / 减值；卡面摘要展示「均值计绩 / 减值计绩」。</li>
-          <li>详情运营数据展示办卡总额、持卡余额、项目消费次数等<strong>经营指标</strong>；与劳动业绩金额无关。</li>
+          <li>Step3「业绩计算规则」可选均值 / <strong>原价</strong>；卡面摘要展示「均值计绩 / 减值计绩」（摘要映射仍用历史「减值计绩」指原价轨）。</li>
+          <li>详情页：卡头独立；其下「运营数据」「卡面信息」两大白底板块外分、板内合并；运营数据展示办卡总额、持卡余额、项目消费次数等<strong>经营指标</strong>；与劳动业绩金额无关。</li>
+          <li>Step3 纯折扣均值文案：员工业绩 = <strong>项目折后价格</strong>；不限次独占：价目表原价。</li>
           <li>消费核销、服务单、店员分成、<code>performanceRule</code> 分支计算<strong>均未建模</strong>。</li>
         </ul>
         <h3><span class="dot gap"></span>产品待解决矛盾</h3>
@@ -470,7 +474,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul style="margin-top:12px">
           <li><strong>余额消费</strong>：充值余额与赠送余额<strong>合并计算</strong>；业绩 = 扣款额 ×（办卡实付 / 办卡总面值），总面值 = 充值 + 赠送。</li>
           <li><strong>次数消费</strong>：购买次数与赠送次数<strong>合并计池</strong>；单次摊销 = 该项目分摊实付 /（购买次数 + 赠送次数）；无论扣减购买次或赠送次，业绩均 = 单次摊销 × 本次次数。</li>
-          <li><strong>折扣消费</strong>：业绩 = 折后实收金额。</li>
+          <li><strong>折扣消费 / 纯折扣卡</strong>：业绩 = <strong>项目折后价格</strong>（与 Step3 文案一致）。</li>
           <li><strong>组合卡分摊</strong>（产品设想）：办卡实付按各权益名义价值在统一分摊池分配（分摊细节以 Q4 退卡引擎为准时可对接）；原型<strong>尚未</strong>落地计绩分摊。</li>
           <li>计绩触发点（产品设想）：核销成功时写入 <code>劳动业绩金额</code> —— <strong>原型无此字段与写入</strong>。</li>
         </ul>
@@ -482,33 +486,33 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             <tbody>
               <tr><td>余额（充值 + 赠送合并）</td><td><code>扣款额 × 办卡实付 / (充值+赠送)</code></td><td>与 Step3 均值计绩文案一致</td></tr>
               <tr><td>项目次数（购买 + 赠送合并）</td><td><code>(分摊实付 / (购次+赠次)) × 本次次数</code></td><td>赠送次与购买次同额计绩</td></tr>
-              <tr><td>折扣权益</td><td><code>折后实收金额</code></td><td>按当次服务实收计</td></tr>
+              <tr><td>折扣权益 / 纯折扣</td><td><code>项目折后价格</code></td><td>与 Step3 均值文案一致</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="block">
-        <h3><span class="dot rec"></span>减值模式 · 价目表原价计绩 <span class="scheme-badge locked">产品目标</span></h3>
+        <h3><span class="dot rec"></span>原价模式 · 价目表原价计绩 <span class="scheme-badge locked">产品目标</span></h3>
         <div class="scheme is-rec" style="margin-top:0;border:none;padding:0;background:transparent">
-          <div class="scheme-head"><span class="name">不论支付来源，统一按挂牌价计绩</span><span class="scheme-badge locked">retail · 未实现</span></div>
-          <p>模板 <code>usagePolicy.performanceRule = retail</code> 时启用（产品目标）；原型仅存字段，不执行公式。</p>
+          <div class="scheme-head"><span class="name">不论支付来源，统一按挂牌价（项目面值）计绩</span><span class="scheme-badge locked">retail · 未实现</span></div>
+          <p>模板 <code>usagePolicy.performanceRule = retail</code> 时启用（界面「原价模式」）；原型仅存字段，不执行公式。</p>
         </div>
         <ul style="margin-top:12px">
-          <li><strong>统一规则</strong>：单次服务劳动业绩 = 当次服务项目在价目表中的<strong>原价</strong>（与扣款额、办卡分摊、折后实收无关）。</li>
+          <li><strong>统一规则</strong>：单次服务劳动业绩 = 当次服务项目在价目表中的<strong>原价 / 项目面值</strong>（与扣款额、办卡分摊、折后价无关）。</li>
           <li><strong>余额 / 次数 / 折扣</strong>：均取同一价目表字段。</li>
         </ul>
         <div class="table-wrap">
           <table class="data">
             <thead>
-              <tr><th>支付来源</th><th>劳动业绩公式（减值 · 产品目标）</th><th>与均值差异</th></tr>
+              <tr><th>支付来源</th><th>劳动业绩公式（原价 · 产品目标）</th><th>与均值差异</th></tr>
             </thead>
             <tbody>
-              <tr><td>余额 / 项目次数 / 折扣</td><td><code>价目表[当次项目] 原价</code></td><td>不折算实付分摊、不取折后实收</td></tr>
+              <tr><td>余额 / 项目次数 / 折扣</td><td><code>价目表[当次项目] 原价</code></td><td>不折算实付分摊、不取折后价</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout info"><strong>与退卡的关系（原型）：</strong>退卡只读 <code>refundRule</code>；计绩规则与退卡<strong>未共用运行时账本</strong>。退卡折扣消耗见 Q4（累计已享优惠），勿与「减值计绩按挂牌价」混淆。</div>
+        <div class="callout info"><strong>与退卡的关系（原型）：</strong>退卡只读 <code>refundRule</code>；计绩规则与退卡<strong>未共用运行时账本</strong>。退卡折扣消耗见 Q4，勿与「原价计绩按挂牌价」混淆。</div>
         <div class="callout info"><strong>价目表来源（原型）：</strong><code>card/demo.html</code> 价目表种子价（如洗剪吹 68、烫发 398、染发 358 等）。</div>
       </div>
 
@@ -643,21 +647,21 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
               </tbody></table></div>
             </div>
             <div class="case-step">
-              <div class="case-step__label">② 劳动业绩</div>
+              <div class="case-step__label">② 劳动业绩（Step3 文案 · 产品目标）</div>
               <div class="table-wrap"><table class="data"><tbody>
-                <tr><td>公式</td><td>折后实收金额</td></tr>
+                <tr><td>公式</td><td>项目折后价格</td></tr>
                 <tr><td>计算</td><td>299</td></tr>
               </tbody></table></div>
             </div>
-            <div class="case-result"><strong>店员劳动业绩（均值模式）= 299 元</strong>（按当次折后实收计）</div>
+            <div class="case-result"><strong>店员劳动业绩（均值模式文案）= 299 元</strong>（项目折后价格；原型无计绩 runtime）</div>
             <div class="case-step">
-              <div class="case-step__label">③ 均值 vs 减值对比</div>
+              <div class="case-step__label">③ 均值 vs 原价对比</div>
               <div class="table-wrap"><table class="data"><thead><tr><th>模式</th><th>计算</th><th>劳动业绩</th><th>差异说明</th></tr></thead><tbody>
-                <tr><td>均值模式</td><td>折后实收</td><td><strong>299.00</strong></td><td>按会员价实收计绩</td></tr>
-                <tr><td>减值模式</td><td>染发价目表 358</td><td><strong>358.00</strong></td><td>按挂牌原价计绩，不含折扣让渡</td></tr>
+                <tr><td>均值模式</td><td>项目折后价格</td><td><strong>299.00</strong></td><td>按会员价/折后价计绩</td></tr>
+                <tr><td>原价模式</td><td>染发价目表 358</td><td><strong>358.00</strong></td><td>按挂牌原价（项目面值）计绩</td></tr>
               </tbody></table></div>
             </div>
-            <p style="margin-top:10px;font-size:12px;color:var(--muted)">说明：购卡费摊销与退卡估值见 Q4；上表仅为产品计绩目标示意。</p>
+            <p style="margin-top:10px;font-size:12px;color:var(--muted)">说明：纯折扣卡均值退卡消耗按时间摊销（见 Q4），与上表计绩文案独立；上表仅为产品计绩目标示意。</p>
           </div>
         </div>
       </div>
@@ -709,9 +713,19 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
                 <td>均值模式；减值见下表挂牌价×次数</td>
               </tr>
               <tr>
-                <td>折扣线</td>
+                <td>折扣线（组合卡）</td>
                 <td><code>累计已享优惠 Σ(原价 − 折后实付)</code>（<code>savedTotal</code>）</td>
-                <td>均值 / 减值相同</td>
+                <td>不占实付份额；均值 / 减值相同</td>
+              </tr>
+              <tr>
+                <td>纯折扣卡（均值）</td>
+                <td><code>办卡实付 ×（已过天数 ÷ 总有效期）</code></td>
+                <td>永久按 3 年=1095 天；已享优惠仅信息行，不计入消耗</td>
+              </tr>
+              <tr>
+                <td>固定期限不限次独占</td>
+                <td>同时间摊销口径</td>
+                <td>无面值/有限次权重时整卡实付摊销</td>
               </tr>
               <tr>
                 <td>建议退款</td>
@@ -738,29 +752,29 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             </thead>
             <tbody>
               <tr>
-                <td>① 权益权重池（均值分母）</td>
-                <td><code>面值权重 = 充值+赠送总面值</code><br><code>项目权重[i] = 价目表单价 × (购次+赠次)</code>（仅有限次）<br><code>权重合计 = 面值权重 + Σ项目权重</code></td>
-                <td><strong>不含折扣权重、不含不限次</strong>；Step3 展示为「面值权重+项目权重」</td>
+                <td>① 名义价值池（均值分母）</td>
+                <td><code>余额名义 = 充值+赠送总面值</code><br><code>项目权重[i] = 价目表单价 × (购次+赠次)</code><br><code>权重合计 = 面值 + Σ有限次项目</code></td>
+                <td>不含折扣、不含不限次；折扣消耗另按已享优惠</td>
               </tr>
               <tr>
                 <td>② 余额 · 消耗价值</td>
-                <td><code>余额分摊实付 = 办卡实付 × (面值权重 / 权重合计)</code><br><code>消耗价值 = 已用充值 × (余额分摊实付 / 充值面值) + 已用赠送 × (余额分摊实付 / 总面值)</code><br><code>剩余价值</code>同理用剩余充值/赠送折算</td>
-                <td>纯面值时权重合计=总面值</td>
+                <td><code>余额分摊实付 = 办卡实付 × (余额名义 / 权重合计)</code><br><code>消耗价值 = 已用充值 × (余额分摊实付 / 充值面值) + 已用赠送 × (余额分摊实付 / 总面值)</code><br><code>剩余价值</code>同理用剩余充值/赠送折算</td>
+                <td>纯面值时权重合计=总面值，简化为「消耗面值 × 实付 ÷ 初始面值」口径</td>
               </tr>
               <tr>
-                <td>③ 有限次项目 · 消耗价值</td>
+                <td>③ 项目 · 消耗价值</td>
                 <td><code>分摊实付 = 办卡实付 × (项目权重 / 权重合计)</code><br><code>单次摊销 = 分摊实付 / (购次+赠次)</code><br><code>消耗价值 = 已用次数 × 单次摊销</code></td>
                 <td>购/赠同单价</td>
               </tr>
               <tr>
-                <td>④ 折扣 · 消耗价值</td>
-                <td><code>不占购卡实付份额</code><br><code>消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)</code><br><code>剩余价值 = 0</code></td>
-                <td>纯折扣卡：建议退款 = max(0, 办卡实付 − 已享优惠)</td>
+                <td>④ 折扣 · 消耗价值（组合卡）</td>
+                <td><code>消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)</code>（账本 <code>savedTotal</code>）</td>
+                <td>不占实付份额；剩余明细可为 0</td>
               </tr>
               <tr>
-                <td>④b 固定期限不限次</td>
-                <td>若权重合计为 0：<code>消耗价值 = 办卡实付 × (已过天数 / 有效总天数)</code><br>若已有面值/有限次权重：实付已分完，不限次不再另占份额<br>劳动业绩（均值）= <strong>价目表原价</strong></td>
-                <td>永久不限次不走时间摊销</td>
+                <td>④′ 纯折扣卡（均值）</td>
+                <td><code>消耗 = 办卡实付 ×（已过天数 ÷ 总有效期）</code>；永久 <code>总有效期 = 1095</code></td>
+                <td>已享优惠信息行 used=0；函数 <code>isPureDiscountTemplate</code></td>
               </tr>
               <tr>
                 <td>⑤ 建议退款</td>
@@ -830,7 +844,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul>
           <li><strong>消费顺序</strong>：余额先扣充值面值再扣赠送；项目先扣购买次再扣赠送次（账本分项记录 <code>rechargeUsed/giftUsed</code>、<code>purchaseUsed/giftUsed</code>）。</li>
           <li><strong>合并计池</strong>：退卡摊销仍共用单价；扣减赠送同样减少可退账面，<strong>不因「扣的是赠送」而免扣</strong>，但须遵守上述消费顺序。</li>
-          <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一权益权重合计</strong>（面值权重 + 有限次项目权重；不含折扣）。</li>
+          <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一名义价值合计</strong>（含余额/折扣权重）。</li>
           <li><strong>建议退款可为 0</strong>：系统允许；店员可在确认环节调低实际退款（无审批拦截）。</li>
         </ul>
 

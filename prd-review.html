@@ -313,7 +313,7 @@
           <div class="loop__step">
             <div class="loop__n">02</div>
             <div class="loop__t">模板管理</div>
-            <div class="loop__d">锁定 · 克隆 · 上下架</div>
+            <div class="loop__d">锁定 · 复制建卡 · 上下架</div>
           </div>
           <div class="loop__step">
             <div class="loop__n">03</div>
@@ -376,7 +376,7 @@
             <p style="margin:0 0 10px;font-size:13px;color:var(--muted)">当前排期唯一交付主体。组合权益模板 + 持卡生命周期。</p>
             <ul>
               <li>三步创建 · 均值/减值策略</li>
-              <li>锁定 / 克隆 / 上下架</li>
+              <li>锁定 / 复制建卡 / 上下架</li>
               <li>办卡 · 延期 · 整卡退卡</li>
             </ul>
             <span class="pillar__pri pri-p0">本期上线口</span>
@@ -410,7 +410,7 @@
           <div class="grid-4" style="margin-top:8px">
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--brand);margin-bottom:6px">卡 · 模板（本期）</div>
-              <div style="font-size:12px;line-height:1.7">在售 / 已下架<br>三步创建<br>详情 / 克隆</div>
+              <div style="font-size:12px;line-height:1.7">在售 / 已下架<br>三步创建<br>详情 / 复制建卡</div>
             </div>
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--brand);margin-bottom:6px">卡 · 持卡（本期）</div>
@@ -547,7 +547,7 @@
             </div>
             <div>
               <div style="font-size:12px;color:var(--muted);margin-bottom:4px">可以</div>
-              <div style="font-size:13px">上下架 · 克隆改规则 · 办 / 延 / 退</div>
+              <div style="font-size:13px">上下架 · 复制建卡改规则 · 办 / 延 / 退</div>
             </div>
           </div>
         </div>
@@ -568,9 +568,11 @@
               <table>
                 <tr><th>余额</th><td>按分摊实付折算已用充值/赠送</td></tr>
                 <tr><th>项目</th><td>已用 ×（分摊实付 ÷ 总次数）</td></tr>
-                <tr><th>折扣</th><td>累计已享优惠 Σ(原价−折后)</td></tr>
+                <tr><th>折扣（组合）</th><td>累计已享优惠（不占实付份额）</td></tr>
+                <tr><th>纯折扣</th><td>实付 ×（已过天数 ÷ 总有效期）；永久按 1095 天；已享优惠不计消耗</td></tr>
+                <tr><th>不限次独占</th><td>同时间摊销；业绩文案按价目表原价</td></tr>
               </table>
-              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">组合卡先建名义价值池，共享分母再分摊。</p>
+              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">组合卡分母=面值+有限次项目（不含折扣/不限次）。Step3 副标题写「总有效期」，不展示具体天数。</p>
             </div>
           </div>
           <div class="mode mode--retail">
@@ -622,7 +624,7 @@
           <div class="col">
             <div class="col__h" style="color:var(--p0)">本期 · 会员卡 <span class="col__count">上线口</span></div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>三步建卡 + 用卡策略存储</div>
-            <div class="tile tile--card"><div class="tile__tag">会员卡</div>锁定 / 克隆 / 上下架</div>
+            <div class="tile tile--card"><div class="tile__tag">会员卡</div>锁定 / 复制建卡 / 上下架</div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>办卡 · 延期 · 整卡退卡双模式</div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>实退可改 + 审计日志</div>
             <div class="tile tile--out"><div class="tile__tag">依赖</div>项目/挂牌价用既存或占位（不建管理）</div>

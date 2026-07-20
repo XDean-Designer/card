@@ -35,7 +35,7 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 | cardColor | string | 否 | 卡面主题枚举，如 `brand_red` |
 | shelved | bool | 是 | true = 已下架，不可新办 |
 | createdAt | number/ISO | 是 | |
-| duplicatedFrom | string | 否 | 克隆来源模板 ID |
+| duplicatedFrom | string | 否 | 复制建卡来源模板 ID |
 | benefits.balance | bool | 是 | 是否含面值 |
 | benefits.timesOrValidity | bool | 是 | 是否含项目次数 |
 | benefits.projectDiscount | bool | 是 | 是否含折扣 |
@@ -55,9 +55,11 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 |------|------|------|
 | id | string | 可选 |
 | name | string | 关联价目项目名 / ID（本期用既存挂牌价源） |
-| purchaseQty | int | 购买次数 |
+| purchaseQty | int | 权益次数（界面文案；字段名历史保留） |
 | giftQty | int | 赠送次数 |
 | unlimited | bool | 不限次；不参与退卡名义池项目权重 |
+| qtyScope | `per_item` \| `shared` | 计次模式：每项 / 共计；不限次强制 `per_item` |
+| sharedGroupId | string \| null | 共计时共享次数池 ID |
 
 ### DiscountRule（memberPrices 的 value）
 
@@ -141,7 +143,7 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 ```text
 在售(shelved=false) ⇄ 已下架(shelved=true)
 编辑规则：仅当 validCardCount==0（及产品约定的无有效持卡）
-克隆：始终可 → 新模板 duplicatedFrom
+复制建卡：始终可 → 新模板 duplicatedFrom
 ```
 
 **实例**

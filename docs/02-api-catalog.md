@@ -126,7 +126,7 @@ Body：`{ "shelved": true|false }`。下架后不可新办；已持卡仍可退/
 `unit`: `day|month|year|permanent`。  
 
 规则摘要：仅改 `cardExpireAt`；含折扣权益时 `feeAmount` 可改（默认可按规则预填）；**独立流水，不计入办卡统计**；失效可复活。  
-永久卡：原型「退卡/延期」Tab **仍展示「延期」入口**，点击 toast「永久卡无需延期」；接口应 **400** `EXTEND_NOT_ALLOWED`。
+永久卡：原型「退卡/延期」Tab **仍展示「延期」入口**，点击 toast「该卡永久有效，无需延期」；接口应 **400** `EXTEND_NOT_ALLOWED`。纯面值永久口径同理。
 
 ---
 
