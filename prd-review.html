@@ -285,16 +285,17 @@
 
     <main class="main">
       <header class="hero" id="top">
-        <div class="hero__badge">PRD 评审页 · 非归档正文</div>
+        <div class="hero__badge">PRD 评审页 · 按当前原型重写对齐</div>
         <h1>剑琅联盟 · 会员卡权益组合版</h1>
-        <p class="hero__lead">用组合权益（面值 / 项目 / 折扣）统一当前建卡体系下的卡能力。<strong>当前排期仅做会员卡创建与管理</strong>；项目管理本期不做；会员管理已规划但尚未启动。APP 内无独立旧卡产品线。<strong>补录老卡安排在 P1</strong>。本页供投屏对齐范围，细节以 MD PRD 为准。</p>
+        <p class="hero__lead">用组合权益（面值 / 项目 / 折扣）统一当前建卡体系下的卡能力。<strong>当前排期仅做会员卡创建与管理</strong>；项目管理本期不做；会员管理已规划但尚未启动。APP 内无独立旧卡产品线。<strong>补录老卡安排在 P1</strong>。规则权威：原型引擎 + <code>logic.html</code>；本页供投屏，全文见 MD PRD。</p>
         <div class="hero__chips">
           <span class="chip"><strong>本期</strong> 仅会员卡</span>
+          <span class="chip"><strong>计次</strong> 每项 / 共计</span>
+          <span class="chip"><strong>退卡</strong> 均值 / 减值</span>
           <span class="chip"><strong>P1</strong> 补录老卡</span>
           <span class="chip"><strong>后续</strong> 项目管理（不做）</span>
           <span class="chip"><strong>后续</strong> 会员管理（未启动）</span>
-          <span class="chip"><strong>用户</strong> 店主 / 店长 / 前台</span>
-          <span class="chip"><strong>对接</strong> 既存会员能力 + 支付退款</span>
+          <span class="chip"><strong>对接</strong> 既存会员 + 支付退款</span>
         </div>
       </header>
 
@@ -336,10 +337,11 @@
           <div class="card">
             <h3>本期要交付</h3>
             <ul>
-              <li>组合卡创建与运营</li>
+              <li>组合卡创建与运营（含计次每项/共计）</li>
               <li>办卡 / 延期 / 整卡退卡</li>
-              <li>退卡双模式引擎</li>
+              <li>退卡双模式引擎（纯折扣 / 不限次）</li>
               <li>实退可改 + 审计日志</li>
+              <li>详情：运营数据 / 卡面信息</li>
             </ul>
           </div>
           <div class="card">
@@ -375,9 +377,10 @@
             <h3>会员卡创建与管理</h3>
             <p style="margin:0 0 10px;font-size:13px;color:var(--muted)">当前排期唯一交付主体。组合权益模板 + 持卡生命周期。</p>
             <ul>
-              <li>三步创建 · 均值/减值策略</li>
+              <li>三步创建 · 计次模式 · 双轴策略</li>
               <li>锁定 / 复制建卡 / 上下架</li>
               <li>办卡 · 延期 · 整卡退卡</li>
+              <li>详情运营数据 / 卡面信息</li>
             </ul>
             <span class="pillar__pri pri-p0">本期上线口</span>
           </article>
@@ -447,11 +450,31 @@
             <span class="flow__arrow">→</span>
             <div class="flow__node">Step1<br><small>名称·金额·期限·卡面</small></div>
             <span class="flow__arrow">→</span>
-            <div class="flow__node">Step2<br><small>面值 / 项目 / 折扣</small></div>
+            <div class="flow__node">Step2<br><small>面值 / 项目（每项·共计）/ 折扣</small></div>
             <span class="flow__arrow">→</span>
-            <div class="flow__node">Step3<br><small>退卡策略·业绩字段</small></div>
+            <div class="flow__node">Step3<br><small>消耗及退卡 · 业绩文案</small></div>
             <span class="flow__arrow">→</span>
             <div class="flow__node is-end">已创建<br><small>去办卡 / 回列表</small></div>
+          </div>
+          <div class="grid-2" style="margin-top:14px">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px">Step2 · 计次模式</div>
+              <ul style="margin:0;padding-left:1.1em;font-size:12px;color:var(--muted)">
+                <li><strong>每项</strong>：各项目各自相同次数</li>
+                <li><strong>共计</strong>：混用共享次数池；退卡组内均价权重</li>
+                <li>不限次强制每项；「共计」禁用，? 仍可点</li>
+                <li>不限次×永久：弹窗设有效期（取消则不保留不限次）</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px">Step3 · 文案定稿</div>
+              <ul style="margin:0;padding-left:1.1em;font-size:12px;color:var(--muted)">
+                <li>分区：消耗及退卡计算规则 / 业绩计算规则</li>
+                <li>副标题写「总有效期」（不写具体天数）</li>
+                <li>纯折扣均值业绩 = 项目折后价格</li>
+                <li>业绩字段本期只存不运算</li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -511,6 +534,7 @@
           <div class="v-box v-box--card">
             <h4>项目权益</h4>
             <p>跟随 <strong>卡到期日</strong><br>到期当日硬失效 · 无宽限</p>
+            <p style="margin:8px 0 0;font-size:12px;color:var(--muted)">计次：<strong>每项</strong>（各自次数）/ <strong>共计</strong>（共享次数池）；不限次强制每项</p>
           </div>
           <div class="v-box v-box--card">
             <h4>折扣权益</h4>
@@ -544,10 +568,12 @@
             <div>
               <div style="font-size:12px;color:var(--muted);margin-bottom:4px">不可</div>
               <div style="font-size:13px">编辑 Step1–3 规则字段</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px">提示：已有持卡，不可编辑；请复制建卡后修改</div>
             </div>
             <div>
               <div style="font-size:12px;color:var(--muted);margin-bottom:4px">可以</div>
               <div style="font-size:13px">上下架 · 复制建卡改规则 · 办 / 延 / 退</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px">详情布局：卡头独立 + 运营数据 / 卡面信息两大板块</div>
             </div>
           </div>
         </div>
@@ -567,12 +593,13 @@
             <div class="mode__body">
               <table>
                 <tr><th>余额</th><td>按分摊实付折算已用充值/赠送</td></tr>
-                <tr><th>项目</th><td>已用 ×（分摊实付 ÷ 总次数）</td></tr>
-                <tr><th>折扣（组合）</th><td>累计已享优惠（不占实付份额）</td></tr>
-                <tr><th>纯折扣</th><td>实付 ×（已过天数 ÷ 总有效期）；永久按 1095 天；已享优惠不计消耗</td></tr>
-                <tr><th>不限次独占</th><td>同时间摊销；业绩文案按价目表原价</td></tr>
+                <tr><th>项目（每项）</th><td>已用 ×（分摊实付 ÷ 总次数）</td></tr>
+                <tr><th>项目（共计）</th><td>组内已用合计 × 单次摊销；权重 = 组内均价 × (购+赠)</td></tr>
+                <tr><th>折扣（组合）</th><td>消耗 = 累计已享优惠；不参与分摊分母，剩余 = 0</td></tr>
+                <tr><th>纯折扣</th><td>实付 ×（已过天数 ÷ 总有效期）；永久按 1095 天；已享优惠仅信息行，不计消耗</td></tr>
+                <tr><th>不限次独占</th><td>无面值/有限次权重时同时间摊销；组合卡实付已分完则不限次不再另占份额</td></tr>
               </table>
-              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">组合卡分母=面值+有限次项目（不含折扣/不限次）。Step3 副标题写「总有效期」，不展示具体天数。</p>
+              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">分摊分母 = 面值 + 有限次项目（不含折扣/不限次）。时间摊销仅 alloc_pool。Step3 副标题写「总有效期」，不展示具体天数。</p>
             </div>
           </div>
           <div class="mode mode--retail">
@@ -580,10 +607,13 @@
             <div class="mode__body">
               <table>
                 <tr><th>余额</th><td>与均值相同</td></tr>
-                <tr><th>项目</th><td>挂牌价 × 已用次数（快照价）</td></tr>
-                <tr><th>折扣</th><td>同均值：累计已享优惠</td></tr>
+                <tr><th>项目（每项）</th><td>挂牌价 × 已用次数（快照价）</td></tr>
+                <tr><th>项目（共计）</th><td>组内均价 × 组内已用合计</td></tr>
+                <tr><th>折扣（组合/纯折扣）</th><td>消耗 = 累计已享优惠；剩余 = 0</td></tr>
+                <tr><th>纯折扣</th><td><strong>无</strong>时间摊销（与均值不同）</td></tr>
+                <tr><th>不限次独占</th><td><strong>无</strong>时间摊销；仅按余额/项目/折扣账本</td></tr>
               </table>
-              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">界面「按挂牌价」仅精确作用于项目线。</p>
+              <p style="margin:10px 0 0;font-size:12px;color:var(--muted)">界面「按挂牌价」仅精确作用于项目线；折扣与均值同为 savedTotal。</p>
             </div>
           </div>
         </div>
@@ -623,10 +653,12 @@
         <div class="board">
           <div class="col">
             <div class="col__h" style="color:var(--p0)">本期 · 会员卡 <span class="col__count">上线口</span></div>
-            <div class="tile tile--card"><div class="tile__tag">会员卡</div>三步建卡 + 用卡策略存储</div>
+            <div class="tile tile--card"><div class="tile__tag">会员卡</div>三步建卡 + 计次模式（每项/共计）</div>
+            <div class="tile tile--card"><div class="tile__tag">会员卡</div>用卡策略存储（退卡均值/减值 · 业绩均值/原价）</div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>锁定 / 复制建卡 / 上下架</div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>办卡 · 延期 · 整卡退卡双模式</div>
             <div class="tile tile--card"><div class="tile__tag">会员卡</div>实退可改 + 审计日志</div>
+            <div class="tile tile--card"><div class="tile__tag">会员卡</div>详情：运营数据 / 卡面信息</div>
             <div class="tile tile--out"><div class="tile__tag">依赖</div>项目/挂牌价用既存或占位（不建管理）</div>
           </div>
           <div class="col">
@@ -648,7 +680,7 @@
       </section>
 
       <div class="footer-bar">
-        <div>准稿：<a href="PRD-会员卡-权益组合版.md">PRD-会员卡-权益组合版.md</a> · 本期仅会员卡 · P1 补录老卡</div>
+        <div>准稿：<a href="PRD-会员卡-权益组合版.md">PRD-会员卡-权益组合版.md</a>（按原型全文重写）· 本期仅会员卡 · P1 补录老卡</div>
         <div><a href="demo.html">打开原型</a> · <a href="logic.html">打开算例</a></div>
       </div>
     </main>

@@ -59,7 +59,7 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 | giftQty | int | 赠送次数 |
 | unlimited | bool | 不限次；不参与退卡名义池项目权重 |
 | qtyScope | `per_item` \| `shared` | 计次模式：每项 / 共计；不限次强制 `per_item` |
-| sharedGroupId | string \| null | 共计时共享次数池 ID |
+| sharedGroupId | string \| null | 共计时共享次数池 ID（同权益卡内多项目共用） |
 
 ### DiscountRule（memberPrices 的 value）
 
@@ -118,8 +118,10 @@ Consumption（既存核销）──汇总──▶ ledger used 字段
 
 | 字段 | 说明 |
 |------|------|
-| purchaseRemaining / giftRemaining | |
-| purchaseUsed / giftUsed | 先购买次后赠送次 |
+| purchaseRemaining / giftRemaining | 剩余次数；**共计组**仅 primary 项目写入完整剩余，同组其余为 0 |
+| purchaseUsed / giftUsed | 先购买次后赠送次；共计组各项目均可记 used |
+| sharedGroupId | 可选；共计组 ID |
+| sharedPoolPrimary | 可选 bool；共计组内是否为次数池主行 |
 
 **discountUses[name]**  
 可为次数或明细；退卡折扣消耗用 **累计已享优惠** `savedTotal`（Σ 原价−折后）。账本需能汇总到 `savedTotal`。

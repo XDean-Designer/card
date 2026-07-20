@@ -141,6 +141,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
     </div>
     <nav class="nav">
       <a href="#template-lock">模板编辑锁定</a>
+      <a href="#qty-scope">Step2 · 计次模式</a>
       <a href="#usage-policy">用卡策略</a>
       <div class="nav-group">四个核心问题</div>
       <a href="#q1" class="active">1 · 有效期闭环</a>
@@ -303,6 +304,51 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
       </div>
     </section>
 
+    <!-- Step2 计次模式 -->
+    <section class="section" id="qty-scope">
+      <h2>Step2 · 计次模式（每项 / 共计）</h2>
+      <p class="sub">添加项目权益时配置；字段 <code>qtyScope</code>；对照原型 <code>normalizeQtyScope</code> / <code>benefitCardsToProjectItems</code></p>
+
+      <div class="block">
+        <h3><span class="dot rec"></span>字段与 UI</h3>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr><th>界面</th><th>枚举</th><th>含义</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>每项</strong></td>
+                <td><code>per_item</code>（默认）</td>
+                <td>每个选中项目<strong>各自</strong>获得相同次数（购次+赠次）；不限次时每个项目独立不限次</td>
+              </tr>
+              <tr>
+                <td><strong>共计</strong></td>
+                <td><code>shared</code></td>
+                <td>所选项目<strong>任意混用</strong>，共享同一次数池；同卡同组共享 <code>sharedGroupId</code>（= 权益卡 id）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul style="margin-top:12px">
+          <li>UI：计次模式「每项 / 共计」横排；右侧圆圈 <code>?</code> 弹窗说明当前状态文案。</li>
+          <li><strong>不限次</strong>：强制 <code>per_item</code>；「共计」单选禁用，<code>?</code> 仍可点（文案：「不限次时不可选」）。</li>
+          <li>问号文案（有限次）：每项 =「每个项目各自获得相同次数」；共计 =「所选项目任意混用，共享同一次数池」。</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <h3><span class="dot rec"></span>账本与退卡（引擎）</h3>
+        <ul>
+          <li><strong>办卡账本</strong>：共计组内仅 <strong>primary</strong> 项目写入完整剩余次数；同组其余项目 <code>remaining=0</code>，可记 <code>used</code>；行上带 <code>sharedGroupId</code> / <code>sharedPoolPrimary</code>。</li>
+          <li><strong>均值名义权重</strong>：每项 = 各项目挂牌价 × (购+赠)，各计一条；共计 = <strong>组内挂牌价均价 × (购+赠)</strong>，整组<strong>只计一条</strong>（函数 <code>buildRefundNominalPool</code>）。</li>
+          <li><strong>均值消耗</strong>：共计按组内已用合计 × 单次摊销（摊销来自组权重）；Sheet 标签 <code>共计 · A、B、C</code>。</li>
+          <li><strong>减值消耗</strong>：每项 = 挂牌价 × 该项目已用；共计 = <strong>组内均价 × 组内已用合计</strong>。</li>
+        </ul>
+        <div class="callout info"><strong>注意：</strong>「各项目独立计次」仅适用于 <code>per_item</code>；不可笼统写进组合卡退卡说明。</div>
+      </div>
+    </section>
+
     <!-- 用卡策略 -->
     <section class="section" id="usage-policy">
       <h2>用卡策略 · Step3 配置项</h2>
@@ -328,13 +374,14 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <div class="scheme-grid">
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">alloc_pool · 均值模式（默认）</span><span class="scheme-badge locked">Q4 对齐</span></div>
-            <p>办卡实付在<strong>面值+有限次项目</strong>名义池中分摊；组合卡折扣按<strong>累计已享优惠</strong>计消耗（不占实付份额）；<strong>纯折扣卡</strong>按办卡实付 ×（已过天数 ÷ 总有效期）时间摊销（永久按 1095 天）；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
+            <p>办卡实付在<strong>面值+有限次项目</strong>名义池中分摊；组合卡折扣消耗 = <strong>累计已享优惠</strong>（不参与分摊分母）；<strong>纯折扣卡</strong>与<strong>无面值/有限次权重的不限次卡</strong>按时间摊销（永久纯折扣按 1095 天）；组合卡含不限次且实付已分完时不再另占份额；建议退款 = <code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
           </div>
           <div class="scheme is-rec">
             <div class="scheme-head"><span class="name">retail · 减值模式</span></div>
             <p><strong>项目</strong>：消耗价值 = 价目表挂牌价 × 已用次数；剩余 = 挂牌价 × 剩余次数。</p>
             <p><strong>余额</strong>：与均值相同，按实耗面值折算实付（充值优先消耗）。</p>
-            <p><strong>折扣</strong>：消耗价值 = 已省优惠合计 <code>Σ(原价−实付)</code>；组合卡每线剩余 = 该线分摊实付 − 已省优惠（账本 <code>savedTotal</code>）。</p>
+            <p><strong>折扣</strong>：消耗价值 = 累计已享优惠（<code>savedTotal</code>）；剩余明细 = 0；<strong>纯折扣卡不做时间摊销</strong>（与均值不同）。</p>
+            <p><strong>不限次独占</strong>：减值模式<strong>无</strong>时间摊销分支；仅按余额/项目/折扣账本计消耗。</p>
             <p><strong>建议退款</strong>：同均值 <code>max(0, 办卡实付 − Σ消耗价值)</code>。</p>
           </div>
         </div>
@@ -708,14 +755,19 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
                 <td>纯面值且仅扣充值、充值面值=实付时，系数可为 1；Step3「消耗面值×实付÷初始面值」为简化句</td>
               </tr>
               <tr>
-                <td>项目次数</td>
+                <td>项目次数（每项）</td>
                 <td><code>已用次数 ×（该项目分摊实付 ÷ 购+赠总次数）</code></td>
-                <td>均值模式；减值见下表挂牌价×次数</td>
+                <td>均值；减值见下表</td>
+              </tr>
+              <tr>
+                <td>项目次数（共计）</td>
+                <td>组权重 = 组内均价 × (购+赠)；消耗 = 组内已用合计 × 单次摊销</td>
+                <td>整组一条；标签「共计 · 项目名」</td>
               </tr>
               <tr>
                 <td>折扣线（组合卡）</td>
                 <td><code>累计已享优惠 Σ(原价 − 折后实付)</code>（<code>savedTotal</code>）</td>
-                <td>不占实付份额；均值 / 减值相同</td>
+                <td>不参与分摊分母；消耗计入建议退款；均值 / 减值相同</td>
               </tr>
               <tr>
                 <td>纯折扣卡（均值）</td>
@@ -723,9 +775,9 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
                 <td>永久按 3 年=1095 天；已享优惠仅信息行，不计入消耗</td>
               </tr>
               <tr>
-                <td>固定期限不限次独占</td>
+                <td>固定期限不限次独占（均值）</td>
                 <td>同时间摊销口径</td>
-                <td>无面值/有限次权重时整卡实付摊销</td>
+                <td>无面值/有限次权重时整卡实付摊销；组合卡实付已分完则不限次不再另占份额</td>
               </tr>
               <tr>
                 <td>建议退款</td>
@@ -735,12 +787,12 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             </tbody>
           </table>
         </div>
-        <div class="callout info" style="margin-top:10px"><strong>引擎一致：</strong>名义价值池用于余额/项目摊销与折扣线「剩余 = max(0, 分摊实付 − 已省)」；建议退款只看 Σ消耗。</div>
+        <div class="callout info" style="margin-top:10px"><strong>引擎一致：</strong>分摊分母仅面值+有限次项目；组合卡折扣消耗 = savedTotal、剩余明细 = 0；建议退款只看 Σ消耗。</div>
 
         <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">折扣线 · 累计已享优惠（引擎）</h3>
         <div class="scheme is-rec" style="margin-top:8px">
-          <div class="scheme-head"><span class="name">均值 / 减值共用</span></div>
-          <p>折扣线计入名义价值池（分摊实付 / 剩余明细）；消耗价值 = <code>Σ(原价 − 折后实付)</code>。折率档：<code>paid = 原价 × tickIndex / 20</code>（如 17 → 8.5 折）；固定价取配置金额。次数为 number 的账本自动 <code>savedTotal = 次数 × 单次已省</code>。</p>
+          <div class="scheme-head"><span class="name">均值 / 减值共用（组合卡）</span></div>
+          <p>组合卡折扣<strong>不参与</strong>均值分摊分母；消耗价值 = <code>Σ(原价 − 折后实付)</code>（<code>savedTotal</code>），计入建议退款；Sheet 剩余明细 = 0。折率档：<code>paid = 原价 × tickIndex / 20</code>；固定价取配置金额。</p>
         </div>
 
         <h3 style="margin-top:16px;font-size:13px;color:var(--muted)">引擎实现 · 名义价值池（组合卡分摊）</h3>
@@ -753,7 +805,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
             <tbody>
               <tr>
                 <td>① 名义价值池（均值分母）</td>
-                <td><code>余额名义 = 充值+赠送总面值</code><br><code>项目权重[i] = 价目表单价 × (购次+赠次)</code><br><code>权重合计 = 面值 + Σ有限次项目</code></td>
+                <td><code>余额名义 = 充值+赠送总面值</code><br><code>每项：权重 = 挂牌价 × (购+赠)</code><br><code>共计：权重 = 组内均价 × (购+赠)</code>（整组一条）<br><code>权重合计 = 面值 + Σ有限次项目权重</code></td>
                 <td>不含折扣、不含不限次；折扣消耗另按已享优惠</td>
               </tr>
               <tr>
@@ -764,17 +816,22 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
               <tr>
                 <td>③ 项目 · 消耗价值</td>
                 <td><code>分摊实付 = 办卡实付 × (项目权重 / 权重合计)</code><br><code>单次摊销 = 分摊实付 / (购次+赠次)</code><br><code>消耗价值 = 已用次数 × 单次摊销</code></td>
-                <td>购/赠同单价</td>
+                <td>购/赠同单价；共计用组内已用合计</td>
               </tr>
               <tr>
                 <td>④ 折扣 · 消耗价值（组合卡）</td>
                 <td><code>消耗价值 = 累计已享优惠 Σ(原价 − 折后实付)</code>（账本 <code>savedTotal</code>）</td>
-                <td>不占实付份额；剩余明细可为 0</td>
+                <td>不参与分摊分母；剩余明细 = 0</td>
               </tr>
               <tr>
                 <td>④′ 纯折扣卡（均值）</td>
                 <td><code>消耗 = 办卡实付 ×（已过天数 ÷ 总有效期）</code>；永久 <code>总有效期 = 1095</code></td>
                 <td>已享优惠信息行 used=0；函数 <code>isPureDiscountTemplate</code></td>
+              </tr>
+              <tr>
+                <td>④″ 不限次独占（均值）</td>
+                <td><code>实付 ×（已过天数 ÷ 总有效期）</code>（仅当权重合计为 0）</td>
+                <td>组合卡实付已分完则不限次不再另占份额；函数 <code>isUnlimitedFixedTermTemplate</code></td>
               </tr>
               <tr>
                 <td>⑤ 建议退款</td>
@@ -817,16 +874,32 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
                 <td>面值线不受减值规则替换</td>
               </tr>
               <tr>
-                <td>项目次数</td>
+                <td>项目次数（每项）</td>
                 <td><code>价目表挂牌价 × 已用次数</code></td>
                 <td><code>价目表挂牌价 × 剩余次数</code></td>
                 <td>不按购卡分摊单次摊销</td>
               </tr>
               <tr>
+                <td>项目次数（共计）</td>
+                <td><code>组内均价 × 组内已用合计</code></td>
+                <td><code>组内均价 × 组内剩余合计</code></td>
+                <td>整组一条明细</td>
+              </tr>
+              <tr>
                 <td>折扣</td>
-                <td><code>累计已享优惠 Σ(原价 − 实付)</code>（<code>savedTotal</code>）</td>
-                <td><code>折扣线分摊实付 − savedTotal</code></td>
-                <td>与均值折扣口径相同</td>
+                <td><code>累计已享优惠 Σ(原价 − 折后实付)</code>（<code>savedTotal</code>）</td>
+                <td><code>0</code></td>
+                <td>与均值相同；纯折扣卡<strong>无</strong>时间摊销</td>
+              </tr>
+              <tr>
+                <td>纯折扣卡（减值）</td>
+                <td colspan="2">仅 <code>savedTotal</code> 计消耗；不做时间摊销</td>
+                <td>对照演示卡「减值烫染卡」</td>
+              </tr>
+              <tr>
+                <td>不限次独占（减值）</td>
+                <td colspan="2">无时间摊销分支</td>
+                <td>仅余额/项目/折扣账本；无权重时若无消费则建议退 ≈ 实付</td>
               </tr>
               <tr>
                 <td>建议退款</td>
@@ -844,7 +917,7 @@ table.data code { font-size: 12px; background: var(--bg); padding: 1px 5px; bord
         <ul>
           <li><strong>消费顺序</strong>：余额先扣充值面值再扣赠送；项目先扣购买次再扣赠送次（账本分项记录 <code>rechargeUsed/giftUsed</code>、<code>purchaseUsed/giftUsed</code>）。</li>
           <li><strong>合并计池</strong>：退卡摊销仍共用单价；扣减赠送同样减少可退账面，<strong>不因「扣的是赠送」而免扣</strong>，但须遵守上述消费顺序。</li>
-          <li><strong>组合卡</strong>：各项目独立计次，但分摊实付来自<strong>同一名义价值合计</strong>（含余额/折扣权重）。</li>
+          <li><strong>组合卡</strong>：计次模式为<strong>每项</strong>时各项目独立计次；为<strong>共计</strong>时同组共享次数池（退卡整组一条）。分摊实付来自<strong>面值 + 有限次项目权重合计</strong>（不含折扣/不限次；共计组用组内均价权重）。</li>
           <li><strong>建议退款可为 0</strong>：系统允许；店员可在确认环节调低实际退款（无审批拦截）。</li>
         </ul>
 

@@ -33,7 +33,7 @@ Base（示例）：`/api/v1/member-cards`
 
 ### `GET /templates/{id}`
 
-详情：完整 `projectItems`、`memberPrices`、`cardValidity`、`stats`。
+详情：完整 `projectItems`（含 `qtyScope` / `sharedGroupId`）、`memberPrices`、`cardValidity`、`stats`。
 
 ### `POST /templates`
 
