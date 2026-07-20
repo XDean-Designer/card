@@ -458,12 +458,13 @@
           </div>
           <div class="grid-2" style="margin-top:14px">
             <div>
-              <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px">Step2 · 计次模式</div>
+              <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px">Step2 · 计次 / 面值</div>
               <ul style="margin:0;padding-left:1.1em;font-size:12px;color:var(--muted)">
                 <li><strong>每项</strong>：各项目各自相同次数</li>
                 <li><strong>共计</strong>：混用共享次数池；退卡组内均价权重</li>
                 <li>不限次强制每项；「共计」禁用，? 仍可点</li>
-                <li>不限次×永久：弹窗设有效期（取消则不保留不限次）</li>
+                <li>面值副文案：「购买与赠送的面值，永久有效。」</li>
+                <li>卡面面值栏：仅面值·赠送，不展示有效期</li>
               </ul>
             </div>
             <div>
@@ -471,6 +472,7 @@
               <ul style="margin:0;padding-left:1.1em;font-size:12px;color:var(--muted)">
                 <li>分区：消耗及退卡计算规则 / 业绩计算规则</li>
                 <li>副标题写「总有效期」（不写具体天数）</li>
+                <li>总权益面值明细：一级面值/项目/合计；二级各项在项目下</li>
                 <li>纯折扣均值业绩 = 项目折后价格</li>
                 <li>业绩字段本期只存不运算</li>
               </ul>
@@ -529,7 +531,7 @@
         <div class="validity">
           <div class="v-box v-box--forever">
             <h4>面值权益</h4>
-            <p>永久有效 · 不受卡到期约束<br>卡过期后仍可消费 / 参与退卡</p>
+            <p>规则：永久有效 · 不受卡到期约束<br>卡过期后仍可消费 / 参与退卡<br><span style="color:var(--muted)">卡面仅展示面值·赠送，不展示有效期</span></p>
           </div>
           <div class="v-box v-box--card">
             <h4>项目权益</h4>
