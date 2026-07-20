@@ -1338,6 +1338,24 @@ input[type=number]::-webkit-inner-spin-button {
   color: var(--text); font-weight: 600; font-family: var(--font-data);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
+.usage-value-detail__row--primary {
+  font-weight: 600;
+  color: var(--text);
+}
+.usage-value-detail__row--primary .usage-value-detail__value {
+  color: var(--brand);
+  font-size: 16px;
+}
+.usage-value-detail__row--child {
+  padding-left: 16px;
+  min-height: 36px;
+  font-size: 13px;
+  border-bottom-color: transparent;
+}
+.usage-value-detail__row--child .usage-value-detail__value {
+  font-weight: 500;
+  color: var(--text-sec);
+}
 .usage-value-detail__row--total {
   margin-top: 4px; border-bottom: none; font-weight: 600; color: var(--text);
 }
@@ -1383,7 +1401,6 @@ input[type=number]::-webkit-inner-spin-button {
   text-align: right; field-sizing: content; color: var(--text);
   cursor: default; caret-color: transparent; pointer-events: none;
 }
-.balance-permanent-tag { font-size: 11px; color: var(--text-sec); margin-left: 6px; font-weight: 500; }
 .proj-tag-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; min-height: 4px; }
 .proj-tag-list:empty { display: none; }
 .proj-tag {
@@ -2338,7 +2355,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-check">
                   <div class="benefit-check__main">
                     <span class="benefit-check__title">面值</span>
-                    <span class="benefit-check__desc">购买与赠送的余额，面值永久有效</span>
+                    <span class="benefit-check__desc">购买与赠送的面值，永久有效。</span>
                   </div>
                   <button type="button" class="switch" id="benBalance" role="switch" aria-checked="false" aria-label="面值"></button>
                 </div>
@@ -6984,24 +7001,29 @@ function openUsageValueDetail() {
   }
 
   if (titleEl) titleEl.textContent = '总权益面值计算明细';
-  const rows = [
-    ['面值权益', values.balanceNominal],
-    ['项目权益', values.projectNominal],
-  ];
-  const noteExtra = values.unlimitedFixedTerm
-    ? ' 本卡含不限次项目：实付已由面值/有限次权益分摊完毕时，不限次不再另占份额；不限次劳动业绩按价目表原价。'
-    : '';
+  const pool = buildRefundNominalPool(values.tpl);
+  const projectRows = pool.projects.map(({ item, weight, sharedNames }) => {
+    const label = sharedNames?.length ? `共计 · ${sharedNames.join('、')}` : item.name;
+    return `<div class="usage-value-detail__row usage-value-detail__row--child">
+      <span>${escapeHtml(label)}</span>
+      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(roundMoney(weight)))}</span>
+    </div>`;
+  }).join('');
   body.innerHTML = `<div class="usage-value-detail">
-    ${rows.map(([label, value]) => `<div class="usage-value-detail__row">
-      <span>${label}</span>
-      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(value))}</span>
-    </div>`).join('')}
+    <div class="usage-value-detail__row usage-value-detail__row--primary">
+      <span>面值权益</span>
+      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.balanceNominal))}</span>
+    </div>
+    <div class="usage-value-detail__row usage-value-detail__row--primary">
+      <span>项目权益</span>
+      <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.projectNominal))}</span>
+    </div>
+    ${projectRows}
     <div class="usage-value-detail__row usage-value-detail__row--total">
       <span>总权益面值</span>
       <span class="usage-value-detail__value">${escapeHtml(formatMoneyDisplay(values.weightTotal))}</span>
     </div>
-  </div>
-  <p class="usage-value-detail__note">总权益面值 = 面值权益 + 项目权益（有限次），不含折扣、不含不限次。折扣消耗按已享优惠计，不占购卡实付份额。${noteExtra}</p>`;
+  </div>`;
   mask.classList.add('show');
 }
 
@@ -7891,7 +7913,7 @@ function renderCardFacePanel(tpl) {
     const giftText = gift !== '' && gift != null ? `¥${gift}` : '¥0';
     const faceText = face > 0 ? formatMoneyDisplay(face) : '¥0';
     sections.push(renderCardSection('面值', [
-      `面值 <span class="member-card-item__line-val is-data">${escapeHtml(faceText)}</span> · 赠送 <span class="member-card-item__line-val is-data">${escapeHtml(giftText)}</span> · <span class="balance-permanent-tag">永久有效</span>`,
+      `面值 <span class="member-card-item__line-val is-data">${escapeHtml(faceText)}</span> · 赠送 <span class="member-card-item__line-val is-data">${escapeHtml(giftText)}</span>`,
     ]));
   }
 
@@ -7971,7 +7993,6 @@ function buildCardFaceRows(tpl, opts = {}) {
     );
     const gift = p.giftAmount;
     rows.push(row('赠送', gift !== '' && gift != null ? `¥${gift}` : '¥0', { data: true }));
-    rows.push(row('面值有效期', '永久有效', { full: true }));
   }
   if (tpl.benefits.timesOrValidity) {
     const applyLine = formatProjectItemsLine(normalizeProjectItemsFromTpl(p));
@@ -8234,7 +8255,7 @@ function renderDetailFaceList(t) {
   const rows = buildCardFaceRows(t, { includeEmpty: true });
   const projects = normalizeProjectItemsFromTpl(t);
   const discountEntries = Object.entries(t.memberPrices || {});
-  const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送', '面值有效期']);
+  const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送']);
   const FACE_OTHER_LABELS = new Set(['项目/折扣有效期', '用卡策略']);
   const cards = [];
   let balanceRows = '';
