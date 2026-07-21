@@ -1812,21 +1812,10 @@ html.figma-capture-step2 .bottom-bar { position: static; }
 .proj-search-box input::placeholder { color: var(--text-sec); }
 .btn-proj-add { flex-shrink: 0; height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
 .proj-list-meta-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  display: flex; align-items: center; justify-content: flex-start; gap: 10px;
   margin: 8px 0 0; min-height: 16px;
 }
 .proj-list-meta { font-size: 11px; color: var(--text-sec); line-height: 1.4; flex-shrink: 0; }
-.proj-name-legend {
-  display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px;
-  font-size: 11px; color: var(--text-sec); line-height: 1.4;
-}
-.proj-name-legend__item { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-.proj-name-legend__dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-}
-.proj-name-legend__dot.is-normal { background: var(--text); }
-.proj-name-legend__dot.is-bound { background: var(--warn-text); }
-.proj-name-legend__dot.is-off { background: var(--text-sec); }
 .table-card { margin: 12px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; }
 .table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 52px 72px 48px; column-gap: 10px; padding-left: 16px; padding-right: 12px; }
 .table-row-swipe { position: relative; overflow: hidden; background: var(--card); }
@@ -1852,12 +1841,13 @@ html.figma-capture-step2 .bottom-bar { position: static; }
   background: #EBEBEB; pointer-events: none;
 }
 .table-row:active { background: var(--bg-page); }
-.table-row-swipe.is-off-sale .name-text:not(.is-bound),
+.table-row-swipe.is-off-sale .name-text,
 .table-row-swipe.is-off-sale .dur,
 .table-row-swipe.is-off-sale .price,
 .table-row-swipe.is-off-sale .sale-status { color: var(--text-sec); }
-.table-row .name-text.is-bound { color: var(--warn-text); }
-.table-row-swipe.is-off-sale .name-text.is-bound { color: var(--warn-text); opacity: .85; }
+.table-row .name-text.is-bound { color: var(--text); }
+.table-row-swipe.is-off-sale .name-text.is-bound { color: var(--text-sec); opacity: 1; }
+.table-row-swipe.is-off-sale .bound-tag { color: var(--text-sec); }
 .table-row-swipe.is-dragging {
   position: absolute; z-index: 10000; margin: 0; cursor: grabbing;
   background: var(--card); box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 8px;
@@ -1926,7 +1916,22 @@ html.figma-capture-step2 .bottom-bar { position: static; }
 }
 .pin-tag:active { opacity: .7; }
 .pin-tag__icon { display: block; width: 16px; height: 16px; pointer-events: none; }
-.price-num { font-family: var(--font-data); font-weight: 700; font-size: 15px; color: var(--text); }
+.bound-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 2px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--brand);
+  pointer-events: none;
+}
+.bound-tag__icon { display: block; width: 14px; height: 14px; }
+.price-num { font-family: var(--font-data); font-weight: 500; font-size: 15px; color: var(--text); }
 .price-num .yen { font-family: inherit; font-weight: 400; margin-right: 1px; font-size: 12px; }
 .catalog-action-list { display: flex; flex-direction: column; padding: 4px 0 8px; }
 .catalog-action-item {
@@ -2544,7 +2549,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromPicker" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title" id="projectPickerTitle">添加项目权益</span>
-            <button type="button" class="title-link" id="btnManagePriceCatalog">管理价目表</button>
+            <button type="button" class="title-link" id="btnManagePriceCatalog">管理项目表</button>
           </div>
           <div class="page-body page-body--pick">
             <div class="pick-section-card">
@@ -2571,7 +2576,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title" id="discountPickerTitle">添加折扣权益</span>
-            <button type="button" class="title-link" id="btnManagePriceCatalogDisc">管理价目表</button>
+            <button type="button" class="title-link" id="btnManagePriceCatalogDisc">管理项目表</button>
           </div>
           <div class="page-body page-body--pick">
             <div class="pick-section-card">
@@ -2597,7 +2602,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <div class="screen hidden" id="screen-p-list">
           <header class="page-title-bar">
             <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <span class="title">价目表</span>
+            <span class="title">项目表</span>
           </header>
           <div class="proj-list-toolbar">
             <div class="proj-search-row">
@@ -2609,11 +2614,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
             <div class="proj-list-meta-row">
               <div class="proj-list-meta" id="projListMeta">共 0 项</div>
-              <div class="proj-name-legend" aria-label="项目名称颜色说明">
-                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-normal" aria-hidden="true"></i>普通</span>
-                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-bound" aria-hidden="true"></i>已绑卡</span>
-                <span class="proj-name-legend__item"><i class="proj-name-legend__dot is-off" aria-hidden="true"></i>已下架</span>
-              </div>
             </div>
           </div>
           <div class="page-body">
@@ -2853,8 +2853,8 @@ const PROJ_INFO_ICON = '<svg class="alert-banner__icon" width="16" height="16" v
 const PROJ_WARN_ICON = '<svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2L14.2 13H1.8L8 2.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 6.4V9.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>';
 const PROJ_CHEV_ICON = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const PROJ_EDIT_NOTICE = {
-  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
-  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片外不可修改，且不可删除' },
+  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在项目表及顾客端同步生效，请确认价格与时长无误' },
+  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片、置顶外不可修改，且不可删除' },
   'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
 };
 const PROJ_LOCK_TOAST = {
@@ -2862,7 +2862,6 @@ const PROJ_LOCK_TOAST = {
   onSale: '绑卡项目不可修改在售状态',
   bookable_bound: '该项目已绑定会员卡，预约设置不可修改',
   bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
-  pinned: '该项目已绑定会员卡，置顶设置不可修改',
   delete: '该项目已绑定会员卡，不可删除',
 };
 let projDurDraft = { hours: 0, minutes: 30 };
@@ -5773,16 +5772,7 @@ function projRenderList() {
   const total = getCatalogProjects().length;
   const meta = document.getElementById('projListMeta');
   if (meta) {
-    const parts = [`共 ${total} 项`];
-    if (q) parts.push(`筛选 ${list.length} 项`);
-    if (isCatalogColSortActive()) {
-      const { key, dir } = state.catalogColSort;
-      parts.push(`按${CATALOG_COL_SORT_LABELS[key] || ''}${dir === 'asc' ? '正序' : '倒序'}`);
-    } else if (!q) {
-      parts.push('长按拖动排序');
-    }
-    parts.push('左滑更多');
-    meta.textContent = parts.join(' · ');
+    meta.textContent = `共 ${total} 项`;
   }
   syncCatalogColSortHead();
   const tbody = document.getElementById('projProjectTable');
@@ -5824,6 +5814,7 @@ function projRenderList() {
       <div class="table-row">
         <div class="name">
           <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(p.name)}</span>
+          ${p.boundToCard ? boundTagHtml() : ''}
           ${p.pinned ? pinTagHtml() : ''}
         </div>
         <div class="dur">${p.duration}分</div>
@@ -6308,10 +6299,10 @@ function projRenderForm(container, mode) {
         <div class="proj-section-label">高级</div>
         <div class="proj-form-section">
           <div class="proj-form-row col" style="padding:0">
-            <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">项目图片（选填，用于顾客端展示）</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
+            <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">项目图片（选填）</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
             <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
           </div>
-          <div${projFormRowAttrs('col', bound, PROJ_LOCK_TOAST.pinned)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned" ${bound ? 'disabled' : ''}></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
+          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
         </div>
       </div>
     </div>`;
@@ -6335,7 +6326,7 @@ function projBindFormEvents(container, lockCtx) {
     afterToggle: () => projSyncBookableLock(container, bound),
   });
   bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
-  bindSwitch('#fProjPinned', 'pinned', { disabled: bound });
+  bindSwitch('#fProjPinned', 'pinned');
   projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   const priceEl = container.querySelector('#fPrice');
@@ -6604,8 +6595,8 @@ const FLOW_MAP_GROUPS = [
   {
     title: '项目创建与管理',
     nodes: [
-      { id: 'price-list-empty', label: '价目表 · 空态', screen: 'screen-p-list' },
-      { id: 'price-list-filled', label: '价目表 · 有数据', screen: 'screen-p-list' },
+      { id: 'price-list-empty', label: '项目表 · 空态', screen: 'screen-p-list' },
+      { id: 'price-list-filled', label: '项目表 · 有数据', screen: 'screen-p-list' },
       { id: 'price-add', label: '新增项目 · 空表单', screen: 'screen-p-add' },
       { id: 'price-edit-normal', label: '项目详情 · 普通', screen: 'screen-p-edit' },
       { id: 'price-edit-bound', label: '项目详情 · 绑卡锁定', screen: 'screen-p-edit' },
@@ -10552,6 +10543,10 @@ function wireProjPickRowMain(container, mode) {
 
 function pinTagHtml() {
   return `<button type="button" class="pin-tag" title="取消置顶" aria-label="取消置顶"><svg class="pin-tag__icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v8l-2 2v2h5v6h2v-6h5v-2l-2-2z"/></svg></button>`;
+}
+
+function boundTagHtml() {
+  return `<span class="bound-tag" title="已绑卡" aria-label="已绑卡"><svg class="bound-tag__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 10h19" stroke="currentColor" stroke-width="1.6"/><path d="M6 14.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>`;
 }
 
 function unpinCatalogProject(proj) {
