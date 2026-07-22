@@ -36,6 +36,8 @@ tr:nth-child(even) td{background:#fafbfc}
 .article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
 .article td img{max-width:160px;margin:6px 0}
 .article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
+.mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
+.mermaid svg{max-width:100%;height:auto}
 </style>
 </head>
 <body>
@@ -59,7 +61,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.2</td>
+<td>v1.3</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -392,6 +394,32 @@ tr:nth-child(even) td{background:#fafbfc}
 <blockquote>
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
 </blockquote>
+<h2>3.0 页面流（示意）</h2>
+<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（见模块 6）。</p>
+<h3>建卡主链</h3>
+<div class="mermaid">flowchart LR
+  L[会员卡列表] --&gt;|添加会员卡| S1[Step1 基本信息]
+  S1 --&gt;|下一步| S2[Step2 权益组合]
+  S2 --&gt;|添加项目权益| P[项目权益页]
+  P --&gt;|确定| S2
+  S2 --&gt;|添加折扣权益| D[折扣权益页]
+  D --&gt;|确定| S2
+  S2 --&gt;|下一步| S3[Step3 用卡策略]
+  S3 --&gt;|保存| OK[创建成功]
+  OK --&gt;|返回列表| L
+  OK -.-&gt;|立即办卡| M[[选择会员 Sheet]]</div>
+<h3>运营主链</h3>
+<div class="mermaid">flowchart LR
+  L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
+  DET --&gt;|编辑·无持卡| S1[Step1…三步]
+  DET --&gt;|复制建卡| S1
+  DET --&gt;|下架| OFF[[下架确认]]
+  OFF --&gt;|确认| L
+  DET --&gt;|重新上架·已下架| ON[[上架确认]]
+  ON --&gt;|确认| L
+  L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
+  DET --&gt;|办卡/退卡| M</div>
+<p>说明：选择会员后「去结账」进入开单结账；退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架等见模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架）
  ├─ 添加/编辑/复制 · Step1 基本信息
@@ -1608,5 +1636,27 @@ tr:nth-child(even) td{background:#fafbfc}
 </ul>
 <p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
+
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  if (!window.mermaid) return;
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#fff5f6',
+      primaryBorderColor: '#F32F41',
+      primaryTextColor: '#1f2329',
+      secondaryColor: '#f2f3f5',
+      tertiaryColor: '#ffffff',
+      lineColor: '#8f959e',
+      fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif'
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
