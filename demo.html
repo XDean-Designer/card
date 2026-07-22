@@ -1065,14 +1065,27 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .proj-switch input:checked + .proj-switch__track::after { transform: translateX(18px); }
 .picker-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--brand); flex-shrink: 0; cursor: pointer; }
-.balance-product-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EBEBEB; }
-.balance-product-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; }
-.balance-product-check input { width: 18px; height: 18px; accent-color: var(--brand); margin: 0; cursor: pointer; }
-.balance-product-check input:disabled { cursor: not-allowed; opacity: .45; }
-.balance-product-hint { display: block; margin-top: 6px; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
-.price-catalog-tabs { flex-shrink: 0; }
+.balance-product-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EBEBEB; align-items: flex-end; gap: 12px; }
+.balance-product-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; flex-shrink: 0; line-height: 1.4; }
+.balance-product-check input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; cursor: pointer; flex-shrink: 0;
+  border: 1.5px solid #C8C9CC; border-radius: 3px; background: #fff;
+}
+.balance-product-check input[type="checkbox"]:checked {
+  background: var(--brand) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1.5 5.5L4.5 8.5L10.5 1.5'/%3E%3C/svg%3E") center/11px 9px no-repeat;
+  border-color: var(--brand);
+}
+.balance-product-check input[type="checkbox"]:disabled { cursor: not-allowed; opacity: .45; }
+.balance-product-hint { flex: 1; min-width: 0; margin-top: 0; font-size: 12px; color: var(--text-sec); line-height: 1.5; text-align: right; }
+.price-catalog-tabs { flex-shrink: 0; overflow: hidden; border-bottom: 1px solid var(--bg-page); }
+.price-catalog-tabs .page-tabs__item.on::after { z-index: 1; }
 .table-card.is-product-tab .table-head__cell[data-col-duration],
 .table-card.is-product-tab .table-row .dur { display: none; }
+/* 产品 Tab 隐藏时长列后改为三列，避免右侧空档 */
+.table-card.is-product-tab .table-head,
+.table-card.is-product-tab .table-row {
+  grid-template-columns: minmax(0, 1fr) 72px 48px;
+}
 .audience-picker-hint { font-size: 12px; color: var(--text-sec); padding: 8px 0 4px; line-height: 1.55; border-bottom: 1px solid var(--bg-page); margin-bottom: 2px; }
 .audience-option-row { display: flex; align-items: center; gap: 6px; position: relative; }
 .audience-option-row .audience-option-item { flex: 1; min-width: 0; margin: 0; border-bottom: none; }
@@ -1912,12 +1925,19 @@ html.prd-capture .phone { border: none; }
   margin: 8px 0 0; min-height: 16px;
 }
 .proj-list-meta { font-size: 11px; color: var(--text-sec); line-height: 1.4; flex-shrink: 0; }
-.table-card { margin: 12px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; }
+.table-card { margin: 12px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; isolation: isolate; position: relative; }
+#projProjectTable { overflow: hidden; background: var(--card); }
 .table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 52px 72px 48px; column-gap: 10px; padding-left: 16px; padding-right: 12px; }
 .table-row-swipe { position: relative; overflow: hidden; background: var(--card); }
 .table-row-swipe:last-child .table-row::after { display: none; }
 .table-row-actions {
   position: absolute; top: 0; right: 0; bottom: 0; display: flex; align-items: stretch; z-index: 0;
+  pointer-events: none;
+}
+.table-row-swipe.is-open .table-row-actions,
+.table-row-swipe.is-swiping .table-row-actions { pointer-events: auto; }
+.table-row-swipe:not(.is-open):not(.is-swiping) .table-row-actions {
+  clip-path: inset(0 100% 0 0);
 }
 .table-row-actions button {
   width: 68px; border: none; padding: 0 6px; color: #fff; font-size: 13px; font-weight: 500;
@@ -1930,6 +1950,7 @@ html.prd-capture .phone { border: none; }
   position: relative; z-index: 1; align-items: center; min-height: 52px; padding-top: 10px; padding-bottom: 10px;
   cursor: pointer; font-size: 14px; touch-action: pan-y; background: var(--card);
   transition: transform .2s ease; will-change: transform;
+  box-shadow: 8px 0 0 var(--card);
 }
 /* 行间划线：左右各 16px 缩进，比表头底边（--border）更淡 */
 .table-row::after {
@@ -5028,9 +5049,9 @@ function syncPriceCatalogTabs() {
   const search = document.getElementById('projSearchInput');
   if (search) search.placeholder = tab === 'product' ? '搜索产品名称' : '搜索项目名称';
   const addBtn = document.getElementById('btnProjGoAdd');
-  if (addBtn) addBtn.textContent = tab === 'product' ? '+ 添加产品' : '+ 添加项目';
+  if (addBtn) addBtn.textContent = tab === 'product' ? '+ 新增产品' : '+ 添加项目';
   const emptyAdd = document.getElementById('btnProjEmptyAdd');
-  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
+  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '新增产品' : '添加项目';
 }
 
 function syncBalanceCanBuyProductsField() {
@@ -8166,9 +8187,9 @@ function openCatalogDeleteConfirm(projId) {
 }
 
 function closeAllCatalogSwipes(exceptWrap) {
-  document.querySelectorAll('.table-row-swipe.is-open').forEach(wrap => {
+  document.querySelectorAll('.table-row-swipe.is-open, .table-row-swipe.is-swiping').forEach(wrap => {
     if (exceptWrap && wrap === exceptWrap) return;
-    wrap.classList.remove('is-open');
+    wrap.classList.remove('is-open', 'is-swiping');
     const row = wrap.querySelector('.table-row');
     if (row) row.style.transform = '';
   });
@@ -8313,6 +8334,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
 
     const settleSwipe = x => {
       row.style.transition = '';
+      wrap.classList.remove('is-swiping');
       const open = x < -openWidth / 2;
       if (open) {
         closeAllCatalogSwipes(wrap);
@@ -8356,6 +8378,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
         if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > CATALOG_SWIPE_MOVE_PX) {
           clearPress();
           swiping = true;
+          wrap.classList.add('is-swiping');
           swipeStartX = e.clientX;
           swipeBaseX = wrap.classList.contains('is-open') ? -openWidth : 0;
           closeAllCatalogSwipes(wrap);
@@ -8484,16 +8507,23 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
 
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', price: '', onSale: true, pinned: false, category: '产品' };
+    return { kind: 'product', name: '', price: '', onSale: true, pinned: false, category: '产品', hasImage: false, imageExpanded: false };
   }
   return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projProjectToForm(p) {
   if (getCatalogProducts().some(x => x.id === p.id)) {
-    return { kind: 'product', name: p.name, price: String(p.price), onSale: p.onSale, pinned: p.pinned, category: p.category || '产品' };
+    return { kind: 'product', name: p.name, price: String(p.price), onSale: p.onSale, pinned: p.pinned, category: p.category || '产品', hasImage: !!p.hasImage, imageExpanded: false };
   }
   return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
+}
+
+function projImageUploadSectionHtml(s, imageLabel) {
+  return `<div class="proj-form-row col" style="padding:0">
+    <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">${imageLabel}</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
+    <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
+  </div>`;
 }
 
 function projFormRowAttrs(extraClass, locked, toast) {
@@ -8543,6 +8573,7 @@ function projRenderForm(container, mode) {
   if (!container || !s) return;
   const nameLabel = isProduct ? '产品名称' : '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
+  const imageLabel = isProduct ? '产品图片（选填）' : '项目图片（选填）';
   container.innerHTML = `
     <div class="proj-form-stack">
       <div>
@@ -8566,16 +8597,13 @@ function projRenderForm(container, mode) {
           ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
         </div>
       </div>
-      ${isProduct ? `<div><div class="proj-section-label">高级</div><div class="proj-form-section"><div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div></div></div>` : `<div>
+      <div>
         <div class="proj-section-label">高级</div>
         <div class="proj-form-section">
-          <div class="proj-form-row col" style="padding:0">
-            <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">项目图片（选填）</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
-            <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
-          </div>
+          ${projImageUploadSectionHtml(s, imageLabel)}
           <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
         </div>
-      </div>`}
+      </div>
     </div>`;
   projBindFormEvents(container, { bound, offSale, isProduct });
 }
@@ -8613,24 +8641,22 @@ function projBindFormEvents(container, lockCtx) {
     }
   }
   wireProjServiceDurationInput(container);
-  if (!isProduct) {
-    container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
-      state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
-      container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
-      container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
-    });
-    container.querySelector('#projImgUpload')?.addEventListener('click', e => {
-      e.stopPropagation();
-      state.projFormState.hasImage = !state.projFormState.hasImage;
-      const el = container.querySelector('#projImgUpload');
-      if (!el) return;
-      el.classList.toggle('has-img', state.projFormState.hasImage);
-      el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
-      const sub = container.querySelector('#projImgCollapse .sub');
-      if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
-      showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
-    });
-  }
+  container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
+    state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
+    container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
+    container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
+  });
+  container.querySelector('#projImgUpload')?.addEventListener('click', e => {
+    e.stopPropagation();
+    state.projFormState.hasImage = !state.projFormState.hasImage;
+    const el = container.querySelector('#projImgUpload');
+    if (!el) return;
+    el.classList.toggle('has-img', state.projFormState.hasImage);
+    el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
+    const sub = container.querySelector('#projImgCollapse .sub');
+    if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
+    showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
+  });
 }
 
 function projOpenAdd() {
@@ -8707,6 +8733,7 @@ function projSaveForm() {
     onSale: state.projFormState.onSale,
     pinned: state.projFormState.pinned,
     category: state.projFormState.category || '产品',
+    hasImage: state.projFormState.hasImage,
   } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
@@ -8914,8 +8941,10 @@ const FLOW_MAP_GROUPS = [
     title: '项目创建与管理',
     nodes: [
       { id: 'price-list-empty', label: '价目表 · 空态', screen: 'screen-p-list' },
-      { id: 'price-list-filled', label: '价目表 · 有数据', screen: 'screen-p-list' },
+      { id: 'price-list-filled', label: '价目表 · 项目', screen: 'screen-p-list' },
+      { id: 'price-list-product', label: '价目表 · 产品', screen: 'screen-p-list' },
       { id: 'price-add', label: '新增项目 · 空表单', screen: 'screen-p-add' },
+      { id: 'price-add-product', label: '新增产品 · 空表单', screen: 'screen-p-add' },
       { id: 'price-edit-normal', label: '项目详情 · 普通', screen: 'screen-p-edit' },
       { id: 'price-edit-bound', label: '项目详情 · 绑卡锁定', screen: 'screen-p-edit' },
       { id: 'price-edit-off-sale', label: '项目详情 · 已下架', screen: 'screen-p-edit' },
@@ -9001,11 +9030,28 @@ const FLOW_NAV = {
   },
   'price-list-filled'() {
     ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+  },
+  'price-list-product'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'product';
+    syncPriceCatalogTabs();
     projRenderList();
     projShowScreen('screen-p-list');
   },
   'price-add'() {
     ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projOpenAdd();
+  },
+  'price-add-product'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'product';
+    syncPriceCatalogTabs();
     projOpenAdd();
   },
   'price-edit-normal'() {
@@ -9083,9 +9129,14 @@ function syncFlowMapFromAppState() {
   } else if (visibleScreen === 'screen2') id = 'pick-projects';
   else if (visibleScreen === 'screen4') id = 'pick-discount-list';
   else if (visibleScreen === 'screen-p-list') {
-    id = state.demoListMode === 'filled' && getCatalogProjects().length ? 'price-list-filled' : 'price-list-empty';
-  } else if (visibleScreen === 'screen-p-add') id = 'price-add';
-  else if (visibleScreen === 'screen-p-edit' && state.projEditingId) {
+    if (isProductCatalogTab()) {
+      id = getCatalogProducts().length ? 'price-list-product' : 'price-list-empty';
+    } else {
+      id = state.demoListMode === 'filled' && getCatalogProjects().length ? 'price-list-filled' : 'price-list-empty';
+    }
+  } else if (visibleScreen === 'screen-p-add') {
+    id = state.projFormKind === 'product' ? 'price-add-product' : 'price-add';
+  } else if (visibleScreen === 'screen-p-edit' && state.projEditingId) {
     const p = getCatalogProjects().find(x => x.id === state.projEditingId);
     if (p?.boundToCard) id = 'price-edit-bound';
     else if (p && !p.onSale) id = 'price-edit-off-sale';
