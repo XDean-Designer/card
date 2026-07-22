@@ -687,6 +687,33 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .issue-member-row__phone { font-size: 12px; color: var(--text-sec); margin-top: 2px; display: block; line-height: 1.35; }
 .issue-member-item { align-items: center; cursor: pointer; }
+.issue-member-item input[type="radio"] { width: 18px; height: 18px; accent-color: var(--brand); margin: 0; flex-shrink: 0; cursor: pointer; }
+.picker-foot .btn-main:disabled { opacity: .45; cursor: not-allowed; }
+.success-card-face { margin: 0 16px 12px; }
+.success-card-face .member-card-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.success-issue-card-slot {
+  width: calc(100% - 32px);
+  margin: 0 16px 24px;
+  text-align: left;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.success-issue-card-slot.hidden { display: none; }
+.success-issue-card-slot .member-card-item { cursor: default; pointer-events: none; flex-shrink: 0; }
+.success-issue-desc {
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #7f7f7f;
+  text-align: center;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+.success-issue-desc.hidden { display: none; }
+.success-flow-btn.hidden { display: none; }
 .balance-face-summary {
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px 0 2px; margin-top: 2px;
@@ -1038,6 +1065,14 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .proj-switch input:checked + .proj-switch__track::after { transform: translateX(18px); }
 .picker-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--brand); flex-shrink: 0; cursor: pointer; }
+.balance-product-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EBEBEB; }
+.balance-product-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; }
+.balance-product-check input { width: 18px; height: 18px; accent-color: var(--brand); margin: 0; cursor: pointer; }
+.balance-product-check input:disabled { cursor: not-allowed; opacity: .45; }
+.balance-product-hint { display: block; margin-top: 6px; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+.price-catalog-tabs { flex-shrink: 0; }
+.table-card.is-product-tab .table-head__cell[data-col-duration],
+.table-card.is-product-tab .table-row .dur { display: none; }
 .audience-picker-hint { font-size: 12px; color: var(--text-sec); padding: 8px 0 4px; line-height: 1.55; border-bottom: 1px solid var(--bg-page); margin-bottom: 2px; }
 .audience-option-row { display: flex; align-items: center; gap: 6px; position: relative; }
 .audience-option-row .audience-option-item { flex: 1; min-width: 0; margin: 0; border-bottom: none; }
@@ -1851,6 +1886,17 @@ html.figma-capture-step2 .page-body { overflow: visible; flex: none; min-height:
 html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
 html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
 html.figma-capture-step2 .bottom-bar { position: static; }
+
+/* PRD shot / deep-link capture: ?flow=<id>&capture=1 — phone frame only, fixed 390×844 */
+html.prd-capture { --phone-scale: 1; }
+html.prd-capture body { background: #fff; margin: 0; }
+html.prd-capture .shell { max-width: none; margin: 0; padding: 0; display: block; }
+html.prd-capture .toolbar,
+html.prd-capture .phone-label,
+html.prd-capture .doc-link-stack { display: none !important; }
+html.prd-capture .phone-scale-slot { width: var(--phone-w); height: var(--phone-h); overflow: hidden; }
+html.prd-capture .phone-wrap { transform: none; }
+html.prd-capture .phone { border: none; }
 
 /* Price catalog screens */
 .table-card.hidden { display: none; }
@@ -2932,7 +2978,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .success-card {
   position: relative; z-index: 1;
-  margin: 20px 16px 24px; padding: 36px 16px 20px; border-radius: 16px;
+  margin: 20px 16px 16px; padding: 36px 16px 20px; border-radius: 16px;
   background: rgba(255,255,255,.6); overflow: hidden;
   box-sizing: border-box;
 }
@@ -3213,20 +3259,154 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   height: 84px;
 }
 .customer-card--guest .customer-card__row { gap: 10px; height: auto; }
+.customer-card__avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+}
+.customer-card__avatar-wrap .customer-card__avatar {
+  width: 44px;
+  height: 44px;
+  border: none;
+}
+.customer-card__gender-switch {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+.customer-card__gender-switch img { width: 20px; height: 20px; display: block; }
+.customer-card__guest-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #751616;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.customer-card--guest.is-gender-open .customer-card__guest-label { display: none; }
 .customer-card__avatars { display: flex; align-items: center; flex-shrink: 0; }
-.customer-card__avatars .customer-card__avatar { margin-left: -12px; border: 2px solid #fff; }
-.customer-card__avatars .customer-card__avatar:first-child { margin-left: 0; z-index: 1; }
+.customer-card__avatar-pick {
+  border: none; background: none; padding: 0; cursor: pointer; border-radius: 50%;
+  flex-shrink: 0; line-height: 0; position: relative; z-index: 1;
+}
+.customer-card__avatars .customer-card__avatar-pick + .customer-card__avatar-pick { margin-left: -12px; }
+.customer-card__avatars .customer-card__avatar {
+  width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff;
+  display: block; object-fit: cover;
+}
+.customer-card__avatar-pick.is-gray .customer-card__avatar { filter: grayscale(1); }
+.customer-card__avatar-pick.is-on { z-index: 2; }
+.customer-card__avatar-pick.is-on .customer-card__avatar { filter: none; }
 .customer-card__gender { display: flex; gap: 14px; flex: 1; min-width: 0; }
+.customer-card__gender.is-hidden { display: none; }
 .customer-card__gender-btn {
   border: none; background: none; padding: 0; cursor: pointer; font-family: inherit;
   font-size: 14px; font-weight: 500; color: rgba(117,22,22,.45); text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 4px; white-space: nowrap; flex-shrink: 0;
 }
 .customer-card__gender-btn.is-on { color: #751616; }
 .customer-card__change {
   border: none; background: rgba(255,255,255,.8); color: var(--brand); font-size: 13px; font-weight: 500;
   height: 32px; padding: 0 14px; border-radius: 24px; cursor: pointer; font-family: inherit; flex-shrink: 0;
 }
+.customer-card__guest-actions {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto;
+}
+.customer-card__record-icon {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.8); color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; flex-shrink: 0;
+}
+.customer-card__record-icon svg { width: 16px; height: 16px; display: block; }
+.guest-record-sheet {
+  overflow: hidden;
+  background: #fff;
+}
+.guest-record-sheet .picker-head {
+  padding: 20px 20px 0;
+  border-bottom: none;
+  box-shadow: none;
+}
+.guest-record-sheet .guest-record-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px calc(20px + var(--safe-bottom, 0px));
+  flex-shrink: 0;
+  overflow: visible;
+}
+.guest-record-field { display: flex; flex-direction: column; gap: 8px; }
+.guest-record-field__label { font-size: 14px; font-weight: 500; color: var(--text); }
+.guest-record-field input {
+  width: 100%; height: 44px; border: 1px solid var(--border, #eee); border-radius: 8px;
+  padding: 0 12px; font-size: 15px; font-family: inherit; box-sizing: border-box;
+  background: #fff; color: var(--text);
+}
+.guest-record-field input::placeholder { color: var(--text-sec); }
+.guest-record-segment {
+  position: relative; display: flex; align-items: stretch;
+  height: 44px; border-radius: 22px; background: #f3f3f3;
+  padding: 3px; box-sizing: border-box; overflow: hidden;
+}
+.guest-record-segment__thumb {
+  position: absolute; top: 3px; left: 3px;
+  width: calc(50% - 3px); height: calc(100% - 6px);
+  border-radius: 19px; background: #4A7BF4;
+  transition: transform 200ms ease, background-color 200ms ease, opacity 200ms ease;
+  z-index: 0; pointer-events: none;
+}
+.guest-record-segment.is-male .guest-record-segment__thumb {
+  transform: translateX(0); background: #4A7BF4; opacity: 1;
+}
+.guest-record-segment.is-female .guest-record-segment__thumb {
+  transform: translateX(100%); background: #F56C9B; opacity: 1;
+}
+.guest-record-segment:not(.is-male):not(.is-female) .guest-record-segment__thumb { opacity: 0; }
+.guest-record-segment__opt {
+  flex: 1; border: none; background: transparent; z-index: 1;
+  font-size: 15px; font-weight: 500; cursor: pointer; color: #666;
+  font-family: inherit; padding: 0;
+  transition: color 200ms ease, transform 200ms ease;
+}
+.guest-record-segment.is-male .guest-record-segment__opt[data-record-gender="male"],
+.guest-record-segment.is-female .guest-record-segment__opt[data-record-gender="female"] {
+  color: #fff;
+}
+.guest-record-segment__opt:active { transform: scale(0.98); }
+.guest-record-preview {
+  display: flex; align-items: center; gap: 6px;
+  min-height: 20px; font-size: 13px; color: var(--text-sec);
+}
+.guest-record-preview.hidden { display: none; }
+.guest-record-preview__name {
+  font-size: 15px; font-weight: 500; color: #751616;
+}
+.guest-record-actions {
+  display: flex; align-items: stretch; gap: 12px;
+  margin-top: 28px;
+  padding-top: 0;
+}
+.guest-record-actions .btn-main {
+  flex: 1 1 0; width: auto; min-width: 0; max-width: none; margin: 0;
+  height: 48px; min-height: 48px; border-radius: 12px;
+}
+#guestRecordMask.picker-mask { z-index: 35; }
 .member-card-panel__vip-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .member-card-panel__benefits { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .benefit-chip {
@@ -3791,14 +3971,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         PRD · 会员卡管理
         <span class="doc-link-entry__hint">排版预览 · 开发用 Markdown 可在预览页下载</span>
       </a>
-      <a class="doc-link-entry" href="logic.html" target="_blank" rel="noopener noreferrer">
-        逻辑梳理文档
-        <span class="doc-link-entry__hint">Q1–Q4 规则与场景算例 · 在新标签页打开</span>
-      </a>
-      <a class="doc-link-entry" href="prd-review.html" target="_blank" rel="noopener noreferrer">
-        PRD 评审页
-        <span class="doc-link-entry__hint">可视化范围与退卡对照 · 投屏用</span>
-      </a>
     </div>
     <div class="demo-tool-panel">
       <h3>演示工具</h3>
@@ -3934,6 +4106,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                           <span class="suffix">元</span>
                         </div>
                       </div>
+                    </div>
+                    <div class="form-row balance-product-row" id="balanceProductRow">
+                      <label class="balance-product-check">
+                        <input type="checkbox" id="fBalanceCanBuyProducts">
+                        <span>可购买产品</span>
+                      </label>
+                      <span class="balance-product-hint" id="balanceProductHint">开启后面值可用于购买价目表中的产品；需先在价目表维护产品</span>
                     </div>
                   </div>
                   </div>
@@ -4099,7 +4278,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromPicker" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title" id="projectPickerTitle">添加项目权益</span>
-            <button type="button" class="title-link" id="btnManagePriceCatalog">管理项目表</button>
+            <button type="button" class="title-link" id="btnManagePriceCatalog">管理价目表</button>
           </div>
           <div class="page-body page-body--pick">
             <div class="pick-section-card">
@@ -4126,7 +4305,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
             <span class="title" id="discountPickerTitle">添加折扣权益</span>
-            <button type="button" class="title-link" id="btnManagePriceCatalogDisc">管理项目表</button>
+            <button type="button" class="title-link" id="btnManagePriceCatalogDisc">管理价目表</button>
           </div>
           <div class="page-body page-body--pick">
             <div class="pick-section-card">
@@ -4152,8 +4331,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <div class="screen hidden" id="screen-p-list">
           <header class="page-title-bar">
             <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <span class="title">项目表</span>
+            <span class="title">价目表</span>
           </header>
+          <div class="page-tabs price-catalog-tabs" id="priceCatalogTabs" role="tablist">
+            <button type="button" class="page-tabs__item on" data-price-catalog-tab="project" role="tab" aria-selected="true">项目</button>
+            <button type="button" class="page-tabs__item" data-price-catalog-tab="product" role="tab" aria-selected="false">产品</button>
+          </div>
           <div class="proj-list-toolbar">
             <div class="proj-search-row">
               <div class="proj-search-box">
@@ -4170,7 +4353,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="table-card" id="projTableCard">
               <div class="table-head" id="projTableHead">
                 <button type="button" class="table-head__cell" data-col-sort="name"><span class="table-head__inner">名称</span></button>
-                <button type="button" class="table-head__cell is-center" data-col-sort="duration"><span class="table-head__inner">时长</span></button>
+                <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长</span></button>
                 <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格</span></button>
                 <button type="button" class="table-head__cell is-center" data-col-sort="sale"><span class="table-head__inner">状态</span></button>
               </div>
@@ -4376,14 +4559,19 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="picker-search"><input type="search" id="issueMemberSearch" placeholder="搜索姓名或手机" /></div>
             <div class="picker-list" id="issueMemberList"></div>
             <div class="picker-foot picker-foot--issue-new" id="issuePickerFootNew">
-              <button type="button" class="btn-main" id="btnIssueMemberOk">确定</button>
+              <button type="button" class="btn-main" id="btnIssueMemberOk" disabled>去结账</button>
             </div>
           </div>
         </div>
           <!-- ==== BILLING MODULE SCREENS (embedded) ==== -->
-<!-- 选客 -->
+<!-- 选择顾客（会员列表，非开单入口） -->
           <div id="screen-pick" class="screen hidden">
-            <div class="page-title-bar page-title-bar--no-back"><div class="title">更换顾客</div></div>
+            <div class="page-title-bar">
+              <button type="button" class="back" id="pickBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">选择顾客</div>
+            </div>
             <div class="page-body pick-page">
               <div class="search-bar">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
@@ -4393,13 +4581,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="pick-holds-entry" id="pickHoldsEntry" hidden>
                 <button type="button" id="btnOpenHolds">取单（0）</button>
               </div>
-              <button type="button" class="guest-btn" id="btnGuest">
-                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <circle cx="9" cy="5.5" r="3" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M3 15.5c0-2.9 2.7-5.25 6-5.25s6 2.35 6 5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                散客开单
-              </button>
               <div class="pick-list-wrap">
                 <div id="customerList"></div>
                 <nav class="pick-index" id="pickIndex" aria-label="字母快速定位"></nav>
@@ -4411,9 +4592,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <!-- 开单台 -->
           <div id="screen-bill" class="screen hidden">
             <div class="page-title-bar">
-              <button type="button" class="back" id="billBack" aria-label="返回">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
+              <span class="back" id="billBack" aria-hidden="true" style="visibility:hidden;pointer-events:none"></span>
               <div class="title">开单结账</div>
               <button type="button" class="action" id="btnBillDate" aria-label="开单日期">
                 <span>2026.7.18</span>
@@ -4583,11 +4762,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                     <span class="success-check" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
                     </span>
-                    <span class="success-head__title">开单成功</span>
+                    <span class="success-head__title" id="successHeadTitle">开单成功</span>
                   </div>
+                  <p class="success-issue-desc hidden" id="successIssueDesc"></p>
                   <button type="button" class="success-flow-btn" id="btnViewFlow">查看流水</button>
                 </div>
                 <div class="success-card" id="successSummary"></div>
+                <div class="create-success-card-slot success-issue-card-slot hidden" id="successIssueCardSlot"></div>
               </div>
               <div class="success-foot">
                 <button type="button" class="btn-soft" id="btnSign">客户签字</button>
@@ -4614,6 +4795,43 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
 
+          <!-- 散客录入姓名/手机号 -->
+          <div id="guestRecordMask" class="picker-mask picker-mask--bottom" data-mask-close="guestRecordMask">
+            <div class="picker-sheet guest-record-sheet" role="dialog" aria-label="录入顾客信息">
+              <div class="picker-head picker-head--stack">
+                <div class="picker-head__title">录入顾客信息</div>
+                <button type="button" class="picker-head__close" data-close="guestRecordMask" aria-label="关闭">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="picker-body guest-record-body">
+                <div class="guest-record-field guest-record-gender">
+                  <span class="guest-record-field__label">性别</span>
+                  <div class="guest-record-segment" id="guestRecordSegment" role="radiogroup" aria-label="选择性别">
+                    <div class="guest-record-segment__thumb" aria-hidden="true"></div>
+                    <button type="button" class="guest-record-segment__opt" data-record-gender="male" role="radio" aria-checked="false">男</button>
+                    <button type="button" class="guest-record-segment__opt" data-record-gender="female" role="radio" aria-checked="false">女</button>
+                  </div>
+                  <div class="guest-record-preview hidden" id="guestRecordPreview">
+                    <span class="guest-record-preview__label">将显示为：</span>
+                    <span class="guest-record-preview__name" id="guestRecordPreviewName"></span>
+                  </div>
+                </div>
+                <label class="guest-record-field">
+                  <span class="guest-record-field__label">姓名</span>
+                  <input type="text" id="guestRecordName" maxlength="20" placeholder="请输入姓名" autocomplete="name">
+                </label>
+                <label class="guest-record-field">
+                  <span class="guest-record-field__label">手机号</span>
+                  <input type="tel" id="guestRecordPhone" maxlength="11" placeholder="选填" inputmode="numeric" autocomplete="tel">
+                </label>
+                <div class="guest-record-actions">
+                  <button type="button" class="btn-main secondary" data-close="guestRecordMask">取消</button>
+                  <button type="button" class="btn-main" id="btnGuestRecordSave">保存</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- 添加卡 · Figma 1:3244 -->
           <div id="screen-add-card" class="screen hidden">
@@ -4733,7 +4951,7 @@ function expandLessLabel() {
 }
 const PROJ_CHEV_ICON = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const PROJ_EDIT_NOTICE = {
-  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在项目表及顾客端同步生效，请确认价格与时长无误' },
+  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
   bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片、置顶外不可修改，且不可删除' },
   'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
 };
@@ -4768,6 +4986,69 @@ function seedProjectCatalog() {
     { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
     { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, pinned: true, hasImage: false, category: '烫染' },
   ].map(p => ({ ...p, boundToCard: false, boundTemplateIds: [], boundTemplateId: null, boundTemplateNames: [] }));
+}
+
+function seedProductCatalog() {
+  return [
+    { id: 'pd1', name: '剑琅修护洗发水 500ml', price: 128, onSale: true, pinned: false, category: '洗护' },
+    { id: 'pd2', name: '剑琅滋养护发素 500ml', price: 98, onSale: true, pinned: false, category: '洗护' },
+    { id: 'pd3', name: '剑琅头皮护理精华 100ml', price: 168, onSale: true, pinned: false, category: '护理' },
+    { id: 'pd4', name: '剑琅造型发蜡 80g', price: 88, onSale: true, pinned: false, category: '造型' },
+    { id: 'pd5', name: '剑琅染发护色套装', price: 198, onSale: true, pinned: false, category: '烫染' },
+    { id: 'pd6', name: '剑琅免洗喷雾 150ml', price: 68, onSale: true, pinned: false, category: '护理' },
+    { id: 'pd7', name: '剑琅儿童温和洗发水 300ml', price: 78, onSale: false, pinned: false, category: '洗护' },
+  ].map(p => ({ ...p, boundToCard: false, boundTemplateIds: [], boundTemplateId: null, boundTemplateNames: [] }));
+}
+
+function isProductCatalogTab() { return state.priceCatalogTab === 'product'; }
+
+function getCatalogProducts() { return state.productCatalog || []; }
+
+function getActivePriceCatalog() {
+  return isProductCatalogTab() ? getCatalogProducts() : getCatalogProjects();
+}
+
+function mutateActivePriceCatalog(mutator) {
+  if (isProductCatalogTab()) mutator(state.productCatalog);
+  else mutator(state.projectCatalog);
+}
+
+function findCatalogItemById(id) {
+  return getCatalogProjects().find(x => x.id === id) || getCatalogProducts().find(x => x.id === id);
+}
+
+function syncPriceCatalogTabs() {
+  const tab = state.priceCatalogTab || 'project';
+  document.querySelectorAll('[data-price-catalog-tab]').forEach(btn => {
+    const on = btn.dataset.priceCatalogTab === tab;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.getElementById('projTableCard')?.classList.toggle('is-product-tab', tab === 'product');
+  const search = document.getElementById('projSearchInput');
+  if (search) search.placeholder = tab === 'product' ? '搜索产品名称' : '搜索项目名称';
+  const addBtn = document.getElementById('btnProjGoAdd');
+  if (addBtn) addBtn.textContent = tab === 'product' ? '+ 添加产品' : '+ 添加项目';
+  const emptyAdd = document.getElementById('btnProjEmptyAdd');
+  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
+}
+
+function syncBalanceCanBuyProductsField() {
+  const el = document.getElementById('fBalanceCanBuyProducts');
+  const hint = document.getElementById('balanceProductHint');
+  if (!el) return;
+  const hasProducts = getCatalogProducts().length > 0;
+  el.disabled = !hasProducts;
+  el.checked = !!state.benefits.balanceCanBuyProducts && hasProducts;
+  if (hint) {
+    hint.textContent = hasProducts
+      ? '开启后面值可用于购买价目表中的产品'
+      : '请先在价目表 · 产品 Tab 维护产品后再开启';
+  }
+}
+
+function formatBalanceCanBuyProductsText(on) {
+  return on ? '可购买产品' : '不可购买产品';
 }
 
 function collectTemplateProjectRefs(templates) {
@@ -4814,17 +5095,18 @@ function compareCatalogPickerOrder(a, b) {
   if (ao !== bo) return ao - bo;
   return a.name.localeCompare(b.name, 'zh-CN');
 }
-function ensureCatalogSortOrder() {
-  const projects = getCatalogProjects();
+function ensureCatalogSortOrder(catalog) {
+  const projects = catalog || getCatalogProjects();
   if (!projects.some(p => p.sortOrder == null)) return;
   const pinned = projects.filter(p => p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
   const nonPinned = projects.filter(p => !p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
   pinned.forEach((p, i) => { p.sortOrder = i; });
   nonPinned.forEach((p, i) => { p.sortOrder = pinned.length + i; });
 }
-function nextCatalogSortOrder() {
-  ensureCatalogSortOrder();
-  const max = Math.max(-1, ...getCatalogProjects().map(p => p.sortOrder ?? 0));
+function nextCatalogSortOrder(catalog) {
+  const list = catalog || getActivePriceCatalog();
+  ensureCatalogSortOrder(list);
+  const max = Math.max(-1, ...list.map(p => p.sortOrder ?? 0));
   return max + 1;
 }
 function isCatalogProjectPinned(name) {
@@ -5515,7 +5797,7 @@ const QUICK_TEMPLATES = [
       recharge: '2000',
       giftAmount: '500',
       validityKey: '1y', validityMonths: 12,
-      benefits: { balance: true, timesOrValidity: true, projectDiscount: true },
+      benefits: { balance: true, timesOrValidity: true, projectDiscount: true, balanceCanBuyProducts: true },
       projectItems: [
         { id: 'demo_vip_wash', name: '洗剪吹', purchaseQty: 10, giftQty: 0, unlimited: false },
         { id: 'demo_vip_scalp', name: '头皮护理', purchaseQty: 3, giftQty: 0, unlimited: false },
@@ -5816,6 +6098,9 @@ const state = {
   returnAfterFlow: 'list',
   demoListMode: 'empty',
   projectCatalog: [],
+  productCatalog: [],
+  priceCatalogTab: 'project',
+  projFormKind: 'project',
   navStack: [],
   priceCatalogReturn: null,
   catalogActionProjId: null,
@@ -5825,7 +6110,7 @@ const state = {
   editingAudienceKey: null,
   saveInFlight: false,
   issueTargetTemplateId: null,
-  issueMemberSelectedIds: [],
+  issueMemberSelectedId: null,
   issuePickerTab: 'new',
   issuePickerHoldersOnly: false,
   listShelfTab: 'active',
@@ -7445,7 +7730,7 @@ function formatProjectItemsLine(items) {
 }
 
 function emptyBenefits() {
-  return { balance: false, timesOrValidity: false, projectDiscount: false };
+  return { balance: false, timesOrValidity: false, projectDiscount: false, balanceCanBuyProducts: false };
 }
 
 function genId() {
@@ -7736,15 +8021,17 @@ function projShowScreen(screenId) {
 }
 
 function projRenderList() {
+  syncPriceCatalogTabs();
+  const isProduct = isProductCatalogTab();
   const q = (document.getElementById('projSearchInput')?.value || '').trim().toLowerCase();
   let list = isCatalogColSortActive()
-    ? sortCatalogByActiveCol(getCatalogProjects())
-    : projSortCatalog(getCatalogProjects());
+    ? sortCatalogByActiveCol(getActivePriceCatalog())
+    : projSortCatalog(getActivePriceCatalog());
   if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
-  const total = getCatalogProjects().length;
+  const total = getActivePriceCatalog().length;
   const meta = document.getElementById('projListMeta');
   if (meta) {
-    meta.textContent = `共 ${total} 项`;
+    meta.textContent = isProduct ? `共 ${total} 个产品` : `共 ${total} 个项目`;
   }
   syncCatalogColSortHead();
   const tbody = document.getElementById('projProjectTable');
@@ -7759,9 +8046,9 @@ function projRenderList() {
   if (!list.length) {
     tableCard?.classList.toggle('hidden', !total);
     listEmpty?.classList.remove('hidden');
-    if (emptyTitle) emptyTitle.textContent = q ? '暂无匹配项目' : '暂无项目';
+    if (emptyTitle) emptyTitle.textContent = q ? (isProduct ? '暂无匹配产品' : '暂无匹配项目') : (isProduct ? '暂无产品' : '暂无项目');
     if (emptyHint) {
-      emptyHint.textContent = q ? '试试其他关键词，或清空搜索' : '添加后可在「选择项目」与办卡中使用';
+      emptyHint.textContent = q ? '试试其他关键词，或清空搜索' : (isProduct ? '添加后可在开单结账与面值购产品设置中使用' : '添加后可在「选择项目」与办卡中使用');
       emptyHint.classList.toggle('hidden', false);
     }
     emptyAdd?.classList.toggle('hidden', !!q);
@@ -7789,7 +8076,7 @@ function projRenderList() {
           ${p.boundToCard ? boundTagHtml() : ''}
           ${p.pinned ? pinTagHtml() : ''}
         </div>
-        <div class="dur">${p.duration}分</div>
+        <div class="dur">${isProduct ? '—' : `${p.duration}分`}</div>
         <div class="price">${projFormatPriceHtml(p.price)}</div>
         <div class="sale-status">${p.onSale ? '在售' : '已下架'}</div>
       </div>`;
@@ -7800,22 +8087,22 @@ function projRenderList() {
       btn.addEventListener('click', e => {
         e.stopPropagation();
         const act = btn.dataset.swipeAct;
-        const proj = state.projectCatalog.find(x => x.id === p.id);
-        if (!proj) return;
-        closeAllCatalogSwipes();
-        if (act === 'pin') {
-          if (pinCatalogProject(proj)) refreshAfterCatalogPinChange();
-        } else if (act === 'sale') {
-          if (toggleCatalogOnSale(proj)) refreshAfterCatalogPinChange();
-        } else if (act === 'delete') {
-          openCatalogDeleteConfirm(proj.id);
-        }
-      });
+        const proj = findCatalogItemById(p.id);
+      if (!proj) return;
+      closeAllCatalogSwipes();
+      if (act === 'pin') {
+        if (pinCatalogProject(proj)) refreshAfterCatalogPinChange();
+      } else if (act === 'sale') {
+        if (toggleCatalogOnSale(proj)) refreshAfterCatalogPinChange();
+      } else if (act === 'delete') {
+        openCatalogDeleteConfirm(proj.id);
+      }
     });
+  });
 
     row.querySelector('.pin-tag')?.addEventListener('click', e => {
       e.stopPropagation();
-      const proj = state.projectCatalog.find(x => x.id === p.id);
+      const proj = findCatalogItemById(p.id);
       if (!proj) return;
       if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
     });
@@ -7856,7 +8143,8 @@ function toggleCatalogOnSale(proj) {
 
 function pinCatalogProject(proj) {
   if (!proj || proj.pinned) return false;
-  getCatalogProjects().filter(p => p.pinned).forEach(p => {
+  const pool = getCatalogProducts().some(x => x.id === proj.id) ? getCatalogProducts() : getCatalogProjects();
+  pool.filter(p => p.pinned && p.id !== proj.id).forEach(p => {
     p.sortOrder = (p.sortOrder ?? 0) + 1;
   });
   proj.pinned = true;
@@ -7866,13 +8154,14 @@ function pinCatalogProject(proj) {
 }
 
 function openCatalogDeleteConfirm(projId) {
-  const p = getCatalogProjects().find(x => x.id === projId);
+  const p = findCatalogItemById(projId);
   if (!p) return;
   if (p.boundToCard) {
     showToast(PROJ_LOCK_TOAST.delete, true);
     return;
   }
   state.projEditingId = projId;
+  state.projFormKind = getCatalogProducts().some(x => x.id === projId) ? 'product' : 'project';
   document.getElementById('projDialogMask')?.classList.add('show');
 }
 
@@ -7886,7 +8175,7 @@ function closeAllCatalogSwipes(exceptWrap) {
 }
 
 function openCatalogRowActions(projId) {
-  const p = state.projectCatalog.find(x => x.id === projId);
+  const p = findCatalogItemById(projId);
   if (!p) return;
   state.catalogActionProjId = projId;
   const mask = document.getElementById('catalogRowActionMask');
@@ -7908,7 +8197,7 @@ function handleCatalogRowAction(act) {
   const id = state.catalogActionProjId;
   closeCatalogRowActions();
   if (!id || act === 'cancel') return;
-  const proj = state.projectCatalog.find(x => x.id === id);
+  const proj = findCatalogItemById(id);
   if (!proj) return;
   if (act === 'pin') {
     if (pinCatalogProject(proj)) refreshAfterCatalogPinChange();
@@ -7922,12 +8211,13 @@ function handleCatalogRowAction(act) {
 }
 
 function commitCatalogBucketOrder(tbody, bucket) {
+  const catalog = getActivePriceCatalog();
   const ids = [...tbody.querySelectorAll(`.table-row-swipe[data-sort-bucket="${bucket}"]`)]
     .map(r => r.dataset.projId)
     .filter(Boolean);
   let changed = false;
   ids.forEach((id, i) => {
-    const p = state.projectCatalog.find(x => x.id === id);
+    const p = catalog.find(x => x.id === id);
     if (!p) return;
     if (p.sortOrder !== i) {
       p.sortOrder = i;
@@ -8192,12 +8482,18 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
   });
 }
 
-function projDefaultForm() {
-  return { name: '', price: '', duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
+function projDefaultForm(kind = 'project') {
+  if (kind === 'product') {
+    return { kind: 'product', name: '', price: '', onSale: true, pinned: false, category: '产品' };
+  }
+  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projProjectToForm(p) {
-  return { name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
+  if (getCatalogProducts().some(x => x.id === p.id)) {
+    return { kind: 'product', name: p.name, price: String(p.price), onSale: p.onSale, pinned: p.pinned, category: p.category || '产品' };
+  }
+  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projFormRowAttrs(extraClass, locked, toast) {
@@ -8235,8 +8531,9 @@ function projSyncBookableLock(container, bound) {
 }
 
 function projRenderForm(container, mode) {
-  const p = mode === 'edit' ? getCatalogProjects().find(x => x.id === state.projEditingId) : null;
-  const bound = !!p?.boundToCard;
+  const p = mode === 'edit' ? findCatalogItemById(state.projEditingId) : null;
+  const isProduct = state.projFormKind === 'product';
+  const bound = !!p?.boundToCard && !isProduct;
   const offSale = !!p && !p.onSale;
   const lockBookable = bound || offSale;
   const lockBookableToast = bound ? PROJ_LOCK_TOAST.bookable_bound : PROJ_LOCK_TOAST.bookable_offSale;
@@ -8244,30 +8541,32 @@ function projRenderForm(container, mode) {
   const reqCls = isEdit ? '' : ' req';
   const s = state.projFormState;
   if (!container || !s) return;
+  const nameLabel = isProduct ? '产品名称' : '项目名称';
+  const priceLabel = isProduct ? '产品价格' : '项目价格';
   container.innerHTML = `
     <div class="proj-form-stack">
       <div>
         <div class="proj-section-label">基本信息</div>
         <div class="proj-form-section">
-          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">项目名称</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
-          <div class="proj-form-row"><span class="label${reqCls}">项目价格</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="0" value="${escapeAttr(s.price)}"><span class="suffix">元</span></div></div>
-          <div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
+          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
+          <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="0" value="${escapeAttr(s.price)}"><span class="suffix">元</span></div></div>
+          ${isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
             units: PROJ_SERVICE_DURATION_UNITS,
             unitLabels: DURATION_UNIT_LABELS,
             includePermanent: false,
-          })}</div></div>
+          })}</div></div>`}
         </div>
       </div>
       <div>
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
           <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.onSale)}><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale" ${bound ? 'disabled' : ''}></button></div></div>
-          <div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>
+          ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
         </div>
       </div>
-      <div>
+      ${isProduct ? `<div><div class="proj-section-label">高级</div><div class="proj-form-section"><div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div></div></div>` : `<div>
         <div class="proj-section-label">高级</div>
         <div class="proj-form-section">
           <div class="proj-form-row col" style="padding:0">
@@ -8276,14 +8575,15 @@ function projRenderForm(container, mode) {
           </div>
           <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
         </div>
-      </div>
+      </div>`}
     </div>`;
-  projBindFormEvents(container, { bound, offSale });
+  projBindFormEvents(container, { bound, offSale, isProduct });
 }
 
 function projBindFormEvents(container, lockCtx) {
   const bound = !!lockCtx?.bound;
   const offSale = !!lockCtx?.offSale;
+  const isProduct = !!lockCtx?.isProduct;
   const bindSwitch = (id, key, opts = {}) => {
     const el = container.querySelector(id);
     if (!el || opts.disabled) return;
@@ -8297,9 +8597,11 @@ function projBindFormEvents(container, lockCtx) {
     disabled: bound,
     afterToggle: () => projSyncBookableLock(container, bound),
   });
-  bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
+  if (!isProduct) {
+    bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
+  }
   bindSwitch('#fProjPinned', 'pinned');
-  projWireLockToasts(container);
+  if (!isProduct) projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
@@ -8311,27 +8613,32 @@ function projBindFormEvents(container, lockCtx) {
     }
   }
   wireProjServiceDurationInput(container);
-  container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
-    state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
-    container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
-    container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
-  });
-  container.querySelector('#projImgUpload')?.addEventListener('click', e => {
-    e.stopPropagation();
-    state.projFormState.hasImage = !state.projFormState.hasImage;
-    const el = container.querySelector('#projImgUpload');
-    if (!el) return;
-    el.classList.toggle('has-img', state.projFormState.hasImage);
-    el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
-    const sub = container.querySelector('#projImgCollapse .sub');
-    if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
-    showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
-  });
+  if (!isProduct) {
+    container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
+      state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
+      container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
+      container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
+    });
+    container.querySelector('#projImgUpload')?.addEventListener('click', e => {
+      e.stopPropagation();
+      state.projFormState.hasImage = !state.projFormState.hasImage;
+      const el = container.querySelector('#projImgUpload');
+      if (!el) return;
+      el.classList.toggle('has-img', state.projFormState.hasImage);
+      el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
+      const sub = container.querySelector('#projImgCollapse .sub');
+      if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
+      showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
+    });
+  }
 }
 
 function projOpenAdd() {
   state.projEditingId = null;
-  state.projFormState = projDefaultForm();
+  state.projFormKind = isProductCatalogTab() ? 'product' : 'project';
+  state.projFormState = projDefaultForm(state.projFormKind);
+  const title = document.querySelector('#screen-p-add .title');
+  if (title) title.textContent = state.projFormKind === 'product' ? '新增产品' : '新增项目';
   projRenderForm(document.getElementById('projFormAddBody'), 'add');
   projShowScreen('screen-p-add');
 }
@@ -8354,13 +8661,20 @@ function projUpdateEditNotice(p) {
 
 function projOpenEdit(id) {
   state.projEditingId = id;
-  const p = getCatalogProjects().find(x => x.id === id);
+  const p = findCatalogItemById(id);
   if (!p) {
-    showToast('未找到该项目，请先切换「有数据」', true);
+    showToast(isProductCatalogTab() ? '未找到该产品，请先切换「有数据」' : '未找到该项目，请先切换「有数据」', true);
     return;
   }
+  state.projFormKind = getCatalogProducts().some(x => x.id === id) ? 'product' : 'project';
   state.projFormState = projProjectToForm(p);
-  projUpdateEditNotice(p);
+  if (state.projFormKind === 'product') {
+    document.getElementById('projEditNotice')?.classList.add('hidden');
+  } else {
+    projUpdateEditNotice(p);
+  }
+  const editTitle = document.querySelector('#screen-p-edit .title');
+  if (editTitle) editTitle.textContent = state.projFormKind === 'product' ? '产品详情' : '项目详情';
   const delBtn = document.getElementById('btnProjDelete');
   if (delBtn) delBtn.disabled = false;
   projRenderForm(document.getElementById('projFormEditBody'), 'edit');
@@ -8375,16 +8689,25 @@ function projValidateForm() {
     if (mins != null) state.projFormState.duration = mins;
   }
   const dur = parseInt(state.projFormState?.duration, 10) || 0;
-  if (!name) { showToast('请填写项目名称', true); return false; }
+  const isProduct = state.projFormKind === 'product';
+  if (!name) { showToast(isProduct ? '请填写产品名称' : '请填写项目名称', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
-  if (dur < 1) { showToast('请填写项目时长', true); return false; }
-  if (dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
+  if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
+  if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
 }
 
 function projSaveForm() {
   if (!projValidateForm()) return;
-  const payload = {
+  const isProduct = state.projFormKind === 'product';
+  const catalog = isProduct ? state.productCatalog : state.projectCatalog;
+  const payload = isProduct ? {
+    name: state.projFormState.name.trim(),
+    price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
+    onSale: state.projFormState.onSale,
+    pinned: state.projFormState.pinned,
+    category: state.projFormState.category || '产品',
+  } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
     duration: state.projFormState.duration,
@@ -8395,14 +8718,15 @@ function projSaveForm() {
     category: PROJ_DEFAULT_CATEGORY,
   };
   if (state.projEditingId) {
-    const idx = state.projectCatalog.findIndex(p => p.id === state.projEditingId);
-    if (idx >= 0) state.projectCatalog[idx] = { ...state.projectCatalog[idx], ...payload };
+    const idx = catalog.findIndex(p => p.id === state.projEditingId);
+    if (idx >= 0) catalog[idx] = { ...catalog[idx], ...payload };
     showToast('保存成功');
   } else {
-    state.projectCatalog.push({ id: projUid(), boundToCard: false, sortOrder: nextCatalogSortOrder(), ...payload });
-    showToast('项目已创建');
+    catalog.push({ id: projUid(), boundToCard: false, sortOrder: nextCatalogSortOrder(catalog), ...payload });
+    showToast(isProduct ? '产品已创建' : '项目已创建');
   }
   projRenderList();
+  if (isProduct) syncBalanceCanBuyProductsField();
   if (state.priceCatalogReturn === 'screen2') {
     renderProjectList();
     if (state.projBenefitDraft) renderProjectPickParams();
@@ -8414,7 +8738,7 @@ function projSaveForm() {
 }
 
 function projOpenDeleteDialog() {
-  const p = getCatalogProjects().find(x => x.id === state.projEditingId);
+  const p = findCatalogItemById(state.projEditingId);
   if (p?.boundToCard) { showToast(PROJ_LOCK_TOAST.delete, true); return; }
   document.getElementById('projDialogMask')?.classList.add('show');
 }
@@ -8459,6 +8783,18 @@ function projBackToList() {
 }
 
 function wireProjCatalogModule() {
+  document.querySelectorAll('[data-price-catalog-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.priceCatalogTab;
+      if (!tab || state.priceCatalogTab === tab) return;
+      state.priceCatalogTab = tab;
+      state.catalogColSort = { key: null, dir: null };
+      const search = document.getElementById('projSearchInput');
+      if (search) search.value = '';
+      closeAllCatalogSwipes();
+      projRenderList();
+    });
+  });
   document.getElementById('projSearchInput')?.addEventListener('input', projRenderList);
   document.getElementById('btnProjGoAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjEmptyAdd')?.addEventListener('click', projOpenAdd);
@@ -8478,7 +8814,13 @@ function wireProjCatalogModule() {
     if (e.target === document.getElementById('projDialogMask')) closeProjDeleteDialog();
   });
   document.getElementById('projDialogConfirm')?.addEventListener('click', () => {
-    state.projectCatalog = state.projectCatalog.filter(x => x.id !== state.projEditingId);
+    const isProduct = getCatalogProducts().some(x => x.id === state.projEditingId);
+    if (isProduct) {
+      state.productCatalog = state.productCatalog.filter(x => x.id !== state.projEditingId);
+      syncBalanceCanBuyProductsField();
+    } else {
+      state.projectCatalog = state.projectCatalog.filter(x => x.id !== state.projEditingId);
+    }
     closeProjDeleteDialog();
     refreshAfterCatalogPinChange();
     projShowScreen('screen-p-list');
@@ -8538,9 +8880,8 @@ function ensureDemoFilled() {
     state.demoListMode = 'filled';
     syncDemoStateButtons();
   }
-  if (!getCatalogProjects().length) {
-    state.projectCatalog = seedProjectCatalog();
-  }
+  if (!getCatalogProjects().length) state.projectCatalog = seedProjectCatalog();
+  if (!getCatalogProducts().length) state.productCatalog = seedProductCatalog();
   if (!state.templates.length) {
     state.templates = buildDemoTemplates();
     if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
@@ -8572,8 +8913,8 @@ const FLOW_MAP_GROUPS = [
   {
     title: '项目创建与管理',
     nodes: [
-      { id: 'price-list-empty', label: '项目表 · 空态', screen: 'screen-p-list' },
-      { id: 'price-list-filled', label: '项目表 · 有数据', screen: 'screen-p-list' },
+      { id: 'price-list-empty', label: '价目表 · 空态', screen: 'screen-p-list' },
+      { id: 'price-list-filled', label: '价目表 · 有数据', screen: 'screen-p-list' },
       { id: 'price-add', label: '新增项目 · 空表单', screen: 'screen-p-add' },
       { id: 'price-edit-normal', label: '项目详情 · 普通', screen: 'screen-p-edit' },
       { id: 'price-edit-bound', label: '项目详情 · 绑卡锁定', screen: 'screen-p-edit' },
@@ -8623,7 +8964,7 @@ const FLOW_NAV = {
   },
   'create-step2'() {
     closeAllFlowOverlays();
-    openCreateFlow();
+    seedCreateFormFromPreset();
     setStep(2);
   },
   'create-step3'() {
@@ -8704,6 +9045,7 @@ function resolveProjDemoTarget(kind) {
   if (!p) {
     /* 强制重建演示价目表 + 卡模板，避免「有目录无演示卡」或绑卡未同步导致入口失效 */
     state.projectCatalog = seedProjectCatalog();
+    state.productCatalog = seedProductCatalog();
     state.templates = buildDemoTemplates();
     if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
     state.demoListMode = 'filled';
@@ -9429,6 +9771,7 @@ function syncCardThemePreview() {
   if (state.benefits.balance) {
     giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
     faceAmount = formatGiftAmountInput(document.getElementById('fFaceValue')?.value ?? '');
+    state.benefits.balanceCanBuyProducts = !!document.getElementById('fBalanceCanBuyProducts')?.checked;
   }
   const draft = {
     recharge: document.getElementById('fRecharge')?.value.trim() || '',
@@ -9479,16 +9822,19 @@ function syncStep2UI() {
   setBenefitSwitchOn('benTimesOrValidity', state.benefits.timesOrValidity);
   setBenefitSwitchOn('benProjectDiscount', state.benefits.projectDiscount);
   applyBenefitVisibility();
+  syncBalanceCanBuyProductsField();
   renderProjectItemTags();
   syncMemberPriceDisplay();
   syncColorPreview();
 }
 
 function readStep2Benefits() {
+  const balance = document.getElementById('benBalance')?.classList.contains('on');
   return {
-    balance: document.getElementById('benBalance')?.classList.contains('on'),
+    balance,
     timesOrValidity: document.getElementById('benTimesOrValidity')?.classList.contains('on'),
     projectDiscount: document.getElementById('benProjectDiscount')?.classList.contains('on'),
+    balanceCanBuyProducts: balance && !!document.getElementById('fBalanceCanBuyProducts')?.checked,
   };
 }
 
@@ -9507,6 +9853,7 @@ function applyBenefitDiff(oldB, newB) {
     if (faceEl) faceEl.value = '';
     const giftEl = document.getElementById('fGiftAmount');
     if (giftEl) giftEl.value = '';
+    newB.balanceCanBuyProducts = false;
   }
   if (oldB.timesOrValidity && !newB.timesOrValidity) {
     /* E2: switch off only collapses; keep project benefit cards */
@@ -9536,6 +9883,7 @@ function applyBenefitVisibility() {
   document.getElementById('blockBalance').classList.toggle('is-expanded', b.balance);
   document.getElementById('blockTimesValidity').classList.toggle('is-expanded', b.timesOrValidity);
   document.getElementById('blockDiscount').classList.toggle('is-expanded', b.projectDiscount);
+  syncBalanceCanBuyProductsField();
   syncGiftCalculated();
 }
 
@@ -9571,6 +9919,7 @@ function buildDuplicateFormPreset(t) {
     memberPrices: t.memberPrices,
     projectItems: normalizeProjectItemsFromTpl(t).map(i => ({ ...i, id: genId() })),
     benefits: { ...(t.benefits || emptyBenefits()) },
+    balanceCanBuyProducts: !!(t.benefits && t.benefits.balanceCanBuyProducts),
     cardColor: t.cardColor || 'brand_red',
     usagePolicy: normalizeUsagePolicy(t.usagePolicy),
     ...pickCardValidityFields(t),
@@ -9868,6 +10217,7 @@ function renderCardFacePanel(tpl) {
     const faceText = face > 0 ? formatMoneyDisplay(face) : '¥0';
     sections.push(renderCardSection('面值', [
       `面值 <span class="member-card-item__line-val is-data">${escapeHtml(faceText)}</span> · 赠送 <span class="member-card-item__line-val is-data">${escapeHtml(giftText)}</span>`,
+      `<span class="member-card-item__line-val is-data">${escapeHtml(formatBalanceCanBuyProductsText(!!benefits.balanceCanBuyProducts))}</span>`,
     ]));
   }
 
@@ -9947,6 +10297,7 @@ function buildCardFaceRows(tpl, opts = {}) {
     );
     const gift = p.giftAmount;
     rows.push(row('赠送', gift !== '' && gift != null ? `¥${gift}` : '¥0', { data: true }));
+    rows.push(row(formatBalanceCanBuyProductsText(!!tpl.benefits.balanceCanBuyProducts), formatBalanceCanBuyProductsText(!!tpl.benefits.balanceCanBuyProducts), { data: true }));
   }
   if (tpl.benefits.timesOrValidity) {
     const applyLine = formatProjectItemsLine(normalizeProjectItemsFromTpl(p));
@@ -10121,6 +10472,9 @@ function renderDetailFacePlainRow(r) {
   if (r.label === '用卡策略' && r._tpl) {
     return `<div class="form-row"><span class="label">${escapeHtml(r.label)}</span><span class="value de-equity-val has-val">${renderUsagePolicyFaceValueHtml(r._tpl)}</span></div>`;
   }
+  if (r.label === '可购买产品' || r.label === '不可购买产品') {
+    return `<div class="form-row"><span class="label">${escapeHtml(r.label)}</span><span class="value de-equity-val has-val is-data"></span></div>`;
+  }
   return `<div class="form-row"><span class="label">${escapeHtml(r.label)}</span><span class="value de-equity-val${r.muted ? '' : ' has-val'}${r.data ? ' is-data' : ''}${r.label === '折扣' ? ' is-preline' : ''}">${escapeHtml(String(val))}</span></div>`;
 }
 
@@ -10212,7 +10566,7 @@ function renderDetailFaceList(t) {
   const rows = buildCardFaceRows(t, { includeEmpty: true });
   const projects = normalizeProjectItemsFromTpl(t);
   const discountEntries = Object.entries(t.memberPrices || {});
-  const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送']);
+  const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送', '可购买产品', '不可购买产品']);
   const FACE_OTHER_LABELS = new Set(['项目/折扣有效期', '用卡策略']);
   const cards = [];
   let balanceRows = '';
@@ -10299,6 +10653,7 @@ function sanitizeTemplatePayload(data) {
   if (!next.benefits.balance) {
     next.giftAmount = '';
     next.faceAmount = '';
+    next.benefits.balanceCanBuyProducts = false;
   }
   return next;
 }
@@ -10356,6 +10711,7 @@ function loadPresetIntoForm(p) {
   renderProjectItemTags();
   syncMemberPriceDisplay();
   syncCardValidityDisplay();
+  syncBalanceCanBuyProductsField();
 }
 
 function clearFormFields() {
@@ -10472,7 +10828,7 @@ function saveTemplate() {
 }
 
 function renderStaticCardItemHtml(t) {
-  return renderMemberCardItemHtml(t, { showFooter: false });
+  return renderMemberCardItemHtml(t, { showFooter: false, showIssue: false, showClone: false });
 }
 
 function showCreateSuccess(templateId) {
@@ -10640,10 +10996,23 @@ function syncIssuePickerTabs() {
     btn.setAttribute('aria-selected', active ? 'true' : 'false');
   });
   document.getElementById('issuePickerTabs')?.classList.toggle('issue-picker-tabs--holders-only', !!state.issuePickerHoldersOnly);
-  const foot = document.getElementById('issuePickerFootNew');
-  if (foot) foot.classList.toggle('hidden', state.issuePickerTab !== 'new');
   const issueList = document.getElementById('issueMemberList');
   if (issueList) issueList.classList.toggle('picker-list--safe-bottom', state.issuePickerTab !== 'new');
+  syncIssuePickerFooter();
+}
+
+function syncIssuePickerFooter() {
+  const foot = document.getElementById('issuePickerFootNew');
+  const btn = document.getElementById('btnIssueMemberOk');
+  if (foot) foot.classList.toggle('hidden', state.issuePickerTab !== 'new');
+  if (btn) {
+    btn.textContent = '去结账';
+    btn.disabled = state.issuePickerTab !== 'new' || !state.issueMemberSelectedId;
+  }
+}
+
+function getTemplatePurchaseAmount(tpl) {
+  return parseAmount(tpl?.recharge);
 }
 
 function buildIssueExtendInlineHtml(memberId, tpl) {
@@ -10698,7 +11067,7 @@ function wireIssuePickerControls() {
     btn.onclick = () => {
       state.issuePickerTab = btn.dataset.issueTab;
       resetIssueExtendDraft();
-      state.issueMemberSelectedIds = [];
+      state.issueMemberSelectedId = null;
       syncIssuePickerTabs();
       renderIssueMemberList();
     };
@@ -10750,7 +11119,7 @@ function openIssueMemberPicker(templateId) {
   const t = getTemplate(templateId);
   if (!t) return;
   state.issueTargetTemplateId = templateId;
-  state.issueMemberSelectedIds = [];
+  state.issueMemberSelectedId = null;
   state.issuePickerTab = 'new';
   state.issuePickerHoldersOnly = false;
   resetIssueExtendDraft();
@@ -10766,7 +11135,7 @@ function openIssueHolderManager(templateId) {
   const t = getTemplateById(templateId);
   if (!t) return;
   state.issueTargetTemplateId = templateId;
-  state.issueMemberSelectedIds = [];
+  state.issueMemberSelectedId = null;
   state.issuePickerTab = 'holders';
   state.issuePickerHoldersOnly = !!t.shelved;
   resetIssueExtendDraft();
@@ -10783,14 +11152,14 @@ function renderIssueMemberList() {
   const q = document.getElementById('issueMemberSearch').value.toLowerCase().trim();
   const list = DEMO_MEMBERS.filter(m => !q || m.name.toLowerCase().includes(q) || m.phone.includes(q));
   const container = document.getElementById('issueMemberList');
-  const selected = new Set(state.issueMemberSelectedIds);
+  const selectedId = state.issueMemberSelectedId;
 
   if (state.issuePickerTab === 'new') {
     const newMembers = list.filter(m => !tid || !memberHoldsTemplate(tid, m.id));
     const itemsHtml = newMembers.length
       ? newMembers.map(m =>
         `<label class="picker-item issue-member-item">
-          <input type="checkbox" name="issueMember" value="${m.id}"${selected.has(m.id) ? ' checked' : ''} />
+          <input type="radio" name="issueMember" value="${m.id}"${selectedId === m.id ? ' checked' : ''} />
           ${memberAvatarHtml(m)}
           <span class="issue-member-row__main">
             <span class="issue-member-row__name">${escapeHtml(m.name)}</span>
@@ -10800,16 +11169,15 @@ function renderIssueMemberList() {
       ).join('')
       : '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">所有会员均已持有该卡</p>';
     container.innerHTML = itemsHtml;
-    container.querySelectorAll('input[name="issueMember"]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        const id = cb.value;
-        if (cb.checked) {
-          if (!state.issueMemberSelectedIds.includes(id)) state.issueMemberSelectedIds.push(id);
-        } else {
-          state.issueMemberSelectedIds = state.issueMemberSelectedIds.filter(x => x !== id);
+    container.querySelectorAll('input[name="issueMember"]').forEach(rb => {
+      rb.addEventListener('change', () => {
+        if (rb.checked) {
+          state.issueMemberSelectedId = rb.value;
+          syncIssuePickerFooter();
         }
       });
     });
+    syncIssuePickerFooter();
     return;
   }
 
@@ -10861,24 +11229,54 @@ function renderIssueMemberList() {
   wireAmountKeypadInputs(container);
 }
 
-function confirmIssueMembers() {
+function startIssueCheckoutFromPicker() {
   if (state.issuePickerTab !== 'new') return;
-  if (!state.issueMemberSelectedIds.length) {
-    showToast('请至少选择一位会员', true);
+  const memberId = state.issueMemberSelectedId;
+  if (!memberId) {
+    showToast('请选择一位会员', true);
     return;
   }
-  const tpl = getTemplate(state.issueTargetTemplateId);
-  if (!tpl) return;
   const tid = state.issueTargetTemplateId;
-  const memberIds = [...state.issueMemberSelectedIds];
-  document.getElementById('issueMemberMask').classList.remove('open');
-  accumulateIssueStats(tid, tpl, memberIds.length);
-  addMemberHoldings(tid, memberIds, tpl);
-  if (state.viewingTemplateId === tid) renderDetailStatsList(tpl);
-  showIssueSuccess(tid, memberIds);
+  const tpl = getTemplate(tid);
+  if (!tpl) return;
+  if (tpl.shelved) {
+    showToast('该卡已下架，无法新办', true);
+    return;
+  }
+  if (memberHoldsTemplate(tid, memberId)) {
+    showToast('该会员已持有此卡', true);
+    return;
+  }
+  const amount = getTemplatePurchaseAmount(tpl);
+  if (amount <= 0) {
+    showToast('该卡未设置购买金额', true);
+    return;
+  }
+  if (!window.BillingDemo || typeof window.BillingDemo.startCardIssueCheckout !== 'function') {
+    showToast('开单结账模块未就绪', true);
+    return;
+  }
+  document.getElementById('issueMemberMask')?.classList.remove('open');
+  window.BillingDemo.startCardIssueCheckout({
+    templateId: tid,
+    memberId,
+    cardName: tpl.name,
+    amount,
+    cardHtml: renderStaticCardItemHtml(tpl),
+  });
   state.issueTargetTemplateId = null;
-  state.issueMemberSelectedIds = [];
+  state.issueMemberSelectedId = null;
   resetIssueExtendDraft();
+}
+
+function finalizeTemplateIssueAfterPay({ templateId, memberId }) {
+  const tpl = getTemplate(templateId);
+  if (!tpl || !memberId) return;
+  accumulateIssueStats(templateId, tpl, 1);
+  addMemberHoldings(templateId, [memberId], tpl);
+  if (state.viewingTemplateId === templateId) renderDetailStatsList(tpl);
+  state.lastIssuedTemplateId = templateId;
+  renderTemplateList();
 }
 
 function confirmIssueExtend(memberId) {
@@ -13185,12 +13583,34 @@ function isFigmaCaptureStep2() {
   return new URLSearchParams(location.search).get('figma') === 'step2';
 }
 
+/** PRD / 深链：?flow=<FLOW_NAV id>；可选 &capture=1 仅保留手机框便于截图 */
+function getFlowDeepLinkId() {
+  return new URLSearchParams(location.search).get('flow');
+}
+
+function applyFlowDeepLink(flowId) {
+  if (!flowId || typeof FLOW_NAV === 'undefined') return false;
+  const fn = FLOW_NAV[flowId];
+  if (typeof fn !== 'function') {
+    console.warn('[flow deep link] unknown flow id:', flowId);
+    return false;
+  }
+  if (new URLSearchParams(location.search).get('capture') === '1') {
+    document.documentElement.classList.add('prd-capture');
+  }
+  fn();
+  if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight(flowId);
+  return true;
+}
+
 function applyDemoListState(mode) {
   closeAllFlowOverlays();
   const changed = state.demoListMode !== mode;
   state.demoListMode = mode;
   // 须先种价目表，再 buildDemoTemplates（normalize 折扣会依赖在售项目）
   state.projectCatalog = mode === 'filled' ? seedProjectCatalog() : [];
+  state.productCatalog = mode === 'filled' ? seedProductCatalog() : [];
+  state.priceCatalogTab = 'project';
   state.templates = mode === 'filled' ? buildDemoTemplates() : [];
   if (mode === 'filled') syncProjectCatalogBindings();
   state.navStack = [];
@@ -13223,6 +13643,8 @@ function resetAll() {
   syncDemoStateButtons();
   state.templates = [];
   state.projectCatalog = [];
+  state.productCatalog = [];
+  state.priceCatalogTab = 'project';
   state.navStack = [];
   state.projEditingId = null;
   state.projFormState = null;
@@ -13279,7 +13701,7 @@ document.getElementById('btnIssueSuccessContinue').onclick = () => {
   if (state.lastIssuedTemplateId) openIssueMemberPicker(state.lastIssuedTemplateId);
 };
 document.getElementById('issueMemberSearch').oninput = renderIssueMemberList;
-document.getElementById('btnIssueMemberOk').onclick = confirmIssueMembers;
+document.getElementById('btnIssueMemberOk').onclick = startIssueCheckoutFromPicker;
 document.getElementById('issueMemberMask').addEventListener('click', e => {
   if (e.target === document.getElementById('issueMemberMask')) {
     document.getElementById('issueMemberMask').classList.remove('open');
@@ -13371,12 +13793,19 @@ renderFlowMap();
     onBenefitCheckChange();
   });
 });
+document.getElementById('fBalanceCanBuyProducts')?.addEventListener('change', () => {
+  state.benefits.balanceCanBuyProducts = !!document.getElementById('fBalanceCanBuyProducts')?.checked;
+  syncColorPreview();
+});
 if (isFigmaCaptureListActive()) {
   applyFigmaCaptureListActive();
 } else if (isFigmaCaptureIssueSuccess()) {
   applyFigmaCaptureIssueSuccess();
 } else if (isFigmaCaptureStep2()) {
   applyFigmaCaptureStep2();
+} else if (getFlowDeepLinkId()) {
+  applyFlowDeepLink(getFlowDeepLinkId());
+  syncDemoStateButtons();
 } else {
   setStep(0);
   syncDemoStateButtons();
@@ -13465,11 +13894,8 @@ window.CardHost.issueTemplateFromBilling = function (ctx) {
 
     state.issueTargetTemplateId = templateId;
     state.issuePickerTab = 'new';
-    state.issueMemberSelectedIds = [memberId];
-    if (typeof confirmIssueMembers === 'function') confirmIssueMembers();
-    if (window.BillingDemo && typeof window.BillingDemo.onCardIssued === 'function') {
-      window.BillingDemo.onCardIssued({ templateId: templateId, customerId: memberId });
-    }
+    state.issueMemberSelectedId = memberId;
+    if (typeof startIssueCheckoutFromPicker === 'function') startIssueCheckoutFromPicker();
   } catch (err) {
     console.error(err);
   }
@@ -13480,6 +13906,13 @@ window.CardHost.openCreateFromBilling = function (ctx) {
     return window.CardHost.issueTemplateFromBilling(ctx);
   }
   window.CardHost.issueTemplateFromBilling(ctx || {});
+};
+window.CardHost.finalizeTemplateIssue = function (ctx) {
+  if (typeof finalizeTemplateIssueAfterPay === 'function') finalizeTemplateIssueAfterPay(ctx || {});
+};
+window.CardHost.renderIssueSuccessCardFace = function (templateId) {
+  const t = typeof getTemplateById === 'function' ? getTemplateById(templateId) : null;
+  return t ? renderStaticCardItemHtml(t) : '';
 };
 window.CardHost.onBillingScreen = function (id) {
   if (typeof setFlowNavHighlight === 'function') {
@@ -13514,8 +13947,8 @@ function billingNav(fn) {
   const group = {
     title: '开单结账',
     nodes: [
-      { id: 'bill-pick', label: '选客', screen: 'screen-pick' },
       { id: 'bill-bill', label: '开单台', screen: 'screen-bill' },
+      { id: 'bill-pick', label: '选择顾客', screen: 'screen-pick' },
       { id: 'bill-cart', label: '已选', screen: 'cartSheetMask' },
       { id: 'bill-detail', label: '详情', screen: 'screen-detail' },
       { id: 'bill-checkout', label: '结账方式', screen: 'checkoutMask' },
@@ -13535,8 +13968,8 @@ function billingNav(fn) {
     if (FLOW_MAP_GROUPS.some(g => g.title === '开单结账')) return true;
     FLOW_MAP_GROUPS.push(group);
     Object.assign(FLOW_NAV, {
-      'bill-pick': billingNav('pick'),
       'bill-bill': billingNav('bill'),
+      'bill-pick': billingNav('pick'),
       'bill-cart': billingNav('cart'),
       'bill-detail': billingNav('detail'),
       'bill-checkout': billingNav('checkout'),
@@ -13841,9 +14274,10 @@ window.__BILLING_EMBEDDED__ = true;
   CUSTOMERS.forEach(c => {
     if (c.cards) c.cards = c.cards.map(normalizeHeldCard);
   });
+  const GUEST_UNSET = { id: 'guest', name: '散客', phone: '', isMember: false, vip: false, gender: null, avatar: 'assets/billing/avatar-guest-default.svg' };
   const GUEST_MALE = { id: 'guest_m', name: '男散客', phone: '', isMember: false, vip: false, gender: 'male', avatar: 'assets/billing/avatar-male.png' };
   const GUEST_FEMALE = { id: 'guest_f', name: '女散客', phone: '', isMember: false, vip: false, gender: 'female', avatar: 'assets/billing/avatar-female.png' };
-  const GUEST = GUEST_FEMALE;
+  const GUEST = GUEST_UNSET;
   const STAFFS_SMALL = [
     { id: 'st1', name: '林屿森', short: '森' },
     { id: 'st2', name: '何苏叶', short: '叶' },
@@ -13946,7 +14380,8 @@ window.__BILLING_EMBEDDED__ = true;
     couponRulesOpen: {},
     manualOrderNo: '',
     heldOrders: [],
-    guestGender: 'female',
+    guestGender: null,
+    guestGenderPickerOpen: false,
     orderRemark: '',
     detailExpandedId: null,
     benefitSkip: false,
@@ -13954,6 +14389,10 @@ window.__BILLING_EMBEDDED__ = true;
     voiceCollect: true,
     discountCats: JSON.parse(JSON.stringify(DISCOUNT_CATS_DEFAULT)),
     pendingOpenCard: null,
+    cardIssuePending: null,
+    successIssueTemplateId: null,
+    successIssueCardHtml: '',
+    lastIssueFromCardMgmt: false,
     pickLetter: 'C',
     pickAvailableLetters: [],
   };
@@ -14023,24 +14462,76 @@ window.__BILLING_EMBEDDED__ = true;
   function showOnlyScreen(id) {
     /* 切屏时收起「已选」抽屉，避免盖在详情等页面上残留 */
     closeMask('cartSheetMask');
+    closeMask('guestRecordMask');
     /* 开单页不应残留办卡成功的绿色渐变底 */
     document.querySelector('.phone-shell')?.classList.remove('phone-shell--success');
     document.querySelectorAll('.phone .screen').forEach(el => el.classList.toggle('hidden', el.id !== id));
+    if (id === 'screen-success' && state.lastIssueFromCardMgmt && typeof renderSuccess === 'function') {
+      renderSuccess();
+    }
     if (window.CardHost && window.CardHost.onBillingScreen) window.CardHost.onBillingScreen(id);
     else syncFlowMapFromAppState();
   }
-  function closeMask(id) { document.getElementById(id)?.classList.remove('open'); }
+  function closeMask(id, opts) {
+    const keepCardIssueDraft = !!(opts && opts.keepCardIssueDraft);
+    document.getElementById(id)?.classList.remove('open');
+    if (id === 'checkoutMask' && state.cardIssuePending && !keepCardIssueDraft) {
+      state.cardIssuePending = null;
+      state.pendingOpenCard = null;
+      state.successIssueTemplateId = null;
+      state.successIssueCardHtml = '';
+      state.lastIssueFromCardMgmt = false;
+      state.payAmounts = {};
+    }
+  }
   function openMask(id) { document.getElementById(id)?.classList.add('open'); }
+  function isAnonymousGuest(c) {
+    return !c || c.id === 'guest' || c.id === 'guest_m' || c.id === 'guest_f';
+  }
+  function isNamedWalkIn(c) {
+    return !!(c && !c.isMember && String(c.id || '').startsWith('w_'));
+  }
   function isGuestCustomer(c) {
-    return !c || c.id === 'guest' || c.id === 'guest_m' || c.id === 'guest_f' || c.gender;
+    return isAnonymousGuest(c) || isNamedWalkIn(c);
+  }
+  function maskPhone(phone) {
+    const p = String(phone || '').replace(/\D/g, '');
+    if (p.length === 11) return p.slice(0, 3) + '****' + p.slice(7);
+    return String(phone || '');
+  }
+  function formatWalkInName(raw, gender) {
+    const s = String(raw || '').trim();
+    if (!s) return '';
+    if (/[先生小姐女士]$/.test(s)) return s;
+    if (s.length === 1) return s + (gender === 'male' ? '先生' : '小姐');
+    return s;
+  }
+  function hasGuestGender() {
+    return state.guestGender === 'male' || state.guestGender === 'female';
   }
   function currentGuest() {
-    return state.guestGender === 'male' ? GUEST_MALE : GUEST_FEMALE;
+    if (state.guestGender === 'male') return GUEST_MALE;
+    if (state.guestGender === 'female') return GUEST_FEMALE;
+    return GUEST_UNSET;
   }
   function getCustomer() {
     if (!state.customer) return currentGuest();
-    if (isGuestCustomer(state.customer) && !state.customer.isMember) return currentGuest();
+    if (isAnonymousGuest(state.customer)) return currentGuest();
     return state.customer;
+  }
+  function enterBillUnselected() {
+    state.guestGender = null;
+    state.guestGenderPickerOpen = false;
+    enterBill(GUEST_UNSET);
+  }
+  function openMemberPicker() {
+    state.guestGender = null;
+    state.guestGenderPickerOpen = false;
+    state.customer = GUEST_UNSET;
+    state.cardsExpanded = false;
+    syncPickHoldsEntry();
+    renderCustomerList();
+    showOnlyScreen('screen-pick');
   }
   function isMemberBill() { const c = getCustomer(); return c.isMember && c.cards && c.cards.length; }
   function customerLetter(c) {
@@ -14173,26 +14664,40 @@ window.__BILLING_EMBEDDED__ = true;
       couponLabel = coupon.name;
     }
 
+    const openCardAmount = state.pendingOpenCard ? round2(Number(state.pendingOpenCard.amount) || 0) : 0;
     let balanceDeduct = 0;
     const balanceLines = [];
+    const membercardPay = round2(Number(state.payAmounts?.membercard) || 0);
     if (isMemberBill()) {
-      getCustomer().cards.forEach(card => {
-        const pick = picks[card.id];
-        let amt = round2(Number(pick?.balanceUse) || 0);
-        if (pick?.fixedUse) amt = Math.max(amt, 98);
-        if (amt <= 0 || !cardHasFaceBenefit(card)) return;
-        const use = Math.min(amt, card.balance, remaining);
-        if (use <= 0) return;
-        balanceDeduct += use;
-        remaining = round2(remaining - use);
-        balanceLines.push({ card: card.name, amount: use });
-      });
+      if (membercardPay > 0) {
+        const cap = round2(Math.max(0, remaining) + openCardAmount);
+        const alloc = allocateMembercardBalance(membercardPay, cap);
+        balanceDeduct = alloc.total;
+        balanceLines.push(...alloc.lines);
+      } else {
+        getCustomer().cards.forEach(card => {
+          const pick = picks[card.id];
+          let amt = round2(Number(pick?.balanceUse) || 0);
+          if (pick?.fixedUse) amt = Math.max(amt, 98);
+          if (amt <= 0 || !cardHasFaceBenefit(card)) return;
+          const use = Math.min(amt, card.balance, remaining);
+          if (use <= 0) return;
+          balanceDeduct += use;
+          remaining = round2(remaining - use);
+          balanceLines.push({ card: card.name, amount: use });
+        });
+        balanceDeduct = round2(balanceDeduct);
+      }
     }
+
+    const dueCash = membercardPay > 0 && isMemberBill()
+      ? Math.max(0, round2(Math.max(0, remaining) + openCardAmount - balanceDeduct))
+      : Math.max(0, round2(remaining + openCardAmount));
 
     return {
       listTotal, projectDeduct, projectLines, discountDeduct, discountRate,
       couponDeduct, couponLabel,
-      balanceDeduct, balanceLines, dueCash: Math.max(0, remaining),
+      balanceDeduct, balanceLines, openCardAmount, dueCash,
     };
   }
 
@@ -14600,7 +15105,7 @@ window.__BILLING_EMBEDDED__ = true;
     }).join('');
 
     document.getElementById('detailBody').innerHTML = `
-      <div class="detail-guest-slot">${renderCustomerNameCard(c, { withActions: true, genderMode: !c.isMember })}</div>
+      <div class="detail-guest-slot">${renderCustomerNameCard(c, { withActions: true, genderMode: isAnonymousGuest(c) })}</div>
       <div class="detail-manual-row">
         <span>手工单号</span>
         <input id="manualOrderInput" type="text" maxlength="32" value="${escapeHtml(state.manualOrderNo || '')}" placeholder="请输入手工单号">
@@ -14763,7 +15268,7 @@ window.__BILLING_EMBEDDED__ = true;
       { id: 'cash', label: '现金', icon: 'assets/billing/pay/cash.svg', fallback: '现', color: '#F5A623' },
       { id: 'bank', label: '银行卡', icon: 'assets/billing/pay/bank.svg', fallback: '卡', color: '#4A7BF4' },
     ];
-    if (isMemberBill() && getCustomer().cards.some(c => c.balance > 0)) {
+    if (isMemberBill() && getMembercardBalanceAvailable() > 0) {
       channels.push({ id: 'membercard', label: '会员卡', icon: 'assets/billing/pay/membercard.svg', fallback: '会', color: '#F32F41' });
     }
     return channels;
@@ -14771,6 +15276,58 @@ window.__BILLING_EMBEDDED__ = true;
 
   function payFilledTotal() {
     return round2(Object.values(state.payAmounts || {}).reduce((s, v) => s + (Number(v) || 0), 0));
+  }
+
+  function payCashFilledTotal() {
+    return round2(Object.entries(state.payAmounts || {}).reduce((s, [id, v]) => {
+      if (id === 'membercard') return s;
+      return s + (Number(v) || 0);
+    }, 0));
+  }
+
+  function getMembercardBalanceAvailable() {
+    if (!isMemberBill()) return 0;
+    return round2(getCustomer().cards.reduce((sum, card) => {
+      if (!cardHasFaceBenefit(card)) return sum;
+      return sum + Math.max(0, Number(card.balance) || 0);
+    }, 0));
+  }
+
+  function allocateMembercardBalance(requested, capTotal) {
+    const lines = [];
+    let total = 0;
+    let left = Math.min(
+      round2(Number(requested) || 0),
+      round2(Number(capTotal) || 0),
+      getMembercardBalanceAvailable()
+    );
+    if (left <= 0) return { total: 0, lines };
+    getCustomer().cards.forEach(card => {
+      if (left <= 0 || !cardHasFaceBenefit(card) || card.balance <= 0) return;
+      const use = Math.min(left, card.balance);
+      if (use <= 0) return;
+      lines.push({ card: card.name, amount: use, source: 'membercard' });
+      total = round2(total + use);
+      left = round2(left - use);
+    });
+    return { total, lines };
+  }
+
+  function updatePaySheetTotals() {
+    const s = calcSettlement();
+    const filled = payFilledTotal();
+    const cashFilled = payCashFilledTotal();
+    const amtEl = document.getElementById('payAmount');
+    if (amtEl) amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(s.dueCash)}</span>`;
+    const tip = document.querySelector('#payChannels > div:last-child');
+    if (tip) {
+      if (s.balanceDeduct > 0 && round2(Number(state.payAmounts?.membercard) || 0) > 0) {
+        tip.textContent = `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}`;
+      } else {
+        tip.textContent = `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`;
+      }
+    }
+    return s;
   }
 
   function initPayAmounts(due) {
@@ -14792,6 +15349,8 @@ window.__BILLING_EMBEDDED__ = true;
       if (state.payAmounts[ch.id] == null) state.payAmounts[ch.id] = 0;
     });
     const filled = payFilledTotal();
+    const cashFilled = payCashFilledTotal();
+    const mcPay = round2(Number(state.payAmounts?.membercard) || 0);
     const amtEl = document.getElementById('payAmount');
     amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(s.dueCash)}</span>`;
     document.getElementById('payChannels').innerHTML = channels.map(ch => {
@@ -14802,13 +15361,13 @@ window.__BILLING_EMBEDDED__ = true;
         : `<span class="pay-channel__icon-fallback" style="background:${ch.color}" aria-hidden="true"></span>`;
       return `<div class="pay-channel ${active ? 'is-active' : ''}" data-pay="${ch.id}">
         <span class="pay-channel__icon" style="background:${ch.icon ? 'transparent' : ch.color}">${iconHtml}</span>
-        <span class="pay-channel__name">${escapeHtml(ch.label)}</span>
+        <span class="pay-channel__name">${ch.id === 'membercard' ? `会员卡（可用 ${formatYen(getMembercardBalanceAvailable())}）` : escapeHtml(ch.label)}</span>
         <span class="pay-channel__field">
           <input class="pay-channel__input num" type="number" min="0" step="0.01" data-pay-amt="${ch.id}" value="${amt}">
           <span class="pay-channel__clear" data-pay-clear="${ch.id}" role="button" aria-label="清除"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="#929292" stroke-width="1.3" stroke-linecap="round"/></svg></span>
         </span>
       </div>`;
-    }).join('') + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}</div>`;
+    }).join('') + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${s.balanceDeduct > 0 && mcPay > 0 ? `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}` : `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`}</div>`;
   }
 
   function createHoldOrder() {
@@ -14819,7 +15378,7 @@ window.__BILLING_EMBEDDED__ = true;
       createdAt: new Date().toISOString(),
       customerId: c.id,
       customerName: c.name,
-      customer: isGuestCustomer(c) ? { ...currentGuest() } : null,
+      customer: isAnonymousGuest(c) ? { ...currentGuest() } : (c ? { ...c } : null),
       cart: JSON.parse(JSON.stringify(state.cart)),
       benefitApplied: JSON.parse(JSON.stringify(state.benefitApplied)),
       selectedCouponId: state.selectedCouponId,
@@ -14838,8 +15397,7 @@ window.__BILLING_EMBEDDED__ = true;
     syncCartChrome();
     syncPickHoldsEntry();
     showToast(`已挂单 · 共 ${state.heldOrders.length} 单`);
-    showOnlyScreen('screen-pick');
-    renderCustomerList();
+    enterBillUnselected();
   }
 
   function renderHoldList() {
@@ -14918,10 +15476,9 @@ window.__BILLING_EMBEDDED__ = true;
         const slot = (card.projects || []).find(p => p.key === pr.key);
         if (slot && pr.qty) slot.remain = Math.max(0, slot.remain - pr.qty);
       });
-      const bal = round2(Number(pick.balanceUse) || 0);
-      if (bal > 0 && cardHasFaceBenefit(card)) {
-        const line = settlement.balanceLines.find(b => b.card === card.name);
-        if (line) card.balance = round2(card.balance - line.amount);
+      const line = (settlement.balanceLines || []).find(b => b.card === card.name);
+      if (line && line.amount > 0 && cardHasFaceBenefit(card)) {
+        card.balance = round2(Math.max(0, card.balance - line.amount));
       }
     });
   }
@@ -14947,9 +15504,9 @@ window.__BILLING_EMBEDDED__ = true;
       rows.push(`<div class="success-card__row"><span>优惠券</span><span class="num">-${formatYen(s.couponDeduct)}</span></div>`);
     }
     (s.balanceLines || []).forEach(line => {
-      rows.push(`<div class="success-card__row"><span>${escapeHtml(line.card)}</span><strong>面值抵扣</strong></div>`);
+      rows.push(`<div class="success-card__row"><span>${escapeHtml(line.card)} · 面值抵扣</span><span class="num">-${formatYen(line.amount)}</span></div>`);
     });
-    const splits = (s.paySplits || []).filter(p => p.amount > 0);
+    const splits = (s.paySplits || []).filter(p => p.amount > 0 && p.id !== 'membercard');
     if (splits.length) {
       splits.forEach(p => {
         rows.push(`<div class="success-card__row"><span>${escapeHtml(chMap[p.id] || p.id)}</span><span class="num">${formatYen(p.amount)}</span></div>`);
@@ -14965,12 +15522,109 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const openAmt = state.pendingOpenCard ? Number(state.pendingOpenCard.amount) || 0 : 0;
     const paid = splits.length ? round2(splits.reduce((a, p) => a + p.amount, 0)) : s.dueCash;
-    const showAmt = round2(paid + openAmt);
-    const amtStr = String(round2(Math.max(0, showAmt || (s.listTotal - s.projectDeduct - s.discountDeduct - (s.couponDeduct || 0) - s.balanceDeduct))));
+    const amtStr = String(round2(Math.max(0, paid || s.dueCash || openAmt || (s.listTotal - s.projectDeduct - s.discountDeduct - (s.couponDeduct || 0) - s.balanceDeduct))));
+    const titleEl = document.getElementById('successHeadTitle');
+    const slotEl = document.getElementById('successIssueCardSlot');
+    const descEl = document.getElementById('successIssueDesc');
+    const flowBtn = document.getElementById('btnViewFlow');
+    if (state.lastIssueFromCardMgmt) {
+      if (titleEl) titleEl.textContent = '办卡成功';
+      if (flowBtn) flowBtn.classList.add('hidden');
+      const cardHtml = state.successIssueCardHtml
+        || (state.successIssueTemplateId && window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function'
+          ? window.CardHost.renderIssueSuccessCardFace(state.successIssueTemplateId)
+          : '');
+      if (slotEl && cardHtml) {
+        slotEl.innerHTML = cardHtml;
+        slotEl.classList.remove('hidden');
+      } else if (slotEl) {
+        slotEl.innerHTML = '';
+        slotEl.classList.add('hidden');
+      }
+      if (descEl) {
+        const c = getCustomer();
+        const cardName = state.pendingOpenCard?.name || '';
+        if (c && cardName) {
+          descEl.textContent = `已为 ${c.name} 办理「${cardName}」`;
+          descEl.classList.remove('hidden');
+        } else {
+          descEl.textContent = '';
+          descEl.classList.add('hidden');
+        }
+      }
+    } else {
+      if (titleEl) titleEl.textContent = '开单成功';
+      if (flowBtn) flowBtn.classList.remove('hidden');
+      if (slotEl) {
+        slotEl.innerHTML = '';
+        slotEl.classList.add('hidden');
+      }
+      if (descEl) {
+        descEl.textContent = '';
+        descEl.classList.add('hidden');
+      }
+    }
     document.getElementById('successSummary').innerHTML = `
       <div class="success-card__amount"><span class="yen">¥</span><span class="val">${amtStr}</span></div>
       <div class="success-card__divider"></div>
       ${rows.join('')}`;
+    const contBtn = document.getElementById('btnContinue');
+    if (contBtn) contBtn.textContent = state.lastIssueFromCardMgmt ? '返回列表' : '继续开单';
+  }
+
+  function returnToCardListFromIssueCheckout() {
+    state.lastIssueFromCardMgmt = false;
+    state.successIssueTemplateId = null;
+    state.successIssueCardHtml = '';
+    state.cardIssuePending = null;
+    state.pendingOpenCard = null;
+    state.payAmounts = {};
+    state.lastSettlement = null;
+    const slotEl = document.getElementById('successIssueCardSlot');
+    const descEl = document.getElementById('successIssueDesc');
+    if (slotEl) {
+      slotEl.innerHTML = '';
+      slotEl.classList.add('hidden');
+    }
+    if (descEl) {
+      descEl.textContent = '';
+      descEl.classList.add('hidden');
+    }
+    if (typeof setStep === 'function') setStep(0);
+    if (typeof renderTemplateList === 'function') renderTemplateList();
+    showOnlyScreen('screen0');
+  }
+
+  function startCardIssueCheckout({ templateId, memberId, cardName, amount, cardHtml }) {
+    const c = CUSTOMERS.find(x => x.id === memberId);
+    if (!c) {
+      showToast('未找到该会员');
+      return;
+    }
+    state.customer = c;
+    state.cart = [];
+    state.benefitDraft = {};
+    state.benefitApplied = {};
+    state.benefitSkip = false;
+    state.selectedCouponId = null;
+    state.couponDraftId = null;
+    state.manualOrderNo = '';
+    state.orderRemark = '';
+    state.payAmounts = {};
+    state.lastSettlement = null;
+    state.pendingOpenCard = { name: cardName, amount: round2(Number(amount) || 0) };
+    state.cardIssuePending = { templateId, memberId };
+    state.successIssueTemplateId = templateId;
+    state.successIssueCardHtml = cardHtml
+      || (window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function'
+        ? window.CardHost.renderIssueSuccessCardFace(templateId)
+        : '');
+    state.lastIssueFromCardMgmt = true;
+    closeMask('cartSheetMask');
+    closeMask('payMask');
+    openMask('checkoutMask');
+    setFlowNavHighlight('checkout');
+    if (typeof syncFlowMapFromAppState === 'function') syncFlowMapFromAppState();
   }
 
   function continueBilling() {
@@ -14985,16 +15639,22 @@ window.__BILLING_EMBEDDED__ = true;
     state.payAmounts = {};
     state.pendingOpenCard = null;
     state.lastSettlement = null;
+    state.guestGenderPickerOpen = false;
     syncCartChrome();
     if (c && c.isMember) enterBill(c);
-    else enterBill(currentGuest());
+    else if (hasGuestGender()) enterBill(currentGuest());
+    else enterBillUnselected();
   }
 
   function enterBill(customer) {
-    if (customer && (customer.id === 'guest' || customer.id === 'guest_m' || customer.id === 'guest_f')) {
+    state.guestGenderPickerOpen = false;
+    if (isAnonymousGuest(customer)) {
+      if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
       state.customer = currentGuest();
     } else {
       state.customer = customer;
+      if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
+      else if (customer && customer.isMember) state.guestGender = null;
     }
     state.benefitDraft = {};
     state.benefitApplied = {};
@@ -15026,9 +15686,10 @@ window.__BILLING_EMBEDDED__ = true;
     state.payAmounts = {};
     state.pendingOpenCard = null;
     state.lastSettlement = null;
+    state.guestGenderPickerOpen = false;
     syncCartChrome();
     syncPickHoldsEntry();
-    showOnlyScreen('screen-pick');
+    enterBillUnselected();
     renderCustomerList();
   }
 
@@ -15069,8 +15730,9 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function openAddCardScreen() {
-    if (!state.customer) {
-      showToast('请先选择顾客');
+    const c = getCustomer();
+    if (!c || (!c.isMember && !hasGuestGender() && !isNamedWalkIn(c))) {
+      showToast('请先选择散客性别或会员');
       return;
     }
     state.addCardMode = 'new';
@@ -15080,26 +15742,60 @@ window.__BILLING_EMBEDDED__ = true;
     setFlowNavHighlight('add-card');
   }
 
+  function renderGuestActionBtns(pickBtnLabel) {
+    return `<div class="customer-card__guest-actions">
+            <button type="button" class="customer-card__record-icon" id="btnRecordGuest" aria-label="录入信息">${iconSvg('edit', 'ui-icon')}</button>
+            <button type="button" class="customer-card__change" id="btnChangeCustomer">${pickBtnLabel}</button>
+          </div>`;
+  }
+
   function renderCustomerNameCard(c, { withActions = false, genderMode = false } = {}) {
-    const useGender = genderMode || (!c.isMember && isGuestCustomer(c));
+    const useGender = genderMode || isAnonymousGuest(c);
     if (useGender) {
-      const g = state.guestGender === 'male' ? 'male' : 'female';
-      return `<div class="customer-card customer-card--guest">
+      const selected = hasGuestGender();
+      const g = selected ? state.guestGender : null;
+      const expanded = !!state.guestGenderPickerOpen || selected;
+      const pickBtnLabel = expanded ? '更换顾客' : '选择顾客';
+      const pickBtn = withActions ? renderGuestActionBtns(pickBtnLabel) : '';
+      if (!expanded) {
+        return `<div class="customer-card customer-card--guest is-unselected">
+        <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
+        <div class="customer-card__row">
+          <div class="customer-card__avatar-wrap">
+            <img class="customer-card__avatar" src="assets/billing/avatar-guest-default.svg" alt="">
+            <button type="button" class="customer-card__gender-switch" data-guest-switch aria-label="选择散客性别">
+              <img src="assets/billing/guest-gender-switch.svg" alt="" width="20" height="20">
+            </button>
+          </div>
+          <div class="customer-card__guest-label customer-card__name-text">散客</div>
+          ${pickBtn}
+        </div>
+      </div>`;
+      }
+      const maleOn = g === 'male';
+      const femaleOn = g === 'female';
+      return `<div class="customer-card customer-card--guest is-gender-open${selected ? ' is-gender-selected' : ''}">
         <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
         <div class="customer-card__row">
           <div class="customer-card__avatars">
-            <img class="customer-card__avatar" src="assets/billing/avatar-male.png" alt="" style="opacity:${g === 'male' ? 1 : .55}">
-            <img class="customer-card__avatar" src="assets/billing/avatar-female.png" alt="" style="opacity:${g === 'female' ? 1 : .55}">
+            <button type="button" class="customer-card__avatar-pick${maleOn ? ' is-on' : ' is-gray'}" data-guest-gender="male" aria-label="男散客">
+              <img class="customer-card__avatar" src="${AVATAR_MALE}" alt="">
+            </button>
+            <button type="button" class="customer-card__avatar-pick${femaleOn ? ' is-on' : ' is-gray'}" data-guest-gender="female" aria-label="女散客">
+              <img class="customer-card__avatar" src="${AVATAR_FEMALE}" alt="">
+            </button>
           </div>
           <div class="customer-card__gender">
             <button type="button" class="customer-card__gender-btn ${g === 'male' ? 'is-on' : ''}" data-guest-gender="male">男散客</button>
             <button type="button" class="customer-card__gender-btn ${g === 'female' ? 'is-on' : ''}" data-guest-gender="female">女散客</button>
           </div>
-          ${withActions ? '<button type="button" class="customer-card__change" id="btnChangeCustomer">更换顾客</button>' : ''}
+          ${pickBtn}
         </div>
       </div>`;
     }
-    const visit = c.lastVisit ? `上次到店${escapeHtml(c.lastVisit)}` : (c.phone || '散客开单');
+    const visit = c.lastVisit
+      ? `上次到店${escapeHtml(c.lastVisit)}`
+      : (isNamedWalkIn(c) && c.phone ? escapeHtml(maskPhone(c.phone)) : '');
     const vip = c.vip
       ? '<img class="customer-card__vip" src="assets/billing/customer-vip-union.svg" alt="VIP" width="26" height="10">'
       : '';
@@ -15174,8 +15870,8 @@ window.__BILLING_EMBEDDED__ = true;
 
   const FLOW_MAP_GROUPS = [
     { title: '开单主流程', nodes: [
-      { id: 'pick', label: '选客', screen: 'screen-pick' },
       { id: 'bill', label: '开单台', screen: 'screen-bill' },
+      { id: 'pick', label: '选择顾客', screen: 'screen-pick' },
       { id: 'cart', label: '已选', screen: 'cartSheetMask' },
       { id: 'detail', label: '详情', screen: 'screen-detail' },
       { id: 'checkout', label: '结账方式', screen: 'checkoutMask' },
@@ -15198,10 +15894,10 @@ window.__BILLING_EMBEDDED__ = true;
   ];
 
   const FLOW_NAV = {
-    pick() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); syncPickHoldsEntry(); showOnlyScreen('screen-pick'); },
-    bill() { if (!state.customer) enterBill(CUSTOMERS[0]); else { renderBillHeader(); showOnlyScreen('screen-bill'); } },
+    pick() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openMemberPicker(); },
+    bill() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); if (!state.customer) enterBillUnselected(); else { renderBillHeader(); showOnlyScreen('screen-bill'); } },
     cart() {
-      if (!state.customer) enterBill(CUSTOMERS[0]);
+      if (!state.customer) enterBillUnselected();
       else { renderBillHeader(); showOnlyScreen('screen-bill'); }
       if (!state.cart.length) setCartQty(PROJECTS[0], 1);
       renderCartList('cartSheetList');
@@ -15292,9 +15988,12 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   document.getElementById('pickSearch').addEventListener('input', e => { state.searchQuery = e.target.value; renderCustomerList(); });
-  document.getElementById('btnGuest').addEventListener('click', () => {
-    state.guestGender = 'female';
-    enterBill(currentGuest());
+  document.getElementById('pickBack')?.addEventListener('click', () => {
+    if (!state.customer) state.customer = GUEST_UNSET;
+    renderBillHeader();
+    syncCartChrome();
+    syncPickHoldsEntry();
+    showOnlyScreen('screen-bill');
   });
   document.getElementById('customerList').addEventListener('click', e => {
     const row = e.target.closest('[data-pick]');
@@ -15302,6 +16001,8 @@ window.__BILLING_EMBEDDED__ = true;
     const c = CUSTOMERS.find(x => x.id === row.dataset.pick);
     if (c) {
       state.pickLetter = customerLetter(c);
+      state.guestGender = null;
+      state.guestGenderPickerOpen = false;
       enterBill(c);
     }
   });
@@ -15342,11 +16043,15 @@ window.__BILLING_EMBEDDED__ = true;
   pickIndexEl?.addEventListener('pointercancel', e => onPickIndexPointer(e, { end: true }));
   pickIndexEl?.addEventListener('lostpointercapture', () => onPickIndexPointer({}, { end: true }));
 
-  document.getElementById('billBack').addEventListener('click', () => { syncPickHoldsEntry(); showOnlyScreen('screen-pick'); });
+  document.getElementById('billBack').addEventListener('click', () => {});
   document.getElementById('btnBillDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('btnHold').addEventListener('click', createHoldOrder);
   document.getElementById('btnOpenHolds')?.addEventListener('click', openHoldList);
-  document.getElementById('holdsBack')?.addEventListener('click', () => { syncPickHoldsEntry(); showOnlyScreen('screen-pick'); });
+  document.getElementById('holdsBack')?.addEventListener('click', () => {
+    renderBillHeader();
+    syncPickHoldsEntry();
+    showOnlyScreen('screen-bill');
+  });
   document.getElementById('holdList')?.addEventListener('click', e => {
     const del = e.target.closest('[data-del-hold]');
     if (del) {
@@ -15362,6 +16067,11 @@ window.__BILLING_EMBEDDED__ = true;
   });
   document.getElementById('btnBillNext').addEventListener('click', () => {
     if (!state.cart.length) { showToast('请先选择商品'); return; }
+    const c = getCustomer();
+    if (!c.isMember && !hasGuestGender() && !isNamedWalkIn(c)) {
+      showToast('请先选择散客性别或会员');
+      return;
+    }
     state.detailExpandedId = state.cart[0]?.id || null;
     closeMask('cartSheetMask');
     closeMask('checkoutMask');
@@ -15377,17 +16087,111 @@ window.__BILLING_EMBEDDED__ = true;
   }
   document.getElementById('btnClearCartSheet')?.addEventListener('click', onClearCart);
 
+  function syncGuestRecordGenderUI(gender) {
+    const seg = document.getElementById('guestRecordSegment');
+    if (seg) {
+      seg.classList.remove('is-male', 'is-female');
+      seg.dataset.gender = gender || '';
+      if (gender === 'male') seg.classList.add('is-male');
+      else if (gender === 'female') seg.classList.add('is-female');
+    }
+    document.querySelectorAll('[data-record-gender]').forEach(btn => {
+      const on = !!gender && btn.dataset.recordGender === gender;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+    updateGuestRecordNamePreview();
+  }
+  function getGuestRecordSheetGender() {
+    const seg = document.getElementById('guestRecordSegment');
+    const g = seg?.dataset.gender;
+    return g === 'male' || g === 'female' ? g : null;
+  }
+  function updateGuestRecordNamePreview() {
+    const preview = document.getElementById('guestRecordPreview');
+    const nameEl = document.getElementById('guestRecordPreviewName');
+    const raw = document.getElementById('guestRecordName')?.value.trim() || '';
+    const gender = getGuestRecordSheetGender();
+    if (!preview || !nameEl) return;
+    if (!gender) {
+      preview.classList.add('hidden');
+      nameEl.textContent = '';
+      return;
+    }
+    nameEl.textContent = raw ? formatWalkInName(raw, gender) : (gender === 'male' ? '先生' : '小姐');
+    preview.classList.remove('hidden');
+  }
+  function openGuestRecordSheet() {
+    const nameEl = document.getElementById('guestRecordName');
+    const phoneEl = document.getElementById('guestRecordPhone');
+    if (nameEl) nameEl.value = '';
+    if (phoneEl) phoneEl.value = '';
+    syncGuestRecordGenderUI(hasGuestGender() ? state.guestGender : null);
+    openMask('guestRecordMask');
+    setTimeout(() => nameEl?.focus(), 120);
+  }
+  function saveGuestRecord() {
+    const gender = getGuestRecordSheetGender();
+    if (!gender) {
+      showToast('请选择性别');
+      return;
+    }
+    const rawName = document.getElementById('guestRecordName')?.value.trim() || '';
+    if (!rawName) { showToast('请输入姓名'); return; }
+    const phoneRaw = document.getElementById('guestRecordPhone')?.value.trim() || '';
+    const phone = phoneRaw.replace(/\D/g, '');
+    if (phoneRaw && !/^1\d{10}$/.test(phone)) {
+      showToast('请输入正确的手机号');
+      return;
+    }
+    const name = formatWalkInName(rawName, gender);
+    const customer = {
+      id: 'w_' + Date.now(),
+      name,
+      phone,
+      isMember: false,
+      vip: false,
+      gender,
+      avatar: gender === 'male' ? AVATAR_MALE : AVATAR_FEMALE,
+      lastVisit: null,
+      cards: [],
+    };
+    CUSTOMERS.unshift(customer);
+    state.guestGender = gender;
+    state.customer = customer;
+    state.guestGenderPickerOpen = false;
+    closeMask('guestRecordMask');
+    showToast('已录入：' + name);
+    if (!document.getElementById('screen-bill').classList.contains('hidden')) renderBillHeader();
+    if (!document.getElementById('screen-detail').classList.contains('hidden')) renderDetail();
+  }
+
+  document.getElementById('guestRecordMask')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-record-gender]');
+    if (!btn) return;
+    syncGuestRecordGenderUI(btn.dataset.recordGender);
+  });
+  document.getElementById('guestRecordName')?.addEventListener('input', updateGuestRecordNamePreview);
+
   function onGuestGenderClick(e) {
     const btn = e.target.closest('[data-guest-gender]');
     if (!btn) return;
     state.guestGender = btn.dataset.guestGender;
     state.customer = currentGuest();
+    state.guestGenderPickerOpen = true;
+    if (!document.getElementById('screen-bill').classList.contains('hidden')) renderBillHeader();
+    if (!document.getElementById('screen-detail').classList.contains('hidden')) renderDetail();
+  }
+  function onGuestSwitchClick() {
+    state.guestGenderPickerOpen = !state.guestGenderPickerOpen;
     if (!document.getElementById('screen-bill').classList.contains('hidden')) renderBillHeader();
     if (!document.getElementById('screen-detail').classList.contains('hidden')) renderDetail();
   }
   document.getElementById('billBody').addEventListener('click', e => {
+    if (e.target.closest('[data-guest-switch]')) { onGuestSwitchClick(); return; }
     if (e.target.closest('[data-guest-gender]')) { onGuestGenderClick(e); return; }
-    if (e.target.id === 'btnChangeCustomer') { showOnlyScreen('screen-pick'); return; }
+    if (e.target.closest('#btnRecordGuest')) { openGuestRecordSheet(); return; }
+    if (e.target.id === 'btnChangeCustomer') { openMemberPicker(); return; }
     if (e.target.id === 'btnExpandCards') { state.cardsExpanded = !state.cardsExpanded; renderBillHeader(); return; }
     if (e.target.id === 'btnBillAddCard' || e.target.id === 'btnIssueCard') { openAddCardScreen(); return; }
     const tab = e.target.closest('[data-tab]');
@@ -15418,10 +16222,12 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('btnDetailDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('detailBody').addEventListener('click', e => {
     if (!e.target.closest('.detail-item__track.is-open') && !e.target.closest('[data-del-cart]')) closeAllDetailSwipes();
+    if (e.target.closest('[data-guest-switch]')) { onGuestSwitchClick(); return; }
     if (e.target.closest('[data-guest-gender]')) { onGuestGenderClick(e); return; }
+    if (e.target.closest('#btnRecordGuest')) { openGuestRecordSheet(); return; }
     if (e.target.id === 'btnChangeCustomer' || e.target.id === 'btnIssueCard') {
       if (e.target.id === 'btnIssueCard') openAddCardScreen();
-      else showOnlyScreen('screen-pick');
+      else openMemberPicker();
       return;
     }
     const del = e.target.closest('[data-del-cart]');
@@ -15507,7 +16313,7 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-scan-cust');
   });
   document.getElementById('btnCheckoutBill')?.addEventListener('click', () => {
-    closeMask('checkoutMask');
+    closeMask('checkoutMask', { keepCardIssueDraft: true });
     state.payAmounts = {};
     renderPayChannels();
     openMask('payMask');
@@ -15654,6 +16460,8 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-pick-benefit');
   });
 
+  document.getElementById('btnGuestRecordSave')?.addEventListener('click', saveGuestRecord);
+
   document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => closeMask(btn.dataset.close)));
   document.querySelectorAll('[data-mask-close]').forEach(mask => {
     mask.addEventListener('click', e => {
@@ -15713,11 +16521,23 @@ window.__BILLING_EMBEDDED__ = true;
     if (!ch) return;
     const id = ch.dataset.pay;
     state.payChannel = id;
-    const due = calcSettlement().dueCash;
+    const s = calcSettlement();
+    const grossDue = round2(s.dueCash + s.balanceDeduct);
     const others = round2(payFilledTotal() - (Number(state.payAmounts[id]) || 0));
-    const remain = round2(Math.max(0, due - others));
+    let remain = round2(Math.max(0, grossDue - others));
+    if (id === 'membercard') remain = Math.min(remain, getMembercardBalanceAvailable());
     if (!(Number(state.payAmounts[id]) > 0) && remain > 0) state.payAmounts[id] = remain;
     renderPayChannels();
+  });
+  document.getElementById('payChannels').addEventListener('focusin', e => {
+    const inp = e.target.closest('[data-pay-amt]');
+    if (!inp) return;
+    const id = inp.dataset.payAmt;
+    if (Number(state.payAmounts[id]) > 0 || inp.value !== '') {
+      state.payAmounts[id] = 0;
+      inp.value = '';
+      updatePaySheetTotals();
+    }
   });
   document.getElementById('payChannels').addEventListener('input', e => {
     const inp = e.target.closest('[data-pay-amt]');
@@ -15725,21 +16545,23 @@ window.__BILLING_EMBEDDED__ = true;
     const id = inp.dataset.payAmt;
     state.payAmounts[id] = Math.max(0, Number(inp.value) || 0);
     if (Number(state.payAmounts[id]) > 0) state.payChannel = id;
-    const s = calcSettlement();
-    const filled = payFilledTotal();
-    const tip = document.querySelector('#payChannels > div:last-child');
-    if (tip) tip.textContent = `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`;
+    updatePaySheetTotals();
   });
   document.getElementById('btnConfirmPay').addEventListener('click', () => {
     const s = calcSettlement();
-    const filled = payFilledTotal();
-    if (s.dueCash > 0 && filled + 0.001 < s.dueCash) {
-      showToast(`支付金额不足，还差 ${formatYen(s.dueCash - filled)}`);
+    const cashFilled = payCashFilledTotal();
+    if (s.dueCash > 0 && cashFilled + 0.001 < s.dueCash) {
+      showToast(`支付金额不足，还差 ${formatYen(s.dueCash - cashFilled)}`);
+      return;
+    }
+    const mcReq = round2(Number(state.payAmounts?.membercard) || 0);
+    if (mcReq > 0 && mcReq > s.balanceDeduct + 0.01) {
+      showToast(`会员卡可用面值不足，最多 ${formatYen(getMembercardBalanceAvailable())}`);
       return;
     }
     const splits = payChannelDefs()
       .map(ch => ({ id: ch.id, amount: round2(Number(state.payAmounts[ch.id]) || 0) }))
-      .filter(p => p.amount > 0);
+      .filter(p => p.amount > 0 && p.id !== 'membercard');
     if (s.dueCash > 0 && !splits.length) {
       showToast('请填写支付金额');
       return;
@@ -15748,16 +16570,42 @@ window.__BILLING_EMBEDDED__ = true;
     s.paySplits = splits;
     s.manualOrderNo = state.manualOrderNo || '';
     state.lastSettlement = s;
+    if (state.cardIssuePending) {
+      const pending = state.cardIssuePending;
+      if (!state.successIssueTemplateId) state.successIssueTemplateId = pending.templateId;
+      if (!state.successIssueCardHtml && window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function') {
+        state.successIssueCardHtml = window.CardHost.renderIssueSuccessCardFace(pending.templateId);
+      }
+      if (window.CardHost && typeof window.CardHost.finalizeTemplateIssue === 'function') {
+        window.CardHost.finalizeTemplateIssue(pending);
+      }
+      const c = CUSTOMERS.find(x => x.id === pending.memberId);
+      const tpl = CARD_TEMPLATES.find(t => t.id === pending.templateId);
+      if (c && tpl) {
+        if (!c.cards) c.cards = [];
+        if (!c.cards.some(card => heldTemplateId(card) === pending.templateId)) {
+          c.cards.push(heldCardFromTemplate(tpl, pending.memberId));
+        }
+        c.isMember = true;
+      }
+      state.cardIssuePending = null;
+    }
     mutateCardsAfterPay(s);
     closeMask('payMask');
     renderSuccess();
     showOnlyScreen('screen-success');
   });
-  document.getElementById('btnSuccessHome').addEventListener('click', resetOrder);
+  document.getElementById('btnSuccessHome').addEventListener('click', () => {
+    if (state.lastIssueFromCardMgmt) returnToCardListFromIssueCheckout();
+    else resetOrder();
+  });
+  document.getElementById('btnContinue').addEventListener('click', () => {
+    if (state.lastIssueFromCardMgmt) returnToCardListFromIssueCheckout();
+    else continueBilling();
+  });
   document.getElementById('btnViewFlow').addEventListener('click', () => showToast('查看流水后续开放'));
   document.getElementById('btnSign').addEventListener('click', () => showToast('客户签字后续开放'));
   document.getElementById('btnCustDetail').addEventListener('click', () => showToast('客户详情后续开放'));
-  document.getElementById('btnContinue').addEventListener('click', continueBilling);
 
   document.querySelectorAll('[data-staff-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -15771,13 +16619,16 @@ window.__BILLING_EMBEDDED__ = true;
   renderCustomerList();
   syncCartChrome();
   syncPickHoldsEntry();
-  if (!window.__BILLING_EMBEDDED__) showOnlyScreen('screen-pick');
+  if (!window.__BILLING_EMBEDDED__) {
+    enterBillUnselected();
+  }
   // Expose bridge for card flow map
   window.BillingDemo = {
     nav: typeof FLOW_NAV !== 'undefined' ? FLOW_NAV : {},
     enterPick() { if (typeof FLOW_NAV !== 'undefined' && FLOW_NAV.pick) FLOW_NAV.pick(); },
     show(id) { showOnlyScreen(id); },
     ensureMember() { if (typeof enterBill === 'function' && typeof CUSTOMERS !== 'undefined') enterBill(CUSTOMERS[0]); },
+    startCardIssueCheckout(ctx) { startCardIssueCheckout(ctx || {}); },
     onCardIssued({ templateId, customerId }) {
       const tpl = CARD_TEMPLATES.find(t => t.id === templateId);
       const c = CUSTOMERS.find(x => x.id === customerId);

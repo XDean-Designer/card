@@ -8,7 +8,7 @@
 
 - 入口：`index.html`
 - 交互原型：`demo.html`
-- 逻辑梳理：`logic.html`
+- 开发 PRD：`PRD-会员卡管理.md`（预览：`PRD-会员卡管理.html`）
 
 推送 `main` 后，GitHub Actions（`Deploy GitHub Pages`）会自动发布。仓库 Pages 源需为 **GitHub Actions**（首次若 404，在 Settings → Pages 确认即可）。
 
@@ -29,7 +29,4 @@ python -m http.server 8080
 | `PRD-会员卡管理.md` | 会员卡管理开发/测试 PRD 源文件（与原型配套） |
 | `PRD-会员卡管理.html` | 上述 PRD 的阅读预览（表格/标题排版） |
 | `assets/billing/` | 开单模块静态资源（从 `billing/assets` 拷贝，供 Pages 单包发布） |
-| `logic.html` | 逻辑与算例文档 |
-| `prd-review.html` | PRD 可视化评审页 |
 | `剑琅联盟-会员卡-权益组合版.html` | 与 `demo.html` 同内容（中文文件名备份） |
-| `剑琅联盟-会员卡逻辑梳理.html` | 与 `logic.html` 同内容（中文文件名备份） |
