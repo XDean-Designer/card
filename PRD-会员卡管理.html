@@ -1,0 +1,1629 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PRD · 会员卡管理（预览）</title><style>
+:root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);line-height:1.7;font-size:15px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topbar__title{font-size:14px;font-weight:600}.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:8px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap}
+.topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
+.topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none}}
+.article>h1:first-child{margin-top:0}
+h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
+h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;font-weight:650;margin:28px 0 10px}h4{font-size:15px;font-weight:650;margin:20px 0 8px}
+p{margin:0 0 12px}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+ul,ol{margin:0 0 14px;padding-left:1.4em}li{margin:4px 0}
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+blockquote{margin:12px 0 16px;padding:10px 14px;border-left:3px solid var(--brand);background:#fff5f6;color:var(--text-sec);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
+pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
+pre code{background:none;padding:0;color:inherit}
+table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
+th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
+tr:nth-child(even) td{background:#fafbfc}
+.foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+</style></head><body><div class="topbar"><div class="topbar__title">PRD · 会员卡管理<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div><div class="topbar__actions"><a class="ghost" href="demo.html">打开交互原型</a><a class="ghost" href="PRD-会员卡管理.md" download>下载 Markdown</a><a class="primary" href="PRD-会员卡管理.md" target="_blank" rel="noopener">打开源文件 .md</a></div></div><div class="wrap"><article class="article"><h1>PRD：会员卡管理（商户端）</h1>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档版本</td>
+<td>v1.0</td>
+</tr>
+<tr>
+<td>日期</td>
+<td>2026-07-22</td>
+</tr>
+<tr>
+<td>交互原型（唯一可视依据）</td>
+<td>同目录 <code>demo.html</code>（中文镜像：<code>剑琅联盟-会员卡-权益组合版.html</code>）</td>
+</tr>
+<tr>
+<td>画布</td>
+<td>390 × 844</td>
+</tr>
+<tr>
+<td>目的</td>
+<td>供前端 / 后端 / 测试及 AI 工具落地「会员卡管理」；<strong>只需本文 + 交互原型</strong>，无需其他说明文档</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>怎么读这份 PRD</h2>
+<p>正文按模块编排。<strong>不用通读全文</strong>，按角色跳章即可。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>模块</th>
+<th style="text-align: center;">前端</th>
+<th style="text-align: center;">后端</th>
+<th style="text-align: center;">测试</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>背景 / 目标 / 范围 / 能力映射</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>防范围蔓延</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户场景与成功标准</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>测「业务对不对」</td>
+</tr>
+<tr>
+<td>3</td>
+<td>信息架构与页面清单</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>做哪些页</td>
+</tr>
+<tr>
+<td>4</td>
+<td>状态机</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td>在售/下架、锁编辑、表单模式</td>
+</tr>
+<tr>
+<td>5</td>
+<td>交互细则 / 异常流</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>校验、toast、拦截</td>
+</tr>
+<tr>
+<td>6</td>
+<td>功能规格</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>逐屏字段与跳转</td>
+</tr>
+<tr>
+<td>7</td>
+<td>数据模型与接口约定</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td style="text-align: center;">✓</td>
+<td>字段、能力清单、时序</td>
+</tr>
+<tr>
+<td>8</td>
+<td>业务规则与算例</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td style="text-align: center;">✓</td>
+<td>权益、策略、退卡</td>
+</tr>
+<tr>
+<td>9</td>
+<td>文案清单与权限</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">部分</td>
+<td style="text-align: center;">✓</td>
+<td>文案；权限占位</td>
+</tr>
+<tr>
+<td>10</td>
+<td>验收 P0 + 造数场景</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td>Given→When→Then</td>
+</tr>
+<tr>
+<td>11</td>
+<td>非功能（极简）</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>交付物</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✓</td>
+<td>仅 PRD + 原型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建议阅读路径</strong></p>
+<ul>
+<li><strong>前端</strong>：1 → 3 → 4 → 5 → 6 → 9 → 12（联调再看 7、8）</li>
+<li><strong>后端</strong>：1 → 4 → 7 → 8（其余了解）</li>
+<li><strong>测试</strong>：1 → 2 → 4 → 8 → 10（对照 5、6、原型走查）</li>
+</ul>
+<p><strong>先读这几条（贯穿全文）</strong></p>
+<ol>
+<li>新系统用 <strong>权益组合</strong>（面值 / 项目 / 折扣）建卡，<strong>不再选「五种卡类型」</strong>；整套取代旧会员卡系统。  </li>
+<li>创建固定 <strong>三步</strong>：基本信息 → 权益组合 → 用卡策略；Step2 <strong>至少开启并配置一类权益</strong>。  </li>
+<li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可办卡/退卡/延期）。  </li>
+<li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
+<li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
+<li>用卡策略两轨独立：<code>消耗及退卡计算规则</code>、<code>业绩计算规则</code>，各可选均值或减值/原价。  </li>
+<li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
+</ol>
+<p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准；本文把规则与验收写全，便于无历史上下文的机器与人直接开工。</p>
+<hr />
+<h1>模块 1　背景 / 目标 / 范围 / 能力映射</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓</p>
+</blockquote>
+<h2>1.1 背景</h2>
+<p>原先的会员卡系统将卡划分为 <strong>5 种固定类型</strong>，每种类型套用 <strong>预设模板字段</strong>。商户创建会员卡时：</p>
+<ul>
+<li>只能在类型预设内填字段，<strong>自由度不足</strong>；</li>
+<li>每次都要面对 <strong>繁复的设置页</strong> 逐项填充，创建成本高。</li>
+</ul>
+<p>本期交付的「会员卡管理」将 <strong>整套取代</strong> 上述旧系统（非长期并行两套产品线），对字段按能力重新解构。</p>
+<h2>1.2 目标</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取代旧系统</td>
+<td>新建模与流程成为唯一建卡体系</td>
+</tr>
+<tr>
+<td>能力覆盖</td>
+<td>可配置出与旧五类 <strong>功能等价</strong> 的卡，也可配置旧体系 <strong>无法做出</strong> 的组合卡</td>
+</tr>
+<tr>
+<td>创建更简</td>
+<td>三步完成：基本信息 → 权益组合 → 用卡策略</td>
+</tr>
+<tr>
+<td>运营闭环</td>
+<td>列表 / 详情 / 上下架 / 复制 / 办卡 / 延期 / 整卡退卡</td>
+</tr>
+<tr>
+<td>策略可配置</td>
+<td>退卡消耗与员工业绩规则在建卡时选定并随模板保存</td>
+</tr>
+</tbody>
+</table>
+<h2>1.3 本期做（In）</h2>
+<ul>
+<li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
+<li>权益组合：面值、项目（每项/共计、购买/赠送/不限次）、折扣（比例/固定金额）  </li>
+<li>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次约束）  </li>
+<li>用卡策略：消耗及退卡计算规则、业绩计算规则  </li>
+<li>办卡（多选既存会员）、办卡成功  </li>
+<li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
+<li>上下架及文案提示  </li>
+</ul>
+<h2>1.4 本期不做（Out）</h2>
+<ul>
+<li><strong>开单结账</strong>全链路（选客、开单台、支付等）— 不在本文范围  </li>
+<li><strong>项目管理（价目表）</strong>作为独立产品交付（建卡时「选项目」依赖价目数据源，见依赖说明）  </li>
+<li><strong>会员管理</strong>（会员 CRUD；办卡仅从既存会员列表多选）  </li>
+<li>部分退卡、劳动业绩独立运算台、预约联调  </li>
+<li>原型工具栏「无数据/有数据」造数按钮 — <strong>仅演示</strong>，不进正式产品  </li>
+</ul>
+<h2>1.5 旧能力 ↔ 新组合权益（能力映射，不写废弃产品名）</h2>
+<table>
+<thead>
+<tr>
+<th>旧体系常见能力（语义）</th>
+<th>新体系如何配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>储值/充值类（买赠面值）</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）</td>
+</tr>
+<tr>
+<td>次卡/项目次数类</td>
+<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次</td>
+</tr>
+<tr>
+<td>折扣/会员价类</td>
+<td>开启 <strong>折扣</strong>：选适用项目；标尺折扣或固定金额</td>
+</tr>
+<tr>
+<td>期限卡</td>
+<td>Step1 <strong>有效期限</strong>；含不限次项目时不可为「永久」</td>
+</tr>
+<tr>
+<td>组合（储值+项目+折扣等）</td>
+<td>Step2 <strong>同时开启多类权益</strong> 并分别配置</td>
+</tr>
+<tr>
+<td>旧类型无法覆盖的组合</td>
+<td>任意权益开关组合 + 独立用卡策略</td>
+</tr>
+</tbody>
+</table>
+<p>映射不足时 <strong>以新字段与原型行为为准</strong>，不编造旧系统字段表。</p>
+<hr />
+<h1>模块 2　用户场景与成功标准</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<h2>2.1 角色</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>店主（默认）</td>
+<td>可进行本文全部操作</td>
+</tr>
+<tr>
+<td>店员</td>
+<td><strong>【待产品确认】</strong> 本期原型未表现差异；权限见模块 9.2 占位</td>
+</tr>
+</tbody>
+</table>
+<h2>2.2 核心场景</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用户期望</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首次建卡</td>
+<td>三步填完保存 → 上架 → 可立即办卡</td>
+</tr>
+<tr>
+<td>配置组合权益</td>
+<td>面值/项目/折扣按需勾选配置，预览卡面</td>
+</tr>
+<tr>
+<td>有持卡后改规则</td>
+<td>不能直接编辑模板；复制建卡后改新卡</td>
+</tr>
+<tr>
+<td>停售</td>
+<td>下架后新客不能办；已持卡不受影响</td>
+</tr>
+<tr>
+<td>再开售</td>
+<td>重新上架后可再办</td>
+</tr>
+<tr>
+<td>为会员办卡</td>
+<td>选未持该卡的会员，可多选，办卡成功</td>
+</tr>
+<tr>
+<td>延期</td>
+<td>对非永久有效持卡设置延期时长（可含参考费用）</td>
+</tr>
+<tr>
+<td>退卡</td>
+<td>看到建议退款与明细，改实际退款后确认整卡退</td>
+</tr>
+</tbody>
+</table>
+<h2>2.3 成功标准（可判定）</h2>
+<ol>
+<li>空店可创建至少一张在售卡并出现在「在售」列表。  </li>
+<li>Step2 未配置任何权益内容时 <strong>不能</strong> 进入 Step3 / 不能保存成功。  </li>
+<li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
+<li>已下架卡列表无「办卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
+<li>办卡后持卡人数/办卡次数等运营数据按规则增加（见原型统计逻辑）。  </li>
+<li>退卡确认后该会员不再作为有效持卡；实退金额以确认值为准写入结果提示。</li>
+</ol>
+<hr />
+<h1>模块 3　信息架构与页面清单</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<pre><code>会员卡管理
+ ├─ 列表（在售 / 已下架）
+ ├─ 添加/编辑/复制 · Step1 基本信息
+ ├─ Step2 权益组合
+ │    ├─ 添加/编辑项目权益
+ │    └─ 添加/编辑折扣权益
+ ├─ Step3 用卡策略
+ ├─ 创建成功
+ ├─ 会员卡详情
+ ├─ 办卡成功
+ └─ Sheets
+      ├─ 选择会员（办卡 | 退卡/延期）
+      ├─ 退卡估值
+      ├─ 下架确认 / 重新上架确认
+      └─ 辅助：金额键盘、计次说明、运营数据说明、不限次改有效期、策略明细等
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>页面/层</th>
+<th>导航标题（原型）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列表</td>
+<td>会员卡管理</td>
+<td>Tab：在售 / 已下架；底栏「添加会员卡」</td>
+</tr>
+<tr>
+<td>Step1</td>
+<td>添加会员卡 / 编辑会员卡</td>
+<td>基本信息 + 卡面模板</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>权益组合</td>
+<td>三类权益 Switch + 配置</td>
+</tr>
+<tr>
+<td>Step3</td>
+<td>用卡策略</td>
+<td>退卡规则 + 业绩规则；保存</td>
+</tr>
+<tr>
+<td>创建成功</td>
+<td>—</td>
+<td>返回列表 / 立即办卡</td>
+</tr>
+<tr>
+<td>详情</td>
+<td>会员卡详情</td>
+<td>运营数据 + 卡面信息 + 操作</td>
+</tr>
+<tr>
+<td>项目权益页</td>
+<td>添加/编辑项目权益</td>
+<td>选项目 + 计次参数</td>
+</tr>
+<tr>
+<td>折扣权益页</td>
+<td>添加/编辑折扣权益</td>
+<td>选项目 + 折扣参数</td>
+</tr>
+<tr>
+<td>办卡成功</td>
+<td>—</td>
+<td>返回列表 / 继续办卡</td>
+</tr>
+<tr>
+<td>选择会员</td>
+<td>选择会员</td>
+<td>Tab 办卡 / 退卡/延期</td>
+</tr>
+<tr>
+<td>退卡估值</td>
+<td>退卡估值</td>
+<td>建议退款 + 实退</td>
+</tr>
+<tr>
+<td>下架/上架</td>
+<td>下架会员卡 / 重新上架</td>
+<td>确认对话框</td>
+</tr>
+</tbody>
+</table>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> + sheets。</p>
+<hr />
+<h1>模块 4　状态机</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 <strong>必看</strong></p>
+</blockquote>
+<h2>4.1 模板上架状态</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>产品表现</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在售 <code>shelved=false</code></td>
+<td>「在售」列表；可办卡；详情可下架/编辑（未锁时）</td>
+<td>新客可办理</td>
+</tr>
+<tr>
+<td>已下架 <code>shelved=true</code></td>
+<td>「已下架」列表；不可新办；详情可重新上架、复制、已持卡管理</td>
+<td>停售</td>
+</tr>
+</tbody>
+</table>
+<pre><code>在售 ──确认下架──► 已下架 ──确认上架──► 在售
+</code></pre>
+<ul>
+<li>下架：<strong>不影响</strong>已持卡客户。  </li>
+<li>已下架：选择会员 Sheet <strong>仅「退卡/延期」</strong>（隐藏办卡 Tab）。</li>
+</ul>
+<h2>4.2 模板编辑锁定</h2>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>当前有效持卡数 validCardCount == 0</code></td>
+<td>可进入编辑三步并保存覆盖原模板</td>
+</tr>
+<tr>
+<td><code>validCardCount &gt; 0</code></td>
+<td><strong>不可编辑</strong>；详情「编辑」禁用；提示复制建卡</td>
+</tr>
+</tbody>
+</table>
+<pre><code>无持卡 ──编辑──► 三步表单 ──保存修改──► 更新原模板 → 回详情
+有持卡 ──点编辑──► 拦截（toast）──► 引导复制建卡 → 新建模板
+</code></pre>
+<h2>4.3 表单模式 <code>formMode</code></h2>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>入口</th>
+<th>保存结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create</code></td>
+<td>「添加会员卡」/空态</td>
+<td>新建在售模板 → 创建成功页</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>详情「编辑」（未锁定）</td>
+<td>更新原模板 → 详情；toast「已保存」</td>
+</tr>
+<tr>
+<td><code>duplicate</code></td>
+<td>「+复制建卡」</td>
+<td>新建模板（名称默认「原名（副本）」）；原卡不变 → 创建成功页</td>
+</tr>
+</tbody>
+</table>
+<p>复制模式三步均展示横幅：<code>正在基于「{原卡名}」创建新卡，保存后原卡不受影响</code>。</p>
+<h2>4.4 列表 Tab</h2>
+<p><code>listShelfTab</code>: <code>active</code> | <code>shelved</code>，仅切换列表数据源与空态文案，不改模板状态。</p>
+<h2>4.5 持卡相关（实例层）</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未持卡</td>
+<td>办卡 Tab 可选</td>
+</tr>
+<tr>
+<td>已持卡（有效）</td>
+<td>退卡/延期 Tab；可退卡；非永久可延期</td>
+</tr>
+<tr>
+<td>已失效</td>
+<td>展示「已失效」；操作以原型表现为准</td>
+</tr>
+<tr>
+<td>永久有效</td>
+<td>延期入口提示无需延期</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>模块 5　交互细则 / 异常流</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<h2>5.1 总原则</h2>
+<ol>
+<li>列表点卡面进详情；footer 按钮不冒泡进详情。  </li>
+<li>创建/编辑/复制均为三步；Step1/2「下一步」、Step3「保存/保存修改」。  </li>
+<li>Step2 必须至少有一类已开启且内容有效的权益。  </li>
+<li>金额类输入使用原型金额键盘交互（正式产品对齐现网数字键盘即可）。  </li>
+<li>所有拦截以 toast 或对话框给出 <strong>明确中文原因</strong>（见模块 9）。</li>
+</ol>
+<h2>5.2 离开与返回</h2>
+<ul>
+<li>各步标题栏返回：回到上一步或列表（与原型一致：Step1 回列表，Step2→1，Step3→2）。  </li>
+<li>Sheet 点遮罩关闭：取消当前 sheet，不提交。  </li>
+<li><strong>【待联调确认】</strong> 三步中途系统返回是否弹「放弃编辑」：原型未做拦截时，正式产品可按现网统一规范补齐。</li>
+</ul>
+<h2>5.3 校验失败（须拦截前进/保存）</h2>
+<table>
+<thead>
+<tr>
+<th>时机</th>
+<th>条件</th>
+<th>提示（原型文案）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step1 下一步</td>
+<td>卡名称为空</td>
+<td>请填写卡名称</td>
+</tr>
+<tr>
+<td>Step1 下一步</td>
+<td>购买金额为空</td>
+<td>请填写购买金额</td>
+</tr>
+<tr>
+<td>Step1/相关</td>
+<td>有效期限未设妥</td>
+<td>请设置有效期限</td>
+</tr>
+<tr>
+<td>Step2 下一步</td>
+<td>未选任何权益内容</td>
+<td>请至少选一项权益内容</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>开启面值但未填面值</td>
+<td>请填写面值金额</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>开启项目但无已保存项目权益</td>
+<td>请至少保存一个项目权益</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>开启折扣但无已保存折扣权益</td>
+<td>请至少保存一个折扣权益</td>
+</tr>
+<tr>
+<td>项目权益确定</td>
+<td>未选项目</td>
+<td>请先选择项目范围</td>
+</tr>
+<tr>
+<td>项目权益确定</td>
+<td>未设次数且非不限次</td>
+<td>请设置次数或选择不限次</td>
+</tr>
+<tr>
+<td>折扣确定</td>
+<td>未选项目</td>
+<td>请先选择折扣范围</td>
+</tr>
+<tr>
+<td>折扣固定金额</td>
+<td>≤0 或空</td>
+<td>请输入大于 0 的固定金额</td>
+</tr>
+<tr>
+<td>折扣比例</td>
+<td>未设置</td>
+<td>请设置折扣</td>
+</tr>
+<tr>
+<td>编辑锁定</td>
+<td>有持卡仍保存/进编辑</td>
+<td>已有持卡，不可编辑；请复制建卡后修改</td>
+</tr>
+<tr>
+<td>不限次 + 永久</td>
+<td>冲突</td>
+<td>弹窗改有效期，或 toast：不限次项目须先设置卡有效期（不可为永久）</td>
+</tr>
+<tr>
+<td>办卡确定</td>
+<td>未选会员</td>
+<td>请至少选择一位会员</td>
+</tr>
+<tr>
+<td>延期</td>
+<td>永久卡</td>
+<td>该卡永久有效，无需延期</td>
+</tr>
+<tr>
+<td>延期</td>
+<td>未设时长</td>
+<td>请设置延期时长</td>
+</tr>
+<tr>
+<td>延期</td>
+<td>参考费用为负</td>
+<td>参考费用不能为负数</td>
+</tr>
+<tr>
+<td>退卡</td>
+<td>实退为空</td>
+<td>请填写实际退款金额</td>
+</tr>
+</tbody>
+</table>
+<h2>5.4 空态</h2>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>文案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在售空</td>
+<td>标题「暂无会员卡」；说明点击底部「添加会员卡」开始创建</td>
+</tr>
+<tr>
+<td>已下架空</td>
+<td>标题「暂无已下架会员卡」；说明下架后的卡会出现在这里…</td>
+</tr>
+<tr>
+<td>办卡选人空</td>
+<td>所有会员均已持有该卡</td>
+</tr>
+<tr>
+<td>卡面预览无权益</td>
+<td>暂无权益信息</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>模块 6　功能规格</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<p>下列字段、按钮、跳转均须与原型一致实现；视觉以原型为准（品牌色 <code>#F32F41</code> 等）。</p>
+<h2>6.1 会员卡列表</h2>
+<p><strong>结构</strong></p>
+<ul>
+<li>标题：会员卡管理  </li>
+<li>Tab：在售 | 已下架  </li>
+<li>列表项：卡面条（VIP 标 + 卡名 + 价格）+ 权益摘要面板 + footer  </li>
+<li>底栏：添加会员卡  </li>
+</ul>
+<p><strong>在售 footer</strong>：<code>+复制建卡</code>、<code>办卡/退卡</code><br />
+<strong>已下架 footer</strong>：仅 <code>+复制建卡</code>  </p>
+<p><strong>卡面摘要面板</strong></p>
+<ul>
+<li>面值：<code>面值 ¥X · 赠送 ¥Y</code>  </li>
+<li>项目：项目名 + 次数摘要（<code>10次</code> / <code>10次+送1次</code> / <code>不限次</code>）  </li>
+<li>折扣：项目名 + <code>N 折</code> 或 <code>¥金额</code>  </li>
+<li>期限：有项目/折扣展示卡有效期；纯面值展示「永久有效」；否则「—」  </li>
+</ul>
+<p><strong>跳转</strong></p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>添加会员卡</td>
+<td><code>formMode=create</code> → Step1</td>
+</tr>
+<tr>
+<td>点卡面</td>
+<td>详情</td>
+</tr>
+<tr>
+<td>+复制建卡</td>
+<td><code>formMode=duplicate</code>，预填，卡名「原名（副本）」→ Step1</td>
+</tr>
+<tr>
+<td>办卡/退卡</td>
+<td>打开选择会员 Sheet（办卡 Tab）</td>
+</tr>
+</tbody>
+</table>
+<h2>6.2 Step1 基本信息</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th style="text-align: center;">必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>卡名称</td>
+<td style="text-align: center;">✓</td>
+<td>输入；placeholder「请输入」</td>
+</tr>
+<tr>
+<td>购买金额</td>
+<td style="text-align: center;">✓</td>
+<td>金额；placeholder「请输入」</td>
+</tr>
+<tr>
+<td>有效期限</td>
+<td style="text-align: center;">✓</td>
+<td>数量 + 单位：日 / 月 / 年 / <strong>永久</strong>（默认永久）</td>
+</tr>
+<tr>
+<td>卡面模板</td>
+<td style="text-align: center;">✓</td>
+<td>五色单选，默认品牌红；下方实时预览</td>
+</tr>
+</tbody>
+</table>
+<p>步骤条文案：<code>第 1/3 步 · 基本信息</code><br />
+底栏：下一步 → Step2  </p>
+<p><strong>隐藏字段</strong>：适用对象 <code>audience</code> 默认 <code>['all']</code>，原型 Step1 <strong>无 UI</strong>；后端可按现网对象模型扩展，<strong>【待联调确认】</strong>。</p>
+<h2>6.3 Step2 权益组合</h2>
+<p>三个独立 Switch 区块（可多开）：</p>
+<h3>6.3.1 面值</h3>
+<ul>
+<li>描述：购买与赠送的面值，永久有效。  </li>
+<li><strong>面值金额</strong>（可编）  </li>
+<li><strong>赠送</strong>（只读）= <code>面值金额 − 购买金额</code>（按原型计算与展示格式）  </li>
+</ul>
+<h3>6.3.2 项目</h3>
+<ul>
+<li>描述：包含、赠送项目的次数  </li>
+<li>已保存权益以 ticket 展示；入口 <strong>+添加项目权益</strong> → 项目权益页  </li>
+<li>ticket meta：<code>每项</code>/<code>共计</code> + 次数摘要  </li>
+</ul>
+<h3>6.3.3 折扣</h3>
+<ul>
+<li>描述：比例或定额折扣  </li>
+<li>ticket + <strong>+添加折扣权益</strong> → 折扣权益页  </li>
+</ul>
+<p>底栏：下一步 → Step3（通过校验后）</p>
+<h2>6.4 项目权益页</h2>
+<ul>
+<li>标题：添加项目权益 / 编辑项目权益；右侧「管理项目表」（跳转价目依赖，<strong>【待联调确认】</strong> 是否本期可点）  </li>
+<li><strong>适用项目</strong>：列表 Switch；全选 / 反选  </li>
+<li><strong>计次模式</strong>：每项 | 共计  </li>
+<li>每项：每个项目各自获得相同次数；不限次时各项目独立不限次  </li>
+<li>共计：所选项目共享同一次数池；<strong>不限次时不可选共计</strong>  </li>
+<li><strong>权益次数 / 赠送次数 / 不限次</strong>  </li>
+<li>页内「确定」写回 Step2 ticket  </li>
+</ul>
+<h2>6.5 折扣权益页</h2>
+<ul>
+<li>适用项目：同项目页选择交互  </li>
+<li><strong>打折</strong>（标尺：免费 ↔ 原价，展示如「8 折」）或 <strong>固定金额</strong>（输入 &gt;0）  </li>
+<li>「确定」写回 Step2  </li>
+</ul>
+<h2>6.6 Step3 用卡策略</h2>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>选项</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>消耗及退卡计算规则</td>
+<td>均值模式 / 减值模式</td>
+<td>均值</td>
+</tr>
+<tr>
+<td>业绩计算规则</td>
+<td>均值模式 / 原价模式</td>
+<td>均值</td>
+</tr>
+</tbody>
+</table>
+<p>均值模式展示动态 hint（代入办卡实付、总权益面值）；<code>?</code> 打开明细说明。<br />
+底栏：保存 / 保存修改。</p>
+<h2>6.7 创建成功</h2>
+<ul>
+<li>文案：会员卡已创建；已上架，可立即为会员办理  </li>
+<li>展示新建卡预览  </li>
+<li>按钮：返回列表 | 立即为会员办卡 → 选择会员（办卡）</li>
+</ul>
+<h2>6.8 会员卡详情</h2>
+<p><strong>在售顶栏操作</strong>：下架、编辑（锁定时禁用）<br />
+<strong>已下架顶栏</strong>：已下架标记、复制建卡  </p>
+<p><strong>运营数据</strong>（带「运营数据说明」）：</p>
+<ul>
+<li>办卡总额、办卡次数、办卡人数  </li>
+<li>持卡余额（仅有面值权益时）、当前有效  </li>
+<li>有项目时：各项目消费次数（含赠送）、剩余次数（含赠送）；多于 4 项可展开  </li>
+</ul>
+<p><strong>卡面信息</strong>：面值金额/赠送、项目网格、折扣网格、项目/折扣有效期、用卡策略摘要（均值退卡·均值计绩 等，可点 <code>?</code>）</p>
+<p><strong>已下架底栏</strong>：重新上架 | 已持卡管理 → 选择会员（仅退卡/延期）</p>
+<h2>6.9 选择会员 Sheet</h2>
+<ul>
+<li>标题：选择会员；副标题：当前卡名  </li>
+<li>Tab：<strong>办卡</strong> | <strong>退卡/延期</strong>  </li>
+<li>搜索：姓名或手机  </li>
+<li>办卡：多选未持卡会员 → 确定 → 办卡成功  </li>
+<li>退卡/延期：持卡行操作「退卡」「延期」；延期展开时长（日/月/年/永久）+ 参考费用（条件显示）+ 确认延期  </li>
+</ul>
+<h2>6.10 退卡估值 Sheet</h2>
+<ul>
+<li>副标题含会员、卡名、均值退卡/减值退卡  </li>
+<li>展示：办卡实付、消耗价值、权益剩余明细、建议退款  </li>
+<li><strong>实际退款</strong>可编辑  </li>
+<li>取消 | 确认退卡  </li>
+</ul>
+<h2>6.11 下架 / 重新上架</h2>
+<p>文案见模块 9；确认后 toast「已下架」/「已重新上架」。</p>
+<h2>6.12 办卡成功</h2>
+<ul>
+<li>单人/多人成功描述  </li>
+<li>返回列表 | 继续办卡  </li>
+</ul>
+<hr />
+<h1>模块 7　数据模型与接口约定</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓</p>
+<p>路径与字段名可按现网命名；下列为 <strong>能力与规则</strong>。标 <code>【待联调确认】</code> 的项评审/联调时拍板。</p>
+</blockquote>
+<h2>7.1 模板（Template）模型</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>模板 ID</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>卡名称</td>
+</tr>
+<tr>
+<td><code>recharge</code></td>
+<td>购买金额（办卡实付口径的配置价）</td>
+</tr>
+<tr>
+<td><code>faceAmount</code> / <code>giftAmount</code></td>
+<td>面值权益开启时的面值与赠送</td>
+</tr>
+<tr>
+<td><code>benefits.balance</code></td>
+<td>bool 是否含面值</td>
+</tr>
+<tr>
+<td><code>benefits.timesOrValidity</code></td>
+<td>bool 是否含项目</td>
+</tr>
+<tr>
+<td><code>benefits.projectDiscount</code></td>
+<td>bool 是否含折扣</td>
+</tr>
+<tr>
+<td><code>projectItems[]</code></td>
+<td>项目权益项（见下）</td>
+</tr>
+<tr>
+<td><code>memberPrices{}</code></td>
+<td>折扣规则（按项目或范围）</td>
+</tr>
+<tr>
+<td><code>cardColor</code></td>
+<td><code>brand_red</code> | <code>gold</code> | <code>blue</code> | <code>purple</code> | <code>teal</code></td>
+</tr>
+<tr>
+<td><code>usagePolicy.refundRule</code></td>
+<td><code>alloc_pool</code> | <code>retail</code></td>
+</tr>
+<tr>
+<td><code>usagePolicy.performanceRule</code></td>
+<td><code>alloc_pool</code> | <code>retail</code></td>
+</tr>
+<tr>
+<td><code>validity*</code></td>
+<td>有效期：永久或日/月/年数量</td>
+</tr>
+<tr>
+<td><code>shelved</code></td>
+<td>是否下架</td>
+</tr>
+<tr>
+<td><code>audience</code></td>
+<td>适用对象，原型默认 <code>['all']</code></td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td><code>normal</code> | <code>duplicate</code> | …</td>
+</tr>
+<tr>
+<td><code>duplicatedFrom</code></td>
+<td>复制来源模板 ID（可选）</td>
+</tr>
+<tr>
+<td><code>createdAt</code></td>
+<td>创建时间</td>
+</tr>
+</tbody>
+</table>
+<h3>projectItems[] 元素</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code> / <code>name</code></td>
+<td>价目项目</td>
+</tr>
+<tr>
+<td><code>unlimited</code></td>
+<td>是否不限次</td>
+</tr>
+<tr>
+<td><code>purchaseQty</code> / <code>giftQty</code></td>
+<td>购买/赠送次数</td>
+</tr>
+<tr>
+<td><code>qtyScope</code></td>
+<td><code>per_item</code>（每项）| <code>shared</code>（共计）</td>
+</tr>
+<tr>
+<td><code>sharedGroupId</code></td>
+<td>共计组 ID（共计时）</td>
+</tr>
+</tbody>
+</table>
+<h3>折扣 memberPrices</h3>
+<ul>
+<li>比例：<code>{ tickIndex: N }</code>（对应标尺档，展示为 N 折/免费/原价）  </li>
+<li>或固定：<code>{ mode: 'fixed', amount: '299' }</code>  </li>
+</ul>
+<h2>7.2 持卡实例（示意）</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>会员 ID、模板 ID</td>
+<td>关联</td>
+</tr>
+<tr>
+<td>办卡实付</td>
+<td>用于退卡/业绩分摊</td>
+</tr>
+<tr>
+<td>有效期至 / 是否永久</td>
+<td></td>
+</tr>
+<tr>
+<td>面值余额拆分（购买/赠送）</td>
+<td>退卡明细</td>
+</tr>
+<tr>
+<td>项目已用/剩余（购买/赠送）</td>
+<td></td>
+</tr>
+<tr>
+<td>折扣已用次数与已省金额</td>
+<td>策略相关</td>
+</tr>
+</tbody>
+</table>
+<p>账本结构 <code>【待联调确认】</code> 与现网会员资产表对齐；语义须支撑模块 8 退卡计算。</p>
+<h2>7.3 接口能力清单</h2>
+<ol>
+<li>模板列表（支持在售/已下架筛选）  </li>
+<li>模板详情（含运营统计、卡面信息、策略）  </li>
+<li>创建模板 / 更新模板（更新须校验无有效持卡） / 复制模板  </li>
+<li>下架 / 重新上架  </li>
+<li>价目项目列表（供权益勾选）<code>【待联调确认】</code>  </li>
+<li>可办卡会员列表（排除已持该卡）/ 已持卡会员列表  </li>
+<li>办卡（支持批量会员）  </li>
+<li>延期  </li>
+<li>退卡估值查询 + 确认退卡（提交实际退款金额）  </li>
+<li>运营统计查询  </li>
+</ol>
+<h2>7.4 谁在什么时机写数据</h2>
+<table>
+<thead>
+<tr>
+<th>时机</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step3 保存（create/duplicate）</td>
+<td>创建模板，默认在售</td>
+</tr>
+<tr>
+<td>Step3 保存（edit）</td>
+<td>覆盖模板（服务端校验无有效持卡）</td>
+</tr>
+<tr>
+<td>确认下架/上架</td>
+<td>更新 <code>shelved</code></td>
+</tr>
+<tr>
+<td>办卡确定</td>
+<td>写持卡实例；更新统计</td>
+</tr>
+<tr>
+<td>确认延期</td>
+<td>更新持卡有效期；可记参考费用</td>
+</tr>
+<tr>
+<td>确认退卡</td>
+<td>结束持卡；记实退金额与审计</td>
+</tr>
+</tbody>
+</table>
+<h2>7.5 时序（示意）</h2>
+<pre><code>创建：Step1→Step2→Step3 SaveTemplate → CreateSuccess → optional IssueCard
+编辑：Detail →（无持卡）Steps → UpdateTemplate → Detail
+复制：Duplicate → Steps → SaveTemplate(new) → CreateSuccess
+办卡：IssueMembers → IssueCard → IssueSuccess
+退卡：Holders → RefundQuote → ConfirmRefund
+</code></pre>
+<h2>7.6 联调待确认</h2>
+<ul>
+<li>[ ] 模板/持卡 API 路径与字段命名  </li>
+<li>[ ] 购买金额与支付实付在办卡时的取值来源  </li>
+<li>[ ] 参考费用是否生成收款单  </li>
+<li>[ ] 实退是否走退款通道及幂等  </li>
+<li>[ ] 「管理项目表」入口权限与路由  </li>
+<li>[ ] <code>audience</code> 是否本期暴露 UI  </li>
+</ul>
+<hr />
+<h1>模块 8　业务规则与算例</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓</p>
+</blockquote>
+<h2>8.1 赠送面值</h2>
+<p>当开启面值权益：</p>
+<p>[<br />
+赠送 = \max(0,\ 面值金额 - 购买金额)<br />
+]</p>
+<p>（展示与存贮格式与原型一致，通常为金额字符串/两位小数。）</p>
+<h2>8.2 项目计次</h2>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每项 <code>per_item</code></td>
+<td>每个适用项目各自拥有相同的购买/赠送次数或各自不限次</td>
+</tr>
+<tr>
+<td>共计 <code>shared</code></td>
+<td>多个项目共享一个次数池；消耗任一项目扣同一池</td>
+</tr>
+<tr>
+<td>不限次</td>
+<td>不可选共计；卡有效期 <strong>不能为永久</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>8.3 用卡策略公式（配置期文案）</h2>
+<p><strong>消耗及退卡 · 均值 <code>alloc_pool</code></strong></p>
+<ul>
+<li>一般：<code>消耗价值 = 项目面值 ×（办卡实付金额 ÷ 总权益面值）</code>  </li>
+<li>纯折扣 / 特殊卡型：按原型 hint 与明细弹窗（如按有效期天数比例等）实现，须与估值接口一致。</li>
+</ul>
+<p><strong>消耗及退卡 · 减值 <code>retail</code></strong></p>
+<ul>
+<li><code>消耗价值 = 项目面值</code>（按已消耗权益的原价累计）</li>
+</ul>
+<p><strong>业绩 · 均值 <code>alloc_pool</code></strong></p>
+<ul>
+<li><code>员工业绩 = 项目面值 ×（办卡实付 ÷ 总权益面值）</code>  </li>
+<li>不限次项目可附加：劳动业绩按价目表原价计（原型 hint）</li>
+</ul>
+<p><strong>业绩 · 原价 <code>retail</code></strong></p>
+<ul>
+<li><code>员工业绩 = 项目面值</code></li>
+</ul>
+<p>详情展示标签：均值退卡 / 减值退卡 · 均值计绩 / 减值计绩。</p>
+<h2>8.4 整卡退卡建议退款（均值池示意）</h2>
+<p>原型均值退卡逻辑概要：</p>
+<ol>
+<li>取办卡实付 <code>purchase</code>  </li>
+<li>按账本累计已消耗价值 <code>consumed</code>（余额消耗、项目次数×分摊或原价、折扣已省等，细则与 <code>refundRule</code> 一致）  </li>
+<li><code>建议退款 = max(0, purchase - consumed)</code>  </li>
+<li>界面展示分项明细；<strong>实际退款</strong>默认建议值，店主可改后提交  </li>
+</ol>
+<p>减值模式按「项目面值」口径累计消耗（<code>computeSuggestedRefundRetail</code> 语义）。</p>
+<p><strong>无分项可估时</strong>：提示按办卡实付协商退款。</p>
+<h2>8.5 办卡与持卡约束</h2>
+<ul>
+<li>同一会员对同一模板：未退卡前不可再次新办（办卡列表排除已持卡）。  </li>
+<li>已下架模板拒绝新办。</li>
+</ul>
+<h2>8.6 算例（测试可对照）</h2>
+<p><strong>算例 A · 纯面值</strong><br />
+购买 1000，面值 1000，赠送 0。未消费。均值/减值建议退款均接近 1000（无消耗）。</p>
+<p><strong>算例 B · 项目每项</strong><br />
+购买 500；项目「剪发」购买 10 次，单次面值 50；已用 2 次。<br />
+- 减值：消耗 ≈ 2×50 = 100；建议退款 ≈ 400（若实付 500 且无其他权益）。<br />
+- 均值：消耗 = 已用部分对应分摊价值（实付/总面值×已用面值）；建议退款 = 实付 − 消耗。</p>
+<p><strong>算例 C · 不限次</strong><br />
+不可永久有效；退卡消耗按策略与有效期/原型明细计算。</p>
+<p>（联调时用接口返回值与上表口径对齐；若现网公式有常量系数，以联调纪要更新本节。）</p>
+<hr />
+<h1>模块 9　文案清单与权限</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 部分 · 测试 ✓</p>
+</blockquote>
+<h2>9.1 文案清单（摘自原型，须一致）</h2>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>文案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列表标题</td>
+<td>会员卡管理</td>
+</tr>
+<tr>
+<td>Tab</td>
+<td>在售 / 已下架</td>
+</tr>
+<tr>
+<td>底栏</td>
+<td>添加会员卡</td>
+</tr>
+<tr>
+<td>空·在售</td>
+<td>暂无会员卡 / 点击底部「添加会员卡」开始创建</td>
+</tr>
+<tr>
+<td>空·下架</td>
+<td>暂无已下架会员卡 / 下架后的卡会出现在这里，仍可查看详情、复制建卡或管理已持卡</td>
+</tr>
+<tr>
+<td>列表操作</td>
+<td>+复制建卡 / 办卡/退卡</td>
+</tr>
+<tr>
+<td>Step1 标题</td>
+<td>添加会员卡 / 编辑会员卡</td>
+</tr>
+<tr>
+<td>步骤条</td>
+<td>第 1/3 步 · 基本信息；第 2/3 步 · 权益组合；第 3/3 步 · 用卡策略</td>
+</tr>
+<tr>
+<td>字段</td>
+<td>卡名称<em> / 购买金额</em> / 有效期限* / 卡面模板</td>
+</tr>
+<tr>
+<td>单位</td>
+<td>日 / 月 / 年 / 永久</td>
+</tr>
+<tr>
+<td>色名</td>
+<td>品牌红 / 金棕 / 深蓝 / 紫罗兰 / 青绿</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>权益组合；面值；项目；折扣；+添加项目权益；+添加折扣权益</td>
+</tr>
+<tr>
+<td>面值描述</td>
+<td>购买与赠送的面值，永久有效。</td>
+</tr>
+<tr>
+<td>项目描述</td>
+<td>包含、赠送项目的次数</td>
+</tr>
+<tr>
+<td>折扣描述</td>
+<td>比例或定额折扣</td>
+</tr>
+<tr>
+<td>Step3</td>
+<td>用卡策略；消耗及退卡计算规则；业绩计算规则；均值模式；减值模式；原价模式</td>
+</tr>
+<tr>
+<td>保存</td>
+<td>保存 / 保存修改 / 下一步</td>
+</tr>
+<tr>
+<td>复制横幅</td>
+<td>正在基于「{名}」创建新卡，保存后原卡不受影响</td>
+</tr>
+<tr>
+<td>创建成功</td>
+<td>会员卡已创建；已上架，可立即为会员办理；返回列表；立即为会员办卡</td>
+</tr>
+<tr>
+<td>详情</td>
+<td>会员卡详情；下架；编辑；复制建卡；重新上架；已持卡管理</td>
+</tr>
+<tr>
+<td>运营数据</td>
+<td>办卡总额；办卡次数；办卡人数；持卡余额；当前有效；消费次数（含赠送）；剩余次数（含赠送）</td>
+</tr>
+<tr>
+<td>下架框</td>
+<td>下架会员卡；确定下架「{名}」？；下架后新客将无法办理该卡；已持有该卡的客户不受影响。；确认下架</td>
+</tr>
+<tr>
+<td>上架框</td>
+<td>重新上架；确定重新上架「{名}」？；上架后新客可再次办理该卡；已持卡客户不受影响。；确认上架</td>
+</tr>
+<tr>
+<td>选会员</td>
+<td>选择会员；办卡；退卡/延期；搜索姓名或手机；确定；退卡；延期；确认延期</td>
+</tr>
+<tr>
+<td>退卡</td>
+<td>退卡估值；办卡实付；消耗价值；建议退款；实际退款；取消；确认退卡</td>
+</tr>
+<tr>
+<td>办卡成功</td>
+<td>办卡成功；返回列表；继续办卡</td>
+</tr>
+<tr>
+<td>计次</td>
+<td>每项；共计；权益次数；赠送次数；不限次；适用项目；全选；反选</td>
+</tr>
+<tr>
+<td>折扣</td>
+<td>打折；固定金额；免费；原价</td>
+</tr>
+<tr>
+<td>Toast</td>
+<td>见模块 5.3 与：已下架；已重新上架；已保存；已添加/已保存项目权益；已添加/已保存折扣权益；办卡/延期/退卡成功句式</td>
+</tr>
+</tbody>
+</table>
+<h2>9.2 权限</h2>
+<ul>
+<li><strong>默认</strong>：店主可进行本文全部操作。  </li>
+<li><strong>店员</strong>：另议（原型未区分）。后端预留鉴权扩展。  </li>
+</ul>
+<hr />
+<h1>模块 10　验收标准 / 造数场景</h1>
+<blockquote>
+<p>读者：前端 了解 · 后端 了解 · 测试 <strong>必看</strong></p>
+</blockquote>
+<h2>10.1 P0 场景表（Given → When → Then）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>场景</th>
+<th>前置</th>
+<th>操作</th>
+<th>期望</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>空态建卡</td>
+<td>在售无卡</td>
+<td>添加→三步合法保存</td>
+<td>创建成功；列表出现在售卡</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Step2 无权益</td>
+<td>Step1 已填</td>
+<td>权益全关点下一步</td>
+<td>toast「请至少选一项权益内容」</td>
+</tr>
+<tr>
+<td>3</td>
+<td>面值赠送</td>
+<td>购买 800 面值 1000</td>
+<td>看赠送</td>
+<td>赠送显示 200</td>
+</tr>
+<tr>
+<td>4</td>
+<td>项目每项</td>
+<td>选 2 项目各 10 次</td>
+<td>保存 ticket</td>
+<td>摘要为每项·10次</td>
+</tr>
+<tr>
+<td>5</td>
+<td>共计</td>
+<td>选 2 项目共计 10 次</td>
+<td>保存</td>
+<td>摘要共计·项目名；共享池</td>
+</tr>
+<tr>
+<td>6</td>
+<td>不限次禁永久</td>
+<td>期限永久</td>
+<td>开不限次</td>
+<td>弹窗要求改非永久期限</td>
+</tr>
+<tr>
+<td>7</td>
+<td>策略保存</td>
+<td>Step3 选减值+原价</td>
+<td>保存</td>
+<td>详情显示减值退卡·减值计绩</td>
+</tr>
+<tr>
+<td>8</td>
+<td>办卡</td>
+<td>在售卡、有未持卡会员</td>
+<td>办卡多选确定</td>
+<td>办卡成功；统计增加</td>
+</tr>
+<tr>
+<td>9</td>
+<td>重复办卡</td>
+<td>会员已持卡</td>
+<td>打开办卡 Tab</td>
+<td>该会员不在可选列表</td>
+</tr>
+<tr>
+<td>10</td>
+<td>锁编辑</td>
+<td>有效持卡&gt;0</td>
+<td>点编辑</td>
+<td>禁用或 toast 引导复制</td>
+</tr>
+<tr>
+<td>11</td>
+<td>复制</td>
+<td>任意卡</td>
+<td>复制建卡保存</td>
+<td>新卡；原卡不变</td>
+</tr>
+<tr>
+<td>12</td>
+<td>下架</td>
+<td>在售卡</td>
+<td>确认下架</td>
+<td>进入已下架；不可新办</td>
+</tr>
+<tr>
+<td>13</td>
+<td>上架</td>
+<td>已下架</td>
+<td>确认上架</td>
+<td>回在售；可办卡</td>
+</tr>
+<tr>
+<td>14</td>
+<td>延期</td>
+<td>非永久持卡</td>
+<td>设时长确认</td>
+<td>toast 延长成功</td>
+</tr>
+<tr>
+<td>15</td>
+<td>永久勿延</td>
+<td>永久持卡</td>
+<td>点延期</td>
+<td>toast 无需延期</td>
+</tr>
+<tr>
+<td>16</td>
+<td>退卡</td>
+<td>有持卡</td>
+<td>估值改实退确认</td>
+<td>退卡成功；不再有效持卡</td>
+</tr>
+<tr>
+<td>17</td>
+<td>已下架持卡</td>
+<td>已下架模板</td>
+<td>已持卡管理</td>
+<td>仅退卡/延期 Tab</td>
+</tr>
+</tbody>
+</table>
+<h2>10.2 回归</h2>
+<ul>
+<li>编辑无持卡模板后详情数据与卡面一致。  </li>
+<li>下架后再上架，办卡恢复。  </li>
+<li>折扣固定金额与打折互斥按页内模式切换。  </li>
+<li>退卡取消不改变持卡。  </li>
+</ul>
+<h2>10.3 原型造数场景（测试对照交互原型）</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>如何得到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全空列表</td>
+<td>原型侧栏「无数据」或清空模板</td>
+</tr>
+<tr>
+<td>有数据</td>
+<td>原型侧栏「有数据」：10 张演示卡 + 18 价目项目</td>
+</tr>
+<tr>
+<td>在售详情</td>
+<td>打开任一在售卡详情</td>
+</tr>
+<tr>
+<td>已下架详情</td>
+<td>打开已下架演示卡</td>
+</tr>
+<tr>
+<td>创建 Step1–3</td>
+<td>功能链路或「添加会员卡」</td>
+</tr>
+<tr>
+<td>选项目/折扣页</td>
+<td>Step2 进入添加权益</td>
+</tr>
+<tr>
+<td>办卡/退卡 Sheet</td>
+<td>列表「办卡/退卡」或详情已持卡管理</td>
+</tr>
+</tbody>
+</table>
+<p>正式环境用测试账号造同等数据，不必依赖演示按钮。</p>
+<hr />
+<h1>模块 11　非功能（极简）</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提交</td>
+<td>保存/办卡/退卡防重复点击；失败可重试</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>模板量增大时保持可滚动、可接受性能</td>
+</tr>
+<tr>
+<td>兼容</td>
+<td>目标机型与现网商户 App WebView 一致</td>
+</tr>
+<tr>
+<td>埋点</td>
+<td>本期不强制事件表；若现网有统一埋点规范则联调时对齐</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>模块 12　交付物</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 — · 测试 ✓</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>交付物</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本 PRD（Markdown）</td>
+<td><code>PRD-会员卡管理.md</code>（给 AI / 研发的源文件）</td>
+</tr>
+<tr>
+<td>本 PRD（阅读预览）</td>
+<td><code>PRD-会员卡管理.html</code>（表格与标题排版预览；非第二份规格）</td>
+</tr>
+<tr>
+<td>交互原型</td>
+<td><code>demo.html</code>（或同内容中文文件名镜像）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>开发与测试只需要以上两样。</strong> 视觉、文案、流程以原型为准；规则、数据、验收以本 PRD 为准。二者冲突时：<strong>先以原型界面为准修正 PRD，再开工</strong>（本文发布时已按原型对齐）。</p>
+<p>画布：390 × 844。品牌色：<code>#F32F41</code>。</p>
+<hr />
+<h2>附录 A · 卡面颜色</h2>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>brand_red</td>
+<td>品牌红（默认）</td>
+</tr>
+<tr>
+<td>gold</td>
+<td>金棕</td>
+</tr>
+<tr>
+<td>blue</td>
+<td>深蓝</td>
+</tr>
+<tr>
+<td>purple</td>
+<td>紫罗兰</td>
+</tr>
+<tr>
+<td>teal</td>
+<td>青绿</td>
+</tr>
+</tbody>
+</table>
+<h2>附录 B · 依赖说明</h2>
+<ul>
+<li><strong>价目项目</strong>：项目/折扣权益勾选依赖门店项目数据；项目管理产品本身不在本期交付。  </li>
+<li><strong>会员</strong>：办卡依赖既存会员列表；会员档案管理不在本期。  </li>
+<li><strong>支付/退款通道</strong>：办卡收款、延期参考费用、实退退款 <code>【待联调确认】</code>。</li>
+</ul><p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p></article></div></body></html>
