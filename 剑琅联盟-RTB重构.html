@@ -2913,7 +2913,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .guest-btn svg { width: 18px; height: 18px; flex-shrink: 0; display: block; }
 .customer-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--bg-page); cursor: pointer; }
 .customer-row:active { background: #fafafa; }
-.customer-row__avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--brand-soft); flex-shrink: 0; }
+.customer-row__avatar { width: 44px; height: 44px; border-radius: 50%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; background: var(--brand-soft); flex-shrink: 0; }
 .customer-row__name { font-size: 16px; font-weight: 500; }
 .customer-row__meta { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
 .customer-row__vip { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #B8860B; background: linear-gradient(90deg,#FFF8E1,#FFE082); }
@@ -2948,7 +2948,9 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .customer-card__avatar {
   width: 44px; height: 44px; border-radius: 50%;
-  object-fit: cover; flex-shrink: 0; display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover; object-position: center;
+  flex-shrink: 0; display: block;
   background: #fff;
 }
 .customer-card__info {
