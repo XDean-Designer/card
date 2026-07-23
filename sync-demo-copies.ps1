@@ -1,8 +1,8 @@
 # Sync card/demo.html -> Chinese mirror copies (byte-identical).
 $ErrorActionPreference = 'Stop'
 $src = 'd:\RTB优化工程\card\demo.html'
-$dst1 = 'd:\RTB优化工程\card\剑琅联盟-会员卡-权益组合版.html'
-$dst2 = 'd:\RTB优化工程\剑琅联盟-卡模板演示包\剑琅联盟-会员卡-权益组合版.html'
+$dst1 = 'd:\RTB优化工程\card\剑琅联盟-RTB重构.html'
+$dst2 = 'd:\RTB优化工程\剑琅联盟-卡模板演示包\剑琅联盟-RTB重构.html'
 
 if (-not (Test-Path -LiteralPath $src)) { throw "Missing source: $src" }
 $dst2Dir = Split-Path -LiteralPath $dst2 -Parent
