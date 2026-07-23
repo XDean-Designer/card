@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD-会员卡管理-精简版（预览）</title>
+<style>
+:root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);line-height:1.7;font-size:15px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topbar__title{font-size:14px;font-weight:600}.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:8px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap}
+.topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
+.topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none}}
+.article>h1:first-child{margin-top:0}
+h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
+h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;font-weight:650;margin:28px 0 10px}h4{font-size:15px;font-weight:650;margin:20px 0 8px}
+p{margin:0 0 12px}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+ul,ol{margin:0 0 14px;padding-left:1.4em}li{margin:4px 0}
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+blockquote{margin:12px 0 16px;padding:10px 14px;border-left:3px solid var(--brand);background:#fff5f6;color:var(--text-sec);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
+pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
+pre code{background:none;padding:0;color:inherit}
+table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
+th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
+tr:nth-child(even) td{background:#fafbfc}
+.foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
+.article td img{max-width:160px;margin:6px 0}
+.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
+.mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar__title">PRD-会员卡管理-精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
+    <div class="topbar__actions">
+      <a class="ghost" href="demo.html">打开交互原型</a>
+      <a class="ghost" href="PRD-会员卡管理-精简版.md" download>下载 Markdown</a>
+      <a class="primary" href="PRD-会员卡管理-精简版.md" target="_blank" rel="noopener">打开源文件 .md</a>
+    </div>
+  </div>
+  <div class="wrap"><article class="article">
+<h1>PRD：会员卡管理（商户端）· 精简版</h1>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档版本</td>
+<td>v1.3-lite</td>
+</tr>
+<tr>
+<td>日期</td>
+<td>2026-07-23</td>
+</tr>
+<tr>
+<td>文档类型</td>
+<td><strong>精简版</strong>（仅模块 1–3；无 3.1 视觉索引）</td>
+</tr>
+<tr>
+<td>完整规格</td>
+<td>同目录 <code>PRD-会员卡管理.md</code>（含状态机 / 功能规格 / 接口 / 验收等）</td>
+</tr>
+<tr>
+<td>交互原型（唯一可视依据）</td>
+<td>同目录 <code>demo.html</code>（中文镜像：<code>剑琅联盟-会员卡-权益组合版.html</code>）</td>
+</tr>
+<tr>
+<td>画布</td>
+<td>390 × 844</td>
+</tr>
+<tr>
+<td>目的</td>
+<td>快速对齐背景、场景与信息架构；落地细节以完整稿 + 原型为准</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>怎么读这份 PRD</h2>
+<p>正文按模块编排。<strong>不用通读全文</strong>，按角色跳章即可。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>模块</th>
+<th style="text-align: center;">前端</th>
+<th style="text-align: center;">后端</th>
+<th style="text-align: center;">测试</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>背景 / 目标 / 范围 / 能力映射</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>防范围蔓延</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户场景与成功标准</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>测「业务对不对」</td>
+</tr>
+<tr>
+<td>3</td>
+<td>信息架构与页面清单</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>做哪些页</td>
+</tr>
+</tbody>
+</table>
+<p><strong>先读这几条（贯穿全文）</strong></p>
+<ol>
+<li>新系统用 <strong>权益组合</strong>（面值 / 项目 / 折扣）建卡，<strong>不再选「五种卡类型」</strong>；整套取代旧会员卡系统。  </li>
+<li>创建固定 <strong>三步</strong>：基本信息 → 权益组合 → 用卡策略；Step2 <strong>至少开启并配置一类权益</strong>。  </li>
+<li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
+<li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
+<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
+<li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
+<li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值+有限次项目权重。  </li>
+<li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
+</ol>
+<p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-会员卡管理.md</code>。</p>
+<hr />
+<h1>模块 1　背景 / 目标 / 范围 / 能力映射</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓</p>
+</blockquote>
+<h2>1.1 背景</h2>
+<p>原先的会员卡系统将卡划分为 <strong>5 种固定类型</strong>，每种类型套用 <strong>预设模板字段</strong>。商户创建会员卡时：</p>
+<ul>
+<li>只能在类型预设内填字段，<strong>自由度不足</strong>；</li>
+<li>每次都要面对 <strong>繁复的设置页</strong> 逐项填充，创建成本高。</li>
+</ul>
+<p>本期交付的「会员卡管理」将 <strong>整套取代</strong> 上述旧系统（非长期并行两套产品线），对字段按能力重新解构。</p>
+<h2>1.2 目标</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取代旧系统</td>
+<td>新建模与流程成为唯一建卡体系</td>
+</tr>
+<tr>
+<td>能力覆盖</td>
+<td>可配置出与旧五类 <strong>功能等价</strong> 的卡，也可配置旧体系 <strong>无法做出</strong> 的组合卡</td>
+</tr>
+<tr>
+<td>创建更简</td>
+<td>三步完成：基本信息 → 权益组合 → 用卡策略</td>
+</tr>
+<tr>
+<td>运营闭环</td>
+<td>列表 / 详情 / 上下架 / 复制 / 办卡 / 延期 / 整卡退卡</td>
+</tr>
+<tr>
+<td>策略可配置</td>
+<td>退卡消耗与员工业绩规则在建卡时选定并随模板保存</td>
+</tr>
+</tbody>
+</table>
+<h2>1.3 本期做（In）</h2>
+<ul>
+<li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
+<li>权益组合：面值（金额与赠送；<strong>不可</strong>用于购买价目产品）、项目（每项/共计、购买/赠送/不限次）、<strong>产品（每项数量，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket   </li>
+<li>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </li>
+<li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
+<li>办卡：单选既存会员 → 去结账支付 → 办卡成功  </li>
+<li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
+<li>上下架及文案提示  </li>
+</ul>
+<h2>1.4 本期不做（Out）</h2>
+<ul>
+<li><strong>开单结账</strong>全链路规格 — 不在本文展开；但 <strong>办卡必须依赖开单结账模块完成收款</strong>（未就绪时 toast「开单结账模块未就绪」）  </li>
+<li><strong>价目表</strong>作为独立产品交付 — 不在本文展开；规格见同目录 <code>PRD-项目创建与管理.md</code>。建卡「选项目/产品」与「管理价目表」依赖价目数据（项目 Tab / 产品 Tab）  </li>
+<li><strong>会员管理</strong>（会员 CRUD；办卡仅从既存会员列表 <strong>单选</strong>）  </li>
+<li>部分退卡、劳动业绩独立运算台、预约联调  </li>
+<li>原型工具栏「无数据/有数据」造数按钮 — <strong>仅演示</strong>，不进正式产品  </li>
+</ul>
+<h2>1.5 旧能力 ↔ 新组合权益（能力映射，不写废弃产品名）</h2>
+<table>
+<thead>
+<tr>
+<th>旧体系常见能力（语义）</th>
+<th>新体系如何配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>储值/充值类（买赠面值）</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；面值 <strong>不可</strong>用于购买价目产品</td>
+</tr>
+<tr>
+<td>次卡/项目次数类</td>
+<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次</td>
+</tr>
+<tr>
+<td>折扣/会员价类</td>
+<td>开启 <strong>折扣</strong>：选适用项目；标尺折扣或固定金额</td>
+</tr>
+<tr>
+<td>期限卡</td>
+<td>Step1 <strong>有效期限</strong>；含不限次项目时不可为「永久」</td>
+</tr>
+<tr>
+<td>组合（储值+项目+折扣等）</td>
+<td>Step2 <strong>同时开启多类权益</strong> 并分别配置</td>
+</tr>
+<tr>
+<td>旧类型无法覆盖的组合</td>
+<td>任意权益开关组合 + 独立用卡策略</td>
+</tr>
+</tbody>
+</table>
+<p>映射不足时 <strong>以新字段与原型行为为准</strong>，不编造旧系统字段表。</p>
+<hr />
+<h1>模块 2　用户场景与成功标准</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<h2>2.1 角色</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>店主（默认）</td>
+<td>可进行本文全部操作</td>
+</tr>
+<tr>
+<td>店员</td>
+<td><strong>【待产品确认】</strong> 本期原型未表现差异；权限占位见完整稿</td>
+</tr>
+</tbody>
+</table>
+<h2>2.2 核心场景</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用户期望</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首次建卡</td>
+<td>三步填完保存 → 上架 → 可立即办卡</td>
+</tr>
+<tr>
+<td>配置组合权益</td>
+<td>面值/项目/产品/折扣按需勾选配置，预览卡面</td>
+</tr>
+<tr>
+<td>有持卡后改规则</td>
+<td>不能直接编辑模板；复制建卡后改新卡</td>
+</tr>
+<tr>
+<td>停售</td>
+<td>下架后新客不能办；已持卡不受影响</td>
+</tr>
+<tr>
+<td>再开售</td>
+<td>重新上架后可再办</td>
+</tr>
+<tr>
+<td>为会员办卡</td>
+<td>单选未持该卡的会员 → 去结账完成支付 → 办卡成功</td>
+</tr>
+<tr>
+<td>延期</td>
+<td>对非永久有效持卡设置延期时长（可含参考费用）</td>
+</tr>
+<tr>
+<td>退卡</td>
+<td>看到建议退款与明细，改实际退款后确认整卡退</td>
+</tr>
+</tbody>
+</table>
+<h2>2.3 成功标准（可判定）</h2>
+<ol>
+<li>空店可创建至少一张在售卡并出现在「在售」列表。  </li>
+<li>Step2 <strong>至少有一类已配置有效内容的权益</strong> 才能进入 Step3 / 保存成功；开关已开但无内容时 <strong>自动关闭该开关</strong>（不拦截下一步；细则见完整稿）。  </li>
+<li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
+<li>已下架卡列表无「办卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
+<li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加。  </li>
+<li>退卡确认后该会员不再作为有效持卡；实退金额以确认值为准写入结果提示。</li>
+</ol>
+<hr />
+<h1>模块 3　信息架构与页面清单</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<h2>3.0 页面流（示意）</h2>
+<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（细则见完整稿）。</p>
+<h3>建卡主链</h3>
+<div class="mermaid">flowchart LR
+  L[会员卡列表] --&gt;|添加会员卡| S1[Step1 基本信息]
+  S1 --&gt;|下一步| S2[Step2 权益组合]
+  S2 --&gt;|添加项目权益| P[项目权益页]
+  P --&gt;|确定| S2
+  S2 --&gt;|添加产品权益| G[产品权益页]
+  G --&gt;|确定| S2
+  S2 --&gt;|添加折扣权益| D[折扣权益页]
+  D --&gt;|确定| S2
+  S2 --&gt;|下一步| S3[Step3 用卡策略]
+  S3 --&gt;|保存| OK[创建成功]
+  OK --&gt;|返回列表| L
+  OK -.-&gt;|立即办卡| M[[选择会员 Sheet]]</div>
+<h3>运营主链</h3>
+<div class="mermaid">flowchart LR
+  L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
+  DET --&gt;|编辑·无持卡| S1[Step1…三步]
+  DET --&gt;|复制建卡| S1
+  DET --&gt;|下架| OFF[[下架确认]]
+  OFF --&gt;|确认| L
+  DET --&gt;|重新上架·已下架| ON[[上架确认]]
+  ON --&gt;|确认| L
+  L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
+  DET --&gt;|办卡/退卡| M</div>
+<p>说明：选择会员后「去结账」进入开单结账；退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架等见完整稿模块 4。</p>
+<pre><code>会员卡管理
+ ├─ 列表（在售 / 已下架）
+ ├─ 添加/编辑/复制 · Step1 基本信息
+ ├─ Step2 权益组合
+ │    ├─ 添加/编辑项目权益（标题栏「管理价目表」）
+ │    ├─ 添加/编辑产品权益（标题栏「管理价目表」）
+ │    └─ 添加/编辑折扣权益（标题栏「管理价目表」）
+ ├─ Step3 用卡策略
+ ├─ 创建成功
+ ├─ 会员卡详情（在售无底栏；已下架有「重新上架 | 已持卡管理」）
+ ├─ 办卡成功（底栏：返回列表 / 继续办卡；来自结账时可为「返回开单」）
+ └─ Sheets / 弹层
+      ├─ 选择会员（办卡 · 单选 · 去结账 | 退卡/延期）
+      ├─ 退卡估值
+      ├─ 下架确认 / 重新上架确认（居中 sheet）
+      ├─ 设置有效期限（不限次与永久冲突）
+      ├─ 总权益面值计算明细 / 计次模式说明 / 运营数据说明
+      └─ 金额键盘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>页面/层</th>
+<th>导航标题（原型）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列表</td>
+<td>会员卡管理</td>
+<td>Tab：在售 / 已下架；底栏「添加会员卡」；空态可点插图创建</td>
+</tr>
+<tr>
+<td>Step1</td>
+<td>添加会员卡 / 编辑会员卡</td>
+<td>基本信息 + 卡面模板；步骤条「第 1/3 步 · 基本信息」</td>
+</tr>
+<tr>
+<td>Step2</td>
+<td>权益组合</td>
+<td>三类权益 Switch + 多 ticket；步骤条第 2/3 步</td>
+</tr>
+<tr>
+<td>Step3</td>
+<td>用卡策略</td>
+<td>退卡规则 + 业绩规则；步骤条第 3/3 步；保存</td>
+</tr>
+<tr>
+<td>创建成功</td>
+<td>—</td>
+<td>返回列表 / 立即为会员办卡</td>
+</tr>
+<tr>
+<td>详情</td>
+<td>会员卡详情</td>
+<td>运营数据 + 卡面信息；在售顶栏下架/编辑</td>
+</tr>
+<tr>
+<td>项目权益页</td>
+<td>添加/编辑项目权益</td>
+<td>适用项目 + 分组筛选 + 权益参数；页内「确定」；「管理价目表」</td>
+</tr>
+<tr>
+<td>产品权益页</td>
+<td>添加/编辑产品权益</td>
+<td>适用产品 + 分组筛选 + <strong>数量</strong>；页内「确定」；「管理价目表」</td>
+</tr>
+<tr>
+<td>折扣权益页</td>
+<td>添加/编辑折扣权益</td>
+<td>同上结构（含分组筛选；仅服务项目）</td>
+</tr>
+<tr>
+<td>办卡成功</td>
+<td>—</td>
+<td>返回列表或返回开单 / 继续办卡</td>
+</tr>
+<tr>
+<td>选择会员</td>
+<td>选择会员</td>
+<td>办卡 Tab 单选 +「去结账」；退卡/延期 Tab</td>
+</tr>
+<tr>
+<td>退卡估值</td>
+<td>退卡估值</td>
+<td>办卡实付 / 消耗 / 明细 / 建议退款 / 实退</td>
+</tr>
+<tr>
+<td>下架/上架</td>
+<td>下架会员卡 / 重新上架</td>
+<td>居中确认 sheet</td>
+</tr>
+</tbody>
+</table>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> + sheets；办卡支付复用开单结账路由。</p>
+<hr />
+<hr />
+<h1>交付说明（精简版）</h1>
+<table>
+<thead>
+<tr>
+<th>交付</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本文 <code>PRD-会员卡管理-精简版.md</code></td>
+<td>仅模块 1–3（无 3.1）</td>
+</tr>
+<tr>
+<td>完整稿 <code>PRD-会员卡管理.md</code></td>
+<td>开发 / 测试落地准稿</td>
+</tr>
+<tr>
+<td>交互原型 <code>demo.html</code></td>
+<td>唯一可视依据</td>
+</tr>
+</tbody>
+</table>
+<p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
+</article></div>
+
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  if (!window.mermaid) return;
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#fff5f6',
+      primaryBorderColor: '#F32F41',
+      primaryTextColor: '#1f2329',
+      secondaryColor: '#f2f3f5',
+      tertiaryColor: '#ffffff',
+      lineColor: '#8f959e',
+      fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif'
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

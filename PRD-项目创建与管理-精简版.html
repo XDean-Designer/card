@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD-项目创建与管理-精简版（预览）</title>
+<style>
+:root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);line-height:1.7;font-size:15px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topbar__title{font-size:14px;font-weight:600}.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:8px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap}
+.topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
+.topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none}}
+.article>h1:first-child{margin-top:0}
+h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
+h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;font-weight:650;margin:28px 0 10px}h4{font-size:15px;font-weight:650;margin:20px 0 8px}
+p{margin:0 0 12px}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+ul,ol{margin:0 0 14px;padding-left:1.4em}li{margin:4px 0}
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+blockquote{margin:12px 0 16px;padding:10px 14px;border-left:3px solid var(--brand);background:#fff5f6;color:var(--text-sec);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
+pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
+pre code{background:none;padding:0;color:inherit}
+table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
+th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
+tr:nth-child(even) td{background:#fafbfc}
+.foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
+.article td img{max-width:160px;margin:6px 0}
+.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
+.mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar__title">PRD-项目创建与管理-精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
+    <div class="topbar__actions">
+      <a class="ghost" href="demo.html">打开交互原型</a>
+      <a class="ghost" href="PRD-项目创建与管理-精简版.md" download>下载 Markdown</a>
+      <a class="primary" href="PRD-项目创建与管理-精简版.md" target="_blank" rel="noopener">打开源文件 .md</a>
+    </div>
+  </div>
+  <div class="wrap"><article class="article">
+<h1>PRD：项目创建与管理（价目表 · 商户端）· 精简版</h1>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档版本</td>
+<td>v1.0-lite</td>
+</tr>
+<tr>
+<td>日期</td>
+<td>2026-07-23</td>
+</tr>
+<tr>
+<td>文档类型</td>
+<td><strong>精简版</strong>（仅模块 1–3）</td>
+</tr>
+<tr>
+<td>完整规格</td>
+<td>同目录 <code>PRD-项目创建与管理.md</code>（含状态机 / 功能规格 / 接口 / 验收等）</td>
+</tr>
+<tr>
+<td>交互原型（唯一可视依据）</td>
+<td>同目录 <code>demo.html</code>（中文镜像：<code>剑琅联盟-会员卡-权益组合版.html</code>；功能链路「项目创建与管理」）</td>
+</tr>
+<tr>
+<td>画布</td>
+<td>390 × 844</td>
+</tr>
+<tr>
+<td>目的</td>
+<td>快速对齐背景、场景与信息架构；落地细节以完整稿 + 原型为准</td>
+</tr>
+<tr>
+<td>关联（非必读）</td>
+<td>同目录 <code>PRD-会员卡管理.md</code> / <code>PRD-会员卡管理-精简版.md</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>怎么读这份 PRD</h2>
+<p>正文按模块编排。<strong>不用通读全文</strong>，按角色跳章即可。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>模块</th>
+<th style="text-align: center;">前端</th>
+<th style="text-align: center;">后端</th>
+<th style="text-align: center;">测试</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>背景 / 目标 / 范围 / 能力映射</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>重构叙事、防范围蔓延</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户场景与成功标准</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>测「业务对不对」</td>
+</tr>
+<tr>
+<td>3</td>
+<td>信息架构与页面清单</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">了解</td>
+<td style="text-align: center;">✓</td>
+<td>做哪些页</td>
+</tr>
+</tbody>
+</table>
+<p><strong>先读这几条（贯穿全文）</strong></p>
+<ol>
+<li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
+<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </li>
+<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后部分字段与删除/上下架 <strong>锁定</strong>（细则见完整稿）。产品亦可标记绑卡，列表展示绑卡标识。  </li>
+<li>B 端改价、上下架、时长等变更需 <strong>同步顾客端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
+<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
+<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</li>
+</ol>
+<p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-项目创建与管理.md</code>。</p>
+<hr />
+<h1>模块 1　背景 / 目标 / 范围 / 能力映射</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓</p>
+</blockquote>
+<h2>1.1 背景</h2>
+<p>旧价目表 / 旧项目管理在列表中带有图片与较多装饰元素，<strong>内容不够紧凑</strong>，一屏信息量少，操作分散，不符合 B 端管理软件「找得到、改得快」的诉求。</p>
+<p>本期在整体产品（含会员卡权益组合）对齐前提下重构价目能力：</p>
+<ul>
+<li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格、价格、状态等），无列表配图堆叠；  </li>
+<li><strong>操作紧凑</strong>：搜索、Tab、分组条、左滑/长按菜单、拖拽排序集中在一屏；  </li>
+<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）；  </li>
+<li><strong>与会员卡联结</strong>：价目为选权益、折扣适用范围的数据源；支持从权益页「管理价目表」往返。</li>
+</ul>
+<h2>1.2 目标</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>覆盖旧能力</td>
+<td>新价目成为项目管理的唯一体系</td>
+</tr>
+<tr>
+<td>高密度列表</td>
+<td>项目/产品双清单，信息行可扫可读</td>
+</tr>
+<tr>
+<td>分组与排序</td>
+<td>自定义分组 + 桶内拖拽排序 + 置顶</td>
+</tr>
+<tr>
+<td>售卖可控</td>
+<td>在售/下架；项目可配手机端预约</td>
+</tr>
+<tr>
+<td>与卡对齐</td>
+<td>绑卡锁定规则清晰；选品只取在售</td>
+</tr>
+</tbody>
+</table>
+<h2>1.3 本期做（In）</h2>
+<ul>
+<li>价目表列表：项目 Tab / 产品 Tab、搜索、列头排序、空态  </li>
+<li>新增 / 编辑 / 删除项目与产品  </li>
+<li>在售切换、置顶/取消置顶  </li>
+<li>分组：筛选 Tab、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
+<li>列表拖拽排序（置顶桶 / 在售桶 / 下架桶内）  </li>
+<li>左滑快捷操作与长按操作 Sheet  </li>
+<li>项目绑卡锁定（部分字段）及提示文案  </li>
+<li>从会员卡权益页「管理价目表」进入并返回  </li>
+<li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
+</ul>
+<h2>1.4 本期不做（Out）</h2>
+<ul>
+<li>顾客端 / 小程序预约页、开单页的 UI 规格（仅消费价目结果）  </li>
+<li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
+<li>真实图片上传链路（原型为演示开关「已上传/未上传」）  </li>
+<li>原型「无数据/有数据」造数开关  </li>
+<li>审核流、多门店价目同步策略（原型未表现则不写死）</li>
+</ul>
+<h2>1.5 旧 → 新能力映射（不写废弃产品名）</h2>
+<table>
+<thead>
+<tr>
+<th>旧体系常见能力（语义）</th>
+<th>新体系如何配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>维护服务项目价格/时长</td>
+<td><strong>项目</strong> Tab：名称、价格、时长、在售、预约、可选图、置顶</td>
+</tr>
+<tr>
+<td>维护可售卖货品</td>
+<td><strong>产品</strong> Tab：名称、规格、价格、在售、可选图、置顶</td>
+</tr>
+<tr>
+<td>列表浏览与查找</td>
+<td>搜索 + 列排序 + 分组筛选；信息行无配图</td>
+</tr>
+<tr>
+<td>分类/归类</td>
+<td><strong>自定义分组</strong>（可多组、可空组、删组保留条目）</td>
+</tr>
+<tr>
+<td>调整展示顺序</td>
+<td><strong>置顶</strong> + <strong>桶内拖拽</strong> <code>sortOrder</code></td>
+</tr>
+<tr>
+<td>停售</td>
+<td><strong>下架</strong>（列表仍可见，选品侧不可选）</td>
+</tr>
+<tr>
+<td>被卡引用后的保护</td>
+<td><strong>绑卡锁定</strong>（名称/在售/预约/删除等受限）</td>
+</tr>
+</tbody>
+</table>
+<p>映射不足时以原型字段与行为为准。</p>
+<hr />
+<h1>模块 2　用户场景与成功标准</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<h2>2.1 角色</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>店主（默认）</td>
+<td>可进行本文全部操作</td>
+</tr>
+<tr>
+<td>店员</td>
+<td><strong>【待产品确认】</strong> 原型未表现差异；见完整稿权限占位</td>
+</tr>
+</tbody>
+</table>
+<h2>2.2 核心场景</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用户期望</th>
+<th>成功标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新建项目</td>
+<td>填名称价格时长等后出现在项目列表在售区</td>
+<td>列表可见；可被会员卡选项目/折扣</td>
+</tr>
+<tr>
+<td>新建产品</td>
+<td>填名称规格价格后出现在产品列表</td>
+<td>列表可见；可被开单/产品权益选用（在售）</td>
+</tr>
+<tr>
+<td>改价</td>
+<td>绑卡或未绑卡均可改价（规则内）</td>
+<td>toast 成功；顾客端同步语义成立</td>
+</tr>
+<tr>
+<td>下架</td>
+<td>停售但仍可在价目表看到</td>
+<td>状态「已下架」；选品列表不出现</td>
+</tr>
+<tr>
+<td>分组运营</td>
+<td>建组、把条目加入多组、按组筛选</td>
+<td>筛选正确；删组不丢条目</td>
+</tr>
+<tr>
+<td>拖拽排序</td>
+<td>调整同状态区内顺序</td>
+<td>刷新后顺序保持；搜索/分组筛选时不可拖</td>
+</tr>
+<tr>
+<td>绑卡项目</td>
+<td>被卡引用后不能乱改关键属性</td>
+<td>锁定字段点击有 toast；不可删、不可改在售</td>
+</tr>
+<tr>
+<td>从建卡管价目</td>
+<td>权益页点「管理价目表」补货后返回继续选</td>
+<td>返回原权益页且列表刷新</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>模块 3　信息架构与页面清单</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
+</blockquote>
+<pre><code>价目表
+ ├─ 列表（项目 Tab / 产品 Tab）
+ │    ├─ 搜索 · 添加 · 分组条 · 齿轮
+ │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作
+ │    └─ 空态
+ ├─ 新增项目 / 新增产品
+ ├─ 项目详情 / 产品详情
+ ├─ 分组管理
+ │    └─ 编辑成员
+ └─ Sheets / 弹层
+      ├─ 行操作 Sheet
+      ├─ 分组菜单 Sheet
+      ├─ 设置分组（多选）
+      ├─ 新建/重命名分组 Dialog
+      ├─ 删除分组确认
+      ├─ 删除条目确认
+      └─ 金额键盘（价格）
+</code></pre>
+<h3>3.0 页面流（示意）</h3>
+<div class="mermaid">flowchart LR
+  L[价目表列表] --&gt;|添加| Add[新增表单]
+  L --&gt;|点行| Edit[详情编辑]
+  L --&gt;|齿轮| G[分组管理]
+  G --&gt;|编辑成员| M[编辑成员]
+  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
+  L --&gt;|长按或左滑| A[[行操作 Sheet]]
+  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
+<p>从会员卡权益页进入：</p>
+<div class="mermaid">flowchart LR
+  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
+  L --&gt;|返回| P</div>
+<table>
+<thead>
+<tr>
+<th>页面/层</th>
+<th>导航标题（原型）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列表</td>
+<td>价目表</td>
+<td>Tab 项目/产品；无底栏主按钮（添加在工具栏）</td>
+</tr>
+<tr>
+<td>新增</td>
+<td>新增项目 / 新增产品</td>
+<td>底栏「保存」</td>
+</tr>
+<tr>
+<td>详情</td>
+<td>项目详情 / 产品详情</td>
+<td>底栏「删除 | 保存」</td>
+</tr>
+<tr>
+<td>分组管理</td>
+<td>分组管理</td>
+<td>底栏「新建分组」</td>
+</tr>
+<tr>
+<td>编辑成员</td>
+<td>编辑成员 · {组名}</td>
+<td>底栏「确定」</td>
+</tr>
+<tr>
+<td>行操作</td>
+<td>条目标题</td>
+<td>置顶/分组/上下架/删除</td>
+</tr>
+<tr>
+<td>设置分组</td>
+<td>条目标题</td>
+<td>可多选；可「去新建分组」</td>
+</tr>
+<tr>
+<td>分组菜单</td>
+<td>组名</td>
+<td>编辑成员 / 重命名 / 删除</td>
+</tr>
+</tbody>
+</table>
+<p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-groups</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code>。</p>
+<p>实现路由建议（名称可调整）：<code>price-list</code> / <code>price-add</code> / <code>price-edit</code> / <code>price-groups</code> / <code>price-group-members</code> + sheets。</p>
+<hr />
+<hr />
+<h1>交付说明（精简版）</h1>
+<table>
+<thead>
+<tr>
+<th>交付</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本文 <code>PRD-项目创建与管理-精简版.md</code></td>
+<td>仅模块 1–3</td>
+</tr>
+<tr>
+<td>完整稿 <code>PRD-项目创建与管理.md</code></td>
+<td>开发 / 测试落地准稿</td>
+</tr>
+<tr>
+<td>交互原型 <code>demo.html</code></td>
+<td>唯一可视依据</td>
+</tr>
+</tbody>
+</table>
+<p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-项目创建与管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
+</article></div>
+
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  if (!window.mermaid) return;
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#fff5f6',
+      primaryBorderColor: '#F32F41',
+      primaryTextColor: '#1f2329',
+      secondaryColor: '#f2f3f5',
+      tertiaryColor: '#ffffff',
+      lineColor: '#8f959e',
+      fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif'
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
