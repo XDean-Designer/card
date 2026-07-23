@@ -2263,9 +2263,8 @@ html.prd-capture .phone { border: none; }
 .table-row .name-main {
   min-width: 0; flex: 1 1 auto;
   display: flex; align-items: center; align-content: center;
-  gap: 2px; flex-wrap: wrap;
+  gap: 2px; flex-wrap: nowrap;
 }
-.table-row .name-main:has(> .name-text:not(.is-long)) { flex-wrap: nowrap; }
 .catalog-row-drag {
   flex-shrink: 0;
   width: 22px;
@@ -2284,18 +2283,25 @@ html.prd-capture .phone { border: none; }
 }
 .catalog-row-drag:active { cursor: grabbing; color: var(--text-sec); }
 .catalog-row-drag svg { display: block; width: 14px; height: 14px; pointer-events: none; }
-/* ≤5 字：单行完整显示，不被图标挤压；>5 字：在标题区换行，拖拽把手始终在左侧 */
+/* ≤5 字：单行；>5 字：换行，绑卡/置顶跟在最后一个字右侧 */
 .table-row .name-text {
   overflow: visible; text-overflow: clip;
+  line-height: 1.35;
 }
 .table-row .name-text:not(.is-long) {
   flex: 0 0 auto; flex-shrink: 0; min-width: max-content; max-width: none;
   white-space: nowrap;
 }
 .table-row .name-text.is-long {
-  flex: 1 1 0; min-width: 0; max-width: 100%;
+  flex: 1 1 auto; min-width: 0; max-width: 100%;
   white-space: normal; word-break: break-all; overflow-wrap: anywhere;
-  line-height: 1.35;
+}
+.table-row .name-text .bound-tag,
+.table-row .name-text .pin-tag {
+  display: inline-flex;
+  vertical-align: -0.15em;
+  position: relative;
+  top: 0;
 }
 .table-row .dur,
 .table-row .spec { color: var(--text-sec); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -2335,9 +2341,9 @@ html.prd-capture .phone { border: none; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  margin: 0 0 0 -2px;
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 2px;
   padding: 0;
   border: none;
   background: transparent;
@@ -2352,9 +2358,9 @@ html.prd-capture .phone { border: none; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin: 0 0 0 2px;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 4px;
   padding: 0;
   border: none;
   background: transparent;
@@ -2913,7 +2919,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .guest-btn svg { width: 18px; height: 18px; flex-shrink: 0; display: block; }
 .customer-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--bg-page); cursor: pointer; }
 .customer-row:active { background: #fafafa; }
-.customer-row__avatar { width: 44px; height: 44px; border-radius: 50%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; background: var(--brand-soft); flex-shrink: 0; }
+.customer-row__avatar { width: 44px; height: 44px; min-width: 44px; min-height: 44px; max-width: 44px; max-height: 44px; border-radius: 50%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; background: var(--brand-soft); flex-shrink: 0; }
 .customer-row__name { font-size: 16px; font-weight: 500; }
 .customer-row__meta { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
 .customer-row__vip { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #B8860B; background: linear-gradient(90deg,#FFF8E1,#FFE082); }
@@ -2947,7 +2953,8 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   width: 100%; min-width: 0; height: 44px;
 }
 .customer-card__avatar {
-  width: 44px; height: 44px; border-radius: 50%;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px; max-width: 44px; max-height: 44px;
+  border-radius: 50%;
   aspect-ratio: 1 / 1;
   object-fit: cover; object-position: center;
   flex-shrink: 0; display: block;
@@ -3717,10 +3724,14 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   flex-shrink: 0;
   width: 44px;
   height: 44px;
+  min-width: 44px;
+  min-height: 44px;
 }
 .customer-card__avatar-wrap .customer-card__avatar {
   width: 44px;
   height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border: none;
 }
 .customer-card__gender-switch {
@@ -9812,9 +9823,7 @@ function projRenderList() {
         <div class="name">
           <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
           <div class="name-main">
-            <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(p.name)}</span>
-            ${p.boundToCard ? boundTagHtml() : ''}
-            ${p.pinned ? pinTagHtml() : ''}
+            <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(p.name)}${p.boundToCard ? boundTagHtml() : ''}${p.pinned ? pinTagHtml() : ''}</span>
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
@@ -16812,7 +16821,7 @@ window.__BILLING_EMBEDDED__ = true;
   CUSTOMERS.forEach(c => {
     if (c.cards) c.cards = c.cards.map(normalizeHeldCard);
   });
-  const GUEST_UNSET = { id: 'guest', name: '散客', phone: '', isMember: false, vip: false, gender: null, avatar: 'assets/billing/avatar-guest-default.svg' };
+  const GUEST_UNSET = { id: 'guest', name: '散客', phone: '', isMember: false, vip: false, gender: null, avatar: 'assets/billing/avatar-guest-default.png' };
   const GUEST_MALE = { id: 'guest_m', name: '男散客', phone: '', isMember: false, vip: false, gender: 'male', avatar: 'assets/billing/avatar-male.png' };
   const GUEST_FEMALE = { id: 'guest_f', name: '女散客', phone: '', isMember: false, vip: false, gender: 'female', avatar: 'assets/billing/avatar-female.png' };
   const GUEST = GUEST_UNSET;
@@ -18420,7 +18429,7 @@ window.__BILLING_EMBEDDED__ = true;
       // 开单台：始终紧凑顶卡；右下角图标打开下方顾客列表（方案 A）
       if (withActions) {
         const label = g === 'male' ? '男散客' : g === 'female' ? '女散客' : '散客';
-        const avatar = g === 'male' ? AVATAR_MALE : g === 'female' ? AVATAR_FEMALE : 'assets/billing/avatar-guest-default.svg';
+        const avatar = g === 'male' ? AVATAR_MALE : g === 'female' ? AVATAR_FEMALE : 'assets/billing/avatar-guest-default.png';
         const pickBtnLabel = (selected || state.billCustomerPickOpen) ? '更换顾客' : '选择顾客';
         const pickBtn = renderGuestActionBtns(pickBtnLabel);
         return `<div class="customer-card customer-card--guest${selected ? ' is-gender-selected' : ' is-unselected'}${state.billCustomerPickOpen ? ' is-pick-open' : ''}">
@@ -18445,7 +18454,7 @@ window.__BILLING_EMBEDDED__ = true;
         <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
         <div class="customer-card__row">
           <div class="customer-card__avatar-wrap">
-            <img class="customer-card__avatar" src="assets/billing/avatar-guest-default.svg" alt="">
+            <img class="customer-card__avatar" src="assets/billing/avatar-guest-default.png" alt="">
             <button type="button" class="customer-card__gender-switch" data-guest-switch aria-label="选择散客性别">
               <img src="assets/billing/guest-gender-switch.svg" alt="" width="20" height="20">
             </button>
