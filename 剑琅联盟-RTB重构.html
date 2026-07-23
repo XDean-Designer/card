@@ -502,28 +502,29 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .btn-add-benefit:active { opacity: .88; background: var(--brand-soft); }
 .step2-benefit-cards {
-  display: flex; flex-direction: column; gap: 10px; margin: 0 0 4px;
-  padding: 2px 1px 6px; /* 给外层 drop-shadow 留出空间 */
+  display: flex; flex-direction: column; gap: 12px; margin: 0 0 4px;
+  padding: 4px 2px 8px; /* 给外层 drop-shadow 留出空间 */
 }
-/* 阴影必须在无 mask 的外层：同元素上的 mask 会裁掉 drop-shadow */
+/* 方案 A · 柔和票券（对齐预览图）：阴影在无 mask 外层 */
 .step2-benefit-card-wrap {
   --ticket-shadow:
-    drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.04))
-    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.04));
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.04))
+    drop-shadow(0 6px 14px rgba(0, 0, 0, 0.05));
   filter: var(--ticket-shadow);
   border-radius: 12px;
 }
 .step2-benefit-card-wrap:active { filter: brightness(.99) var(--ticket-shadow); }
 .step2-benefit-card {
-  --ticket-notch-r: 5px;
-  --ticket-cut-x: calc(100% - 132px);
+  --ticket-notch-r: 7px;
+  --ticket-stub-w: 90px;
+  --ticket-cut-x: calc(100% - var(--ticket-stub-w));
+  --ticket-meta: #8F8F8F;
   position: relative; display: flex; align-items: stretch;
   width: 100%; box-sizing: border-box; min-height: 72px;
-  padding: 14px 44px 14px 14px;
-  border: none; border-radius: 12px; background: var(--card); overflow: visible;
-  box-shadow: none;
-  cursor: pointer;
-  /* 两层 mask 必须都是 100% 高度；半高会在 intersect 后只剩中间一条缝 */
+  padding: 16px 8px 16px 18px;
+  border: none; border-radius: 12px; background: #FFFFFF; overflow: visible;
+  box-shadow: none; cursor: pointer;
+  /* 两层 mask：上下半圆缺口对齐撕票线 */
   -webkit-mask-image:
     radial-gradient(circle at var(--ticket-cut-x) 0, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px)),
     radial-gradient(circle at var(--ticket-cut-x) 100%, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px));
@@ -537,20 +538,26 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   mask-repeat: no-repeat;
   mask-composite: intersect;
 }
+/* 撕票虚线（票根纯白，无灰底） */
 .step2-benefit-card::before {
   content: '';
-  position: absolute; top: 0; right: 0; bottom: 0;
-  width: 132px; box-sizing: border-box;
-  padding-block: var(--ticket-notch-r);
-  /* 虚线 14px(7+7) 周期平铺；content-box 裁在缺口之间，高卡片两端不再丢失 */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='14' viewBox='0 0 2 14'%3E%3Cline x1='1' y1='1.5' x2='1' y2='5.5' stroke='%23e3e3e3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"),
-    linear-gradient(180deg, rgba(234, 234, 234, 0.5) 0%, rgba(236, 236, 236, 0.25) 100%);
-  background-position: -1px 0, 0 0;
-  background-size: 2px 14px, 100% 100%;
-  background-repeat: repeat-y, no-repeat;
-  background-clip: content-box, border-box;
-  pointer-events: none;
+  position: absolute;
+  top: var(--ticket-notch-r); bottom: var(--ticket-notch-r);
+  left: var(--ticket-cut-x); width: 2px; margin-left: -1px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='14' viewBox='0 0 2 14'%3E%3Cline x1='1' y1='1.5' x2='1' y2='6.5' stroke='%23DCDCDC' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-position: center 0;
+  background-size: 2px 14px;
+  background-repeat: repeat-y;
+  pointer-events: none; z-index: 1;
+}
+/* 左侧短圆角品牌条（约半高、垂直居中） */
+.step2-benefit-card::after {
+  content: '';
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 44%; min-height: 28px; max-height: 36px;
+  background: var(--brand); border-radius: 2px;
+  pointer-events: none; z-index: 2;
 }
 .step2-benefit-card__body {
   position: relative; z-index: 1;
@@ -559,48 +566,54 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   font-family: inherit; color: inherit; pointer-events: none;
 }
 .step2-benefit-card__main {
-  flex: 0 1 65.055%; min-width: 0; display: flex; align-items: center;
-  padding-right: 12px;
+  flex: 1 1 auto; min-width: 0; display: flex; align-items: center;
+  padding-right: 12px; padding-left: 6px;
 }
 .step2-benefit-card__side {
-  flex: 0 1 34.945%; min-width: 0; display: flex; align-items: center; justify-content: center;
-  padding-left: 12px;
+  flex: 0 0 var(--ticket-stub-w); width: var(--ticket-stub-w); min-width: var(--ticket-stub-w);
   box-sizing: border-box;
+  display: flex; align-items: center; justify-content: flex-end; gap: 0;
+  padding: 0 2px 0 10px;
+  pointer-events: auto;
 }
 .step2-benefit-card__title {
   display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; row-gap: 2px;
-  font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4;
+  font-size: 15px; font-weight: 600; color: #1A1A1A; line-height: 1.4;
   white-space: normal; overflow: visible; width: 100%;
 }
 .step2-benefit-card__proj {
   flex-shrink: 0; max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
 }
 .step2-benefit-card__meta {
+  flex: 1 1 auto; min-width: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px; width: 100%;
-  color: #7C7C7C; text-align: center;
+  gap: 1px;
+  color: var(--ticket-meta); text-align: center;
   white-space: normal; overflow-wrap: anywhere; word-break: break-word;
+  pointer-events: none;
 }
 .step2-benefit-card__meta-scope {
-  display: block; font-size: 12px; font-weight: 500; line-height: 1.3; color: #7C7C7C;
+  display: block; font-size: 11px; font-weight: 500; line-height: 1.25; color: var(--ticket-meta);
 }
 .step2-benefit-card__meta-qty {
-  display: block; font-size: 15px; font-weight: 600; line-height: 1.35; color: #7C7C7C;
+  display: block; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
+}
+.step2-benefit-card__meta-gift {
+  display: block; font-size: 12px; font-weight: 500; line-height: 1.25; color: var(--ticket-meta);
 }
 .step2-benefit-card__meta--single {
-  font-size: 15px; font-weight: 600; line-height: 1.35; color: #7C7C7C;
+  font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
 }
 .step2-benefit-card__rm {
-  position: absolute; top: 50%; right: 12px; z-index: 2;
-  transform: translateY(-50%);
-  width: 28px; height: 28px; padding: 0; margin: 0;
-  border: none; border-radius: 6px;
-  background: transparent; color: var(--text-sec); cursor: pointer;
+  position: static; transform: none;
+  flex: 0 0 28px; width: 28px; height: 28px; padding: 0; margin: 0;
+  border: none; border-radius: 8px;
+  background: transparent; color: #8F8F8F; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   box-sizing: border-box;
 }
 .step2-benefit-card__rm:active {
-  background: var(--bg-page); color: var(--text); filter: brightness(.97);
+  background: rgba(0, 0, 0, 0.04); color: #666666;
 }
 .step2-benefit-card__rm svg {
   display: block; width: 18px; height: 18px; pointer-events: none;
@@ -2191,7 +2204,98 @@ html.prd-capture .phone { border: none; }
 }
 .table-row-actions .act-pin { background: #5B8DEF; }
 .table-row-actions .act-sale { background: #E8A317; }
+.table-row-actions .act-hide { background: #8B7E74; }
 .table-row-actions .act-del { background: var(--brand); }
+.table-row-actions .act-del.act-del--locked {
+  width: 80px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 4px;
+}
+.table-row-actions .act-del__lock {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+}
+.table-row-actions .act-del__lock svg { display: block; width: 18px; height: 18px; }
+.catalog-action-item__del-lock {
+  display: inline-flex;
+  vertical-align: -3px;
+  margin-left: 6px;
+  width: 18px;
+  height: 18px;
+  color: var(--brand);
+  align-items: center;
+  justify-content: center;
+}
+.catalog-action-item__del-lock svg { display: block; width: 18px; height: 18px; }
+.catalog-action-item__del-lock.is-hidden { display: none; }
+.catalog-hidden-block {
+  margin-top: 0;
+  border-top: none;
+  background: var(--card);
+  position: relative;
+}
+/* 与上方末行划线同位置、同缩进，叠成一条 */
+.catalog-hidden-block::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 0;
+  height: 1px;
+  background: #EBEBEB;
+  pointer-events: none;
+  z-index: 1;
+}
+.table-row-swipe:has(+ .catalog-hidden-block) .table-row::after {
+  display: none;
+}
+.catalog-hidden-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-sec);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.catalog-hidden-toggle:active { background: var(--bg-page); }
+.catalog-hidden-toggle__label { display: inline-flex; align-items: center; gap: 6px; }
+.catalog-hidden-toggle__count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-sec);
+  background: #F2F2F2;
+  border-radius: 999px;
+  padding: 1px 8px;
+  line-height: 1.4;
+}
+.catalog-hidden-toggle__chev {
+  width: 18px;
+  height: 18px;
+  color: var(--text-sec);
+  transition: transform .18s ease;
+}
+.catalog-hidden-block.is-open .catalog-hidden-toggle__chev { transform: rotate(180deg); }
+.catalog-hidden-list { display: none; }
+.catalog-hidden-block.is-open .catalog-hidden-list { display: block; }
+.catalog-hidden-list .table-row-swipe { background: #FAFAFA; }
+.catalog-hidden-list .table-row { background: #FAFAFA; box-shadow: 8px 0 0 #FAFAFA; }
 .table-row {
   position: relative; z-index: 1; align-items: center; min-height: 52px; padding-top: 10px; padding-bottom: 10px;
   cursor: pointer; font-size: 14px; touch-action: pan-y; background: var(--card);
@@ -2571,7 +2675,14 @@ html.prd-capture .phone { border: none; }
   display: flex; align-items: center; justify-content: center;
 }
 .dialog__actions .btn-main.secondary { margin-top: 0; }
-.page-title-bar .title-link { grid-column: 3; justify-self: end; border: none; background: none; color: var(--brand); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; padding: 0 8px; white-space: nowrap; }
+/* 右侧文案底对齐标题字底：只调右侧，不改 .title */
+.page-title-bar .title-link {
+  grid-column: 3; justify-self: end; align-self: end;
+  border: none; background: none; color: var(--brand);
+  font-size: 13px; font-weight: 500; line-height: 18px;
+  cursor: pointer; font-family: inherit;
+  padding: 0 12px 9px 8px; white-space: nowrap;
+}
 .pick-select-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   flex-shrink: 0; padding: 14px 16px 10px; background: transparent;
@@ -2841,7 +2952,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .page-title-bar .action {
   grid-column: 3; justify-self: end; align-self: end;
-  margin-right: 12px; padding: 0 0 10px;
+  margin-right: 12px; padding: 0 0 9px;
   border: none; background: none; cursor: pointer; font-family: inherit;
   display: inline-flex; align-items: flex-end; gap: 4px;
   font-size: 12px; font-weight: 400; line-height: 16px; color: #333333;
@@ -4824,10 +4935,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
               </div>
             </div>
-            <div class="pick-section-card">
-              <div class="pick-params-section__title">数量设置</div>
-              <div class="pick-params-section__body" id="productPickParams"></div>
-            </div>
             <button type="button" class="btn-main pick-confirm-inline" id="btnConfirmProducts">确定</button>
           </div>
         </div>
@@ -5087,7 +5194,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <button type="button" class="catalog-action-item hidden" data-catalog-act="unpin">取消置顶</button>
                 <button type="button" class="catalog-action-item" data-catalog-act="group">设置分组</button>
                 <button type="button" class="catalog-action-item" data-catalog-act="sale">下架</button>
-                <button type="button" class="catalog-action-item catalog-action-item--danger" data-catalog-act="delete">删除</button>
+                <button type="button" class="catalog-action-item" data-catalog-act="hide">隐藏</button>
+                <button type="button" class="catalog-action-item hidden" data-catalog-act="unhide">取消隐藏</button>
+                <button type="button" class="catalog-action-item catalog-action-item--danger" data-catalog-act="delete">删除<span class="catalog-action-item__del-lock is-hidden" id="catalogActDeleteLock" aria-hidden="true"></span></button>
               </div>
             </div>
             <div class="catalog-action-foot">
@@ -5618,11 +5727,40 @@ const PROJ_LOCK_TOAST = {
   bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
   delete: '该项目已绑定会员卡，不可删除',
 };
+
+/** Figma card-lock (86:7) — 删除锁定；currentColor 适配红底白字 / 菜单品牌色 */
+const CATALOG_DELETE_LOCK_ICON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.1998 16.5C16.1998 15.9477 16.6475 15.5 17.1998 15.5H21.1998C21.7521 15.5 22.1998 15.9477 22.1998 16.5V18.5C22.1998 19.0523 21.7521 19.5 21.1998 19.5H17.1998C16.6475 19.5 16.1998 19.0523 16.1998 18.5V16.5Z" fill="currentColor"/><path d="M12.0002 18.3L4.20045 18.2998C2.87501 18.2998 1.80053 17.2253 1.80049 15.8999L1.80023 6.90004C1.80019 5.57453 2.87472 4.49998 4.20023 4.49998H18.5992C19.9249 4.49998 20.9997 5.57419 20.9997 6.8999L20.9998 8.69998M2.39977 8.69983H20.3998M17.6998 15V14C17.6998 13.1716 18.3713 12.5 19.1998 12.5C20.0282 12.5 20.6998 13.1716 20.6998 14V15.5M17.1998 19.5H21.1998C21.7521 19.5 22.1998 19.0523 22.1998 18.5V16.5C22.1998 15.9477 21.7521 15.5 21.1998 15.5H17.1998C16.6475 15.5 16.1998 15.9477 16.1998 16.5V18.5C16.1998 19.0523 16.6475 19.5 17.1998 19.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function getCatalogDeleteLocks(p) {
+  if (!p) return [];
+  const locks = [];
+  if (p.boundToCard) locks.push('card');
+  if (p.boundToCoupon) locks.push('coupon');
+  if (p.boundToMall) locks.push('mall');
+  return locks;
+}
+
+function isCatalogDeleteLocked(p) {
+  return getCatalogDeleteLocks(p).length > 0;
+}
+
+function catalogDeleteLockToast(p) {
+  const locks = getCatalogDeleteLocks(p);
+  if (!locks.length) return PROJ_LOCK_TOAST.delete;
+  const labels = { card: '会员卡', coupon: '优惠券', mall: '商城' };
+  const parts = locks.map(k => labels[k]).filter(Boolean);
+  return `已关联${parts.join('/')}，不可删除`;
+}
+
+function catalogDeleteBtnHtml(locked) {
+  if (!locked) return `<button type="button" class="act-del" data-swipe-act="delete">删除</button>`;
+  return `<button type="button" class="act-del act-del--locked" data-swipe-act="delete" aria-label="删除（已锁定）"><span>删除</span><span class="act-del__lock">${CATALOG_DELETE_LOCK_ICON}</span></button>`;
+}
 let projDurDraft = { hours: 0, minutes: 30 };
 let projDurWheelTimer = null;
 
 function seedProjectCatalog() {
-  return [
+  const list = [
     { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
     { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, pinned: true, hasImage: false, category: '剪发' },
     { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
@@ -5641,11 +5779,26 @@ function seedProjectCatalog() {
     { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
     { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
     { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, pinned: true, hasImage: false, category: '烫染' },
-  ].map(p => ({ ...p, boundToCard: false, boundTemplateIds: [], boundTemplateId: null, boundTemplateNames: [] }));
+  ].map(p => ({
+    ...p,
+    boundToCard: false,
+    boundToCoupon: false,
+    boundToMall: false,
+    hidden: false,
+    boundTemplateIds: [],
+    boundTemplateId: null,
+    boundTemplateNames: [],
+  }));
+  const byId = Object.fromEntries(list.map(p => [p.id, p]));
+  if (byId.p16) byId.p16.boundToCoupon = true;
+  if (byId.p9) byId.p9.boundToMall = true;
+  if (byId.p13) byId.p13.hidden = true;
+  if (byId.p5) byId.p5.hidden = true;
+  return list;
 }
 
 function seedProductCatalog() {
-  return [
+  const list = [
     { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, onSale: true, pinned: false, category: '洗护' },
     { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, onSale: true, pinned: false, category: '洗护' },
     { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, onSale: true, pinned: true, category: '护理' },
@@ -5664,7 +5817,22 @@ function seedProductCatalog() {
     { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, onSale: true, pinned: false, category: '护理' },
     { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, onSale: true, pinned: false, category: '洗护' },
     { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, onSale: false, pinned: false, category: '烫染' },
-  ].map(p => ({ ...p, boundToCard: false, boundTemplateIds: [], boundTemplateId: null, boundTemplateNames: [] }));
+  ].map(p => ({
+    ...p,
+    boundToCard: false,
+    boundToCoupon: false,
+    boundToMall: false,
+    hidden: false,
+    boundTemplateIds: [],
+    boundTemplateId: null,
+    boundTemplateNames: [],
+  }));
+  const byId = Object.fromEntries(list.map(p => [p.id, p]));
+  if (byId.pd6) byId.pd6.boundToCoupon = true;
+  if (byId.pd11) byId.pd11.boundToMall = true;
+  if (byId.pd17) byId.pd17.hidden = true;
+  if (byId.pd4) byId.pd4.hidden = true;
+  return list;
 }
 
 function seedCatalogGroups() {
@@ -6377,12 +6545,10 @@ function renderCatalogGroupMembers() {
   }
   listEl.innerHTML = sorted.map(p => {
     const checked = selected.has(p.id) ? ' checked' : '';
-    const bound = p.boundToCard ? boundTagHtml() : '';
     return `<label class="catalog-member-item">
       <input type="checkbox" data-member-id="${escapeAttr(p.id)}"${checked}>
       <span class="catalog-member-item__main">
         <span class="catalog-member-item__name">${escapeHtml(p.name)}</span>
-        ${bound}
       </span>
       <span class="catalog-member-item__price">¥${Number(p.price) || 0}</span>
     </label>`;
@@ -7688,6 +7854,7 @@ const state = {
   discBenefitIsNew: false,
   simpleProjPickOn: {},
   simpleProdPickOn: {},
+  simpleProdPickQty: {},
   simpleDiscPickOn: {},
   pickerProjectOn: {},
   pickerProjectExcluded: {},
@@ -7742,6 +7909,7 @@ const state = {
   priceCatalogReturn: null,
   catalogActionProjId: null,
   catalogColSort: { key: null, dir: null },
+  catalogHiddenExpanded: false,
   projEditingId: null,
   projFormState: null,
   editingAudienceKey: null,
@@ -8400,10 +8568,7 @@ function formatProductScopeTitleHtml(products) {
 
 function formatProductBenefitCardQtyMetaHtml(card) {
   const qty = Math.max(1, parseInt(card?.qty, 10) || 1);
-  return `<span class="step2-benefit-card__meta">
-    <span class="step2-benefit-card__meta-scope">每项</span>
-    <span class="step2-benefit-card__meta-qty">${escapeHtml(`×${qty}`)}</span>
-  </span>`;
+  return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(`×${qty}`)}</span>`;
 }
 
 function formatBenefitCardQtyScopeLabel(card) {
@@ -8411,24 +8576,62 @@ function formatBenefitCardQtyScopeLabel(card) {
     projectCount: card.projects?.length || 0,
     unlimited: card.unlimited,
   });
-  return scope === 'shared' ? '共计' : '每项';
+  return scope === 'shared' ? '共' : '';
 }
 
 function formatBenefitCardQtyValue(card) {
   if (card.unlimited) return '不限次';
   const purchase = card.purchaseQty ?? 0;
   const gift = card.giftQty ?? 0;
-  return gift > 0 ? `${purchase}次+送${gift}次` : `${purchase}次`;
+  return gift > 0 ? `${purchase}次送${gift}次` : `${purchase}次`;
 }
 
 function formatBenefitCardQtySummary(card) {
-  return `${formatBenefitCardQtyScopeLabel(card)}${formatBenefitCardQtyValue(card)}`;
+  const scope = formatBenefitCardQtyScopeLabel(card);
+  if (card.unlimited) {
+    const qty = '不限次';
+    return scope ? `${scope}${qty}` : qty;
+  }
+  const purchase = card.purchaseQty ?? 0;
+  const gift = card.giftQty ?? 0;
+  const purchaseText = `${purchase}次`;
+  if (gift > 0) {
+    const body = `${purchaseText}送${gift}次`;
+    return scope ? `${scope}${body}` : body;
+  }
+  return scope ? `${scope}${purchaseText}` : purchaseText;
 }
 
 function formatBenefitCardQtyMetaHtml(card) {
+  const scopeLabel = formatBenefitCardQtyScopeLabel(card);
+  if (card.unlimited) {
+    if (!scopeLabel) {
+      return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml('不限次')}</span>`;
+    }
+    return `<span class="step2-benefit-card__meta">
+      <span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>
+      <span class="step2-benefit-card__meta-qty">${escapeHtml('不限次')}</span>
+    </span>`;
+  }
+  const purchase = card.purchaseQty ?? 0;
+  const gift = card.giftQty ?? 0;
+  const purchaseText = `${purchase}次`;
+  // 有赠送：固定两行（购买 / 赠送），去掉加号；「共」单独一行在上
+  if (gift > 0) {
+    const parts = [];
+    if (scopeLabel) {
+      parts.push(`<span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>`);
+    }
+    parts.push(`<span class="step2-benefit-card__meta-qty">${escapeHtml(purchaseText)}</span>`);
+    parts.push(`<span class="step2-benefit-card__meta-gift">${escapeHtml(`送${gift}次`)}</span>`);
+    return `<span class="step2-benefit-card__meta">${parts.join('')}</span>`;
+  }
+  if (!scopeLabel) {
+    return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(purchaseText)}</span>`;
+  }
   return `<span class="step2-benefit-card__meta">
-    <span class="step2-benefit-card__meta-scope">${escapeHtml(formatBenefitCardQtyScopeLabel(card))}</span>
-    <span class="step2-benefit-card__meta-qty">${escapeHtml(formatBenefitCardQtyValue(card))}</span>
+    <span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>
+    <span class="step2-benefit-card__meta-qty">${escapeHtml(purchaseText)}</span>
   </span>`;
 }
 
@@ -9753,6 +9956,98 @@ function projShowScreen(screenId) {
   showOnlyScreen(screenId);
 }
 
+function catalogItemMatchesSearch(p, q, isProduct) {
+  if (!q) return true;
+  if (p.name.toLowerCase().includes(q)) return true;
+  if (isProduct && String(p.spec || '').toLowerCase().includes(q)) return true;
+  return false;
+}
+
+function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
+  const wrap = document.createElement('div');
+  const bucket = getCatalogSortBucket(p);
+  wrap.className = 'table-row-swipe' + (p.onSale ? '' : ' is-off-sale');
+  wrap.dataset.projId = p.id;
+  wrap.dataset.sortBucket = inHiddenSection ? `hidden-${bucket}` : bucket;
+  const longName = p.name.length > 5;
+  const saleLabel = p.onSale ? '下架' : '上架';
+  const hideLabel = p.hidden ? '取消隐藏' : '隐藏';
+  const delLocked = isCatalogDeleteLocked(p);
+  const actions = [];
+  if (!p.pinned) actions.push(`<button type="button" class="act-pin" data-swipe-act="pin">置顶</button>`);
+  actions.push(`<button type="button" class="act-group" data-swipe-act="group">分组</button>`);
+  actions.push(`<button type="button" class="act-sale" data-swipe-act="sale">${saleLabel}</button>`);
+  actions.push(`<button type="button" class="act-hide" data-swipe-act="hide">${hideLabel}</button>`);
+  actions.push(catalogDeleteBtnHtml(delLocked));
+  wrap.innerHTML = `
+      <div class="table-row-actions">${actions.join('')}</div>
+      <div class="table-row">
+        <div class="name">
+          <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
+          <div class="name-main">
+            <span class="name-text${longName ? ' is-long' : ''}">${escapeHtml(p.name)}${p.pinned ? pinTagHtml() : ''}</span>
+          </div>
+        </div>
+        <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
+        <div class="spec">${isProduct ? escapeHtml((p.spec || '').trim() || '—') : ''}</div>
+        <div class="price">${projFormatPriceHtml(p.price)}</div>
+        <div class="sale-status"><span class="sale-status__pill ${p.onSale ? 'sale-status--on' : 'sale-status--off'}">${p.onSale ? '在售' : '已下架'}</span></div>
+      </div>`;
+  const row = wrap.querySelector('.table-row');
+  let openWidth = 0;
+  actions.forEach((_, i) => {
+    openWidth += (i === actions.length - 1 && delLocked) ? 80 : 68;
+  });
+  wrap.querySelectorAll('[data-swipe-act]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const act = btn.dataset.swipeAct;
+      const proj = findCatalogItemById(p.id);
+      if (!proj) return;
+      let ok = false;
+      if (act === 'pin') {
+        ok = pinCatalogProject(proj);
+        if (ok) refreshAfterCatalogPinChange();
+      } else if (act === 'group') {
+        openCatalogItemGroupSheet(proj.id);
+        ok = true;
+      } else if (act === 'sale') {
+        ok = toggleCatalogOnSale(proj);
+        if (ok) refreshAfterCatalogPinChange();
+      } else if (act === 'hide') {
+        ok = toggleCatalogHidden(proj, !proj.hidden);
+        if (ok) refreshAfterCatalogPinChange();
+      } else if (act === 'delete') {
+        ok = openCatalogDeleteConfirm(proj.id);
+      }
+      // 仅操作成功时归位；失败（如不可删 toast）保持展开
+      if (ok) closeAllCatalogSwipes();
+    });
+  });
+  row.querySelector('.pin-tag')?.addEventListener('click', e => {
+    e.stopPropagation();
+    const proj = findCatalogItemById(p.id);
+    if (!proj) return;
+    if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
+  });
+  row.addEventListener('click', () => {
+    // 左滑展开时：任意点击本行（含最左侧）归位，优先于 suppressClick
+    if (wrap.classList.contains('is-open')) {
+      row.dataset.suppressClick = '';
+      closeAllCatalogSwipes();
+      return;
+    }
+    if (row.dataset.suppressClick === '1') {
+      row.dataset.suppressClick = '';
+      return;
+    }
+    closeAllCatalogSwipes();
+    projOpenEdit(p.id);
+  });
+  wrap._swipeOpenWidth = openWidth;
+  return wrap;
+}
+
 function projRenderList() {
   syncPriceCatalogTabs();
   const isProduct = isProductCatalogTab();
@@ -9763,13 +10058,10 @@ function projRenderList() {
     ? sortCatalogByActiveCol(getActivePriceCatalog())
     : projSortCatalog(getActivePriceCatalog());
   list = filterCatalogByActiveGroup(list);
-  if (q) {
-    list = list.filter(p => {
-      if (p.name.toLowerCase().includes(q)) return true;
-      if (isProduct && String(p.spec || '').toLowerCase().includes(q)) return true;
-      return false;
-    });
-  }
+  list = list.filter(p => catalogItemMatchesSearch(p, q, isProduct));
+  const visibleList = list.filter(p => !p.hidden);
+  const hiddenList = list.filter(p => !!p.hidden);
+  if (q && hiddenList.length) state.catalogHiddenExpanded = true;
   const total = getActivePriceCatalog().length;
   syncCatalogColSortHead();
   const tbody = document.getElementById('projProjectTable');
@@ -9783,7 +10075,7 @@ function projRenderList() {
   syncCatalogGroupChrome();
   tbody.innerHTML = '';
   tbody.classList.remove('is-reordering');
-  if (!list.length) {
+  if (!visibleList.length && !hiddenList.length) {
     tableCard?.classList.toggle('hidden', !total || (inCustomGroup && !q));
     listEmpty?.classList.remove('hidden');
     if (emptyTitle) {
@@ -9804,75 +10096,28 @@ function projRenderList() {
   tableCard?.classList.remove('hidden');
   listEmpty?.classList.add('hidden');
   emptyToGroup?.classList.add('hidden');
-  list.forEach(p => {
-    const wrap = document.createElement('div');
-    const bucket = getCatalogSortBucket(p);
-    wrap.className = 'table-row-swipe' + (p.onSale ? '' : ' is-off-sale');
-    wrap.dataset.projId = p.id;
-    wrap.dataset.sortBucket = bucket;
-    const longName = p.name.length > 5;
-    const saleLabel = p.onSale ? '下架' : '上架';
-    const actions = [];
-    if (!p.pinned) actions.push(`<button type="button" class="act-pin" data-swipe-act="pin">置顶</button>`);
-    actions.push(`<button type="button" class="act-group" data-swipe-act="group">分组</button>`);
-    actions.push(`<button type="button" class="act-sale" data-swipe-act="sale">${saleLabel}</button>`);
-    actions.push(`<button type="button" class="act-del" data-swipe-act="delete">删除</button>`);
-    wrap.innerHTML = `
-      <div class="table-row-actions">${actions.join('')}</div>
-      <div class="table-row">
-        <div class="name">
-          <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
-          <div class="name-main">
-            <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(p.name)}${p.boundToCard ? boundTagHtml() : ''}${p.pinned ? pinTagHtml() : ''}</span>
-          </div>
-        </div>
-        <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
-        <div class="spec">${isProduct ? escapeHtml((p.spec || '').trim() || '—') : ''}</div>
-        <div class="price">${projFormatPriceHtml(p.price)}</div>
-        <div class="sale-status"><span class="sale-status__pill ${p.onSale ? 'sale-status--on' : 'sale-status--off'}">${p.onSale ? '在售' : '已下架'}</span></div>
-      </div>`;
-    const row = wrap.querySelector('.table-row');
-    const openWidth = actions.length * 68;
-
-    wrap.querySelectorAll('[data-swipe-act]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const act = btn.dataset.swipeAct;
-        const proj = findCatalogItemById(p.id);
-      if (!proj) return;
-      closeAllCatalogSwipes();
-      if (act === 'pin') {
-        if (pinCatalogProject(proj)) refreshAfterCatalogPinChange();
-      } else if (act === 'group') {
-        openCatalogItemGroupSheet(proj.id);
-      } else if (act === 'sale') {
-        if (toggleCatalogOnSale(proj)) refreshAfterCatalogPinChange();
-      } else if (act === 'delete') {
-        openCatalogDeleteConfirm(proj.id);
-      }
-    });
+  visibleList.forEach(p => {
+    tbody.appendChild(buildCatalogListRow(p, { isProduct, inHiddenSection: false }));
   });
-
-    row.querySelector('.pin-tag')?.addEventListener('click', e => {
-      e.stopPropagation();
-      const proj = findCatalogItemById(p.id);
-      if (!proj) return;
-      if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
+  if (hiddenList.length) {
+    const block = document.createElement('div');
+    block.className = 'catalog-hidden-block' + (state.catalogHiddenExpanded ? ' is-open' : '');
+    block.innerHTML = `
+      <button type="button" class="catalog-hidden-toggle" data-catalog-hidden-toggle aria-expanded="${state.catalogHiddenExpanded ? 'true' : 'false'}">
+        <span class="catalog-hidden-toggle__label">已隐藏<span class="catalog-hidden-toggle__count">${hiddenList.length}</span></span>
+        <svg class="catalog-hidden-toggle__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="catalog-hidden-list"></div>`;
+    const hiddenMount = block.querySelector('.catalog-hidden-list');
+    hiddenList.forEach(p => {
+      hiddenMount.appendChild(buildCatalogListRow(p, { isProduct, inHiddenSection: true }));
     });
-    row.addEventListener('click', () => {
-      if (row.dataset.suppressClick === '1') {
-        row.dataset.suppressClick = '';
-        return;
-      }
-      if (wrap.classList.contains('is-open')) {
-        closeAllCatalogSwipes();
-        return;
-      }
-      projOpenEdit(p.id);
+    block.querySelector('[data-catalog-hidden-toggle]')?.addEventListener('click', () => {
+      state.catalogHiddenExpanded = !state.catalogHiddenExpanded;
+      projRenderList();
     });
-    wrap._swipeOpenWidth = openWidth;
-    tbody.appendChild(wrap);
-  });
+    tbody.appendChild(block);
+  }
   wireCatalogRowInteractions(tbody, {
     filterActive: !!q || inCustomGroup,
     colSortActive: isCatalogColSortActive(),
@@ -9906,16 +10151,26 @@ function pinCatalogProject(proj) {
   return true;
 }
 
+function toggleCatalogHidden(proj, hidden) {
+  if (!proj) return false;
+  const next = !!hidden;
+  if (!!proj.hidden === next) return false;
+  proj.hidden = next;
+  showToast(next ? '已隐藏' : '已取消隐藏');
+  return true;
+}
+
 function openCatalogDeleteConfirm(projId) {
   const p = findCatalogItemById(projId);
-  if (!p) return;
-  if (p.boundToCard) {
-    showToast(PROJ_LOCK_TOAST.delete, true);
-    return;
+  if (!p) return false;
+  if (isCatalogDeleteLocked(p)) {
+    showToast(catalogDeleteLockToast(p), true);
+    return false;
   }
   state.projEditingId = projId;
   state.projFormKind = getCatalogProducts().some(x => x.id === projId) ? 'product' : 'project';
   document.getElementById('projDialogMask')?.classList.add('show');
+  return true;
 }
 
 function closeAllCatalogSwipes(exceptWrap) {
@@ -9938,6 +10193,15 @@ function openCatalogRowActions(projId) {
   mask?.querySelector('[data-catalog-act="unpin"]')?.classList.toggle('hidden', !p.pinned);
   const saleBtn = mask?.querySelector('[data-catalog-act="sale"]');
   if (saleBtn) saleBtn.textContent = p.onSale ? '下架' : '上架';
+  mask?.querySelector('[data-catalog-act="hide"]')?.classList.toggle('hidden', !!p.hidden);
+  mask?.querySelector('[data-catalog-act="unhide"]')?.classList.toggle('hidden', !p.hidden);
+  const lockEl = document.getElementById('catalogActDeleteLock');
+  if (lockEl) {
+    const locked = isCatalogDeleteLocked(p);
+    lockEl.classList.toggle('is-hidden', !locked);
+    lockEl.innerHTML = locked ? CATALOG_DELETE_LOCK_ICON : '';
+    lockEl.setAttribute('aria-hidden', locked ? 'false' : 'true');
+  }
   mask?.classList.add('open');
 }
 
@@ -9958,6 +10222,10 @@ function handleCatalogRowAction(act) {
     if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
   } else if (act === 'sale') {
     if (toggleCatalogOnSale(proj)) refreshAfterCatalogPinChange();
+  } else if (act === 'hide') {
+    if (toggleCatalogHidden(proj, true)) refreshAfterCatalogPinChange();
+  } else if (act === 'unhide') {
+    if (toggleCatalogHidden(proj, false)) refreshAfterCatalogPinChange();
   } else if (act === 'group') {
     openCatalogItemGroupSheet(proj.id);
   } else if (act === 'delete') {
@@ -10164,6 +10432,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
         armed = false;
         suppressClick = true;
         row.dataset.suppressClick = '1';
+        closeAllCatalogSwipes();
         openCatalogRowActions(wrap.dataset.projId);
       }
       clearPress();
@@ -10230,6 +10499,12 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
     });
 
     row.addEventListener('click', e => {
+      // 展开态允许冒泡到行点击以归位，不拦截
+      if (wrap.classList.contains('is-open')) {
+        suppressClick = false;
+        row.dataset.suppressClick = '';
+        return;
+      }
       if (suppressClick) {
         e.preventDefault();
         e.stopPropagation();
@@ -10242,6 +10517,11 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
       e.preventDefault();
       e.stopPropagation();
       if (e.button !== 0 && e.pointerType === 'mouse') return;
+      // 左滑展开时点最左侧把手 → 归位，不进入拖拽
+      if (wrap.classList.contains('is-open')) {
+        closeAllCatalogSwipes();
+        return;
+      }
       const block = dragBlockToast();
       if (block) {
         showToast(block, true);
@@ -10509,7 +10789,15 @@ function projSaveForm() {
     if (idx >= 0) catalog[idx] = { ...catalog[idx], ...payload };
     showToast('保存成功');
   } else {
-    catalog.push({ id: projUid(), boundToCard: false, sortOrder: nextCatalogSortOrder(catalog), ...payload });
+    catalog.push({
+      id: projUid(),
+      boundToCard: false,
+      boundToCoupon: false,
+      boundToMall: false,
+      hidden: false,
+      sortOrder: nextCatalogSortOrder(catalog),
+      ...payload,
+    });
     showToast(isProduct ? '产品已创建' : '项目已创建');
   }
   projRenderList();
@@ -10519,7 +10807,6 @@ function projSaveForm() {
     if (state.projBenefitDraft) renderProjectPickParams();
   } else if (state.priceCatalogReturn === 'screen2p') {
     renderProductList();
-    if (state.prodBenefitDraft) renderProductPickParams();
   } else if (state.priceCatalogReturn === 'screen4') {
     renderMemberPriceProjectList();
     if (state.discBenefitDraft) renderDiscountPickParams();
@@ -10529,7 +10816,7 @@ function projSaveForm() {
 
 function projOpenDeleteDialog() {
   const p = findCatalogItemById(state.projEditingId);
-  if (p?.boundToCard) { showToast(PROJ_LOCK_TOAST.delete, true); return; }
+  if (isCatalogDeleteLocked(p)) { showToast(catalogDeleteLockToast(p), true); return; }
   document.getElementById('projDialogMask')?.classList.add('show');
 }
 
@@ -10538,6 +10825,7 @@ function openPriceCatalog(fromScreen) {
   state.priceCatalogReturn = fromScreen || 'screen0';
   state.navStack.push(state.priceCatalogReturn);
   state.catalogColSort = { key: null, dir: null };
+  state.catalogHiddenExpanded = false;
   const search = document.getElementById('projSearchInput');
   if (search) search.value = '';
   projRenderList();
@@ -10554,7 +10842,6 @@ function projBackFromCatalog() {
     showOnlyScreen('screen2');
   } else if (from === 'screen2p') {
     renderProductList();
-    if (state.prodBenefitDraft) renderProductPickParams();
     showOnlyScreen('screen2p');
   } else if (from === 'screen6') {
     showOnlyScreen('screen6');
@@ -10608,8 +10895,14 @@ function wireProjCatalogModule() {
     if (e.target === document.getElementById('projDialogMask')) closeProjDeleteDialog();
   });
   document.getElementById('projDialogConfirm')?.addEventListener('click', () => {
-    const isProduct = getCatalogProducts().some(x => x.id === state.projEditingId);
     const delId = state.projEditingId;
+    const p = findCatalogItemById(delId);
+    if (isCatalogDeleteLocked(p)) {
+      showToast(catalogDeleteLockToast(p), true);
+      closeProjDeleteDialog();
+      return;
+    }
+    const isProduct = getCatalogProducts().some(x => x.id === delId);
     if (isProduct) {
       state.productCatalog = state.productCatalog.filter(x => x.id !== delId);
       syncBalanceCanBuyProductsField();
@@ -12898,6 +13191,7 @@ function clearFormFields() {
   state.discBenefitFocusCardId = null;
   state.simpleProjPickOn = {};
   state.simpleProdPickOn = {};
+  state.simpleProdPickQty = {};
   state.simpleDiscPickOn = {};
   state.memberPricePickTemp = [];
   state.memberPriceDraft = {};
@@ -13710,9 +14004,10 @@ function projectItemsToBenefitCards(items) {
   for (const item of items || []) {
     const norm = normalizeProjectItemFields(item);
     const scope = norm.qtyScope === 'shared' && norm.sharedGroupId ? 'shared' : 'per_item';
+    // 每项：一种项目一张卡；共计：同共享池合并为一张
     const key = scope === 'shared'
       ? `shared|${norm.sharedGroupId}`
-      : `per|${norm.unlimited}|${norm.purchaseQty}|${norm.giftQty}`;
+      : `per|${norm.name}`;
     if (!groups.has(key)) {
       groups.set(key, {
         id: scope === 'shared' ? (norm.sharedGroupId || genId()) : genId(),
@@ -13729,6 +14024,10 @@ function projectItemsToBenefitCards(items) {
     if (scope === 'shared') {
       g.purchaseQty = Math.max(g.purchaseQty || 0, norm.purchaseQty || 0);
       g.giftQty = Math.max(g.giftQty || 0, norm.giftQty || 0);
+    } else {
+      g.purchaseQty = norm.purchaseQty;
+      g.giftQty = norm.giftQty;
+      g.unlimited = norm.unlimited;
     }
   }
   return [...groups.values()];
@@ -13808,9 +14107,96 @@ function syncMemberPricesFromBenefitCards() {
   state.memberPrices = discountCardsToMemberPrices(state.discountBenefitCards);
 }
 
+/** 将「每项」多项目卡拆成 1 项目 = 1 卡（共计保持合并） */
+function expandPerItemProjectBenefitCards(cards) {
+  const out = [];
+  for (const card of cards || []) {
+    const scope = normalizeQtyScope(card.qtyScope, {
+      projectCount: card.projects?.length || 0,
+      unlimited: card.unlimited,
+    });
+    const names = card.projects || [];
+    if (scope !== 'shared' && names.length > 1) {
+      names.forEach((name, i) => {
+        out.push(cloneProjectBenefitCard({
+          ...card,
+          id: i === 0 ? card.id : genId(),
+          projects: [name],
+          qtyScope: 'per_item',
+        }));
+      });
+    } else {
+      out.push(cloneProjectBenefitCard(card));
+    }
+  }
+  return out;
+}
+
+/** 将多产品卡拆成 1 产品 = 1 卡 */
+function expandProductBenefitCards(cards) {
+  const out = [];
+  for (const card of cards || []) {
+    const names = card.products || [];
+    if (names.length > 1) {
+      names.forEach((name, i) => {
+        out.push(cloneProductBenefitCard({
+          ...card,
+          id: i === 0 ? card.id : genId(),
+          products: [name],
+        }));
+      });
+    } else {
+      out.push(cloneProductBenefitCard(card));
+    }
+  }
+  return out;
+}
+
+function cardsFromProjectBenefitDraft(draft, preferId) {
+  const base = cloneProjectBenefitCard({ ...draft, saved: true });
+  if (preferId) base.id = preferId;
+  const scope = normalizeQtyScope(base.qtyScope, {
+    projectCount: base.projects?.length || 0,
+    unlimited: base.unlimited,
+  });
+  if (scope === 'shared' || (base.projects?.length || 0) <= 1) return [base];
+  return (base.projects || []).map((name, i) => cloneProjectBenefitCard({
+    ...base,
+    id: i === 0 ? base.id : genId(),
+    projects: [name],
+    qtyScope: 'per_item',
+    saved: true,
+  }));
+}
+
+function normalizeProjectBenefitCardsShape() {
+  if (!state.projectBenefitCards?.length) return;
+  const needs = state.projectBenefitCards.some(c => {
+    const scope = normalizeQtyScope(c.qtyScope, {
+      projectCount: c.projects?.length || 0,
+      unlimited: c.unlimited,
+    });
+    return scope !== 'shared' && (c.projects?.length || 0) > 1;
+  });
+  if (!needs) return;
+  state.projectBenefitCards = expandPerItemProjectBenefitCards(state.projectBenefitCards);
+  syncProjectItemsFromBenefitCards();
+}
+
+function normalizeProductBenefitCardsShape() {
+  if (!state.productBenefitCards?.length) return;
+  const needs = state.productBenefitCards.some(c => (c.products?.length || 0) > 1);
+  if (!needs) return;
+  state.productBenefitCards = expandProductBenefitCards(state.productBenefitCards);
+  syncProductItemsFromBenefitCards();
+}
+
 function ensureProjectBenefitCardsFromItems() {
+  if (!state.projectBenefitCards) state.projectBenefitCards = [];
   if (!state.projectBenefitCards.length && state.projectItems.length) {
     state.projectBenefitCards = projectItemsToBenefitCards(state.projectItems);
+  } else {
+    normalizeProjectBenefitCardsShape();
   }
 }
 
@@ -13830,7 +14216,8 @@ function getDiscountBenefitCard(id) {
 
 const PROJ_SCOPE_CHEV = '<span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TAG_CHEV = '<span class="proj-tag__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span>';
-const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+/* 方案 A：细线描边垃圾桶（与预览一致） */
+const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 4h4"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M7 7l1 13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
 
 function renderProjectItemTags() {
   const el = document.getElementById('projectBenefitCardsStep2');
@@ -13846,9 +14233,9 @@ function renderProjectItemTags() {
           </div>
           <div class="step2-benefit-card__side">
             ${formatBenefitCardQtyMetaHtml(card)}
+            <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
           </div>
         </div>
-        <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
       </div>
     </div>`;
   }).join('');
@@ -13882,22 +14269,18 @@ function cloneProductBenefitCard(card) {
 }
 
 function productItemsToBenefitCards(items) {
-  const groups = new Map();
+  const byName = new Map();
   for (const item of items || []) {
     const norm = normalizeProductItemFields(item);
-    const key = `qty|${norm.qty}`;
-    if (!groups.has(key)) {
-      groups.set(key, {
-        id: genId(),
-        products: [],
-        qty: norm.qty,
-        saved: true,
-      });
-    }
-    const g = groups.get(key);
-    if (!g.products.includes(norm.name)) g.products.push(norm.name);
+    // 产品权益：一种产品一张卡
+    byName.set(norm.name, {
+      id: genId(),
+      products: [norm.name],
+      qty: norm.qty,
+      saved: true,
+    });
   }
-  return [...groups.values()];
+  return [...byName.values()];
 }
 
 function benefitCardsToProductItems(cards) {
@@ -13919,6 +14302,8 @@ function ensureProductBenefitCardsFromItems() {
   if (!state.productBenefitCards) state.productBenefitCards = [];
   if (!state.productBenefitCards.length && state.productItems.length) {
     state.productBenefitCards = productItemsToBenefitCards(state.productItems);
+  } else {
+    normalizeProductBenefitCardsShape();
   }
 }
 
@@ -13946,9 +14331,9 @@ function renderProductItemTags() {
           </div>
           <div class="step2-benefit-card__side">
             ${formatProductBenefitCardQtyMetaHtml(card)}
+            <button type="button" class="step2-benefit-card__rm" data-rm-product-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
           </div>
         </div>
-        <button type="button" class="step2-benefit-card__rm" data-rm-product-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
       </div>
     </div>`;
   }).join('');
@@ -14039,9 +14424,9 @@ function renderMemberPriceTags() {
           </div>
           <div class="step2-benefit-card__side">
             <span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+            <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
           </div>
         </div>
-        <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
       </div>
     </div>`
   ).join('');
@@ -14071,10 +14456,48 @@ function initSimpleProjPick(projects) {
   getAllProjectNamesForPicker().forEach(p => { state.simpleProjPickOn[p] = picked.has(p); });
 }
 
-function initSimpleProdPick(products) {
+function initSimpleProdPick(products, sharedQty) {
   const picked = new Set(products || []);
+  const q = Math.max(1, Math.min(999, parseInt(sharedQty, 10) || 1));
   state.simpleProdPickOn = {};
-  getAllProductNamesForPicker().forEach(p => { state.simpleProdPickOn[p] = picked.has(p); });
+  state.simpleProdPickQty = {};
+  getAllProductNamesForPicker().forEach(p => {
+    const on = picked.has(p);
+    state.simpleProdPickOn[p] = on;
+    state.simpleProdPickQty[p] = on ? q : 0;
+  });
+}
+
+function syncSimpleProdPickOnFromQty() {
+  const qtyMap = state.simpleProdPickQty || {};
+  state.simpleProdPickOn = state.simpleProdPickOn || {};
+  getAllProductNamesForPicker().forEach(p => {
+    const qty = Math.max(0, Math.min(999, parseInt(qtyMap[p], 10) || 0));
+    state.simpleProdPickQty[p] = qty;
+    state.simpleProdPickOn[p] = qty >= 1;
+  });
+}
+
+function getSimpleProdPickItems() {
+  syncSimpleProdPickOnFromQty();
+  return getAllProductNamesForPicker()
+    .filter(p => (parseInt(state.simpleProdPickQty[p], 10) || 0) >= 1)
+    .map(p => normalizeProductItemFields({
+      id: genId(),
+      name: p,
+      qty: Math.max(1, Math.min(999, parseInt(state.simpleProdPickQty[p], 10) || 1)),
+    }));
+}
+
+function setSimpleProdPickQty(name, next) {
+  const qty = Math.max(0, Math.min(999, parseInt(next, 10) || 0));
+  state.simpleProdPickQty = state.simpleProdPickQty || {};
+  state.simpleProdPickQty[name] = qty;
+  state.simpleProdPickOn = state.simpleProdPickOn || {};
+  state.simpleProdPickOn[name] = qty >= 1;
+  if (state.prodBenefitDraft) {
+    state.prodBenefitDraft.products = getSimplePickSelected('product');
+  }
 }
 
 function initSimpleDiscPick(projects) {
@@ -14084,6 +14507,7 @@ function initSimpleDiscPick(projects) {
 
 function getSimplePickSelected(mode) {
   if (mode === 'product') {
+    syncSimpleProdPickOnFromQty();
     return getAllProductNamesForPicker().filter(p => state.simpleProdPickOn[p]);
   }
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
@@ -14096,9 +14520,11 @@ function updateSimplePickCount(mode) {
 
 function selectAllSimplePick(mode) {
   if (mode === 'product') {
-    getProductNamesForPickerByGroup().forEach(p => { state.simpleProdPickOn[p] = true; });
+    getProductNamesForPickerByGroup().forEach(p => {
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[p], 10) || 0);
+      setSimpleProdPickQty(p, cur >= 1 ? cur : 1);
+    });
     renderProductList();
-    if (state.prodBenefitDraft) state.prodBenefitDraft.products = getSimplePickSelected('product');
     return;
   }
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
@@ -14118,9 +14544,11 @@ function selectAllSimplePick(mode) {
 
 function invertSimplePick(mode) {
   if (mode === 'product') {
-    getProductNamesForPickerByGroup().forEach(p => { state.simpleProdPickOn[p] = !state.simpleProdPickOn[p]; });
+    getProductNamesForPickerByGroup().forEach(p => {
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[p], 10) || 0);
+      setSimpleProdPickQty(p, cur >= 1 ? 0 : 1);
+    });
     renderProductList();
-    if (state.prodBenefitDraft) state.prodBenefitDraft.products = getSimplePickSelected('product');
     return;
   }
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
@@ -14293,6 +14721,11 @@ function saveProjectBenefitCard(cardId) {
   const card = getProjectBenefitCard(cardId);
   if (!card || !validateProjectBenefitCardDraft(card)) return;
   card.saved = true;
+  const expanded = cardsFromProjectBenefitDraft(card, card.id);
+  if (expanded.length > 1) {
+    const idx = state.projectBenefitCards.findIndex(c => c.id === cardId);
+    if (idx >= 0) state.projectBenefitCards.splice(idx, 1, ...expanded);
+  }
   pruneEmptyBenefitDrafts('project');
   syncProjectItemsFromBenefitCards();
   renderProjectItemTags();
@@ -14550,46 +14983,12 @@ function showDiscountBenefitEditor() {
   syncFlowMapFromAppState();
 }
 
-function buildProductQtyParamsHtml(draft) {
-  const qty = Math.max(1, parseInt(draft?.qty, 10) || 1);
-  return `<div class="proj-qty-panel">
-    <div class="proj-qty-dual">
-      <div class="proj-qty-dual__item">
-        <div class="proj-qty-dual__label">数量</div>
-        <div class="qty-stepper">
-          <button type="button" class="qty-btn" data-prod-qty-minus>−</button>
-          <input type="number" class="qty-input" data-prod-qty-input min="1" max="999" value="${qty}" />
-          <button type="button" class="qty-btn" data-prod-qty-plus>+</button>
-        </div>
-      </div>
-    </div>
-    <p class="pick-params-section__hint" style="margin:10px 0 0;font-size:12px;color:var(--text-sec);line-height:1.45">每个已选产品各自获得该数量，不可不限量。</p>
-  </div>`;
-}
-
-function renderProductPickParams() {
-  const host = document.getElementById('productPickParams');
-  if (!host || !state.prodBenefitDraft) return;
-  host.innerHTML = buildProductQtyParamsHtml(state.prodBenefitDraft);
-  const draft = state.prodBenefitDraft;
-  const input = host.querySelector('[data-prod-qty-input]');
-  const applyQty = (next) => {
-    draft.qty = Math.max(1, Math.min(999, parseInt(next, 10) || 1));
-    if (input) input.value = String(draft.qty);
-  };
-  host.querySelector('[data-prod-qty-minus]')?.addEventListener('click', () => applyQty((draft.qty || 1) - 1));
-  host.querySelector('[data-prod-qty-plus]')?.addEventListener('click', () => applyQty((draft.qty || 1) + 1));
-  input?.addEventListener('change', () => applyQty(input.value));
-  input?.addEventListener('blur', () => applyQty(input.value));
-}
-
 function showProductBenefitEditor() {
   const draft = state.prodBenefitDraft;
   const titleEl = document.getElementById('productPickerTitle');
   if (titleEl) titleEl.textContent = state.prodBenefitIsNew ? '添加产品权益' : '编辑产品权益';
-  initSimpleProdPick(draft?.products || []);
+  initSimpleProdPick(draft?.products || [], draft?.qty);
   renderProductList();
-  renderProductPickParams();
   showOnlyScreen('screen2p');
   syncFlowMapFromAppState();
 }
@@ -14626,23 +15025,32 @@ function cancelProductBenefitEditor() {
 }
 
 function confirmProductPick() {
-  const selected = getSimplePickSelected('product');
   const draft = state.prodBenefitDraft;
   if (!draft) {
     returnToForm('product');
     return;
   }
-  draft.products = selected;
-  draft.qty = Math.max(1, parseInt(draft.qty, 10) || 1);
-  if (!validateProductBenefitCardDraft(draft)) return;
-  draft.saved = true;
+  const items = getSimpleProdPickItems();
+  if (!items.length) {
+    showToast('请先选择产品范围', true);
+    return;
+  }
+  const newCards = productItemsToBenefitCards(items).map(c => cloneProductBenefitCard({ ...c, saved: true }));
+  if (!newCards.length) {
+    showToast('请先选择产品范围', true);
+    return;
+  }
   const wasNew = state.prodBenefitIsNew;
   if (wasNew) {
-    state.productBenefitCards.push(cloneProductBenefitCard(draft));
+    state.productBenefitCards.push(...newCards);
   } else {
     const idx = state.productBenefitCards.findIndex(c => c.id === state.prodBenefitEditingCardId);
-    if (idx >= 0) state.productBenefitCards[idx] = cloneProductBenefitCard(draft);
-    else state.productBenefitCards.push(cloneProductBenefitCard(draft));
+    if (idx >= 0) {
+      newCards[0].id = state.prodBenefitEditingCardId;
+      state.productBenefitCards.splice(idx, 1, ...newCards);
+    } else {
+      state.productBenefitCards.push(...newCards);
+    }
   }
   pruneEmptyBenefitDrafts('product');
   syncProductItemsFromBenefitCards();
@@ -14663,15 +15071,16 @@ function renderProductList() {
     container.innerHTML = '';
     return;
   }
+  syncSimpleProdPickOnFromQty();
   const names = getProductNamesForPickerByGroup();
   container.innerHTML = names.map(p => {
-    const checked = !!state.simpleProdPickOn[p];
+    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty?.[p], 10) || 0));
     return `<div class="proj-pick-card">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}${isCatalogProductPinned(p) ? pinTagHtml() : ''}</span>
         </span>
-        ${projPickSwitchHtml(p, checked)}
+        ${projQtyStepperHtml(p, 'prodrow', qty, 0)}
       </div>
     </div>`;
   }).join('');
@@ -14680,17 +15089,35 @@ function renderProductList() {
 }
 
 function wireSimpleProductPicker(container) {
-  container.querySelectorAll('.proj-switch').forEach(wrap => {
+  const applyQty = (name, next, inputEl) => {
+    setSimpleProdPickQty(name, next);
+    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty[name], 10) || 0));
+    if (inputEl) inputEl.value = String(qty);
+  };
+  container.querySelectorAll('.qty-stepper').forEach(wrap => {
     wrap.addEventListener('click', e => e.stopPropagation());
   });
-  container.querySelectorAll('.proj-pick-sw').forEach(sw => {
-    sw.addEventListener('change', () => {
-      state.simpleProdPickOn[sw.value] = sw.checked;
-      updateSimplePickCount('product');
-      if (state.prodBenefitDraft) {
-        state.prodBenefitDraft.products = getSimplePickSelected('product');
-      }
+  container.querySelectorAll('[data-prodrow-minus]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-prodrow-minus');
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
+      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
+      applyQty(name, cur - 1, input);
     });
+  });
+  container.querySelectorAll('[data-prodrow-plus]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-prodrow-plus');
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
+      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
+      applyQty(name, cur + 1, input);
+    });
+  });
+  container.querySelectorAll('[data-prodrow-input]').forEach(input => {
+    const name = input.getAttribute('data-prodrow-input');
+    const commit = () => applyQty(name, input.value, input);
+    input.addEventListener('change', commit);
+    input.addEventListener('blur', commit);
   });
 }
 
@@ -15970,12 +16397,16 @@ function confirmProjectPick() {
   if (!validateProjectBenefitCardDraft(draft)) return;
   draft.saved = true;
   const wasNew = state.projBenefitIsNew;
+  const newCards = cardsFromProjectBenefitDraft(
+    draft,
+    wasNew ? null : state.projBenefitEditingCardId,
+  );
   if (wasNew) {
-    state.projectBenefitCards.push(cloneProjectBenefitCard(draft));
+    state.projectBenefitCards.push(...newCards);
   } else {
     const idx = state.projectBenefitCards.findIndex(c => c.id === state.projBenefitEditingCardId);
-    if (idx >= 0) state.projectBenefitCards[idx] = cloneProjectBenefitCard(draft);
-    else state.projectBenefitCards.push(cloneProjectBenefitCard(draft));
+    if (idx >= 0) state.projectBenefitCards.splice(idx, 1, ...newCards);
+    else state.projectBenefitCards.push(...newCards);
   }
   pruneEmptyBenefitDrafts('project');
   syncProjectItemsFromBenefitCards();
