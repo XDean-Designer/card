@@ -61,11 +61,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.3-lite</td>
+<td>v1.4-lite</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-07-23</td>
+<td>2026-07-24</td>
 </tr>
 <tr>
 <td>文档类型</td>
@@ -89,7 +89,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<hr />
+<hr>
 <h2>怎么读这份 PRD</h2>
 <p>正文按模块编排。<strong>不用通读全文</strong>，按角色跳章即可。</p>
 <table>
@@ -132,17 +132,17 @@ tr:nth-child(even) td{background:#fafbfc}
 </table>
 <p><strong>先读这几条（贯穿全文）</strong></p>
 <ol>
-<li>新系统用 <strong>权益组合</strong>（面值 / 项目 / 折扣）建卡，<strong>不再选「五种卡类型」</strong>；整套取代旧会员卡系统。  </li>
+<li>新系统用 <strong>权益组合</strong>（面值 / 项目 / <strong>产品</strong> / 折扣）建卡，<strong>不再选「五种卡类型」</strong>；整套取代旧会员卡系统。  </li>
 <li>创建固定 <strong>三步</strong>：基本信息 → 权益组合 → 用卡策略；Step2 <strong>至少开启并配置一类权益</strong>。  </li>
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
 <li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
-<li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值+有限次项目权重。  </li>
+<li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
 <li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-会员卡管理.md</code>。</p>
-<hr />
+<hr>
 <h1>模块 1　背景 / 目标 / 范围 / 能力映射</h1>
 <blockquote>
 <p>读者：前端 ✓ · 后端 ✓ · 测试 ✓</p>
@@ -188,8 +188,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>1.3 本期做（In）</h2>
 <ul>
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
-<li>权益组合：面值（金额与赠送；<strong>不可</strong>用于购买价目产品）、项目（每项/共计、购买/赠送/不限次）、<strong>产品（每项数量，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket   </li>
-<li>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </li>
+<li>
+<p>权益组合：面值（金额与赠送；<strong>可用于办卡/购卡</strong>，含被购卡无面值；<strong>不可</strong>用于购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+</li>
+<li>
+<p>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </p>
+</li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
 <li>办卡：单选既存会员 → 去结账支付 → 办卡成功  </li>
 <li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
@@ -214,11 +218,15 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>储值/充值类（买赠面值）</td>
-<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；面值 <strong>不可</strong>用于购买价目产品</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；面值 <strong>可用于办卡/购卡</strong>（含被购卡无面值），<strong>不可</strong>用于购买价目产品</td>
 </tr>
 <tr>
 <td>次卡/项目次数类</td>
-<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次</td>
+<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次；保存后每项 = 一项目一 ticket</td>
+</tr>
+<tr>
+<td>产品次数/礼品类</td>
+<td>开启 <strong>产品</strong>：行内设数量（qty≥1 为已选）；一种产品一张 ticket；禁止不限量</td>
 </tr>
 <tr>
 <td>折扣/会员价类</td>
@@ -239,7 +247,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tbody>
 </table>
 <p>映射不足时 <strong>以新字段与原型行为为准</strong>，不编造旧系统字段表。</p>
-<hr />
+<hr>
 <h1>模块 2　用户场景与成功标准</h1>
 <blockquote>
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
@@ -298,7 +306,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>延期</td>
-<td>对非永久有效持卡设置延期时长（可含参考费用）</td>
+<td>对非永久有效持卡设置延期时长；费用 &gt; 0 走开单支付页，支付成功后再写延期；费用为 0 或选永久则立即生效</td>
 </tr>
 <tr>
 <td>退卡</td>
@@ -315,7 +323,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加。  </li>
 <li>退卡确认后该会员不再作为有效持卡；实退金额以确认值为准写入结果提示。</li>
 </ol>
-<hr />
+<hr>
 <h1>模块 3　信息架构与页面清单</h1>
 <blockquote>
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
@@ -323,30 +331,36 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>3.0 页面流（示意）</h2>
 <p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（细则见完整稿）。</p>
 <h3>建卡主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|添加会员卡| S1[Step1 基本信息]
-  S1 --&gt;|下一步| S2[Step2 权益组合]
-  S2 --&gt;|添加项目权益| P[项目权益页]
-  P --&gt;|确定| S2
-  S2 --&gt;|添加产品权益| G[产品权益页]
-  G --&gt;|确定| S2
-  S2 --&gt;|添加折扣权益| D[折扣权益页]
-  D --&gt;|确定| S2
-  S2 --&gt;|下一步| S3[Step3 用卡策略]
-  S3 --&gt;|保存| OK[创建成功]
-  OK --&gt;|返回列表| L
-  OK -.-&gt;|立即办卡| M[[选择会员 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|添加会员卡| S1[Step1 基本信息]
+  S1 -->|下一步| S2[Step2 权益组合]
+  S2 -->|添加项目权益| P[项目权益页]
+  P -->|确定| S2
+  S2 -->|添加产品权益| G[产品权益页]
+  G -->|确定| S2
+  S2 -->|添加折扣权益| D[折扣权益页]
+  D -->|确定| S2
+  S2 -->|下一步| S3[Step3 用卡策略]
+  S3 -->|保存| OK[创建成功]
+  OK -->|返回列表| L
+  OK -.->|立即办卡| M[[选择会员 Sheet]]
+</div>
+
 <h3>运营主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
-  DET --&gt;|编辑·无持卡| S1[Step1…三步]
-  DET --&gt;|复制建卡| S1
-  DET --&gt;|下架| OFF[[下架确认]]
-  OFF --&gt;|确认| L
-  DET --&gt;|重新上架·已下架| ON[[上架确认]]
-  ON --&gt;|确认| L
-  L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
-  DET --&gt;|办卡/退卡| M</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|点卡面| DET[会员卡详情]
+  DET -->|编辑·无持卡| S1[Step1…三步]
+  DET -->|复制建卡| S1
+  DET -->|下架| OFF[[下架确认]]
+  OFF -->|确认| L
+  DET -->|重新上架·已下架| ON[[上架确认]]
+  ON -->|确认| L
+  L -->|办卡/退卡| M[[选择会员 Sheet]]
+  DET -->|办卡/退卡| M
+</div>
+
 <p>说明：选择会员后「去结账」进入开单结账；退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架等见完整稿模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架）
@@ -389,7 +403,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>Step2</td>
 <td>权益组合</td>
-<td>三类权益 Switch + 多 ticket；步骤条第 2/3 步</td>
+<td>四类权益 Switch（面值/项目/产品/折扣）+ 多 ticket；步骤条第 2/3 步</td>
 </tr>
 <tr>
 <td>Step3</td>
@@ -414,7 +428,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>产品权益页</td>
 <td>添加/编辑产品权益</td>
-<td>适用产品 + 分组筛选 + <strong>数量</strong>；页内「确定」；「管理价目表」</td>
+<td>适用产品 + 分组筛选 + <strong>行内数量步进</strong>；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>折扣权益页</td>
@@ -444,8 +458,8 @@ tr:nth-child(even) td{background:#fafbfc}
 </tbody>
 </table>
 <p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> + sheets；办卡支付复用开单结账路由。</p>
-<hr />
-<hr />
+<hr>
+<hr>
 <h1>交付说明（精简版）</h1>
 <table>
 <thead>
@@ -469,7 +483,6 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
 
 <script src="assets/vendor/mermaid.min.js"></script>
