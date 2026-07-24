@@ -61,11 +61,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.0</td>
+<td>v1.2</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-07-23</td>
+<td>2026-07-24</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -130,7 +130,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td style="text-align: center;">✓</td>
 <td style="text-align: center;"><strong>必看</strong></td>
 <td style="text-align: center;"><strong>必看</strong></td>
-<td>在售/下架、绑卡锁、分组</td>
+<td>在售/下架/隐藏、绑卡锁、分组</td>
 </tr>
 <tr>
 <td>5</td>
@@ -162,7 +162,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td style="text-align: center;">✓</td>
 <td style="text-align: center;"><strong>必看</strong></td>
 <td style="text-align: center;">✓</td>
-<td>排序桶、多分组、同步 C 端</td>
+<td>排序桶、多分组、可见性矩阵</td>
 </tr>
 <tr>
 <td>9</td>
@@ -202,9 +202,10 @@ tr:nth-child(even) td{background:#fafbfc}
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
 <li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </li>
-<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后部分字段与删除/上下架 <strong>锁定</strong>（见模块 4、8）。产品亦可标记绑卡，列表展示绑卡标识。  </li>
-<li>B 端改价、上下架、时长等变更需 <strong>同步顾客端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
+<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。产品亦可标记绑卡，列表展示绑卡标识；删除锁定规则同原型。  </li>
+<li>B 端改价、上下架、时长、隐藏等变更需 <strong>同步顾客端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
+<li><strong>开单选品</strong> 读取价目表 <strong>实时目录</strong>（含已下架与已隐藏条目）；<strong>建卡权益选品</strong> 仅 <code>onSale &amp;&amp; !hidden</code>。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。</p>
@@ -219,8 +220,8 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格、价格、状态等），无列表配图堆叠；  </li>
 <li><strong>操作紧凑</strong>：搜索、Tab、分组条、左滑/长按菜单、拖拽排序集中在一屏；  </li>
-<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）；  </li>
-<li><strong>与会员卡联结</strong>：价目为选权益、折扣适用范围的数据源；支持从权益页「管理价目表」往返。</li>
+<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）、<strong>隐藏</strong> 与系统「隐藏」分组；  </li>
+<li><strong>与会员卡 / 开单联结</strong>：价目为选权益、折扣适用范围及 <strong>开单选品</strong> 的数据源；支持从权益页「管理价目表」往返。</li>
 </ul>
 <h2>1.2 目标</h2>
 <table>
@@ -241,15 +242,19 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>分组与排序</td>
-<td>自定义分组 + 桶内拖拽排序 + 置顶</td>
+<td>自定义分组 + 系统「隐藏」组 + 在售/下架桶内拖拽 <code>sortOrder</code></td>
 </tr>
 <tr>
 <td>售卖可控</td>
-<td>在售/下架；项目可配手机端预约</td>
+<td>在售/下架/隐藏；项目可配手机端预约</td>
+</tr>
+<tr>
+<td>可见性清晰</td>
+<td>顾客端 / 开单 / 建卡选品三套范围分明（见模块 4.6）</td>
 </tr>
 <tr>
 <td>与卡对齐</td>
-<td>绑卡锁定规则清晰；选品只取在售</td>
+<td>绑卡锁定规则清晰；权益选品只取在售且未隐藏</td>
 </tr>
 </tbody>
 </table>
@@ -257,12 +262,13 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>价目表列表：项目 Tab / 产品 Tab、搜索、列头排序、空态  </li>
 <li>新增 / 编辑 / 删除项目与产品  </li>
-<li>在售切换、置顶/取消置顶  </li>
-<li>分组：筛选 Tab、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
-<li>列表拖拽排序（置顶桶 / 在售桶 / 下架桶内）  </li>
+<li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
+<li>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
+<li>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内）  </li>
 <li>左滑快捷操作与长按操作 Sheet  </li>
 <li>项目绑卡锁定（部分字段）及提示文案  </li>
 <li>从会员卡权益页「管理价目表」进入并返回  </li>
+<li><strong>开单选品</strong> 联结（读取完整价目目录）  </li>
 <li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
@@ -284,11 +290,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>维护服务项目价格/时长</td>
-<td><strong>项目</strong> Tab：名称、价格、时长、在售、预约、可选图、置顶</td>
+<td><strong>项目</strong> Tab：名称、价格、时长、在售、预约、可选图</td>
 </tr>
 <tr>
 <td>维护可售卖货品</td>
-<td><strong>产品</strong> Tab：名称、规格、价格、在售、可选图、置顶</td>
+<td><strong>产品</strong> Tab：名称、规格、价格、在售、可选图</td>
 </tr>
 <tr>
 <td>列表浏览与查找</td>
@@ -296,19 +302,23 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>分类/归类</td>
-<td><strong>自定义分组</strong>（可多组、可空组、删组保留条目）</td>
+<td><strong>自定义分组</strong>（可多组、可空组、删组保留条目）+ 系统 <strong>隐藏</strong> 组</td>
 </tr>
 <tr>
 <td>调整展示顺序</td>
-<td><strong>置顶</strong> + <strong>桶内拖拽</strong> <code>sortOrder</code></td>
+<td><strong>桶内拖拽</strong> <code>sortOrder</code>（在售 / 下架两桶）</td>
 </tr>
 <tr>
 <td>停售</td>
-<td><strong>下架</strong>（列表仍可见，选品侧不可选）</td>
+<td><strong>下架</strong>（列表仍可见；顾客端不可见；开单仍可选；权益选品不可选）</td>
+</tr>
+<tr>
+<td>对 C 端隐藏但 B 端保留</td>
+<td><strong>隐藏</strong>（<code>hidden=true</code> / 系统「隐藏」组）</td>
 </tr>
 <tr>
 <td>被卡引用后的保护</td>
-<td><strong>绑卡锁定</strong>（名称/在售/预约/删除等受限）</td>
+<td><strong>绑卡锁定</strong>（名称/预约/删除等受限；<strong>在售仍可改</strong>）</td>
 </tr>
 </tbody>
 </table>
@@ -350,12 +360,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>新建项目</td>
 <td>填名称价格时长等后出现在项目列表在售区</td>
-<td>列表可见；可被会员卡选项目/折扣</td>
+<td>列表可见；可被会员卡选项目/折扣（在售且未隐藏）</td>
 </tr>
 <tr>
 <td>新建产品</td>
 <td>填名称规格价格后出现在产品列表</td>
-<td>列表可见；可被开单/产品权益选用（在售）</td>
+<td>列表可见；开单可选；产品权益选用（在售且未隐藏）</td>
 </tr>
 <tr>
 <td>改价</td>
@@ -365,22 +375,32 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>下架</td>
 <td>停售但仍可在价目表看到</td>
-<td>状态「已下架」；选品列表不出现</td>
+<td>状态「已下架」；顾客端不可见；开单仍可选；权益选品不可选</td>
+</tr>
+<tr>
+<td>隐藏</td>
+<td>对顾客端隐藏但 B 端保留</td>
+<td><code>hidden=true</code>；「全部」Tab 不显示；「隐藏」Tab 可见；开单仍可选</td>
 </tr>
 <tr>
 <td>分组运营</td>
 <td>建组、把条目加入多组、按组筛选</td>
-<td>筛选正确；删组不丢条目</td>
+<td>筛选正确；删组不丢条目；系统「隐藏」组不可删/改名</td>
 </tr>
 <tr>
 <td>拖拽排序</td>
-<td>调整同状态区内顺序</td>
-<td>刷新后顺序保持；搜索/分组筛选时不可拖</td>
+<td>调整同售卖态桶内顺序</td>
+<td>刷新后顺序保持；搜索/分组筛选/「隐藏」Tab 时不可拖</td>
 </tr>
 <tr>
 <td>绑卡项目</td>
 <td>被卡引用后不能乱改关键属性</td>
-<td>锁定字段点击有 toast；不可删、不可改在售</td>
+<td>锁定名称/预约/删除有 toast；<strong>可改在售/下架</strong></td>
+</tr>
+<tr>
+<td>开单选品</td>
+<td>开单时能选到下架/隐藏条目</td>
+<td>读取价目实时目录，不受 <code>onSale</code>/<code>hidden</code> 过滤</td>
 </tr>
 <tr>
 <td>从建卡管价目</td>
@@ -396,35 +416,39 @@ tr:nth-child(even) td{background:#fafbfc}
 </blockquote>
 <pre><code>价目表
  ├─ 列表（项目 Tab / 产品 Tab）
- │    ├─ 搜索 · 添加 · 分组条 · 齿轮
+ │    ├─ 搜索 · 添加 · 分组条（全部 / 自定义 / 隐藏）· 齿轮
  │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作
  │    └─ 空态
  ├─ 新增项目 / 新增产品
  ├─ 项目详情 / 产品详情
  ├─ 分组管理
- │    └─ 编辑成员
+ │    └─ 编辑成员（含系统「隐藏」组）
  └─ Sheets / 弹层
       ├─ 行操作 Sheet
       ├─ 分组菜单 Sheet
-      ├─ 设置分组（多选）
+      ├─ 设置分组（多选，含系统「隐藏」组）
       ├─ 新建/重命名分组 Dialog
       ├─ 删除分组确认
       ├─ 删除条目确认
       └─ 金额键盘（价格）
 </code></pre>
 <h3>3.0 页面流（示意）</h3>
-<div class="mermaid">flowchart LR
-  L[价目表列表] --&gt;|添加| Add[新增表单]
-  L --&gt;|点行| Edit[详情编辑]
-  L --&gt;|齿轮| G[分组管理]
-  G --&gt;|编辑成员| M[编辑成员]
-  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
-  L --&gt;|长按或左滑| A[[行操作 Sheet]]
-  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+  L[价目表列表] -->|添加| Add[新增表单]
+  L -->|点行| Edit[详情编辑]
+  L -->|齿轮| G[分组管理]
+  G -->|编辑成员| M[编辑成员]
+  G -->|新建或重命名| D[[分组名称 Dialog]]
+  L -->|长按或左滑| A[[行操作 Sheet]]
+  A -->|设置分组| IG[[多选分组 Sheet]]
+</div>
 <p>从会员卡权益页进入：</p>
-<div class="mermaid">flowchart LR
-  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
-  L --&gt;|返回| P</div>
+<div class="mermaid">
+flowchart LR
+  P[权益选品页] -->|管理价目表| L[价目表列表]
+  L -->|返回| P
+</div>
 <table>
 <thead>
 <tr>
@@ -457,22 +481,22 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>编辑成员</td>
 <td>编辑成员 · {组名}</td>
-<td>底栏「确定」</td>
+<td>底栏「确定」；系统「隐藏」组可编辑成员</td>
 </tr>
 <tr>
 <td>行操作</td>
 <td>条目标题</td>
-<td>置顶/分组/上下架/删除</td>
+<td>设置分组/上下架/隐藏或取消隐藏/删除</td>
 </tr>
 <tr>
 <td>设置分组</td>
 <td>条目标题</td>
-<td>可多选；可「去新建分组」</td>
+<td>可多选（含系统「隐藏」）；可「去新建分组」</td>
 </tr>
 <tr>
 <td>分组菜单</td>
 <td>组名</td>
-<td>编辑成员 / 重命名 / 删除</td>
+<td>编辑成员 / 重命名 / 删除（系统组无菜单）</td>
 </tr>
 </tbody>
 </table>
@@ -495,23 +519,51 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>在售 <code>true</code></td>
-<td>状态胶囊「在售」；可选入权益/开单选品</td>
-<td>对外可售</td>
+<td>状态胶囊「在售」</td>
+<td>对外可售（仍须未隐藏才顾客端可见）</td>
 </tr>
 <tr>
 <td>已下架 <code>false</code></td>
-<td>「已下架」；行样式弱化；选品不可见</td>
-<td>停售，价目表仍保留</td>
+<td>「已下架」；行样式弱化</td>
+<td>停售；价目表仍保留</td>
 </tr>
 </tbody>
 </table>
 <pre><code>在售 ──下架──► 已下架 ──上架──► 在售
 </code></pre>
 <ul>
-<li>绑卡 <strong>项目</strong>：禁止改在售（toast 拦截）。  </li>
+<li>绑卡 <strong>项目/产品</strong>：<strong>允许</strong> 改在售/下架（左滑、行操作 Sheet、详情表单 Switch 均可）。  </li>
 <li>项目下架时：<strong>手机端可预约</strong> 强制关闭并锁定，直至重新在售。</li>
 </ul>
-<h2>4.2 绑卡锁定（项目为主）</h2>
+<h2>4.2 隐藏状态 <code>hidden</code></h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hidden: boolean</code></td>
+<td>条目是否对顾客端隐藏</td>
+</tr>
+<tr>
+<td>系统组</td>
+<td>每桶固定 <code>g_sys_hidden_project</code> / <code>g_sys_hidden_product</code>，名称「隐藏」，<code>system: true</code></td>
+</tr>
+<tr>
+<td>双向同步</td>
+<td>加入/移出系统「隐藏」组 ↔ 切换 <code>hidden</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>系统「隐藏」组：<strong>不可重命名、不可删除</strong>；Tab 排在自定义组 <strong>之后</strong>；分组管理页 <strong>不可拖拽</strong> 排序。  </li>
+<li>列表筛选：Tab「<strong>全部</strong>」主列表排除 hidden，<strong>底部</strong>提供可折叠「已隐藏 N」展开查看；Tab「<strong>隐藏</strong>」仅 hidden；自定义组 Tab 仅显示 <strong>非 hidden</strong> 成员。  </li>
+<li><strong></li>
+</ul>
+<h2>4.3 绑卡锁定（项目为主）</h2>
 <p>绑定依据：项目/产品 <strong>名称</strong> 出现在会员卡模板权益引用中（项目次数、折扣键、产品权益等）时，同步 <code>boundToCard</code> 及模板名列表。</p>
 <table>
 <thead>
@@ -527,16 +579,16 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>已绑卡</td>
-<td><strong>不可改</strong>：名称、在售、手机端可预约；<strong>不可删除</strong>；<strong>不可</strong>通过快捷操作上下架</td>
+<td><strong>不可改</strong>：名称、手机端可预约；<strong>不可删除</strong></td>
 </tr>
 <tr>
 <td>已绑卡仍可改</td>
-<td>价格、时长、项目图片（演示）、置顶</td>
+<td>价格、时长、项目图片（演示）、<strong>在售/下架</strong></td>
 </tr>
 </tbody>
 </table>
-<p>产品：列表可显示绑卡标识；快捷上下架/删除走同类拦截文案。表单层产品名称/在售的禁用表现以原型为准（产品详情通知条隐藏）。</p>
-<h2>4.3 表单模式</h2>
+<p>产品：列表可显示绑卡标识；<strong>在售/下架不受绑卡限制</strong>；删除若同时关联优惠券/商城则一并锁定（toast 区分来源）。产品详情通知条隐藏。</p>
+<h2>4.4 表单模式</h2>
 <table>
 <thead>
 <tr>
@@ -558,19 +610,51 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<h2>4.4 分组生命周期</h2>
+<h2>4.5 分组生命周期</h2>
 <pre><code>无组 ──新建──► 有组（可空成员）
-有组 ──编辑成员──► 更新 itemIds
-有组 ──重命名──► 同 id 改名（桶内唯一）
+有组 ──编辑成员──► 更新 itemIds（系统「隐藏」组同步 hidden）
+有组 ──重命名──► 同 id 改名（桶内唯一；系统组不可）
 有组 ──删除──► 组消失；条目仍在价目表；若当前筛选该组则回「全部」
 </code></pre>
-<p>条目可同时属于 <strong>多个</strong> 自定义分组；「全部」不是分组实体。</p>
-<h2>4.5 列表排序相关状态</h2>
+<p>条目可同时属于 <strong>多个</strong> 自定义分组；「全部」「隐藏」不是可编辑的自定义分组实体。</p>
+<h2>4.6 可见性矩阵（跨端）</h2>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>顾客端</th>
+<th>开单选品</th>
+<th>建卡权益选品（项目/产品/折扣）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在售且未隐藏</td>
+<td>可见（项目预约另需 <code>bookable</code>）</td>
+<td>可选</td>
+<td>可选</td>
+</tr>
+<tr>
+<td>已下架（含绑卡下架）</td>
+<td>不可见</td>
+<td><strong>仍可选</strong></td>
+<td>不可选</td>
+</tr>
+<tr>
+<td>隐藏（<code>hidden=true</code> / 系统「隐藏」组）</td>
+<td>不可见</td>
+<td><strong>仍可选</strong></td>
+<td>不可选</td>
+</tr>
+</tbody>
+</table>
+<p><strong>顾客端可见</strong>（项目/产品）：<code>onSale &amp;&amp; !hidden</code>。<br />
+<strong>顾客端可预约</strong>（仅项目）：<code>onSale &amp;&amp; !hidden &amp;&amp; bookable</code>。</p>
+<h2>4.7 列表排序相关状态</h2>
 <ul>
-<li><code>pinned</code>：置顶，优先于同售卖态未置顶项。  </li>
-<li><code>sortOrder</code>：桶内顺序。  </li>
+<li><code>sortOrder</code>：桶内顺序（<strong>在售桶</strong> / <strong>下架桶</strong> 两桶隔离）。  </li>
 <li>列头排序 <code>catalogColSort</code>：临时视图排序；开启时禁止拖拽。  </li>
-<li>搜索关键字或自定义分组筛选激活时禁止拖拽。</li>
+<li>搜索关键字、自定义分组筛选、或当前为「<strong>隐藏</strong>」Tab 时禁止拖拽。</li>
 </ul>
 <hr />
 <h1>模块 5　交互细则 / 异常流</h1>
@@ -648,7 +732,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </thead>
 <tbody>
 <tr>
-<td>搜索未清空 <strong>或</strong> 当前非「全部」分组</td>
+<td>搜索未清空 <strong>或</strong> 当前非「全部」分组 <strong>或</strong> 当前为「隐藏」Tab</td>
 <td>请清空搜索后再排序</td>
 </tr>
 <tr>
@@ -657,7 +741,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<h2>5.5 绑卡 / 下架拦截（节选）</h2>
+<h2>5.5 绑卡 / 下架 / 隐藏拦截（节选）</h2>
 <table>
 <thead>
 <tr>
@@ -671,10 +755,6 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>该项目已绑定会员卡，项目名称不可修改</td>
 </tr>
 <tr>
-<td>改绑卡在售</td>
-<td>绑卡项目不可修改在售状态</td>
-</tr>
-<tr>
 <td>改绑卡预约</td>
 <td>该项目已绑定会员卡，预约设置不可修改</td>
 </tr>
@@ -686,10 +766,22 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>删绑卡项</td>
 <td>该项目已绑定会员卡，不可删除</td>
 </tr>
+<tr>
+<td>删关联优惠券/商城项</td>
+<td>已关联优惠券/商城，不可删除</td>
+</tr>
+<tr>
+<td>隐藏条目</td>
+<td>已隐藏</td>
+</tr>
+<tr>
+<td>取消隐藏</td>
+<td>已取消隐藏</td>
+</tr>
 </tbody>
 </table>
 <h2>5.6 空态</h2>
-<p>见模块 6.1；搜索无结果引导换关键词或清空。</p>
+<p>见模块 6.1；搜索无结果引导换关键词或清空。「隐藏」Tab 空态引导左滑或编辑表单移入隐藏。</p>
 <hr />
 <h1>模块 6　功能规格</h1>
 <blockquote>
@@ -704,12 +796,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>搜索：项目搜名称；产品搜名称或规格  </li>
 <li>工具栏添加：<code>+ 添加项目</code> / <code>+ 新增产品</code>  </li>
 <li>可关闭提示条：<code>长按项目可拖动排序 · 左滑快捷操作</code>（关闭状态可本地记忆）  </li>
-<li>分组条：<code>全部</code> + 自定义组 + 齿轮「分组管理」  </li>
+<li>分组条：<code>全部</code> + 自定义组 + 系统 <strong>隐藏</strong> + 齿轮「分组管理」  </li>
 <li>表头可点循环排序：升序 → 降序 → 取消  </li>
 <li>项目列：名称 / 时长 / 价格(¥) / 状态  </li>
 <li>产品列：名称 / 规格 / 价格(¥) / 状态  </li>
-<li>行：拖拽把手、名称、时长或规格、价格、状态；可选绑卡标、置顶标（点置顶标=取消置顶）  </li>
-<li>默认排序：在售优先 → 置顶优先 → <code>sortOrder</code> → 名称  </li>
+<li>行：拖拽把手、名称、时长或规格、价格、状态；可选绑卡标  </li>
+<li>默认排序：在售优先 → 桶内 <code>sortOrder</code> → 名称  </li>
 </ul>
 <p><strong>空态</strong></p>
 <table>
@@ -735,6 +827,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>添加…到本组 → 编辑成员</td>
 </tr>
 <tr>
+<td>「隐藏」Tab 无成员</td>
+<td>暂无隐藏…</td>
+<td>左滑条目或编辑表单可将项目/产品移入隐藏</td>
+<td>—</td>
+</tr>
+<tr>
 <td>搜索无命中</td>
 <td>暂无匹配…</td>
 <td>试试其他关键词，或清空搜索</td>
@@ -743,7 +841,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tbody>
 </table>
 <p><strong>行进入</strong>：点击主区域 → 详情。<br />
-<strong>左滑</strong>：置顶（未置顶时）· 分组 · 下架/上架 · 删除。<br />
+<strong>左滑</strong>：分组 · 下架/上架 · 隐藏/取消隐藏 · 删除。<br />
 <strong>长按</strong>：无垂直拖动则打开行操作 Sheet（副文案：长按后滑动可排序 · 也可左滑快捷操作）。</p>
 <h2>6.2 新增 / 编辑 · 项目</h2>
 <table>
@@ -778,7 +876,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>在售</td>
 <td style="text-align: center;">—</td>
 <td>开</td>
-<td>绑卡锁定</td>
+<td>绑卡 <strong>不锁定</strong></td>
 </tr>
 <tr>
 <td>手机端可预约</td>
@@ -791,12 +889,6 @@ tr:nth-child(even) td{background:#fafbfc}
 <td style="text-align: center;">—</td>
 <td>未上传</td>
 <td>演示开关；不影响保存</td>
-</tr>
-<tr>
-<td>置顶</td>
-<td style="text-align: center;">—</td>
-<td>关</td>
-<td>hint：置顶后，在列表中优先排序</td>
 </tr>
 </tbody>
 </table>
@@ -816,7 +908,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>绑卡</td>
-<td>该项目已绑定会员卡，除价格、服务时长、项目照片、置顶外不可修改，且不可删除</td>
+<td>该项目已绑定会员卡，可修改价格、服务时长、项目照片与在售/下架；名称、预约设置与删除仍不可改</td>
 </tr>
 <tr>
 <td>已下架</td>
@@ -866,36 +958,32 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>未上传</td>
 <td>演示开关</td>
 </tr>
-<tr>
-<td>置顶</td>
-<td style="text-align: center;">—</td>
-<td>关</td>
-<td></td>
-</tr>
 </tbody>
 </table>
 <p>无时长、无预约开关。分类默认「产品」。详情页可不展示项目类通知条。</p>
 <h2>6.4 分组管理</h2>
 <ul>
-<li>列表行：拖拽把手 · 组名 · <code>{n} 个项目|个产品</code> · 更多菜单  </li>
+<li>列表行：拖拽把手（系统「隐藏」组为<strong>等宽空白占位</strong>，名称与普通组左对齐）· 组名 · <code>{n} 个项目|个产品</code> · 更多菜单（系统组为等宽空白占位，无「⋯」）  </li>
 <li>空态：暂无分组 / 创建分组后可快速筛选价目表  </li>
 <li>底栏：新建分组 → Dialog（最多 20 字，不可与已有分组重名）  </li>
-<li>菜单：编辑成员 / 重命名 / 删除  </li>
+<li>菜单：编辑成员 / 重命名 / 删除（<strong>系统「隐藏」组</strong> 仅可 <strong>编辑成员</strong>）  </li>
 <li>删除确认：仅删除分组，不会删除项目/产品  </li>
-<li>组顺序：在分组管理页拖拽提交当前桶内数组顺序  </li>
+<li>组顺序：自定义组在分组管理页拖拽排序；系统「隐藏」组 <strong>固定末尾</strong></li>
+<li>「隐藏」分组 Tab 与列表底部「已隐藏」折叠条展示隐藏图标（<code>assets/catalog/hide.svg</code>）  </li>
 </ul>
 <h2>6.5 编辑成员</h2>
 <ul>
 <li>标题：编辑成员 · {组名}  </li>
-<li>列出当前 Tab 桶内全部价目（含绑卡标与价格）；已选 N · 反选 · 全选  </li>
+<li>列出当前 Tab 桶内 <strong>全部</strong> 价目（含绑卡标与价格；含 hidden 条目）；已选 N · 反选 · 全选  </li>
+<li>系统「隐藏」组：勾选即移入隐藏 / 取消即取消隐藏  </li>
 <li>无可选项：暂无可选项目/产品  </li>
 <li>确定 → toast「已更新成员」→ 回分组管理  </li>
 </ul>
 <h2>6.6 设置分组（条目）</h2>
 <ul>
 <li>副标题：可同时加入多个分组  </li>
-<li>多选自定义组；确定 →「已更新分组」  </li>
-<li>无组：暂无自定义分组 +「去新建分组」  </li>
+<li>多选 <strong>全部</strong> 分组（含系统「隐藏」）；确定 →「已更新分组」并同步 <code>hidden</code>  </li>
+<li>无自定义组：暂无自定义分组 +「去新建分组」  </li>
 </ul>
 <h2>6.7 拖拽排序（列表）</h2>
 <p>仅在同一 <code>sort-bucket</code> 内重排并写回 <code>sortOrder</code>：</p>
@@ -908,12 +996,8 @@ tr:nth-child(even) td{background:#fafbfc}
 </thead>
 <tbody>
 <tr>
-<td>pin</td>
-<td>在售且置顶</td>
-</tr>
-<tr>
 <td>sale</td>
-<td>在售且未置顶</td>
+<td>在售</td>
 </tr>
 <tr>
 <td>off</td>
@@ -921,8 +1005,8 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<p>不可跨桶；搜索/分组筛选/列排序激活时拦截（文案见模块 5）。</p>
-<h2>6.8 与会员卡联结</h2>
+<p>不可跨桶；搜索 / 自定义分组 / 「隐藏」Tab / 列排序激活时拦截（文案见模块 5）。</p>
+<h2>6.8 与会员卡 / 开单联结</h2>
 <table>
 <thead>
 <tr>
@@ -936,12 +1020,16 @@ tr:nth-child(even) td{background:#fafbfc}
 <td><code>openPriceCatalog</code>，记录返回页；返回后刷新对应选择列表</td>
 </tr>
 <tr>
-<td>选择列表</td>
-<td><strong>仅在售</strong>；可按项目或产品分组 Tab 筛选</td>
+<td>权益选择列表</td>
+<td><strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；可按项目或产品 <strong>自定义</strong> 分组 Tab 筛选（<strong>不展示</strong> 系统「隐藏」Tab）</td>
 </tr>
 <tr>
 <td>分组空</td>
 <td>本组暂无…；请在「管理价目表」中将项目/产品加入本组</td>
+</tr>
+<tr>
+<td><strong>开单选品</strong></td>
+<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目 <strong>全量</strong> 实时目录（含已下架、已隐藏）；改价后开单价格同步</td>
 </tr>
 </tbody>
 </table>
@@ -987,14 +1075,14 @@ tr:nth-child(even) td{background:#fafbfc}
 <td></td>
 </tr>
 <tr>
+<td>hidden</td>
+<td>boolean</td>
+<td>对顾客端隐藏；与系统「隐藏」组成员同步</td>
+</tr>
+<tr>
 <td>bookable</td>
 <td>boolean</td>
 <td>手机端可预约</td>
-</tr>
-<tr>
-<td>pinned</td>
-<td>boolean</td>
-<td></td>
 </tr>
 <tr>
 <td>hasImage</td>
@@ -1010,6 +1098,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>boundToCard</td>
 <td>boolean</td>
 <td>派生或落库【待联调确认】</td>
+</tr>
+<tr>
+<td>boundToCoupon / boundToMall</td>
+<td>boolean</td>
+<td>删除锁定来源【待联调确认】</td>
 </tr>
 <tr>
 <td>boundTemplateIds / Names</td>
@@ -1059,9 +1152,9 @@ tr:nth-child(even) td{background:#fafbfc}
 <td></td>
 </tr>
 <tr>
-<td>pinned</td>
+<td>hidden</td>
 <td>boolean</td>
-<td></td>
+<td>同项目</td>
 </tr>
 <tr>
 <td>category</td>
@@ -1098,12 +1191,17 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>id</td>
 <td>string</td>
-<td></td>
+<td>系统隐藏组：<code>g_sys_hidden_project</code> / <code>g_sys_hidden_product</code></td>
 </tr>
 <tr>
 <td>name</td>
 <td>string</td>
 <td>桶内唯一，≤20 字</td>
+</tr>
+<tr>
+<td>system</td>
+<td>boolean</td>
+<td>系统固定组（「隐藏」）；不可重命名/删除</td>
 </tr>
 <tr>
 <td>itemIds</td>
@@ -1128,10 +1226,10 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>创建/更新/删除项目或产品</td>
-<td>校验；删前校验绑卡</td>
+<td>校验；删前校验绑卡/优惠券/商城</td>
 </tr>
 <tr>
-<td>上下架 / 置顶</td>
+<td>上下架 / 隐藏</td>
 <td></td>
 </tr>
 <tr>
@@ -1140,15 +1238,19 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>分组 CRUD</td>
-<td>删组不删货</td>
+<td>删组不删货；系统组只读除成员</td>
 </tr>
 <tr>
 <td>设置组成员 / 条目多分组</td>
-<td></td>
+<td>含系统「隐藏」同步</td>
 </tr>
 <tr>
 <td>绑卡状态查询或同步</td>
 <td>与会员卡模板引用对齐</td>
+</tr>
+<tr>
+<td>开单价目桥接</td>
+<td>全量目录供开单模块消费</td>
 </tr>
 <tr>
 <td>变更后通知顾客端缓存/展示</td>
@@ -1161,13 +1263,14 @@ tr:nth-child(even) td{background:#fafbfc}
   → API 更新价目
   → 写库成功
   → 异步/同步刷新顾客端可见价目【待联调确认】
+  → 开单模块读取最新目录【待联调确认】
   → 客户端 toast 成功并回列表
 
 商户从权益页打开价目表
   → 带 returnContext
   → 编辑保存
   → 返回权益页
-  → 重新拉取在售列表与分组
+  → 重新拉取 onSale&amp;&amp;!hidden 列表与分组
 </code></pre>
 <hr />
 <h1>模块 8　业务规则</h1>
@@ -1175,15 +1278,19 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓</p>
 </blockquote>
 <ol>
-<li><strong>选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true</code>。  </li>
+<li><strong>权益选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true &amp;&amp; hidden=false</code>。  </li>
+<li><strong>开单选品范围</strong>：读取价目全量目录（含已下架、已隐藏）；与顾客端/权益选品 <strong>解耦</strong>。  </li>
+<li><strong>顾客端可见</strong>：<code>onSale &amp;&amp; !hidden</code>；项目预约另需 <code>bookable</code>。  </li>
 <li><strong>绑卡匹配</strong>：以 <strong>名称</strong> 与模板权益引用对齐；改名锁定避免孤儿引用。  </li>
+<li><strong>绑卡上下架</strong>：绑卡 <strong>不</strong> 阻止改 <code>onSale</code>。  </li>
 <li><strong>删组</strong>：只移除分组实体与成员关系，不删除项目/产品。  </li>
-<li><strong>多分组</strong>：同一条目可出现在多个 <code>itemIds</code> 中。  </li>
-<li><strong>排序桶</strong>：置顶在售 / 普通在售 / 下架 三桶隔离；置顶变更会换桶。  </li>
+<li><strong>多分组</strong>：同一条目可出现在多个 <code>itemIds</code> 中；加入系统「隐藏」组即 <code>hidden=true</code>。  </li>
+<li><strong>排序桶</strong>：<strong>在售</strong> / <strong>下架</strong> 两桶隔离；<code>sortOrder</code> 仅在桶内生效。  </li>
 <li><strong>下架与预约</strong>：项目下架 ⇒ <code>bookable=false</code> 且不可开，直到重新在售。  </li>
-<li><strong>B→C 同步</strong>：价格、时长、在售等变更「在价目表及顾客端同步生效」；顾客端页面结构不在范围。  </li>
+<li><strong>B→C 同步</strong>：价格、时长、在售、隐藏等变更「在价目表及顾客端同步生效」；顾客端页面结构不在范围。  </li>
 <li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序并清空搜索、回到「全部」。  </li>
-<li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。</li>
+<li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。  </li>
+<li><strong>权益选品分组 Tab</strong>：仅自定义组 +「全部」；<strong>不展示</strong> 系统「隐藏」Tab。</li>
 </ol>
 <hr />
 <h1>模块 9　文案清单与权限</h1>
@@ -1191,10 +1298,10 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>读者：前端 ✓ · 后端 部分 · 测试 ✓</p>
 </blockquote>
 <h2>9.1 文案清单（须与原型一致）</h2>
-<p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、置顶、取消置顶、设置分组、下架、上架、分组、重命名、编辑成员、去新建分组、添加项目、新增产品、基本信息、售卖设置、高级、在售、已下架、手机端可预约、规格、时长、价格(¥)、状态、全部。</p>
-<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已置顶、置顶已取消、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、时长至少5分钟、请清空搜索后再排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片；以及模块 5.5 绑卡/预约拦截句。</p>
-<p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、长按后滑动可排序 · 也可左滑快捷操作、长按项目可拖动排序 · 左滑快捷操作、打开后项目会在小程序-预约中显示、置顶后，在列表中优先排序、未上传，不影响保存、已上传 1 张；模块 6.2 三条详情通知。</p>
-<p><strong>空态</strong>：暂无项目/产品、本组暂无项目/产品、暂无匹配项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、添加后可在「选择项目」与办卡中使用、添加后可在开单结账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
+<p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、添加项目、新增产品、基本信息、售卖设置、高级、在售、已下架、手机端可预约、规格、时长、价格(¥)、状态、全部。</p>
+<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、时长至少5分钟、请清空搜索后再排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片；以及模块 5.5 绑卡/预约/删除拦截句。</p>
+<p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、长按后滑动可排序 · 也可左滑快捷操作、长按项目可拖动排序 · 左滑快捷操作、打开后项目会在小程序-预约中显示、未上传，不影响保存、已上传 1 张；模块 6.2 三条详情通知。</p>
+<p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无匹配项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目或编辑表单可将项目/产品移入隐藏、添加后可在「选择项目」与办卡中使用、添加后可在开单结账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
 <h2>9.2 权限（占位）</h2>
 <p>本期按 <strong>店主可操作全文</strong> 实现；店员差异 <strong>【待产品确认】</strong>，原型未表现。</p>
 <hr />
@@ -1217,25 +1324,29 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>有数据</td>
-<td>演示多项项目与产品、多分组（含空组）、含下架/置顶/绑卡样例（原型「有数据」）</td>
+<td>演示多项项目与产品、多分组（含空组）、含下架/隐藏/绑卡样例（原型「有数据」）</td>
 </tr>
 </tbody>
 </table>
 <p>正式环境自备等价数据；演示开关不进产品。</p>
 <h2>10.2 Given → When → Then（P0）</h2>
 <ol>
-<li><strong>Given</strong> 项目 Tab 为空，<strong>When</strong> 保存合法新项目，<strong>Then</strong> 列表出现且为在售，可被选项目。  </li>
+<li><strong>Given</strong> 项目 Tab 为空，<strong>When</strong> 保存合法新项目，<strong>Then</strong> 列表出现且为在售，可被选项目（未隐藏时）。  </li>
 <li><strong>Given</strong> 产品 Tab，<strong>When</strong> 保存带规格产品，<strong>Then</strong> 列表规格列展示正确。  </li>
-<li><strong>Given</strong> 未绑卡在售项目，<strong>When</strong> 下架，<strong>Then</strong> 状态已下架且选品不可见。  </li>
-<li><strong>Given</strong> 绑卡项目，<strong>When</strong> 尝试删除或改在售，<strong>Then</strong> toast 拦截且数据不变。  </li>
+<li><strong>Given</strong> 未绑卡在售项目，<strong>When</strong> 下架，<strong>Then</strong> 状态已下架；顾客端不可见；开单仍可选；权益选品不可见。  </li>
+<li><strong>Given</strong> 绑卡项目，<strong>When</strong> 尝试删除或改名称/预约，<strong>Then</strong> toast 拦截且数据不变。  </li>
+<li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改在售/下架并保存或左滑，<strong>Then</strong> 操作成功。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改价格并保存，<strong>Then</strong> 保存成功。  </li>
 <li><strong>Given</strong> 已下架项目详情，<strong>When</strong> 查看预约开关，<strong>Then</strong> 关闭且不可开，直到重新在售。  </li>
-<li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示成员。  </li>
+<li><strong>Given</strong> 条目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」Tab 不显示；「隐藏」Tab 显示；顾客端不可见；开单仍可选。  </li>
+<li><strong>Given</strong> 隐藏条目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」Tab 可见（在售时顾客端可见）。  </li>
+<li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示非 hidden 成员。  </li>
 <li><strong>Given</strong> 条目属于两组，<strong>When</strong> 删除其中一组，<strong>Then</strong> 条目仍在，另一组关系保留。  </li>
 <li><strong>Given</strong> 在售区两行，<strong>When</strong> 拖拽换序，<strong>Then</strong> 刷新后顺序保持。  </li>
-<li><strong>Given</strong> 搜索有关键字，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请清空搜索后再排序」。  </li>
+<li><strong>Given</strong> 搜索有关键字或当前「隐藏」Tab，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请清空搜索后再排序」。  </li>
 <li><strong>Given</strong> 列排序激活，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请先取消列排序后再手动排序」。  </li>
-<li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售项目。  </li>
+<li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目。  </li>
+<li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 仍可选中且价格为价目表实时价格。</li>
 </ol>
 <hr />
 <h1>模块 11　非功能（极简）</h1>

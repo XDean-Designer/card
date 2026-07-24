@@ -61,7 +61,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.4-lite</td>
+<td>v1.5-lite</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -189,7 +189,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
 <li>
-<p>权益组合：面值（金额与赠送；<strong>可用于办卡/购卡</strong>，含被购卡无面值；<strong>不可</strong>用于购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+<p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
 <p>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </p>
@@ -218,7 +218,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>储值/充值类（买赠面值）</td>
-<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；面值 <strong>可用于办卡/购卡</strong>（含被购卡无面值），<strong>不可</strong>用于购买价目产品</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；持卡面值 <strong>仅可</strong>支付不含面值的办卡/购卡、延期与项目消费；<strong>不可</strong>支付含面值新办卡，<strong>不可</strong>购价目产品</td>
 </tr>
 <tr>
 <td>次卡/项目次数类</td>
@@ -321,7 +321,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
 <li>已下架卡列表无「办卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
 <li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加。  </li>
-<li>退卡确认后该会员不再作为有效持卡；实退金额以确认值为准写入结果提示。</li>
+<li>退卡确认后该会员不再作为有效持卡；进入退卡成功页，实退金额以确认值为准展示。</li>
 </ol>
 <hr>
 <h1>模块 3　信息架构与页面清单</h1>

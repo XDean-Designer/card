@@ -603,11 +603,16 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   white-space: normal; overflow-wrap: anywhere; word-break: break-word;
   pointer-events: none;
 }
+.step2-benefit-card__meta-main {
+  display: inline-flex; align-items: baseline; justify-content: center;
+  flex-wrap: nowrap; white-space: nowrap; gap: 0;
+  max-width: 100%;
+}
 .step2-benefit-card__meta-scope {
-  display: block; font-size: 11px; font-weight: 500; line-height: 1.25; color: var(--ticket-meta);
+  display: inline; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
 }
 .step2-benefit-card__meta-qty {
-  display: block; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
+  display: inline; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
 }
 .step2-benefit-card__meta-gift {
   display: block; font-size: 12px; font-weight: 500; line-height: 1.25; color: var(--ticket-meta);
@@ -1039,7 +1044,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   flex-shrink: 0;
   min-height: min-content;
 }
-.proj-pick-card[data-proj-drag-card]:not([data-proj-pinned]) { cursor: grab; touch-action: pan-y; }
+.proj-pick-card[data-proj-drag-card] { cursor: grab; touch-action: pan-y; }
 .proj-pick-card.is-dragging {
   position: absolute;
   z-index: 10000;
@@ -2125,9 +2130,32 @@ html.prd-capture .phone { border: none; }
   pointer-events: none;
 }
 .catalog-group-tab__label {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   white-space: nowrap;
   pointer-events: none;
+}
+.catalog-hide-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: url('assets/catalog/hide.svg') center / contain no-repeat;
+  mask: url('assets/catalog/hide.svg') center / contain no-repeat;
+}
+.catalog-group-tab__face .catalog-hide-icon {
+  width: 14px;
+  height: 12px;
+}
+.catalog-group-tab.on .catalog-hide-icon {
+  color: inherit;
+}
+.catalog-hidden-toggle__label .catalog-hide-icon {
+  width: 16px;
+  height: 14px;
+  color: var(--text-sec);
 }
 .catalog-group-tab__indicator { display: none !important; }
 .catalog-group-tab.on {
@@ -2169,6 +2197,10 @@ html.prd-capture .phone { border: none; }
   flex-shrink: 0; width: 44px; height: 64px; border: none; background: transparent;
   color: #C8C9CC; cursor: grab; display: inline-flex; align-items: center; justify-content: center;
   padding: 0; font-family: inherit; touch-action: none;
+}
+.catalog-group-manage-row__drag-spacer,
+.catalog-group-manage-row__more-spacer {
+  flex-shrink: 0; width: 44px; height: 64px; display: block;
 }
 .catalog-group-manage-row__drag:active { cursor: grabbing; color: var(--text-sec); }
 .catalog-group-manage-row__drag svg { display: block; width: 18px; height: 18px; pointer-events: none; }
@@ -2291,7 +2323,6 @@ html.prd-capture .phone { border: none; }
   width: 68px; border: none; padding: 0 6px; color: #fff; font-size: 13px; font-weight: 500;
   font-family: inherit; cursor: pointer; line-height: 1.2;
 }
-.table-row-actions .act-pin { background: #5B8DEF; }
 .table-row-actions .act-sale { background: #E8A317; }
 .table-row-actions .act-hide { background: #8B7E74; }
 .table-row-actions .act-del { background: var(--brand); }
@@ -2327,21 +2358,20 @@ html.prd-capture .phone { border: none; }
 .catalog-action-item__del-lock svg { display: block; width: 18px; height: 18px; }
 .catalog-action-item__del-lock.is-hidden { display: none; }
 .catalog-hidden-block {
-  margin-top: 0;
-  border-top: none;
-  background: var(--card);
   position: relative;
+  background: #FAFAFA;
 }
-/* 与上方末行划线同位置、同缩进，叠成一条 */
 .catalog-hidden-block::before {
   content: '';
   position: absolute;
-  left: 12px;
-  right: 12px;
+  left: 16px;
+  right: 16px;
   top: 0;
   height: 1px;
-  background: var(--card-divider); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
-  z-index: 1;
+  background: var(--card-divider);
+  transform: scaleY(0.5);
+  transform-origin: center top;
+  pointer-events: none;
 }
 .table-row-swipe:has(+ .catalog-hidden-block) .table-row::after {
   display: none;
@@ -2351,33 +2381,41 @@ html.prd-capture .phone { border: none; }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 48px;
-  padding: 12px 16px;
+  min-height: 44px;
+  padding: 10px 16px;
+  margin: 0;
   border: none;
   background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
   color: var(--text-sec);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  font-family: inherit;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 .catalog-hidden-toggle:active { background: var(--bg-page); }
 .catalog-hidden-toggle__label { display: inline-flex; align-items: center; gap: 6px; }
 .catalog-hidden-toggle__count {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-sec);
-  background: #F2F2F2;
-  border-radius: 999px;
-  padding: 1px 8px;
-  line-height: 1.4;
+  box-sizing: border-box;
 }
 .catalog-hidden-toggle__chev {
-  width: 18px;
-  height: 18px;
-  color: var(--text-sec);
-  transition: transform .18s ease;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform .2s ease;
 }
 .catalog-hidden-block.is-open .catalog-hidden-toggle__chev { transform: rotate(180deg); }
 .catalog-hidden-list { display: none; }
@@ -2488,8 +2526,7 @@ html.prd-capture .phone { border: none; }
   flex: 1 1 auto; min-width: 0; max-width: 100%;
   white-space: normal; word-break: break-all; overflow-wrap: anywhere;
 }
-.table-row .name-text .bound-tag,
-.table-row .name-text .pin-tag {
+.table-row .name-text .bound-tag {
   display: inline-flex;
   vertical-align: -0.15em;
   position: relative;
@@ -2528,23 +2565,6 @@ html.prd-capture .phone { border: none; }
 .sale-status__pill.sale-status--on { color: #5EAD7A; background: #EEFAF3; }
 .sale-status__pill.sale-status--off { color: #B0B0B0; background: #F2F2F2; }
 .table-row-swipe.is-off-sale .sale-status__pill.sale-status--off { color: #B0B0B0; background: #F2F2F2; }
-.pin-tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin: 0 0 0 2px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: var(--brand);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.pin-tag:active { opacity: .7; }
-.pin-tag__icon { display: block; width: 16px; height: 16px; pointer-events: none; }
 .bound-tag {
   display: inline-flex;
   align-items: center;
@@ -2637,7 +2657,7 @@ html.prd-capture .phone { border: none; }
   flex-shrink: 0;
   background: var(--card);
 }
-/* Switch — price catalog toggles (on-sale / bookable / pinned) */
+/* Switch — price catalog toggles (on-sale / bookable) */
 .switch {
   width: 44px; height: 26px; border-radius: 13px; background: var(--disabled); position: relative;
   cursor: pointer; transition: background .2s; flex-shrink: 0; border: none; padding: 0;
@@ -3472,6 +3492,36 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .pay-channel.is-active .pay-channel__clear { display: flex; }
 .pay-channel__clear svg,
 .pay-channel__clear img { width: 20px; height: 20px; display: block; }
+.pay-membercard-picker {
+  background: #fff;
+  padding: 0 16px 12px;
+  box-shadow: inset 0 1px 0 #F7F7F7;
+}
+.pay-membercard-picker__hint {
+  font-size: 12px; color: var(--text-sec); padding: 4px 0 8px;
+}
+.pay-membercard-option {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 8px 12px; margin: 0 0 8px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: #FAFAFA; cursor: pointer; box-sizing: border-box;
+  font-family: inherit;
+}
+.pay-membercard-option:last-child { margin-bottom: 0; }
+.pay-membercard-option.is-on {
+  border-color: var(--brand); background: #FFF5F6;
+}
+.pay-membercard-option input {
+  width: 16px; height: 16px; margin: 0; accent-color: var(--brand); flex-shrink: 0;
+}
+.pay-membercard-option__main { flex: 1; min-width: 0; }
+.pay-membercard-option__name {
+  display: block; font-size: 14px; font-weight: 500; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pay-membercard-option__bal {
+  display: block; font-size: 12px; color: var(--text-sec); margin-top: 2px;
+}
 .pay-sheet-foot {
   flex-shrink: 0; background: #fff;
   padding: 16px 16px calc(16px + var(--safe-bottom));
@@ -5349,8 +5399,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="picker-head__sub">长按后滑动可排序 · 也可左滑快捷操作</div>
               </div>
               <div class="catalog-action-list">
-                <button type="button" class="catalog-action-item" data-catalog-act="pin">置顶</button>
-                <button type="button" class="catalog-action-item hidden" data-catalog-act="unpin">取消置顶</button>
                 <button type="button" class="catalog-action-item" data-catalog-act="group">设置分组</button>
                 <button type="button" class="catalog-action-item" data-catalog-act="sale">下架</button>
                 <button type="button" class="catalog-action-item" data-catalog-act="hide">隐藏</button>
@@ -5876,15 +5924,18 @@ function expandLessLabel() {
 const PROJ_CHEV_ICON = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const PROJ_EDIT_NOTICE = {
   normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
-  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，除价格、服务时长、项目照片、置顶外不可修改，且不可删除' },
+  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，可修改价格、服务时长、项目照片与在售/下架；名称、预约设置与删除仍不可改' },
   'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
 };
 const PROJ_LOCK_TOAST = {
   name: '该项目已绑定会员卡，项目名称不可修改',
-  onSale: '绑卡项目不可修改在售状态',
   bookable_bound: '该项目已绑定会员卡，预约设置不可修改',
   bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
   delete: '该项目已绑定会员卡，不可删除',
+};
+const CATALOG_SYS_HIDDEN_GROUP = {
+  project: { id: 'g_sys_hidden_project', name: '隐藏', system: true },
+  product: { id: 'g_sys_hidden_product', name: '隐藏', system: true },
 };
 
 /** Figma card-lock (86:7) — 删除锁定；currentColor 适配红底白字 / 菜单品牌色 */
@@ -5920,24 +5971,24 @@ let projDurWheelTimer = null;
 
 function seedProjectCatalog() {
   const list = [
-    { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
-    { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, pinned: true, hasImage: false, category: '剪发' },
-    { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, category: '洗吹' },
-    { id: 'p4', name: '儿童剪发', price: 48, duration: 35, onSale: true, bookable: true, pinned: false, hasImage: false, category: '剪发' },
-    { id: 'p5', name: '女士造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
-    { id: 'p6', name: '染发', price: 358, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p7', name: '漂发', price: 288, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p8', name: '烫发', price: 398, duration: 150, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p9', name: '摩根烫', price: 458, duration: 150, onSale: true, bookable: false, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p10', name: '电棒烫', price: 428, duration: 150, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p11', name: '深层滋养', price: 198, duration: 75, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
-    { id: 'p12', name: '蛋白矫正', price: 598, duration: 120, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
-    { id: 'p13', name: '头疗', price: 138, duration: 50, onSale: true, bookable: true, pinned: false, hasImage: false, category: '护理' },
-    { id: 'p14', name: '接发', price: 888, duration: 180, onSale: false, bookable: false, pinned: false, hasImage: false, category: '造型' },
-    { id: 'p15', name: '头皮护理', price: 168, duration: 60, onSale: true, bookable: true, pinned: false, hasImage: true, category: '护理' },
-    { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, pinned: false, hasImage: false, category: '烫染' },
-    { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, pinned: false, hasImage: false, category: '造型' },
-    { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, pinned: true, hasImage: false, category: '烫染' },
+    { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, hasImage: false, category: '洗吹' },
+    { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, hasImage: false, category: '剪发' },
+    { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, hasImage: false, category: '洗吹' },
+    { id: 'p4', name: '儿童剪发', price: 48, duration: 35, onSale: true, bookable: true, hasImage: false, category: '剪发' },
+    { id: 'p5', name: '女士造型', price: 128, duration: 45, onSale: true, bookable: true, hasImage: false, category: '造型' },
+    { id: 'p6', name: '染发', price: 358, duration: 120, onSale: true, bookable: true, hasImage: false, category: '烫染' },
+    { id: 'p7', name: '漂发', price: 288, duration: 120, onSale: true, bookable: true, hasImage: false, category: '烫染' },
+    { id: 'p8', name: '烫发', price: 398, duration: 150, onSale: true, bookable: true, hasImage: false, category: '烫染' },
+    { id: 'p9', name: '摩根烫', price: 458, duration: 150, onSale: true, bookable: false, hasImage: false, category: '烫染' },
+    { id: 'p10', name: '电棒烫', price: 428, duration: 150, onSale: true, bookable: true, hasImage: false, category: '烫染' },
+    { id: 'p11', name: '深层滋养', price: 198, duration: 75, onSale: true, bookable: true, hasImage: false, category: '护理' },
+    { id: 'p12', name: '蛋白矫正', price: 598, duration: 120, onSale: true, bookable: true, hasImage: false, category: '护理' },
+    { id: 'p13', name: '头疗', price: 138, duration: 50, onSale: true, bookable: true, hasImage: false, category: '护理' },
+    { id: 'p14', name: '接发', price: 888, duration: 180, onSale: false, bookable: false, hasImage: false, category: '造型' },
+    { id: 'p15', name: '头皮护理', price: 168, duration: 60, onSale: true, bookable: true, hasImage: true, category: '护理' },
+    { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, hasImage: false, category: '烫染' },
+    { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, hasImage: false, category: '造型' },
+    { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, hasImage: false, category: '烫染' },
   ].map(p => ({
     ...p,
     boundToCard: false,
@@ -5958,24 +6009,24 @@ function seedProjectCatalog() {
 
 function seedProductCatalog() {
   const list = [
-    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, onSale: true, pinned: false, category: '洗护' },
-    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, onSale: true, pinned: false, category: '洗护' },
-    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, onSale: true, pinned: true, category: '护理' },
-    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, onSale: true, pinned: false, category: '造型' },
-    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, onSale: true, pinned: false, category: '烫染' },
-    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, onSale: true, pinned: false, category: '护理' },
-    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, onSale: false, pinned: false, category: '洗护' },
-    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, onSale: true, pinned: false, category: '洗护' },
-    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, onSale: true, pinned: false, category: '护理' },
-    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, onSale: true, pinned: false, category: '护理' },
-    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, onSale: true, pinned: false, category: '造型' },
-    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, onSale: true, pinned: false, category: '造型' },
-    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, onSale: true, pinned: false, category: '烫染' },
-    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, onSale: true, pinned: false, category: '烫染' },
-    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, onSale: true, pinned: false, category: '洗护' },
-    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, onSale: true, pinned: false, category: '护理' },
-    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, onSale: true, pinned: false, category: '洗护' },
-    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, onSale: false, pinned: false, category: '烫染' },
+    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, onSale: true, category: '洗护' },
+    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, onSale: true, category: '洗护' },
+    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, onSale: true, category: '护理' },
+    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, onSale: true, category: '造型' },
+    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, onSale: true, category: '烫染' },
+    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, onSale: true, category: '护理' },
+    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, onSale: false, category: '洗护' },
+    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, onSale: true, category: '洗护' },
+    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, onSale: true, category: '护理' },
+    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, onSale: true, category: '护理' },
+    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, onSale: true, category: '造型' },
+    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, onSale: true, category: '造型' },
+    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, onSale: true, category: '烫染' },
+    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, onSale: true, category: '烫染' },
+    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, onSale: true, category: '洗护' },
+    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, onSale: true, category: '护理' },
+    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, onSale: true, category: '洗护' },
+    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, onSale: false, category: '烫染' },
   ].map(p => ({
     ...p,
     boundToCard: false,
@@ -6001,6 +6052,7 @@ function seedCatalogGroups() {
       { id: 'g_proj_care', name: '护理', itemIds: ['p11', 'p12', 'p13', 'p15'] },
       { id: 'g_proj_cut', name: '剪发造型', itemIds: ['p2', 'p3', 'p4', 'p5', 'p14', 'p17'] },
       { id: 'g_proj_empty', name: '待配置', itemIds: [] },
+      { id: CATALOG_SYS_HIDDEN_GROUP.project.id, name: '隐藏', system: true, itemIds: ['p13', 'p5'] },
     ],
     product: [
       { id: 'g_prod_wash', name: '洗护', itemIds: ['pd1', 'pd2', 'pd7', 'pd8', 'pd14', 'pd15', 'pd17'] },
@@ -6009,6 +6061,7 @@ function seedCatalogGroups() {
       { id: 'g_prod_color', name: '烫染护理', itemIds: ['pd5', 'pd13', 'pd14', 'pd18'] },
       { id: 'g_prod_kids', name: '儿童专区', itemIds: ['pd7', 'pd15'] },
       { id: 'g_prod_empty', name: '待配置', itemIds: [] },
+      { id: CATALOG_SYS_HIDDEN_GROUP.product.id, name: '隐藏', system: true, itemIds: ['pd17', 'pd4'] },
     ],
   };
 }
@@ -6042,18 +6095,18 @@ function setActivePickGroupId(mode, id) {
 }
 
 function getOnSaleProjectCount() {
-  return getCatalogProjects().filter(p => p.onSale).length;
+  return getCatalogProjects().filter(p => p.onSale && !p.hidden).length;
 }
 
 function getOnSaleProductCount() {
-  return getCatalogProducts().filter(p => p.onSale).length;
+  return getCatalogProducts().filter(p => p.onSale && !p.hidden).length;
 }
 
 function getAllProductNamesForPicker() {
   const list = getCatalogProducts();
   ensureCatalogSortOrder(list);
   return [...list]
-    .filter(p => p.onSale)
+    .filter(p => p.onSale && !p.hidden)
     .sort(compareCatalogPickerOrder)
     .map(p => p.name);
 }
@@ -6063,9 +6116,91 @@ function getProductPrice(name) {
   return p != null ? p.price : 0;
 }
 
-function isCatalogProductPinned(name) {
-  return !!getCatalogProducts().find(x => x.name === name)?.pinned;
+function isCatalogSystemGroup(g) {
+  return !!g?.system;
 }
+
+function getCatalogItemsForBucket(bucket) {
+  return bucket === 'product' ? getCatalogProducts() : getCatalogProjects();
+}
+
+function ensureSystemHiddenGroups() {
+  ['project', 'product'].forEach(bucket => {
+    const groups = getCatalogGroupsForBucket(bucket);
+    const meta = CATALOG_SYS_HIDDEN_GROUP[bucket];
+    let sys = groups.find(g => g.id === meta.id);
+    if (!sys) {
+      sys = { id: meta.id, name: meta.name, system: true, itemIds: [] };
+      groups.push(sys);
+    } else {
+      sys.system = true;
+      sys.name = meta.name;
+    }
+    sys.itemIds = getCatalogItemsForBucket(bucket).filter(p => p.hidden).map(p => p.id);
+  });
+}
+
+function getCustomCatalogGroups(bucket) {
+  ensureSystemHiddenGroups();
+  return getCatalogGroupsForBucket(bucket).filter(g => !g.system);
+}
+
+function getSystemHiddenGroup(bucket) {
+  ensureSystemHiddenGroups();
+  return findCatalogGroupById(CATALOG_SYS_HIDDEN_GROUP[bucket || getCatalogGroupBucket()]?.id, bucket);
+}
+
+function syncItemHiddenFromSystemGroup(g, bucket) {
+  if (!g || !isCatalogSystemGroup(g)) return;
+  const ids = new Set(g.itemIds || []);
+  getCatalogItemsForBucket(bucket).forEach(item => {
+    item.hidden = ids.has(item.id);
+  });
+}
+
+function setCatalogItemHidden(item, hidden) {
+  if (!item) return;
+  const next = !!hidden;
+  if (!!item.hidden === next) return;
+  item.hidden = next;
+  const bucket = getCatalogProducts().some(x => x.id === item.id) ? 'product' : 'project';
+  ensureSystemHiddenGroups();
+  const sys = getSystemHiddenGroup(bucket);
+  if (!sys) return;
+  const set = new Set(sys.itemIds || []);
+  if (next) set.add(item.id);
+  else set.delete(item.id);
+  sys.itemIds = [...set];
+}
+
+function isCatalogVisibleToCustomer(p) {
+  return !!p?.onSale && !p?.hidden;
+}
+
+function isCatalogBookableToCustomer(p) {
+  return isCatalogVisibleToCustomer(p) && !!p?.bookable;
+}
+
+window.CardCatalogBridge = {
+  getBillProjects() {
+    return getCatalogProjects().map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category || '项目',
+      price: p.price,
+      benefitKey: p.name,
+    }));
+  },
+  getBillProducts() {
+    return getCatalogProducts().map(p => ({
+      id: p.id,
+      name: p.name,
+      spec: p.spec || '',
+      category: p.category || '产品',
+      price: p.price,
+    }));
+  },
+};
 
 function getProductNamesForPickerByGroup() {
   const all = getAllProductNamesForPicker();
@@ -6122,7 +6257,7 @@ function renderPickGroupTabs(mode) {
   const el = document.getElementById(pickGroupTabsElId(mode));
   if (!el) return;
   const bucket = mode === 'product' ? 'product' : 'project';
-  const groups = getCatalogGroupsForBucket(bucket);
+  const groups = getCustomCatalogGroups(bucket);
   const tabs = [{ id: 'all', name: '全部' }, ...groups.map(g => ({ id: g.id, name: g.name }))];
   if (!tabs.some(t => t.id === getActivePickGroupId(mode))) setActivePickGroupId(mode, 'all');
   const cur = getActivePickGroupId(mode);
@@ -6355,7 +6490,12 @@ function getCatalogGroupsForBucket(bucket) {
 }
 
 function getActiveCatalogGroups() {
-  return getCatalogGroupsForBucket(getCatalogGroupBucket());
+  ensureSystemHiddenGroups();
+  const bucket = getCatalogGroupBucket();
+  const groups = getCatalogGroupsForBucket(bucket);
+  const custom = groups.filter(g => !g.system);
+  const sys = groups.find(g => g.system);
+  return sys ? [...custom, sys] : custom;
 }
 
 function getActiveCatalogGroupId() {
@@ -6389,29 +6529,39 @@ function purgeCatalogItemFromGroups(itemId) {
 
 function filterCatalogByActiveGroup(list) {
   const gid = getActiveCatalogGroupId();
-  if (!gid || gid === 'all') return list;
-  const g = findCatalogGroupById(gid);
+  const bucket = getCatalogGroupBucket();
+  if (!gid || gid === 'all') return list.filter(p => !p.hidden);
+  const sysHidden = getSystemHiddenGroup(bucket);
+  if (sysHidden && gid === sysHidden.id) return list.filter(p => !!p.hidden);
+  const g = findCatalogGroupById(gid, bucket);
   const ids = new Set(g?.itemIds || []);
-  return list.filter(p => ids.has(p.id));
+  return list.filter(p => ids.has(p.id) && !p.hidden);
 }
 
 const CATALOG_GROUP_DRAG_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" aria-hidden="true"><path d="M9 7h6M9 12h6M9 17h6"/></svg>';
 const CATALOG_ROW_DRAG_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" aria-hidden="true"><path d="M9 7h6M9 12h6M9 17h6"/></svg>';
+const CATALOG_HIDE_ICON = '<span class="catalog-hide-icon" aria-hidden="true"></span>';
 const CATALOG_DRAG_HINT_KEY = 'rtb_catalog_drag_hint_dismissed';
 
 function renderCatalogGroupTabs() {
   const el = document.getElementById('catalogGroupTabs');
   if (!el) return;
+  ensureSystemHiddenGroups();
   const active = getActiveCatalogGroupId();
-  const groups = getActiveCatalogGroups();
-  const tabs = [{ id: 'all', name: '全部' }, ...groups.map(g => ({ id: g.id, name: g.name }))];
+  const bucket = getCatalogGroupBucket();
+  const custom = getCustomCatalogGroups(bucket);
+  const sysHidden = getSystemHiddenGroup(bucket);
+  const tabs = [{ id: 'all', name: '全部' }, ...custom.map(g => ({ id: g.id, name: g.name }))];
+  if (sysHidden) tabs.push({ id: sysHidden.id, name: sysHidden.name });
   if (!tabs.some(t => t.id === active)) setActiveCatalogGroupId('all');
   const cur = getActiveCatalogGroupId();
-  el.innerHTML = tabs.map(t => (
-    `<button type="button" class="catalog-group-tab${t.id === cur ? ' on' : ''}" data-catalog-group="${escapeAttr(t.id)}" role="tab" aria-selected="${t.id === cur ? 'true' : 'false'}">
-      <span class="catalog-group-tab__face"><span class="catalog-group-tab__label">${escapeHtml(t.name)}</span></span>
-    </button>`
-  )).join('');
+  el.innerHTML = tabs.map(t => {
+    const isHiddenTab = !!(sysHidden && t.id === sysHidden.id);
+    const label = `${isHiddenTab ? CATALOG_HIDE_ICON : ''}<span class="catalog-group-tab__label-text">${escapeHtml(t.name)}</span>`;
+    return `<button type="button" class="catalog-group-tab${t.id === cur ? ' on' : ''}${isHiddenTab ? ' is-hidden-group' : ''}" data-catalog-group="${escapeAttr(t.id)}" role="tab" aria-selected="${t.id === cur ? 'true' : 'false'}">
+      <span class="catalog-group-tab__face"><span class="catalog-group-tab__label">${label}</span></span>
+    </button>`;
+  }).join('');
   requestAnimationFrame(() => scrollActiveCatalogGroupTabIntoView());
 }
 
@@ -6502,13 +6652,14 @@ function renderCatalogGroupManage() {
   emptyEl?.classList.add('hidden');
   listEl.innerHTML = `<div class="catalog-group-card" id="catalogGroupCard">${groups.map(g => {
     const n = (g.itemIds || []).length;
-    return `<div class="catalog-group-manage-row" data-group-id="${escapeAttr(g.id)}">
-      <button type="button" class="catalog-group-manage-row__drag" data-group-drag="${escapeAttr(g.id)}" aria-label="拖动排序">${CATALOG_GROUP_DRAG_ICON}</button>
+    const isSys = isCatalogSystemGroup(g);
+    return `<div class="catalog-group-manage-row" data-group-id="${escapeAttr(g.id)}"${isSys ? ' data-group-system="1"' : ''}>
+      ${isSys ? '<span class="catalog-group-manage-row__drag-spacer" aria-hidden="true"></span>' : `<button type="button" class="catalog-group-manage-row__drag" data-group-drag="${escapeAttr(g.id)}" aria-label="拖动排序">${CATALOG_GROUP_DRAG_ICON}</button>`}
       <button type="button" class="catalog-group-manage-row__main" data-group-members="${escapeAttr(g.id)}">
         <span class="catalog-group-manage-row__name">${escapeHtml(g.name)}</span>
         <span class="catalog-group-manage-row__meta">${n} ${noun}</span>
       </button>
-      <button type="button" class="catalog-group-manage-row__more" data-group-menu="${escapeAttr(g.id)}" aria-label="更多">⋯</button>
+      ${isSys ? '<span class="catalog-group-manage-row__more-spacer" aria-hidden="true"></span>' : `<button type="button" class="catalog-group-manage-row__more" data-group-menu="${escapeAttr(g.id)}" aria-label="更多">⋯</button>`}
     </div>`;
   }).join('')}</div>`;
   wireCatalogGroupManageDrag();
@@ -6541,7 +6692,7 @@ function wireCatalogGroupManageDrag() {
       e.preventDefault();
       e.stopPropagation();
       const row = handle.closest('.catalog-group-manage-row');
-      if (!row) return;
+      if (!row || row.dataset.groupSystem === '1') return;
       activeId = handle.dataset.groupDrag;
       draggingRow = row;
       startY = e.clientY;
@@ -6587,18 +6738,22 @@ function commitCatalogGroupOrderFromDom() {
   const card = document.getElementById('catalogGroupCard');
   if (!card) return;
   const groups = getActiveCatalogGroups();
-  const ids = [...card.querySelectorAll('.catalog-group-manage-row[data-group-id]')]
+  const ids = [...card.querySelectorAll('.catalog-group-manage-row[data-group-id]:not([data-group-system="1"])')]
     .map(r => r.dataset.groupId)
     .filter(Boolean);
-  const ordered = ids.map(id => groups.find(g => g.id === id)).filter(Boolean);
-  if (ordered.length !== groups.length) return;
-  groups.splice(0, groups.length, ...ordered);
+  const ordered = ids.map(id => groups.find(g => g.id === id && !g.system)).filter(Boolean);
+  const sys = groups.find(g => g.system);
+  if (ordered.length + (sys ? 1 : 0) !== groups.length) return;
+  groups.splice(0, groups.length, ...(sys ? [...ordered, sys] : ordered));
   renderCatalogGroupTabs();
 }
 
 function openCatalogGroupRowMenu(groupId) {
   const g = findCatalogGroupById(groupId);
-  if (!g) return;
+  if (!g || isCatalogSystemGroup(g)) {
+    if (g) showToast('系统分组不可重命名或删除', true);
+    return;
+  }
   state.catalogGroupMenuId = groupId;
   const title = document.getElementById('catalogGroupMenuTitle');
   if (title) title.textContent = g.name;
@@ -6614,6 +6769,11 @@ function handleCatalogGroupMenuAction(act) {
   const id = state.catalogGroupMenuId;
   closeCatalogGroupRowMenu();
   if (!id || act === 'cancel') return;
+  const g = findCatalogGroupById(id);
+  if (isCatalogSystemGroup(g)) {
+    showToast('系统分组不可重命名或删除', true);
+    return;
+  }
   if (act === 'members') openCatalogGroupMembers(id);
   else if (act === 'rename') openCatalogGroupNameDialog('rename', id);
   else if (act === 'delete') openCatalogGroupDeleteConfirm(id);
@@ -6659,6 +6819,10 @@ function confirmCatalogGroupNameDialog() {
   }
   if (mode === 'rename' && editingId) {
     const g = findCatalogGroupById(editingId);
+    if (isCatalogSystemGroup(g)) {
+      showToast('系统分组不可重命名', true);
+      return;
+    }
     if (g) g.name = name;
     showToast('已重命名');
   } else {
@@ -6684,6 +6848,12 @@ function closeCatalogGroupDeleteConfirm() {
 
 function confirmCatalogGroupDelete() {
   const id = state.catalogGroupDeletingId;
+  const g = findCatalogGroupById(id);
+  if (isCatalogSystemGroup(g)) {
+    showToast('系统分组不可删除', true);
+    closeCatalogGroupDeleteConfirm();
+    return;
+  }
   const groups = getActiveCatalogGroups();
   const idx = groups.findIndex(g => g.id === id);
   if (idx >= 0) groups.splice(idx, 1);
@@ -6753,11 +6923,13 @@ function renderCatalogGroupMembers() {
 function saveCatalogGroupMembers() {
   const g = findCatalogGroupById(state.catalogMembersGroupId);
   if (!g) return;
+  const bucket = getCatalogGroupBucket();
   const listEl = document.getElementById('catalogGroupMembersList');
   const ids = [...(listEl?.querySelectorAll('input[data-member-id]:checked') || [])]
     .map(el => el.dataset.memberId)
     .filter(Boolean);
   g.itemIds = ids;
+  if (isCatalogSystemGroup(g)) syncItemHiddenFromSystemGroup(g, bucket);
   showToast('已更新成员');
   openCatalogGroupManage();
 }
@@ -6773,7 +6945,8 @@ function openCatalogItemGroupSheet(itemId) {
   const groups = getCatalogGroupsForBucket(bucket);
   const listEl = document.getElementById('catalogItemGroupList');
   if (!listEl) return;
-  if (!groups.length) {
+  const custom = getCustomCatalogGroups(bucket);
+  if (!custom.length) {
     listEl.innerHTML = `<div class="catalog-group-sheet-empty">
       <p class="catalog-group-sheet-empty__title">暂无自定义分组</p>
       <p class="catalog-group-sheet-empty__hint">请先创建分组，再把${bucket === 'product' ? '产品' : '项目'}加入</p>
@@ -6825,6 +6998,9 @@ function confirmCatalogItemGroupSheet() {
     else set.delete(itemId);
     g.itemIds = [...set];
   });
+  const item = findCatalogItemById(itemId);
+  const sysHidden = getSystemHiddenGroup(bucket);
+  if (item && sysHidden) item.hidden = (sysHidden.itemIds || []).includes(itemId);
   closeCatalogItemGroupSheet();
   showToast('已更新分组');
   projRenderList();
@@ -6904,19 +7080,16 @@ function getOnSaleProjectNames() {
   return getCatalogProjects().filter(p => p.onSale).map(p => p.name);
 }
 function compareCatalogPickerOrder(a, b) {
-  if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
   const ao = a.sortOrder ?? 0;
   const bo = b.sortOrder ?? 0;
   if (ao !== bo) return ao - bo;
   return a.name.localeCompare(b.name, 'zh-CN');
 }
 function ensureCatalogSortOrder(catalog) {
-  const projects = catalog || getCatalogProjects();
-  if (!projects.some(p => p.sortOrder == null)) return;
-  const pinned = projects.filter(p => p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-  const nonPinned = projects.filter(p => !p.pinned).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-  pinned.forEach((p, i) => { p.sortOrder = i; });
-  nonPinned.forEach((p, i) => { p.sortOrder = pinned.length + i; });
+  const items = catalog || getCatalogProjects();
+  if (!items.some(p => p.sortOrder == null)) return;
+  const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+  sorted.forEach((p, i) => { p.sortOrder = i; });
 }
 function nextCatalogSortOrder(catalog) {
   const list = catalog || getActivePriceCatalog();
@@ -6924,14 +7097,10 @@ function nextCatalogSortOrder(catalog) {
   const max = Math.max(-1, ...list.map(p => p.sortOrder ?? 0));
   return max + 1;
 }
-function isCatalogProjectPinned(name) {
-  const p = getCatalogProjects().find(x => x.name === name);
-  return !!p?.pinned;
-}
 function getAllProjectNamesForPicker() {
   ensureCatalogSortOrder();
   return [...getCatalogProjects()]
-    .filter(p => p.onSale)
+    .filter(p => p.onSale && !p.hidden)
     .sort(compareCatalogPickerOrder)
     .map(p => p.name);
 }
@@ -8777,7 +8946,7 @@ function formatBenefitCardQtyValue(card) {
   if (card.unlimited) return '不限次';
   const purchase = card.purchaseQty ?? 0;
   const gift = card.giftQty ?? 0;
-  return gift > 0 ? `${purchase}次送${gift}次` : `${purchase}次`;
+  return gift > 0 ? `${purchase}次+送${gift}次` : `${purchase}次`;
 }
 
 function formatBenefitCardQtySummary(card) {
@@ -8790,7 +8959,7 @@ function formatBenefitCardQtySummary(card) {
   const gift = card.giftQty ?? 0;
   const purchaseText = `${purchase}次`;
   if (gift > 0) {
-    const body = `${purchaseText}送${gift}次`;
+    const body = `${purchaseText}+送${gift}次`;
     return scope ? `${scope}${body}` : body;
   }
   return scope ? `${scope}${purchaseText}` : purchaseText;
@@ -8798,35 +8967,33 @@ function formatBenefitCardQtySummary(card) {
 
 function formatBenefitCardQtyMetaHtml(card) {
   const scopeLabel = formatBenefitCardQtyScopeLabel(card);
+  const qtyMain = (scope, qtyText) => {
+    if (!scope) {
+      return `<span class="step2-benefit-card__meta-qty">${escapeHtml(qtyText)}</span>`;
+    }
+    // 「共」与次数同一行不换行
+    return `<span class="step2-benefit-card__meta-main"><span class="step2-benefit-card__meta-scope">${escapeHtml(scope)}</span><span class="step2-benefit-card__meta-qty">${escapeHtml(qtyText)}</span></span>`;
+  };
   if (card.unlimited) {
     if (!scopeLabel) {
       return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml('不限次')}</span>`;
     }
-    return `<span class="step2-benefit-card__meta">
-      <span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>
-      <span class="step2-benefit-card__meta-qty">${escapeHtml('不限次')}</span>
-    </span>`;
+    return `<span class="step2-benefit-card__meta">${qtyMain(scopeLabel, '不限次')}</span>`;
   }
   const purchase = card.purchaseQty ?? 0;
   const gift = card.giftQty ?? 0;
   const purchaseText = `${purchase}次`;
-  // 有赠送：固定两行（购买 / 赠送），去掉加号；「共」单独一行在上
+  // 有赠送：第一行「共N次」（共与次数不换行）；第二行「+送M次」
   if (gift > 0) {
-    const parts = [];
-    if (scopeLabel) {
-      parts.push(`<span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>`);
-    }
-    parts.push(`<span class="step2-benefit-card__meta-qty">${escapeHtml(purchaseText)}</span>`);
-    parts.push(`<span class="step2-benefit-card__meta-gift">${escapeHtml(`送${gift}次`)}</span>`);
-    return `<span class="step2-benefit-card__meta">${parts.join('')}</span>`;
+    return `<span class="step2-benefit-card__meta">
+      ${qtyMain(scopeLabel, purchaseText)}
+      <span class="step2-benefit-card__meta-gift">${escapeHtml(`+送${gift}次`)}</span>
+    </span>`;
   }
   if (!scopeLabel) {
     return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(purchaseText)}</span>`;
   }
-  return `<span class="step2-benefit-card__meta">
-    <span class="step2-benefit-card__meta-scope">${escapeHtml(scopeLabel)}</span>
-    <span class="step2-benefit-card__meta-qty">${escapeHtml(purchaseText)}</span>
-  </span>`;
+  return `<span class="step2-benefit-card__meta">${qtyMain(scopeLabel, purchaseText)}</span>`;
 }
 
 function formatProjectQtySummary(item) {
@@ -10142,8 +10309,7 @@ function syncCatalogColSortHead() {
 }
 
 function getCatalogSortBucket(p) {
-  if (!p.onSale) return 'off';
-  return p.pinned ? 'pin' : 'sale';
+  return p.onSale ? 'sale' : 'off';
 }
 
 function projShowScreen(screenId) {
@@ -10168,7 +10334,6 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
   const hideLabel = p.hidden ? '取消隐藏' : '隐藏';
   const delLocked = isCatalogDeleteLocked(p);
   const actions = [];
-  if (!p.pinned) actions.push(`<button type="button" class="act-pin" data-swipe-act="pin">置顶</button>`);
   actions.push(`<button type="button" class="act-group" data-swipe-act="group">分组</button>`);
   actions.push(`<button type="button" class="act-sale" data-swipe-act="sale">${saleLabel}</button>`);
   actions.push(`<button type="button" class="act-hide" data-swipe-act="hide">${hideLabel}</button>`);
@@ -10179,7 +10344,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
         <div class="name">
           <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
           <div class="name-main">
-            <span class="name-text${longName ? ' is-long' : ''}">${escapeHtml(p.name)}${p.pinned ? pinTagHtml() : ''}</span>
+            <span class="name-text${longName ? ' is-long' : ''}">${escapeHtml(p.name)}</span>
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
@@ -10199,30 +10364,20 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
       const proj = findCatalogItemById(p.id);
       if (!proj) return;
       let ok = false;
-      if (act === 'pin') {
-        ok = pinCatalogProject(proj);
-        if (ok) refreshAfterCatalogPinChange();
-      } else if (act === 'group') {
+      if (act === 'group') {
         openCatalogItemGroupSheet(proj.id);
         ok = true;
       } else if (act === 'sale') {
         ok = toggleCatalogOnSale(proj);
-        if (ok) refreshAfterCatalogPinChange();
+        if (ok) refreshAfterCatalogChange();
       } else if (act === 'hide') {
         ok = toggleCatalogHidden(proj, !proj.hidden);
-        if (ok) refreshAfterCatalogPinChange();
+        if (ok) refreshAfterCatalogChange();
       } else if (act === 'delete') {
         ok = openCatalogDeleteConfirm(proj.id);
       }
-      // 仅操作成功时归位；失败（如不可删 toast）保持展开
       if (ok) closeAllCatalogSwipes();
     });
-  });
-  row.querySelector('.pin-tag')?.addEventListener('click', e => {
-    e.stopPropagation();
-    const proj = findCatalogItemById(p.id);
-    if (!proj) return;
-    if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
   });
   row.addEventListener('click', () => {
     // 左滑展开时：任意点击本行（含最左侧）归位，优先于 suppressClick
@@ -10247,15 +10402,21 @@ function projRenderList() {
   const isProduct = isProductCatalogTab();
   const q = (document.getElementById('projSearchInput')?.value || '').trim().toLowerCase();
   const groupId = getActiveCatalogGroupId();
-  const inCustomGroup = groupId && groupId !== 'all';
-  let list = isCatalogColSortActive()
+  const bucket = getCatalogGroupBucket();
+  const sysHidden = getSystemHiddenGroup(bucket);
+  const inHiddenTab = !!(sysHidden && groupId === sysHidden.id);
+  const inAllTab = !groupId || groupId === 'all';
+  const inCustomGroup = groupId && groupId !== 'all' && !inHiddenTab;
+  let base = isCatalogColSortActive()
     ? sortCatalogByActiveCol(getActivePriceCatalog())
     : projSortCatalog(getActivePriceCatalog());
-  list = filterCatalogByActiveGroup(list);
-  list = list.filter(p => catalogItemMatchesSearch(p, q, isProduct));
-  const visibleList = list.filter(p => !p.hidden);
-  const hiddenList = list.filter(p => !!p.hidden);
-  if (q && hiddenList.length) state.catalogHiddenExpanded = true;
+  let list = filterCatalogByActiveGroup(base).filter(p => catalogItemMatchesSearch(p, q, isProduct));
+  /* 「全部」Tab：主列表排除隐藏；底部折叠区可展开查看隐藏项 */
+  let hiddenList = [];
+  if (inAllTab) {
+    hiddenList = base.filter(p => !!p.hidden && catalogItemMatchesSearch(p, q, isProduct));
+    if (q && hiddenList.length) state.catalogHiddenExpanded = true;
+  }
   const total = getActivePriceCatalog().length;
   syncCatalogColSortHead();
   const tbody = document.getElementById('projProjectTable');
@@ -10269,28 +10430,30 @@ function projRenderList() {
   syncCatalogGroupChrome();
   tbody.innerHTML = '';
   tbody.classList.remove('is-reordering');
-  if (!visibleList.length && !hiddenList.length) {
-    tableCard?.classList.toggle('hidden', !total || (inCustomGroup && !q));
+  if (!list.length && !hiddenList.length) {
+    tableCard?.classList.toggle('hidden', !total || ((inCustomGroup || inHiddenTab) && !q));
     listEmpty?.classList.remove('hidden');
     if (emptyTitle) {
       if (q) emptyTitle.textContent = isProduct ? '暂无匹配产品' : '暂无匹配项目';
+      else if (inHiddenTab) emptyTitle.textContent = isProduct ? '暂无隐藏产品' : '暂无隐藏项目';
       else if (inCustomGroup) emptyTitle.textContent = isProduct ? '本组暂无产品' : '本组暂无项目';
       else emptyTitle.textContent = isProduct ? '暂无产品' : '暂无项目';
     }
     if (emptyHint) {
       if (q) emptyHint.textContent = '试试其他关键词，或清空搜索';
+      else if (inHiddenTab) emptyHint.textContent = '左滑条目可将项目/产品移入隐藏';
       else if (inCustomGroup) emptyHint.textContent = '可将价目表中的条目加入本组';
       else emptyHint.textContent = isProduct ? '添加后可在开单结账中使用' : '添加后可在「选择项目」与办卡中使用';
       emptyHint.classList.toggle('hidden', false);
     }
-    emptyAdd?.classList.toggle('hidden', !!q || inCustomGroup);
+    emptyAdd?.classList.toggle('hidden', !!q || inCustomGroup || inHiddenTab);
     emptyToGroup?.classList.toggle('hidden', !(inCustomGroup && !q && total));
     return;
   }
   tableCard?.classList.remove('hidden');
   listEmpty?.classList.add('hidden');
   emptyToGroup?.classList.add('hidden');
-  visibleList.forEach(p => {
+  list.forEach(p => {
     tbody.appendChild(buildCatalogListRow(p, { isProduct, inHiddenSection: false }));
   });
   if (hiddenList.length) {
@@ -10298,7 +10461,7 @@ function projRenderList() {
     block.className = 'catalog-hidden-block' + (state.catalogHiddenExpanded ? ' is-open' : '');
     block.innerHTML = `
       <button type="button" class="catalog-hidden-toggle" data-catalog-hidden-toggle aria-expanded="${state.catalogHiddenExpanded ? 'true' : 'false'}">
-        <span class="catalog-hidden-toggle__label">已隐藏<span class="catalog-hidden-toggle__count">${hiddenList.length}</span></span>
+        <span class="catalog-hidden-toggle__label">${CATALOG_HIDE_ICON}已隐藏<span class="catalog-hidden-toggle__count">${hiddenList.length}</span></span>
         <svg class="catalog-hidden-toggle__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       <div class="catalog-hidden-list"></div>`;
@@ -10313,7 +10476,7 @@ function projRenderList() {
     tbody.appendChild(block);
   }
   wireCatalogRowInteractions(tbody, {
-    filterActive: !!q || inCustomGroup,
+    filterActive: !!q || inCustomGroup || inHiddenTab,
     colSortActive: isCatalogColSortActive(),
   });
 }
@@ -10324,24 +10487,9 @@ const CATALOG_SWIPE_MOVE_PX = 10;
 
 function toggleCatalogOnSale(proj) {
   if (!proj) return false;
-  if (proj.boundToCard) {
-    showToast(PROJ_LOCK_TOAST.onSale, true);
-    return false;
-  }
   proj.onSale = !proj.onSale;
+  if (!proj.onSale && proj.bookable != null) proj.bookable = false;
   showToast(proj.onSale ? '已上架' : '已下架');
-  return true;
-}
-
-function pinCatalogProject(proj) {
-  if (!proj || proj.pinned) return false;
-  const pool = getCatalogProducts().some(x => x.id === proj.id) ? getCatalogProducts() : getCatalogProjects();
-  pool.filter(p => p.pinned && p.id !== proj.id).forEach(p => {
-    p.sortOrder = (p.sortOrder ?? 0) + 1;
-  });
-  proj.pinned = true;
-  proj.sortOrder = 0;
-  showToast('已置顶');
   return true;
 }
 
@@ -10349,7 +10497,7 @@ function toggleCatalogHidden(proj, hidden) {
   if (!proj) return false;
   const next = !!hidden;
   if (!!proj.hidden === next) return false;
-  proj.hidden = next;
+  setCatalogItemHidden(proj, next);
   showToast(next ? '已隐藏' : '已取消隐藏');
   return true;
 }
@@ -10383,8 +10531,6 @@ function openCatalogRowActions(projId) {
   const mask = document.getElementById('catalogRowActionMask');
   const title = document.getElementById('catalogRowActionTitle');
   if (title) title.textContent = p.name;
-  mask?.querySelector('[data-catalog-act="pin"]')?.classList.toggle('hidden', !!p.pinned);
-  mask?.querySelector('[data-catalog-act="unpin"]')?.classList.toggle('hidden', !p.pinned);
   const saleBtn = mask?.querySelector('[data-catalog-act="sale"]');
   if (saleBtn) saleBtn.textContent = p.onSale ? '下架' : '上架';
   mask?.querySelector('[data-catalog-act="hide"]')?.classList.toggle('hidden', !!p.hidden);
@@ -10410,16 +10556,12 @@ function handleCatalogRowAction(act) {
   if (!id || act === 'cancel') return;
   const proj = findCatalogItemById(id);
   if (!proj) return;
-  if (act === 'pin') {
-    if (pinCatalogProject(proj)) refreshAfterCatalogPinChange();
-  } else if (act === 'unpin') {
-    if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
-  } else if (act === 'sale') {
-    if (toggleCatalogOnSale(proj)) refreshAfterCatalogPinChange();
+  if (act === 'sale') {
+    if (toggleCatalogOnSale(proj)) refreshAfterCatalogChange();
   } else if (act === 'hide') {
-    if (toggleCatalogHidden(proj, true)) refreshAfterCatalogPinChange();
+    if (toggleCatalogHidden(proj, true)) refreshAfterCatalogChange();
   } else if (act === 'unhide') {
-    if (toggleCatalogHidden(proj, false)) refreshAfterCatalogPinChange();
+    if (toggleCatalogHidden(proj, false)) refreshAfterCatalogChange();
   } else if (act === 'group') {
     openCatalogItemGroupSheet(proj.id);
   } else if (act === 'delete') {
@@ -10602,7 +10744,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
       const changed = commit && commitCatalogBucketOrder(tbody, bucket);
       dragCard = null;
       activePointerId = null;
-      if (changed) refreshAfterCatalogPinChange();
+      if (changed) refreshAfterCatalogChange();
     };
 
     const onDocPointerEnd = e => {
@@ -10668,7 +10810,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
 
     row.addEventListener('pointerdown', e => {
       if (e.button !== 0 && e.pointerType === 'mouse') return;
-      if (e.target.closest('button, .pin-tag, [data-catalog-drag]')) return;
+      if (e.target.closest('button, [data-catalog-drag]')) return;
       activePointerId = e.pointerId;
       pressStartX = e.clientX;
       pressStartY = e.clientY;
@@ -10738,16 +10880,16 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
 
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', spec: '', price: '', onSale: true, pinned: false, category: '产品', hasImage: false, imageExpanded: false };
+    return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', hasImage: false, imageExpanded: false };
   }
-  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, pinned: false, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
+  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projProjectToForm(p) {
   if (getCatalogProducts().some(x => x.id === p.id)) {
-    return { kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price), onSale: p.onSale, pinned: p.pinned, category: p.category || '产品', hasImage: !!p.hasImage, imageExpanded: false };
+    return { kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price), onSale: p.onSale, category: p.category || '产品', hasImage: !!p.hasImage, imageExpanded: false };
   }
-  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, pinned: p.pinned, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
+  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projImageUploadSectionHtml(s, imageLabel) {
@@ -10825,7 +10967,7 @@ function projRenderForm(container, mode) {
       <div>
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
-          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.onSale)}><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale" ${bound ? 'disabled' : ''}></button></div></div>
+          <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale"></button></div></div>
           ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
         </div>
       </div>
@@ -10833,7 +10975,6 @@ function projRenderForm(container, mode) {
         <div class="proj-section-label">高级</div>
         <div class="proj-form-section">
           ${projImageUploadSectionHtml(s, imageLabel)}
-          <div class="proj-form-row col"><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">置顶</span><button type="button" class="switch ${s.pinned ? 'on' : ''}" id="fProjPinned"></button></div><p class="hint">置顶后，在列表中优先排序</p></div>
         </div>
       </div>
     </div>`;
@@ -10854,13 +10995,11 @@ function projBindFormEvents(container, lockCtx) {
     });
   };
   bindSwitch('#fProjOnSale', 'onSale', {
-    disabled: bound,
     afterToggle: () => projSyncBookableLock(container, bound),
   });
   if (!isProduct) {
     bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
   }
-  bindSwitch('#fProjPinned', 'pinned');
   if (!isProduct) projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   container.querySelector('#fProjSpec')?.addEventListener('input', e => { state.projFormState.spec = e.target.value; });
@@ -10965,7 +11104,6 @@ function projSaveForm() {
     spec: (state.projFormState.spec || '').trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
     onSale: state.projFormState.onSale,
-    pinned: state.projFormState.pinned,
     category: state.projFormState.category || '产品',
     hasImage: state.projFormState.hasImage,
   } : {
@@ -10974,7 +11112,6 @@ function projSaveForm() {
     duration: state.projFormState.duration,
     onSale: state.projFormState.onSale,
     bookable: state.projFormState.bookable,
-    pinned: state.projFormState.pinned,
     hasImage: state.projFormState.hasImage,
     category: PROJ_DEFAULT_CATEGORY,
   };
@@ -11019,7 +11156,6 @@ function openPriceCatalog(fromScreen) {
   state.priceCatalogReturn = fromScreen || 'screen0';
   state.navStack.push(state.priceCatalogReturn);
   state.catalogColSort = { key: null, dir: null };
-  state.catalogHiddenExpanded = false;
   const search = document.getElementById('projSearchInput');
   if (search) search.value = '';
   projRenderList();
@@ -11105,7 +11241,7 @@ function wireProjCatalogModule() {
     }
     purgeCatalogItemFromGroups(delId);
     closeProjDeleteDialog();
-    refreshAfterCatalogPinChange();
+    refreshAfterCatalogChange();
     projShowScreen('screen-p-list');
     showToast('已删除');
   });
@@ -11252,10 +11388,14 @@ function ensureDemoFilled() {
   if (!getCatalogProducts().length) state.productCatalog = seedProductCatalog();
   if (!state.catalogGroups) state.catalogGroups = emptyCatalogGroups();
   if (!state.activeCatalogGroupId) state.activeCatalogGroupId = emptyActiveCatalogGroupId();
-  const hasAnyGroup = (state.catalogGroups.project?.length || 0) + (state.catalogGroups.product?.length || 0) > 0;
-  if (!hasAnyGroup && (getCatalogProjects().length || getCatalogProducts().length)) {
+  /* 空态会留下仅含系统「隐藏」的分组；须按「是否有自定义组」判断，否则烫染/护理等演示组不会注入 */
+  const hasCustomGroup = ['project', 'product'].some(bucket =>
+    (state.catalogGroups[bucket] || []).some(g => g && !g.system)
+  );
+  if (!hasCustomGroup && (getCatalogProjects().length || getCatalogProducts().length)) {
     state.catalogGroups = seedCatalogGroups();
   }
+  ensureSystemHiddenGroups();
   if (!state.templates.length) {
     state.templates = buildDemoTemplates();
     if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
@@ -14181,15 +14321,39 @@ function performRefundCard() {
     showToast('请填写实际退款金额', true);
     return;
   }
+  const meta = getHolderMeta(tid, memberId) || {
+    purchaseAmount: parseAmount(tpl.recharge),
+    ledger: buildInitialHolderLedger(tpl),
+  };
+  const calc = computeSuggestedRefund(tpl, meta);
   removeHolderFromTemplate(tid, memberId);
   if (state.issueExtendMemberId === memberId) resetIssueExtendDraft();
-  document.getElementById('refundCardMask').classList.remove('open');
+  document.getElementById('refundCardMask')?.classList.remove('open');
+  document.getElementById('issueMemberMask')?.classList.remove('open');
   state.issueRefundMemberId = null;
   state.refundActualAmount = null;
-  showToast(`已为 ${member.name} 退卡「${tpl.name}」，退款 ${formatMoneyDisplay(actual)}`);
   if (state.viewingTemplateId === tid) renderDetailStatsList(tpl);
+  if (window.BillingDemo && typeof window.BillingDemo.showRefundSuccess === 'function') {
+    window.BillingDemo.showRefundSuccess({
+      memberName: member.name,
+      cardName: tpl.name,
+      templateId: tid,
+      purchaseAmount: calc.purchaseAmount,
+      consumedTotal: calc.consumedTotal,
+      suggestedRefund: calc.suggestedRefund,
+      actualRefund: actual,
+      lines: (calc.lines || []).map(l => ({
+        label: l.label,
+        detail: l.detail,
+        remain: l.remain,
+        used: l.used,
+      })),
+    });
+    return;
+  }
+  showToast(`已为 ${member.name} 退卡「${tpl.name}」，退款 ${formatMoneyDisplay(actual)}`);
   if (state.issueTargetTemplateId) {
-    document.getElementById('issueMemberMask').classList.add('open');
+    document.getElementById('issueMemberMask')?.classList.add('open');
     renderIssueMemberList();
   }
 }
@@ -15335,7 +15499,7 @@ function renderProductList() {
     return `<div class="proj-pick-card">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
-          <span class="proj-item-name">${escapeHtml(p)}${isCatalogProductPinned(p) ? pinTagHtml() : ''}</span>
+          <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
         ${projQtyStepperHtml(p, 'prodrow', qty, 0)}
       </div>
@@ -15492,16 +15656,6 @@ function wireSimpleProjectPicker(container, mode) {
         });
         renderProjectPickParams();
       }
-    });
-  });
-  container.querySelectorAll('.pin-tag').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const name = btn.closest('[data-proj-name]')?.dataset.projName;
-      if (!name) return;
-      const proj = getCatalogProjects().find(x => x.name === name);
-      if (!proj) return;
-      if (unpinCatalogProject(proj)) refreshAfterCatalogPinChange();
     });
   });
   wireProjPickDragReorder(container, mode);
@@ -16101,30 +16255,14 @@ function wireProjPickRowMain(container, mode) {
   });
 }
 
-function pinTagHtml() {
-  return `<button type="button" class="pin-tag" title="取消置顶" aria-label="取消置顶"><svg class="pin-tag__icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v8l-2 2v2h5v6h2v-6h5v-2l-2-2z"/></svg></button>`;
-}
-
-function boundTagHtml() {
-  return `<span class="bound-tag" title="已绑卡" aria-label="已绑卡"><svg class="bound-tag__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 10h19" stroke="currentColor" stroke-width="1.6"/><path d="M6 14.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>`;
-}
-
-function unpinCatalogProject(proj) {
-  if (!proj?.pinned) return false;
-  proj.pinned = false;
-  showToast('置顶已取消');
-  return true;
-}
-
-function refreshAfterCatalogPinChange() {
+function refreshAfterCatalogChange() {
   projRenderList();
   renderProjectList();
   renderMemberPriceProjectList();
 }
 
 function projPickDragCardAttrs(name) {
-  const pinned = isCatalogProjectPinned(name);
-  return ` data-proj-drag-card data-proj-name="${escapeAttr(name)}"${pinned ? ' data-proj-pinned="1"' : ''}`;
+  return ` data-proj-drag-card data-proj-name="${escapeAttr(name)}"`;
 }
 
 const PROJ_PICK_LONG_PRESS_MS = 400;
@@ -16152,20 +16290,14 @@ function projPickDragIgnoresTarget(target) {
 }
 
 function commitProjPickDragOrder(container) {
-  const cards = [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])')];
+  const cards = [...container.querySelectorAll('[data-proj-drag-card]')];
   if (!cards.length) return false;
   const names = cards.map(c => c.dataset.projName).filter(Boolean);
-  const pinned = getCatalogProjects().filter(p => p.onSale && p.pinned).sort(compareCatalogPickerOrder);
   let changed = false;
-  pinned.forEach((p, i) => {
-    if (p.sortOrder !== i) { p.sortOrder = i; changed = true; }
-  });
-  const base = pinned.length;
   names.forEach((name, i) => {
     const p = getCatalogProjects().find(x => x.name === name);
-    if (!p || p.pinned) return;
-    const next = base + i;
-    if (p.sortOrder !== next) { p.sortOrder = next; changed = true; }
+    if (!p) return;
+    if (p.sortOrder !== i) { p.sortOrder = i; changed = true; }
   });
   return changed;
 }
@@ -16173,7 +16305,7 @@ function commitProjPickDragOrder(container) {
 function wireProjPickDragReorder(container, mode) {
   if (!container.classList.contains('proj-pick-list--item-cards')
     && !container.classList.contains('proj-pick-list--plain')) return;
-  container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])').forEach(card => {
+  container.querySelectorAll('[data-proj-drag-card]').forEach(card => {
     if (card.dataset.dragWired === '1') return;
     card.dataset.dragWired = '1';
     let pressTimer = null;
@@ -16192,11 +16324,11 @@ function wireProjPickDragReorder(container, mode) {
       if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
     };
 
-    const getDraggableCards = () => [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned])')];
+    const getDraggableCards = () => [...container.querySelectorAll('[data-proj-drag-card]')];
 
     const updatePlaceholderIndex = clientY => {
       if (!placeholder) return;
-      const slots = [...container.querySelectorAll('[data-proj-drag-card]:not([data-proj-pinned]), .proj-pick-drag-placeholder')];
+      const slots = [...container.querySelectorAll('[data-proj-drag-card], .proj-pick-drag-placeholder')];
       let insertBefore = null;
       for (const slot of slots) {
         if (slot === placeholder) continue;
@@ -16452,7 +16584,7 @@ function renderMemberPriceProjectList() {
     return `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
-          <span class="proj-item-name">${escapeHtml(p)}${isCatalogProjectPinned(p) ? pinTagHtml() : ''}</span>
+          <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
         ${projPickSwitchHtml(p, checked)}
       </div>
@@ -16629,7 +16761,7 @@ function renderProjectList() {
     return `<div class="proj-pick-card"${projPickDragCardAttrs(p)}>
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
-          <span class="proj-item-name">${escapeHtml(p)}${isCatalogProjectPinned(p) ? pinTagHtml() : ''}</span>
+          <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
         ${projPickSwitchHtml(p, checked)}
       </div>
@@ -16801,6 +16933,7 @@ function applyDemoListState(mode) {
   state.projectCatalog = mode === 'filled' ? seedProjectCatalog() : [];
   state.productCatalog = mode === 'filled' ? seedProductCatalog() : [];
   state.catalogGroups = mode === 'filled' ? seedCatalogGroups() : emptyCatalogGroups();
+  ensureSystemHiddenGroups();
   state.activeCatalogGroupId = emptyActiveCatalogGroupId();
   state.activePickGroupId = emptyActivePickGroupId();
   state.priceCatalogTab = 'project';
@@ -17633,6 +17766,8 @@ window.__BILLING_EMBEDDED__ = true;
     successIssueTemplateId: null,
     successIssueCardHtml: '',
     lastIssueFromCardMgmt: false,
+    lastRefundResult: null,
+    payMembercardCardId: null,
     pickLetter: 'C',
     pickAvailableLetters: [],
   };
@@ -17918,8 +18053,9 @@ window.__BILLING_EMBEDDED__ = true;
     const openCardAmount = state.pendingOpenCard ? round2(Number(state.pendingOpenCard.amount) || 0) : 0;
     let balanceDeduct = 0;
     const balanceLines = [];
-    const membercardPay = round2(Number(state.payAmounts?.membercard) || 0);
-    if (isMemberBill()) {
+    const membercardAllowed = canPayWithMembercardFace();
+    const membercardPay = membercardAllowed ? round2(Number(state.payAmounts?.membercard) || 0) : 0;
+    if (isMemberBill() && membercardAllowed) {
       if (membercardPay > 0) {
         const cap = round2(Math.max(0, remaining) + openCardAmount);
         const alloc = allocateMembercardBalance(membercardPay, cap);
@@ -18220,9 +18356,19 @@ window.__BILLING_EMBEDDED__ = true;
     renderBillCatalog();
   }
 
+  function getBillCatalogItems() {
+    const bridge = window.CardCatalogBridge;
+    const projects = bridge?.getBillProjects?.() || PROJECTS;
+    const products = bridge?.getBillProducts?.() || PRODUCTS;
+    return [...projects, ...products];
+  }
+
   function renderBillCatalog() {
     const q = state.searchQuery.trim().toLowerCase();
-    const src = state.billTab === 'project' ? PROJECTS : PRODUCTS;
+    const bridge = window.CardCatalogBridge;
+    const src = state.billTab === 'project'
+      ? (bridge?.getBillProjects?.() || PROJECTS)
+      : (bridge?.getBillProducts?.() || PRODUCTS);
     const items = src.filter(it => !q || it.name.includes(q) || String(it.price).includes(q) || it.category.includes(q));
     document.getElementById('catalogList').innerHTML = items.map(it => {
       const qty = getCartQty(it.id);
@@ -18580,6 +18726,33 @@ window.__BILLING_EMBEDDED__ = true;
     return v.toFixed(2);
   }
 
+  /** 正在办理「含面值」的新卡（延期除外）：面值不可用于支付此类办卡款 */
+  function isIssuingCardWithFaceBenefit() {
+    if (state.pendingOpenCard?.kind === 'extend') return false;
+    if (state.pendingOpenCard && state.pendingOpenCard.includesFace != null) {
+      return !!state.pendingOpenCard.includesFace;
+    }
+    const tid = state.cardIssuePending?.templateId || state.pendingOpenCard?.templateId;
+    if (!tid) return false;
+    const tpl = CARD_TEMPLATES.find(t => t.id === tid) || CARD_TPL_BY_ID[tid];
+    return !!(tpl?.benefits?.balance);
+  }
+
+  function canPayWithMembercardFace() {
+    if (!isMemberBill()) return false;
+    if (isIssuingCardWithFaceBenefit()) return false;
+    return getMembercardBalanceTotal() > 0;
+  }
+
+  function clearMembercardPayIfBlocked() {
+    if (canPayWithMembercardFace()) return;
+    if (state.payAmounts && Number(state.payAmounts.membercard) > 0) {
+      state.payAmounts.membercard = 0;
+    }
+    if (state.payChannel === 'membercard') state.payChannel = 'alipay';
+    state.payMembercardCardId = null;
+  }
+
   function payChannelDefs() {
     const channels = [
       { id: 'alipay', label: '支付宝', icon: 'assets/billing/pay/alipay.png', fallback: '支', color: '#1677FF' },
@@ -18591,7 +18764,7 @@ window.__BILLING_EMBEDDED__ = true;
       { id: 'cash', label: '现金', icon: 'assets/billing/pay/cash.svg', fallback: '现', color: '#F5A623' },
       { id: 'bank', label: '银行卡', icon: 'assets/billing/pay/bank.svg', fallback: '卡', color: '#4A7BF4' },
     ];
-    if (isMemberBill() && getMembercardBalanceAvailable() > 0) {
+    if (canPayWithMembercardFace()) {
       channels.push({ id: 'membercard', label: '会员卡', icon: 'assets/billing/pay/membercard.svg', fallback: '会', color: '#F32F41' });
     }
     return channels;
@@ -18608,32 +18781,54 @@ window.__BILLING_EMBEDDED__ = true;
     }, 0));
   }
 
-  function getMembercardBalanceAvailable() {
+  function getMemberFaceCards() {
+    if (!isMemberBill()) return [];
+    return (getCustomer().cards || []).filter(card =>
+      cardHasFaceBenefit(card) && round2(Math.max(0, Number(card.balance) || 0)) > 0
+    );
+  }
+
+  function getMembercardBalanceTotal() {
+    return round2(getMemberFaceCards().reduce((sum, card) => sum + Math.max(0, Number(card.balance) || 0), 0));
+  }
+
+  function ensurePayMembercardCardId() {
+    const cards = getMemberFaceCards();
+    if (!cards.length) {
+      state.payMembercardCardId = null;
+      return null;
+    }
+    if (state.payMembercardCardId && cards.some(c => c.id === state.payMembercardCardId)) {
+      return state.payMembercardCardId;
+    }
+    state.payMembercardCardId = cards[0].id;
+    return state.payMembercardCardId;
+  }
+
+  function getMembercardBalanceAvailable(cardId) {
     if (!isMemberBill()) return 0;
-    return round2(getCustomer().cards.reduce((sum, card) => {
-      if (!cardHasFaceBenefit(card)) return sum;
-      return sum + Math.max(0, Number(card.balance) || 0);
-    }, 0));
+    const cards = getMemberFaceCards();
+    if (!cards.length) return 0;
+    const id = arguments.length ? cardId : ensurePayMembercardCardId();
+    if (!id) return getMembercardBalanceTotal();
+    const card = cards.find(c => c.id === id);
+    return card ? round2(Math.max(0, Number(card.balance) || 0)) : 0;
   }
 
   function allocateMembercardBalance(requested, capTotal) {
     const lines = [];
-    let total = 0;
-    let left = Math.min(
+    const cardId = ensurePayMembercardCardId();
+    const cards = getMemberFaceCards();
+    const card = cards.find(c => c.id === cardId) || cards[0];
+    if (!card) return { total: 0, lines };
+    const left = Math.min(
       round2(Number(requested) || 0),
       round2(Number(capTotal) || 0),
-      getMembercardBalanceAvailable()
+      round2(Math.max(0, Number(card.balance) || 0))
     );
     if (left <= 0) return { total: 0, lines };
-    getCustomer().cards.forEach(card => {
-      if (left <= 0 || !cardHasFaceBenefit(card) || card.balance <= 0) return;
-      const use = Math.min(left, card.balance);
-      if (use <= 0) return;
-      lines.push({ card: card.name, amount: use, source: 'membercard' });
-      total = round2(total + use);
-      left = round2(left - use);
-    });
-    return { total, lines };
+    lines.push({ cardId: card.id, card: card.name, amount: left, source: 'membercard' });
+    return { total: left, lines };
   }
 
   function updatePaySheetTotals() {
@@ -18661,9 +18856,30 @@ window.__BILLING_EMBEDDED__ = true;
     state.payChannel = prefer;
     next[prefer] = round2(due);
     state.payAmounts = next;
+    ensurePayMembercardCardId();
+  }
+
+  function renderPayMembercardPickerHtml() {
+    const cards = getMemberFaceCards();
+    if (cards.length <= 1) return '';
+    ensurePayMembercardCardId();
+    return `<div class="pay-membercard-picker" data-pay-mc-picker>
+      <div class="pay-membercard-picker__hint">选择用于抵扣的会员卡</div>
+      ${cards.map(card => {
+        const on = card.id === state.payMembercardCardId;
+        return `<label class="pay-membercard-option${on ? ' is-on' : ''}">
+          <input type="radio" name="payMembercardCard" value="${escapeHtml(card.id)}"${on ? ' checked' : ''}>
+          <span class="pay-membercard-option__main">
+            <span class="pay-membercard-option__name">${escapeHtml(card.name)}</span>
+            <span class="pay-membercard-option__bal">可用 ${formatYen(card.balance)}</span>
+          </span>
+        </label>`;
+      }).join('')}
+    </div>`;
   }
 
   function renderPayChannels() {
+    clearMembercardPayIfBlocked();
     const s = calcSettlement();
     const channels = payChannelDefs();
     if (!channels.find(c => c.id === state.payChannel)) state.payChannel = channels[0]?.id || 'alipay';
@@ -18671,26 +18887,42 @@ window.__BILLING_EMBEDDED__ = true;
     channels.forEach(ch => {
       if (state.payAmounts[ch.id] == null) state.payAmounts[ch.id] = 0;
     });
+    ensurePayMembercardCardId();
     const filled = payFilledTotal();
     const cashFilled = payCashFilledTotal();
     const mcPay = round2(Number(state.payAmounts?.membercard) || 0);
+    const mcAvail = getMembercardBalanceAvailable();
+    const faceCards = getMemberFaceCards();
+    const selectedCard = faceCards.find(c => c.id === state.payMembercardCardId);
     const amtEl = document.getElementById('payAmount');
     amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(s.dueCash)}</span>`;
-    document.getElementById('payChannels').innerHTML = channels.map(ch => {
+    const channelHtml = channels.map(ch => {
       const amt = formatPayAmt(state.payAmounts[ch.id] || 0);
       const active = Number(state.payAmounts[ch.id]) > 0 || state.payChannel === ch.id;
       const iconHtml = ch.icon
         ? `<img src="${ch.icon}" alt="">`
         : `<span class="pay-channel__icon-fallback" style="background:${ch.color}" aria-hidden="true"></span>`;
-      return `<div class="pay-channel ${active ? 'is-active' : ''}" data-pay="${ch.id}">
+      let nameLabel = escapeHtml(ch.label);
+      if (ch.id === 'membercard') {
+        nameLabel = selectedCard && faceCards.length > 1
+          ? `会员卡 · ${escapeHtml(selectedCard.name)}（可用 ${formatYen(mcAvail)}）`
+          : `会员卡（可用 ${formatYen(mcAvail)}）`;
+      }
+      const row = `<div class="pay-channel ${active ? 'is-active' : ''}" data-pay="${ch.id}">
         <span class="pay-channel__icon" style="background:${ch.icon ? 'transparent' : ch.color}">${iconHtml}</span>
-        <span class="pay-channel__name">${ch.id === 'membercard' ? `会员卡（可用 ${formatYen(getMembercardBalanceAvailable())}）` : escapeHtml(ch.label)}</span>
+        <span class="pay-channel__name">${nameLabel}</span>
         <span class="pay-channel__field">
           <input class="pay-channel__input num" type="number" min="0" step="0.01" data-pay-amt="${ch.id}" value="${amt}">
           <span class="pay-channel__clear" data-pay-clear="${ch.id}" role="button" aria-label="清除"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="#929292" stroke-width="1.3" stroke-linecap="round"/></svg></span>
         </span>
       </div>`;
-    }).join('') + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${s.balanceDeduct > 0 && mcPay > 0 ? `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}` : `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`}</div>`;
+      if (ch.id === 'membercard' && (mcPay > 0 || state.payChannel === 'membercard')) {
+        return row + renderPayMembercardPickerHtml();
+      }
+      return row;
+    }).join('');
+    document.getElementById('payChannels').innerHTML = channelHtml
+      + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${s.balanceDeduct > 0 && mcPay > 0 ? `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}` : `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`}</div>`;
   }
 
   function createHoldOrder() {
@@ -18838,7 +19070,7 @@ window.__BILLING_EMBEDDED__ = true;
   function mutateCardsAfterPay(settlement) {
     const c = CUSTOMERS.find(x => x.id === getCustomer().id);
     if (!c || !c.cards) return;
-    const picks = state.benefitApplied;
+    const picks = state.benefitApplied || {};
     c.cards.forEach(card => {
       const pick = picks[card.id];
       if (!pick) return;
@@ -18846,14 +19078,50 @@ window.__BILLING_EMBEDDED__ = true;
         const slot = (card.projects || []).find(p => p.key === pr.key);
         if (slot && pr.qty) slot.remain = Math.max(0, slot.remain - pr.qty);
       });
-      const line = (settlement.balanceLines || []).find(b => b.card === card.name);
-      if (line && line.amount > 0 && cardHasFaceBenefit(card)) {
-        card.balance = round2(Math.max(0, card.balance - line.amount));
-      }
+    });
+    (settlement.balanceLines || []).forEach(line => {
+      const card = c.cards.find(x => (line.cardId && x.id === line.cardId) || x.name === line.card);
+      if (!card || !(line.amount > 0) || !cardHasFaceBenefit(card)) return;
+      card.balance = round2(Math.max(0, (Number(card.balance) || 0) - line.amount));
     });
   }
 
   function renderSuccess() {
+    const refund = state.lastRefundResult;
+    if (refund) {
+      const rows = [];
+      rows.push(`<div class="success-card__row"><span>办卡实付</span><span class="num">${formatYen(refund.purchaseAmount)}</span></div>`);
+      rows.push(`<div class="success-card__row"><span>消耗价值</span><span class="num">-${formatYen(refund.consumedTotal)}</span></div>`);
+      (refund.lines || []).forEach(line => {
+        const name = line.label || '权益';
+        const meta = line.detail ? `<br><span style="font-size:12px;color:var(--text-sec)">${escapeHtml(line.detail)}</span>` : '';
+        rows.push(`<div class="success-card__row"><span>${escapeHtml(name)}${meta}</span><span class="num">${formatYen(line.remain != null ? line.remain : 0)}</span></div>`);
+      });
+      rows.push(`<div class="success-card__row"><span>实际退款</span><span class="num">${formatYen(refund.actualRefund)}</span></div>`);
+      const titleEl = document.getElementById('successHeadTitle');
+      const slotEl = document.getElementById('successIssueCardSlot');
+      const descEl = document.getElementById('successIssueDesc');
+      const flowBtn = document.getElementById('btnViewFlow');
+      if (titleEl) titleEl.textContent = '退卡成功';
+      if (flowBtn) flowBtn.classList.add('hidden');
+      if (slotEl) {
+        slotEl.innerHTML = '';
+        slotEl.classList.add('hidden');
+      }
+      if (descEl) {
+        descEl.textContent = `已为 ${refund.memberName} 退卡「${refund.cardName}」`;
+        descEl.classList.remove('hidden');
+      }
+      const amtStr = String(round2(Math.max(0, Number(refund.actualRefund) || 0)));
+      document.getElementById('successSummary').innerHTML = `
+        <div class="success-card__amount"><span class="yen">¥</span><span class="val">${amtStr}</span></div>
+        <div class="success-card__divider"></div>
+        ${rows.join('')}`;
+      const contBtn = document.getElementById('btnContinue');
+      if (contBtn) contBtn.textContent = '返回列表';
+      state.lastIssueFromCardMgmt = true;
+      return;
+    }
     const s = state.lastSettlement || calcSettlement();
     const chMap = {
       alipay: '支付宝', wechat: '微信', meituan: '美团', dianping: '大众点评',
@@ -18946,14 +19214,42 @@ window.__BILLING_EMBEDDED__ = true;
     if (contBtn) contBtn.textContent = state.lastIssueFromCardMgmt ? '返回列表' : '继续开单';
   }
 
+  function showRefundSuccess(payload) {
+    const p = payload || {};
+    state.lastRefundResult = {
+      memberName: p.memberName || '',
+      cardName: p.cardName || '',
+      templateId: p.templateId || '',
+      purchaseAmount: round2(Number(p.purchaseAmount) || 0),
+      consumedTotal: round2(Number(p.consumedTotal) || 0),
+      suggestedRefund: round2(Number(p.suggestedRefund) || 0),
+      actualRefund: round2(Math.max(0, Number(p.actualRefund) || 0)),
+      lines: Array.isArray(p.lines) ? p.lines.map(l => ({
+        label: l.label || '',
+        detail: l.detail || '',
+        remain: l.remain,
+        used: l.used,
+      })) : [],
+    };
+    state.lastIssueFromCardMgmt = true;
+    state.pendingOpenCard = null;
+    state.successIssueTemplateId = null;
+    state.successIssueCardHtml = '';
+    state.lastSettlement = null;
+    renderSuccess();
+    showOnlyScreen('screen-success');
+  }
+
   function returnToCardListFromIssueCheckout() {
     state.lastIssueFromCardMgmt = false;
+    state.lastRefundResult = null;
     state.successIssueTemplateId = null;
     state.successIssueCardHtml = '';
     state.cardIssuePending = null;
     state.cardExtendPending = null;
     state.pendingOpenCard = null;
     state.payAmounts = {};
+    state.payMembercardCardId = null;
     state.lastSettlement = null;
     const slotEl = document.getElementById('successIssueCardSlot');
     const descEl = document.getElementById('successIssueDesc');
@@ -18987,7 +19283,14 @@ window.__BILLING_EMBEDDED__ = true;
     state.orderRemark = '';
     state.payAmounts = {};
     state.lastSettlement = null;
-    state.pendingOpenCard = { name: cardName, amount: round2(Number(amount) || 0) };
+    const issueTpl = CARD_TEMPLATES.find(t => t.id === templateId) || CARD_TPL_BY_ID[templateId];
+    const includesFace = !!(issueTpl?.benefits?.balance);
+    state.pendingOpenCard = {
+      name: cardName,
+      amount: round2(Number(amount) || 0),
+      templateId,
+      includesFace,
+    };
     state.cardIssuePending = { templateId, memberId };
     state.cardExtendPending = null;
     state.successIssueTemplateId = templateId;
@@ -19026,7 +19329,13 @@ window.__BILLING_EMBEDDED__ = true;
     state.orderRemark = '';
     state.payAmounts = {};
     state.lastSettlement = null;
-    state.pendingOpenCard = { name: cardName, amount: payAmt, kind: 'extend' };
+    state.pendingOpenCard = {
+      name: cardName,
+      amount: payAmt,
+      kind: 'extend',
+      templateId,
+      includesFace: false,
+    };
     state.cardIssuePending = null;
     state.cardExtendPending = {
       templateId,
@@ -19708,7 +20017,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (tab) { state.billTab = tab.dataset.tab; renderBillHeader(); return; }
     const step = e.target.closest('[data-step]');
     if (step) {
-      const catalog = [...PROJECTS, ...PRODUCTS];
+      const catalog = getBillCatalogItems();
       const item = catalog.find(x => x.id === step.dataset.step);
       if (item) setCartQty(item, Number(step.dataset.d));
     }
@@ -19728,7 +20037,7 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('cartSheetList').addEventListener('click', e => {
     const step = e.target.closest('[data-cart-step]');
     if (!step) return;
-    const item = state.cart.find(x => x.id === step.dataset.cartStep) || [...PROJECTS, ...PRODUCTS].find(x => x.id === step.dataset.cartStep);
+    const item = state.cart.find(x => x.id === step.dataset.cartStep) || getBillCatalogItems().find(x => x.id === step.dataset.cartStep);
     if (item) {
       setCartQty(item, Number(step.dataset.d));
       renderCartList('cartSheetList');
@@ -20034,7 +20343,12 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('未找到该卡模板');
       return;
     }
-    state.pendingOpenCard = { name: tpl.name, amount: tpl.price || tpl.face || 0 };
+    state.pendingOpenCard = {
+      name: tpl.name,
+      amount: tpl.price || tpl.face || 0,
+      templateId: tpl.id,
+      includesFace: !!(tpl.benefits && tpl.benefits.balance),
+    };
     openCardModule();
   });
 
@@ -20064,6 +20378,23 @@ window.__BILLING_EMBEDDED__ = true;
     if (!(Number(state.payAmounts[id]) > 0) && remain > 0) state.payAmounts[id] = remain;
     renderPayChannels();
   });
+  document.getElementById('payChannels').addEventListener('change', e => {
+    const radio = e.target.closest('input[name="payMembercardCard"]');
+    if (!radio) return;
+    state.payMembercardCardId = radio.value;
+    state.payChannel = 'membercard';
+    const avail = getMembercardBalanceAvailable(radio.value);
+    const cur = round2(Number(state.payAmounts.membercard) || 0);
+    if (cur > avail) state.payAmounts.membercard = avail;
+    else if (!(cur > 0)) {
+      const s = calcSettlement();
+      const grossDue = round2(s.dueCash + s.balanceDeduct);
+      const others = round2(payFilledTotal() - cur);
+      let remain = round2(Math.max(0, Math.min(avail, grossDue - others)));
+      if (remain > 0) state.payAmounts.membercard = remain;
+    }
+    renderPayChannels();
+  });
   document.getElementById('payChannels').addEventListener('focusin', e => {
     const inp = e.target.closest('[data-pay-amt]');
     if (!inp) return;
@@ -20090,9 +20421,23 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     const mcReq = round2(Number(state.payAmounts?.membercard) || 0);
-    if (mcReq > 0 && mcReq > s.balanceDeduct + 0.01) {
-      showToast(`会员卡可用面值不足，最多 ${formatYen(getMembercardBalanceAvailable())}`);
-      return;
+    if (mcReq > 0) {
+      if (!canPayWithMembercardFace()) {
+        showToast('含面值的会员卡不能用面值支付办卡款');
+        clearMembercardPayIfBlocked();
+        renderPayChannels();
+        return;
+      }
+      ensurePayMembercardCardId();
+      const mcAvail = getMembercardBalanceAvailable();
+      if (!state.payMembercardCardId || mcAvail <= 0) {
+        showToast('请选择用于抵扣的会员卡');
+        return;
+      }
+      if (mcReq > mcAvail + 0.01) {
+        showToast(`所选会员卡可用面值不足，最多 ${formatYen(mcAvail)}`);
+        return;
+      }
     }
     const splits = payChannelDefs()
       .map(ch => ({ id: ch.id, amount: round2(Number(state.payAmounts[ch.id]) || 0) }))
@@ -20177,6 +20522,7 @@ window.__BILLING_EMBEDDED__ = true;
     ensureMember() { if (typeof enterBill === 'function' && typeof CUSTOMERS !== 'undefined') enterBill(CUSTOMERS[0]); },
     startCardIssueCheckout(ctx) { startCardIssueCheckout(ctx || {}); },
     startCardExtendCheckout(ctx) { startCardExtendCheckout(ctx || {}); },
+    showRefundSuccess(payload) { showRefundSuccess(payload || {}); },
     upsertCardTemplate(tpl) {
       if (!tpl || !tpl.id) return;
       const idx = CARD_TEMPLATES.findIndex(t => t.id === tpl.id);

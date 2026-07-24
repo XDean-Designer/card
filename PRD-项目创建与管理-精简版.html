@@ -51,97 +51,47 @@ tr:nth-child(even) td{background:#fafbfc}
   </div>
   <div class="wrap"><article class="article">
 <h1>PRD：项目创建与管理（价目表 · 商户端）· 精简版</h1>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>文档版本</td>
-<td>v1.0-lite</td>
-</tr>
-<tr>
-<td>日期</td>
-<td>2026-07-23</td>
-</tr>
-<tr>
-<td>文档类型</td>
-<td><strong>精简版</strong>（仅模块 1–3）</td>
-</tr>
-<tr>
-<td>完整规格</td>
-<td>同目录 <code>PRD-项目创建与管理.md</code>（含状态机 / 功能规格 / 接口 / 验收等）</td>
-</tr>
-<tr>
-<td>交互原型（唯一可视依据）</td>
-<td>同目录 <code>demo.html</code>（中文镜像：<code>剑琅联盟-RTB重构.html</code>；功能链路「项目创建与管理」）</td>
-</tr>
-<tr>
-<td>画布</td>
-<td>390 × 844</td>
-</tr>
-<tr>
-<td>目的</td>
-<td>快速对齐背景、场景与信息架构；落地细节以完整稿 + 原型为准</td>
-</tr>
-<tr>
-<td>关联（非必读）</td>
-<td>同目录 <code>PRD-会员卡管理.md</code> / <code>PRD-会员卡管理-精简版.md</code></td>
-</tr>
-</tbody>
-</table>
+<p>| 字段 | 内容 |</p>
+<p>|------|------|</p>
+<p>| 文档版本 | v1.2-lite |</p>
+<p>| 日期 | 2026-07-24 |</p>
+<p>| 文档类型 | <strong>精简版</strong>（仅模块 1–3） |</p>
+<p>| 完整规格 | 同目录 <code>PRD-项目创建与管理.md</code>（含状态机 / 功能规格 / 接口 / 验收等） |</p>
+<p>| 交互原型（唯一可视依据） | 同目录 <code>demo.html</code>（中文镜像：<code>剑琅联盟-RTB重构.html</code>；功能链路「项目创建与管理」） |</p>
+<p>| 画布 | 390 × 844 |</p>
+<p>| 目的 | 快速对齐背景、场景与信息架构；落地细节以完整稿 + 原型为准 |</p>
+<p>| 关联（非必读） | 同目录 <code>PRD-会员卡管理.md</code> / <code>PRD-会员卡管理-精简版.md</code> |</p>
 <hr />
 <h2>怎么读这份 PRD</h2>
 <p>正文按模块编排。<strong>不用通读全文</strong>，按角色跳章即可。</p>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>模块</th>
-<th style="text-align: center;">前端</th>
-<th style="text-align: center;">后端</th>
-<th style="text-align: center;">测试</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>背景 / 目标 / 范围 / 能力映射</td>
-<td style="text-align: center;">✓</td>
-<td style="text-align: center;">✓</td>
-<td style="text-align: center;">✓</td>
-<td>重构叙事、防范围蔓延</td>
-</tr>
-<tr>
-<td>2</td>
-<td>用户场景与成功标准</td>
-<td style="text-align: center;">✓</td>
-<td style="text-align: center;">了解</td>
-<td style="text-align: center;">✓</td>
-<td>测「业务对不对」</td>
-</tr>
-<tr>
-<td>3</td>
-<td>信息架构与页面清单</td>
-<td style="text-align: center;">✓</td>
-<td style="text-align: center;">了解</td>
-<td style="text-align: center;">✓</td>
-<td>做哪些页</td>
-</tr>
-</tbody>
-</table>
+<p>| # | 模块 | 前端 | 后端 | 测试 | 说明 |</p>
+<p>|---|------|:----:|:----:|:----:|------|</p>
+<p>| 1 | 背景 / 目标 / 范围 / 能力映射 | ✓ | ✓ | ✓ | 重构叙事、防范围蔓延 |</p>
+<p>| 2 | 用户场景与成功标准 | ✓ | 了解 | ✓ | 测「业务对不对」 |</p>
+<p>| 3 | 信息架构与页面清单 | ✓ | 了解 | ✓ | 做哪些页 |</p>
 <p><strong>先读这几条（贯穿全文）</strong></p>
 <ol>
-<li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
-<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </li>
-<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后部分字段与删除/上下架 <strong>锁定</strong>（细则见完整稿）。产品亦可标记绑卡，列表展示绑卡标识。  </li>
-<li>B 端改价、上下架、时长等变更需 <strong>同步顾客端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
-<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
-<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</li>
+<li>
+<p>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </p>
+</li>
+<li>
+<p>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </p>
+</li>
+<li>
+<p>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。产品亦可标记绑卡，列表展示绑卡标识。  </p>
+</li>
+<li>
+<p>B 端改价、上下架、时长、<strong>隐藏</strong> 等变更需 <strong>同步顾客端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </p>
+</li>
+<li>
+<p>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </p>
+</li>
+<li>
+<p><strong>可见性</strong>：顾客端 <code>onSale &amp;&amp; !hidden</code>；<strong>开单选品</strong> 读价目全量（含下架/隐藏）；<strong>建卡权益选品</strong> 仅 <code>onSale &amp;&amp; !hidden</code>。  </p>
+</li>
+<li>
+<p>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</p>
+</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-项目创建与管理.md</code>。</p>
 <hr />
@@ -153,101 +103,90 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>旧价目表 / 旧项目管理在列表中带有图片与较多装饰元素，<strong>内容不够紧凑</strong>，一屏信息量少，操作分散，不符合 B 端管理软件「找得到、改得快」的诉求。</p>
 <p>本期在整体产品（含会员卡权益组合）对齐前提下重构价目能力：</p>
 <ul>
-<li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格、价格、状态等），无列表配图堆叠；  </li>
-<li><strong>操作紧凑</strong>：搜索、Tab、分组条、左滑/长按菜单、拖拽排序集中在一屏；  </li>
-<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）；  </li>
-<li><strong>与会员卡联结</strong>：价目为选权益、折扣适用范围的数据源；支持从权益页「管理价目表」往返。</li>
+<li>
+<p><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格、价格、状态等），无列表配图堆叠；  </p>
+</li>
+<li>
+<p><strong>操作紧凑</strong>：搜索、Tab、分组条、左滑/长按菜单、拖拽排序集中在一屏；  </p>
+</li>
+<li>
+<p><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）、<strong>隐藏</strong> 与系统「隐藏」分组；  </p>
+</li>
+<li>
+<p><strong>与会员卡 / 开单联结</strong>：价目为选权益、折扣适用范围及 <strong>开单选品</strong> 的数据源；支持从权益页「管理价目表」往返。</p>
+</li>
 </ul>
 <h2>1.2 目标</h2>
-<table>
-<thead>
-<tr>
-<th>目标</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>覆盖旧能力</td>
-<td>新价目成为项目管理的唯一体系</td>
-</tr>
-<tr>
-<td>高密度列表</td>
-<td>项目/产品双清单，信息行可扫可读</td>
-</tr>
-<tr>
-<td>分组与排序</td>
-<td>自定义分组 + 桶内拖拽排序 + 置顶</td>
-</tr>
-<tr>
-<td>售卖可控</td>
-<td>在售/下架；项目可配手机端预约</td>
-</tr>
-<tr>
-<td>与卡对齐</td>
-<td>绑卡锁定规则清晰；选品只取在售</td>
-</tr>
-</tbody>
-</table>
+<p>| 目标 | 说明 |</p>
+<p>|------|------|</p>
+<p>| 覆盖旧能力 | 新价目成为项目管理的唯一体系 |</p>
+<p>| 高密度列表 | 项目/产品双清单，信息行可扫可读 |</p>
+<p>| 分组与排序 | 自定义分组 + 系统「隐藏」组 + 在售/下架桶内拖拽 <code>sortOrder</code> |</p>
+<p>| 售卖可控 | 在售/下架/隐藏；项目可配手机端预约 |</p>
+<p>| 可见性清晰 | 顾客端 / 开单 / 建卡选品三套范围分明 |</p>
+<p>| 与卡对齐 | 绑卡锁定规则清晰；权益选品只取在售且未隐藏 |</p>
 <h2>1.3 本期做（In）</h2>
 <ul>
-<li>价目表列表：项目 Tab / 产品 Tab、搜索、列头排序、空态  </li>
-<li>新增 / 编辑 / 删除项目与产品  </li>
-<li>在售切换、置顶/取消置顶  </li>
-<li>分组：筛选 Tab、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
-<li>列表拖拽排序（置顶桶 / 在售桶 / 下架桶内）  </li>
-<li>左滑快捷操作与长按操作 Sheet  </li>
-<li>项目绑卡锁定（部分字段）及提示文案  </li>
-<li>从会员卡权益页「管理价目表」进入并返回  </li>
-<li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
+<li>
+<p>价目表列表：项目 Tab / 产品 Tab、搜索、列头排序、空态  </p>
+</li>
+<li>
+<p>新增 / 编辑 / 删除项目与产品  </p>
+</li>
+<li>
+<p>在售切换、<strong>隐藏 / 取消隐藏</strong>  </p>
+</li>
+<li>
+<p>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </p>
+</li>
+<li>
+<p>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内）  </p>
+</li>
+<li>
+<p>左滑快捷操作与长按操作 Sheet  </p>
+</li>
+<li>
+<p>项目绑卡锁定（部分字段）及提示文案  </p>
+</li>
+<li>
+<p>从会员卡权益页「管理价目表」进入并返回  </p>
+</li>
+<li>
+<p><strong>开单选品</strong> 联结（读取完整价目目录）  </p>
+</li>
+<li>
+<p>B→C 同步生效的产品语义说明（无 C 端页面规格）</p>
+</li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
 <ul>
-<li>顾客端 / 小程序预约页、开单页的 UI 规格（仅消费价目结果）  </li>
-<li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
-<li>真实图片上传链路（原型为演示开关「已上传/未上传」）  </li>
-<li>原型「无数据/有数据」造数开关  </li>
-<li>审核流、多门店价目同步策略（原型未表现则不写死）</li>
+<li>
+<p>顾客端 / 小程序预约页、开单页的 UI 规格（仅消费价目结果）  </p>
+</li>
+<li>
+<p>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </p>
+</li>
+<li>
+<p>真实图片上传链路（原型为演示开关「已上传/未上传」）  </p>
+</li>
+<li>
+<p>原型「无数据/有数据」造数开关  </p>
+</li>
+<li>
+<p>审核流、多门店价目同步策略（原型未表现则不写死）</p>
+</li>
 </ul>
 <h2>1.5 旧 → 新能力映射（不写废弃产品名）</h2>
-<table>
-<thead>
-<tr>
-<th>旧体系常见能力（语义）</th>
-<th>新体系如何配置</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>维护服务项目价格/时长</td>
-<td><strong>项目</strong> Tab：名称、价格、时长、在售、预约、可选图、置顶</td>
-</tr>
-<tr>
-<td>维护可售卖货品</td>
-<td><strong>产品</strong> Tab：名称、规格、价格、在售、可选图、置顶</td>
-</tr>
-<tr>
-<td>列表浏览与查找</td>
-<td>搜索 + 列排序 + 分组筛选；信息行无配图</td>
-</tr>
-<tr>
-<td>分类/归类</td>
-<td><strong>自定义分组</strong>（可多组、可空组、删组保留条目）</td>
-</tr>
-<tr>
-<td>调整展示顺序</td>
-<td><strong>置顶</strong> + <strong>桶内拖拽</strong> <code>sortOrder</code></td>
-</tr>
-<tr>
-<td>停售</td>
-<td><strong>下架</strong>（列表仍可见，选品侧不可选）</td>
-</tr>
-<tr>
-<td>被卡引用后的保护</td>
-<td><strong>绑卡锁定</strong>（名称/在售/预约/删除等受限）</td>
-</tr>
-</tbody>
-</table>
+<p>| 旧体系常见能力（语义） | 新体系如何配置 |</p>
+<p>|------------------------|----------------|</p>
+<p>| 维护服务项目价格/时长 | <strong>项目</strong> Tab：名称、价格、时长、在售、预约、可选图 |</p>
+<p>| 维护可售卖货品 | <strong>产品</strong> Tab：名称、规格、价格、在售、可选图 |</p>
+<p>| 列表浏览与查找 | 搜索 + 列排序 + 分组筛选；信息行无配图 |</p>
+<p>| 分类/归类 | <strong>自定义分组</strong> + 系统 <strong>隐藏</strong> 组 |</p>
+<p>| 调整展示顺序 | <strong>桶内拖拽</strong> <code>sortOrder</code>（在售 / 下架两桶） |</p>
+<p>| 停售 | <strong>下架</strong>（列表仍可见；顾客端不可见；开单仍可选） |</p>
+<p>| 对 C 端隐藏但 B 端保留 | <strong>隐藏</strong> |</p>
+<p>| 被卡引用后的保护 | <strong>绑卡锁定</strong>（名称/预约/删除等受限；<strong>在售仍可改</strong>） |</p>
 <p>映射不足时以原型字段与行为为准。</p>
 <hr />
 <h1>模块 2　用户场景与成功标准</h1>
@@ -255,190 +194,110 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
 </blockquote>
 <h2>2.1 角色</h2>
-<table>
-<thead>
-<tr>
-<th>角色</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>店主（默认）</td>
-<td>可进行本文全部操作</td>
-</tr>
-<tr>
-<td>店员</td>
-<td><strong>【待产品确认】</strong> 原型未表现差异；见完整稿权限占位</td>
-</tr>
-</tbody>
-</table>
+<p>| 角色 | 说明 |</p>
+<p>|------|------|</p>
+<p>| 店主（默认） | 可进行本文全部操作 |</p>
+<p>| 店员 | <strong>【待产品确认】</strong> 原型未表现差异；见完整稿权限占位 |</p>
 <h2>2.2 核心场景</h2>
-<table>
-<thead>
-<tr>
-<th>场景</th>
-<th>用户期望</th>
-<th>成功标准</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>新建项目</td>
-<td>填名称价格时长等后出现在项目列表在售区</td>
-<td>列表可见；可被会员卡选项目/折扣</td>
-</tr>
-<tr>
-<td>新建产品</td>
-<td>填名称规格价格后出现在产品列表</td>
-<td>列表可见；可被开单/产品权益选用（在售）</td>
-</tr>
-<tr>
-<td>改价</td>
-<td>绑卡或未绑卡均可改价（规则内）</td>
-<td>toast 成功；顾客端同步语义成立</td>
-</tr>
-<tr>
-<td>下架</td>
-<td>停售但仍可在价目表看到</td>
-<td>状态「已下架」；选品列表不出现</td>
-</tr>
-<tr>
-<td>分组运营</td>
-<td>建组、把条目加入多组、按组筛选</td>
-<td>筛选正确；删组不丢条目</td>
-</tr>
-<tr>
-<td>拖拽排序</td>
-<td>调整同状态区内顺序</td>
-<td>刷新后顺序保持；搜索/分组筛选时不可拖</td>
-</tr>
-<tr>
-<td>绑卡项目</td>
-<td>被卡引用后不能乱改关键属性</td>
-<td>锁定字段点击有 toast；不可删、不可改在售</td>
-</tr>
-<tr>
-<td>从建卡管价目</td>
-<td>权益页点「管理价目表」补货后返回继续选</td>
-<td>返回原权益页且列表刷新</td>
-</tr>
-</tbody>
-</table>
+<p>| 场景 | 用户期望 | 成功标准 |</p>
+<p>|------|----------|----------|</p>
+<p>| 新建项目 | 填名称价格时长等后出现在项目列表在售区 | 列表可见；可被会员卡选项目/折扣（在售且未隐藏） |</p>
+<p>| 新建产品 | 填名称规格价格后出现在产品列表 | 列表可见；开单可选；产品权益选用（在售且未隐藏） |</p>
+<p>| 改价 | 绑卡或未绑卡均可改价（规则内） | toast 成功；顾客端同步语义成立 |</p>
+<p>| 下架 | 停售但仍可在价目表看到 | 状态「已下架」；顾客端不可见；开单仍可选；权益选品不可选 |</p>
+<p>| 隐藏 | 对顾客端隐藏但 B 端保留 | 「全部」Tab 不显示；「隐藏」Tab 可见；开单仍可选 |</p>
+<p>| 分组运营 | 建组、把条目加入多组、按组筛选 | 筛选正确；删组不丢条目；系统「隐藏」组不可删/改名 |</p>
+<p>| 拖拽排序 | 调整同售卖态桶内顺序 | 刷新后顺序保持；搜索/分组筛选/「隐藏」Tab 时不可拖 |</p>
+<p>| 绑卡项目 | 被卡引用后不能乱改关键属性 | 锁定名称/预约/删除有 toast；<strong>可改在售/下架</strong> |</p>
+<p>| 开单选品 | 开单时能选到下架/隐藏条目 | 读取价目实时全量目录 |</p>
+<p>| 从建卡管价目 | 权益页点「管理价目表」补货后返回继续选 | 返回原权益页且列表刷新 |</p>
 <hr />
 <h1>模块 3　信息架构与页面清单</h1>
 <blockquote>
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
 </blockquote>
-<pre><code>价目表
+<pre><code>
+价目表
+
  ├─ 列表（项目 Tab / 产品 Tab）
- │    ├─ 搜索 · 添加 · 分组条 · 齿轮
+
+ │    ├─ 搜索 · 添加 · 分组条（全部 / 自定义 / 隐藏）· 齿轮
+
  │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作
+
  │    └─ 空态
+
  ├─ 新增项目 / 新增产品
+
  ├─ 项目详情 / 产品详情
+
  ├─ 分组管理
- │    └─ 编辑成员
+
+ │    └─ 编辑成员（含系统「隐藏」组）
+
  └─ Sheets / 弹层
+
       ├─ 行操作 Sheet
+
       ├─ 分组菜单 Sheet
-      ├─ 设置分组（多选）
+
+      ├─ 设置分组（多选，含系统「隐藏」组）
+
       ├─ 新建/重命名分组 Dialog
+
       ├─ 删除分组确认
+
       ├─ 删除条目确认
+
       └─ 金额键盘（价格）
+
 </code></pre>
 <h3>3.0 页面流（示意）</h3>
-<div class="mermaid">flowchart LR
-  L[价目表列表] --&gt;|添加| Add[新增表单]
-  L --&gt;|点行| Edit[详情编辑]
-  L --&gt;|齿轮| G[分组管理]
-  G --&gt;|编辑成员| M[编辑成员]
-  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
-  L --&gt;|长按或左滑| A[[行操作 Sheet]]
-  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+
+  L[价目表列表] -->|添加| Add[新增表单]
+
+  L -->|点行| Edit[详情编辑]
+
+  L -->|齿轮| G[分组管理]
+
+  G -->|编辑成员| M[编辑成员]
+
+  G -->|新建或重命名| D[[分组名称 Dialog]]
+
+  L -->|长按或左滑| A[[行操作 Sheet]]
+
+  A -->|设置分组| IG[[多选分组 Sheet]]
+</div>
 <p>从会员卡权益页进入：</p>
-<div class="mermaid">flowchart LR
-  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
-  L --&gt;|返回| P</div>
-<table>
-<thead>
-<tr>
-<th>页面/层</th>
-<th>导航标题（原型）</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>列表</td>
-<td>价目表</td>
-<td>Tab 项目/产品；无底栏主按钮（添加在工具栏）</td>
-</tr>
-<tr>
-<td>新增</td>
-<td>新增项目 / 新增产品</td>
-<td>底栏「保存」</td>
-</tr>
-<tr>
-<td>详情</td>
-<td>项目详情 / 产品详情</td>
-<td>底栏「删除 | 保存」</td>
-</tr>
-<tr>
-<td>分组管理</td>
-<td>分组管理</td>
-<td>底栏「新建分组」</td>
-</tr>
-<tr>
-<td>编辑成员</td>
-<td>编辑成员 · {组名}</td>
-<td>底栏「确定」</td>
-</tr>
-<tr>
-<td>行操作</td>
-<td>条目标题</td>
-<td>置顶/分组/上下架/删除</td>
-</tr>
-<tr>
-<td>设置分组</td>
-<td>条目标题</td>
-<td>可多选；可「去新建分组」</td>
-</tr>
-<tr>
-<td>分组菜单</td>
-<td>组名</td>
-<td>编辑成员 / 重命名 / 删除</td>
-</tr>
-</tbody>
-</table>
+<div class="mermaid">
+flowchart LR
+
+  P[权益选品页] -->|管理价目表| L[价目表列表]
+
+  L -->|返回| P
+</div>
+<p>| 页面/层 | 导航标题（原型） | 说明 |</p>
+<p>|---------|------------------|------|</p>
+<p>| 列表 | 价目表 | Tab 项目/产品；无底栏主按钮（添加在工具栏） |</p>
+<p>| 新增 | 新增项目 / 新增产品 | 底栏「保存」 |</p>
+<p>| 详情 | 项目详情 / 产品详情 | 底栏「删除 | 保存」 |</p>
+<p>| 分组管理 | 分组管理 | 底栏「新建分组」 |</p>
+<p>| 编辑成员 | 编辑成员 · {组名} | 底栏「确定」 |</p>
+<p>| 行操作 | 条目标题 | 设置分组/上下架/隐藏或取消隐藏/删除 |</p>
+<p>| 设置分组 | 条目标题 | 可多选（含系统「隐藏」）；可「去新建分组」 |</p>
+<p>| 分组菜单 | 组名 | 编辑成员 / 重命名 / 删除（系统组无菜单） |</p>
 <p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-groups</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code>。</p>
 <p>实现路由建议（名称可调整）：<code>price-list</code> / <code>price-add</code> / <code>price-edit</code> / <code>price-groups</code> / <code>price-group-members</code> + sheets。</p>
 <hr />
 <hr />
 <h1>交付说明（精简版）</h1>
-<table>
-<thead>
-<tr>
-<th>交付</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>本文 <code>PRD-项目创建与管理-精简版.md</code></td>
-<td>仅模块 1–3</td>
-</tr>
-<tr>
-<td>完整稿 <code>PRD-项目创建与管理.md</code></td>
-<td>开发 / 测试落地准稿</td>
-</tr>
-<tr>
-<td>交互原型 <code>demo.html</code></td>
-<td>唯一可视依据</td>
-</tr>
-</tbody>
-</table>
+<p>| 交付 | 说明 |</p>
+<p>|------|------|</p>
+<p>| 本文 <code>PRD-项目创建与管理-精简版.md</code> | 仅模块 1–3 |</p>
+<p>| 完整稿 <code>PRD-项目创建与管理.md</code> | 开发 / 测试落地准稿 |</p>
+<p>| 交互原型 <code>demo.html</code> | 唯一可视依据 |</p>
 <p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-项目创建与管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
 

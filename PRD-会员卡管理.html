@@ -61,7 +61,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.4</td>
+<td>v1.5</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -257,7 +257,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
 <li>
-<p>权益组合：面值（金额与赠送；<strong>可用于办卡/购卡</strong>，含被购卡无面值；<strong>不可</strong>用于购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+<p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
 <p>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </p>
@@ -286,7 +286,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>储值/充值类（买赠面值）</td>
-<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；面值 <strong>可用于办卡/购卡</strong>（含被购卡无面值），<strong>不可</strong>用于购买价目产品</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；持卡面值 <strong>仅可</strong>支付不含面值的办卡/购卡、延期与项目消费；<strong>不可</strong>支付含面值新办卡，<strong>不可</strong>购价目产品</td>
 </tr>
 <tr>
 <td>次卡/项目次数类</td>
@@ -389,7 +389,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
 <li>已下架卡列表无「办卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
 <li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加。  </li>
-<li>退卡确认后该会员不再作为有效持卡；实退金额以确认值为准写入结果提示。</li>
+<li>退卡确认后该会员不再作为有效持卡；进入退卡成功页，实退金额以确认值为准展示。</li>
 </ol>
 <hr>
 <h1>模块 3　信息架构与页面清单</h1>
@@ -1023,22 +1023,28 @@ flowchart LR
 <p><strong>原型</strong>：<a href="demo.html?flow=create-step2">打开 Step2</a></p>
 <p><img alt="Step2 权益组合" src="assets/prd-shots/create-step2.png"></p>
 <p>四类 Switch（面值 / 项目 / 产品 / 折扣）可多开；每类可多张 ticket（点票面编辑；项目/产品/折扣 ticket 右侧灰色描线垃圾桶删除，内容垂直居中）。</p>
-<p><strong>ticket 视觉（与原型一致）</strong>：柔和票券样式——左右半圆 notch、虚线撕口、右侧票根约 <strong>90px</strong>（次数/数量摘要与删除）、左侧短品牌色条与轻阴影。项目有赠送时票根为两行：<code>N次</code> / <code>送M次</code>（无「+」）。</p>
+<p><strong>ticket 视觉（与原型一致）</strong>：柔和票券样式——左右半圆 notch、虚线撕口、右侧票根约 <strong>90px</strong>（次数/数量摘要与删除）、左侧短品牌色条与轻阴影。共计票面「共」与购买次数同一行（如 <code>共10次</code>）；有赠送时第二行为 <code>+送M次</code>。</p>
 <p><strong>空开关清洗</strong>：点「下一步」或保存时，若某类 Switch 为开但无有效配置（项目/产品/折扣无已保存 ticket；面值无金额且购买金额也无法回填），则 <strong>自动关闭</strong> 该 Switch 并 toast 提示；只要仍剩至少一类有效权益即可进入 Step3。若清洗后一类都没有 → toast「请至少选一项权益内容」并留在 Step2。</p>
 <h3>6.3.1 面值</h3>
 <ul>
 <li>描述：购买与赠送的面值，永久有效。  </li>
 <li>面值金额（可编，可为 0）  </li>
 <li>赠送（只读）= max(0, 面值 − 购买金额)  </li>
-<li><strong>面值可用于支付办卡/购卡费用</strong>（含被购卡本身未配置面值权益的情况）；<strong>不可用于购买价目「产品」</strong>；Step2 无「可购买产品」配置项。</li>
+<li><strong>面值支付规则</strong>（与开单支付页一致）：
+<ul>
+<li><strong>可用</strong>：办理 <strong>未</strong> 开启面值权益的会员卡；收费延期；开单中的服务项目消费</li>
+<li><strong>不可用</strong>：办理 <strong>已</strong> 开启面值权益的会员卡（禁止面值买面值）；购买价目「产品」</li>
+<li><strong>多卡</strong>：会员有多张可用面值余额时，支付页须 <strong>单选一张</strong>；抵扣上限为该卡余额，不跨卡分摊</li>
+<li>Step2 <strong>无</strong>「可购买产品」配置项</li>
+</ul></li>
 </ul>
 <h3>6.3.2 项目</h3>
 <ul>
 <li>+添加项目权益。  </li>
 <li>选品页计次模式为「每项 / 共计」；<strong>保存后</strong>：  </li>
 <li><strong>每项</strong> → <strong>一种项目一张 ticket</strong>（同次数参数分别落卡）  </li>
-<li><strong>共计</strong> → 共享次数池合并为一张 ticket；票面 scope 文案为 <strong>「共」</strong>（非「共计」）  </li>
-<li>有赠送时票根两行展示购买次数与「送M次」。</li>
+<li><strong>共计</strong> → 共享次数池合并为一张 ticket；票面为 <strong>「共」+ 次数同一行</strong>（非「共计」）  </li>
+<li>有赠送时：第一行 <code>共N次</code>（或仅 <code>N次</code>），第二行 <code>+送M次</code>。</li>
 </ul>
 <h3>6.3.3 产品</h3>
 <ul>
@@ -1135,13 +1141,23 @@ flowchart LR
 <li>纯面值或模板永久 → 点延期即 toast「该卡永久有效，无需延期」（不进延期表单） </li>
 </ul>
 <h2>6.11 退卡估值 Sheet</h2>
-<p>副标题含均值退卡/减值退卡。办卡实付、消耗价值、权益剩余明细、建议退款、实际退款。无分项 fallback 文案见模块 9。确认 toast：<code>已为 {名} 退卡「{卡名}」，退款 ¥X</code>。</p>
+<p>副标题含均值退卡/减值退卡。办卡实付、消耗价值、权益剩余明细、建议退款、实际退款。无分项 fallback 文案见模块 9。确认后关闭估值 Sheet（及选人 Sheet），进入 <strong>退卡成功页</strong>（见 6.14），不 toast 后重开选人。</p>
 <h2>6.12 下架 / 重新上架</h2>
 <p>居中 sheet；确认后 toast「已下架」/「已重新上架」。</p>
 <h2>6.13 办卡成功</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=issue-success">打开办卡成功</a></p>
 <p><img alt="办卡成功" src="assets/prd-shots/issue-success.png"></p>
-<p>返回列表或 <strong>返回开单</strong>（来自结账）| 继续办卡。</p>
+<p>返回列表或 <strong>返回开单</strong>（来自结账）| 继续办卡。收费延期支付成功亦走同款成功页（标题「延期成功」）。
+
+<h2>6.14 退卡成功</h2>
+<p>与办卡成功同屏结构（<code>screen-success</code>）：</p>
+<ul>
+<li>标题：<strong>退卡成功</strong></li>
+<li>金额区：实际退款</li>
+<li>明细行：办卡实付、消耗价值（负向）、各权益剩余、实际退款</li>
+<li>说明：<code>已为 {名} 退卡「{卡名}」</code></li>
+<li>底栏：<strong>返回列表</strong>（回会员卡列表；不「继续开单」）</li>
+</ul></p>
 <hr>
 <h1>模块 7　数据模型与接口约定</h1>
 <blockquote>
@@ -1297,7 +1313,7 @@ flowchart LR
 办卡：IssuePicker(单选) → 去结账 → PaySuccess → FinalizeIssue → IssueSuccess
 延期·免费/永久：IssuePicker → ConfirmExtend → 写有效期
 延期·收费：IssuePicker → PayMask → PaySuccess → FinalizeExtend
-退卡：Holders → RefundQuote → ConfirmRefund
+退卡：Holders → RefundQuote → ConfirmRefund → RefundSuccess → 返回列表
 </code></pre>
 <h2>7.6 联调待确认</h2>
 <ul>
@@ -1315,7 +1331,18 @@ flowchart LR
 </blockquote>
 <h2>8.1 赠送面值</h2>
 <p>开启面值：<code>赠送 = max(0, 面值金额 − 购买金额)</code>。面值金额可为 0。<br>
-面值 <strong>可用于支付办卡/购卡费用</strong>（含被购卡无面值权益）；<strong>不可</strong>用于购买价目「产品」（不以面值购价目产品）。</p>
+<strong>持卡面值支付（开单支付页「会员卡」渠道）</strong></p>
+<table>
+<thead><tr><th>场景</th><th>是否可用面值</th></tr></thead>
+<tbody>
+<tr><td>开单 · 服务项目消费</td><td>✓</td></tr>
+<tr><td>办卡 · 被办模板 <strong>未</strong> 开启面值</td><td>✓</td></tr>
+<tr><td>办卡 · 被办模板 <strong>已</strong> 开启面值</td><td>✗（支付页不展示会员卡渠道）</td></tr>
+<tr><td>收费延期</td><td>✓</td></tr>
+<tr><td>开单 · 价目「产品」</td><td>✗</td></tr>
+</tbody>
+</table>
+<p>多张有面值余额的持卡：须 <strong>单选一张</strong> 抵扣；金额 ≤ 该卡余额，不跨卡分摊。</p>
 <h2>8.2 项目计次</h2>
 <table>
 <thead>
@@ -1427,7 +1454,7 @@ flowchart LR
 </tr>
 <tr>
 <td>退卡成功</td>
-<td>已为 {名} 退卡「{卡名}」，退款 ¥X</td>
+<td>退卡成功；已为 {名} 退卡「{卡名}」；返回列表</td>
 </tr>
 <tr>
 <td>延期</td>
@@ -1543,10 +1570,17 @@ flowchart LR
 </tr>
 <tr>
 <td>4b</td>
-<td>面值可办卡</td>
-<td>会员有面值余额</td>
-<td>结账用会员卡支付办卡（含无面值卡）</td>
-<td>可用面值抵扣办卡款</td>
+<td>面值可办无面值卡</td>
+<td>会员有面值余额；目标卡无面值</td>
+<td>结账选会员卡支付</td>
+<td>可用面值抵扣；多卡时须单选一张</td>
+</tr>
+<tr>
+<td>4c</td>
+<td>面值不可办含面值卡</td>
+<td>会员有面值余额；目标卡含面值</td>
+<td>打开支付页</td>
+<td>无「会员卡」支付渠道</td>
 </tr>
 <tr>
 <td>5</td>
@@ -1637,7 +1671,7 @@ flowchart LR
 <td>退卡</td>
 <td>有持卡</td>
 <td>改实退确认</td>
-<td>退卡成功</td>
+<td>进入退卡成功页；展示实退与结算明细；返回列表</td>
 </tr>
 <tr>
 <td>17</td>
@@ -1756,7 +1790,7 @@ flowchart LR
 </table>
 <h2>附录 B · 依赖说明</h2>
 <ul>
-<li>价目：项目/产品勾选依赖价目数据；价目产品本身不在本文交付。面值可用于办卡/购卡，不可用于购买价目产品。  </li>
+<li>价目：项目/产品勾选依赖价目数据；价目产品本身不在本文交付。面值支付范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>
 <li>会员：办卡单选既存会员。  </li>
 <li>开单结账：办卡收款与支付成功回调。  </li>
 <li>支付/退款通道：<code>【待联调确认】</code>。</li>
