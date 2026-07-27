@@ -4,19 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>剑琅联盟·RTB重构</title>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 <style>
 @font-face {
   font-family: 'TCloudNumber';
-  src: url('assets/fonts/TCloudNumber/TCloudNumber-Regular.woff2') format('woff2'),
-       url('assets/fonts/TCloudNumber/TCloudNumber-Regular.woff') format('woff');
+  src: url('assets/fonts/TCloudNumber/TCloudNumber-Light.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'TCloudNumber';
-  src: url('assets/fonts/TCloudNumber/TCloudNumber-Bold.woff2') format('woff2'),
-       url('assets/fonts/TCloudNumber/TCloudNumber-Bold.woff') format('woff');
+  src: url('assets/fonts/TCloudNumber/TCloudNumberVF.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -61,8 +60,26 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   padding: 14px 16px; margin: 12px 0; font-size: 13px;
 }
 .flow-map-panel h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
-.flow-map-group { margin-bottom: 14px; }
-.flow-map-group:last-child { margin-bottom: 0; }
+.flow-map-seg {
+  display: grid; gap: 3px; margin-bottom: 12px; padding: 3px;
+  background: var(--bg-page); border-radius: 8px;
+}
+.flow-map-seg__btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1px; min-width: 0; padding: 6px 2px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-sec); cursor: pointer;
+  font-family: inherit; font-size: 11px; font-weight: 500; line-height: 1.2;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.flow-map-seg__btn:hover { color: var(--text); }
+.flow-map-seg__btn.is-on {
+  background: #fff; color: var(--text); font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.flow-map-seg__label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-map-seg__count { font-size: 10px; font-weight: 400; color: var(--text-sec); font-variant-numeric: tabular-nums; }
+.flow-map-seg__btn.is-on .flow-map-seg__count { color: var(--brand); }
+.flow-map-group { margin-bottom: 0; }
 .flow-map-group__title {
   font-size: 11px; font-weight: 600; color: var(--text-sec); margin-bottom: 8px;
 }
@@ -120,7 +137,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .phone-label { text-align: center; font-size: 12px; color: var(--text-sec); margin-bottom: 8px; }
 .phone { width: var(--phone-w); height: var(--phone-h); overflow: hidden; position: relative; background: var(--bg-page); border: 1px solid var(--border); }
 .phone-shell { display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; }
-.status-bar { height: 53px; background: var(--card); flex-shrink: 0; }
+.status-bar { height: 53px; background: var(--card); flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between; box-sizing: border-box; padding: 0 24px 10px; color: #000; }
+.status-bar__time { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; line-height: 1; min-width: 54px; }
+.status-bar__icons { display: flex; align-items: center; gap: 6px; height: 12px; }
+.status-bar__icons svg { display: block; flex-shrink: 0; }
 .screen { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; position: relative; }
 
 /* 输入框统一灰色方案：禁用系统黄框 / 品牌色聚焦描边 */
@@ -570,6 +590,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: var(--brand); border-radius: 2px;
   pointer-events: none; z-index: 2;
 }
+/* Figma capture：CSS mask 无法导入，capture 模式改用 DOM 半圆撕口 */
+.step2-benefit-card__notch {
+  display: none; position: absolute; left: var(--ticket-cut-x);
+  width: calc(var(--ticket-notch-r) * 2); height: calc(var(--ticket-notch-r) * 2);
+  margin-left: calc(var(--ticket-notch-r) * -1); border-radius: 50%;
+  background: var(--bg-page); pointer-events: none; z-index: 4;
+}
+.step2-benefit-card__notch--top { top: calc(var(--ticket-notch-r) * -1); }
+.step2-benefit-card__notch--bottom { bottom: calc(var(--ticket-notch-r) * -1); }
+html.prd-capture .step2-benefit-card {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+html.prd-capture .step2-benefit-card__notch { display: block; }
 .step2-benefit-card__body {
   position: relative; z-index: 1;
   flex: 1; min-width: 0; display: flex; align-items: stretch;
@@ -834,15 +868,6 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   box-sizing: border-box; border-radius: 12px;
 }
 .picker-foot--row .btn-main.secondary { margin-top: 0; }
-/* ModalPopup/centered · 下架 / 重新上架文案 Token */
-.shelf-dialog__body { padding: 8px 20px 0; text-align: center; }
-.shelf-dialog__title {
-  font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.35; margin: 0 0 8px;
-}
-.shelf-dialog__desc {
-  font-size: 16px; font-weight: 400; color: var(--text-sec); line-height: 24px; margin: 0;
-}
-.shelf-dialog__foot { padding: 8px 20px 20px; }
 .toast-msg {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   box-sizing: border-box; max-width: min(310px, calc(100% - 80px));
@@ -922,27 +947,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .usage-policy-help__list li + li { margin-top: 8px; }
 .stats-help-body {
-  flex: 1 1 auto; min-height: 0;
-  padding: 4px 16px 16px; overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  -webkit-overflow-scrolling: touch; text-align: left;
 }
 .stats-help-note {
-  font-size: 12px; color: var(--text-sec); line-height: 1.55; margin-bottom: 14px;
-  padding-bottom: 12px; border-bottom: 1px solid var(--bg-page);
+  font-size: 12px; color: var(--text-sec); line-height: 1.55; margin: 0 0 14px;
+  padding-bottom: 12px; position: relative;
+}
+.stats-help-note::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--disabled); transform: scaleY(0.5); transform-origin: center bottom;
 }
 .stats-help-item + .stats-help-item { margin-top: 14px; }
 .stats-help-item__term { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 4px; }
 .stats-help-item__def { font-size: 13px; color: var(--text-sec); line-height: 1.55; }
-.stats-help-sheet {
-  min-height: min(520px, 75vh);
-}
-.stats-help-sheet .picker-foot {
-  flex-shrink: 0; min-height: 72px; padding: 0 16px;
-  border-top: none;
-  display: flex; align-items: center; justify-content: center;
-  box-sizing: border-box;
-}
-.stats-help-sheet .picker-foot .btn-main { margin: 0; max-width: 100%; display: flex; align-items: center; justify-content: center; line-height: 1.2; }
 .hidden { display: none !important; }
 .picker-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 30; display: none; align-items: center; justify-content: center; padding: 0 32px; }
 .picker-mask.open { display: flex; }
@@ -1409,7 +1427,6 @@ input[type=number]::-webkit-inner-spin-button {
 .mp-validity-panel .validity-chips { margin-bottom: 8px; }
 .mp-validity-panel .validity-custom { margin-top: 0; padding-top: 0; border-top: none; }
 #memberPriceProjectList { padding: 0 16px 8px; background: var(--card); }
-#memberPriceConfigList { padding: 0 16px 8px; }
 .sub-seg { display: flex; margin: 0 16px 12px; background: var(--bg-page); border-radius: 8px; padding: 3px; }
 .sub-seg button { flex: 1; border: none; background: transparent; padding: 8px 6px; font-size: 13px; border-radius: 6px; cursor: pointer; font-family: inherit; color: var(--text-sec); }
 .sub-seg button.on { background: var(--card); color: var(--brand); font-weight: 600; }
@@ -2000,16 +2017,58 @@ html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
 html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
 html.figma-capture-step2 .bottom-bar { position: static; }
 
-/* PRD shot / deep-link capture: ?flow=<id>&capture=1 — phone frame only, fixed 390×844 */
+/* PRD shot / deep-link capture: ?flow=<id>&capture=1 — phone only；高度随内容向下延伸，避免列表被 844 裁切 */
 html.prd-capture { --phone-scale: 1; }
 html.prd-capture body { background: #fff; margin: 0; }
 html.prd-capture .shell { max-width: none; margin: 0; padding: 0; display: block; }
 html.prd-capture .toolbar,
 html.prd-capture .phone-label,
 html.prd-capture .doc-link-stack { display: none !important; }
-html.prd-capture .phone-scale-slot { width: var(--phone-w); height: var(--phone-h); overflow: hidden; }
+html.prd-capture .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
 html.prd-capture .phone-wrap { transform: none; }
-html.prd-capture .phone { border: none; }
+html.prd-capture .phone {
+  height: auto;
+  min-height: var(--phone-h);
+  overflow: visible;
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+/* 壳层至少铺满手机高度，短页也能把底栏顶到贴边 */
+html.prd-capture .phone-shell {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: var(--phone-h);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+html.prd-capture .status-bar {
+  flex-shrink: 0;
+  min-height: 53px;
+  height: 53px;
+}
+html.prd-capture .screen {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  min-height: 0;
+}
+html.prd-capture .page-body,
+html.prd-capture .list-page-body {
+  flex: 1 1 auto;
+  overflow: visible;
+  min-height: 0;
+}
+html.prd-capture .bottom-bar {
+  position: static;
+  flex-shrink: 0;
+  margin-top: auto; /* 内容不够高时贴屏幕底 */
+}
+html.prd-capture #screen-p-list .catalog-list-shell,
+html.prd-capture #projProjectTable { overflow: visible; }
 
 /* Price catalog screens */
 .table-card.hidden { display: none; }
@@ -2618,6 +2677,12 @@ html.prd-capture .phone { border: none; }
 }
 .picker-sheet--menu .picker-sheet__grabber { display: none; }
 .picker-sheet--menu .picker-head--stack {
+  /* 覆盖全局 .picker-head 的横向 flex，保证标题/副标题纵向居中堆叠 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
   padding: 18px 20px 12px;
   text-align: center;
   border-bottom: none;
@@ -2790,6 +2855,12 @@ html.prd-capture .phone { border: none; }
   display: flex; align-items: center; justify-content: center;
 }
 .dialog__actions .btn-main.secondary { margin-top: 0; }
+.dialog--stats-help {
+  max-height: min(520px, 75vh); display: flex; flex-direction: column;
+}
+.dialog--stats-help .dialog__scroll { flex: 1 1 auto; min-height: 0; margin-bottom: 8px; }
+.dialog__actions--single { margin-top: 0; }
+.dialog__actions--single .btn-main { flex: none; width: 100%; max-width: none; }
 /* 右侧文案底对齐标题字底：只调右侧，不改 .title */
 .page-title-bar .title-link {
   grid-column: 3; justify-self: end; align-self: end;
@@ -3008,8 +3079,26 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .demo-tool-hint { font-size: 11px; color: var(--text-sec); line-height: 1.5; margin-top: 10px; }
 .flow-map-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 13px; }
 .flow-map-panel h3 { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
-.flow-map-group { margin-bottom: 14px; }
-.flow-map-group:last-child { margin-bottom: 0; }
+.flow-map-seg {
+  display: grid; gap: 3px; margin-bottom: 12px; padding: 3px;
+  background: var(--bg-page); border-radius: 8px;
+}
+.flow-map-seg__btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1px; min-width: 0; padding: 6px 2px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-sec); cursor: pointer;
+  font-family: inherit; font-size: 11px; font-weight: 500; line-height: 1.2;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.flow-map-seg__btn:hover { color: var(--text); }
+.flow-map-seg__btn.is-on {
+  background: #fff; color: var(--text); font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.flow-map-seg__label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-map-seg__count { font-size: 10px; font-weight: 400; color: var(--text-sec); font-variant-numeric: tabular-nums; }
+.flow-map-seg__btn.is-on .flow-map-seg__count { color: var(--brand); }
+.flow-map-group { margin-bottom: 0; }
 .flow-map-group__title { font-size: 11px; font-weight: 600; color: var(--text-sec); margin-bottom: 8px; }
 .flow-map-group__nodes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .flow-map-node { display: block; width: 100%; text-align: left; font-size: 12px; line-height: 1.35; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-page); color: var(--text); cursor: pointer; font-family: inherit; transition: .15s; }
@@ -3025,7 +3114,18 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .status-bar {
   width: 100%; height: 53px; flex-shrink: 0;
   background: #FFFFFF; border: none; box-shadow: none;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  box-sizing: border-box; padding: 0 24px 10px;
+  color: #000; font-family: "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
 }
+.status-bar__time {
+  font-size: 16px; font-weight: 600; letter-spacing: -0.3px; line-height: 1;
+  min-width: 54px;
+}
+.status-bar__icons {
+  display: flex; align-items: center; gap: 6px; height: 12px;
+}
+.status-bar__icons svg { display: block; flex-shrink: 0; }
 .screen { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; position: relative; }
 .screen.hidden { display: none !important; }
 
@@ -3713,6 +3813,703 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-size: 13px; color: #6C7279; cursor: pointer; font-family: inherit;
   box-sizing: border-box;
 }
+/* ==== 订单流水 · 产品级精修 · 对齐剑琅设计规范 v1.6 ==== */
+#screen-flow-hub,
+#screen-flow-list,
+#screen-flow-detail,
+#screen-flow-self { background: var(--bg-page); }
+.flow-hub-body { padding: 16px 16px 24px; background: var(--bg-page); box-sizing: border-box; }
+.flow-hub-overview {
+  background: transparent; border-radius: 0; padding: 0; margin-bottom: 0;
+  overflow: visible; box-sizing: border-box;
+}
+.flow-hub-overview__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 12px; padding: 0 2px;
+}
+.flow-hub-overview__title { font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px; }
+.flow-hub-overview__sub { font-size: 12px; color: var(--text-sec); line-height: 18px; flex-shrink: 0; }
+.flow-hub-entries {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.flow-hub-card {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%;
+  min-height: 112px; padding: 16px; box-sizing: border-box;
+  background: #fff; border: none; border-radius: 12px;
+  cursor: pointer; font-family: inherit; text-align: left;
+  overflow: hidden;
+  transition: background-color .2s ease, box-shadow .2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.flow-hub-card:active {
+  background: #FAFAFA;
+  box-shadow: none;
+}
+.flow-hub-card__icon {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #FF8A94 0%, #FFB088 100%);
+  color: #fff;
+}
+.flow-hub-card__icon svg {
+  width: 22px; height: 22px; display: block; stroke: currentColor; fill: none;
+  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+}
+.flow-hub-card__icon--soft {
+  background: linear-gradient(145deg, #FFB088 0%, #FFC49A 100%);
+  color: #fff;
+}
+.flow-hub-card__body {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;
+}
+.flow-hub-card__title-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.flow-hub-card__title {
+  font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px;
+}
+.flow-hub-card__chev {
+  flex-shrink: 0; width: 16px; height: 16px; color: var(--text-sec);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-hub-card__chev svg { width: 16px; height: 16px; display: block; }
+.flow-hub-card__hint {
+  font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.flow-hub-card__metric {
+  display: flex; align-items: baseline; gap: 4px; margin-top: 6px;
+}
+.flow-hub-card__val {
+  font-size: 28px; font-weight: 700; font-family: var(--font-data); color: var(--text); line-height: 1.15;
+}
+.flow-hub-card__unit {
+  font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.flow-list-tabs {
+  display: flex; align-items: stretch; height: 48px; width: 100%; max-width: 390px; margin: 0 auto;
+  background: #fff; border-bottom: 1px solid var(--bg-page);
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-shrink: 0;
+}
+.flow-list-tabs::-webkit-scrollbar { display: none; }
+.flow-list-tab {
+  position: relative; flex: 1 1 0; min-width: 64px; height: 48px; border: none; background: none;
+  cursor: pointer; font-family: inherit; padding: 0 4px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+  font-size: 14px; line-height: 20px; color: var(--text-sec); text-align: center;
+}
+.flow-list-tab.is-active { color: var(--text); font-weight: 500; }
+.flow-list-tab.is-active::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 32px; height: 3px; background: var(--brand); border-radius: 2px;
+}
+.flow-list-tab__badge {
+  display: inline-block; margin-left: 2px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 4px; background: var(--brand); color: #fff; font-size: 10px; line-height: 16px;
+  text-align: center; font-family: var(--font-data); vertical-align: 1px; font-weight: 400;
+}
+.flow-list-body,
+#flowListBody,
+#flowSelfBody {
+  padding: 0 0 24px; background: var(--bg-page); box-sizing: border-box;
+}
+.flow-order-card {
+  margin: 12px 16px 0; padding: 16px; background: #fff; border-radius: 12px;
+  border: none; width: calc(100% - 32px); max-width: 358px; box-sizing: border-box; text-align: left;
+  cursor: pointer; font-family: inherit; display: block; overflow: hidden;
+}
+.flow-order-card:active { opacity: .96; }
+.flow-order-card__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;
+}
+.flow-order-card__user { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.flow-order-card__avatar {
+  width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  background: var(--disabled); display: block;
+}
+.flow-order-card__name {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.flow-order-card__status {
+  flex-shrink: 0; font-size: 12px; font-weight: 500; line-height: 16px;
+  color: var(--brand); background: var(--brand-soft); border-radius: 4px;
+  padding: 4px 8px;
+}
+.flow-order-card__status.is-void,
+.flow-order-card__status.is-pending {
+  color: var(--text-sec); background: var(--disabled);
+}
+.flow-order-card__item {
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.flow-type-tag {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; border-radius: 4px;
+  background: var(--brand); color: #fff;
+  font-size: 11px; line-height: 18px; text-align: center; font-weight: 600;
+}
+.flow-type-tag--product { background: var(--warn-text); }
+.flow-type-tag--card { background: var(--text-sec); }
+.flow-order-card__item-main { flex: 1; min-width: 0; }
+.flow-order-card__item-name {
+  font-size: 14px; font-weight: 400; color: var(--text); line-height: 20px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.flow-order-card__staff {
+  display: inline-block; margin-top: 6px; padding: 4px 8px; border-radius: 4px;
+  background: var(--brand-soft); color: var(--brand); font-size: 11px; line-height: 16px;
+}
+.flow-order-card__price {
+  font-family: var(--font-data); font-size: 14px; font-weight: 400; color: var(--text);
+  flex-shrink: 0; line-height: 20px; padding-top: 0;
+}
+.flow-order-card__price .yen,
+.flow-detail-item-price .yen,
+.flow-detail-due .yen,
+.flow-detail-foot__amt .yen,
+.flow-order-card__total .yen { margin-right: 2px; font-weight: 400; }
+.flow-order-card__pay {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  font-size: 13px; color: var(--text-sec); margin-top: 14px; line-height: 20px;
+}
+.flow-order-card__pay-amt {
+  color: var(--text); font-family: var(--font-data); font-weight: 400; flex-shrink: 0;
+}
+.flow-order-card__total {
+  display: flex; justify-content: flex-end; align-items: baseline; gap: 6px;
+  margin-top: 10px; padding-top: 10px; border-top: 0.5px solid #EDEDED;
+  font-size: 13px; font-weight: 500; color: var(--text); line-height: 20px;
+}
+.flow-order-card__total .num {
+  font-family: var(--font-data); font-weight: 700; margin-left: 0; font-size: 16px; line-height: 22px;
+  color: var(--text);
+}
+.flow-order-card__foot {
+  margin-top: 12px; padding-top: 12px; margin-left: 0; margin-right: 0;
+  border-top: 0.5px solid #EDEDED;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.flow-empty {
+  min-height: 360px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 24px 48px; text-align: center; box-sizing: border-box;
+}
+.flow-empty__illus {
+  width: 96px; height: 96px; margin-bottom: 16px; border-radius: 16px;
+  background: var(--disabled); display: flex; align-items: center; justify-content: center;
+  color: #fff;
+}
+.flow-empty__illus svg { width: 40px; height: 40px; display: block; opacity: .85; }
+.flow-empty__title { font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px; margin-bottom: 8px; }
+.flow-empty__desc { font-size: 13px; color: var(--text-sec); line-height: 20px; max-width: 240px; }
+.flow-detail-body { padding: 16px 16px 160px; background: var(--bg-page); box-sizing: border-box; }
+.flow-detail-card {
+  background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; overflow: hidden;
+  box-sizing: border-box;
+}
+.flow-detail-card__title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--text); line-height: 21px;
+  margin-bottom: 14px;
+}
+.flow-detail-card__title::before {
+  content: ''; width: 3px; height: 14px; border-radius: 2px; background: var(--brand); flex-shrink: 0;
+}
+.flow-detail-user {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.flow-detail-user__left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.flow-detail-user__left strong {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.flow-detail-meta {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 0.5px solid #EDEDED;
+}
+.flow-detail-meta__row {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  padding: 8px 0; font-size: 13px; color: var(--text-sec); line-height: 20px;
+}
+.flow-detail-meta__row:first-child { padding-top: 0; }
+.flow-detail-meta__row:last-child { padding-bottom: 0; }
+.flow-detail-meta__val {
+  color: var(--text); text-align: right; word-break: break-all;
+  font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-weight: 400;
+}
+.flow-detail-meta__val--num {
+  font-family: var(--font-data);
+}
+.flow-detail-item-row { display: flex; gap: 8px; align-items: flex-start; }
+.flow-detail-item-name { font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px; }
+.flow-detail-item-price {
+  margin-top: 6px; font-family: var(--font-data); font-size: 14px; color: var(--text); line-height: 20px;
+}
+.flow-detail-benefit {
+  margin-top: 14px; padding-top: 12px; border-top: 0.5px solid #EDEDED;
+  font-size: 13px; color: var(--text-sec); line-height: 20px;
+}
+.flow-detail-benefit__label {
+  font-size: 12px; color: var(--text-sec); line-height: 18px; margin-bottom: 6px;
+}
+.flow-detail-benefit__row {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 6px 0; color: var(--text-sec); font-size: 13px; line-height: 20px;
+}
+.flow-detail-benefit__row span:last-child { color: var(--text); font-family: var(--font-data); font-weight: 500; }
+.flow-detail-due {
+  display: flex; justify-content: flex-end; align-items: baseline; gap: 8px;
+  margin-top: 10px; padding-top: 10px; border-top: 0.5px solid #EDEDED;
+  font-size: 13px; color: var(--text); line-height: 20px;
+}
+.flow-detail-due .amt {
+  font-family: var(--font-data); font-size: 18px; font-weight: 700; color: var(--brand); line-height: 24px;
+}
+.flow-detail-staff {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  margin-top: 14px; padding-top: 12px; border-top: 0.5px solid #EDEDED;
+  font-size: 13px; color: var(--text); line-height: 20px;
+}
+.flow-detail-staff__tag {
+  font-size: 12px; color: var(--text-sec); background: var(--disabled);
+  border-radius: 4px; padding: 2px 8px; line-height: 16px;
+}
+.flow-detail-metric {
+  display: flex; gap: 12px;
+}
+.flow-detail-metric__item {
+  flex: 1; min-width: 0; background: var(--bg-page); border-radius: 8px; padding: 12px;
+  box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; cursor: pointer;
+}
+.flow-detail-metric__label {
+  font-size: 12px; color: var(--text-sec); line-height: 18px;
+  font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.flow-detail-metric__val-row {
+  display: flex; align-items: center; gap: 6px; min-width: 0;
+}
+.flow-detail-metric__input {
+  flex: 1; min-width: 0; border: none; background: transparent; padding: 0;
+  font-family: var(--font-data); font-size: 18px; font-weight: 700; color: var(--brand);
+  line-height: 24px; text-align: left; outline: none; cursor: pointer;
+  box-sizing: border-box; caret-color: transparent;
+}
+.flow-detail-metric__edit-icon {
+  flex-shrink: 0; width: 16px; height: 16px; color: var(--text-sec);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-detail-metric__edit-icon svg { width: 16px; height: 16px; display: block; }
+.flow-detail-metric__input:active { opacity: .88; }
+.flow-detail-edit {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.flow-detail-edit__main { flex: 1; min-width: 0; }
+.flow-detail-edit__title {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
+  font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.flow-detail-edit__hint {
+  margin-top: 4px; font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.flow-detail-edit__btn {
+  flex-shrink: 0; height: 32px; padding: 0 14px; border: none; border-radius: 999px;
+  background: var(--brand-soft); color: var(--brand); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-detail-edit__btn:active { opacity: .88; }
+.flow-detail-expand {
+  border: none; background: var(--brand-soft); color: var(--brand); border-radius: 4px;
+  padding: 4px 10px; font-size: 12px; line-height: 16px; font-weight: 500;
+  cursor: pointer; font-family: inherit; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.flow-detail-expand svg { width: 14px; height: 14px; display: block; flex-shrink: 0; }
+.flow-detail-expand:active { opacity: .88; }
+.flow-detail-pay-row {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 8px 0; font-size: 14px; color: var(--text-sec); line-height: 20px;
+}
+.flow-detail-pay-row:first-of-type { padding-top: 0; }
+.flow-detail-pay-row span:last-child {
+  color: var(--text);
+  font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.flow-detail-pay-row .flow-detail-pay-amt {
+  font-family: var(--font-data); font-weight: 400; color: var(--text);
+}
+.flow-detail-pay-row--strong {
+  margin-top: 4px; padding-top: 12px; border-top: 0.5px solid #EDEDED;
+  font-weight: 500; color: var(--text); line-height: 20px;
+}
+.flow-detail-pay-row--strong span:last-child,
+.flow-detail-pay-row--strong .flow-detail-pay-amt {
+  font-family: var(--font-data); font-size: 16px; font-weight: 700; color: var(--brand);
+}
+.flow-detail-all {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  width: 100%; margin: 0 0 12px; padding: 10px 12px; border: none; border-radius: 8px;
+  background: #fff; color: var(--brand); font-size: 13px; font-weight: 500; line-height: 18px;
+  cursor: pointer; font-family: inherit; box-sizing: border-box;
+}
+.flow-detail-all:active { opacity: .88; }
+.flow-detail-foot {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: flex; flex-direction: column; background: #fff;
+  box-sizing: border-box;
+}
+.flow-detail-foot__tip {
+  margin: 0; padding: 10px 16px; border-top: none; border-bottom: 0.5px solid #EDEDED;
+  background: var(--warn-bg); color: var(--warn-text);
+  font-size: 12px; line-height: 18px;
+  box-sizing: border-box;
+  display: flex; align-items: flex-start; gap: 6px;
+  box-shadow: none;
+}
+.flow-detail-foot__tip-icon {
+  flex-shrink: 0; width: 14px; height: 14px; margin-top: 2px;
+  display: block; object-fit: contain;
+}
+.flow-detail-foot__tip-text { flex: 1; min-width: 0; }
+.flow-detail-foot__main {
+  display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 16px;
+  box-sizing: border-box;
+  box-shadow: none;
+}
+.flow-detail-foot__safe { height: 34px; background: #fff; flex-shrink: 0; }
+.flow-detail-foot__total { flex: 1; min-width: 0; }
+.flow-detail-foot__label { font-size: 12px; color: var(--text-sec); line-height: 18px; }
+.flow-detail-foot__amt {
+  font-family: var(--font-data); font-size: 20px; font-weight: 700; color: var(--text); line-height: 26px;
+  margin-top: 2px;
+}
+.flow-detail-foot .btn-soft {
+  flex: 0 0 auto; height: 48px; min-height: 48px; min-width: 72px; padding: 0 16px;
+  border: none; border-radius: 12px;
+  background: var(--brand-soft); color: var(--brand); font-size: 16px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-detail-foot .btn-soft:active,
+.flow-detail-foot .btn-void:active { opacity: .88; }
+.flow-detail-foot .btn-void {
+  flex: 0 0 auto; height: 48px; min-height: 48px; padding: 0 16px;
+  border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; color: var(--text); font-size: 16px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+#screen-flow-detail { position: relative; display: flex; flex-direction: column; }
+#screen-flow-detail.hidden { display: none; }
+#screen-flow-detail:not(.hidden) { display: flex; }
+#screen-flow-list .page-body,
+#screen-flow-self .page-body { background: var(--bg-page); }
+.flow-self-filters {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; background: #fff; border-bottom: 1px solid var(--bg-page);
+  box-sizing: border-box; flex-shrink: 0;
+}
+.flow-self-filter {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: none; background: var(--bg-page); border-radius: 8px;
+  padding: 6px 10px; cursor: pointer; font-family: inherit;
+  font-size: 13px; line-height: 18px; color: var(--text); font-weight: 500;
+}
+.flow-self-filter:active { opacity: .88; }
+.flow-self-filter svg {
+  width: 14px; height: 14px; color: var(--text-sec); flex-shrink: 0;
+}
+
+/* ==== 订单流水 · P1/P2 筛选/退款/改单/尾款/自助详情 ==== */
+#screen-flow-refund,
+#screen-flow-edit,
+#screen-flow-edit-add,
+#screen-flow-edit-item,
+#screen-flow-weikuan,
+#screen-flow-self-detail { background: var(--bg-page); }
+.flow-list-actions {
+  grid-column: 3; justify-self: end; align-self: end;
+  margin-right: 8px; padding: 0 0 9px;
+  display: inline-flex; align-items: flex-end; gap: 10px;
+}
+.flow-list-actions .action {
+  grid-column: auto; margin-right: 0; padding: 0;
+  font-size: 12px; line-height: 16px; color: #333;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.flow-list-actions .action svg {
+  flex: 0 0 16px; width: 16px; height: 16px; color: #333;
+}
+.flow-chip-row {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
+}
+.flow-chip {
+  border: 1px solid var(--border); background: #fff; border-radius: 8px;
+  padding: 6px 12px; font-size: 13px; line-height: 18px; color: var(--text);
+  cursor: pointer; font-family: inherit;
+}
+.flow-chip.is-on {
+  border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 500;
+}
+.flow-filter-sheet .picker-body { padding: 8px 16px 16px; }
+.flow-filter-section { margin-bottom: 16px; }
+.flow-filter-section__title {
+  font-size: 13px; color: var(--text-sec); line-height: 18px; margin-bottom: 8px;
+}
+.flow-filter-foot {
+  display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--bg-page);
+  background: #fff;
+}
+.flow-filter-foot .btn-main { flex: 1; min-height: 48px; }
+.flow-filter-foot .btn-main.secondary {
+  background: #fff; color: var(--text); border: 1px solid var(--border);
+}
+.flow-tip {
+  margin: 0 0 12px; padding: 10px 12px; border-radius: 8px;
+  background: var(--warn-bg); color: var(--warn-text);
+  font-size: 12px; line-height: 18px;
+}
+.flow-refund-body, .flow-edit-body, .flow-weikuan-body, .flow-self-detail-body {
+  padding: 16px 16px 120px; background: var(--bg-page); box-sizing: border-box;
+}
+.flow-edit-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 16px; background: #fff; border-radius: 12px; margin-bottom: 12px;
+  border: none; box-sizing: border-box; text-align: left; font-family: inherit;
+  cursor: pointer;
+}
+.flow-edit-item:active { opacity: .96; }
+.flow-edit-item__chev {
+  flex-shrink: 0; width: 16px; height: 16px; color: var(--text-sec);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-edit-item__chev svg { width: 16px; height: 16px; display: block; }
+.flow-edit-item__meta-line {
+  margin-top: 4px; font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.flow-edit-staff-row {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 0; border-bottom: 0.5px solid #EDEDED;
+}
+.flow-edit-staff-row:last-child { border-bottom: none; padding-bottom: 0; }
+.flow-edit-staff-row:first-child { padding-top: 0; }
+.flow-edit-staff-row__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.flow-edit-staff-row__name {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
+}
+.flow-edit-staff-row__tag {
+  font-size: 12px; color: var(--text-sec); background: var(--disabled);
+  border-radius: 4px; padding: 2px 8px; line-height: 16px;
+}
+.flow-edit-staff-row__tag.is-on {
+  color: var(--brand); background: var(--brand-soft);
+}
+.flow-edit-specify-seg {
+  display: inline-flex; flex-shrink: 0; padding: 2px; gap: 2px;
+  background: var(--bg-page); border-radius: 8px;
+}
+.flow-edit-specify-seg__btn {
+  border: none; background: transparent; border-radius: 6px;
+  padding: 4px 10px; font-size: 12px; line-height: 16px; font-weight: 500;
+  color: var(--text-sec); cursor: pointer; font-family: inherit;
+  min-height: 28px;
+}
+.flow-edit-specify-seg__btn.is-on {
+  background: #fff; color: var(--brand);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.flow-edit-item__edit {
+  flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px;
+  font-size: 12px; line-height: 16px; color: var(--text-sec); font-weight: 500;
+}
+.flow-edit-item__edit svg {
+  width: 14px; height: 14px; display: block; color: var(--text-sec);
+}
+.flow-edit-staff-row__metrics {
+  display: flex; gap: 12px;
+}
+.flow-edit-sum {
+  margin-top: 12px; padding-top: 12px; border-top: 0.5px solid #EDEDED;
+  display: flex; justify-content: space-between; gap: 12px;
+  font-size: 13px; color: var(--text-sec); line-height: 20px;
+}
+.flow-edit-sum strong {
+  font-weight: 600; color: var(--text); font-family: var(--font-data);
+}
+.flow-edit-form-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; border-bottom: 0.5px solid #EDEDED;
+}
+.flow-edit-form-row:last-child { border-bottom: none; }
+.flow-edit-form-row__label {
+  font-size: 14px; color: var(--text-sec); line-height: 20px; flex-shrink: 0;
+}
+.flow-edit-form-row__val {
+  font-size: 15px; color: var(--text); line-height: 21px; text-align: right;
+  font-weight: 500;
+}
+.flow-edit-form-row__val--muted { font-weight: 400; color: var(--text-sec); }
+.flow-edit-price-input {
+  width: 120px; border: none; background: transparent; padding: 0;
+  font-family: var(--font-data); font-size: 18px; font-weight: 700; color: var(--brand);
+  text-align: right; outline: none; cursor: pointer;
+}
+.flow-edit-qty {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  background: #fff;
+}
+.flow-edit-qty__btn {
+  width: 36px; height: 36px; border: none; background: var(--bg-page);
+  font-size: 18px; line-height: 1; color: var(--text); cursor: pointer; font-family: inherit;
+}
+.flow-edit-qty__btn:active { opacity: .85; }
+.flow-edit-qty__val {
+  min-width: 40px; text-align: center; font-family: var(--font-data);
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.flow-edit-staff-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
+}
+.flow-edit-staff-chip {
+  border: 1px solid var(--border); background: #fff; border-radius: 8px;
+  padding: 8px 12px; font-size: 13px; line-height: 18px; color: var(--text);
+  cursor: pointer; font-family: inherit;
+}
+.flow-edit-staff-chip.is-on {
+  border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 500;
+}
+.flow-edit-add-tabs {
+  display: flex; height: 48px; background: #fff; border-bottom: 1px solid var(--bg-page); flex-shrink: 0;
+}
+.flow-edit-add-tab {
+  flex: 1; border: none; background: none; font-family: inherit; cursor: pointer;
+  font-size: 14px; color: var(--text-sec); position: relative;
+}
+.flow-edit-add-tab.is-on { color: var(--text); font-weight: 500; }
+.flow-edit-add-tab.is-on::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 32px; height: 3px; background: var(--brand); border-radius: 2px;
+}
+.flow-edit-pick-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 16px; background: #fff; border-radius: 12px; margin-bottom: 12px;
+  border: none; box-sizing: border-box; text-align: left; font-family: inherit; cursor: pointer;
+}
+.flow-edit-pick-item.is-on { box-shadow: inset 0 0 0 1.5px var(--brand); }
+.flow-edit-pick-item__check {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  color: #fff; background: #fff; box-sizing: border-box;
+}
+.flow-edit-pick-item.is-on .flow-edit-pick-item__check {
+  border-color: var(--brand); background: var(--brand);
+}
+.flow-staff-pick-row {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 4px; border-bottom: 0.5px solid #EDEDED;
+  border-left: none; border-right: none; border-top: none; background: transparent;
+  font-family: inherit; cursor: pointer; text-align: left;
+}
+.flow-staff-pick-row:last-child { border-bottom: none; }
+.flow-staff-pick-row.is-on .flow-edit-pick-item__check {
+  border-color: var(--brand); background: var(--brand);
+}
+.flow-refund-rule {
+  margin-bottom: 12px; padding: 12px; border-radius: 8px; background: var(--info-bg);
+  color: var(--info-text); font-size: 12px; line-height: 18px;
+}
+.flow-refund-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 16px; background: #fff; border-radius: 12px; margin-bottom: 12px;
+  border: none; box-sizing: border-box; text-align: left; font-family: inherit;
+  cursor: pointer;
+}
+.flow-refund-item__check {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  color: #fff; background: #fff; box-sizing: border-box;
+}
+.flow-refund-item.is-on .flow-refund-item__check {
+  border-color: var(--brand); background: var(--brand);
+}
+.flow-refund-item__main { flex: 1; min-width: 0; }
+.flow-refund-item__name { font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px; }
+.flow-refund-item__meta { margin-top: 4px; font-size: 12px; color: var(--text-sec); }
+.flow-refund-item__price { font-family: var(--font-data); font-size: 14px; color: var(--text); }
+.flow-refund-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; font-size: 13px; color: var(--text-sec);
+}
+.flow-refund-toolbar button {
+  border: none; background: none; color: var(--brand); font-size: 13px;
+  font-weight: 500; cursor: pointer; font-family: inherit; padding: 0;
+}
+.flow-screen-foot {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: flex; flex-direction: column; background: #fff;
+  box-shadow: var(--bottom-surface-shadow, var(--bottom-shadow));
+}
+.flow-screen-foot__main {
+  display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 16px;
+  box-sizing: border-box;
+}
+.flow-screen-foot__safe { height: 34px; background: #fff; flex-shrink: 0; }
+.flow-screen-foot .btn-main { flex: 1; min-height: 48px; border-radius: 12px; }
+.flow-screen-foot .btn-soft {
+  flex: 0 0 auto; min-width: 88px; height: 48px; border: none; border-radius: 12px;
+  background: var(--brand-soft); color: var(--brand); font-size: 16px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+}
+#screen-flow-refund, #screen-flow-edit, #screen-flow-edit-add, #screen-flow-edit-item, #screen-flow-self-detail {
+  position: relative; display: flex; flex-direction: column;
+}
+#screen-flow-refund.hidden, #screen-flow-edit.hidden, #screen-flow-edit-add.hidden, #screen-flow-edit-item.hidden,
+#screen-flow-weikuan.hidden, #screen-flow-self-detail.hidden { display: none; }
+#screen-flow-refund:not(.hidden), #screen-flow-edit:not(.hidden),
+#screen-flow-edit-add:not(.hidden), #screen-flow-edit-item:not(.hidden),
+#screen-flow-self-detail:not(.hidden) { display: flex; }
+.flow-weikuan-card {
+  margin: 0 16px 12px; padding: 16px; background: #fff; border-radius: 12px;
+  border: none; width: calc(100% - 32px); max-width: 358px; box-sizing: border-box;
+  text-align: left; cursor: pointer; font-family: inherit; display: block;
+}
+.flow-weikuan-card__head {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.flow-weikuan-card__name { font-size: 15px; font-weight: 600; color: var(--text); }
+.flow-weikuan-card__status { font-size: 12px; color: var(--warn-text); background: var(--warn-bg); padding: 4px 8px; border-radius: 4px; }
+.flow-weikuan-card__status.is-done { color: var(--text-sec); background: var(--disabled); }
+.flow-weikuan-card__amt {
+  margin-top: 12px; font-family: var(--font-data); font-size: 20px; font-weight: 700; color: var(--brand);
+}
+.flow-weikuan-card__meta { margin-top: 8px; font-size: 12px; color: var(--text-sec); }
+.flow-weikuan-toolbar {
+  display: flex; flex-direction: column; gap: 0; background: #fff; flex-shrink: 0;
+  border-bottom: 1px solid var(--bg-page);
+}
+.flow-weikuan-toolbar .search-bar {
+  margin: 12px 16px; height: 40px; border-radius: 8px;
+}
+.flow-weikuan-list { padding: 12px 0 24px; box-sizing: border-box; }
+#screen-flow-weikuan-repay { background: var(--bg-page); }
+#screen-flow-weikuan-repay.hidden { display: none; }
+.flow-repay-card {
+  margin: 0 16px 12px; padding: 16px; background: #fff; border-radius: 12px;
+  box-sizing: border-box; width: calc(100% - 32px); max-width: 358px;
+}
+.flow-repay-card__head {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.flow-repay-card__name { font-size: 15px; font-weight: 500; color: var(--text); }
+.flow-repay-card__amt {
+  font-family: var(--font-data); font-size: 16px; font-weight: 700; color: var(--brand);
+}
+.flow-repay-card__meta { margin-top: 8px; font-size: 12px; color: var(--text-sec); line-height: 18px; }
+.flow-order-card__status.is-refund { color: var(--info-text); background: var(--info-bg); }
+
 .success-card {
   position: relative; z-index: 1;
   margin: 20px 16px 16px; padding: 36px 16px 20px; border-radius: 16px;
@@ -4387,12 +5184,37 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .detail-item__chips-row { padding: 0 0 10px; }
 .detail-item__chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .detail-item__chip {
-  width: 20px; height: 20px; border-radius: 50%; background: #fff; border: none;
-  font-size: 14px; line-height: 20px; display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; font-family: inherit; color: #1a1a1a; padding: 0; flex-shrink: 0;
+  min-height: 32px; min-width: 52px; padding: 6px 12px; border-radius: 16px;
+  background: #fff; border: 1px solid #E8E8E8;
+  font-size: 13px; line-height: 1.2; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: inherit; color: #1a1a1a; flex-shrink: 0;
 }
-.detail-item__chip.is-on { background: #DCE2F9; color: #1a1a1a; }
+.detail-item__chip.is-on {
+  background: #DCE2F9; border-color: #C5CEF0; color: #1a1a1a;
+}
+.detail-item__role-list { display: flex; flex-direction: column; gap: 8px; padding: 0 0 10px; }
+.detail-item__role-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.detail-item__role-row__name {
+  flex: 0 1 auto; min-width: 0; font-size: 13px; color: #666; font-weight: 500;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.detail-item__role-row--list {
+  padding: 0 0 6px 14px;
+}
+.detail-item__role-radios {
+  display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+}
+.detail-item__role-radios .radio-opt {
+  gap: 6px; font-size: 13px; color: #1a1a1a; user-select: none;
+}
+.detail-item__role-radios .radio-opt input {
+  width: 16px; height: 16px; margin: 0; accent-color: var(--brand); cursor: pointer;
+}
 .detail-item__staff-list { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px; }
+.detail-item__staff-row-wrap { display: flex; flex-direction: column; }
 .detail-item__staff-row {
   display: flex; align-items: center; width: 100%; border: none; background: transparent;
   cursor: pointer; padding: 7px 0; font-family: inherit; text-align: left;
@@ -4779,7 +5601,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="flow-map-panel" id="flowMapPanel">
       <h3>功能链路</h3>
       <div id="flowMapBody"></div>
-      <p class="flow-map-hint">点击节点跳转对应页面；自动切换「有数据」并注入演示卡 + 价目表项目。Sheet/弹窗（选会员、退卡估值、价格键盘、时长滚轮等）请从列表或详情进入。</p>
+      <p class="flow-map-hint">上方分组切换查看全部节点（不删减）；点击节点跳转对应页面，并自动切到所在分组。自动切换「有数据」并注入演示卡 + 价目表项目。Sheet/弹窗请从列表或详情进入。</p>
     </div>
   </aside>
 
@@ -4789,7 +5611,14 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="phone">
       <div class="phone-shell">
         <div class="toast-msg hidden" id="toastMsg" role="status"></div>
-        <div class="status-bar"></div>
+        <div class="status-bar" aria-hidden="true">
+          <span class="status-bar__time">9:41</span>
+          <span class="status-bar__icons">
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true"><rect x="0.5" y="2.5" width="3" height="9" rx="0.6" fill="currentColor"/><rect x="5" y="1.5" width="3" height="10" rx="0.6" fill="currentColor"/><rect x="9.5" y="0.5" width="3" height="11" rx="0.6" fill="currentColor"/><rect x="14" y="0" width="3.5" height="12" rx="0.6" fill="currentColor"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M8.2 3.2c1.5 0 2.9.6 3.9 1.6l1.1-1.2A7.1 7.1 0 0 0 8.2 1.4 7.1 7.1 0 0 0 3.1 3.6l1.1 1.2a5.5 5.5 0 0 1 4-1.6Z" fill="currentColor"/><path d="M8.2 6.2c.9 0 1.7.3 2.3.9l1.2-1.2a4.7 4.7 0 0 0-7 0L5.9 7a3.3 3.3 0 0 1 2.3-.8Z" fill="currentColor"/><circle cx="8.2" cy="10.2" r="1.3" fill="currentColor"/></svg>
+            <svg width="27" height="13" viewBox="0 0 27 13" fill="none" aria-hidden="true"><rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="currentColor" stroke-opacity="0.4"/><rect x="2" y="2" width="17" height="9" rx="1.5" fill="currentColor"/><path d="M24 4.5v4c1.2-.4 1.2-3.6 0-4Z" fill="currentColor" fill-opacity="0.4"/></svg>
+          </span>
+        </div>
 
         <div class="screen" id="screen0">
           <div class="page-title-bar"><span class="title">会员卡管理</span></div>
@@ -5078,8 +5907,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
 
-        <div class="screen hidden" id="screen2setup" aria-hidden="true"></div>
-
         <div class="screen hidden" id="screen2">
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromPicker" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -5148,8 +5975,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
 
-        <div class="screen hidden" id="screen4setup" aria-hidden="true"></div>
-
         <div class="screen hidden" id="screen4">
           <div class="page-title-bar">
             <button type="button" class="back" id="backFromMpPick" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -5185,8 +6010,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <button type="button" class="btn-main pick-confirm-inline" id="btnConfirmMpList">确定</button>
           </div>
         </div>
-
-        <div class="screen hidden" id="screen5" aria-hidden="true"></div>
 
         <div class="screen hidden" id="screen-p-list">
           <header class="page-title-bar">
@@ -5459,38 +6282,32 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
 
-        <div class="picker-mask" id="statsHelpMask">
-          <div class="picker-sheet stats-help-sheet">
-            <div class="picker-head">运营数据说明</div>
-            <div class="stats-help-body" id="statsHelpBody"></div>
-            <div class="picker-foot">
+        <div class="dialog-mask" id="statsHelpMask">
+          <div class="dialog dialog--stats-help" role="dialog" aria-labelledby="statsHelpTitle">
+            <div class="dialog__title" id="statsHelpTitle">运营数据说明</div>
+            <div class="dialog__scroll stats-help-body" id="statsHelpBody"></div>
+            <div class="dialog__actions dialog__actions--single">
               <button type="button" class="btn-main" id="btnStatsHelpOk">知道了</button>
             </div>
           </div>
         </div>
 
-        <div class="picker-mask" id="shelfMask">
-          <div class="picker-sheet">
-            <div class="picker-head">下架会员卡</div>
-            <div class="picker-body shelf-dialog__body">
-              <p id="shelfConfirmText" class="shelf-dialog__title">确定下架「—」？</p>
-              <p class="shelf-dialog__desc">下架后新客将无法办理该卡；已持有该卡的客户不受影响。</p>
-            </div>
-            <div class="picker-foot picker-foot--row shelf-dialog__foot">
+        <div class="dialog-mask" id="shelfMask">
+          <div class="dialog" role="dialog" aria-labelledby="shelfConfirmText">
+            <div class="dialog__title" id="shelfConfirmText">确定下架「—」？</div>
+            <p class="dialog__body">下架后新客将无法办理该卡；已持有该卡的客户不受影响。</p>
+            <div class="dialog__actions">
               <button type="button" class="btn-main secondary" id="btnShelfCancel">取消</button>
               <button type="button" class="btn-main" id="btnShelfConfirm">确认下架</button>
             </div>
           </div>
         </div>
 
-        <div class="picker-mask" id="reshelfMask">
-          <div class="picker-sheet">
-            <div class="picker-head">重新上架</div>
-            <div class="picker-body shelf-dialog__body">
-              <p id="reshelfConfirmText" class="shelf-dialog__title">确定重新上架「—」？</p>
-              <p class="shelf-dialog__desc">上架后新客可再次办理该卡；已持卡客户不受影响。</p>
-            </div>
-            <div class="picker-foot picker-foot--row shelf-dialog__foot">
+        <div class="dialog-mask" id="reshelfMask">
+          <div class="dialog" role="dialog" aria-labelledby="reshelfConfirmText">
+            <div class="dialog__title" id="reshelfConfirmText">确定重新上架「—」？</div>
+            <p class="dialog__body">上架后新客可再次办理该卡；已持卡客户不受影响。</p>
+            <div class="dialog__actions">
               <button type="button" class="btn-main secondary" id="btnReshelfCancel">取消</button>
               <button type="button" class="btn-main" id="btnReshelfConfirm">确认上架</button>
             </div>
@@ -5747,6 +6564,257 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <button type="button" class="btn-continue" id="btnContinue">继续开单</button>
               </div>
               <div class="bottom-bar__safe"></div>
+            </div>
+          </div>
+
+          <!-- 订单流水 · Hub -->
+          <div id="screen-flow-hub" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowHubBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">流水订单</div>
+            </div>
+            <div class="page-body flow-hub-body" id="flowHubBody"></div>
+          </div>
+
+          <!-- 订单流水 · 门店流水列表 -->
+          <div id="screen-flow-list" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowListBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">门店流水</div>
+              <div class="flow-list-actions">
+                <button type="button" class="action" id="flowListFilter" aria-label="筛选">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
+                  <span>筛选</span>
+                </button>
+                <button type="button" class="action" id="flowListWeikuan" aria-label="尾款单">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                  <span>尾款单</span>
+                </button>
+              </div>
+            </div>
+            <div class="flow-list-tabs" id="flowListTabs" role="tablist"></div>
+            <div class="page-body" id="flowListBody"></div>
+          </div>
+
+          <!-- 订单流水 · 自助收银 -->
+          <div id="screen-flow-self" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowSelfBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">自助收银订单</div>
+            </div>
+            <div class="flow-self-filters">
+              <button type="button" class="flow-self-filter" id="flowSelfDate" aria-label="日期筛选">
+                <span>今日</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <button type="button" class="flow-self-filter" id="flowSelfStatus" aria-label="状态筛选">
+                <span>全部状态</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </div>
+            <div class="page-body" id="flowSelfBody"></div>
+          </div>
+
+          <!-- 订单流水 · 详情 -->
+          <div id="screen-flow-detail" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowDetailBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">开单流水详情</div>
+            </div>
+            <div class="page-body flow-detail-body" id="flowDetailBody"></div>
+            <div class="flow-detail-foot" id="flowDetailFoot"></div>
+          </div>
+
+
+          <!-- 订单流水 · 选择退款 -->
+          <div id="screen-flow-refund" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowRefundBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">选择退款</div>
+            </div>
+            <div class="page-body flow-refund-body" id="flowRefundBody"></div>
+            <div class="flow-screen-foot" id="flowRefundFoot"></div>
+          </div>
+
+          <!-- 订单流水 · 修改订单 -->
+          <div id="screen-flow-edit" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowEditBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">修改订单</div>
+            </div>
+            <div class="page-body flow-edit-body" id="flowEditBody"></div>
+            <div class="flow-screen-foot" id="flowEditFoot"></div>
+          </div>
+
+          <!-- 订单流水 · 添加服务项目 -->
+          <div id="screen-flow-edit-add" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowEditAddBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">添加服务项目</div>
+            </div>
+            <div class="flow-edit-add-tabs" id="flowEditAddTabs" role="tablist"></div>
+            <div class="page-body flow-edit-body" id="flowEditAddBody"></div>
+            <div class="flow-screen-foot" id="flowEditAddFoot"></div>
+          </div>
+
+          <!-- 订单流水 · 编辑项目 -->
+          <div id="screen-flow-edit-item" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowEditItemBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title" id="flowEditItemTitle">编辑项目</div>
+            </div>
+            <div class="page-body flow-edit-body" id="flowEditItemBody"></div>
+            <div class="flow-screen-foot" id="flowEditItemFoot"></div>
+          </div>
+
+          <!-- 订单流水 · 添加员工 Sheet -->
+          <div class="picker-mask picker-mask--bottom" id="flowEditStaffMask" data-mask-close="flowEditStaffMask">
+            <div class="picker-sheet tall flow-filter-sheet" role="dialog" aria-label="添加员工">
+              <div class="picker-head">
+                <div class="picker-head__title">添加员工</div>
+                <button type="button" class="picker-head__close" data-close="flowEditStaffMask" aria-label="关闭">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="picker-body" id="flowEditStaffBody"></div>
+              <div class="flow-filter-foot">
+                <button type="button" class="btn-main secondary" id="flowEditStaffCancel">取消</button>
+                <button type="button" class="btn-main" id="flowEditStaffConfirm">确定</button>
+              </div>
+              <div class="catalog-action-safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 订单流水 · 尾款单 -->
+          <div id="screen-flow-weikuan" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowWeikuanBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">尾款单</div>
+              <div class="flow-list-actions">
+                <button type="button" class="action" id="flowWeikuanRepayEntry" aria-label="还款明细">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6"/><path d="M16 12h-6"/><path d="M16 16h-6"/></svg>
+                  <span>还款明细</span>
+                </button>
+                <button type="button" class="action" id="flowWeikuanFilter" aria-label="筛选">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
+                  <span>筛选</span>
+                </button>
+              </div>
+            </div>
+            <div class="flow-weikuan-toolbar">
+              <div class="search-bar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="search" id="flowWeikuanSearch" placeholder="搜索顾客姓名/手机号" autocomplete="off">
+              </div>
+            </div>
+            <div class="page-body flow-weikuan-body" id="flowWeikuanBody"></div>
+          </div>
+
+          <!-- 订单流水 · 还款明细 -->
+          <div id="screen-flow-weikuan-repay" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowWeikuanRepayBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">还款明细</div>
+            </div>
+            <div class="page-body flow-weikuan-body" id="flowWeikuanRepayBody"></div>
+          </div>
+
+          <!-- 订单流水 · 尾款筛选 -->
+          <div class="picker-mask picker-mask--bottom" id="flowWeikuanFilterMask" data-mask-close="flowWeikuanFilterMask">
+            <div class="picker-sheet tall flow-filter-sheet" role="dialog" aria-label="筛选尾款单">
+              <div class="picker-head">
+                <div class="picker-head__title">筛选</div>
+                <button type="button" class="picker-head__close" data-close="flowWeikuanFilterMask" aria-label="关闭">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="picker-body" id="flowWeikuanFilterBody"></div>
+              <div class="flow-filter-foot">
+                <button type="button" class="btn-main secondary" id="flowWeikuanFilterReset">重置</button>
+                <button type="button" class="btn-main" id="flowWeikuanFilterApply">确定</button>
+              </div>
+              <div class="catalog-action-safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 订单流水 · 自助收银详情 -->
+          <div id="screen-flow-self-detail" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowSelfDetailBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">自助收银详情</div>
+            </div>
+            <div class="page-body flow-self-detail-body" id="flowSelfDetailBody"></div>
+          </div>
+
+          <!-- 订单流水 · 筛选 Sheet -->
+          <div class="picker-mask picker-mask--bottom" id="flowFilterMask" data-mask-close="flowFilterMask">
+            <div class="picker-sheet tall flow-filter-sheet" role="dialog" aria-label="筛选流水">
+              <div class="picker-head">
+                <div class="picker-head__title">筛选</div>
+                <button type="button" class="picker-head__close" data-close="flowFilterMask" aria-label="关闭">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="picker-body" id="flowFilterBody"></div>
+              <div class="flow-filter-foot">
+                <button type="button" class="btn-main secondary" id="flowFilterReset">重置</button>
+                <button type="button" class="btn-main" id="flowFilterApply">确定</button>
+              </div>
+              <div class="catalog-action-safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 订单流水 · 更多操作 -->
+          <div class="picker-mask picker-mask--bottom" id="flowMoreMask" data-mask-close="flowMoreMask">
+            <div class="picker-sheet picker-sheet--menu">
+              <div class="catalog-action-card">
+                <div class="picker-sheet__grabber" aria-hidden="true"></div>
+                <div class="picker-head picker-head--stack">
+                  <div class="picker-head__title">更多操作</div>
+                  <div class="picker-head__sub">客户退钱点退款；单子开错点作废</div>
+                </div>
+                <div class="catalog-action-list">
+                  <button type="button" class="catalog-action-item" id="flowMoreRefund">申请退款</button>
+                </div>
+              </div>
+              <div class="catalog-action-foot">
+                <button type="button" class="catalog-action-item catalog-action-item--cancel" data-close="flowMoreMask">取消</button>
+              </div>
+              <div class="catalog-action-safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 订单流水 · 作废确认 -->
+          <div class="dialog-mask" id="flowVoidMask">
+            <div class="dialog" role="dialog" aria-labelledby="flowVoidTitle">
+              <div class="dialog__title" id="flowVoidTitle">确定作废该订单？</div>
+              <div class="dialog__body">作废后不计入经营统计；若含会员卡消费，将恢复相应额度。</div>
+              <div class="dialog__actions">
+                <button type="button" class="btn-main secondary" id="flowVoidCancel">取消</button>
+                <button type="button" class="btn-main" id="flowVoidConfirm">确定作废</button>
+              </div>
             </div>
           </div>
 
@@ -10323,6 +11391,11 @@ function catalogItemMatchesSearch(p, q, isProduct) {
   return false;
 }
 
+/** 已绑卡：名称后跟卡面图标（非文字「绑卡」徽标） */
+function boundTagHtml() {
+  return `<span class="bound-tag" title="已绑卡" aria-label="已绑卡"><svg class="bound-tag__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 10h19" stroke="currentColor" stroke-width="1.6"/><path d="M6 14.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>`;
+}
+
 function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
   const wrap = document.createElement('div');
   const bucket = getCatalogSortBucket(p);
@@ -10344,7 +11417,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
         <div class="name">
           <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
           <div class="name-main">
-            <span class="name-text${longName ? ' is-long' : ''}">${escapeHtml(p.name)}</span>
+            <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(p.name)}${p.boundToCard ? boundTagHtml() : ''}</span>
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
@@ -11179,8 +12252,6 @@ function projBackFromCatalog() {
     renderMemberPriceProjectList();
     if (state.discBenefitDraft) renderDiscountPickParams();
     showOnlyScreen('screen4');
-  } else if (from === 'screen5') {
-    showOnlyScreen(from);
   } else {
     setStep(0);
   }
@@ -11431,11 +12502,19 @@ const FLOW_MAP_GROUPS = [
       { id: 'price-list-filled', label: '价目表 · 项目', screen: 'screen-p-list' },
       { id: 'price-list-product', label: '价目表 · 产品', screen: 'screen-p-list' },
       { id: 'price-groups', label: '价目表 · 分组管理', screen: 'screen-p-groups' },
+      { id: 'price-group-members', label: '分组 · 编辑成员', screen: 'screen-p-group-members' },
       { id: 'price-add', label: '新增项目 · 空表单', screen: 'screen-p-add' },
       { id: 'price-add-product', label: '新增产品 · 空表单', screen: 'screen-p-add' },
       { id: 'price-edit-normal', label: '项目详情 · 普通', screen: 'screen-p-edit' },
       { id: 'price-edit-bound', label: '项目详情 · 绑卡锁定', screen: 'screen-p-edit' },
       { id: 'price-edit-off-sale', label: '项目详情 · 已下架', screen: 'screen-p-edit' },
+      /* 浮层 / 叠加态（截图用 deep-link） */
+      { id: 'price-list-action', label: '价目表 · 行操作 Sheet', screen: 'screen-p-list' },
+      { id: 'price-list-hidden-open', label: '价目表 · 已隐藏展开', screen: 'screen-p-list' },
+      { id: 'price-item-group', label: '价目表 · 设置分组 Sheet', screen: 'screen-p-list' },
+      { id: 'price-group-menu', label: '分组 · 行菜单 Sheet', screen: 'screen-p-groups' },
+      { id: 'price-group-create', label: '分组 · 新建 Dialog', screen: 'screen-p-groups' },
+      { id: 'price-group-rename', label: '分组 · 重命名 Dialog', screen: 'screen-p-groups' },
     ],
   },
   {
@@ -11456,9 +12535,31 @@ const FLOW_MAP_GROUPS = [
       { id: 'pick-products-group', label: '选产品 · 分组筛选', screen: 'screen2p' },
       { id: 'pick-discount-list', label: '添加折扣权益', screen: 'screen4' },
       { id: 'pick-discount-group', label: '选折扣 · 分组筛选', screen: 'screen4' },
+      /* 浮层 / 叠加态（截图 deep-link · 底图多为详情在售） */
+      { id: 'card-issue-new', label: '选择会员 · 办卡 Tab', screen: 'screen6' },
+      { id: 'card-issue-holders', label: '选择会员 · 退卡/延期 Tab', screen: 'screen6' },
+      { id: 'card-extend', label: '持卡延期 · 行内面板', screen: 'screen6' },
+      { id: 'card-refund', label: '退卡估值 Sheet', screen: 'screen6' },
+      { id: 'card-shelf', label: '下架确认 Dialog', screen: 'screen6' },
+      { id: 'card-reshelf', label: '重新上架 Dialog', screen: 'screen6' },
+      { id: 'card-stats-help', label: '运营数据说明 Dialog', screen: 'screen6' },
+      { id: 'card-unlimited-validity', label: '永久转有限 Dialog', screen: 'screen6' },
     ],
   },
 ];
+
+const CARD_OVERLAY_DETAIL_ID = 'demo_vip_combo';
+const CARD_OVERLAY_SHELVED_ID = 'demo_kids_times';
+
+function openCardDetailForOverlay(templateId = CARD_OVERLAY_DETAIL_ID) {
+  closeAllFlowOverlays();
+  ensureDemoFilled();
+  openTemplateDetail(templateId);
+}
+
+function firstHolderForTemplate(tid) {
+  return DEMO_MEMBERS.find(m => memberHoldsTemplate(tid, m.id));
+}
 
 const FLOW_NAV = {
   'list-active'() {
@@ -11546,6 +12647,46 @@ const FLOW_NAV = {
     setActivePickGroupId('discount', first?.id || 'all');
     openAddDiscountBenefit();
   },
+  'card-issue-new'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openIssueMemberPicker(CARD_OVERLAY_DETAIL_ID);
+  },
+  'card-issue-holders'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openIssueHolderManager(CARD_OVERLAY_DETAIL_ID);
+  },
+  'card-extend'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openIssueHolderManager(CARD_OVERLAY_DETAIL_ID);
+    state.issueExtendMemberId = 'm8';
+    state.issueExtendUnit = 'month';
+    state.issueExtendAmount = 3;
+    state.issueExtendFeeTouched = false;
+    syncIssueExtendFeeDefault(getTemplateForHolderOps(CARD_OVERLAY_DETAIL_ID));
+    renderIssueMemberList();
+  },
+  'card-refund'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openIssueHolderManager(CARD_OVERLAY_DETAIL_ID);
+    const member = firstHolderForTemplate(CARD_OVERLAY_DETAIL_ID);
+    if (member) openRefundCardConfirm(member.id);
+  },
+  'card-shelf'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openShelfConfirm();
+  },
+  'card-reshelf'() {
+    openCardDetailForOverlay(CARD_OVERLAY_SHELVED_ID);
+    openReshelfConfirm();
+  },
+  'card-stats-help'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openStatsHelp();
+  },
+  'card-unlimited-validity'() {
+    openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
+    openUnlimitedValidityDialog(() => {});
+  },
   'price-list-empty'() {
     applyDemoListState('empty');
     projShowScreen('screen-p-list');
@@ -11557,6 +12698,15 @@ const FLOW_NAV = {
     syncPriceCatalogTabs();
     projRenderList();
     projShowScreen('screen-p-list');
+  },
+  'price-list-action'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+    const first = getCatalogProjects().find(p => p.onSale && !p.hidden) || getCatalogProjects()[0];
+    if (first) openCatalogRowActions(first.id);
   },
   'price-list-product'() {
     ensureDemoFilled();
@@ -11598,6 +12748,53 @@ const FLOW_NAV = {
     const p = resolveProjDemoTarget('offSale');
     if (p) projOpenEdit(p.id);
   },
+  'price-list-hidden-open'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    state.catalogHiddenExpanded = true;
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+  },
+  'price-item-group'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+    const first = getCatalogProjects().find(p => p.onSale && !p.hidden) || getCatalogProjects()[0];
+    if (first) openCatalogItemGroupSheet(first.id);
+  },
+  'price-group-members'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    const g = (state.catalogGroups?.project || []).find(x => !x.system) || (state.catalogGroups?.project || [])[0];
+    if (g) openCatalogGroupMembers(g.id);
+  },
+  'price-group-menu'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    openCatalogGroupManage();
+    const g = (state.catalogGroups?.project || []).find(x => !x.system);
+    if (g) openCatalogGroupRowMenu(g.id);
+  },
+  'price-group-create'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    openCatalogGroupManage();
+    openCatalogGroupNameDialog('create');
+  },
+  'price-group-rename'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    openCatalogGroupManage();
+    const g = (state.catalogGroups?.project || []).find(x => !x.system);
+    if (g) openCatalogGroupNameDialog('rename', g.id);
+  },
 };
 
 /** 功能链路演示项：优先固定 ID，缺失或状态不符时回退匹配 */
@@ -11637,9 +12834,14 @@ function resolveProjDemoTarget(kind) {
 
 function setFlowNavHighlight(id) {
   state.flowNavHighlight = id || null;
-  document.querySelectorAll('.flow-map-node').forEach(btn => {
-    btn.classList.toggle('is-current', btn.dataset.flowNav === id);
-  });
+  const gi = findFlowMapGroupIndexByNodeId(id);
+  if (gi >= 0 && gi !== flowMapActiveGroupIdx) {
+    flowMapActiveGroupIdx = gi;
+    persistFlowMapActiveGroup(gi);
+    renderFlowMap({ skipSync: true });
+    return;
+  }
+  applyFlowNavHighlightDom();
 }
 
 function syncFlowMapFromAppState() {
@@ -11680,14 +12882,74 @@ function syncFlowMapFromAppState() {
   if (id) setFlowNavHighlight(id);
 }
 
-function renderFlowMap() {
+const FLOW_MAP_TAB_SHORT = {
+  '项目创建与管理': '项目',
+  '会员卡管理': '会员卡',
+  '开单结账': '开单',
+  '订单流水': '流水',
+  '开单主流程': '开单',
+  '收款': '收款',
+  '会员卡关联': '卡关联',
+  '其他': '其他',
+};
+const FLOW_MAP_GROUP_LS_KEY = 'rtb-flow-map-group';
+let flowMapActiveGroupIdx = 0;
+try {
+  const saved = Number(localStorage.getItem(FLOW_MAP_GROUP_LS_KEY));
+  if (Number.isFinite(saved) && saved >= 0) flowMapActiveGroupIdx = saved;
+} catch (_) { /* ignore */ }
+
+function flowMapShortTitle(title) {
+  return FLOW_MAP_TAB_SHORT[title] || String(title || '').slice(0, 4) || '分组';
+}
+
+function findFlowMapGroupIndexByNodeId(id) {
+  if (!id || typeof FLOW_MAP_GROUPS === 'undefined') return -1;
+  return FLOW_MAP_GROUPS.findIndex(g => g.nodes.some(n => n.id === id));
+}
+
+function persistFlowMapActiveGroup(idx) {
+  try { localStorage.setItem(FLOW_MAP_GROUP_LS_KEY, String(idx)); } catch (_) { /* ignore */ }
+}
+
+function applyFlowNavHighlightDom() {
+  const id = state.flowNavHighlight || null;
+  document.querySelectorAll('.flow-map-node').forEach(btn => {
+    btn.classList.toggle('is-current', btn.dataset.flowNav === id);
+  });
+  document.querySelectorAll('.flow-map-seg__btn').forEach(btn => {
+    const on = Number(btn.dataset.flowGroup) === flowMapActiveGroupIdx;
+    btn.classList.toggle('is-on', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+}
+
+function renderFlowMap(opts) {
+  const skipSync = !!(opts && opts.skipSync);
   const body = document.getElementById('flowMapBody');
-  if (!body) return;
-  body.innerHTML = FLOW_MAP_GROUPS.map(group => `
+  if (!body || typeof FLOW_MAP_GROUPS === 'undefined') return;
+  if (!FLOW_MAP_GROUPS.length) {
+    body.innerHTML = '';
+    return;
+  }
+  if (flowMapActiveGroupIdx < 0 || flowMapActiveGroupIdx >= FLOW_MAP_GROUPS.length) {
+    flowMapActiveGroupIdx = 0;
+  }
+  const active = FLOW_MAP_GROUPS[flowMapActiveGroupIdx];
+  const cols = Math.max(1, FLOW_MAP_GROUPS.length);
+  body.innerHTML = `
+    <div class="flow-map-seg" role="tablist" aria-label="功能链路分组" style="grid-template-columns: repeat(${cols}, minmax(0, 1fr));">
+      ${FLOW_MAP_GROUPS.map((group, i) => `
+        <button type="button" class="flow-map-seg__btn${i === flowMapActiveGroupIdx ? ' is-on' : ''}" role="tab" aria-selected="${i === flowMapActiveGroupIdx ? 'true' : 'false'}" data-flow-group="${i}" title="${escapeAttr(group.title)}">
+          <span class="flow-map-seg__label">${escapeHtml(flowMapShortTitle(group.title))}</span>
+          <span class="flow-map-seg__count">${group.nodes.length}</span>
+        </button>
+      `).join('')}
+    </div>
     <section class="flow-map-group">
-      <div class="flow-map-group__title">${escapeHtml(group.title)}</div>
+      <div class="flow-map-group__title">${escapeHtml(active.title)} · ${active.nodes.length}</div>
       <div class="flow-map-group__nodes">
-        ${group.nodes.map(node => `
+        ${active.nodes.map(node => `
           <button type="button" class="flow-map-node" data-flow-nav="${escapeAttr(node.id)}">
             ${escapeHtml(node.label)}
             <span class="flow-map-node__screen">${escapeHtml(node.screen)}</span>
@@ -11695,7 +12957,16 @@ function renderFlowMap() {
         `).join('')}
       </div>
     </section>
-  `).join('');
+  `;
+  body.querySelectorAll('[data-flow-group]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.dataset.flowGroup);
+      if (!Number.isFinite(idx) || idx === flowMapActiveGroupIdx) return;
+      flowMapActiveGroupIdx = idx;
+      persistFlowMapActiveGroup(idx);
+      renderFlowMap({ skipSync: true });
+    });
+  });
   body.querySelectorAll('[data-flow-nav]').forEach(btn => {
     btn.addEventListener('click', () => {
       const navId = btn.dataset.flowNav;
@@ -11704,9 +12975,11 @@ function renderFlowMap() {
       else showToast('该节点暂未配置跳转', true);
     });
   });
-  syncFlowMapFromAppState();
+  applyFlowNavHighlightDom();
+  if (!skipSync) syncFlowMapFromAppState();
 }
 window.renderFlowMap = renderFlowMap;
+window.setFlowNavHighlight = setFlowNavHighlight;
 
 function showToast(msg, _isWarn) {
   const el = document.getElementById('toastMsg');
@@ -12297,6 +13570,9 @@ function openAmountKeypad(el) {
   if (titleEl) {
     if (el.id === 'fPrice') titleEl.textContent = '项目价格';
     else if (el.id === 'holdPriceKeypadProxy') titleEl.textContent = '挂单金额';
+    else if (el.dataset && (el.dataset.flowPerf === 'achievement' || el.dataset.flowEditPerf === 'achievement' || el.dataset.flowEditStaffPerf === 'achievement')) titleEl.textContent = '修改业绩';
+    else if (el.dataset && (el.dataset.flowPerf === 'commission' || el.dataset.flowEditPerf === 'commission' || el.dataset.flowEditStaffPerf === 'commission')) titleEl.textContent = '修改提成';
+    else if (el.dataset && el.dataset.flowEditItemPrice != null) titleEl.textContent = '修改单价';
     else titleEl.textContent = state.amountKeypadMode === 'integer' ? '输入天数' : '输入金额';
   }
   updateAmountKeypadDisplay();
@@ -13323,11 +14599,11 @@ function renderStatsHelpBody() {
 }
 
 function openStatsHelp() {
-  document.getElementById('statsHelpMask')?.classList.add('open');
+  document.getElementById('statsHelpMask')?.classList.add('show');
 }
 
 function closeStatsHelp() {
-  document.getElementById('statsHelpMask')?.classList.remove('open');
+  document.getElementById('statsHelpMask')?.classList.remove('show');
 }
 
 function openTemplateDetail(id) {
@@ -13406,14 +14682,14 @@ function openShelfConfirm() {
   const t = getTemplateById(state.viewingTemplateId);
   if (!t || t.shelved) return;
   document.getElementById('shelfConfirmText').textContent = `确定下架「${t.name}」？`;
-  document.getElementById('shelfMask').classList.add('open');
+  document.getElementById('shelfMask').classList.add('show');
 }
 
 function performShelfTemplate() {
   const t = getTemplateById(state.viewingTemplateId);
   if (!t || t.shelved) return;
   t.shelved = true;
-  document.getElementById('shelfMask').classList.remove('open');
+  document.getElementById('shelfMask').classList.remove('show');
   syncDetailShell(t);
   showToast('已下架');
 }
@@ -13422,14 +14698,14 @@ function openReshelfConfirm() {
   const t = getTemplateById(state.viewingTemplateId);
   if (!t || !t.shelved) return;
   document.getElementById('reshelfConfirmText').textContent = `确定重新上架「${t.name}」？`;
-  document.getElementById('reshelfMask').classList.add('open');
+  document.getElementById('reshelfMask').classList.add('show');
 }
 
 function performReshelfTemplate() {
   const t = getTemplateById(state.viewingTemplateId);
   if (!t || !t.shelved) return;
   t.shelved = false;
-  document.getElementById('reshelfMask').classList.remove('open');
+  document.getElementById('reshelfMask').classList.remove('show');
   syncDetailShell(t);
   showToast('已重新上架');
 }
@@ -14639,6 +15915,7 @@ const PROJ_SCOPE_CHEV = '<span class="chevron"><svg class="icon-chevron-right" w
 const BENEFIT_TAG_CHEV = '<span class="proj-tag__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span>';
 /* 方案 A：细线描边垃圾桶（与预览一致） */
 const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 4h4"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M7 7l1 13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+const STEP2_BENEFIT_NOTCHES = '<span class="step2-benefit-card__notch step2-benefit-card__notch--top" aria-hidden="true"></span><span class="step2-benefit-card__notch step2-benefit-card__notch--bottom" aria-hidden="true"></span>';
 
 function renderProjectItemTags() {
   const el = document.getElementById('projectBenefitCardsStep2');
@@ -14648,6 +15925,7 @@ function renderProjectItemTags() {
   el.innerHTML = saved.map(card => {
     return `<div class="step2-benefit-card-wrap">
       <div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+        ${STEP2_BENEFIT_NOTCHES}
         <div class="step2-benefit-card__body">
           <div class="step2-benefit-card__main">
             <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
@@ -14746,6 +16024,7 @@ function renderProductItemTags() {
   el.innerHTML = saved.map(card => {
     return `<div class="step2-benefit-card-wrap">
       <div class="step2-benefit-card" data-edit-product-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+        ${STEP2_BENEFIT_NOTCHES}
         <div class="step2-benefit-card__body">
           <div class="step2-benefit-card__main">
             <span class="step2-benefit-card__title">${formatProductScopeTitleHtml(card.products)}</span>
@@ -14839,6 +16118,7 @@ function renderMemberPriceTags() {
   el.innerHTML = saved.map(card =>
     `<div class="step2-benefit-card-wrap">
       <div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+        ${STEP2_BENEFIT_NOTCHES}
         <div class="step2-benefit-card__body">
           <div class="step2-benefit-card__main">
             <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
@@ -15674,20 +16954,6 @@ function getMemberPriceAllRowMeta() {
   return { text: `已设 ${configured.length} 项`, hasVal: true };
 }
 
-function inferBatchMemberPriceRule() {
-  if (state.memberPrices[MP_BATCH_KEY]) {
-    return normalizeDiscountRule(state.memberPrices[MP_BATCH_KEY]);
-  }
-  const configured = getAllProjectNamesForPicker().filter(p => state.memberPrices[p]);
-  if (configured.length === 1) return normalizeDiscountRule(state.memberPrices[configured[0]]);
-  return defaultMemberPricePickRule();
-}
-
-function setMemberPriceConfigTitle(batchAll) {
-  const titleEl = document.querySelector('#screen5 .page-title-bar .title');
-  if (titleEl) titleEl.textContent = batchAll ? '设置折扣 · 全部' : '设置折扣';
-}
-
 function getProjectPickBatchDraft() {
   if (!state.pickerBatchDraft) state.pickerBatchDraft = defaultProjectPickDraft();
   return state.pickerBatchDraft;
@@ -16133,7 +17399,6 @@ function wireMpConfigBlock(root, project, getDraft, setDraft, onRerender) {
   };
   const rerender = () => {
     if (typeof onRerender === 'function') onRerender();
-    else if (root.id === 'memberPriceConfigList') renderMemberPriceConfig();
     else if (isDiscountSetup) renderDiscountBenefitCards();
     else if (isDiscountPick) renderDiscountPickParams();
     else renderMemberPriceProjectList();
@@ -16594,28 +17859,6 @@ function renderMemberPriceProjectList() {
   updateSimplePickCount('discount');
 }
 
-function openMemberPriceConfigForProject(project) {
-  state.memberPriceBatchAll = false;
-  state.memberPricePickTemp = [project];
-  state.memberPriceDraft = {
-    [project]: normalizeDiscountRule(state.memberPrices[project] || defaultMemberPricePickRule()),
-  };
-  setMemberPriceConfigTitle(false);
-  renderMemberPriceConfig();
-  showOnlyScreen('screen5');
-}
-
-function openMemberPriceConfigForAllProjects() {
-  state.memberPriceBatchAll = true;
-  state.memberPricePickTemp = [MP_BATCH_KEY];
-  state.memberPriceDraft = {
-    [MP_BATCH_KEY]: inferBatchMemberPriceRule(),
-  };
-  setMemberPriceConfigTitle(true);
-  renderMemberPriceConfig();
-  showOnlyScreen('screen5');
-}
-
 function discountRulerBlockHtml(project, rule, opts = {}) {
   const showHead = opts.showHead !== false;
   const wrapStack = opts.wrapStack !== false;
@@ -16637,62 +17880,10 @@ function discountRulerBlockHtml(project, rule, opts = {}) {
   return `<div class="mp-ruler-stack" data-ruler-stack="${safeName}">${inner}</div>`;
 }
 
-function renderMemberPriceConfig() {
-  const list = document.getElementById('memberPriceConfigList');
-  list.innerHTML = state.memberPricePickTemp.map(p =>
-    buildMpConfigBlockHtml(p, state.memberPriceDraft[p])
-  ).join('');
-  state.memberPricePickTemp.forEach(p => {
-    wireMpConfigBlock(list, p, () => state.memberPriceDraft[p], rule => { state.memberPriceDraft[p] = rule; });
-  });
-  wireNonNegativeAmountInputs(list);
-  wireAmountKeypadInputs(list);
-}
-
-function validateMemberPriceDraft() {
-  for (const p of state.memberPricePickTemp) {
-    const rule = normalizeDiscountRule(state.memberPriceDraft[p]);
-    const label = p === MP_BATCH_KEY ? '全部项目' : `「${p}」`;
-    if (rule.mode === 'fixed') {
-      if (!(parseFloat(rule.amount) > 0)) {
-        showToast(`请为${label}输入大于 0 的固定金额`, true);
-        return false;
-      }
-    } else if (rule.tickIndex == null) {
-      showToast(`请为${label}设置折扣`, true);
-      return false;
-    }
-  }
-  return true;
-}
-
-function openMemberPriceFlow() {
-  openDiscountSetup();
-}
-
 function wireDiscountRuler(el, onChange, onDragEnd) {
   wireSnapRuler(el, tick => {
     if (onChange) onChange(tick);
   }, discountTickLabel, onDragEnd);
-}
-
-function commitMemberPriceDraft() {
-  if (!validateMemberPriceDraft()) return;
-  if (state.memberPriceBatchAll) {
-    const rule = normalizeDiscountRule(state.memberPriceDraft[MP_BATCH_KEY]);
-    state.memberPrices = { [MP_BATCH_KEY]: rule };
-    state.memberPriceBatchAll = false;
-  } else {
-    const next = { ...state.memberPrices };
-    delete next[MP_BATCH_KEY];
-    state.memberPricePickTemp.forEach(p => {
-      next[p] = normalizeDiscountRule(state.memberPriceDraft[p]);
-    });
-    state.memberPrices = next;
-  }
-  syncMemberPriceDisplay();
-  renderMemberPriceProjectList();
-  showOnlyScreen('screen4');
 }
 
 function clearAllMemberPrices(stayOnList) {
@@ -16922,7 +18113,53 @@ function applyFlowDeepLink(flowId) {
   }
   fn();
   if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight(flowId);
+  if (document.documentElement.classList.contains('prd-capture')) {
+    if (flowId === 'list-active' || flowId === 'list-shelved') {
+      document.documentElement.classList.add('figma-capture-list-active');
+      document.querySelectorAll('.member-card-item__grid--more.is-collapsed').forEach(el => el.classList.remove('is-collapsed'));
+      document.querySelectorAll('.member-card-item__expand').forEach(el => { el.style.display = 'none'; });
+    }
+    requestAnimationFrame(() => expandPrdCapturePhoneToContent());
+    setTimeout(expandPrdCapturePhoneToContent, 120);
+    setTimeout(expandPrdCapturePhoneToContent, 480);
+  }
   return true;
+}
+
+/** capture 模式：手机框高度贴合内容，避免列表/弹层被 844 裁切；短页壳层铺满使底栏贴底 */
+function expandPrdCapturePhoneToContent() {
+  if (!document.documentElement.classList.contains('prd-capture')) return;
+  const phone = document.querySelector('.phone');
+  const shell = document.querySelector('.phone-shell');
+  const slot = document.querySelector('.phone-scale-slot');
+  if (!phone) return;
+
+  phone.style.height = 'auto';
+  phone.style.minHeight = '';
+  phone.style.overflow = 'visible';
+  if (shell) {
+    shell.style.height = '';
+    shell.style.minHeight = '';
+    shell.style.overflow = 'visible';
+  }
+  if (slot) {
+    slot.style.height = 'auto';
+    slot.style.overflow = 'visible';
+  }
+
+  /* 强制一次布局后再量；只用壳层内容高度，勿用 document.scrollHeight */
+  void phone.offsetHeight;
+  const minH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--phone-h')) || 844;
+  const shellH = shell
+    ? Math.max(shell.scrollHeight || 0, shell.offsetHeight || 0)
+    : 0;
+  const phoneH = Math.max(phone.scrollHeight || 0, phone.offsetHeight || 0);
+  const h = Math.ceil(Math.max(shellH, phoneH, minH));
+
+  phone.style.height = `${h}px`;
+  /* 壳层铺满手机框，配合 .bottom-bar { margin-top:auto } 贴底 */
+  if (shell) shell.style.minHeight = `${h}px`;
+  if (slot) slot.style.height = `${h}px`;
 }
 
 function applyDemoListState(mode) {
@@ -17094,9 +18331,9 @@ document.getElementById('btnDetailHolders').onclick = () => {
   openIssueHolderManager(state.viewingTemplateId);
 };
 document.getElementById('btnShelfTemplate').onclick = openShelfConfirm;
-document.getElementById('btnShelfCancel').onclick = () => document.getElementById('shelfMask').classList.remove('open');
+document.getElementById('btnShelfCancel').onclick = () => document.getElementById('shelfMask').classList.remove('show');
 document.getElementById('btnShelfConfirm').onclick = performShelfTemplate;
-document.getElementById('btnReshelfCancel').onclick = () => document.getElementById('reshelfMask').classList.remove('open');
+document.getElementById('btnReshelfCancel').onclick = () => document.getElementById('reshelfMask').classList.remove('show');
 document.getElementById('btnReshelfConfirm').onclick = performReshelfTemplate;
 document.querySelectorAll('#listShelfSeg [data-shelf-tab]').forEach(btn => {
   btn.onclick = () => {
@@ -17288,6 +18525,11 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-pick-benefit': 'bill-benefit', 'screen-discount': 'bill-discount',
       'screen-scan-me': 'bill-scan-me', 'screen-scan-cust': 'bill-scan-cust',
       'screen-coupon': 'bill-detail', 'screen-add-card': 'bill-add-card',
+      'screen-flow-hub': 'flow-hub', 'screen-flow-list': 'flow-list',
+      'screen-flow-detail': 'flow-detail', 'screen-flow-refund': 'flow-refund', 'screen-flow-edit': 'flow-edit',
+      'screen-flow-edit-add': 'flow-edit-add', 'screen-flow-edit-item': 'flow-edit-item',
+      'screen-flow-weikuan': 'flow-weikuan', 'screen-flow-weikuan-repay': 'flow-weikuan-repay',
+      'screen-flow-self': 'flow-self', 'screen-flow-self-detail': 'flow-self-detail',
     };
     const hid = document.getElementById('cartSheetMask')?.classList.contains('open');
     const checkout = document.getElementById('checkoutMask')?.classList.contains('open');
@@ -17329,25 +18571,80 @@ function billingNav(fn) {
       { id: 'bill-hold', label: '挂单列表', screen: 'screen-holds' },
     ],
   };
+  const flowGroup = {
+    title: '订单流水',
+    nodes: [
+      { id: 'flow-hub', label: '流水入口', screen: 'screen-flow-hub' },
+      { id: 'flow-list', label: '门店流水', screen: 'screen-flow-list' },
+      { id: 'flow-detail', label: '流水详情', screen: 'screen-flow-detail' },
+      { id: 'flow-refund', label: '选择退款', screen: 'screen-flow-refund' },
+      { id: 'flow-edit', label: '修改订单', screen: 'screen-flow-edit' },
+      { id: 'flow-edit-add', label: '添加服务项目', screen: 'screen-flow-edit-add' },
+      { id: 'flow-edit-item', label: '编辑项目', screen: 'screen-flow-edit-item' },
+      { id: 'flow-weikuan', label: '尾款单', screen: 'screen-flow-weikuan' },
+      { id: 'flow-weikuan-repay', label: '还款明细', screen: 'screen-flow-weikuan-repay' },
+      { id: 'flow-self', label: '自助收银', screen: 'screen-flow-self' },
+      { id: 'flow-self-detail', label: '自助详情', screen: 'screen-flow-self-detail' },
+    ],
+  };
+  function flowNav(fn) {
+    return function () {
+      if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
+      if (!window.BillingDemo) return;
+      if (fn === 'hub' && window.BillingDemo.openFlowHub) window.BillingDemo.openFlowHub();
+      else if (fn === 'list' && window.BillingDemo.openFlowList) window.BillingDemo.openFlowList();
+      else if (fn === 'detail' && window.BillingDemo.openFlowDetail) {
+        window.BillingDemo.openFlowDetail(null, { fromSuccess: false });
+      }
+      else if (fn === 'refund' && window.BillingDemo.openFlowRefund) window.BillingDemo.openFlowRefund();
+      else if (fn === 'edit' && window.BillingDemo.openFlowEdit) window.BillingDemo.openFlowEdit();
+      else if (fn === 'edit-add' && window.BillingDemo.openFlowEditAdd) window.BillingDemo.openFlowEditAdd();
+      else if (fn === 'edit-item' && window.BillingDemo.openFlowEditItemDemo) window.BillingDemo.openFlowEditItemDemo();
+      else if (fn === 'weikuan' && window.BillingDemo.openFlowWeikuan) window.BillingDemo.openFlowWeikuan();
+      else if (fn === 'weikuan-repay' && window.BillingDemo.openFlowWeikuanRepay) window.BillingDemo.openFlowWeikuanRepay();
+      else if (fn === 'self' && window.BillingDemo.openFlowSelf) window.BillingDemo.openFlowSelf();
+      else if (fn === 'self-detail' && window.BillingDemo.openFlowSelfDetail) window.BillingDemo.openFlowSelfDetail();
+    };
+  }
   function tryPatch() {
     if (typeof FLOW_MAP_GROUPS === 'undefined' || typeof FLOW_NAV === 'undefined') return false;
-    if (FLOW_MAP_GROUPS.some(g => g.title === '开单结账')) return true;
-    FLOW_MAP_GROUPS.push(group);
+    if (!FLOW_MAP_GROUPS.some(g => g.title === '开单结账')) {
+      FLOW_MAP_GROUPS.push(group);
+      Object.assign(FLOW_NAV, {
+        'bill-bill': billingNav('bill'),
+        'bill-pick': billingNav('pick'),
+        'bill-cart': billingNav('cart'),
+        'bill-detail': billingNav('detail'),
+        'bill-checkout': billingNav('checkout'),
+        'bill-pay': billingNav('pay'),
+        'bill-success': billingNav('success'),
+        'bill-scan-me': billingNav('scan-me'),
+        'bill-scan-cust': billingNav('scan-cust'),
+        'bill-expand': billingNav('expand'),
+        'bill-add-card': billingNav('add-card'),
+        'bill-benefit': billingNav('benefit'),
+        'bill-discount': billingNav('discount'),
+        'bill-hold': billingNav('hold'),
+      });
+    }
+    if (!FLOW_MAP_GROUPS.some(g => g.title === '订单流水')) {
+      FLOW_MAP_GROUPS.push(flowGroup);
+    } else {
+      const g = FLOW_MAP_GROUPS.find(x => x.title === '订单流水');
+      if (g) g.nodes = flowGroup.nodes;
+    }
     Object.assign(FLOW_NAV, {
-      'bill-bill': billingNav('bill'),
-      'bill-pick': billingNav('pick'),
-      'bill-cart': billingNav('cart'),
-      'bill-detail': billingNav('detail'),
-      'bill-checkout': billingNav('checkout'),
-      'bill-pay': billingNav('pay'),
-      'bill-success': billingNav('success'),
-      'bill-scan-me': billingNav('scan-me'),
-      'bill-scan-cust': billingNav('scan-cust'),
-      'bill-expand': billingNav('expand'),
-      'bill-add-card': billingNav('add-card'),
-      'bill-benefit': billingNav('benefit'),
-      'bill-discount': billingNav('discount'),
-      'bill-hold': billingNav('hold'),
+      'flow-hub': flowNav('hub'),
+      'flow-list': flowNav('list'),
+      'flow-detail': flowNav('detail'),
+      'flow-refund': flowNav('refund'),
+      'flow-edit': flowNav('edit'),
+      'flow-edit-add': flowNav('edit-add'),
+      'flow-edit-item': flowNav('edit-item'),
+      'flow-weikuan': flowNav('weikuan'),
+      'flow-weikuan-repay': flowNav('weikuan-repay'),
+      'flow-self': flowNav('self'),
+      'flow-self-detail': flowNav('self-detail'),
     });
     if (typeof renderFlowMap === 'function') renderFlowMap();
     return true;
@@ -17672,6 +18969,47 @@ window.__BILLING_EMBEDDED__ = true;
     return getStaffMode() === 'full' ? STAFFS_FULL : STAFFS_SMALL;
   }
   function staffUsesListMode() { return getStaffPool().length >= 10; }
+  const STAFF_ROLE_OPTS = [
+    { id: 'senior', label: '大工' },
+    { id: 'mid', label: '中工' },
+    { id: 'junior', label: '小工' },
+  ];
+  const STAFF_ROLE_DEFAULT = 'senior';
+  function staffRoleLabel(roleId) {
+    const hit = STAFF_ROLE_OPTS.find(r => r.id === roleId);
+    return hit ? hit.label : '';
+  }
+  function ensureCartStaffState(it) {
+    if (!it) return;
+    if (!Array.isArray(it.staffIds)) it.staffIds = [];
+    if (!it.staffRoles || typeof it.staffRoles !== 'object') it.staffRoles = {};
+    Object.keys(it.staffRoles).forEach(sid => {
+      if (!it.staffIds.includes(sid)) delete it.staffRoles[sid];
+    });
+    it.staffIds.forEach(sid => {
+      if (!it.staffRoles[sid]) it.staffRoles[sid] = STAFF_ROLE_DEFAULT;
+    });
+  }
+  function renderStaffRoleRadioHtml(cartId, staffId, roleId) {
+    const cur = roleId || STAFF_ROLE_DEFAULT;
+    const name = `staffRole_${cartId}_${staffId}`;
+    return `<div class="detail-item__role-radios" role="radiogroup" aria-label="工位">
+      ${STAFF_ROLE_OPTS.map(r => `
+        <label class="radio-opt">
+          <input type="radio" name="${escapeHtml(name)}" value="${r.id}"
+            data-staff-role-radio data-staff-id="${escapeHtml(staffId)}" data-cart-id="${escapeHtml(cartId)}"
+            ${cur === r.id ? 'checked' : ''}/>
+          ${r.label}
+        </label>
+      `).join('')}
+    </div>`;
+  }
+  function cartHasUnsetStaffRoles() {
+    return (state.cart || []).some(it => {
+      ensureCartStaffState(it);
+      return (it.staffIds || []).some(sid => !it.staffRoles[sid]);
+    });
+  }
   function setStaffMode(mode) {
     const next = mode === 'full' ? 'full' : 'small';
     const url = new URL(location.href);
@@ -17743,6 +19081,26 @@ window.__BILLING_EMBEDDED__ = true;
     payChannel: 'alipay',
     payAmounts: {},
     lastSettlement: null,
+    lastFlowOrderId: null,
+    flowTab: 'all',
+    flowDetailId: null,
+    flowDetailExpanded: false,
+    flowFromSuccess: false,
+    flowFilter: { date: 'all', pay: 'all', guest: 'all' },
+    flowFilterDraft: null,
+    flowRefundSelected: [],
+    flowEditDraft: null,
+    flowEditAddTab: 'project',
+    flowEditAddSelected: [],
+    flowEditItemId: null,
+    flowEditStaffPick: [],
+    flowEditReplaceItemId: null,
+    flowSelfDetailId: null,
+    flowSelfDate: 'today',
+    flowSelfStatus: 'all',
+    flowWeikuanQuery: '',
+    flowWeikuanFilter: { status: 'all' },
+    flowWeikuanFilterDraft: null,
     flowNavHighlight: null,
     addCardMode: 'new',
     selectedTemplateId: null,
@@ -17970,7 +19328,7 @@ window.__BILLING_EMBEDDED__ = true;
     const next = (row?.qty || 0) + delta;
     if (next <= 0) state.cart = state.cart.filter(x => x.id !== item.id);
     else if (row) row.qty = next;
-    else state.cart.push({ ...item, qty: next, unitPrice: item.price, staffIds: [], expanded: false });
+    else state.cart.push({ ...item, qty: next, unitPrice: item.price, staffIds: [], staffRoles: {}, expanded: false });
     syncCartChrome();
     if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
   }
@@ -18505,6 +19863,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function renderStaffPickerHtml(it) {
+    ensureCartStaffState(it);
     const pool = getStaffPool();
     const head = `<div class="detail-item__panel-row detail-item__panel-row--staff-head">
       <span>选择员工</span>
@@ -18513,19 +19872,33 @@ window.__BILLING_EMBEDDED__ = true;
     if (staffUsesListMode()) {
       const rows = pool.map(st => {
         const on = (it.staffIds || []).includes(st.id);
-        return `<button type="button" class="detail-item__staff-row" data-staff-toggle="${it.id}" data-staff-id="${st.id}">
-          <span class="detail-item__staff-row-dash" aria-hidden="true"></span>
-          <span class="detail-item__staff-row-name">${escapeHtml(st.name)}</span>
-          <span class="detail-item__staff-row-badge ${on ? 'is-on' : ''}">${on ? '已指定' : '未指定'}</span>
-        </button>`;
+        const role = it.staffRoles[st.id] || STAFF_ROLE_DEFAULT;
+        const badgeText = !on ? '未指定' : staffRoleLabel(role);
+        const badgeCls = on ? ' is-on' : '';
+        return `<div class="detail-item__staff-row-wrap">
+          <button type="button" class="detail-item__staff-row" data-staff-toggle="${it.id}" data-staff-id="${st.id}">
+            <span class="detail-item__staff-row-dash" aria-hidden="true"></span>
+            <span class="detail-item__staff-row-name">${escapeHtml(st.name)}</span>
+            <span class="detail-item__staff-row-badge${badgeCls}">${badgeText}</span>
+          </button>
+          ${on ? `<div class="detail-item__role-row detail-item__role-row--list">${renderStaffRoleRadioHtml(it.id, st.id, role)}</div>` : ''}
+        </div>`;
       }).join('');
       return `<div class="detail-item__staff-block detail-item__staff-block--list">${head}<div class="detail-item__staff-list">${rows}</div></div>`;
     }
     const chips = pool.map(st => {
       const on = (it.staffIds || []).includes(st.id);
-      return `<button type="button" class="detail-item__chip ${on ? 'is-on' : ''}" data-staff-toggle="${it.id}" data-staff-id="${st.id}">${escapeHtml(staffChipLabel(st))}</button>`;
+      return `<button type="button" class="detail-item__chip ${on ? 'is-on' : ''}" data-staff-toggle="${it.id}" data-staff-id="${st.id}">${escapeHtml(st.name)}</button>`;
     }).join('');
-    return `<div class="detail-item__staff-block detail-item__staff-block--compact">${head}<div class="detail-item__chips-row"><div class="detail-item__chips">${chips}</div></div></div>`;
+    const roleRows = (it.staffIds || []).map(sid => {
+      const st = pool.find(s => s.id === sid) || { id: sid, name: sid };
+      const role = it.staffRoles[sid] || STAFF_ROLE_DEFAULT;
+      return `<div class="detail-item__role-row">
+        <span class="detail-item__role-row__name">${escapeHtml(st.name)}</span>
+        ${renderStaffRoleRadioHtml(it.id, sid, role)}
+      </div>`;
+    }).join('');
+    return `<div class="detail-item__staff-block detail-item__staff-block--compact">${head}<div class="detail-item__chips-row"><div class="detail-item__chips">${chips}</div></div>${roleRows ? `<div class="detail-item__role-list">${roleRows}</div>` : ''}</div>`;
   }
 
   function renderDetail() {
@@ -18535,6 +19908,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (!state.manualOrderNo) state.manualOrderNo = '8290009321234560';
     const items = state.cart.map(it => {
       if (!it.staffIds) it.staffIds = [];
+      ensureCartStaffState(it);
       const unit = lineUnit(it);
       const lineAmt = round2(unit * it.qty);
       const open = state.detailExpandedId === it.id;
@@ -19240,6 +20614,1506 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-success');
   }
 
+  /* ==== 订单流水 · seed 对齐 CUSTOMERS / PROJECTS / PRODUCTS / STAFFS ==== */
+  const FLOW_AVATAR_GUEST = 'assets/billing/avatar-female.png';
+  const FLOW_ORDERS = [
+    {
+      id: 'fo-seed-1',
+      flowNo: '202607270001',
+      customerId: null,
+      customerName: '散客',
+      avatar: FLOW_AVATAR_GUEST,
+      status: 'done',
+      kind: 'project',
+      items: [{ id: 'fi-seed-1', name: '洗剪吹', price: 68, type: 'project', qty: 1 }],
+      staff: '林屿森',
+      staffSpecify: false,
+      payMethod: '现金',
+      payments: [{ method: '现金', amount: 68 }],
+      amount: 68,
+      achievement: 68,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.27 09:22',
+      cashier: '林屿森',
+    },
+    {
+      id: 'fo-seed-2',
+      flowNo: '202607261014',
+      customerId: 'm1',
+      customerName: '张雨晴',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'done',
+      kind: 'project',
+      items: [{ id: 'fi-seed-2', name: '头皮护理', price: 168, type: 'project', qty: 1 }],
+      staff: '何苏叶',
+      staffSpecify: true,
+      payMethod: '微信',
+      payments: [
+        { method: '微信', amount: 100 },
+        { method: '现金', amount: 68 },
+      ],
+      amount: 168,
+      achievement: 168,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.26 15:40',
+      cashier: '何苏叶',
+    },
+    {
+      id: 'fo-seed-3',
+      flowNo: '202607251008',
+      customerId: 'm8',
+      customerName: '吴佳宁',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'done',
+      kind: 'project',
+      items: [{ id: 'fi-seed-3', name: '时尚洗吹', price: 58, type: 'project', qty: 1 }],
+      staff: '阿Ken',
+      staffSpecify: true,
+      payMethod: '会员卡',
+      payments: [{ method: '会员卡', amount: 0 }],
+      amount: 0,
+      listPrice: 58,
+      achievement: 58,
+      commission: 0,
+      discount: 58,
+      benefitLabel: '全年洗吹卡 · 项目抵扣',
+      time: '2026.07.25 11:18',
+      cashier: '林屿森',
+    },
+    {
+      id: 'fo-seed-4',
+      flowNo: '202607241022',
+      customerId: 'm2',
+      customerName: '李诗涵',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'done',
+      kind: 'product',
+      items: [{ id: 'fi-seed-4', name: '剑琅修护洗发水', price: 128, type: 'product', qty: 1, spec: '500ml' }],
+      staff: 'Lisa',
+      staffSpecify: false,
+      payMethod: '支付宝',
+      payments: [{ method: '支付宝', amount: 128 }],
+      amount: 128,
+      achievement: 128,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.24 16:05',
+      cashier: 'Lisa',
+    },
+    {
+      id: 'fo-seed-5',
+      flowNo: '202607231008',
+      customerId: 'm1',
+      customerName: '张雨晴',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'done',
+      kind: 'card',
+      items: [{ id: 'fi-seed-5', name: '办卡 · 尊享组合卡', price: 2000, type: 'card', qty: 1 }],
+      staff: '林屿森',
+      staffSpecify: false,
+      payMethod: '微信',
+      payments: [{ method: '微信', amount: 2000 }],
+      amount: 2000,
+      achievement: 2000,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.23 14:20',
+      cashier: '林屿森',
+    },
+    {
+      id: 'fo-seed-6',
+      flowNo: '202607221015',
+      customerId: 'm2',
+      customerName: '李诗涵',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'done',
+      kind: 'card',
+      items: [{ id: 'fi-seed-6', name: '充值 · 老客续充卡', price: 1000, type: 'card', qty: 1 }],
+      staff: '何苏叶',
+      staffSpecify: false,
+      payMethod: '支付宝',
+      payments: [{ method: '支付宝', amount: 1000 }],
+      amount: 1000,
+      achievement: 1000,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.22 10:05',
+      cashier: '何苏叶',
+    },
+    {
+      id: 'fo-seed-7',
+      flowNo: '202607201002',
+      customerId: null,
+      customerName: '散客',
+      avatar: FLOW_AVATAR_GUEST,
+      status: 'void',
+      kind: 'project',
+      items: [{ id: 'fi-seed-7', name: '精致剪发', price: 88, type: 'project', qty: 1 }],
+      staff: '阿Ken',
+      staffSpecify: false,
+      payMethod: '现金',
+      payments: [{ method: '现金', amount: 88 }],
+      amount: 88,
+      achievement: 88,
+      commission: 0,
+      discount: 0,
+      benefitLabel: '无卡权益',
+      time: '2026.07.20 16:48',
+      cashier: '阿Ken',
+    },
+  ];
+
+  const FLOW_WEIKUAN = [
+    {
+      id: 'wk-1',
+      customerName: '张雨晴',
+      phone: '13800001111',
+      status: 'pending',
+      statusLabel: '待收尾款',
+      amount: 320,
+      related: '办卡 · 尊享组合卡',
+      time: '2026.07.23 14:20',
+    },
+    {
+      id: 'wk-2',
+      customerName: '散客',
+      phone: '',
+      status: 'pending',
+      statusLabel: '待收尾款',
+      amount: 50,
+      related: '洗剪吹',
+      time: '2026.07.27 09:22',
+    },
+    {
+      id: 'wk-3',
+      customerName: '李诗涵',
+      phone: '13900002222',
+      status: 'done',
+      statusLabel: '已还清',
+      amount: 0,
+      related: '充值 · 老客续充卡',
+      time: '2026.07.18 16:40',
+    },
+  ];
+
+  const FLOW_WEIKUAN_REPAY = [
+    {
+      id: 'wr-1',
+      customerName: '李诗涵',
+      amount: 200,
+      method: '微信',
+      related: '充值 · 老客续充卡',
+      time: '2026.07.18 16:40',
+    },
+    {
+      id: 'wr-2',
+      customerName: '张雨晴',
+      amount: 100,
+      method: '现金',
+      related: '办卡 · 尊享组合卡',
+      time: '2026.07.24 11:05',
+    },
+  ];
+
+  const FLOW_SELF_ORDERS = [
+    {
+      id: 'fs-seed-1',
+      customerId: 'm1',
+      customerName: '张雨晴',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'paid',
+      kind: 'project',
+      items: [{ name: '洗剪吹', price: 68, type: 'project', qty: 1 }],
+      payMethod: '微信',
+      amount: 68,
+      time: '2026.07.27 10:18',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-2',
+      customerId: 'm2',
+      customerName: '李诗涵',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'paid',
+      kind: 'product',
+      items: [{ name: '剑琅修护洗发水', price: 128, type: 'product', qty: 1 }],
+      payMethod: '支付宝',
+      amount: 128,
+      time: '2026.07.27 11:05',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-3',
+      customerId: null,
+      customerName: '散客',
+      avatar: FLOW_AVATAR_GUEST,
+      status: 'pending',
+      kind: 'project',
+      items: [{ name: '时尚洗吹', price: 58, type: 'project', qty: 1 }],
+      payMethod: '微信',
+      amount: 58,
+      time: '2026.07.27 12:32',
+      channel: '顾客自助',
+    },
+  ];
+
+  function flowSelfStatusLabel(status) {
+    if (status === 'pending') return '待支付';
+    if (status === 'closed') return '已关闭';
+    return '已支付';
+  }
+
+  function flowStatusLabel(status) {
+    if (status === 'void') return '已作废';
+    if (status === 'refund') return '已退款';
+    return '已完成';
+  }
+
+  function flowTypeTag(kind) {
+    if (kind === 'product') return { text: '产', cls: 'flow-type-tag--product' };
+    if (kind === 'card') return { text: '卡', cls: 'flow-type-tag--card' };
+    return { text: '项', cls: '' };
+  }
+
+  function flowAvatarSrc(o) {
+    if (o && o.avatar) return o.avatar;
+    if (o && o.customerId) {
+      const c = CUSTOMERS.find(x => x.id === o.customerId);
+      if (c && c.avatar) return c.avatar;
+    }
+    const name = (o && o.customerName) || '';
+    if (/先生|男/.test(name)) return 'assets/billing/avatar-male.png';
+    return FLOW_AVATAR_GUEST;
+  }
+
+  function flowIconEmpty() {
+    /* Lucide receipt · 空态流水单据 */
+    return `<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6M16 12h-6M16 16h-6"/></svg>`;
+  }
+
+  function flowEmptyHtml(title, desc) {
+    return `<div class="flow-empty">
+      <div class="flow-empty__illus" aria-hidden="true">${flowIconEmpty()}</div>
+      <div class="flow-empty__title">${escapeHtml(title || '暂无数据')}</div>
+      <div class="flow-empty__desc">${escapeHtml(desc || '相关订单会出现在这里')}</div>
+    </div>`;
+  }
+
+  function flowAvatarHtml(o) {
+    const src = flowAvatarSrc(o);
+    return `<img class="flow-order-card__avatar" src="${escapeHtml(src)}" alt="" width="36" height="36">`;
+  }
+
+  function flowIconStore() {
+    /* Lucide receipt · 门店流水（与空态单据同系） */
+    return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6"/><path d="M16 12h-6"/><path d="M16 16h-6"/></svg>`;
+  }
+  function flowIconSelf() {
+    /* Lucide smartphone · 自助收银 */
+    return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>`;
+  }
+  function flowIconChevron() {
+    /* Lucide chevron-right · 辅助 16 */
+    return `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
+  }
+  function flowIconChevronDown() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+  }
+  function flowIconChevronUp() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>`;
+  }
+  function flowIconPencil() {
+    /* Lucide pencil · 可编辑示意 */
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a2.119 2.119 0 0 0-3.004-2.987L4.5 17.5 2 22l4.5-2.5Z"/><path d="m15 5 4 4"/></svg>`;
+  }
+  function flowIconFilter() {
+    /* Lucide sliders-horizontal · 标题栏筛选统一图标 */
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>`;
+  }
+  function flowIconInfo() {
+    /* 内联 info，避免相对路径丢图；描边用 warn-text */
+    return `<svg class="flow-detail-foot__tip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#E37318" stroke-width="2"/><path d="M12 16v-4" stroke="#E37318" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.25" fill="#E37318"/></svg>`;
+  }
+
+  function flowPaymentsOf(o) {
+    if (o && Array.isArray(o.payments) && o.payments.length) {
+      return o.payments.map(p => ({
+        method: p.method || p.name || '其他',
+        amount: Number(p.amount) || 0,
+      }));
+    }
+    return [{ method: (o && o.payMethod) || '现金', amount: Number(o && o.amount) || 0 }];
+  }
+
+  function flowParseDay(timeStr) {
+    if (!timeStr) return '';
+    return String(timeStr).slice(0, 10).replace(/\./g, '-');
+  }
+
+  function flowTodayKey() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  function flowDaysAgoKey(n) {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    const pad = x => String(x).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  function flowMatchDateFilter(o, dateMode) {
+    if (!dateMode || dateMode === 'all') return true;
+    const day = flowParseDay(o.time);
+    if (dateMode === 'today') return day === flowTodayKey();
+    if (dateMode === '7d') return day >= flowDaysAgoKey(6) && day <= flowTodayKey();
+    return true;
+  }
+
+  function flowApplySheetFilter(list) {
+    const f = state.flowFilter || { date: 'all', pay: 'all', guest: 'all' };
+    return list.filter(o => {
+      if (!flowMatchDateFilter(o, f.date)) return false;
+      if (f.pay && f.pay !== 'all' && o.payMethod !== f.pay) return false;
+      if (f.guest === 'guest' && o.customerId) return false;
+      if (f.guest === 'member' && !o.customerId) return false;
+      return true;
+    });
+  }
+
+  function flowOrdersByTab(tab) {
+    let list = FLOW_ORDERS.slice();
+    if (tab === 'project') list = list.filter(o => o.kind === 'project' && o.status !== 'void');
+    else if (tab === 'product') list = list.filter(o => o.kind === 'product' && o.status !== 'void');
+    else if (tab === 'card') list = list.filter(o => o.kind === 'card' && o.status !== 'void');
+    else if (tab === 'void') list = list.filter(o => o.status === 'void');
+    else list = list.filter(o => o.status !== 'void');
+    return flowApplySheetFilter(list);
+  }
+
+  function flowTabCounts() {
+    const base = FLOW_ORDERS.filter(o => {
+      const f = state.flowFilter || { date: 'all', pay: 'all', guest: 'all' };
+      if (!flowMatchDateFilter(o, f.date)) return false;
+      if (f.pay && f.pay !== 'all' && o.payMethod !== f.pay) return false;
+      if (f.guest === 'guest' && o.customerId) return false;
+      if (f.guest === 'member' && !o.customerId) return false;
+      return true;
+    });
+    return {
+      all: base.filter(o => o.status !== 'void').length,
+      project: base.filter(o => o.kind === 'project' && o.status !== 'void').length,
+      product: base.filter(o => o.kind === 'product' && o.status !== 'void').length,
+      card: base.filter(o => o.kind === 'card' && o.status !== 'void').length,
+      void: base.filter(o => o.status === 'void').length,
+    };
+  }
+
+  function nextFlowNo() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const seq = String(FLOW_ORDERS.length + 1).padStart(4, '0');
+    return `${y}${m}${day}${seq}`;
+  }
+
+  function formatFlowTime(d) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  function recordFlowOrderFromSettlement(s) {
+    const c = getCustomer();
+    const chMap = {
+      alipay: '支付宝', wechat: '微信', meituan: '美团', dianping: '大众点评',
+      douyin: '抖音', koubei: '口碑', cash: '现金', bank: '银行卡', membercard: '会员卡',
+    };
+    const splits = (s.paySplits || []).filter(p => p.amount > 0);
+    const cashLike = splits.filter(p => p.id !== 'membercard');
+    const payMethod = cashLike.length
+      ? (chMap[cashLike[0].id] || cashLike[0].id)
+      : (splits.length ? (chMap[splits[0].id] || splits[0].id) : (chMap[state.payChannel] || state.payChannel || '现金'));
+    const paid = splits.length
+      ? round2(splits.reduce((a, p) => a + p.amount, 0))
+      : round2(Number(s.dueCash) || 0);
+    const payments = splits.length
+      ? splits.map(p => ({ method: chMap[p.id] || p.id, amount: round2(p.amount) }))
+      : [{ method: payMethod, amount: paid }];
+    const cartItems = (state.cart || []).map((line, i) => {
+      const prodHit = (PRODUCTS || []).find(p => p.id === line.id || p.name === line.name);
+      const isProduct = !!(prodHit || line.kind === 'product' || line.type === 'product');
+      return {
+        id: `fi-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 6)}`,
+        name: line.name || (isProduct ? '产品' : '项目'),
+        price: round2(Number(line.unitPrice != null ? line.unitPrice : line.price) || 0),
+        type: isProduct ? 'product' : 'project',
+        qty: Number(line.qty) || 1,
+        spec: (prodHit && prodHit.spec) || line.spec || '',
+      };
+    });
+    const items = cartItems.length
+      ? cartItems
+      : [{ name: '开单消费', price: paid, type: 'project', qty: 1 }];
+    const kind = items.every(i => i.type === 'product') ? 'product' : 'project';
+    const defaultStaff = (STAFFS_SMALL[0] && STAFFS_SMALL[0].name) || '林屿森';
+    const staffName = state.technician && state.technician !== '未指定' ? state.technician : defaultStaff;
+    const isGuest = !c || isGuestCustomer(c);
+    const order = {
+      id: `fo-${Date.now()}`,
+      flowNo: nextFlowNo(),
+      customerId: isGuest ? null : c.id,
+      customerName: (c && c.name) || '散客',
+      avatar: (c && c.avatar) || FLOW_AVATAR_GUEST,
+      status: 'done',
+      kind,
+      items,
+      staff: staffName,
+      staffSpecify: !!(state.technician && state.technician !== '未指定'),
+      payMethod,
+      payments,
+      amount: paid || round2(Number(s.listTotal) || 0),
+      achievement: paid || round2(Number(s.listTotal) || 0),
+      commission: 0,
+      discount: round2((s.discountDeduct || 0) + (s.couponDeduct || 0) + (s.projectDeduct || 0) + (s.balanceDeduct || 0)),
+      benefitLabel: (s.projectDeduct || s.balanceDeduct) ? '会员卡权益' : '无卡权益',
+      time: formatFlowTime(new Date()),
+      cashier: defaultStaff,
+      manualOrderNo: s.manualOrderNo || state.manualOrderNo || '',
+    };
+    FLOW_ORDERS.unshift(order);
+    state.lastFlowOrderId = order.id;
+    return order;
+  }
+
+  function renderFlowHub() {
+    const storeCount = FLOW_ORDERS.filter(o => o.status !== 'void').length;
+    const selfCount = FLOW_SELF_ORDERS.length;
+    const body = document.getElementById('flowHubBody');
+    if (!body) return;
+    body.innerHTML = `
+      <div class="flow-hub-overview">
+        <div class="flow-hub-overview__head">
+          <div class="flow-hub-overview__title">流水概览</div>
+          <div class="flow-hub-overview__sub">今日数据</div>
+        </div>
+        <div class="flow-hub-entries">
+          <button type="button" class="flow-hub-card" data-flow-hub="store" aria-label="进入门店流水">
+            <span class="flow-hub-card__icon" aria-hidden="true">${flowIconStore()}</span>
+            <span class="flow-hub-card__body">
+              <span class="flow-hub-card__title-row">
+                <span class="flow-hub-card__title">门店流水</span>
+                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
+              </span>
+              <span class="flow-hub-card__hint">开单 · 办卡 · 充值等门店订单</span>
+              <span class="flow-hub-card__metric">
+                <span class="flow-hub-card__val">${storeCount}</span>
+                <span class="flow-hub-card__unit">笔</span>
+              </span>
+            </span>
+          </button>
+          <button type="button" class="flow-hub-card" data-flow-hub="self" aria-label="进入自助收银">
+            <span class="flow-hub-card__icon flow-hub-card__icon--soft" aria-hidden="true">${flowIconSelf()}</span>
+            <span class="flow-hub-card__body">
+              <span class="flow-hub-card__title-row">
+                <span class="flow-hub-card__title">自助收银</span>
+                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
+              </span>
+              <span class="flow-hub-card__hint">顾客端自助下单订单</span>
+              <span class="flow-hub-card__metric">
+                <span class="flow-hub-card__val">${selfCount}</span>
+                <span class="flow-hub-card__unit">笔</span>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  function renderFlowList() {
+    const counts = flowTabCounts();
+    const tabs = [
+      { id: 'all', label: '全部' },
+      { id: 'project', label: '项目' },
+      { id: 'product', label: '产品' },
+      { id: 'card', label: '会员卡' },
+      { id: 'void', label: '作废' },
+    ];
+    const tabEl = document.getElementById('flowListTabs');
+    if (tabEl) {
+      tabEl.innerHTML = tabs.map(t => {
+        const n = counts[t.id] || 0;
+        const badge = n > 0 ? `<span class="flow-list-tab__badge">${n}</span>` : '';
+        return `<button type="button" class="flow-list-tab${state.flowTab === t.id ? ' is-active' : ''}" data-flow-tab="${t.id}" role="tab" aria-selected="${state.flowTab === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}${badge}</button>`;
+      }).join('');
+    }
+    const list = flowOrdersByTab(state.flowTab);
+    const body = document.getElementById('flowListBody');
+    if (!body) return;
+    if (!list.length) {
+      body.innerHTML = flowEmptyHtml('暂无流水', '切换 Tab 或完成开单后可在此查看');
+      return;
+    }
+    body.innerHTML = list.map(o => {
+      const item = o.items[0] || { name: '—', price: o.amount };
+      const tag = flowTypeTag(o.kind);
+      const statusCls = o.status === 'void' ? ' is-void' : (o.status === 'refund' ? ' is-refund' : '');
+      const showAmt = Number(o.amount);
+      const priceLabel = Number(item.price != null ? item.price : (o.listPrice != null ? o.listPrice : showAmt));
+      return `<button type="button" class="flow-order-card" data-flow-id="${escapeHtml(o.id)}">
+        <div class="flow-order-card__head">
+          <div class="flow-order-card__user">
+            ${flowAvatarHtml(o)}
+            <span class="flow-order-card__name">${escapeHtml(o.customerName)}</span>
+          </div>
+          <span class="flow-order-card__status${statusCls}">${escapeHtml(flowStatusLabel(o.status))}</span>
+        </div>
+        <div class="flow-order-card__item">
+          <span class="flow-type-tag ${tag.cls}">${tag.text}</span>
+          <div class="flow-order-card__item-main">
+            <div class="flow-order-card__item-name">${escapeHtml(item.name)}</div>
+            <span class="flow-order-card__staff">服务人 | ${escapeHtml(o.staff)}</span>
+          </div>
+          <div class="flow-order-card__price"><span class="yen">¥</span>${priceLabel.toFixed(2)}</div>
+        </div>
+        <div class="flow-order-card__pay">
+          <span>${escapeHtml(o.payMethod)}</span>
+          <span class="flow-order-card__pay-amt">-¥${showAmt.toFixed(2)}</span>
+        </div>
+        <div class="flow-order-card__total">实付总额<span class="num"><span class="yen">¥</span>${showAmt.toFixed(2)}</span></div>
+        <div class="flow-order-card__foot">
+          <span>开单时间</span>
+          <span>${escapeHtml(o.time)}</span>
+        </div>
+      </button>`;
+    }).join('');
+  }
+
+  function renderFlowDetail() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId) || FLOW_ORDERS[0];
+    const body = document.getElementById('flowDetailBody');
+    const foot = document.getElementById('flowDetailFoot');
+    if (!o || !body) return;
+    const item = o.items[0] || { name: '—', price: o.amount };
+    const tag = flowTypeTag(o.kind);
+    const expandLabel = state.flowDetailExpanded ? '收起' : '展开';
+    const expandIcon = state.flowDetailExpanded ? flowIconChevronUp() : flowIconChevronDown();
+    const payAmt = Number(o.amount);
+    const itemPrice = Number(item.price != null ? item.price : (o.listPrice != null ? o.listPrice : payAmt));
+    const ach = Number(o.achievement != null ? o.achievement : itemPrice);
+    const comm = Number(o.commission || 0);
+    const payLines = flowPaymentsOf(o);
+    const payRowsHtml = payLines.map(p => `
+        <div class="flow-detail-pay-row"><span>${escapeHtml(p.method)}</span><span class="flow-detail-pay-amt"><span class="yen">¥</span>${Number(p.amount).toFixed(2)}</span></div>`
+    ).join('');
+    const itemsHtml = (o.items && o.items.length ? o.items : [item]).map(it => {
+      const t = flowTypeTag(it.type === 'product' ? 'product' : (it.type === 'card' ? 'card' : (o.kind || 'project')));
+      const price = Number(it.price != null ? it.price : 0);
+      return `<div class="flow-detail-item-row" style="margin-bottom:12px">
+          <span class="flow-type-tag ${t.cls}">${t.text}</span>
+          <div style="flex:1;min-width:0">
+            <div class="flow-detail-item-name">${escapeHtml(it.name)}</div>
+            <div class="flow-detail-item-price"><span class="yen">¥</span>${price.toFixed(2)}${it.qty > 1 ? ` · ×${it.qty}` : ''}</div>
+          </div>
+        </div>`;
+    }).join('');
+    const staffs = Array.isArray(o.staffs) && o.staffs.length
+      ? o.staffs
+      : [{ name: o.staff, specify: o.staffSpecify, achievement: ach, commission: comm }];
+    const staffBlockHtml = staffs.length > 1
+      ? staffs.map(st => `
+        <div class="flow-edit-staff-row" style="padding:10px 0">
+          <div class="flow-edit-staff-row__head">
+            <span class="flow-edit-staff-row__name">${escapeHtml(st.name || '—')}</span>
+            <span class="flow-edit-staff-row__tag${st.specify ? ' is-on' : ''}">${st.specify ? '指定' : '非指定'}</span>
+          </div>
+          <div class="flow-detail-meta__row" style="padding:4px 0"><span>业绩</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${Number(st.achievement || 0).toFixed(2)}</span></div>
+          <div class="flow-detail-meta__row" style="padding:4px 0"><span>提成</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${Number(st.commission || 0).toFixed(2)}</span></div>
+        </div>`).join('')
+      : `<div class="flow-detail-metric">
+          <label class="flow-detail-metric__item">
+            <span class="flow-detail-metric__label">业绩</span>
+            <span class="flow-detail-metric__val-row">
+              <input type="text" class="input-amount flow-detail-metric__input" readonly inputmode="decimal"
+                data-flow-perf="achievement" value="${Number(staffs[0].achievement != null ? staffs[0].achievement : ach).toFixed(2)}" aria-label="修改业绩">
+              <span class="flow-detail-metric__edit-icon" aria-hidden="true">${flowIconPencil()}</span>
+            </span>
+          </label>
+          <label class="flow-detail-metric__item">
+            <span class="flow-detail-metric__label">提成</span>
+            <span class="flow-detail-metric__val-row">
+              <input type="text" class="input-amount flow-detail-metric__input" readonly inputmode="decimal"
+                data-flow-perf="commission" value="${Number(staffs[0].commission != null ? staffs[0].commission : comm).toFixed(2)}" aria-label="修改提成">
+              <span class="flow-detail-metric__edit-icon" aria-hidden="true">${flowIconPencil()}</span>
+            </span>
+          </label>
+        </div>`;
+    const staffLineHtml = staffs.map(st => `
+        <div class="flow-detail-staff">
+          <span>${escapeHtml(st.name || '—')}</span>
+          <span class="flow-detail-staff__tag">${st.specify ? '指定' : '非指定'}</span>
+        </div>`).join('');
+    const meta = state.flowDetailExpanded ? `
+      <div class="flow-detail-meta">
+        <div class="flow-detail-meta__row"><span>开单人员</span><span class="flow-detail-meta__val">${escapeHtml(o.cashier || o.staff)}</span></div>
+        <div class="flow-detail-meta__row"><span>开单时间</span><span class="flow-detail-meta__val">${escapeHtml(o.time)}</span></div>
+        <div class="flow-detail-meta__row"><span>流水单号</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${escapeHtml(o.flowNo)}</span></div>
+        ${o.manualOrderNo ? `<div class="flow-detail-meta__row"><span>手工单号</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${escapeHtml(o.manualOrderNo)}</span></div>` : ''}
+      </div>` : '';
+    const allBtn = state.flowFromSuccess
+      ? '<button type="button" class="flow-detail-all" data-flow-all>查看全部流水</button>'
+      : '';
+    const canAct = o.status === 'done';
+    body.innerHTML = `
+      ${allBtn}
+      <div class="flow-detail-card">
+        <div class="flow-detail-user">
+          <div class="flow-detail-user__left">
+            ${flowAvatarHtml(o)}
+            <strong>${escapeHtml(o.customerName)}</strong>
+          </div>
+          <button type="button" class="flow-detail-expand" data-flow-expand>${expandLabel}${expandIcon}</button>
+        </div>
+        ${meta}
+      </div>
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">消费内容</div>
+        ${itemsHtml}
+        <div class="flow-detail-benefit">
+          <div class="flow-detail-benefit__label">权益 · 会员卡</div>
+          <div class="flow-detail-benefit__row"><span>${escapeHtml(o.benefitLabel || '无卡权益')}</span><span>-¥${Number(o.discount || 0).toFixed(2)}</span></div>
+          <div class="flow-detail-due"><span>应付</span><span class="amt"><span class="yen">¥</span>${payAmt.toFixed(2)}</span></div>
+        </div>
+        ${staffLineHtml}
+      </div>
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">业绩提成</div>
+        ${staffBlockHtml}
+      </div>
+      ${canAct ? `<div class="flow-detail-card">
+        <div class="flow-detail-edit">
+          <div class="flow-detail-edit__main">
+            <div class="flow-detail-edit__title">修改订单</div>
+            <div class="flow-detail-edit__hint">添加项目、调整服务与支付</div>
+          </div>
+          <button type="button" class="flow-detail-edit__btn" data-flow-edit>修改</button>
+        </div>
+      </div>` : ''}
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">支付信息</div>
+        ${payRowsHtml}
+        <div class="flow-detail-pay-row flow-detail-pay-row--strong"><span>实付</span><span class="flow-detail-pay-amt"><span class="yen">¥</span>${payAmt.toFixed(2)}</span></div>
+      </div>`;
+    if (foot) {
+      if (!canAct) {
+        foot.innerHTML = `
+          <div class="flow-detail-foot__main">
+            <div class="flow-detail-foot__total">
+              <div class="flow-detail-foot__label">实付总额</div>
+              <div class="flow-detail-foot__amt"><span class="yen">¥</span>${payAmt.toFixed(2)}</div>
+            </div>
+            <button type="button" class="btn-void" disabled style="opacity:.5">${escapeHtml(flowStatusLabel(o.status))}</button>
+          </div>
+          <div class="flow-detail-foot__safe" aria-hidden="true"></div>`;
+      } else {
+        foot.innerHTML = `
+          <div class="flow-detail-foot__tip">
+            ${flowIconInfo()}
+            <span class="flow-detail-foot__tip-text">客户退钱点退款；单子开错点作废</span>
+          </div>
+          <div class="flow-detail-foot__main">
+            <div class="flow-detail-foot__total">
+              <div class="flow-detail-foot__label">实付总额</div>
+              <div class="flow-detail-foot__amt"><span class="yen">¥</span>${payAmt.toFixed(2)}</div>
+            </div>
+            <button type="button" class="btn-soft" data-flow-refund>申请退款</button>
+            <button type="button" class="btn-void" data-flow-void>订单作废</button>
+          </div>
+          <div class="flow-detail-foot__safe" aria-hidden="true"></div>`;
+      }
+    }
+  }
+
+  function openFlowHub() {
+    state.flowFromSuccess = false;
+    renderFlowHub();
+    showOnlyScreen('screen-flow-hub');
+  }
+
+  function openFlowList() {
+    state.flowFromSuccess = false;
+    if (!state.flowTab) state.flowTab = 'all';
+    renderFlowList();
+    showOnlyScreen('screen-flow-list');
+  }
+
+  function openFlowSelf() {
+    renderFlowSelf();
+    showOnlyScreen('screen-flow-self');
+  }
+
+  function openFlowDetail(id, opts) {
+    const order = FLOW_ORDERS.find(x => x.id === id) || FLOW_ORDERS[0];
+    if (!order) {
+      showToast('暂无流水');
+      openFlowHub();
+      return;
+    }
+    state.flowDetailId = order.id;
+    state.flowDetailExpanded = false;
+    state.flowFromSuccess = !!(opts && opts.fromSuccess);
+    renderFlowDetail();
+    showOnlyScreen('screen-flow-detail');
+  }
+
+
+  function renderFlowFilterSheet() {
+    const draft = state.flowFilterDraft || Object.assign({}, state.flowFilter);
+    state.flowFilterDraft = draft;
+    const body = document.getElementById('flowFilterBody');
+    if (!body) return;
+    const dateOpts = [
+      { id: 'all', label: '全部日期' },
+      { id: 'today', label: '今日' },
+      { id: '7d', label: '近7日' },
+    ];
+    const payOpts = [
+      { id: 'all', label: '全部' },
+      { id: '现金', label: '现金' },
+      { id: '微信', label: '微信' },
+      { id: '支付宝', label: '支付宝' },
+      { id: '会员卡', label: '会员卡' },
+    ];
+    const guestOpts = [
+      { id: 'all', label: '全部顾客' },
+      { id: 'guest', label: '散客' },
+      { id: 'member', label: '会员' },
+    ];
+    const chips = (key, opts) => opts.map(o =>
+      `<button type="button" class="flow-chip${draft[key] === o.id ? ' is-on' : ''}" data-flow-filter-key="${key}" data-flow-filter-val="${escapeHtml(o.id)}">${escapeHtml(o.label)}</button>`
+    ).join('');
+    body.innerHTML = `
+      <div class="flow-filter-section">
+        <div class="flow-filter-section__title">日期</div>
+        <div class="flow-chip-row">${chips('date', dateOpts)}</div>
+      </div>
+      <div class="flow-filter-section">
+        <div class="flow-filter-section__title">支付方式</div>
+        <div class="flow-chip-row">${chips('pay', payOpts)}</div>
+      </div>
+      <div class="flow-filter-section">
+        <div class="flow-filter-section__title">顾客类型</div>
+        <div class="flow-chip-row">${chips('guest', guestOpts)}</div>
+      </div>`;
+  }
+
+  function openFlowFilter() {
+    state.flowFilterDraft = Object.assign({}, state.flowFilter || { date: 'all', pay: 'all', guest: 'all' });
+    renderFlowFilterSheet();
+    openMask('flowFilterMask');
+  }
+
+  function openFlowVoidDialog() {
+    document.getElementById('flowVoidMask')?.classList.add('open');
+  }
+
+  function closeFlowVoidDialog() {
+    document.getElementById('flowVoidMask')?.classList.remove('open');
+  }
+
+  function confirmFlowVoid() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o) return;
+    o.status = 'void';
+    closeFlowVoidDialog();
+    showToast('订单已作废');
+    state.flowTab = 'void';
+    openFlowList();
+  }
+
+  function openFlowMore() {
+    openMask('flowMoreMask');
+  }
+
+  function renderFlowRefund() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    const body = document.getElementById('flowRefundBody');
+    const foot = document.getElementById('flowRefundFoot');
+    if (!o || !body) return;
+    if (!Array.isArray(state.flowRefundSelected)) state.flowRefundSelected = o.items.map((_, i) => i);
+    const selected = new Set(state.flowRefundSelected);
+    const allOn = o.items.length > 0 && o.items.every((_, i) => selected.has(i));
+    body.innerHTML = `
+      <div class="flow-refund-rule">全选可原路退回或指定退款方式；部分退款仅支持指定退款方式。</div>
+      <div class="flow-refund-toolbar">
+        <span>已选 ${selected.size}/${o.items.length} 项</span>
+        <button type="button" data-flow-refund-all>${allOn ? '取消全选' : '全选'}</button>
+      </div>
+      ${o.items.map((it, i) => `
+        <button type="button" class="flow-refund-item${selected.has(i) ? ' is-on' : ''}" data-flow-refund-idx="${i}">
+          <span class="flow-refund-item__check" aria-hidden="true">${selected.has(i) ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+          <div class="flow-refund-item__main">
+            <div class="flow-refund-item__name">${escapeHtml(it.name)}</div>
+            <div class="flow-refund-item__meta">×${it.qty || 1}</div>
+          </div>
+          <div class="flow-refund-item__price"><span class="yen">¥</span>${Number(it.price || 0).toFixed(2)}</div>
+        </button>`).join('')}`;
+    const sum = o.items.reduce((s, it, i) => selected.has(i) ? s + Number(it.price || 0) : s, 0);
+    if (foot) {
+      foot.innerHTML = `
+        <div class="flow-screen-foot__main">
+          <div class="flow-detail-foot__total">
+            <div class="flow-detail-foot__label">退款金额</div>
+            <div class="flow-detail-foot__amt"><span class="yen">¥</span>${sum.toFixed(2)}</div>
+          </div>
+          <button type="button" class="btn-main" data-flow-refund-confirm ${selected.size ? '' : 'disabled style="opacity:.5"'}>确认退款</button>
+        </div>
+        <div class="flow-screen-foot__safe" aria-hidden="true"></div>`;
+    }
+  }
+
+  function openFlowRefund() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o || o.status !== 'done') {
+      showToast('当前订单不可退款', true);
+      return;
+    }
+    closeMask('flowMoreMask');
+    state.flowRefundSelected = o.items.map((_, i) => i);
+    renderFlowRefund();
+    showOnlyScreen('screen-flow-refund');
+  }
+
+  function confirmFlowRefund() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o || !state.flowRefundSelected.length) {
+      showToast('请选择退款项', true);
+      return;
+    }
+    o.status = 'refund';
+    showToast('退款已提交');
+    openFlowDetail(o.id, { fromSuccess: false });
+  }
+
+  function renderFlowEdit() {
+    ensureFlowEditDraft();
+    const d = state.flowEditDraft;
+    const body = document.getElementById('flowEditBody');
+    const foot = document.getElementById('flowEditFoot');
+    if (!d || !body) return;
+    const pool = getStaffPool();
+    const staffName = (id) => (pool.find(s => s.id === id) || {}).name || id;
+    const achSum = d.staffs.reduce((s, x) => s + (Number(x.achievement) || 0), 0);
+    const commSum = d.staffs.reduce((s, x) => s + (Number(x.commission) || 0), 0);
+    const r2 = typeof round2 === 'function' ? round2 : (n) => Math.round(n * 100) / 100;
+    body.innerHTML = `
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">服务项目</div>
+        ${d.items.map(it => {
+          const tag = flowTypeTag(it.type === 'product' ? 'product' : (it.type === 'card' ? 'card' : 'project'));
+          const staffLine = (it.staffIds || []).length
+            ? (it.staffIds.map(staffName).join('、') + (it.specify ? ' · 指定' : ''))
+            : '未指定员工';
+          const specBit = it.type === 'product' && it.spec ? `${escapeHtml(it.spec)} · ` : '';
+          return `<button type="button" class="flow-edit-item" data-flow-edit-item="${escapeHtml(it.id)}">
+            <span class="flow-type-tag ${tag.cls}">${tag.text}</span>
+            <div class="flow-refund-item__main">
+              <div class="flow-refund-item__name">${escapeHtml(it.name)}</div>
+              <div class="flow-edit-item__meta-line">${specBit}×${it.qty || 1} · ${escapeHtml(staffLine)}</div>
+            </div>
+            <div class="flow-refund-item__price"><span class="yen">¥</span>${Number(it.price || 0).toFixed(2)}</div>
+            <span class="flow-edit-item__edit" aria-hidden="true">${flowIconPencil()}<span>编辑</span></span>
+          </button>`;
+        }).join('')}
+        <button type="button" class="btn-add-benefit" data-flow-edit-add style="width:100%;margin-top:4px">+ 添加服务项目</button>
+      </div>
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">设置员工</div>
+        ${d.staffs.length ? d.staffs.map(st => `
+          <div class="flow-edit-staff-row" data-flow-edit-staff="${escapeHtml(st.id)}">
+            <div class="flow-edit-staff-row__head">
+              <span class="flow-edit-staff-row__name">${escapeHtml(st.name)}</span>
+              <div class="flow-edit-specify-seg" role="group" aria-label="指定状态">
+                <button type="button" class="flow-edit-specify-seg__btn${!st.specify ? ' is-on' : ''}" data-flow-edit-staff-specify="${escapeHtml(st.id)}" data-specify="0">非指定</button>
+                <button type="button" class="flow-edit-specify-seg__btn${st.specify ? ' is-on' : ''}" data-flow-edit-staff-specify="${escapeHtml(st.id)}" data-specify="1">指定</button>
+              </div>
+            </div>
+            <div class="flow-edit-staff-row__metrics">
+              <label class="flow-detail-metric__item">
+                <span class="flow-detail-metric__label">业绩</span>
+                <span class="flow-detail-metric__val-row">
+                  <input type="text" class="input-amount flow-detail-metric__input" readonly inputmode="decimal"
+                    data-flow-edit-staff-perf="achievement" data-staff-id="${escapeHtml(st.id)}"
+                    value="${Number(st.achievement || 0).toFixed(2)}" aria-label="修改业绩">
+                  <span class="flow-detail-metric__edit-icon" aria-hidden="true">${flowIconPencil()}</span>
+                </span>
+              </label>
+              <label class="flow-detail-metric__item">
+                <span class="flow-detail-metric__label">提成</span>
+                <span class="flow-detail-metric__val-row">
+                  <input type="text" class="input-amount flow-detail-metric__input" readonly inputmode="decimal"
+                    data-flow-edit-staff-perf="commission" data-staff-id="${escapeHtml(st.id)}"
+                    value="${Number(st.commission || 0).toFixed(2)}" aria-label="修改提成">
+                  <span class="flow-detail-metric__edit-icon" aria-hidden="true">${flowIconPencil()}</span>
+                </span>
+              </label>
+            </div>
+          </div>`).join('') : `<div class="flow-edit-item__meta-line" style="padding:4px 0 12px">暂未设置员工</div>`}
+        <button type="button" class="btn-add-benefit" data-flow-edit-staff-add style="width:100%;margin-top:4px">+ 添加员工</button>
+        ${d.staffs.length ? `<div class="flow-edit-sum"><span>合计</span><span>业绩 <strong>${r2(achSum).toFixed(2)}</strong> · 提成 <strong>${r2(commSum).toFixed(2)}</strong></span></div>` : ''}
+      </div>`;
+    if (foot) {
+      foot.innerHTML = `
+        <div class="flow-screen-foot__main">
+          <button type="button" class="btn-soft" data-flow-edit-cancel>取消</button>
+          <button type="button" class="btn-main" data-flow-edit-save>保存修改</button>
+        </div>
+        <div class="flow-screen-foot__safe" aria-hidden="true"></div>`;
+    }
+  }
+
+  function flowResolveItemType(it, orderKind) {
+    if (it && it.type === 'product') return 'product';
+    if (it && it.type === 'card') return 'card';
+    if (it && it.type === 'project') return 'project';
+    if (orderKind === 'product') return 'product';
+    if (orderKind === 'card') return 'card';
+    return 'project';
+  }
+
+  function flowNormalizeEditItems(items, orderKind) {
+    return (items || []).map((it, i) => {
+      const type = flowResolveItemType(it, orderKind);
+      let spec = it.spec || '';
+      if (type === 'product' && !spec) {
+        const hit = (PRODUCTS || []).find(p => p.name === it.name);
+        if (hit && hit.spec) spec = hit.spec;
+      }
+      return {
+        id: it.id || (`fi-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 6)}`),
+        name: it.name || '—',
+        price: Number(it.price) || 0,
+        qty: Math.max(1, Number(it.qty) || 1),
+        type,
+        spec,
+        staffIds: Array.isArray(it.staffIds) ? it.staffIds.slice() : [],
+        specify: !!it.specify,
+      };
+    });
+  }
+
+  function flowStaffsFromOrder(o) {
+    if (Array.isArray(o.staffs) && o.staffs.length) {
+      return o.staffs.map(s => ({
+        id: s.id || s.name,
+        name: s.name || '员工',
+        specify: !!s.specify,
+        achievement: Number(s.achievement) || 0,
+        commission: Number(s.commission) || 0,
+      }));
+    }
+    const pool = getStaffPool();
+    const hit = pool.find(s => s.name === o.staff);
+    return [{
+      id: hit ? hit.id : 'legacy-staff',
+      name: o.staff || '未指定',
+      specify: !!o.staffSpecify,
+      achievement: Number(o.achievement != null ? o.achievement : o.amount) || 0,
+      commission: Number(o.commission) || 0,
+    }];
+  }
+
+  function ensureFlowEditDraft() {
+    if (state.flowEditDraft) return state.flowEditDraft;
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o) return null;
+    state.flowEditDraft = {
+      items: flowNormalizeEditItems(o.items, o.kind),
+      staffs: flowStaffsFromOrder(o),
+    };
+    return state.flowEditDraft;
+  }
+
+  function openFlowEdit() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o || o.status !== 'done') {
+      showToast('当前订单不可修改', true);
+      return;
+    }
+    state.flowEditDraft = null;
+    ensureFlowEditDraft();
+    renderFlowEdit();
+    showOnlyScreen('screen-flow-edit');
+  }
+
+  function openFlowEditAdd() {
+    ensureFlowEditDraft();
+    state.flowEditReplaceItemId = null;
+    state.flowEditAddTab = 'project';
+    state.flowEditAddSelected = [];
+    renderFlowEditAdd();
+    showOnlyScreen('screen-flow-edit-add');
+  }
+
+  function openFlowEditReplaceCatalog() {
+    const it = getFlowEditItem();
+    if (!it || it.type === 'card') return;
+    ensureFlowEditDraft();
+    state.flowEditReplaceItemId = it.id;
+    state.flowEditAddTab = it.type === 'product' ? 'product' : 'project';
+    state.flowEditAddSelected = [];
+    renderFlowEditAdd();
+    showOnlyScreen('screen-flow-edit-add');
+  }
+
+  function renderFlowEditAdd() {
+    const replacing = !!state.flowEditReplaceItemId;
+    const tab = state.flowEditAddTab === 'product' ? 'product' : 'project';
+    const tabs = document.getElementById('flowEditAddTabs');
+    const body = document.getElementById('flowEditAddBody');
+    const foot = document.getElementById('flowEditAddFoot');
+    const titleEl = document.querySelector('#screen-flow-edit-add .title');
+    if (titleEl) {
+      titleEl.textContent = replacing
+        ? (tab === 'product' ? '更换产品' : '更换项目')
+        : '添加服务项目';
+    }
+    const selected = new Set(state.flowEditAddSelected || []);
+    if (tabs) {
+      if (replacing) {
+        tabs.innerHTML = tab === 'product'
+          ? `<button type="button" class="flow-edit-add-tab is-on" data-flow-edit-add-tab="product" role="tab">产品</button>`
+          : `<button type="button" class="flow-edit-add-tab is-on" data-flow-edit-add-tab="project" role="tab">项目</button>`;
+      } else {
+        tabs.innerHTML = `
+          <button type="button" class="flow-edit-add-tab${tab === 'project' ? ' is-on' : ''}" data-flow-edit-add-tab="project" role="tab">项目</button>
+          <button type="button" class="flow-edit-add-tab${tab === 'product' ? ' is-on' : ''}" data-flow-edit-add-tab="product" role="tab">产品</button>`;
+      }
+    }
+    const list = tab === 'product' ? PRODUCTS : PROJECTS;
+    if (body) {
+      body.innerHTML = list.map(p => {
+        const on = selected.has(p.id);
+        return `<button type="button" class="flow-edit-pick-item${on ? ' is-on' : ''}" data-flow-edit-pick="${escapeHtml(p.id)}">
+          <span class="flow-edit-pick-item__check" aria-hidden="true">${on ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+          <div class="flow-refund-item__main">
+            <div class="flow-refund-item__name">${escapeHtml(p.name)}</div>
+            <div class="flow-refund-item__meta">${escapeHtml(p.category || p.spec || '')}</div>
+          </div>
+          <div class="flow-refund-item__price"><span class="yen">¥</span>${Number(p.price || 0).toFixed(2)}</div>
+        </button>`;
+      }).join('');
+    }
+    if (foot) {
+      const confirmLabel = replacing ? '确认更换' : '确认添加';
+      foot.innerHTML = `
+        <div class="flow-screen-foot__main">
+          <div class="flow-detail-foot__total">
+            <div class="flow-detail-foot__label">已选</div>
+            <div class="flow-detail-foot__amt" style="font-size:18px">${selected.size} 项</div>
+          </div>
+          <button type="button" class="btn-main" data-flow-edit-add-confirm ${selected.size ? '' : 'disabled style="opacity:.5"'}>${confirmLabel}</button>
+        </div>
+        <div class="flow-screen-foot__safe" aria-hidden="true"></div>`;
+    }
+  }
+
+  function confirmFlowEditAdd() {
+    const d = ensureFlowEditDraft();
+    if (!d) return;
+    const tab = state.flowEditAddTab === 'product' ? 'product' : 'project';
+    const pool = tab === 'product' ? PRODUCTS : PROJECTS;
+    const selected = state.flowEditAddSelected || [];
+    const replaceId = state.flowEditReplaceItemId;
+
+    if (replaceId) {
+      const pickId = selected[0];
+      const p = pool.find(x => x.id === pickId);
+      const target = d.items.find(x => x.id === replaceId);
+      if (p && target) {
+        target.name = p.name;
+        target.price = Number(p.price) || 0;
+        target.type = tab;
+        target.spec = p.spec || '';
+      }
+      state.flowEditReplaceItemId = null;
+      state.flowEditAddSelected = [];
+      state.flowEditItemId = replaceId;
+      renderFlowEditItem();
+      showOnlyScreen('screen-flow-edit-item');
+      return;
+    }
+
+    selected.forEach(id => {
+      const p = pool.find(x => x.id === id);
+      if (!p) return;
+      d.items.push({
+        id: `fi-${Date.now()}-${id}-${Math.random().toString(36).slice(2, 6)}`,
+        name: p.name,
+        price: Number(p.price) || 0,
+        qty: 1,
+        type: tab,
+        spec: p.spec || '',
+        staffIds: [],
+        specify: false,
+      });
+    });
+    state.flowEditAddSelected = [];
+    renderFlowEdit();
+    showOnlyScreen('screen-flow-edit');
+  }
+
+  function openFlowEditItem(itemId) {
+    ensureFlowEditDraft();
+    state.flowEditItemId = itemId;
+    renderFlowEditItem();
+    showOnlyScreen('screen-flow-edit-item');
+  }
+
+  function getFlowEditItem() {
+    const d = state.flowEditDraft;
+    if (!d) return null;
+    return d.items.find(x => x.id === state.flowEditItemId) || null;
+  }
+
+  function renderFlowEditItem() {
+    const it = getFlowEditItem();
+    const body = document.getElementById('flowEditItemBody');
+    const foot = document.getElementById('flowEditItemFoot');
+    if (!it || !body) return;
+    const isProduct = it.type === 'product';
+    const isCard = it.type === 'card';
+    const titleEl = document.getElementById('flowEditItemTitle');
+    if (titleEl) {
+      titleEl.textContent = isProduct ? '编辑产品' : (isCard ? '编辑会员卡' : '编辑项目');
+    }
+    const tag = flowTypeTag(isProduct ? 'product' : (isCard ? 'card' : 'project'));
+    const pool = getStaffPool();
+    const replaceBtn = !isCard
+      ? `<button type="button" class="btn-add-benefit" data-flow-edit-item-replace style="width:100%;margin-top:12px">${isProduct ? '更换产品' : '更换项目'}</button>`
+      : '';
+    body.innerHTML = `
+      <div class="flow-detail-card">
+        <div class="flow-edit-form-row">
+          <span class="flow-edit-form-row__label">名称</span>
+          <span class="flow-edit-form-row__val">${escapeHtml(it.name)}</span>
+        </div>
+        <div class="flow-edit-form-row">
+          <span class="flow-edit-form-row__label">类型</span>
+          <span class="flow-edit-form-row__val flow-edit-form-row__val--muted"><span class="flow-type-tag ${tag.cls}">${tag.text}</span></span>
+        </div>
+        ${isProduct && it.spec ? `<div class="flow-edit-form-row">
+          <span class="flow-edit-form-row__label">规格</span>
+          <span class="flow-edit-form-row__val flow-edit-form-row__val--muted">${escapeHtml(it.spec)}</span>
+        </div>` : ''}
+        <div class="flow-edit-form-row">
+          <span class="flow-edit-form-row__label">单价</span>
+          <input type="text" class="input-amount flow-edit-price-input" readonly inputmode="decimal"
+            data-flow-edit-item-price value="${Number(it.price || 0).toFixed(2)}" aria-label="修改单价">
+        </div>
+        <div class="flow-edit-form-row">
+          <span class="flow-edit-form-row__label">数量</span>
+          <div class="flow-edit-qty">
+            <button type="button" class="flow-edit-qty__btn" data-flow-edit-qty="-1" aria-label="减少">−</button>
+            <span class="flow-edit-qty__val">${it.qty || 1}</span>
+            <button type="button" class="flow-edit-qty__btn" data-flow-edit-qty="1" aria-label="增加">+</button>
+          </div>
+        </div>
+        <div class="flow-edit-form-row" style="align-items:flex-start;flex-direction:column;gap:8px">
+          <div style="display:flex;width:100%;justify-content:space-between;align-items:center">
+            <span class="flow-edit-form-row__label">${isProduct ? '销售员工' : '本项服务员工'}</span>
+            <div class="flow-edit-specify-seg" role="group" aria-label="指定状态">
+              <button type="button" class="flow-edit-specify-seg__btn${!it.specify ? ' is-on' : ''}" data-flow-edit-item-specify data-specify="0">非指定</button>
+              <button type="button" class="flow-edit-specify-seg__btn${it.specify ? ' is-on' : ''}" data-flow-edit-item-specify data-specify="1">指定</button>
+            </div>
+          </div>
+          <div class="flow-edit-staff-chips">
+            ${pool.map(st => {
+              const on = (it.staffIds || []).includes(st.id);
+              return `<button type="button" class="flow-edit-staff-chip${on ? ' is-on' : ''}" data-flow-edit-item-staff="${escapeHtml(st.id)}">${escapeHtml(st.name)}</button>`;
+            }).join('')}
+          </div>
+        </div>
+        ${replaceBtn}
+      </div>`;
+    if (foot) {
+      foot.innerHTML = `
+        <div class="flow-screen-foot__main">
+          <button type="button" class="btn-main" data-flow-edit-item-done>完成</button>
+        </div>
+        <div class="flow-screen-foot__safe" aria-hidden="true"></div>`;
+    }
+  }
+
+  function openFlowEditStaffSheet() {
+    ensureFlowEditDraft();
+    state.flowEditStaffPick = (state.flowEditDraft.staffs || []).map(s => s.id);
+    renderFlowEditStaffSheet();
+    openMask('flowEditStaffMask');
+  }
+
+  function renderFlowEditStaffSheet() {
+    const body = document.getElementById('flowEditStaffBody');
+    if (!body) return;
+    const picked = new Set(state.flowEditStaffPick || []);
+    const inDraft = new Set((state.flowEditDraft && state.flowEditDraft.staffs || []).map(s => s.id));
+    body.innerHTML = getStaffPool().map(st => {
+      const on = picked.has(st.id);
+      return `<button type="button" class="flow-staff-pick-row${on ? ' is-on' : ''}" data-flow-edit-staff-pick="${escapeHtml(st.id)}">
+        <span class="flow-edit-pick-item__check" aria-hidden="true">${on ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+        <span class="flow-edit-staff-row__name">${escapeHtml(st.name)}</span>
+        ${inDraft.has(st.id) ? '<span class="flow-edit-staff-row__tag">已添加</span>' : ''}
+      </button>`;
+    }).join('');
+  }
+
+  function confirmFlowEditStaffSheet() {
+    const d = ensureFlowEditDraft();
+    if (!d) return;
+    const picked = new Set(state.flowEditStaffPick || []);
+    const pool = getStaffPool();
+    const prev = new Map(d.staffs.map(s => [s.id, s]));
+    d.staffs = pool.filter(st => picked.has(st.id)).map(st => {
+      const old = prev.get(st.id);
+      return old || {
+        id: st.id,
+        name: st.name,
+        specify: false,
+        achievement: 0,
+        commission: 0,
+      };
+    });
+    closeMask('flowEditStaffMask');
+    renderFlowEdit();
+  }
+
+  function saveFlowEdit() {
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    const d = state.flowEditDraft;
+    if (!o || !d) return;
+    if (!d.items.length) {
+      showToast('请至少保留一个服务项目', true);
+      return;
+    }
+    o.items = d.items.map(it => Object.assign({}, it));
+    o.staffs = d.staffs.map(s => Object.assign({}, s));
+    const primary = d.staffs[0];
+    o.staff = primary ? primary.name : (o.staff || '未指定');
+    o.staffSpecify = primary ? !!primary.specify : !!o.staffSpecify;
+    o.achievement = d.staffs.reduce((s, x) => s + (Number(x.achievement) || 0), 0);
+    o.commission = d.staffs.reduce((s, x) => s + (Number(x.commission) || 0), 0);
+    const first = d.items[0];
+    if (first) {
+      o.kind = first.type === 'product' ? 'product' : (first.type === 'card' ? 'card' : 'project');
+    }
+    state.flowEditDraft = null;
+    showToast('订单已修改');
+    openFlowDetail(o.id, { fromSuccess: false });
+  }
+
+  function renderFlowWeikuan() {
+    const body = document.getElementById('flowWeikuanBody');
+    if (!body) return;
+    const q = String(state.flowWeikuanQuery || '').trim().toLowerCase();
+    const f = state.flowWeikuanFilter || { status: 'all' };
+    let list = FLOW_WEIKUAN.slice();
+    if (f.status && f.status !== 'all') list = list.filter(w => w.status === f.status);
+    if (q) {
+      list = list.filter(w => {
+        const name = String(w.customerName || '').toLowerCase();
+        const phone = String(w.phone || '').toLowerCase();
+        const related = String(w.related || '').toLowerCase();
+        return name.includes(q) || phone.includes(q) || related.includes(q);
+      });
+    }
+    const searchEl = document.getElementById('flowWeikuanSearch');
+    if (searchEl && searchEl.value !== (state.flowWeikuanQuery || '')) {
+      searchEl.value = state.flowWeikuanQuery || '';
+    }
+    if (!list.length) {
+      body.innerHTML = flowEmptyHtml('暂无尾款单', q || f.status !== 'all' ? '试试调整搜索或筛选条件' : '有待收尾款时会出现在这里');
+      return;
+    }
+    body.innerHTML = `<div class="flow-weikuan-list">` + list.map(w => {
+      const statusCls = w.status === 'done' ? ' is-done' : '';
+      const amt = Number(w.amount) || 0;
+      return `<button type="button" class="flow-weikuan-card" data-flow-weikuan-id="${escapeHtml(w.id)}">
+        <div class="flow-weikuan-card__head">
+          <span class="flow-weikuan-card__name">${escapeHtml(w.customerName)}</span>
+          <span class="flow-weikuan-card__status${statusCls}">${escapeHtml(w.statusLabel || (w.status === 'done' ? '已还清' : '待收尾款'))}</span>
+        </div>
+        <div class="flow-weikuan-card__amt"><span class="yen">¥</span>${amt.toFixed(2)}</div>
+        <div class="flow-weikuan-card__meta">${escapeHtml(w.related)} · ${escapeHtml(w.time)}</div>
+      </button>`;
+    }).join('') + `</div>`;
+  }
+
+  function openFlowWeikuan() {
+    if (!state.flowWeikuanFilter) state.flowWeikuanFilter = { status: 'all' };
+    renderFlowWeikuan();
+    showOnlyScreen('screen-flow-weikuan');
+  }
+
+  function renderFlowWeikuanFilterSheet() {
+    const draft = state.flowWeikuanFilterDraft || Object.assign({}, state.flowWeikuanFilter || { status: 'all' });
+    state.flowWeikuanFilterDraft = draft;
+    const body = document.getElementById('flowWeikuanFilterBody');
+    if (!body) return;
+    const opts = [
+      { id: 'all', label: '全部状态' },
+      { id: 'pending', label: '待收尾款' },
+      { id: 'done', label: '已还清' },
+    ];
+    body.innerHTML = `
+      <div class="flow-filter-section">
+        <div class="flow-filter-section__title">状态</div>
+        <div class="flow-chip-row">
+          ${opts.map(o => `<button type="button" class="flow-chip${draft.status === o.id ? ' is-on' : ''}" data-wk-filter-status="${o.id}">${escapeHtml(o.label)}</button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function openFlowWeikuanFilter() {
+    state.flowWeikuanFilterDraft = Object.assign({}, state.flowWeikuanFilter || { status: 'all' });
+    renderFlowWeikuanFilterSheet();
+    openMask('flowWeikuanFilterMask');
+  }
+
+  function renderFlowWeikuanRepay() {
+    const body = document.getElementById('flowWeikuanRepayBody');
+    if (!body) return;
+    if (!FLOW_WEIKUAN_REPAY.length) {
+      body.innerHTML = flowEmptyHtml('暂无还款明细', '完成尾款收款后会出现在这里');
+      return;
+    }
+    body.innerHTML = `<div class="flow-weikuan-list">` + FLOW_WEIKUAN_REPAY.map(r => `
+      <div class="flow-repay-card">
+        <div class="flow-repay-card__head">
+          <span class="flow-repay-card__name">${escapeHtml(r.customerName)}</span>
+          <span class="flow-repay-card__amt"><span class="yen">¥</span>${Number(r.amount).toFixed(2)}</span>
+        </div>
+        <div class="flow-repay-card__meta">${escapeHtml(r.method)} · ${escapeHtml(r.related)} · ${escapeHtml(r.time)}</div>
+      </div>`).join('') + `</div>`;
+  }
+
+  function openFlowWeikuanRepay() {
+    renderFlowWeikuanRepay();
+    showOnlyScreen('screen-flow-weikuan-repay');
+  }
+
+  function renderFlowSelfDetail() {
+    const o = FLOW_SELF_ORDERS.find(x => x.id === state.flowSelfDetailId) || FLOW_SELF_ORDERS[0];
+    const body = document.getElementById('flowSelfDetailBody');
+    if (!o || !body) return;
+    const item = o.items[0] || { name: '—', price: o.amount };
+    const tag = flowTypeTag(o.kind);
+    const amt = Number(o.amount);
+    body.innerHTML = `
+      <div class="flow-detail-card">
+        <div class="flow-detail-user">
+          <div class="flow-detail-user__left">
+            ${flowAvatarHtml(o)}
+            <strong>${escapeHtml(o.customerName)}</strong>
+          </div>
+          <span class="flow-order-card__status${o.status === 'pending' ? ' is-pending' : ''}">${escapeHtml(flowSelfStatusLabel(o.status))}</span>
+        </div>
+        <div class="flow-detail-meta" style="margin-top:12px;padding-top:12px;border-top:0.5px solid #EDEDED">
+          <div class="flow-detail-meta__row"><span>下单时间</span><span class="flow-detail-meta__val">${escapeHtml(o.time)}</span></div>
+          <div class="flow-detail-meta__row"><span>渠道</span><span class="flow-detail-meta__val">${escapeHtml(o.channel || '顾客自助')}</span></div>
+        </div>
+      </div>
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">消费内容</div>
+        <div class="flow-detail-item-row">
+          <span class="flow-type-tag ${tag.cls}">${tag.text}</span>
+          <div>
+            <div class="flow-detail-item-name">${escapeHtml(item.name)}</div>
+            <div class="flow-detail-item-price"><span class="yen">¥</span>${Number(item.price).toFixed(2)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-detail-card">
+        <div class="flow-detail-card__title">支付信息</div>
+        <div class="flow-detail-pay-row"><span>支付方式</span><span>${escapeHtml(o.payMethod)}</span></div>
+        <div class="flow-detail-pay-row flow-detail-pay-row--strong"><span>实付</span><span><span class="yen">¥</span>${amt.toFixed(2)}</span></div>
+      </div>`;
+  }
+
+  function openFlowSelfDetail(id) {
+    const o = FLOW_SELF_ORDERS.find(x => x.id === id) || FLOW_SELF_ORDERS[0];
+    if (!o) {
+      showToast('暂无订单');
+      return;
+    }
+    state.flowSelfDetailId = o.id;
+    renderFlowSelfDetail();
+    showOnlyScreen('screen-flow-self-detail');
+  }
+
+  function renderFlowSelf() {
+    const body = document.getElementById('flowSelfBody');
+    if (!body) return;
+    let list = FLOW_SELF_ORDERS.slice();
+    if (state.flowSelfDate === 'today') {
+      const today = flowTodayKey();
+      list = list.filter(o => flowParseDay(o.time) === today);
+    }
+    if (state.flowSelfStatus === 'paid') list = list.filter(o => o.status === 'paid');
+    else if (state.flowSelfStatus === 'pending') list = list.filter(o => o.status === 'pending');
+    const dateLabel = state.flowSelfDate === 'today' ? '今日' : '全部日期';
+    const statusLabel = state.flowSelfStatus === 'paid' ? '已支付'
+      : (state.flowSelfStatus === 'pending' ? '待支付' : '全部状态');
+    const dateBtn = document.querySelector('#flowSelfDate span');
+    const statusBtn = document.querySelector('#flowSelfStatus span');
+    if (dateBtn) dateBtn.textContent = dateLabel;
+    if (statusBtn) statusBtn.textContent = statusLabel;
+    if (!list.length) {
+      body.innerHTML = flowEmptyHtml('暂无自助收银订单', '调整筛选条件或等待顾客下单');
+      return;
+    }
+    body.innerHTML = list.map(o => {
+      const item = o.items[0] || { name: '—', price: o.amount };
+      const tag = flowTypeTag(o.kind);
+      const statusCls = o.status === 'pending' ? ' is-pending' : '';
+      const amt = Number(o.amount);
+      return `<button type="button" class="flow-order-card" data-flow-self-id="${escapeHtml(o.id)}">
+        <div class="flow-order-card__head">
+          <div class="flow-order-card__user">
+            ${flowAvatarHtml(o)}
+            <span class="flow-order-card__name">${escapeHtml(o.customerName)}</span>
+          </div>
+          <span class="flow-order-card__status${statusCls}">${escapeHtml(flowSelfStatusLabel(o.status))}</span>
+        </div>
+        <div class="flow-order-card__item">
+          <span class="flow-type-tag ${tag.cls}">${tag.text}</span>
+          <div class="flow-order-card__item-main">
+            <div class="flow-order-card__item-name">${escapeHtml(item.name)}</div>
+            <span class="flow-order-card__staff">${escapeHtml(o.channel || '顾客自助')}</span>
+          </div>
+          <div class="flow-order-card__price"><span class="yen">¥</span>${Number(item.price).toFixed(2)}</div>
+        </div>
+        <div class="flow-order-card__pay">
+          <span>${escapeHtml(o.payMethod)}</span>
+          <span class="flow-order-card__pay-amt">-¥${amt.toFixed(2)}</span>
+        </div>
+        <div class="flow-order-card__total">实付总额<span class="num"><span class="yen">¥</span>${amt.toFixed(2)}</span></div>
+        <div class="flow-order-card__foot">
+          <span>下单时间</span>
+          <span>${escapeHtml(o.time)}</span>
+        </div>
+      </button>`;
+    }).join('');
+  }
+
+
   function returnToCardListFromIssueCheckout() {
     state.lastIssueFromCardMgmt = false;
     state.lastRefundResult = null;
@@ -19676,6 +22550,10 @@ window.__BILLING_EMBEDDED__ = true;
     checkout() {
       if (!state.cart.length) { showToast('请先添加商品'); return; }
       renderDetail(); showOnlyScreen('screen-detail');
+      if (cartHasUnsetStaffRoles()) {
+        showToast('请为已选员工设置工位（大工/中工/小工）', true);
+        return;
+      }
       openMask('checkoutMask'); setFlowNavHighlight('checkout');
     },
     pay() {
@@ -19713,8 +22591,13 @@ window.__BILLING_EMBEDDED__ = true;
   };
 
   function setFlowNavHighlight(id) {
-    if (window.__BILLING_EMBEDDED__ && id && !String(id).startsWith('bill-')) {
+    if (window.__BILLING_EMBEDDED__ && id && !String(id).startsWith('bill-') && !String(id).startsWith('flow-')) {
       id = 'bill-' + id;
+    }
+    /* 内嵌时交给宿主：功能链路分组 Tab 需随高亮切换 */
+    if (window.__BILLING_EMBEDDED__ && typeof window.setFlowNavHighlight === 'function') {
+      window.setFlowNavHighlight(id);
+      return;
     }
     state.flowNavHighlight = id;
     document.querySelectorAll('.flow-map-node').forEach(btn => btn.classList.toggle('is-current', btn.dataset.flowNav === id));
@@ -20078,12 +22961,18 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const staffBtn = e.target.closest('[data-staff-toggle]');
     if (staffBtn) {
+      if (e.target.closest('[data-staff-role-radio], .detail-item__role-radios, .radio-opt')) return;
       const row = state.cart.find(x => x.id === staffBtn.dataset.staffToggle);
       if (!row) return;
-      if (!row.staffIds) row.staffIds = [];
+      ensureCartStaffState(row);
       const sid = staffBtn.dataset.staffId;
-      if (row.staffIds.includes(sid)) row.staffIds = row.staffIds.filter(x => x !== sid);
-      else row.staffIds.push(sid);
+      if (row.staffIds.includes(sid)) {
+        row.staffIds = row.staffIds.filter(x => x !== sid);
+        delete row.staffRoles[sid];
+      } else {
+        row.staffIds.push(sid);
+        row.staffRoles[sid] = STAFF_ROLE_DEFAULT;
+      }
       renderDetail();
       return;
     }
@@ -20126,6 +23015,10 @@ window.__BILLING_EMBEDDED__ = true;
     }
   });
   document.getElementById('btnGoPay').addEventListener('click', () => {
+    if (cartHasUnsetStaffRoles()) {
+      showToast('请为已选员工设置工位（大工/中工/小工）', true);
+      return;
+    }
     openMask('checkoutMask');
     setFlowNavHighlight('checkout');
   });
@@ -20482,6 +23375,9 @@ window.__BILLING_EMBEDDED__ = true;
       state.cardExtendPending = null;
     }
     mutateCardsAfterPay(s);
+    if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
+      recordFlowOrderFromSettlement(s);
+    }
     closeMask('payMask', { keepCardExtendDraft: true });
     renderSuccess();
     showOnlyScreen('screen-success');
@@ -20494,9 +23390,318 @@ window.__BILLING_EMBEDDED__ = true;
     if (state.lastIssueFromCardMgmt) returnToCardListFromIssueCheckout();
     else continueBilling();
   });
-  document.getElementById('btnViewFlow').addEventListener('click', () => showToast('查看流水后续开放'));
+  document.getElementById('btnViewFlow').addEventListener('click', () => {
+    const id = state.lastFlowOrderId || (FLOW_ORDERS[0] && FLOW_ORDERS[0].id);
+    if (!id) {
+      openFlowHub();
+      return;
+    }
+    openFlowDetail(id, { fromSuccess: true });
+  });
   document.getElementById('btnSign').addEventListener('click', () => showToast('客户签字后续开放'));
   document.getElementById('btnCustDetail').addEventListener('click', () => showToast('客户详情后续开放'));
+
+  document.getElementById('flowHubBack')?.addEventListener('click', () => {
+    resetOrder();
+  });
+  document.getElementById('flowListBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('flowSelfBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('flowSelfDate')?.addEventListener('click', () => {
+    state.flowSelfDate = state.flowSelfDate === 'today' ? 'all' : 'today';
+    renderFlowSelf();
+  });
+  document.getElementById('flowSelfStatus')?.addEventListener('click', () => {
+    const order = ['all', 'paid', 'pending'];
+    const i = order.indexOf(state.flowSelfStatus || 'all');
+    state.flowSelfStatus = order[(i + 1) % order.length];
+    renderFlowSelf();
+  });
+  document.getElementById('flowSelfBody')?.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-flow-self-id]');
+    if (!card) return;
+    openFlowSelfDetail(card.dataset.flowSelfId);
+  });
+  document.getElementById('flowDetailBack')?.addEventListener('click', () => openFlowList());
+  document.getElementById('flowListFilter')?.addEventListener('click', () => openFlowFilter());
+  document.getElementById('flowListWeikuan')?.addEventListener('click', () => openFlowWeikuan());
+  document.getElementById('flowListTabs')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-flow-tab]');
+    if (!btn) return;
+    state.flowTab = btn.dataset.flowTab;
+    renderFlowList();
+  });
+  document.getElementById('flowListBody')?.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-flow-id]');
+    if (!card) return;
+    openFlowDetail(card.dataset.flowId, { fromSuccess: false });
+  });
+  document.getElementById('flowHubBody')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-flow-hub]');
+    if (!btn) return;
+    if (btn.dataset.flowHub === 'store') openFlowList();
+    else if (btn.dataset.flowHub === 'self') openFlowSelf();
+  });
+  document.getElementById('flowDetailBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-expand]')) {
+      state.flowDetailExpanded = !state.flowDetailExpanded;
+      renderFlowDetail();
+      return;
+    }
+    if (e.target.closest('[data-flow-all]')) {
+      openFlowList();
+      return;
+    }
+    if (e.target.closest('[data-flow-edit]')) {
+      openFlowEdit();
+      return;
+    }
+    const perf = e.target.closest('[data-flow-perf]')
+      || e.target.closest('.flow-detail-metric__item')?.querySelector('[data-flow-perf]');
+    if (perf) {
+      e.preventDefault();
+      if (typeof openAmountKeypad === 'function') openAmountKeypad(perf);
+      else if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(perf);
+      else showToast('金额键盘未就绪');
+    }
+  });
+  document.getElementById('flowDetailBody')?.addEventListener('change', (e) => {
+    const el = e.target.closest('[data-flow-perf]');
+    if (!el) return;
+    const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+    if (!o) return;
+    const val = typeof round2 === 'function' ? round2(Number(el.value) || 0) : Math.round((Number(el.value) || 0) * 100) / 100;
+    if (el.dataset.flowPerf === 'achievement') o.achievement = val;
+    else if (el.dataset.flowPerf === 'commission') o.commission = val;
+    el.value = val.toFixed(2);
+  });
+  document.getElementById('flowDetailFoot')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-refund]')) openFlowRefund();
+    if (e.target.closest('[data-flow-void]')) openFlowVoidDialog();
+  });
+  document.getElementById('flowFilterBody')?.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-flow-filter-key]');
+    if (!chip) return;
+    if (!state.flowFilterDraft) state.flowFilterDraft = Object.assign({}, state.flowFilter);
+    state.flowFilterDraft[chip.dataset.flowFilterKey] = chip.dataset.flowFilterVal;
+    renderFlowFilterSheet();
+  });
+  document.getElementById('flowFilterReset')?.addEventListener('click', () => {
+    state.flowFilterDraft = { date: 'all', pay: 'all', guest: 'all' };
+    renderFlowFilterSheet();
+  });
+  document.getElementById('flowFilterApply')?.addEventListener('click', () => {
+    state.flowFilter = Object.assign({}, state.flowFilterDraft || state.flowFilter);
+    closeMask('flowFilterMask');
+    renderFlowList();
+  });
+  document.getElementById('flowVoidCancel')?.addEventListener('click', () => closeFlowVoidDialog());
+  document.getElementById('flowVoidConfirm')?.addEventListener('click', () => confirmFlowVoid());
+  document.getElementById('flowVoidMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'flowVoidMask') closeFlowVoidDialog();
+  });
+  document.getElementById('flowMoreRefund')?.addEventListener('click', () => openFlowRefund());
+  document.getElementById('flowRefundBack')?.addEventListener('click', () => openFlowDetail(state.flowDetailId, { fromSuccess: false }));
+  document.getElementById('flowRefundBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-refund-all]')) {
+      const o = FLOW_ORDERS.find(x => x.id === state.flowDetailId);
+      if (!o) return;
+      const all = o.items.map((_, i) => i);
+      const cur = state.flowRefundSelected || [];
+      state.flowRefundSelected = cur.length === all.length ? [] : all;
+      renderFlowRefund();
+      return;
+    }
+    const row = e.target.closest('[data-flow-refund-idx]');
+    if (!row) return;
+    const idx = Number(row.dataset.flowRefundIdx);
+    const set = new Set(state.flowRefundSelected || []);
+    if (set.has(idx)) set.delete(idx); else set.add(idx);
+    state.flowRefundSelected = Array.from(set).sort((a, b) => a - b);
+    renderFlowRefund();
+  });
+  document.getElementById('flowRefundFoot')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-refund-confirm]')) confirmFlowRefund();
+  });
+  document.getElementById('flowEditBack')?.addEventListener('click', () => openFlowDetail(state.flowDetailId, { fromSuccess: false }));
+  document.getElementById('flowEditAddBack')?.addEventListener('click', () => {
+    if (state.flowEditReplaceItemId) {
+      const keepId = state.flowEditReplaceItemId;
+      state.flowEditReplaceItemId = null;
+      state.flowEditAddSelected = [];
+      state.flowEditItemId = keepId;
+      renderFlowEditItem();
+      showOnlyScreen('screen-flow-edit-item');
+      return;
+    }
+    renderFlowEdit();
+    showOnlyScreen('screen-flow-edit');
+  });
+  document.getElementById('flowEditItemBack')?.addEventListener('click', () => {
+    renderFlowEdit();
+    showOnlyScreen('screen-flow-edit');
+  });
+  document.getElementById('flowEditBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-edit-add]')) {
+      openFlowEditAdd();
+      return;
+    }
+    if (e.target.closest('[data-flow-edit-staff-add]')) {
+      openFlowEditStaffSheet();
+      return;
+    }
+    const specBtn = e.target.closest('[data-flow-edit-staff-specify]');
+    if (specBtn && state.flowEditDraft) {
+      const sid = specBtn.dataset.flowEditStaffSpecify;
+      const st = state.flowEditDraft.staffs.find(x => x.id === sid);
+      if (st) {
+        st.specify = specBtn.dataset.specify === '1';
+        renderFlowEdit();
+      }
+      return;
+    }
+    const itemBtn = e.target.closest('[data-flow-edit-item]');
+    if (itemBtn) {
+      openFlowEditItem(itemBtn.dataset.flowEditItem);
+      return;
+    }
+    const perf = e.target.closest('[data-flow-edit-staff-perf]');
+    if (perf) {
+      e.preventDefault();
+      if (typeof openAmountKeypad === 'function') openAmountKeypad(perf);
+      else if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(perf);
+    }
+  });
+  document.getElementById('flowEditBody')?.addEventListener('change', (e) => {
+    const el = e.target.closest('[data-flow-edit-staff-perf]');
+    if (!el || !state.flowEditDraft) return;
+    const sid = el.dataset.staffId;
+    const st = state.flowEditDraft.staffs.find(x => x.id === sid);
+    if (!st) return;
+    const val = typeof round2 === 'function' ? round2(Number(el.value) || 0) : Math.round((Number(el.value) || 0) * 100) / 100;
+    if (el.dataset.flowEditStaffPerf === 'achievement') st.achievement = val;
+    else if (el.dataset.flowEditStaffPerf === 'commission') st.commission = val;
+    el.value = val.toFixed(2);
+    renderFlowEdit();
+  });
+  document.getElementById('flowEditFoot')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-edit-cancel]')) openFlowDetail(state.flowDetailId, { fromSuccess: false });
+    if (e.target.closest('[data-flow-edit-save]')) saveFlowEdit();
+  });
+  document.getElementById('flowEditAddTabs')?.addEventListener('click', (e) => {
+    const tab = e.target.closest('[data-flow-edit-add-tab]');
+    if (!tab) return;
+    state.flowEditAddTab = tab.dataset.flowEditAddTab;
+    state.flowEditAddSelected = [];
+    renderFlowEditAdd();
+  });
+  document.getElementById('flowEditAddBody')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-flow-edit-pick]');
+    if (!btn) return;
+    const id = btn.dataset.flowEditPick;
+    if (state.flowEditReplaceItemId) {
+      state.flowEditAddSelected = state.flowEditAddSelected && state.flowEditAddSelected[0] === id ? [] : [id];
+    } else {
+      const set = new Set(state.flowEditAddSelected || []);
+      if (set.has(id)) set.delete(id);
+      else set.add(id);
+      state.flowEditAddSelected = Array.from(set);
+    }
+    renderFlowEditAdd();
+  });
+  document.getElementById('flowEditAddFoot')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-edit-add-confirm]')) confirmFlowEditAdd();
+  });
+  document.getElementById('flowEditItemBody')?.addEventListener('click', (e) => {
+    const it = getFlowEditItem();
+    if (!it) return;
+    if (e.target.closest('[data-flow-edit-item-replace]')) {
+      openFlowEditReplaceCatalog();
+      return;
+    }
+    const qtyBtn = e.target.closest('[data-flow-edit-qty]');
+    if (qtyBtn) {
+      const delta = Number(qtyBtn.dataset.flowEditQty) || 0;
+      it.qty = Math.max(1, (Number(it.qty) || 1) + delta);
+      renderFlowEditItem();
+      return;
+    }
+    if (e.target.closest('[data-flow-edit-item-specify]')) {
+      const btn = e.target.closest('[data-flow-edit-item-specify]');
+      it.specify = btn.dataset.specify === '1';
+      renderFlowEditItem();
+      return;
+    }
+    const chip = e.target.closest('[data-flow-edit-item-staff]');
+    if (chip) {
+      const sid = chip.dataset.flowEditItemStaff;
+      const ids = new Set(it.staffIds || []);
+      if (ids.has(sid)) ids.delete(sid);
+      else ids.add(sid);
+      it.staffIds = Array.from(ids);
+      renderFlowEditItem();
+      return;
+    }
+    const price = e.target.closest('[data-flow-edit-item-price]');
+    if (price) {
+      e.preventDefault();
+      if (typeof openAmountKeypad === 'function') openAmountKeypad(price);
+      else if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(price);
+    }
+  });
+  document.getElementById('flowEditItemBody')?.addEventListener('change', (e) => {
+    const el = e.target.closest('[data-flow-edit-item-price]');
+    const it = getFlowEditItem();
+    if (!el || !it) return;
+    const val = typeof round2 === 'function' ? round2(Number(el.value) || 0) : Math.round((Number(el.value) || 0) * 100) / 100;
+    it.price = val;
+    el.value = val.toFixed(2);
+  });
+  document.getElementById('flowEditItemFoot')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-edit-item-done]')) {
+      renderFlowEdit();
+      showOnlyScreen('screen-flow-edit');
+    }
+  });
+  document.getElementById('flowEditStaffBody')?.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-flow-edit-staff-pick]');
+    if (!row) return;
+    const id = row.dataset.flowEditStaffPick;
+    const set = new Set(state.flowEditStaffPick || []);
+    if (set.has(id)) set.delete(id);
+    else set.add(id);
+    state.flowEditStaffPick = Array.from(set);
+    renderFlowEditStaffSheet();
+  });
+  document.getElementById('flowEditStaffCancel')?.addEventListener('click', () => closeMask('flowEditStaffMask'));
+  document.getElementById('flowEditStaffConfirm')?.addEventListener('click', () => confirmFlowEditStaffSheet());
+  document.getElementById('flowWeikuanBack')?.addEventListener('click', () => openFlowList());
+  document.getElementById('flowWeikuanRepayEntry')?.addEventListener('click', () => openFlowWeikuanRepay());
+  document.getElementById('flowWeikuanFilter')?.addEventListener('click', () => openFlowWeikuanFilter());
+  document.getElementById('flowWeikuanSearch')?.addEventListener('input', (e) => {
+    state.flowWeikuanQuery = e.target.value || '';
+    renderFlowWeikuan();
+  });
+  document.getElementById('flowWeikuanBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-weikuan-id]')) showToast('尾款收款后续开放');
+  });
+  document.getElementById('flowWeikuanRepayBack')?.addEventListener('click', () => openFlowWeikuan());
+  document.getElementById('flowWeikuanFilterBody')?.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-wk-filter-status]');
+    if (!chip) return;
+    if (!state.flowWeikuanFilterDraft) state.flowWeikuanFilterDraft = { status: 'all' };
+    state.flowWeikuanFilterDraft.status = chip.dataset.wkFilterStatus;
+    renderFlowWeikuanFilterSheet();
+  });
+  document.getElementById('flowWeikuanFilterReset')?.addEventListener('click', () => {
+    state.flowWeikuanFilterDraft = { status: 'all' };
+    renderFlowWeikuanFilterSheet();
+  });
+  document.getElementById('flowWeikuanFilterApply')?.addEventListener('click', () => {
+    state.flowWeikuanFilter = Object.assign({}, state.flowWeikuanFilterDraft || { status: 'all' });
+    closeMask('flowWeikuanFilterMask');
+    renderFlowWeikuan();
+  });
+  document.getElementById('flowSelfDetailBack')?.addEventListener('click', () => openFlowSelf());
 
   document.querySelectorAll('[data-staff-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -20518,6 +23723,34 @@ window.__BILLING_EMBEDDED__ = true;
     nav: typeof FLOW_NAV !== 'undefined' ? FLOW_NAV : {},
     enterPick() { if (typeof FLOW_NAV !== 'undefined' && FLOW_NAV.pick) FLOW_NAV.pick(); },
     show(id) { showOnlyScreen(id); },
+    openFlowHub,
+    openFlowList,
+    openFlowDetail,
+    openFlowSelf,
+    openFlowRefund,
+    openFlowEdit,
+    openFlowEditAdd,
+    openFlowEditItemDemo() {
+      const productOrder = FLOW_ORDERS.find(o =>
+        o.status === 'done' && (
+          o.kind === 'product' ||
+          (o.items || []).some(i => i.type === 'product')
+        )
+      );
+      if (productOrder) state.flowDetailId = productOrder.id;
+      else if (!state.flowDetailId) {
+        const done = FLOW_ORDERS.find(o => o.status === 'done');
+        if (done) state.flowDetailId = done.id;
+      }
+      openFlowEdit();
+      const d = ensureFlowEditDraft();
+      if (!d || !d.items.length) return;
+      const prefer = d.items.find(x => x.type === 'product') || d.items[0];
+      openFlowEditItem(prefer.id);
+    },
+    openFlowWeikuan,
+    openFlowWeikuanRepay,
+    openFlowSelfDetail,
     getCustomer() { return typeof getCustomer === 'function' ? getCustomer() : null; },
     ensureMember() { if (typeof enterBill === 'function' && typeof CUSTOMERS !== 'undefined') enterBill(CUSTOMERS[0]); },
     startCardIssueCheckout(ctx) { startCardIssueCheckout(ctx || {}); },
