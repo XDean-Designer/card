@@ -22322,6 +22322,8 @@ window.__BILLING_EMBEDDED__ = true;
     flowWeikuanPayAmounts: {},
     flowWeikuanPayChannel: 'wechat',
     flowWeikuanPayEditingId: null,
+    flowWeikuanPayActiveAmtId: null,
+    flowWeikuanPayManualEdit: {},
     flowWeikuanLastPay: null,
     flowNavHighlight: null,
     addCardMode: 'new',
@@ -22374,7 +22376,8 @@ window.__BILLING_EMBEDDED__ = true;
       case 'close':
         return `<svg${cls} viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>`;
       case 'edit':
-        return `<svg${common}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+        /* 圆角实心铅笔 · 可编辑示意（面性） */
+        return filledEditPencilSvg(className);
       case 'trash':
         /* 偏胖描边垃圾桶 · 独立 stroke，避免沿用细线 common */
         return `<svg${cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5h18"/><path d="M9.5 6.5V4.8c0-.7.56-1.3 1.25-1.3h2.5c.69 0 1.25.6 1.25 1.3v1.7"/><path d="M18.2 6.5 17.2 19.1c0 .95-.8 1.7-1.75 1.7H8.55c-.95 0-1.75-.75-1.75-1.7L5.8 6.5"/><path d="M10 10.5v6"/><path d="M14 10.5v6"/></svg>`;
@@ -22389,6 +22392,12 @@ window.__BILLING_EMBEDDED__ = true;
       default:
         return '';
     }
+  }
+
+  /** 圆角实心铅笔（面性），开单可编辑字段统一使用 */
+  function filledEditPencilSvg(className) {
+    const cls = className ? ` class="${className}"` : '';
+    return `<svg${cls} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.92 3.08a2.35 2.35 0 0 1 3.32 0l2.68 2.68a2.35 2.35 0 0 1 0 3.32L9.28 20.72c-.24.24-.54.4-.87.46l-4.78 1.12a1.12 1.12 0 0 1-1.35-1.35l1.12-4.78c.06-.33.22-.63.46-.87L14.92 3.08Z"/><path d="M16.2 4.55c.2-.2.52-.2.72 0l2.53 2.53c.2.2.2.52 0 .72l-.9.9-3.25-3.25.9-.9Z" opacity=".35"/></svg>`;
   }
 
   function formatYen(n) {
@@ -24358,8 +24367,8 @@ window.__BILLING_EMBEDDED__ = true;
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>`;
   }
   function flowIconPencil() {
-    /* Lucide pencil · 可编辑示意 */
-    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a2.119 2.119 0 0 0-3.004-2.987L4.5 17.5 2 22l4.5-2.5Z"/><path d="m15 5 4 4"/></svg>`;
+    /* 圆角实心铅笔 · 与 iconSvg('edit') 同款面性 */
+    return filledEditPencilSvg();
   }
   function flowIconFilter() {
     /* Lucide sliders-horizontal · 标题栏筛选统一图标 */
@@ -25790,29 +25799,31 @@ window.__BILLING_EMBEDDED__ = true;
     return round2(Object.values(state.flowWeikuanPayAmounts || {}).reduce((s, v) => s + (Number(v) || 0), 0));
   }
 
-  function weikuanPayRemain(id) {
+  function weikuanPayDue() {
     const w = weikuanById(state.flowWeikuanPayId);
-    const due = round2(Number(w && w.amount) || 0);
+    return round2(Number(w && w.amount) || 0);
+  }
+
+  /** 当前渠道可填入金额：full=待收全额；remain=扣除其他渠道后剩余 */
+  function weikuanPayFillAmount(id, mode) {
+    const due = weikuanPayDue();
     const self = round2(Number(state.flowWeikuanPayAmounts?.[id]) || 0);
+    if (mode === 'full') return due;
     const others = round2(weikuanPayFilledTotal() - self);
     return round2(Math.max(0, due - others));
   }
 
-  function syncWeikuanPayDom() {
-    const root = document.getElementById('flowWeikuanPayChannels');
-    if (!root) return;
-    root.querySelectorAll('[data-wk-pay-amt]').forEach(inp => {
-      const id = inp.dataset.wkPayAmt;
-      inp.value = formatPayAmt(state.flowWeikuanPayAmounts[id] || 0);
-      inp.readOnly = state.flowWeikuanPayEditingId !== id;
-    });
-    root.querySelectorAll('.pay-channel[data-wk-pay]').forEach(row => {
-      const id = row.dataset.wkPay;
-      const on = Number(state.flowWeikuanPayAmounts[id]) > 0 || state.flowWeikuanPayChannel === id;
-      row.classList.toggle('is-active', on);
-    });
-    const w = weikuanById(state.flowWeikuanPayId);
-    const due = round2(Number(w && w.amount) || 0);
+  function weikuanPayRemain(id) {
+    return weikuanPayFillAmount(id, 'remain');
+  }
+
+  function hasStickyWeikuanManualPays() {
+    const edits = state.flowWeikuanPayManualEdit || {};
+    return Object.keys(edits).some(k => edits[k] && round2(Number(state.flowWeikuanPayAmounts?.[k]) || 0) > 0);
+  }
+
+  function updateWeikuanPaySheetTotals() {
+    const due = weikuanPayDue();
     const filled = weikuanPayFilledTotal();
     const amtEl = document.querySelector('#flowWeikuanPayAmount .val');
     if (amtEl) amtEl.textContent = formatPayAmt(due);
@@ -25825,10 +25836,79 @@ window.__BILLING_EMBEDDED__ = true;
     if (btn) btn.disabled = !(filled > 0 && filled <= due + 0.001);
   }
 
+  function syncWeikuanPayInputDom() {
+    const root = document.getElementById('flowWeikuanPayChannels');
+    if (!root) return;
+    root.querySelectorAll('[data-wk-pay-amt]').forEach(inp => {
+      const id = inp.dataset.wkPayAmt;
+      inp.value = formatPayAmt(state.flowWeikuanPayAmounts[id] || 0);
+      inp.readOnly = state.flowWeikuanPayEditingId !== id;
+    });
+    root.querySelectorAll('.pay-channel[data-wk-pay]').forEach(row => {
+      const id = row.dataset.wkPay;
+      const on = Number(state.flowWeikuanPayAmounts[id]) > 0 || state.flowWeikuanPayChannel === id;
+      row.classList.toggle('is-active', on);
+    });
+    updateWeikuanPaySheetTotals();
+  }
+
+  function commitWeikuanPayInputEl(inp) {
+    if (!inp) return;
+    const id = inp.dataset.wkPayAmt;
+    if (!id) return;
+    state.flowWeikuanPayAmounts[id] = Math.max(0, Number(inp.value) || 0);
+    if (Number(state.flowWeikuanPayAmounts[id]) > 0) state.flowWeikuanPayChannel = id;
+  }
+
+  function applyWeikuanPayFocusFill(id) {
+    if (state.flowWeikuanPayEditingId === id && state.flowWeikuanPayActiveAmtId === id) {
+      return;
+    }
+    const prev = state.flowWeikuanPayActiveAmtId;
+    if (prev && prev !== id) {
+      const prevInp = document.querySelector(`#flowWeikuanPayChannels [data-wk-pay-amt="${prev}"]`);
+      if (prevInp) commitWeikuanPayInputEl(prevInp);
+    }
+    Object.keys(state.flowWeikuanPayAmounts || {}).forEach(cid => {
+      if (cid === id) return;
+      if (state.flowWeikuanPayManualEdit && state.flowWeikuanPayManualEdit[cid]) return;
+      state.flowWeikuanPayAmounts[cid] = 0;
+    });
+    state.flowWeikuanPayEditingId = null;
+    const sticky = hasStickyWeikuanManualPays();
+    const keepManual = !!(state.flowWeikuanPayManualEdit && state.flowWeikuanPayManualEdit[id]
+      && Number(state.flowWeikuanPayAmounts[id]) > 0);
+    if (!keepManual) {
+      state.flowWeikuanPayAmounts[id] = weikuanPayFillAmount(id, sticky ? 'remain' : 'full');
+    }
+    state.flowWeikuanPayChannel = id;
+    state.flowWeikuanPayActiveAmtId = id;
+    syncWeikuanPayInputDom();
+  }
+
+  function initWeikuanPayAmounts(due) {
+    const channels = weikuanPayChannelDefs();
+    const next = {};
+    channels.forEach(ch => { next[ch.id] = 0; });
+    const prefer = channels.find(c => c.id === state.flowWeikuanPayChannel)
+      ? state.flowWeikuanPayChannel
+      : 'wechat';
+    state.flowWeikuanPayChannel = prefer;
+    next[prefer] = round2(due);
+    state.flowWeikuanPayAmounts = next;
+    state.flowWeikuanPayManualEdit = {};
+    state.flowWeikuanPayActiveAmtId = null;
+    state.flowWeikuanPayEditingId = null;
+  }
+
   function renderWeikuanPayChannels() {
     const root = document.getElementById('flowWeikuanPayChannels');
     if (!root) return;
-    root.innerHTML = weikuanPayChannelDefs().map(ch => {
+    const channels = weikuanPayChannelDefs();
+    channels.forEach(ch => {
+      if (state.flowWeikuanPayAmounts[ch.id] == null) state.flowWeikuanPayAmounts[ch.id] = 0;
+    });
+    root.innerHTML = channels.map(ch => {
       const amt = formatPayAmt(state.flowWeikuanPayAmounts[ch.id] || 0);
       const active = Number(state.flowWeikuanPayAmounts[ch.id]) > 0 || state.flowWeikuanPayChannel === ch.id;
       const iconHtml = ch.icon
@@ -25843,15 +25923,7 @@ window.__BILLING_EMBEDDED__ = true;
         </span>
       </div>`;
     }).join('');
-    syncWeikuanPayDom();
-  }
-
-  function applyWeikuanPayFocusFill(id) {
-    const remain = weikuanPayRemain(id);
-    state.flowWeikuanPayAmounts[id] = remain;
-    state.flowWeikuanPayChannel = id;
-    state.flowWeikuanPayEditingId = id;
-    renderWeikuanPayChannels();
+    syncWeikuanPayInputDom();
   }
 
   function renderFlowWeikuanDetail() {
@@ -25924,10 +25996,8 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('该尾款已还清');
       return;
     }
-    state.flowWeikuanPayAmounts = {};
     state.flowWeikuanPayChannel = 'wechat';
-    state.flowWeikuanPayEditingId = null;
-    state.flowWeikuanPayAmounts.wechat = round2(Number(w.amount) || 0);
+    initWeikuanPayAmounts(round2(Number(w.amount) || 0));
     closeMask('weikuanCheckoutMask');
     renderWeikuanPayChannels();
     openMask('weikuanPayMask');
@@ -27774,52 +27844,92 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('btnWeikuanCheckoutScanMe')?.addEventListener('click', () => showToast('客户扫我收款后续开放'));
   document.getElementById('btnWeikuanCheckoutScanCust')?.addEventListener('click', () => showToast('我扫客户收款后续开放'));
   document.getElementById('btnWeikuanCheckoutPay')?.addEventListener('click', () => openFlowWeikuanPaySheet());
-  document.getElementById('flowWeikuanPayConfirm')?.addEventListener('click', () => confirmFlowWeikuanPay());
+  let weikuanPaySkipBlurClear = false;
   document.getElementById('flowWeikuanPayChannels')?.addEventListener('click', (e) => {
     const clear = e.target.closest('[data-wk-pay-clear]');
     if (clear) {
       e.stopPropagation();
       const id = clear.dataset.wkPayClear;
       state.flowWeikuanPayAmounts[id] = 0;
-      if (state.flowWeikuanPayChannel === id) state.flowWeikuanPayChannel = null;
+      if (state.flowWeikuanPayManualEdit) state.flowWeikuanPayManualEdit[id] = false;
+      if (state.flowWeikuanPayEditingId === id) state.flowWeikuanPayEditingId = null;
+      if (state.flowWeikuanPayActiveAmtId === id) state.flowWeikuanPayActiveAmtId = null;
+      if (state.flowWeikuanPayChannel === id) {
+        const next = weikuanPayChannelDefs().find(c => Number(state.flowWeikuanPayAmounts[c.id]) > 0);
+        state.flowWeikuanPayChannel = next ? next.id : null;
+      }
       renderWeikuanPayChannels();
       return;
     }
-    const inp = e.target.closest('[data-wk-pay-amt]');
+    if (e.target.closest('[data-wk-pay-amt]')) return;
+    const ch = e.target.closest('.pay-channel[data-wk-pay]');
+    if (!ch) return;
+    const id = ch.dataset.wkPay;
+    const inp = ch.querySelector('[data-wk-pay-amt]');
     if (inp) {
-      e.stopPropagation();
-      const id = inp.dataset.wkPayAmt;
-      state.flowWeikuanPayChannel = id;
-      state.flowWeikuanPayEditingId = id;
-      syncWeikuanPayDom();
-      const openKp = typeof openAmountKeypad === 'function' ? openAmountKeypad
-        : (typeof window.openAmountKeypad === 'function' ? window.openAmountKeypad : null);
-      if (openKp) {
-        inp.readOnly = false;
-        openKp(inp);
-        const mask = document.getElementById('amountKeypadMask');
-        if (mask) {
-          const obs = new MutationObserver(() => {
-            if (!mask.classList.contains('open')) {
-              obs.disconnect();
-              state.flowWeikuanPayAmounts[id] = Math.max(0, Number(inp.value) || 0);
-              const due = round2(Number(weikuanById(state.flowWeikuanPayId)?.amount) || 0);
-              if (weikuanPayFilledTotal() > due + 0.001) {
-                const others = round2(weikuanPayFilledTotal() - Number(state.flowWeikuanPayAmounts[id]));
-                state.flowWeikuanPayAmounts[id] = round2(Math.max(0, due - others));
-                showToast('已自动调整为不超过待收金额');
-              }
-              state.flowWeikuanPayEditingId = null;
-              renderWeikuanPayChannels();
-            }
-          });
-          obs.observe(mask, { attributes: true, attributeFilter: ['class'] });
-        }
-      }
+      inp.focus();
       return;
     }
-    const row = e.target.closest('[data-wk-pay]');
-    if (row) applyWeikuanPayFocusFill(row.dataset.wkPay);
+    state.flowWeikuanPayChannel = id;
+    applyWeikuanPayFocusFill(id);
+    renderWeikuanPayChannels();
+  });
+  document.getElementById('flowWeikuanPayChannels')?.addEventListener('focusin', (e) => {
+    const inp = e.target.closest('[data-wk-pay-amt]');
+    if (!inp) return;
+    applyWeikuanPayFocusFill(inp.dataset.wkPayAmt);
+  });
+  document.getElementById('flowWeikuanPayChannels')?.addEventListener('focusout', (e) => {
+    const inp = e.target.closest('[data-wk-pay-amt]');
+    if (!inp) return;
+    if (weikuanPaySkipBlurClear) {
+      weikuanPaySkipBlurClear = false;
+      return;
+    }
+    commitWeikuanPayInputEl(inp);
+    if (state.flowWeikuanPayEditingId === inp.dataset.wkPayAmt) {
+      state.flowWeikuanPayEditingId = null;
+      inp.readOnly = true;
+    }
+    updateWeikuanPaySheetTotals();
+  });
+  document.getElementById('flowWeikuanPayChannels')?.addEventListener('dblclick', (e) => {
+    const inp = e.target.closest('[data-wk-pay-amt]');
+    if (!inp) return;
+    const id = inp.dataset.wkPayAmt;
+    state.flowWeikuanPayEditingId = id;
+    inp.readOnly = false;
+    try { inp.focus(); inp.select(); } catch (_) { /* ignore */ }
+  });
+  document.getElementById('flowWeikuanPayChannels')?.addEventListener('input', (e) => {
+    const inp = e.target.closest('[data-wk-pay-amt]');
+    if (!inp) return;
+    const id = inp.dataset.wkPayAmt;
+    state.flowWeikuanPayAmounts[id] = Math.max(0, Number(inp.value) || 0);
+    if (!state.flowWeikuanPayManualEdit) state.flowWeikuanPayManualEdit = {};
+    state.flowWeikuanPayManualEdit[id] = true;
+    if (Number(state.flowWeikuanPayAmounts[id]) > 0) state.flowWeikuanPayChannel = id;
+    updateWeikuanPaySheetTotals();
+  });
+  document.getElementById('flowWeikuanPayConfirm')?.addEventListener('pointerdown', () => {
+    const ae = document.activeElement;
+    const inp = ae && ae.closest ? ae.closest('[data-wk-pay-amt]') : null;
+    if (!inp) return;
+    commitWeikuanPayInputEl(inp);
+    weikuanPaySkipBlurClear = true;
+  });
+  document.getElementById('flowWeikuanPayConfirm')?.addEventListener('click', () => {
+    const ae = document.activeElement;
+    const focusedPay = ae && ae.closest ? ae.closest('[data-wk-pay-amt]') : null;
+    if (focusedPay) commitWeikuanPayInputEl(focusedPay);
+    weikuanPaySkipBlurClear = false;
+    const due = weikuanPayDue();
+    const filled = weikuanPayFilledTotal();
+    if (filled > due + 0.001) {
+      showToast('收款金额不能超过待收尾款');
+      return;
+    }
+    confirmFlowWeikuanPay();
   });
   document.getElementById('flowWeikuanSuccessBody')?.addEventListener('click', (e) => {
     if (e.target.closest('#flowWeikuanSuccessRepay')) {
