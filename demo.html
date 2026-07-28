@@ -9,13 +9,21 @@
 @font-face {
   font-family: 'TCloudNumber';
   src: url('assets/fonts/TCloudNumber/TCloudNumber-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  /* Figma 价目价格：TCloudNumber Regular */
+  font-family: 'TCloudNumber';
+  src: url('assets/fonts/TCloudNumber/TCloudNumber-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'TCloudNumber';
-  src: url('assets/fonts/TCloudNumber/TCloudNumberVF.ttf') format('truetype');
+  src: url('assets/fonts/TCloudNumber/TCloudNumber-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -33,6 +41,8 @@
   --warn-bg: #FFF8E6; --warn-text: #E37318;
   --neutral-bg: #EDEDED; --neutral-text: #929292;
   --font-data: "TCloudNumber", "DIN Alternate", "Helvetica Neue", monospace;
+  /* 文案/占位（如金额「请输入」）；有数字后金额栏切回 --font-data */
+  --font-text: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --phone-w: 390px; --phone-h: 844px; --phone-scale: 1.5;
   --phone-display-w: calc(var(--phone-w) * var(--phone-scale));
   --phone-display-h: calc(var(--phone-h) * var(--phone-scale));
@@ -1166,10 +1176,11 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .table-card.is-product-tab .table-row .dur { display: none; }
 .table-card:not(.is-product-tab) .table-head__cell[data-col-spec],
 .table-card:not(.is-product-tab) .table-row .spec { display: none; }
-/* 产品 Tab：名称 / 规格 / 价格 / 状态 */
-.table-card.is-product-tab .table-head,
-.table-card.is-product-tab .table-row {
-  grid-template-columns: minmax(0, 1fr) 72px 72px 48px;
+/* 产品 Tab：名称 / 规格 / 价格 / 状态 — 与项目列位同宽骨架 */
+#screen-p-list .table-card.is-product-tab .table-head,
+#screen-p-list .table-card.is-product-tab .table-row {
+  grid-template-columns: 118px 109px 90px 44px;
+  column-gap: 0;
 }
 .audience-picker-hint { font-size: 12px; color: var(--text-sec); padding: 8px 0 4px; line-height: 1.55; border-bottom: 1px solid var(--bg-page); margin-bottom: 2px; }
 .audience-option-row { display: flex; align-items: center; gap: 6px; position: relative; }
@@ -1259,8 +1270,19 @@ input[type=number]::-webkit-inner-spin-button {
 .issue-extend-custom-input {
   font-family: var(--font-data); font-weight: 400; font-size: 14px; font-variant-numeric: tabular-nums;
 }
+/* 空态「请输入」用思源黑体；有金额后仍走 --font-data */
+.input-amount:placeholder-shown,
+.mp-fixed-input:placeholder-shown,
+.issue-extend-custom-input:placeholder-shown {
+  font-family: var(--font-text); font-variant-numeric: normal;
+}
+.input-amount::placeholder,
+.mp-fixed-input::placeholder,
+.issue-extend-custom-input::placeholder {
+  font-family: var(--font-text); font-variant-numeric: normal;
+}
 .amount-keypad-display.is-empty {
-  font-size: 16px; font-weight: 400; font-family: inherit; color: var(--text-sec);
+  font-size: 16px; font-weight: 400; font-family: var(--font-text); color: var(--text-sec);
 }
 .amount-keypad-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
@@ -1359,13 +1381,15 @@ input[type=number]::-webkit-inner-spin-button {
 .duration-input__num:focus { outline: none; border-color: #C2C4CC; color: var(--text); }
 .duration-input__num.is-confirmed { color: var(--text); font-weight: 600; }
 .duration-input__units {
-  position: relative; flex: 0 0 120px; width: 120px; height: 32px; padding: 2px; box-sizing: border-box;
+  position: relative; flex: 0 0 120px; width: 120px; height: 32px;
+  padding: var(--dur-seg-inset, 2px); box-sizing: border-box;
   display: grid; grid-template-columns: repeat(4, 1fr); align-items: center;
   background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px;
+  --dur-seg-inset: 2px;
 }
 .duration-seg-indicator {
-  position: absolute; top: 2px; bottom: 2px; left: 2px;
-  width: calc((100% - 4px) / 4); border-radius: 6px; background: var(--brand);
+  position: absolute; top: var(--dur-seg-inset, 2px); bottom: var(--dur-seg-inset, 2px); left: var(--dur-seg-inset, 2px);
+  width: calc((100% - 2 * var(--dur-seg-inset, 2px)) / 4); border-radius: 6px; background: var(--brand);
   transition: transform .2s ease; pointer-events: none; z-index: 0;
 }
 .duration-input__unit {
@@ -2094,68 +2118,113 @@ html.prd-capture .bottom-bar {
 html.prd-capture #screen-p-list .catalog-list-shell,
 html.prd-capture #projProjectTable { overflow: visible; }
 
-/* Price catalog screens */
+/* Price catalog screens · 对齐 Figma 305:45 / 305:99 */
 .table-card.hidden { display: none; }
-.proj-list-toolbar { padding: 8px 16px 6px; background: var(--bg-page); flex-shrink: 0; }
-.proj-search-row { display: flex; gap: 8px; align-items: center; }
-.proj-search-box { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--card); border-radius: 8px; padding: 0 12px; height: 36px; border: 1px solid var(--border); }
+.proj-list-toolbar {
+  padding: 12px 16px 20px; background: #F7F7F7; flex-shrink: 0;
+}
+.proj-search-row { display: flex; gap: 12px; align-items: center; }
+.proj-search-box {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+  background: #fff; border-radius: 8px; padding: 0 12px 0 26px; height: 42px;
+  border: 0.5px solid #E8E8E8; box-sizing: border-box; position: relative;
+}
 .proj-search-box:focus-within { border-color: #C2C4CC; }
-.proj-search-box input { flex: 1; border: none; background: none; font-size: 14px; font-family: inherit; outline: none; color: var(--text); }
-.proj-search-box input::placeholder { color: var(--text-sec); }
-.btn-proj-add { flex-shrink: 0; height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.proj-search-box__icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  flex-shrink: 0; display: block; width: 16px; height: 16px; pointer-events: none;
+}
+.proj-search-box input {
+  flex: 1; min-width: 0; border: none; background: none; font-size: 14px;
+  font-family: inherit; outline: none; color: var(--text); height: 100%;
+}
+.proj-search-box input::placeholder { color: #929292; }
+/* Figma Line 3：竖向渐变发丝线（导出为横线再旋转，stops 对齐 SVG） */
+.proj-search-box__divider {
+  flex-shrink: 0; width: 1px; height: 26px; border: none;
+  background: linear-gradient(
+    180deg,
+    rgba(232, 232, 232, 0) 0%,
+    rgba(232, 232, 232, 0.4) 17.3077%,
+    #E8E8E8 53.3654%,
+    rgba(232, 232, 232, 0.4) 82.6923%,
+    rgba(232, 232, 232, 0) 100%
+  );
+  transform: none;
+}
+.proj-search-go {
+  flex-shrink: 0; border: none; background: transparent; padding: 0 2px 0 8px;
+  font-size: 14px; color: #929292; font-family: inherit; cursor: pointer; line-height: 1;
+}
+.proj-search-go:active { color: var(--text); }
+.btn-proj-add {
+  flex-shrink: 0; width: 54px; height: 32px; padding: 0;
+  border: none; border-radius: 6px; background: var(--brand); color: #fff;
+  font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit;
+  white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  box-sizing: border-box;
+}
+/* Figma 305:141：布局框 10×10；描边叶 11.6×11.6（inset -8%） */
+.btn-proj-add__plus {
+  flex-shrink: 0; width: 10px; height: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  overflow: visible; position: relative;
+}
+.btn-proj-add__plus img {
+  display: block; width: 11.6px; height: 11.6px; flex-shrink: 0;
+  object-fit: contain; max-width: none;
+}
 .proj-list-hint {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  margin: 6px -16px -6px; padding: 8px 16px;
-  background: #F5F5F5;
+  display: flex; align-items: center; gap: 8px;
+  margin: 0; padding: 0 16px; height: 34px; box-sizing: border-box;
+  background: #FFF2F2; flex-shrink: 0;
 }
 .proj-list-hint.hidden { display: none; }
+.proj-list-hint__icon { flex-shrink: 0; display: block; width: 15px; height: 15px; color: #1A1A1A; }
 .proj-list-hint__text {
   margin: 0; flex: 1; min-width: 0;
-  font-size: 12px; color: var(--text-sec); line-height: 1.4; font-weight: 500;
+  font-size: 12px; color: #1A1A1A; line-height: 18px; font-weight: 400;
 }
 .proj-list-hint__close {
-  flex-shrink: 0; width: 24px; height: 24px; margin: 0; padding: 0;
+  flex-shrink: 0; width: 20px; height: 20px; margin: 0; padding: 0;
   display: inline-flex; align-items: center; justify-content: center;
-  border: none; background: transparent; color: #B0B0B0; font-size: 18px; line-height: 1;
-  cursor: pointer; font-family: inherit; border-radius: 4px;
+  border: none; background: transparent; cursor: pointer; border-radius: 4px;
 }
-.proj-list-hint__close:active { background: #EBEBEB; color: var(--text-sec); }
+.proj-list-hint__close img { display: block; width: 20px; height: 20px; }
+.proj-list-hint__close:active { opacity: .7; }
 .catalog-list-shell {
-  margin: 0 16px 12px; background: var(--card); border-radius: 12px;
+  margin: 0; background: #fff; border-radius: 0;
   overflow: hidden; flex-shrink: 0;
 }
 .catalog-group-bar.hidden { display: none; }
 .catalog-list-shell.hidden { display: none; }
 .catalog-group-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 8px 8px 12px; flex-shrink: 0; background: var(--card);
-  border-bottom: 1px solid #EBEBEB;
+  display: flex; align-items: center; gap: 0;
+  padding: 0 16px; height: 28px; margin: 0 0 24px; flex-shrink: 0; background: #fff;
+  box-sizing: content-box;
 }
 /*
- * 分组迷你分段：
- * - 灰槽固定 46px
- * - 按钮热区 46px，内层白胶囊 28px（上下各 9px）
- * - 左右内边距加大，避免圆角槽 + 横向滑动时裁切白胶囊
- * - 阴影画在内层，物理上落在热区里
+ * 分组 Chip + 右侧半透渐变（Figma 305:145 Rectangle 5024）
  */
 .catalog-group-segment {
   flex: 1;
   min-width: 0;
-  height: 46px;
+  height: 28px;
   box-sizing: border-box;
-  background: #F2F2F2;
-  border-radius: 999px;
+  background: transparent;
+  border-radius: 0;
   overflow: hidden;
-  padding: 0 10px;
+  padding: 0;
   display: flex;
   align-items: center;
+  position: relative;
 }
 .catalog-group-scroll {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
   width: 100%;
-  height: 46px;
+  height: 28px;
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
@@ -2165,9 +2234,18 @@ html.prd-capture #projProjectTable { overflow: visible; }
   cursor: grab;
   scroll-padding-inline: 4px;
   scroll-snap-type: x proximity;
+  padding-right: 28px;
+  box-sizing: border-box;
 }
 .catalog-group-scroll::-webkit-scrollbar { display: none; }
 .catalog-group-scroll.is-panning { cursor: grabbing; user-select: none; }
+.catalog-group-fade {
+  position: absolute;
+  right: 0; top: 50%; transform: translateY(-50%);
+  width: 66px; height: 33px;
+  pointer-events: none; z-index: 2;
+  background: linear-gradient(-90deg, #fff 0%, #fff 77.318%, rgba(255, 255, 255, 0) 100%);
+}
 .catalog-group-tab {
   position: relative;
   flex: 0 0 auto;
@@ -2175,14 +2253,14 @@ html.prd-capture #projProjectTable { overflow: visible; }
   border: none;
   outline: none;
   margin: 0;
-  padding: 0 2px;
+  padding: 0;
   width: auto;
-  height: 46px;
-  min-height: 46px;
-  max-height: 46px;
+  height: auto;
+  min-height: 0;
+  max-height: none;
   background: transparent;
   box-shadow: none;
-  color: #929292;
+  color: #1A1A1A;
   font-family: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -2200,13 +2278,14 @@ html.prd-capture #projProjectTable { overflow: visible; }
   height: 28px;
   min-height: 28px;
   max-height: 28px;
-  padding: 0 14px;
-  border-radius: 999px;
+  padding: 4px 16px;
+  border-radius: 8px;
   background: transparent;
+  border: 0.5px solid #E8E8E8;
   box-shadow: none;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
   color: inherit;
   white-space: nowrap;
   box-sizing: border-box;
@@ -2247,22 +2326,28 @@ html.prd-capture #projProjectTable { overflow: visible; }
   box-shadow: none;
 }
 .catalog-group-tab.on .catalog-group-tab__face {
-  background: #fff;
-  font-weight: 600;
+  background: #FFF2F2;
+  border-color: var(--brand);
+  font-weight: 500;
   color: var(--brand);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
 }
-.catalog-group-tab:active:not(.on) { color: var(--text); }
+.catalog-group-tab:active:not(.on) { opacity: .85; }
 .catalog-group-tab:focus,
 .catalog-group-tab:focus-visible { outline: none; }
 .catalog-group-gear {
-  flex-shrink: 0; width: 36px; height: 36px; margin: 0; padding: 0;
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  z-index: 3;
+  flex-shrink: 0; width: 24px; height: 24px; margin: 0; padding: 0;
   border: none; background: transparent; color: var(--text-sec); cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
-  font-family: inherit; -webkit-tap-highlight-color: transparent; border-radius: 8px;
+  font-family: inherit; -webkit-tap-highlight-color: transparent; border-radius: 0;
 }
-.catalog-group-gear:active { background: var(--bg-page); color: var(--brand); }
-.catalog-group-gear svg { display: block; width: 20px; height: 20px; pointer-events: none; }
+.catalog-group-bar { position: relative; }
+.catalog-group-segment { padding-right: 40px; box-sizing: border-box; }
+.catalog-group-gear:active { opacity: .75; }
+.catalog-group-gear img,
+.catalog-group-gear svg { display: block; width: 24px; height: 24px; pointer-events: none; }
 .catalog-group-manage-list { padding: 12px 16px 24px; }
 .catalog-group-card {
   background: var(--card); border-radius: 12px; overflow: hidden;
@@ -2278,7 +2363,7 @@ html.prd-capture #projProjectTable { overflow: visible; }
 }
 .catalog-group-manage-row__drag {
   flex-shrink: 0; width: 44px; height: 64px; border: none; background: transparent;
-  color: #C8C9CC; cursor: grab; display: inline-flex; align-items: center; justify-content: center;
+  color: #929292; cursor: grab; display: inline-flex; align-items: center; justify-content: center;
   padding: 0; font-family: inherit; touch-action: none;
 }
 .catalog-group-manage-row__drag-spacer,
@@ -2369,28 +2454,105 @@ html.prd-capture #projProjectTable { overflow: visible; }
   margin: 0 0 20px; font-size: 13px; color: var(--text-sec); line-height: 1.5;
 }
 .catalog-group-sheet-empty .btn-main { width: auto; min-width: 140px; margin: 0 auto; height: 40px; line-height: 40px; font-size: 14px; }
-#screen-p-list { background: var(--card); }
-#screen-p-list .page-body { display: flex; flex-direction: column; background: var(--card); }
-#screen-p-list .proj-list-toolbar { background: var(--card); }
-#screen-p-list .price-catalog-tabs { border-bottom-color: #EBEBEB; }
+#screen-p-list { background: #F7F7F7; }
+#screen-p-list .page-title-bar { background: #fff; }
+/* Figma 305:99/45：顶栏/提示下留 10px 灰缝，白底内容区含 Tab+搜索+列表 */
+#screen-p-list .page-body {
+  display: flex; flex-direction: column; background: #fff;
+  border-radius: 0; margin-top: 0;
+}
+#screen-p-list .proj-list-toolbar {
+  background: #fff; padding: 12px 16px 20px;
+}
+#screen-p-list .price-catalog-tabs {
+  /* margin 10 + padTop 12 + 内容 33 = 对齐 Tab y119 / 有提示时 y153 */
+  margin-top: 10px;
+  padding-top: 12px;
+  height: 45px;
+  box-sizing: border-box;
+  background: #fff;
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+}
+#screen-p-list .price-catalog-tabs .page-tabs__item {
+  font-size: 16px; color: #6C7279; font-weight: 400; letter-spacing: 0.32px;
+}
+#screen-p-list .price-catalog-tabs .page-tabs__item.on {
+  color: #1A1A1A; font-weight: 600;
+}
+#screen-p-list .price-catalog-tabs .page-tabs__item.on::after {
+  width: 27px; height: 3px; border-radius: 4px; bottom: 0;
+}
 #screen-p-list .catalog-list-shell {
   flex-shrink: 0;
   margin: 0;
   border-radius: 0;
-  background: var(--card);
+  background: #fff;
 }
 #screen-p-list .table-card {
   margin: 0; border-radius: 0; background: transparent;
 }
+/*
+ * 表头/行列位对齐 Figma 305:99：
+ * 项目名称 x24；时长 x131 w84；价格 x240 w65；状态 x338（徽章列 44 @x330）
+ * 列宽 118+109+90+44=361（含列间 25 空隙并入后两列）
+ */
 #screen-p-list .table-head {
-  padding-top: 8px; padding-bottom: 6px;
-  font-size: 11px; color: #B3B3B3;
-  border-bottom-color: #F0F0F0;
+  padding: 0 16px 16px 13px; min-height: 20px;
+  font-size: 14px; color: #666; font-weight: 400;
+  border-bottom: none; align-items: center;
+  box-sizing: content-box;
+  grid-template-columns: 118px 109px 90px 44px;
+  column-gap: 0;
+}
+#screen-p-list .table-row {
+  grid-template-columns: 118px 109px 90px 44px;
+  column-gap: 0;
+  padding-left: 13px;
+  padding-right: 16px;
+}
+#screen-p-list .table-head__cell[data-col-sort="name"] {
+  justify-content: flex-start;
+  padding-left: 11px; /* abs 24 − pad 13 */
+}
+#screen-p-list .table-head__cell[data-col-sort="name"] .table-head__inner {
+  padding-left: 0;
+}
+#screen-p-list .table-head__cell[data-col-sort="duration"],
+#screen-p-list .table-head__cell[data-col-sort="spec"] {
+  justify-content: flex-start;
+  width: 84px;
+  max-width: 84px;
+}
+#screen-p-list .table-head__cell[data-col-sort="price"] {
+  justify-content: flex-start;
+  width: 65px;
+  max-width: 65px;
+}
+#screen-p-list .table-head__cell[data-col-sort="sale"] {
+  justify-content: center;
+}
+#screen-p-list .table-head__cell.is-center { justify-content: center; }
+#screen-p-list .table-head__cell[data-col-sort="duration"].is-center,
+#screen-p-list .table-head__cell[data-col-sort="spec"].is-center,
+#screen-p-list .table-head__cell[data-col-sort="price"].is-center {
+  justify-content: flex-start;
+}
+#screen-p-list .table-row .dur,
+#screen-p-list .table-row .spec {
+  width: 84px; max-width: 84px; justify-self: start; text-align: center;
+}
+#screen-p-list .table-row .price {
+  width: 65px; max-width: 65px; justify-self: start; text-align: center;
+}
+#screen-p-list .table-row .sale-status {
+  width: 44px; justify-self: stretch;
 }
 .table-card { margin: 8px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; isolation: isolate; position: relative; }
 .table-row-actions .act-group { background: #64748B; }
 #projProjectTable { overflow: hidden; background: var(--card); }
-.table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 68px 72px 48px; column-gap: 6px; padding-left: 12px; padding-right: 10px; }
+/* 行容器 Figma x=13；拖拽 16 + gap4 + 名；表头「项目名称」x=24 */
+.table-head, .table-row { display: grid; grid-template-columns: minmax(0, 1fr) 84px 64px 52px; column-gap: 6px; padding-left: 13px; padding-right: 16px; }
 .table-row-swipe { position: relative; overflow: hidden; background: var(--card); }
 .table-row-swipe:last-child .table-row::after { display: none; }
 .table-row-actions {
@@ -2442,53 +2604,50 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .catalog-action-item__del-lock.is-hidden { display: none; }
 .catalog-hidden-block {
   position: relative;
-  background: #FAFAFA;
+  background: #F7F7F7;
 }
 .catalog-hidden-block::before {
   content: '';
   position: absolute;
   left: 16px;
-  right: 16px;
+  right: 13px;
   top: 0;
   height: 1px;
-  background: var(--card-divider);
+  background: #EBEBEB;
   transform: scaleY(0.5);
   transform-origin: center top;
   pointer-events: none;
-}
-.table-row-swipe:has(+ .catalog-hidden-block) .table-row::after {
-  display: none;
 }
 .catalog-hidden-toggle {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 44px;
-  padding: 10px 16px;
+  min-height: 37px;
+  padding: 8px 12px;
   margin: 0;
   border: none;
   background: transparent;
-  color: var(--text-sec);
+  color: var(--text);
   font: inherit;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 400;
   cursor: pointer;
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
-.catalog-hidden-toggle:active { background: var(--bg-page); }
-.catalog-hidden-toggle__label { display: inline-flex; align-items: center; gap: 6px; }
+.catalog-hidden-toggle:active { background: #EFEFEF; }
+.catalog-hidden-toggle__label { display: inline-flex; align-items: center; gap: 8px; }
 .catalog-hidden-toggle__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.08);
   font-size: 11px;
   font-weight: 600;
   color: var(--text-sec);
@@ -2498,24 +2657,32 @@ html.prd-capture #projProjectTable { overflow: visible; }
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+  display: block;
+  object-fit: contain;
+  /* 禁止把 扁 V 字形强拉成正方形导致变形 */
+  aspect-ratio: 1;
   transition: transform .2s ease;
+  transform: rotate(180deg);
 }
-.catalog-hidden-block.is-open .catalog-hidden-toggle__chev { transform: rotate(180deg); }
+.catalog-hidden-block.is-open .catalog-hidden-toggle__chev { transform: rotate(0deg); }
 .catalog-hidden-list { display: none; }
 .catalog-hidden-block.is-open .catalog-hidden-list { display: block; }
-.catalog-hidden-list .table-row-swipe { background: #FAFAFA; }
-.catalog-hidden-list .table-row { background: #FAFAFA; box-shadow: 8px 0 0 #FAFAFA; }
+.catalog-hidden-list .table-row-swipe { background: #fff; }
+.catalog-hidden-list .table-row { background: #fff; box-shadow: 8px 0 0 #fff; }
 .table-row {
-  position: relative; z-index: 1; align-items: center; min-height: 52px; padding-top: 10px; padding-bottom: 10px;
+  position: relative; z-index: 1; align-items: center; min-height: 52px; padding-top: 0; padding-bottom: 0;
   cursor: pointer; font-size: 14px; touch-action: pan-y; background: var(--card);
   transition: transform .2s ease; will-change: transform;
   box-shadow: 8px 0 0 var(--card);
 }
-/* 行间划线：左右各 16px 缩进，与文字对齐 */
+/* 行间划线：Figma Line 66/67，行内左 3→屏左 16，宽 361→右约 13 */
 .table-row::after {
-  content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px;
-  background: var(--card-divider); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+  content: ''; position: absolute; left: 16px; right: 13px; bottom: 0; height: 1px;
+  background: #EBEBEB; transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
 }
+#projProjectTable .table-row-swipe .table-row::after { display: block; }
+#projProjectTable .table-row-swipe:last-child .table-row::after { display: none; }
+.table-row-swipe:has(+ .catalog-hidden-block) .table-row::after { display: block; }
 .table-row:active { background: var(--bg-page); }
 .table-row-swipe.is-off-sale .name-text,
 .table-row-swipe.is-off-sale .dur,
@@ -2566,7 +2733,7 @@ html.prd-capture #projProjectTable { overflow: visible; }
   pointer-events: none;
 }
 .table-head__cell[data-col-sort="name"] .table-head__inner {
-  padding-left: 24px; /* 与行内拖拽把手同宽，标题与产品名对齐 */
+  padding-left: 20px; /* 与行内 16 热区 + 间距对齐名称 */
 }
 .table-row .name {
   min-width: 0; font-weight: 500;
@@ -2580,13 +2747,13 @@ html.prd-capture #projProjectTable { overflow: visible; }
 }
 .catalog-row-drag {
   flex-shrink: 0;
-  width: 22px;
-  height: 28px;
-  margin: 0 2px 0 0;
+  width: 16px;
+  height: 16px;
+  margin: 0 4px 0 0;
   padding: 0;
   border: none;
   background: transparent;
-  color: #BDBDBD;
+  color: #929292;
   cursor: grab;
   display: inline-flex;
   align-items: center;
@@ -2594,8 +2761,12 @@ html.prd-capture #projProjectTable { overflow: visible; }
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
 }
-.catalog-row-drag:active { cursor: grabbing; color: var(--text-sec); }
-.catalog-row-drag svg { display: block; width: 14px; height: 14px; pointer-events: none; }
+.catalog-row-drag:active { cursor: grabbing; }
+.catalog-row-drag svg,
+.catalog-row-drag img {
+  display: block; width: 10px; height: 9.5px; pointer-events: none;
+  /* Figma：16 热区，字形约 10×9.5，描边 #929292 */
+}
 /* ≤5 字：单行；>5 字：换行，绑卡/置顶跟在最后一个字右侧 */
 .table-row .name-text {
   overflow: visible; text-overflow: clip;
@@ -2624,16 +2795,21 @@ html.prd-capture #projProjectTable { overflow: visible; }
 #screen-p-list .table-row .dur-clock {
   flex-shrink: 0; display: block; width: 12px; height: 12px; color: #B0B0B0;
 }
-#screen-p-list .table-row .dur-text { font-size: 12px; color: var(--text-sec); white-space: nowrap; }
+#screen-p-list .table-row .dur-text { font-size: 14px; color: #929292; white-space: nowrap; }
 .table-row .price { text-align: center; font-variant-numeric: tabular-nums; }
 #screen-p-list .table-row .price-num {
-  font-family: var(--font-data); font-weight: 600; font-size: 15px; color: var(--brand);
+  /* Figma 305:155 TCloudNumber Regular 14 / 主红 #F32F41 */
+  font-family: var(--font-data); font-weight: 400; font-size: 14px; line-height: 19px;
+  color: #F32F41; letter-spacing: 0;
 }
 #screen-p-list .table-row .price-num .yen {
-  font-family: inherit; font-weight: 600; font-size: 13px; color: var(--brand); margin-right: 1px;
+  font-family: inherit; font-weight: 400; font-size: 14px; line-height: 19px;
+  color: inherit; margin-right: 0;
 }
 #screen-p-list .table-row-swipe.is-off-sale .price-num,
-#screen-p-list .table-row-swipe.is-off-sale .price-num .yen { color: var(--text-sec); font-weight: 500; }
+#screen-p-list .table-row-swipe.is-off-sale .price-num .yen {
+  color: var(--text-sec); font-weight: 400;
+}
 .sale-status {
   display: flex; align-items: center; justify-content: center;
   min-width: 0;
@@ -2641,28 +2817,30 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .sale-status__pill {
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  font-size: 10px; font-weight: 600; line-height: 1.2;
-  padding: 2px 7px; border-radius: 999px;
+  font-size: 14px; font-weight: 400; line-height: 1.2;
+  min-width: 44px; height: 20px; padding: 0 8px; border-radius: 4px;
   white-space: nowrap; box-sizing: border-box;
 }
-.sale-status__pill.sale-status--on { color: #5EAD7A; background: #EEFAF3; }
-.sale-status__pill.sale-status--off { color: #B0B0B0; background: #F2F2F2; }
-.table-row-swipe.is-off-sale .sale-status__pill.sale-status--off { color: #B0B0B0; background: #F2F2F2; }
+.sale-status__pill.sale-status--on { color: #5EAD7A; background: rgba(94, 173, 122, 0.1); }
+.sale-status__pill.sale-status--off { color: #666; background: #F2F2F2; }
+.table-row-swipe.is-off-sale .sale-status__pill.sale-status--off { color: #666; background: #F2F2F2; }
 .bound-tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   margin: 0 0 0 4px;
   padding: 0;
   border: none;
-  background: transparent;
-  color: var(--brand);
+  border-radius: 2px;
+  background: #EEF2FF;
+  color: #4A7BF4;
   pointer-events: none;
+  box-sizing: border-box;
 }
-.bound-tag__icon { display: block; width: 14px; height: 14px; }
+.bound-tag__icon { display: block; width: 12px; height: 10px; }
 .price-num { font-family: var(--font-data); font-weight: 500; font-size: 15px; color: var(--text); }
 .price-num .yen { font-family: inherit; font-weight: 400; margin-right: 1px; font-size: 12px; }
 .catalog-action-list { display: flex; flex-direction: column; padding: 0; }
@@ -2760,14 +2938,31 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .switch:disabled { opacity: .5; cursor: not-allowed; }
 .switch.is-locked { opacity: .5; cursor: not-allowed; }
 .proj-list-empty {
-  text-align: center; padding: 56px 24px 32px; color: var(--text-sec); font-size: 13px;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  /* 搜索底→插画：Figma 24px = toolbar pb20 + 此处 pt4 */
+  text-align: center; padding: 4px 24px 40px; color: #B2B2B2; font-size: 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  flex: 1; background: #fff; border-radius: 0;
 }
 .proj-list-empty.hidden { display: none; }
-.proj-list-empty__title { font-size: 15px; font-weight: 500; color: var(--text); margin: 0; }
-.proj-list-empty__hint { font-size: 13px; color: var(--text-sec); margin: 0 0 8px; line-height: 1.45; }
-.proj-list-empty .btn-main { width: auto; min-width: 160px; padding: 0 24px; height: 40px; line-height: 40px; font-size: 14px; }
-.proj-list-empty .btn-main.hidden { display: none; }
+.proj-list-empty__illust {
+  display: block; width: 144px; height: 144px; margin: 0 0 20px;
+  object-fit: contain;
+}
+.proj-list-empty__title {
+  font-size: 14px; font-weight: 400; color: #B2B2B2; margin: 0 0 4px; line-height: 20px;
+}
+.proj-list-empty__hint {
+  font-size: 14px; color: #B2B2B2; margin: 0 0 28px; line-height: 20px;
+}
+.btn-proj-empty-add {
+  width: 154px; height: 30px; margin: 0; padding: 0;
+  border: 0.5px solid #EDEDED; border-radius: 4px;
+  background: #fff; color: #666; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer; line-height: 1;
+}
+.btn-proj-empty-add + .btn-proj-empty-add { margin-top: 12px; }
+.btn-proj-empty-add:active { background: #FAFAFA; }
+.btn-proj-empty-add.hidden { display: none; }
 .alert-banner { display: flex; gap: 8px; align-items: flex-start; margin: 0; padding: 12px 16px; border-radius: 0; font-size: 13px; line-height: 1.5; color: var(--text-sec); flex-shrink: 0; width: 100%; box-sizing: border-box; }
 .alert-banner--info { background: var(--info-bg); color: var(--info-text); }
 .alert-banner--warn { background: var(--warn-bg); color: var(--warn-text); }
@@ -2812,7 +3007,9 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .proj-form-row .field { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; }
 .proj-form-row .field-value { font-size: 14px; color: var(--text); }
 .proj-form-row input[type="text"], .proj-form-row .input-amount { border: none; text-align: right; font-size: 14px; font-family: inherit; width: 100%; max-width: 200px; outline: none; color: var(--text); background: transparent; }
-.proj-form-row .input-amount[readonly] { cursor: pointer; caret-color: transparent; font-family: var(--font-data); }
+.proj-form-row .input-amount[readonly] { cursor: pointer; caret-color: transparent; }
+.proj-form-row .input-amount:placeholder-shown { font-family: var(--font-text); font-variant-numeric: normal; }
+.proj-form-row .input-amount:not(:placeholder-shown) { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
 .proj-form-row input::placeholder { color: var(--text-sec); }
 .proj-form-row input:disabled { color: var(--text-sec); }
 .proj-form-row .suffix { font-size: 14px; color: var(--text-sec); flex-shrink: 0; }
@@ -2862,6 +3059,437 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .img-upload__plus::before, .img-upload__plus::after { content: ""; position: absolute; background: var(--text-sec); border-radius: 1px; }
 .img-upload__plus::before { left: 7px; top: 11px; width: 10px; height: 2px; }
 .img-upload__plus::after { left: 11px; top: 7px; width: 2px; height: 10px; }
+
+/* ========== Figma 305:190/511/251/325/426 · 价目表单/详情 ========== */
+#screen-p-add,
+#screen-p-edit { background: #F7F7F7; }
+#screen-p-add .page-body,
+#screen-p-edit .page-body { background: #F7F7F7; }
+#screen-p-add .proj-form-stack,
+#screen-p-edit .proj-form-stack {
+  padding: 10px 16px 24px; gap: 20px;
+}
+#screen-p-add .proj-section-label,
+#screen-p-edit .proj-section-label {
+  position: relative;
+  display: flex; align-items: center;
+  margin: 0 0 10px; padding: 0 0 0 7px;
+  font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
+}
+#screen-p-add .proj-section-label::before,
+#screen-p-edit .proj-section-label::before {
+  content: ''; position: absolute; left: 0; top: 3px;
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4A7BF4;
+}
+#screen-p-add .proj-form-section,
+#screen-p-edit .proj-form-section {
+  border-radius: 8px; padding: 0; overflow: hidden;
+}
+#screen-p-add .proj-form-row,
+#screen-p-edit .proj-form-row {
+  min-height: 52px; padding: 0 16px;
+}
+#screen-p-add .proj-form-row:not(:last-child)::after,
+#screen-p-edit .proj-form-row:not(:last-child)::after {
+  background: #EBEBEB;
+}
+#screen-p-add .proj-form-row .label,
+#screen-p-edit .proj-form-row .label {
+  font-size: 14px; font-weight: 400; color: #1A1A1A; line-height: normal;
+}
+#screen-p-add .proj-form-row input[type="text"],
+#screen-p-add .proj-form-row .input-amount,
+#screen-p-edit .proj-form-row input[type="text"],
+#screen-p-edit .proj-form-row .input-amount {
+  font-size: 14px; font-weight: 400; color: #1A1A1A; max-width: none;
+  text-align: right; line-height: normal;
+}
+#screen-p-add .proj-form-row .input-amount:placeholder-shown,
+#screen-p-edit .proj-form-row .input-amount:placeholder-shown {
+  font-family: var(--font-text); font-variant-numeric: normal;
+}
+#screen-p-add .proj-form-row .input-amount:not(:placeholder-shown),
+#screen-p-edit .proj-form-row .input-amount:not(:placeholder-shown) {
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+#screen-p-add .proj-form-row input::placeholder,
+#screen-p-edit .proj-form-row input::placeholder {
+  color: #929292; font-weight: 400; font-size: 14px; opacity: 1;
+  -webkit-text-fill-color: #929292;
+  font-family: var(--font-text);
+}
+#screen-p-add .proj-form-row .suffix,
+#screen-p-edit .proj-form-row .suffix { display: none; }
+#screen-p-add .proj-form-row .hint,
+#screen-p-edit .proj-form-row .hint {
+  margin-top: 4px; font-size: 12px; color: #929292; line-height: 17px;
+}
+#screen-p-add .proj-form-row.col,
+#screen-p-edit .proj-form-row.col { padding: 16px; min-height: 0; }
+#screen-p-add .form-row--duration .duration-input,
+#screen-p-edit .form-row--duration .duration-input {
+  display: inline-flex; align-items: center; gap: 8px; width: 148px; margin-left: auto;
+}
+#screen-p-add .duration-input__num,
+#screen-p-edit .duration-input__num {
+  width: 68px; height: 32px; border: 0.67px solid #EDEDED; border-radius: 8px;
+  font-size: 14px; font-weight: 500; color: #1A1A1A; text-align: right; padding: 0 8px;
+}
+#screen-p-add .duration-input__num::placeholder,
+#screen-p-edit .duration-input__num::placeholder {
+  color: #929292; font-weight: 400; opacity: 1; -webkit-text-fill-color: #929292;
+}
+#screen-p-add .duration-input__units,
+#screen-p-edit .duration-input__units {
+  flex: 0 0 72px; width: 72px; height: 32px;
+  --dur-seg-inset: 2.33px;
+  padding: var(--dur-seg-inset);
+  background: #fff; border: 0.67px solid #EDEDED; border-radius: 8px;
+  grid-template-columns: 1fr 1fr;
+  box-sizing: border-box;
+}
+#screen-p-add .duration-seg-indicator,
+#screen-p-edit .duration-seg-indicator {
+  top: var(--dur-seg-inset); bottom: var(--dur-seg-inset); left: var(--dur-seg-inset);
+  width: calc((100% - 2 * var(--dur-seg-inset)) / 2);
+  background: rgba(74, 123, 244, 0.1); border-radius: 6px;
+}
+#screen-p-add .duration-input__unit,
+#screen-p-edit .duration-input__unit {
+  height: 26px; line-height: 26px; font-size: 14px; font-weight: 500; color: #929292;
+}
+#screen-p-add .duration-input__unit.is-active,
+#screen-p-edit .duration-input__unit.is-active {
+  color: #4A7BF4; font-weight: 500;
+}
+#screen-p-add .switch,
+#screen-p-edit .switch {
+  width: 40px; height: 22px; border-radius: 11px; background: #E5E5E5;
+}
+#screen-p-add .switch::after,
+#screen-p-edit .switch::after {
+  width: 18px; height: 18px; top: 2px; left: 2px;
+  box-shadow: none;
+}
+#screen-p-add .switch.on,
+#screen-p-edit .switch.on {
+  background: linear-gradient(135deg, #FF974B 0%, #FE7A4C 100%);
+}
+#screen-p-add .switch.on::after,
+#screen-p-edit .switch.on::after { transform: translateX(18px); }
+#screen-p-add .collapse-head,
+#screen-p-edit .collapse-head { padding: 16px; }
+#screen-p-add .collapse-head .title,
+#screen-p-edit .collapse-head .title { font-size: 14px; color: #1A1A1A; }
+#screen-p-add .collapse-head .sub,
+#screen-p-edit .collapse-head .sub { font-size: 12px; color: #929292; margin-top: 4px; }
+#screen-p-add .collapse-body,
+#screen-p-edit .collapse-body { padding: 0 16px 16px; }
+#screen-p-add .img-upload,
+#screen-p-edit .img-upload {
+  width: 79px; height: 79px; border-radius: 4px; border: none;
+  background: #F7F7F7; flex-direction: column; justify-content: center; align-items: center;
+  gap: 0; padding: 8px 0 6px; box-sizing: border-box;
+  font-size: 11px; color: #1A1A1A;
+}
+#screen-p-add .img-upload.has-img,
+#screen-p-edit .img-upload.has-img {
+  background: #F7F7F7; border: none; color: #929292; font-size: 11px; line-height: 1.35;
+}
+#screen-p-add .img-upload__cam,
+#screen-p-edit .img-upload__cam {
+  display: block; width: 36px; height: 36px; flex-shrink: 0; pointer-events: none;
+}
+#screen-p-add .img-upload__cap,
+#screen-p-edit .img-upload__cap {
+  margin-top: 2px; font-size: 11px; font-weight: 400; color: #1A1A1A; line-height: normal;
+}
+#screen-p-add .img-upload__plus,
+#screen-p-edit .img-upload__plus { display: none; }
+/* Figma 305:325 · 项目图片多图轨 */
+#screen-p-add .proj-form-section,
+#screen-p-edit .proj-form-section {
+  /* 圆角内裁切，避免末图像素溢出成贴边深色线 */
+  overflow: hidden;
+}
+#screen-p-add .collapse-body,
+#screen-p-edit .collapse-body {
+  /* 右侧贴齐白卡内缘，渐变盖住末图 */
+  padding: 0 0 16px 16px;
+}
+#screen-p-add .proj-img-rail-outer,
+#screen-p-edit .proj-img-rail-outer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden; /* 裁掉删图钮 right:-3px 溢出 */
+}
+#screen-p-add .proj-img-rail-wrap,
+#screen-p-edit .proj-img-rail-wrap {
+  position: relative;
+  z-index: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* 把子元素 z-index 关在滚动层内，避免删图钮压过渐变 */
+  isolation: isolate;
+}
+#screen-p-add .proj-img-rail-wrap::-webkit-scrollbar,
+#screen-p-edit .proj-img-rail-wrap::-webkit-scrollbar { display: none; }
+#screen-p-add .proj-img-rail,
+#screen-p-edit .proj-img-rail {
+  display: flex; align-items: flex-start; gap: 8px;
+  width: max-content; min-width: 100%;
+  padding: 3px 0 0;
+  box-sizing: border-box;
+}
+#screen-p-add .proj-img-rail .img-upload,
+#screen-p-edit .proj-img-rail .img-upload {
+  flex-shrink: 0; cursor: pointer;
+}
+#screen-p-add .proj-img-rail .img-upload.is-disabled,
+#screen-p-edit .proj-img-rail .img-upload.is-disabled {
+  opacity: .45; pointer-events: none;
+}
+#screen-p-add .proj-img-thumb,
+#screen-p-edit .proj-img-thumb {
+  position: relative; flex-shrink: 0;
+  width: 79px; height: 79px; border-radius: 4px; overflow: visible;
+}
+#screen-p-add .proj-img-thumb__media,
+#screen-p-edit .proj-img-thumb__media {
+  display: block; width: 79px; height: 79px; border-radius: 4px;
+  object-fit: cover; background: #F2F2F2;
+}
+#screen-p-add .proj-img-thumb__cover,
+#screen-p-edit .proj-img-thumb__cover {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 15px; border-radius: 0 0 4px 4px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.25);
+  font-size: 11px; font-weight: 400; color: #fff; line-height: 15px;
+  text-align: center; pointer-events: none;
+}
+#screen-p-add .proj-img-thumb__del,
+#screen-p-edit .proj-img-thumb__del {
+  position: absolute; top: -3px; right: -3px;
+  width: 14px; height: 14px; padding: 0; border: none; background: transparent;
+  cursor: pointer; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+#screen-p-add .proj-img-thumb__del img,
+#screen-p-edit .proj-img-thumb__del img {
+  display: block; width: 14px; height: 14px; pointer-events: none;
+}
+/* 白色半透渐变贴齐右缘；末端实心白封住亚像素缝（Figma 305:421） */
+#screen-p-add .proj-img-rail__fade,
+#screen-p-edit .proj-img-rail__fade {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  min-height: 85px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.72) 42%,
+    #ffffff 72%,
+    #ffffff 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+#screen-p-add .proj-img-rail-outer.has-fade .proj-img-rail__fade,
+#screen-p-edit .proj-img-rail-outer.has-fade .proj-img-rail__fade {
+  display: block;
+}
+/* 最右 3px 实心白条，彻底盖住贴边深色线 */
+#screen-p-add .proj-img-rail-outer.has-fade::after,
+#screen-p-edit .proj-img-rail-outer.has-fade::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  min-height: 85px;
+  background: #fff;
+  pointer-events: none;
+  z-index: 6;
+}
+#screen-p-add .bottom-bar__action,
+#screen-p-edit .bottom-bar__action {
+  background: transparent; box-shadow: none; border: none;
+  min-height: 0; padding: 0 16px 8px; gap: 16px;
+}
+#screen-p-add .bottom-bar__safe,
+#screen-p-edit .bottom-bar__safe {
+  background: transparent; box-shadow: none;
+}
+#screen-p-add .bottom-bar .btn-main,
+#screen-p-edit .bottom-bar .btn-main {
+  height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600;
+}
+#screen-p-edit .bottom-bar--dual .btn-main.secondary {
+  background: #FFF2F2; color: #F32F41; border: none; font-weight: 600;
+}
+#screen-p-edit .bottom-bar--dual .bottom-bar__action { gap: 16px; }
+#screen-p-edit .alert-banner {
+  min-height: 34px; padding: 8px 16px; align-items: flex-start;
+  font-size: 12px; line-height: 18px; gap: 8px;
+  background: #FFF2F2; color: #1A1A1A;
+}
+#screen-p-edit .alert-banner--info,
+#screen-p-edit .alert-banner--warn,
+#screen-p-edit .alert-banner--neutral {
+  background: #FFF2F2; color: #1A1A1A;
+}
+#screen-p-edit .alert-banner__icon {
+  margin-top: 1px;
+  color: inherit; /* 与正文同色 #1A1A1A，勿用品牌红 */
+  width: 15px;
+  height: 15px;
+}
+
+/* ========== Figma 305:751 · 分组管理 ========== */
+#screen-p-groups { background: #F7F7F7; }
+#screen-p-groups .page-body { background: #F7F7F7; }
+#screen-p-groups .catalog-group-manage-list { padding: 12px 16px 24px; }
+#screen-p-groups .catalog-group-card { border-radius: 12px; }
+#screen-p-groups .catalog-group-manage-row { min-height: 69px; }
+#screen-p-groups .catalog-group-manage-row + .catalog-group-manage-row::before {
+  left: 16px; right: 16px; height: 0.5px; background: rgba(0, 0, 0, 0.04);
+  transform: none;
+}
+#screen-p-groups .catalog-group-manage-row__drag {
+  color: #929292; width: 44px; height: 64px;
+}
+#screen-p-groups .catalog-group-manage-row__drag img,
+#screen-p-groups .catalog-group-manage-row__drag svg {
+  display: block; width: 18px; height: 18px; pointer-events: none;
+}
+#screen-p-groups .catalog-group-manage-row__name {
+  font-size: 16px; font-weight: 600; color: #1A1A1A; line-height: 20.8px;
+}
+#screen-p-groups .catalog-group-manage-row__meta {
+  margin-top: 0; padding-top: 4px; font-size: 12px; font-weight: 400;
+  color: #929292; line-height: 15.6px;
+}
+#screen-p-groups .catalog-group-manage-row__more {
+  color: #929292; font-size: 20px; letter-spacing: 1px;
+}
+#screen-p-groups .bottom-bar__action {
+  background: transparent; box-shadow: none; border: none;
+  min-height: 0; padding: 0 16px 8px;
+}
+#screen-p-groups .bottom-bar__safe {
+  background: transparent; box-shadow: none;
+}
+#screen-p-groups .bottom-bar .btn-main {
+  height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600;
+}
+
+/* ========== Figma 305:843/930 · 操作弹层 ========== */
+.picker-mask--bottom .picker-sheet.picker-sheet--menu {
+  background: #F7F7F7;
+  border-radius: 16px 16px 0 0;
+}
+.picker-sheet--menu .picker-head--stack {
+  padding: 16px 20px 16px;
+  background: transparent;
+}
+.picker-sheet--menu .picker-head--stack::after { display: none; }
+.picker-sheet--menu .picker-head--stack .picker-head__title {
+  font-size: 18px; font-weight: 600; color: #1A1A1A; line-height: 25px;
+}
+.picker-sheet--menu .picker-head--stack .picker-head__sub {
+  display: none;
+}
+.picker-sheet--menu .catalog-action-list {
+  display: flex; flex-direction: column; gap: 0;
+}
+.picker-sheet--menu .catalog-action-item {
+  min-height: 54px; padding: 16px 20px;
+  background: #fff; font-size: 16px; font-weight: 500; color: #1A1A1A;
+  text-align: center; justify-content: center;
+  border-bottom: none;
+}
+.picker-sheet--menu .catalog-action-item + .catalog-action-item {
+  box-shadow: inset 0 0.5px 0 rgba(0, 0, 0, 0.04);
+}
+.picker-sheet--menu .catalog-action-item--danger {
+  color: #F32F41; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  width: 100%;
+}
+.picker-sheet--menu .catalog-action-foot {
+  border-top: 8px solid #F7F7F7;
+  background: #fff;
+}
+.picker-sheet--menu .catalog-action-foot .catalog-action-item--cancel {
+  min-height: 54px; color: #929292; font-weight: 500; font-size: 16px;
+  background: #fff;
+  box-shadow: none;
+}
+.picker-sheet--menu .catalog-action-safe { background: #F7F7F7; height: 34px; }
+
+/* ========== Figma 305:865 · 设置分组 ========== */
+#catalogItemGroupMask .picker-sheet.tall {
+  background: linear-gradient(180deg, #fff 0%, #F7F7F7 30%, #F7F7F7 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+  max-height: 85%;
+}
+#catalogItemGroupMask .picker-head--stack {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14px 20px 12px; border-bottom: none; background: transparent;
+}
+#catalogItemGroupMask .picker-head__title {
+  font-size: 18px; font-weight: 600; color: #1A1A1A; line-height: 25px; text-align: center;
+}
+#catalogItemGroupMask .picker-head__sub {
+  margin-top: 8px; font-size: 14px; font-weight: 400; color: #929292; line-height: 20px;
+  text-align: center;
+}
+#catalogItemGroupMask .catalog-group-sheet-list {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding: 8px 8px 12px; display: flex; flex-direction: column; gap: 8px;
+}
+#catalogItemGroupMask .catalog-group-assign-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; padding: 0 12px; margin: 0;
+  background: #fff; border-radius: 8px; cursor: pointer;
+  box-sizing: border-box;
+}
+#catalogItemGroupMask .catalog-group-assign-row__name {
+  font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
+}
+#catalogItemGroupMask .catalog-group-assign-row__check {
+  width: 20px; height: 20px; flex-shrink: 0;
+  box-sizing: border-box;
+  display: inline-block;
+  border: none; border-radius: 0; background: transparent;
+  background-image: url("assets/catalog/group-check-off.svg");
+  background-repeat: no-repeat; background-position: center; background-size: 20px 20px;
+}
+#catalogItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check {
+  background-image: url("assets/catalog/group-check-on.svg");
+  background-color: transparent; border: none;
+}
+#catalogItemGroupMask .catalog-group-assign-row input { position: absolute; opacity: 0; pointer-events: none; }
+#catalogItemGroupMask .picker-foot--row {
+  padding: 16px; gap: 16px; background: #fff;
+  box-shadow: none; border-top: none;
+}
+#catalogItemGroupMask .picker-foot--row .btn-main {
+  height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600; flex: 1;
+}
+#catalogItemGroupMask .picker-foot--row .btn-main.secondary {
+  background: #F7F7F7; color: #1A1A1A; border: none;
+}
+
 #durPickerMask.open { z-index: 45; }
 .dialog-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 50; display: none; align-items: center; justify-content: center; padding: 0 32px; box-sizing: border-box; }
 .dialog-mask.show { display: flex; }
@@ -3083,6 +3711,7 @@ html.figma-capture-list-active .member-card-item__expand { display: none !import
   --card-divider: rgba(0, 0, 0, 0.04);
   --input-border: #D7D7D5; --input-border-focus: #C2C4CC; --input-bg: #F7F7F7;
   --font-data: "TCloudNumber", "DIN Alternate", "Helvetica Neue", monospace;
+  --font-text: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --phone-w: 390px; --phone-h: 844px; --phone-scale: 1.5;
   --phone-display-w: calc(var(--phone-w) * var(--phone-scale));
   --phone-display-h: calc(var(--phone-h) * var(--phone-scale));
@@ -3667,10 +4296,11 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-comm-card__icon {
   width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid #EBEBEB; box-sizing: border-box;
 }
 .emp-comm-card__icon svg { display: block; }
-.emp-comm-card__icon--single { background: #FFF2F2; color: var(--brand); }
-.emp-comm-card__icon--ladder { background: #FFF8F0; color: #D8993B; }
+.emp-comm-card__icon--single { color: var(--brand); }
+.emp-comm-card__icon--ladder { color: #D8993B; }
 .emp-comm-card__title-wrap { min-width: 0; flex: 1; }
 .emp-comm-card__name {
   font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3;
@@ -7536,6 +8166,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
             <span class="title">价目表</span>
           </header>
+          <div class="proj-list-hint" id="projListDragHint">
+            <svg class="proj-list-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p class="proj-list-hint__text">长按项目可拖动排序，左滑快捷操作</p>
+            <button type="button" class="proj-list-hint__close" id="btnProjListHintClose" aria-label="关闭提示">
+              <img src="assets/catalog/hint-close.svg" width="20" height="20" alt="" aria-hidden="true">
+            </button>
+          </div>
           <div class="page-tabs price-catalog-tabs" id="priceCatalogTabs" role="tablist">
             <button type="button" class="page-tabs__item on" data-price-catalog-tab="project" role="tab" aria-selected="true">项目</button>
             <button type="button" class="page-tabs__item" data-price-catalog-tab="product" role="tab" aria-selected="false">产品</button>
@@ -7543,14 +8180,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="proj-list-toolbar">
             <div class="proj-search-row">
               <div class="proj-search-box">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#929292" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-                <input type="search" id="projSearchInput" placeholder="搜索项目名称" autocomplete="off">
+                <img class="proj-search-box__icon" src="assets/catalog/search.svg" width="16" height="16" alt="" aria-hidden="true">
+                <input type="search" id="projSearchInput" placeholder="搜索项目名称或价格" autocomplete="off">
+                <span class="proj-search-box__divider" aria-hidden="true"></span>
+                <button type="button" class="proj-search-go" id="btnProjSearchGo">搜索</button>
               </div>
-              <button type="button" class="btn-proj-add" id="btnProjGoAdd">+ 添加项目</button>
-            </div>
-            <div class="proj-list-hint" id="projListDragHint">
-              <p class="proj-list-hint__text">长按项目可拖动排序 · 左滑快捷操作</p>
-              <button type="button" class="proj-list-hint__close" id="btnProjListHintClose" aria-label="关闭提示">×</button>
+              <button type="button" class="btn-proj-add" id="btnProjGoAdd">
+                <span class="btn-proj-add__plus" aria-hidden="true">
+                  <img src="assets/catalog/add-plus.svg" width="12" height="12" alt="">
+                </span>
+                <span id="btnProjGoAddLabel">添加</span>
+              </button>
             </div>
           </div>
           <div class="page-body">
@@ -7558,27 +8198,29 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="catalog-group-bar" id="catalogGroupBar">
                 <div class="catalog-group-segment">
                   <div class="catalog-group-scroll" id="catalogGroupTabs" role="tablist" aria-label="价目分组"></div>
+                  <div class="catalog-group-fade" aria-hidden="true"></div>
                 </div>
                 <button type="button" class="catalog-group-gear" id="btnCatalogGroupManage" aria-label="分组管理">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+                  <img src="assets/catalog/gear.svg" width="24" height="24" alt="" aria-hidden="true">
                 </button>
               </div>
               <div class="table-card" id="projTableCard">
                 <div class="table-head" id="projTableHead">
                   <button type="button" class="table-head__cell" data-col-sort="name"><span class="table-head__inner">项目名称</span></button>
-                  <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长</span></button>
+                  <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长（分钟）</span></button>
                   <button type="button" class="table-head__cell is-center" data-col-sort="spec" data-col-spec><span class="table-head__inner">规格</span></button>
-                  <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格(¥)</span></button>
+                  <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格（¥）</span></button>
                   <button type="button" class="table-head__cell is-center" data-col-sort="sale"><span class="table-head__inner">状态</span></button>
                 </div>
                 <div id="projProjectTable"></div>
               </div>
             </div>
             <div class="proj-list-empty hidden" id="projListEmpty">
+              <img class="proj-list-empty__illust" src="assets/catalog/empty-box.svg" width="144" height="144" alt="" aria-hidden="true">
               <p class="proj-list-empty__title" id="projListEmptyTitle">暂无项目</p>
-              <p class="proj-list-empty__hint" id="projListEmptyHint">添加后可在「选择项目」与办卡中使用</p>
-              <button type="button" class="btn-main btn-outline-brand" id="btnProjEmptyAdd">添加项目</button>
-              <button type="button" class="btn-main btn-outline-brand hidden" id="btnProjEmptyAddToGroup" style="margin-top:12px">添加项目到本组</button>
+              <p class="proj-list-empty__hint" id="projListEmptyHint">添加后可在选择项目与办卡中使用</p>
+              <button type="button" class="btn-proj-empty-add" id="btnProjEmptyAdd">添加项目</button>
+              <button type="button" class="btn-proj-empty-add hidden" id="btnProjEmptyAddToGroup">添加项目到本组</button>
             </div>
           </div>
         </div>
@@ -7739,7 +8381,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="picker-sheet__grabber" aria-hidden="true"></div>
               <div class="picker-head picker-head--stack">
                 <div class="picker-head__title" id="catalogRowActionTitle">项目</div>
-                <div class="picker-head__sub">长按后滑动可排序 · 也可左滑快捷操作</div>
               </div>
               <div class="catalog-action-list">
                 <button type="button" class="catalog-action-item" data-catalog-act="group">设置分组</button>
@@ -8586,8 +9227,18 @@ const PROJ_DUR_CHIP_PRESETS = [
   { label: '2小时', minutes: 120 },
 ];
 const PROJ_IMG_PLUS = '<span class="img-upload__plus" aria-hidden="true"></span>';
-const PROJ_INFO_ICON = '<svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.1V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.15" r="0.55" fill="currentColor"/></svg>';
-const PROJ_WARN_ICON = '<svg class="alert-banner__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2L14.2 13H1.8L8 2.2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M8 6.4V9.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>';
+/* Figma 305:405/325 · 添加图片 + 演示美容美发图 */
+const PROJ_IMG_MAX = 5;
+const PROJ_DEMO_IMG_POOL = [
+  'assets/catalog/demo-imgs/demo-1.jpg',
+  'assets/catalog/demo-imgs/demo-2.jpg',
+  'assets/catalog/demo-imgs/demo-3.jpg',
+  'assets/catalog/demo-imgs/demo-4.jpg',
+];
+const PROJ_IMG_DEL = '<img src="assets/catalog/demo-imgs/demo-del.svg" width="14" height="14" alt="" aria-hidden="true">';
+const PROJ_TIP_ICON = '<svg class="alert-banner__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const PROJ_INFO_ICON = PROJ_TIP_ICON;
+const PROJ_WARN_ICON = PROJ_TIP_ICON;
 const ICON_CHEVRON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 const ICON_CHEVRON_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>';
 function expandMoreLabel(count) {
@@ -8598,9 +9249,9 @@ function expandLessLabel() {
 }
 const PROJ_CHEV_ICON = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 const PROJ_EDIT_NOTICE = {
-  normal: { variant: 'info', icon: PROJ_INFO_ICON, text: '修改后将在价目表及顾客端同步生效，请确认价格与时长无误' },
-  bound: { variant: 'warn', icon: PROJ_WARN_ICON, text: '该项目已绑定会员卡，可修改价格、服务时长、项目照片与在售/下架；名称、预约设置与删除仍不可改' },
-  'off-sale': { variant: 'neutral', icon: PROJ_INFO_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
+  normal: { variant: 'info', icon: PROJ_TIP_ICON, text: '修改后将在价目表及客户端同步生效，请确认价格与时长无误' },
+  bound: { variant: 'warn', icon: PROJ_TIP_ICON, text: '该项目已绑定会员卡，可修改价格、服务时长、项目照片与在售/下架；名称、预约设置与删除仍不可改' },
+  'off-sale': { variant: 'neutral', icon: PROJ_TIP_ICON, text: '该项目已下架，顾客端不可预约；开启「在售」后可重新售卖' },
 };
 const PROJ_LOCK_TOAST = {
   name: '该项目已绑定会员卡，项目名称不可修改',
@@ -8646,26 +9297,28 @@ let projDurWheelTimer = null;
 
 function seedProjectCatalog() {
   const list = [
-    { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, hasImage: false, category: '洗吹' },
-    { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, hasImage: false, category: '剪发' },
-    { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, hasImage: false, category: '洗吹' },
-    { id: 'p4', name: '儿童剪发', price: 48, duration: 35, onSale: true, bookable: true, hasImage: false, category: '剪发' },
-    { id: 'p5', name: '女士造型', price: 128, duration: 45, onSale: true, bookable: true, hasImage: false, category: '造型' },
-    { id: 'p6', name: '染发', price: 358, duration: 120, onSale: true, bookable: true, hasImage: false, category: '烫染' },
-    { id: 'p7', name: '漂发', price: 288, duration: 120, onSale: true, bookable: true, hasImage: false, category: '烫染' },
-    { id: 'p8', name: '烫发', price: 398, duration: 150, onSale: true, bookable: true, hasImage: false, category: '烫染' },
-    { id: 'p9', name: '摩根烫', price: 458, duration: 150, onSale: true, bookable: false, hasImage: false, category: '烫染' },
-    { id: 'p10', name: '电棒烫', price: 428, duration: 150, onSale: true, bookable: true, hasImage: false, category: '烫染' },
-    { id: 'p11', name: '深层滋养', price: 198, duration: 75, onSale: true, bookable: true, hasImage: false, category: '护理' },
-    { id: 'p12', name: '蛋白矫正', price: 598, duration: 120, onSale: true, bookable: true, hasImage: false, category: '护理' },
-    { id: 'p13', name: '头疗', price: 138, duration: 50, onSale: true, bookable: true, hasImage: false, category: '护理' },
-    { id: 'p14', name: '接发', price: 888, duration: 180, onSale: false, bookable: false, hasImage: false, category: '造型' },
-    { id: 'p15', name: '头皮护理', price: 168, duration: 60, onSale: true, bookable: true, hasImage: true, category: '护理' },
-    { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, hasImage: false, category: '烫染' },
-    { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, hasImage: false, category: '造型' },
-    { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, hasImage: false, category: '烫染' },
+    { id: 'p1', name: '时尚洗吹', price: 58, duration: 60, onSale: true, bookable: true, category: '洗吹' },
+    { id: 'p2', name: '精致剪发', price: 98, duration: 45, onSale: true, bookable: true, category: '剪发' },
+    { id: 'p3', name: '洗剪吹', price: 68, duration: 60, onSale: true, bookable: true, category: '洗吹' },
+    { id: 'p4', name: '儿童剪发', price: 48, duration: 55, onSale: true, bookable: true, category: '剪发' },
+    { id: 'p5', name: '女士造型', price: 128, duration: 45, onSale: true, bookable: true, category: '造型' },
+    { id: 'p6', name: '染发', price: 358, duration: 120, onSale: true, bookable: true, category: '烫染' },
+    { id: 'p7', name: '漂发', price: 288, duration: 120, onSale: true, bookable: true, category: '烫染' },
+    { id: 'p8', name: '烫发', price: 398, duration: 150, onSale: true, bookable: true, category: '烫染' },
+    { id: 'p9', name: '摩根烫', price: 458, duration: 150, onSale: true, bookable: false, category: '烫染' },
+    { id: 'p10', name: '电棒烫', price: 428, duration: 150, onSale: true, bookable: true, category: '烫染' },
+    { id: 'p11', name: '深层滋养', price: 198, duration: 75, onSale: true, bookable: true, category: '护理' },
+    { id: 'p12', name: '蛋白矫正', price: 598, duration: 120, onSale: true, bookable: true, category: '护理' },
+    { id: 'p13', name: '头疗', price: 138, duration: 50, onSale: true, bookable: true, category: '护理' },
+    { id: 'p14', name: '接发', price: 888, duration: 180, onSale: false, bookable: false, category: '造型' },
+    { id: 'p15', name: '头皮护理', price: 168, duration: 60, onSale: true, bookable: true, category: '护理' },
+    { id: 'p16', name: '挑染', price: 198, duration: 90, onSale: true, bookable: true, category: '烫染' },
+    { id: 'p17', name: '时尚造型', price: 128, duration: 45, onSale: true, bookable: true, category: '造型' },
+    { id: 'p18', name: '暖色漂褪', price: 328, duration: 120, onSale: true, bookable: false, category: '烫染' },
   ].map(p => ({
     ...p,
+    images: [],
+    hasImage: false,
     boundToCard: false,
     boundToCoupon: false,
     boundToMall: false,
@@ -8679,6 +9332,15 @@ function seedProjectCatalog() {
   if (byId.p9) byId.p9.boundToMall = true;
   if (byId.p13) byId.p13.hidden = true;
   if (byId.p5) byId.p5.hidden = true;
+  /* Figma 305:325 · 绑卡详情默认展开多图，右侧可看出渐隐 */
+  if (byId.p4) {
+    byId.p4.images = PROJ_DEMO_IMG_POOL.slice(0, 4);
+    byId.p4.hasImage = true;
+  }
+  if (byId.p15) {
+    byId.p15.images = [PROJ_DEMO_IMG_POOL[0]];
+    byId.p15.hasImage = true;
+  }
   return list;
 }
 
@@ -9110,7 +9772,8 @@ function syncProjListDragHint() {
   const el = document.getElementById('projListDragHint');
   if (!el) return;
   try {
-    el.classList.toggle('hidden', localStorage.getItem(CATALOG_DRAG_HINT_KEY) === '1');
+    /* sessionStorage：同会话内关闭仍记忆；强制刷新后重新显示。不改 PRD 文案/可关闭语义 */
+    el.classList.toggle('hidden', sessionStorage.getItem(CATALOG_DRAG_HINT_KEY) === '1');
   } catch (_) {
     el.classList.remove('hidden');
   }
@@ -9125,15 +9788,19 @@ function syncPriceCatalogTabs() {
   });
   document.getElementById('projTableCard')?.classList.toggle('is-product-tab', tab === 'product');
   const search = document.getElementById('projSearchInput');
-  if (search) search.placeholder = tab === 'product' ? '搜索产品名称' : '搜索项目名称';
-  const addBtn = document.getElementById('btnProjGoAdd');
-  if (addBtn) addBtn.textContent = tab === 'product' ? '+ 新增产品' : '+ 添加项目';
+  if (search) search.placeholder = tab === 'product' ? '搜索产品名称或价格' : '搜索项目名称或价格';
+  const addLabel = document.getElementById('btnProjGoAddLabel');
+  if (addLabel) addLabel.textContent = '添加';
   const emptyAdd = document.getElementById('btnProjEmptyAdd');
-  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '新增产品' : '添加项目';
+  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
   const emptyToGroup = document.getElementById('btnProjEmptyAddToGroup');
   if (emptyToGroup) emptyToGroup.textContent = tab === 'product' ? '添加产品到本组' : '添加项目到本组';
   const nameHead = document.querySelector('#projTableHead [data-col-sort="name"] .table-head__inner');
   if (nameHead) nameHead.textContent = tab === 'product' ? '产品名称' : '项目名称';
+  const durHead = document.querySelector('#projTableHead [data-col-sort="duration"] .table-head__inner');
+  if (durHead) durHead.textContent = '时长（分钟）';
+  const priceHead = document.querySelector('#projTableHead [data-col-sort="price"] .table-head__inner');
+  if (priceHead) priceHead.textContent = '价格（¥）';
   syncProjListDragHint();
   syncCatalogGroupChrome();
 }
@@ -9213,8 +9880,9 @@ function filterCatalogByActiveGroup(list) {
   return list.filter(p => ids.has(p.id) && !p.hidden);
 }
 
-const CATALOG_GROUP_DRAG_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" aria-hidden="true"><path d="M9 7h6M9 12h6M9 17h6"/></svg>';
-const CATALOG_ROW_DRAG_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" aria-hidden="true"><path d="M9 7h6M9 12h6M9 17h6"/></svg>';
+const CATALOG_GROUP_DRAG_ICON = '<img src="assets/catalog/group-drag.svg" width="18" height="18" alt="" aria-hidden="true">';
+const CATALOG_ROW_DRAG_ICON = '<img src="assets/catalog/row-drag.svg" width="10" height="10" alt="" aria-hidden="true">';
+const PROJ_IMG_CAM = '<img class="img-upload__cam" src="assets/catalog/add-image-camera.svg" width="36" height="36" alt="" aria-hidden="true">';
 const CATALOG_HIDE_ICON = '<span class="catalog-hide-icon" aria-hidden="true"></span>';
 const CATALOG_DRAG_HINT_KEY = 'rtb_catalog_drag_hint_dismissed';
 
@@ -9634,14 +10302,20 @@ function openCatalogItemGroupSheet(itemId) {
   } else {
     listEl.innerHTML = groups.map(g => {
       const on = (g.itemIds || []).includes(itemId);
-      return `<label class="catalog-member-item">
+      const count = (g.itemIds || []).length;
+      const label = g.system ? escapeHtml(g.name) : `${escapeHtml(g.name)}（${count}）`;
+      return `<label class="catalog-group-assign-row${on ? ' is-on' : ''}">
         <input type="checkbox" data-assign-group="${escapeAttr(g.id)}"${on ? ' checked' : ''}>
-        <span class="catalog-member-item__main">
-          <span class="catalog-member-item__name">${escapeHtml(g.name)}</span>
-        </span>
-        <span class="catalog-member-item__price">${(g.itemIds || []).length}</span>
+        <span class="catalog-group-assign-row__name">${label}</span>
+        <span class="catalog-group-assign-row__check" aria-hidden="true"></span>
       </label>`;
     }).join('');
+    listEl.querySelectorAll('.catalog-group-assign-row').forEach(row => {
+      const input = row.querySelector('input');
+      input?.addEventListener('change', () => {
+        row.classList.toggle('is-on', !!input.checked);
+      });
+    });
   }
   document.getElementById('catalogItemGroupMask')?.classList.add('open');
 }
@@ -11250,7 +11924,7 @@ function buildDurationInputHtml(opts = {}) {
   ).join('');
   const gridCols = units.length;
   const activeIdx = Math.max(0, units.indexOf(unit));
-  const indicatorStyle = `width:calc((100% - 4px) / ${gridCols});transform:translateX(${activeIdx * 100}%)`;
+  const indicatorStyle = `width:calc((100% - 2 * var(--dur-seg-inset, 2px)) / ${gridCols});transform:translateX(${activeIdx * 100}%)`;
   const unitsWidth = Math.max(72, gridCols * 30);
   const rootWidth = 68 + 8 + unitsWidth;
   return `<div class="duration-input"${idAttr}${dataId} style="width:${rootWidth}px">
@@ -11269,7 +11943,7 @@ function syncDurationSegIndicator(root, unit) {
   const buttons = track ? [...track.querySelectorAll('[data-duration-unit]')] : [];
   const idx = buttons.findIndex(b => b.dataset.durationUnit === unit);
   if (!indicator || idx < 0 || !buttons.length) return;
-  indicator.style.width = `calc((100% - 4px) / ${buttons.length})`;
+  indicator.style.width = `calc((100% - 2 * var(--dur-seg-inset, 2px)) / ${buttons.length})`;
   indicator.style.transform = `translateX(${idx * 100}%)`;
 }
 
@@ -12789,7 +13463,7 @@ const CATALOG_DUR_CLOCK_ICON = '<svg class="dur-clock" width="12" height="12" vi
 
 function projFormatDurationListHtml(mins) {
   const m = Math.max(0, parseInt(mins, 10) || 0);
-  return `<span class="dur-cell">${CATALOG_DUR_CLOCK_ICON}<span class="dur-text">${m}分钟</span></span>`;
+  return `<span class="dur-cell"><span class="dur-text">${m}</span></span>`;
 }
 
 function projMinutesToWheel(total) {
@@ -13050,9 +13724,9 @@ function catalogItemMatchesSearch(p, q, isProduct) {
   return false;
 }
 
-/** 已绑卡：名称后跟卡面图标（非文字「绑卡」徽标） */
+/** 已绑卡：名称后跟蓝底卡面图标（非文字「绑卡」徽标） */
 function boundTagHtml() {
-  return `<span class="bound-tag" title="已绑卡" aria-label="已绑卡"><svg class="bound-tag__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 10h19" stroke="currentColor" stroke-width="1.6"/><path d="M6 14.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>`;
+  return `<span class="bound-tag" title="已绑卡" aria-label="已绑卡"><img class="bound-tag__icon" src="assets/catalog/bound-card.svg" width="12" height="10" alt="" aria-hidden="true"></span>`;
 }
 
 function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
@@ -13082,7 +13756,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
         <div class="spec">${isProduct ? escapeHtml((p.spec || '').trim() || '—') : ''}</div>
         <div class="price">${projFormatPriceHtml(p.price)}</div>
-        <div class="sale-status"><span class="sale-status__pill ${p.onSale ? 'sale-status--on' : 'sale-status--off'}">${p.onSale ? '在售' : '已下架'}</span></div>
+        <div class="sale-status"><span class="sale-status__pill ${p.onSale ? 'sale-status--on' : 'sale-status--off'}">${p.onSale ? '在售' : '下架'}</span></div>
       </div>`;
   const row = wrap.querySelector('.table-row');
   let openWidth = 0;
@@ -13175,7 +13849,7 @@ function projRenderList() {
       if (q) emptyHint.textContent = '试试其他关键词，或清空搜索';
       else if (inHiddenTab) emptyHint.textContent = '左滑条目可将项目/产品移入隐藏';
       else if (inCustomGroup) emptyHint.textContent = '可将价目表中的条目加入本组';
-      else emptyHint.textContent = isProduct ? '添加后可在开单记账中使用' : '添加后可在「选择项目」与办卡中使用';
+      else emptyHint.textContent = isProduct ? '添加后可在开单记账中使用' : '添加后可在选择项目与办卡中使用';
       emptyHint.classList.toggle('hidden', false);
     }
     emptyAdd?.classList.toggle('hidden', !!q || inCustomGroup || inHiddenTab);
@@ -13193,8 +13867,8 @@ function projRenderList() {
     block.className = 'catalog-hidden-block' + (state.catalogHiddenExpanded ? ' is-open' : '');
     block.innerHTML = `
       <button type="button" class="catalog-hidden-toggle" data-catalog-hidden-toggle aria-expanded="${state.catalogHiddenExpanded ? 'true' : 'false'}">
-        <span class="catalog-hidden-toggle__label">${CATALOG_HIDE_ICON}已隐藏<span class="catalog-hidden-toggle__count">${hiddenList.length}</span></span>
-        <svg class="catalog-hidden-toggle__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <span class="catalog-hidden-toggle__label">已隐藏<span class="catalog-hidden-toggle__count">${hiddenList.length}</span></span>
+        <img class="catalog-hidden-toggle__chev" src="assets/catalog/hidden-chev.svg" width="16" height="16" alt="" aria-hidden="true">
       </button>
       <div class="catalog-hidden-list"></div>`;
     const hiddenMount = block.querySelector('.catalog-hidden-list');
@@ -13610,24 +14284,64 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
   });
 }
 
+function projNormalizeImages(raw, hasImageFlag) {
+  const list = Array.isArray(raw) ? raw.filter(Boolean).map(String) : [];
+  if (list.length) return list.slice(0, PROJ_IMG_MAX);
+  if (hasImageFlag) return [PROJ_DEMO_IMG_POOL[0]];
+  return [];
+}
+
+function projImageSubText(images) {
+  const n = (images || []).length;
+  return n ? `已上传 ${n} 张，最多可上传 ${PROJ_IMG_MAX} 张` : '未上传，不影响保存';
+}
+
+function projPickNextDemoImage(images) {
+  const used = new Set(images || []);
+  const next = PROJ_DEMO_IMG_POOL.find(src => !used.has(src));
+  if (next) return next;
+  return PROJ_DEMO_IMG_POOL[(images || []).length % PROJ_DEMO_IMG_POOL.length];
+}
+
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', hasImage: false, imageExpanded: false };
+    return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
-  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
+  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
 
 function projProjectToForm(p) {
+  const images = projNormalizeImages(p.images, p.hasImage);
+  const imageExpanded = images.length > 0;
   if (getCatalogProducts().some(x => x.id === p.id)) {
-    return { kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price), onSale: p.onSale, category: p.category || '产品', hasImage: !!p.hasImage, imageExpanded: false };
+    return { kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price), onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded };
   }
-  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, hasImage: p.hasImage, imageExpanded: false, _durUnit: null, _durAmount: null };
+  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, images, hasImage: images.length > 0, imageExpanded, _durUnit: null, _durAmount: null };
 }
 
 function projImageUploadSectionHtml(s, imageLabel) {
+  const images = Array.isArray(s.images) ? s.images : [];
+  const atMax = images.length >= PROJ_IMG_MAX;
+  const thumbs = images.map((src, idx) => `
+    <div class="proj-img-thumb${idx === 0 ? ' is-cover' : ''}" data-img-idx="${idx}">
+      <img class="proj-img-thumb__media" src="${escapeAttr(src)}" alt="" loading="lazy">
+      ${idx === 0 ? '<span class="proj-img-thumb__cover">主图</span>' : ''}
+      <button type="button" class="proj-img-thumb__del" data-img-del="${idx}" aria-label="删除图片">${PROJ_IMG_DEL}</button>
+    </div>`).join('');
+  const showFade = images.length >= 3;
   return `<div class="proj-form-row col" style="padding:0">
-    <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">${imageLabel}</span><span class="sub">${s.hasImage ? '已上传 1 张' : '未上传，不影响保存'}</span></div>${PROJ_CHEV_ICON}</button>
-    <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody"><div class="img-upload ${s.hasImage ? 'has-img' : ''}" id="projImgUpload">${s.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS}</div></div>
+    <button type="button" class="collapse-head ${s.imageExpanded ? 'open' : ''}" id="projImgCollapse"><div><span class="title">${imageLabel}</span><span class="sub">${projImageSubText(images)}</span></div>${PROJ_CHEV_ICON}</button>
+    <div class="collapse-body ${s.imageExpanded ? 'open' : ''}" id="projImgBody">
+      <div class="proj-img-rail-outer${showFade ? ' has-fade' : ''}">
+        <div class="proj-img-rail-wrap">
+          <div class="proj-img-rail" id="projImgRail">
+            <button type="button" class="img-upload${atMax ? ' is-disabled' : ''}" id="projImgUpload" aria-label="添加图片">${PROJ_IMG_CAM}<span class="img-upload__cap">添加图片</span></button>
+            ${thumbs}
+          </div>
+        </div>
+        <div class="proj-img-rail__fade" aria-hidden="true"></div>
+      </div>
+    </div>
   </div>`;
 }
 
@@ -13676,17 +14390,17 @@ function projRenderForm(container, mode) {
   const reqCls = isEdit ? '' : ' req';
   const s = state.projFormState;
   if (!container || !s) return;
-  const nameLabel = isProduct ? '产品名称' : '项目名称';
+  const nameLabel = '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
-  const imageLabel = isProduct ? '产品图片（选填）' : '项目图片（选填）';
+  const imageLabel = '项目图片（选填）';
   container.innerHTML = `
     <div class="proj-form-stack">
       <div>
         <div class="proj-section-label">基本信息</div>
         <div class="proj-form-section">
           <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
-          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="如 500ml" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
-          <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="0" value="${escapeAttr(s.price)}"><span class="suffix">元</span></div></div>
+          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="请输入" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
+          <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
           ${isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
@@ -13704,7 +14418,7 @@ function projRenderForm(container, mode) {
         </div>
       </div>
       <div>
-        <div class="proj-section-label">高级</div>
+        <div class="proj-section-label">高级设置</div>
         <div class="proj-form-section">
           ${projImageUploadSectionHtml(s, imageLabel)}
         </div>
@@ -13745,22 +14459,49 @@ function projBindFormEvents(container, lockCtx) {
     }
   }
   wireProjServiceDurationInput(container);
-  container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
-    state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
-    container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
-    container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
-  });
-  container.querySelector('#projImgUpload')?.addEventListener('click', e => {
-    e.stopPropagation();
-    state.projFormState.hasImage = !state.projFormState.hasImage;
-    const el = container.querySelector('#projImgUpload');
-    if (!el) return;
-    el.classList.toggle('has-img', state.projFormState.hasImage);
-    el.innerHTML = state.projFormState.hasImage ? '已上传<br>点击更换' : PROJ_IMG_PLUS;
-    const sub = container.querySelector('#projImgCollapse .sub');
-    if (sub) sub.textContent = state.projFormState.hasImage ? '已上传 1 张' : '未上传，不影响保存';
-    showToast(state.projFormState.hasImage ? '已添加演示图片' : '已移除图片');
-  });
+  const refreshImgSection = () => {
+    const section = container.querySelector('#projImgCollapse')?.closest('.proj-form-row');
+    if (!section) return;
+    const label = section.querySelector('.title')?.textContent || '项目图片（选填）';
+    section.outerHTML = projImageUploadSectionHtml(state.projFormState, label);
+    wireProjImageSection();
+  };
+  const wireProjImageSection = () => {
+    container.querySelector('#projImgCollapse')?.addEventListener('click', () => {
+      state.projFormState.imageExpanded = !state.projFormState.imageExpanded;
+      container.querySelector('#projImgCollapse')?.classList.toggle('open', state.projFormState.imageExpanded);
+      container.querySelector('#projImgBody')?.classList.toggle('open', state.projFormState.imageExpanded);
+    });
+    container.querySelector('#projImgUpload')?.addEventListener('click', e => {
+      e.stopPropagation();
+      const images = Array.isArray(state.projFormState.images) ? state.projFormState.images.slice() : [];
+      if (images.length >= PROJ_IMG_MAX) {
+        showToast(`最多上传 ${PROJ_IMG_MAX} 张`, true);
+        return;
+      }
+      state.projFormState.imageExpanded = true;
+      images.push(projPickNextDemoImage(images));
+      state.projFormState.images = images;
+      state.projFormState.hasImage = true;
+      refreshImgSection();
+      showToast('已添加演示图片');
+    });
+    container.querySelectorAll('[data-img-del]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-img-del'), 10);
+        const images = Array.isArray(state.projFormState.images) ? state.projFormState.images.slice() : [];
+        if (Number.isNaN(idx) || idx < 0 || idx >= images.length) return;
+        images.splice(idx, 1);
+        state.projFormState.images = images;
+        state.projFormState.hasImage = images.length > 0;
+        state.projFormState.imageExpanded = true;
+        refreshImgSection();
+        showToast('已移除图片');
+      });
+    });
+  };
+  wireProjImageSection();
 }
 
 function projOpenAdd() {
@@ -13813,7 +14554,9 @@ function projOpenEdit(id) {
 
 function projValidateForm() {
   const name = (state.projFormState?.name || '').trim();
-  const price = parseFloat(state.projFormState?.price);
+  const priceRaw = String(state.projFormState?.price || '').replace(/^¥/, '').trim();
+  state.projFormState.price = priceRaw;
+  const price = parseFloat(priceRaw);
   if (state.projFormState?._durUnit) {
     const mins = serviceDurationFieldsToMinutes(state.projFormState._durUnit, state.projFormState._durAmount);
     if (mins != null) state.projFormState.duration = mins;
@@ -13831,20 +14574,23 @@ function projSaveForm() {
   if (!projValidateForm()) return;
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
+  const images = projNormalizeImages(state.projFormState.images, false);
   const payload = isProduct ? {
     name: state.projFormState.name.trim(),
     spec: (state.projFormState.spec || '').trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
     onSale: state.projFormState.onSale,
     category: state.projFormState.category || '产品',
-    hasImage: state.projFormState.hasImage,
+    images,
+    hasImage: images.length > 0,
   } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
     duration: state.projFormState.duration,
     onSale: state.projFormState.onSale,
     bookable: state.projFormState.bookable,
-    hasImage: state.projFormState.hasImage,
+    images,
+    hasImage: images.length > 0,
     category: PROJ_DEFAULT_CATEGORY,
   };
   if (state.projEditingId) {
@@ -13940,6 +14686,10 @@ function wireProjCatalogModule() {
     });
   });
   document.getElementById('projSearchInput')?.addEventListener('input', projRenderList);
+  document.getElementById('btnProjSearchGo')?.addEventListener('click', () => {
+    document.getElementById('projSearchInput')?.focus();
+    projRenderList();
+  });
   document.getElementById('btnProjGoAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjEmptyAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('projTableHead')?.addEventListener('click', e => {
@@ -14069,7 +14819,7 @@ function wireProjCatalogModule() {
   document.getElementById('btnManagePriceCatalogProd')?.addEventListener('click', () => openPriceCatalog('screen2p'));
   wirePickGroupTabs();
   document.getElementById('btnProjListHintClose')?.addEventListener('click', () => {
-    try { localStorage.setItem(CATALOG_DRAG_HINT_KEY, '1'); } catch (_) {}
+    try { sessionStorage.setItem(CATALOG_DRAG_HINT_KEY, '1'); } catch (_) {}
     syncProjListDragHint();
   });
   syncProjListDragHint();
@@ -14136,6 +14886,22 @@ function ensureDemoFilled() {
   }
   /* 须在 templates 就绪后再同步，否则绑卡标记会全为 false */
   syncAllCatalogBindings();
+  ensureProjDemoImages();
+}
+
+/** 保证绑卡演示项带上多图，充分展示 Figma 305:325 上传 UI */
+function ensureProjDemoImages() {
+  const projects = getCatalogProjects();
+  const p4 = projects.find(x => x.id === 'p4');
+  if (p4 && (!Array.isArray(p4.images) || p4.images.length < 3)) {
+    p4.images = PROJ_DEMO_IMG_POOL.slice(0, 4);
+    p4.hasImage = true;
+  }
+  const p15 = projects.find(x => x.id === 'p15');
+  if (p15 && (!Array.isArray(p15.images) || !p15.images.length)) {
+    p15.images = [PROJ_DEMO_IMG_POOL[0]];
+    p15.hasImage = true;
+  }
 }
 
 function getVipComboPreset() {
@@ -15334,12 +16100,13 @@ function openAmountKeypad(el) {
   state.amountKeypadTarget = el;
   state.amountKeypadMode = getAmountKeypadMode(el);
   const original = el.value != null ? String(el.value) : '';
-  state.amountKeypadOriginalValue = original;
-  state.amountKeypadBuffer = original;
-  state.amountKeypadReplacePending = !!original;
+  const normalized = el.id === 'fPrice' ? original.replace(/^¥/, '').trim() : original;
+  state.amountKeypadOriginalValue = normalized;
+  state.amountKeypadBuffer = normalized;
+  state.amountKeypadReplacePending = !!normalized;
   const titleEl = document.getElementById('amountKeypadTitle');
   if (titleEl) {
-    if (el.id === 'fPrice') titleEl.textContent = '项目价格';
+    if (el.id === 'fPrice') titleEl.textContent = state.projFormKind === 'product' ? '产品价格' : '项目价格';
     else if (el.id === 'holdPriceKeypadProxy') titleEl.textContent = '挂单金额';
     else if (el.dataset && (el.dataset.flowPerf === 'achievement' || el.dataset.flowEditPerf === 'achievement' || el.dataset.flowEditStaffPerf === 'achievement')) titleEl.textContent = '修改业绩';
     else if (el.dataset && (el.dataset.flowPerf === 'commission' || el.dataset.flowEditPerf === 'commission' || el.dataset.flowEditStaffPerf === 'commission')) titleEl.textContent = '修改提成';
@@ -15368,10 +16135,18 @@ function confirmAmountKeypad() {
     closeAmountKeypad();
     return;
   }
-  el.value = buf;
-  if (el.id === 'fPrice' && state.projFormState) state.projFormState.price = el.value;
-  if (state.amountKeypadMode === 'decimal') clampNonNegativeAmountInput(el);
-  else clampIntegerAmountInput(el);
+  if (el.id === 'fPrice' && state.projFormState) {
+    state.projFormState.price = String(buf).replace(/^¥/, '').trim();
+    el.value = state.projFormState.price;
+    if (state.amountKeypadMode === 'decimal') clampNonNegativeAmountInput(el);
+    else clampIntegerAmountInput(el);
+    state.projFormState.price = String(el.value || '').replace(/^¥/, '').trim();
+    el.value = state.projFormState.price ? `¥${state.projFormState.price}` : '';
+  } else {
+    el.value = buf;
+    if (state.amountKeypadMode === 'decimal') clampNonNegativeAmountInput(el);
+    else clampIntegerAmountInput(el);
+  }
   el.dispatchEvent(new Event('input', { bubbles: true }));
   el.dispatchEvent(new Event('change', { bubbles: true }));
   closeAmountKeypad();
@@ -21373,14 +22148,16 @@ function billingNav(fn) {
 
   function commSchemeIconSvg(type) {
     if (type === 'ladder') {
-      return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
-        '<path d="M4 18h4v-3H4v3zm6 0h4v-7h-4v7zm6 0h4V6h-4v12z" fill="currentColor" opacity=".92"/>' +
+      return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+        '<rect x="3.5" y="14" width="4.5" height="6.5" rx="1.2"/>' +
+        '<rect x="9.75" y="9" width="4.5" height="11.5" rx="1.2"/>' +
+        '<rect x="16" y="4.5" width="4.5" height="16" rx="1.2"/>' +
         '</svg>';
     }
-    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
-      '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>' +
-      '<path d="M15.2 8.6a3.2 3.2 0 0 0-2.7-1.4c-1.8 0-3.1 1.2-3.1 2.8 0 1.5 1.1 2.3 2.9 2.8l.7.2c1.3.35 1.8.7 1.8 1.45 0 .85-.8 1.45-2 1.45-1.05 0-1.85-.45-2.25-1.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
-      '<path d="M12 6.8v1.5M12 15.7v1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+    return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+      '<circle cx="7.5" cy="7.5" r="2.6"/>' +
+      '<circle cx="16.5" cy="16.5" r="2.6"/>' +
+      '<path d="M16.8 5.6a1.35 1.35 0 0 1 .1 1.9L8.9 17.3a1.35 1.35 0 1 1-2-1.8l7.98-9.8a1.35 1.35 0 0 1 1.92-.1z"/>' +
       '</svg>';
   }
 
