@@ -16802,6 +16802,120 @@ function seedDemoMemberHoldings() {
     const { active, expired } = countActiveHolders(templateId);
     state.holdingsBaseline[templateId] = { valid: active, invalid: expired };
   });
+  syncAllBillingCustomerCardsFromHoldings();
+}
+
+/** 开单侧持卡投影：以 memberHoldings + holderMeta.ledger 为源 */
+function billingDiscountRatioFromTpl(tpl) {
+  if (!tpl?.benefits?.projectDiscount) return undefined;
+  const ticks = Object.values(tpl.memberPrices || {})
+    .map(r => normalizeDiscountRule(r))
+    .filter(r => r.mode === 'discount')
+    .map(r => r.tickIndex | 0);
+  if (!ticks.length) return 0.85;
+  const tick = Math.min(...ticks);
+  if (tick >= DISCOUNT_TICK_MAX) return undefined;
+  return tick / DISCOUNT_TICK_MAX;
+}
+
+function projectBillingProjectsFromLedger(tpl, ledger) {
+  const items = normalizeProjectItemsFromTpl(tpl);
+  const projects = [];
+  const seenShared = new Set();
+  items.forEach(item => {
+    if (item.unlimited) {
+      projects.push({ key: item.name, label: item.name, remain: '不限次', unlimited: true });
+      return;
+    }
+    if (item.qtyScope === 'shared' && item.sharedGroupId) {
+      if (seenShared.has(item.sharedGroupId)) return;
+      seenShared.add(item.sharedGroupId);
+      const names = items
+        .filter(i => i.sharedGroupId === item.sharedGroupId)
+        .map(i => i.name);
+      let rem = 0;
+      Object.values(ledger?.projects || {}).forEach(pl => {
+        if (pl.sharedGroupId !== item.sharedGroupId) return;
+        if (pl.sharedPoolPrimary) {
+          rem = (pl.purchaseRemaining || 0) + (pl.giftRemaining || 0);
+        }
+      });
+      if (!rem) {
+        rem = Object.values(ledger?.projects || {})
+          .filter(pl => pl.sharedGroupId === item.sharedGroupId)
+          .reduce((s, pl) => s + (pl.purchaseRemaining || 0) + (pl.giftRemaining || 0), 0);
+      }
+      const label = names.join('、');
+      projects.push({ key: label, label, remain: rem });
+      return;
+    }
+    const pl = ledger?.projects?.[item.name];
+    const remain = pl
+      ? (pl.purchaseRemaining || 0) + (pl.giftRemaining || 0)
+      : (item.purchaseQty || 0) + (item.giftQty || 0);
+    projects.push({ key: item.name, label: item.name, remain });
+  });
+  return projects;
+}
+
+function projectHeldCardForBilling(templateId, memberId) {
+  const tpl = typeof getTemplateForHolderOps === 'function'
+    ? getTemplateForHolderOps(templateId)
+    : getTemplateById(templateId);
+  if (!tpl) return null;
+  const meta = getHolderMeta(templateId, memberId);
+  const ledger = meta?.ledger || buildInitialHolderLedger(tpl);
+  let balance = 0;
+  if (tpl.benefits?.balance && ledger.balance) {
+    balance = (Number(ledger.balance.rechargeRemaining) || 0)
+      + (Number(ledger.balance.giftRemaining) || 0);
+  } else if (tpl.benefits?.balance) {
+    balance = getTemplateFaceTotal(tpl);
+  }
+  const discount = billingDiscountRatioFromTpl(tpl);
+  const card = {
+    id: `${templateId}_${memberId}`,
+    name: tpl.name,
+    balance,
+    projects: projectBillingProjectsFromLedger(tpl, ledger),
+    templateId,
+    benefits: { ...(tpl.benefits || emptyBenefits()) },
+  };
+  if (discount != null) card.discount = discount;
+  return card;
+}
+
+function getMemberCardsFromHoldings(memberId) {
+  if (!memberId) return [];
+  const cards = [];
+  Object.entries(state.memberHoldings || {}).forEach(([tid, ids]) => {
+    if (!(ids || []).includes(memberId)) return;
+    const card = projectHeldCardForBilling(tid, memberId);
+    if (card) cards.push(card);
+  });
+  return cards;
+}
+
+function ensureBillingTemplatesFromCardModule() {
+  if (!window.BillingDemo || typeof window.BillingDemo.upsertCardTemplate !== 'function') return;
+  (state.templates || []).forEach(t => {
+    window.BillingDemo.upsertCardTemplate(mapTemplateToBillingListItem(t));
+  });
+}
+
+function syncBillingCustomerCardsFromHoldings(memberId) {
+  if (!memberId || !window.BillingDemo) return;
+  if (typeof window.BillingDemo.syncMemberCardsFromHoldings === 'function') {
+    window.BillingDemo.syncMemberCardsFromHoldings(memberId);
+  }
+}
+
+function syncAllBillingCustomerCardsFromHoldings() {
+  if (!window.BillingDemo) return;
+  ensureBillingTemplatesFromCardModule();
+  if (typeof window.BillingDemo.syncAllMemberCardsFromHoldings === 'function') {
+    window.BillingDemo.syncAllMemberCardsFromHoldings();
+  }
 }
 
 function syncIssuePickerTabs() {
@@ -17092,6 +17206,11 @@ function finalizeTemplateIssueAfterPay({ templateId, memberId }) {
   if (state.viewingTemplateId === templateId) renderDetailStatsList(tpl);
   state.lastIssuedTemplateId = templateId;
   renderTemplateList();
+  if (window.BillingDemo && typeof window.BillingDemo.onCardIssued === 'function') {
+    window.BillingDemo.onCardIssued({ templateId, customerId: memberId });
+  } else {
+    syncBillingCustomerCardsFromHoldings(memberId);
+  }
 }
 
 function applyIssueExtendCommit({
@@ -17332,6 +17451,11 @@ function performRefundCard() {
   state.issueRefundMemberId = null;
   state.refundActualAmount = null;
   if (state.viewingTemplateId === tid) renderDetailStatsList(tpl);
+  if (window.BillingDemo && typeof window.BillingDemo.onCardRefunded === 'function') {
+    window.BillingDemo.onCardRefunded({ templateId: tid, customerId: memberId });
+  } else {
+    syncBillingCustomerCardsFromHoldings(memberId);
+  }
   if (window.BillingDemo && typeof window.BillingDemo.showRefundSuccess === 'function') {
     window.BillingDemo.showRefundSuccess({
       memberName: member.name,
@@ -19920,6 +20044,9 @@ function applyDemoListState(mode) {
   state.holdingsBaseline = {};
   state.templateIssueDeltas = {};
   if (mode === 'filled') seedDemoMemberHoldings();
+  else if (window.BillingDemo && typeof window.BillingDemo.syncAllMemberCardsFromHoldings === 'function') {
+    window.BillingDemo.syncAllMemberCardsFromHoldings();
+  }
   state.formMode = 'create';
   state.editingTemplateId = null;
   state.viewingTemplateId = null;
@@ -20233,6 +20360,13 @@ window.CardHost.openDuplicateFlowFromBilling = function (templateId) {
 };
 window.CardHost.finalizeTemplateIssue = function (ctx) {
   if (typeof finalizeTemplateIssueAfterPay === 'function') finalizeTemplateIssueAfterPay(ctx || {});
+};
+window.CardHost.getMemberCards = function (memberId) {
+  return typeof getMemberCardsFromHoldings === 'function' ? getMemberCardsFromHoldings(memberId) : [];
+};
+window.CardHost.syncBillingCustomerCards = function (memberId) {
+  if (memberId) syncBillingCustomerCardsFromHoldings(memberId);
+  else syncAllBillingCustomerCardsFromHoldings();
 };
 window.CardHost.finalizeTemplateExtend = function (ctx) {
   if (typeof finalizeTemplateExtendAfterPay === 'function') finalizeTemplateExtendAfterPay(ctx || {});
@@ -22380,6 +22514,57 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-pick');
   }
   function isMemberBill() { const c = getCustomer(); return c.isMember && c.cards && c.cards.length; }
+  function refreshCustomerCardsFromHoldings(customer) {
+    if (!customer || !customer.isMember || !customer.id) return customer;
+    if (String(customer.id).indexOf('guest') === 0) return customer;
+    if (!(window.CardHost && typeof window.CardHost.getMemberCards === 'function')) return customer;
+    const projected = window.CardHost.getMemberCards(customer.id).map(normalizeHeldCard);
+    const prev = customer.cards || [];
+    const prevByTpl = new Map();
+    prev.forEach(card => {
+      const tid = heldTemplateId(card);
+      if (tid) prevByTpl.set(tid, card);
+    });
+    // 以持卡账本为准增减卡；同模板已存在的卡保留开单侧已扣减余额/次数
+    const cards = projected.map(p => {
+      const tid = heldTemplateId(p) || p.templateId;
+      return (tid && prevByTpl.get(tid)) || p;
+    });
+    customer.cards = cards;
+    const root = CUSTOMERS.find(x => x.id === customer.id);
+    if (root) root.cards = cards;
+    return customer;
+  }
+  function syncMemberCardsFromHoldings(memberId) {
+    if (!memberId) return;
+    const c = CUSTOMERS.find(x => x.id === memberId);
+    if (!c) return;
+    const cards = (window.CardHost && typeof window.CardHost.getMemberCards === 'function'
+      ? window.CardHost.getMemberCards(memberId)
+      : []).map(normalizeHeldCard);
+    c.cards = cards;
+    if (state.customer && state.customer.id === memberId) {
+      state.customer = c;
+      const billEl = document.getElementById('screen-bill');
+      if (billEl && !billEl.classList.contains('hidden')) {
+        renderBillHeader();
+        syncCartChrome();
+      }
+    }
+  }
+  function syncAllMemberCardsFromHoldings() {
+    CUSTOMERS.forEach(c => {
+      if (!c.isMember || !c.id || String(c.id).indexOf('guest') === 0) return;
+      const cards = (window.CardHost && typeof window.CardHost.getMemberCards === 'function'
+        ? window.CardHost.getMemberCards(c.id)
+        : []).map(normalizeHeldCard);
+      c.cards = cards;
+    });
+    if (state.customer && state.customer.isMember && state.customer.id) {
+      const root = CUSTOMERS.find(x => x.id === state.customer.id);
+      if (root) state.customer = root;
+    }
+  }
   function customerLetter(c) {
     const ch = (c.name || '')[0];
     return SURNAME_LETTER[ch] || '#';
@@ -22754,7 +22939,11 @@ window.__BILLING_EMBEDDED__ = true;
   function renderBillHeader() {
     const c = getCustomer();
     const balSum = isMemberBill() ? c.cards.reduce((s, x) => s + (x.balance || 0), 0) : 0;
-    const timesSum = isMemberBill() ? c.cards.reduce((s, x) => s + (x.projects || []).reduce((a, p) => a + (p.remain || 0), 0), 0) : 0;
+    const timesSum = isMemberBill() ? c.cards.reduce((s, x) => s + (x.projects || []).reduce((a, p) => {
+      if (p.unlimited) return a;
+      const n = Number(p.remain);
+      return a + (Number.isFinite(n) ? n : 0);
+    }, 0), 0) : 0;
     const discCount = isMemberBill() ? c.cards.filter(x => cardBenefits(x).projectDiscount).length : 0;
     const cardBlock = (!state.billCustomerPickOpen && isMemberBill()) ? `
       <div class="member-cards-wrap ${state.cardsExpanded ? '' : 'collapsed'}" id="memberCardsWrap">
@@ -22778,7 +22967,7 @@ window.__BILLING_EMBEDDED__ = true;
               <span class="member-card-panel__name">${escapeHtml(card.name)}</span>
             </div>
             <div class="member-card-panel__row"><span>${escapeHtml(balText)}</span></div>
-            ${(card.projects || []).map(p => `<div class="member-card-panel__row"><span>${escapeHtml(p.label)}</span><span>余 ${p.remain} 次</span></div>`).join('')}
+            ${(card.projects || []).map(p => `<div class="member-card-panel__row"><span>${escapeHtml(p.label)}</span><span>${p.unlimited ? '不限次' : `余 ${p.remain} 次`}</span></div>`).join('')}
           </div>`;
         }).join('')}
         <button type="button" class="add-card-btn" id="btnBillAddCard">+ 添加卡</button>
@@ -26084,6 +26273,7 @@ window.__BILLING_EMBEDDED__ = true;
       if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
       state.customer = currentGuest();
     } else {
+      if (customer && customer.isMember) refreshCustomerCardsFromHoldings(customer);
       state.customer = customer;
       if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
       else if (customer && customer.isMember) state.guestGender = null;
@@ -27235,15 +27425,6 @@ window.__BILLING_EMBEDDED__ = true;
       if (window.CardHost && typeof window.CardHost.finalizeTemplateIssue === 'function') {
         window.CardHost.finalizeTemplateIssue(pending);
       }
-      const c = CUSTOMERS.find(x => x.id === pending.memberId);
-      const tpl = CARD_TEMPLATES.find(t => t.id === pending.templateId);
-      if (c && tpl) {
-        if (!c.cards) c.cards = [];
-        if (!c.cards.some(card => heldTemplateId(card) === pending.templateId)) {
-          c.cards.push(heldCardFromTemplate(tpl, pending.memberId));
-        }
-        c.isMember = true;
-      }
       state.cardIssuePending = null;
     }
     if (state.cardExtendPending) {
@@ -27770,8 +27951,6 @@ window.__BILLING_EMBEDDED__ = true;
     },
     onCardIssued({ templateId, customerId }) {
       let tpl = CARD_TEMPLATES.find(t => t.id === templateId);
-      const c = CUSTOMERS.find(x => x.id === customerId);
-      if (!c) return;
       if (!tpl && typeof getTemplate === 'function') {
         const full = getTemplate(templateId);
         if (full && typeof mapTemplateToBillingListItem === 'function') {
@@ -27779,21 +27958,38 @@ window.__BILLING_EMBEDDED__ = true;
           CARD_TEMPLATES.unshift(tpl);
           CARD_TPL_BY_ID[tpl.id] = tpl;
         }
+      } else if (tpl) {
+        CARD_TPL_BY_ID[tpl.id] = tpl;
       }
-      if (!tpl) return;
-      if (!c.cards) c.cards = [];
-      if (c.cards.some(card => heldTemplateId(card) === templateId)) return;
-      c.cards.push(heldCardFromTemplate(tpl, customerId));
+      const c = CUSTOMERS.find(x => x.id === customerId);
+      if (!c) return;
       c.isMember = true;
+      syncMemberCardsFromHoldings(customerId);
       if (state.customer && state.customer.id === customerId) {
-        state.customer = c;
         state.cardsExpanded = true;
-        renderBillHeader();
-        syncCartChrome();
       }
     },
+    onCardRefunded({ templateId, customerId }) {
+      syncMemberCardsFromHoldings(customerId);
+    },
+    syncMemberCardsFromHoldings,
+    syncAllMemberCardsFromHoldings,
+    getMemberCards(memberId) {
+      return (window.CardHost && typeof window.CardHost.getMemberCards === 'function'
+        ? window.CardHost.getMemberCards(memberId)
+        : []).map(normalizeHeldCard);
+    },
   };
-  /* 内嵌：Billing 初始化后重绘宿主链路，确保项目/会员卡/开单三组都在 */
+  /* 内嵌：以会员卡持卡账本重建开单侧顾客卡列表 */
+  if (window.__BILLING_EMBEDDED__) {
+    if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+    if (typeof syncAllBillingCustomerCardsFromHoldings === 'function') {
+      syncAllBillingCustomerCardsFromHoldings();
+    } else {
+      syncAllMemberCardsFromHoldings();
+    }
+  }
+  /* 内嵌：billing 初始化后重绘宿主链路，确保项目/会员卡/开单三组都在 */
   if (window.__BILLING_EMBEDDED__ && typeof window.renderFlowMap === 'function') {
     window.renderFlowMap();
   }
