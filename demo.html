@@ -15854,10 +15854,45 @@ function formatMemberPriceDisplay(rule) {
   return formatMemberPriceRule(normalizeDiscountRule(rule));
 }
 
+/** 详情/卡面：同规则多项目合并为一组（对齐 Step2 折扣权益卡） */
+function groupMemberPricesForDisplay(prices) {
+  const normalized = normalizeMemberPricesFromTpl(prices || {});
+  const entries = Object.entries(normalized);
+  if (!entries.length) return [];
+  const groups = [];
+  const byRule = new Map();
+  for (const [key, rule] of entries) {
+    if (key === MP_BATCH_KEY) {
+      groups.push({ names: [getMemberPriceLabel(MP_BATCH_KEY)], rule, full: true });
+      continue;
+    }
+    const ruleKey = JSON.stringify(normalizeDiscountRule(rule));
+    let group = byRule.get(ruleKey);
+    if (!group) {
+      group = { names: [], rule, full: false };
+      byRule.set(ruleKey, group);
+      groups.push(group);
+    }
+    const label = getMemberPriceLabel(key);
+    if (!group.names.includes(label)) group.names.push(label);
+  }
+  groups.forEach(g => {
+    if (g.names.length > 1) g.full = true;
+  });
+  return groups;
+}
+
+function formatMemberPriceFaceLine(group) {
+  return `${group.names.join('、')} · ${formatMemberPriceDisplay(group.rule)}`;
+}
+
+function formatMemberPriceFaceLines(prices) {
+  return groupMemberPricesForDisplay(prices).map(formatMemberPriceFaceLine);
+}
+
 function formatMemberPriceFaceSummary(prices) {
-  const entries = Object.entries(prices || {});
-  if (!entries.length) return null;
-  return entries.map(([p, r]) => `${getMemberPriceLabel(p)} ${formatMemberPriceDisplay(r)}`).join('\n');
+  const lines = formatMemberPriceFaceLines(prices);
+  return lines.length ? lines.join('\n') : null;
 }
 
 function formatCardPurchasePrice(t) {
@@ -15971,9 +16006,9 @@ function renderCardFacePanel(tpl) {
   }
 
   if (benefits.projectDiscount) {
-    const entries = Object.entries(tpl.memberPrices || {});
-    const cells = entries.length
-      ? entries.map(([p, r]) => renderCardGridCell(escapeHtml(`${getMemberPriceLabel(p)} ${formatMemberPriceDisplay(r)}`)))
+    const groups = groupMemberPricesForDisplay(tpl.memberPrices);
+    const cells = groups.length
+      ? groups.map(g => renderCardGridCell(escapeHtml(formatMemberPriceFaceLine(g)), { full: g.full }))
       : [];
     sections.push(renderCardSectionBlock('折扣', renderCollapsibleItemGrid(cells)));
   }
@@ -16307,7 +16342,7 @@ function renderDetailFaceList(t) {
   const rows = buildCardFaceRows(t, { includeEmpty: true });
   const projects = normalizeProjectItemsFromTpl(t);
   const products = normalizeProductItemsFromTpl(t);
-  const discountEntries = Object.entries(t.memberPrices || {});
+  const discountGroups = groupMemberPricesForDisplay(t.memberPrices);
   const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送']);
   const FACE_OTHER_LABELS = new Set(['项目/折扣有效期', '用卡策略']);
   const cards = [];
@@ -16330,9 +16365,9 @@ function renderDetailFaceList(t) {
       return;
     }
     if (r.label === '折扣') {
-      if (discountEntries.length) {
-        const cells = discountEntries.map(([p, rule]) =>
-          renderCardGridCell(escapeHtml(`${getMemberPriceLabel(p)} ${formatMemberPriceDisplay(rule)}`))
+      if (discountGroups.length) {
+        const cells = discountGroups.map(g =>
+          renderCardGridCell(escapeHtml(formatMemberPriceFaceLine(g)), { full: g.full })
         );
         cards.push(renderDetailFaceGridSection('折扣', cells));
         return;
