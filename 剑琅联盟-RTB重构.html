@@ -3579,25 +3579,29 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-cat.on { background: #fff; color: var(--text); font-weight: 500; }
 .emp-ach-items { flex: 1; overflow-y: auto; min-width: 0; }
 .emp-ach-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px; position: relative; cursor: default;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 16px; position: relative; cursor: pointer;
 }
 .emp-ach-item + .emp-ach-item::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
   height: 1px; background: var(--card-divider);
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
-.emp-ach-item__name { font-size: 14px; color: var(--text); flex: 1; min-width: 0; }
+.emp-ach-item:active { background: rgba(0, 0, 0, .03); }
+.emp-ach-item__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.emp-ach-item__name { font-size: 14px; color: var(--text); line-height: 1.3; }
+.emp-ach-item__price {
+  font-size: 12px; color: var(--text-sec); font-family: var(--font-data); line-height: 1.2;
+}
 .emp-ach-item__pcts { display: flex; gap: 16px; flex-shrink: 0; }
 .emp-ach-pct {
-  font-size: 13px; color: var(--text-sec); cursor: pointer; border: none;
-  background: transparent; font-family: inherit; padding: 4px 0;
+  font-size: 13px; color: var(--text-sec); border: none;
+  background: transparent; font-family: inherit; padding: 0; pointer-events: none;
 }
 .emp-ach-pct em {
   font-style: normal; font-family: var(--font-data); color: var(--brand);
   font-weight: 600; margin-left: 2px;
 }
-.emp-ach-pct:active { opacity: .75; }
 
 .emp-notice-red {
   margin: 0; padding: 10px 16px; background: #FFF2F2;
@@ -3643,22 +3647,56 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-calc-mode.on .emp-calc-mode__check svg { display: block; }
 .emp-calc-mode__check svg { display: none; }
 
-.emp-comm-list { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+.emp-comm-list { padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
 .emp-comm-card {
-  background: #fff; border-radius: 12px; padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  background: #fff; border-radius: 12px; padding: 14px 16px; cursor: pointer;
 }
 .emp-comm-card:active { opacity: .92; }
-.emp-comm-card__main { flex: 1; min-width: 0; }
-.emp-comm-card__name { font-size: 15px; font-weight: 500; color: var(--text); }
-.emp-comm-card__sub { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+.emp-comm-card__top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding-bottom: 12px; position: relative;
+}
+.emp-comm-card__top::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: var(--card-divider);
+  transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
+.emp-comm-card__who {
+  display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;
+}
+.emp-comm-card__icon {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.emp-comm-card__icon svg { display: block; }
+.emp-comm-card__icon--single { background: #FFF2F2; color: var(--brand); }
+.emp-comm-card__icon--ladder { background: #FFF8F0; color: #D8993B; }
+.emp-comm-card__title-wrap { min-width: 0; flex: 1; }
+.emp-comm-card__name {
+  font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.emp-comm-card__type {
+  margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 1.3;
+}
 .emp-comm-card__menu {
   width: 32px; height: 32px; border: none; background: transparent;
   color: var(--text-sec); cursor: pointer; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 0; margin-right: -6px;
 }
+.emp-comm-card__menu:active { opacity: .7; }
+.emp-comm-card__rows { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; }
+.emp-comm-card__row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-size: 13px; color: var(--text-sec); line-height: 1.35;
+}
+.emp-comm-card__row > span:last-child {
+  color: var(--text); text-align: right; min-width: 0;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.emp-comm-card__row.is-muted > span:last-child { color: var(--text-sec); font-family: inherit; }
 .emp-comm-help-link {
-  display: block; text-align: center; padding: 8px 16px 16px;
+  display: block; text-align: center; padding: 4px 16px 8px;
   font-size: 13px; color: var(--brand); cursor: pointer; border: none;
   background: transparent; width: 100%; font-family: inherit;
 }
@@ -3677,6 +3715,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-family: var(--font-data); font-size: 15px; color: var(--text); outline: none;
 }
 
+.emp-pct-dialog-fields { margin: 12px 0 4px; display: flex; flex-direction: column; gap: 12px; }
+.emp-pct-dialog-fields label { display: block; }
+.emp-pct-dialog-fields label span {
+  display: block; font-size: 13px; color: var(--text-sec); margin-bottom: 8px;
+}
+.emp-pct-dialog-fields input {
+  width: 100%; height: 44px; border: 1px solid #EDEDED; border-radius: 8px;
+  padding: 0 12px; font-size: 15px; box-sizing: border-box; font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
 .emp-pct-form { padding: 16px 20px; }
 .emp-pct-form label { display: block; font-size: 13px; color: var(--text-sec); margin-bottom: 8px; }
 .emp-pct-form input {
@@ -3748,6 +3796,35 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 
 .emp-comm-edit-body { padding: 12px 16px 16px; }
 .emp-comm-edit-body .form-row:last-child::after { display: none; }
+.emp-pct-trail {
+  display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px;
+  flex-shrink: 0; margin-left: auto; max-width: 68%;
+}
+.emp-pct-trail .input-amount,
+.emp-pct-trail .value {
+  width: 56px; max-width: 72px; flex: 0 0 auto;
+  font-family: var(--font-data); color: var(--text); text-align: right;
+}
+.emp-pct-suffix {
+  font-size: 14px; color: var(--text); flex-shrink: 0; line-height: 1;
+  font-family: var(--font-data);
+}
+.emp-pct-edit {
+  width: 16px; height: 16px; color: var(--text-sec); flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.emp-pct-edit svg { width: 16px; height: 16px; display: block; }
+.emp-ladder-row__field {
+  display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.emp-ladder-row__field input {
+  width: 56px; text-align: right; border: none; background: transparent;
+  font-family: var(--font-data); font-size: 15px; color: var(--text); outline: none;
+}
+.emp-ladder-row__field .emp-pct-suffix {
+  font-size: 15px; color: var(--text); font-weight: 600;
+}
 
 .page-title-bar .emp-title-link {
   font-size: 14px; color: var(--brand); cursor: pointer; border: none;
@@ -6782,9 +6859,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <span class="title">提成设置</span>
   </div>
   <div class="page-body">
-    <p class="emp-notice-muted" style="margin-top:12px">可对方案进行员工分配、重命名、复制、删除操作。<button type="button" class="emp-inline-link" id="empBtnCommHelpTop">查看提成说明</button></p>
+    <p class="emp-notice-muted" style="margin-top:12px">点右侧菜单可分配员工、重命名、复制、删除。<button type="button" class="emp-inline-link" id="empBtnCommHelpTop">提成说明</button></p>
     <div class="emp-comm-list" id="empCommList"></div>
-    <button type="button" class="emp-comm-help-link" id="empBtnCommHelp">查看提成说明</button>
   </div>
   <div class="bottom-bar">
     <div class="bottom-bar__action"><button type="button" class="btn-main" id="empBtnAddScheme">添加新的提成方案</button></div>
@@ -6800,9 +6876,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   <div class="page-body emp-comm-edit-body">
     <div class="emp-card">
       <div class="form-row"><span class="label">方案名称</span><span class="form-row__trail"><span class="value has-val" id="empCommEditName"></span></span></div>
-      <div class="form-row"><span class="label">劳动提成</span><input class="value input-amount" id="empCommLaborPct" type="number" placeholder="0" inputmode="decimal" /></div>
-      <div class="form-row"><span class="label">销售提成</span><input class="value input-amount" id="empCommSalesPct" type="number" placeholder="0" inputmode="decimal" /></div>
-      <div class="form-row"><span class="label">卡耗提成</span><input class="value input-amount" id="empCommCardPct" type="number" placeholder="0" inputmode="decimal" /></div>
+      <div class="form-row"><span class="label">劳动提成</span><span class="emp-pct-trail"><input class="value input-amount" id="empCommLaborPct" type="number" placeholder="0" inputmode="decimal" aria-label="劳动提成比例" /><span class="emp-pct-suffix">%</span><span class="emp-pct-edit" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.92 3.08a2.35 2.35 0 0 1 3.32 0l2.68 2.68a2.35 2.35 0 0 1 0 3.32L9.28 20.72c-.24.24-.54.4-.87.46l-4.78 1.12a1.12 1.12 0 0 1-1.35-1.35l1.12-4.78c.06-.33.22-.63.46-.87L14.92 3.08Z"/><path d="M16.2 4.55c.2-.2.52-.2.72 0l2.53 2.53c.2.2.2.52 0 .72l-.9.9-3.25-3.25.9-.9Z" opacity=".35"/></svg></span></span></div>
+      <div class="form-row"><span class="label">销售提成</span><span class="emp-pct-trail"><input class="value input-amount" id="empCommSalesPct" type="number" placeholder="0" inputmode="decimal" aria-label="销售提成比例" /><span class="emp-pct-suffix">%</span><span class="emp-pct-edit" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.92 3.08a2.35 2.35 0 0 1 3.32 0l2.68 2.68a2.35 2.35 0 0 1 0 3.32L9.28 20.72c-.24.24-.54.4-.87.46l-4.78 1.12a1.12 1.12 0 0 1-1.35-1.35l1.12-4.78c.06-.33.22-.63.46-.87L14.92 3.08Z"/><path d="M16.2 4.55c.2-.2.52-.2.72 0l2.53 2.53c.2.2.2.52 0 .72l-.9.9-3.25-3.25.9-.9Z" opacity=".35"/></svg></span></span></div>
+      <div class="form-row"><span class="label">卡耗提成</span><span class="emp-pct-trail"><input class="value input-amount" id="empCommCardPct" type="number" placeholder="0" inputmode="decimal" aria-label="卡耗提成比例" /><span class="emp-pct-suffix">%</span><span class="emp-pct-edit" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.92 3.08a2.35 2.35 0 0 1 3.32 0l2.68 2.68a2.35 2.35 0 0 1 0 3.32L9.28 20.72c-.24.24-.54.4-.87.46l-4.78 1.12a1.12 1.12 0 0 1-1.35-1.35l1.12-4.78c.06-.33.22-.63.46-.87L14.92 3.08Z"/><path d="M16.2 4.55c.2-.2.52-.2.72 0l2.53 2.53c.2.2.2.52 0 .72l-.9.9-3.25-3.25.9-.9Z" opacity=".35"/></svg></span></span></div>
     </div>
     <p class="emp-section__title" style="margin-top:16px;">已分配员工</p>
     <div class="emp-card" id="empCommAssigned"></div>
@@ -6837,16 +6913,22 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
 </div>
 
-<div class="picker-mask picker-mask--bottom" id="empPctMask">
-  <div class="picker-sheet">
-    <div class="picker-head" id="empPctTitle">编辑比例</div>
-    <div class="emp-pct-form">
-      <label id="empPctLabel">指定客比例 (%)</label>
-      <input type="number" id="empPctInput" inputmode="decimal" min="0" max="100" step="0.1" />
+<div class="dialog-mask" id="empPctDialogMask">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="empPctDialogTitle">
+    <div class="dialog__title" id="empPctDialogTitle">编辑比例</div>
+    <div class="emp-pct-dialog-fields">
+      <label>
+        <span>指定客比例 (%)</span>
+        <input type="number" id="empPctDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
+      </label>
+      <label>
+        <span>非指定客比例 (%)</span>
+        <input type="number" id="empPctNonDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
+      </label>
     </div>
-    <div class="picker-foot picker-foot--row">
-      <button type="button" class="btn-main secondary" id="empPctCancel">取消</button>
-      <button type="button" class="btn-main" id="empPctConfirm">确定</button>
+    <div class="dialog__actions dialog__actions--row">
+      <button type="button" class="btn-main secondary" id="empPctDialogCancel">取消</button>
+      <button type="button" class="btn-main" id="empPctDialogOk">确定</button>
     </div>
   </div>
 </div>
@@ -20673,43 +20755,8 @@ function billingNav(fn) {
       { id: 'rr3', name: '迟到扣款', amount: -50, type: 'deduct' },
     ],
     ach: {
-      labor: {
-        cats: [
-          { id: 'lc1', name: '面部护理' },
-          { id: 'lc2', name: '身体护理' },
-          { id: 'lc3', name: '美甲美睫' },
-        ],
-        items: {
-          lc1: [
-            { id: 'li1', name: '深层清洁', designated: 100, nonDesignated: 80 },
-            { id: 'li2', name: '补水护理', designated: 100, nonDesignated: 85 },
-            { id: 'li3', name: '光子嫩肤', designated: 90, nonDesignated: 70 },
-          ],
-          lc2: [
-            { id: 'li4', name: '精油SPA', designated: 100, nonDesignated: 75 },
-            { id: 'li5', name: '淋巴排毒', designated: 95, nonDesignated: 80 },
-          ],
-          lc3: [
-            { id: 'li6', name: '美甲基础', designated: 100, nonDesignated: 90 },
-          ],
-        },
-      },
-      sales: {
-        cats: [
-          { id: 'sc1', name: '护肤品' },
-          { id: 'sc2', name: '疗程卡' },
-        ],
-        items: {
-          sc1: [
-            { id: 'si1', name: '院线套装', designated: 100, nonDesignated: 80 },
-            { id: 'si2', name: '家居单品', designated: 100, nonDesignated: 85 },
-          ],
-          sc2: [
-            { id: 'si3', name: '次卡/疗程', designated: 100, nonDesignated: 70 },
-            { id: 'si4', name: '储值卡', designated: 90, nonDesignated: 75 },
-          ],
-        },
-      },
+      labor: { cats: [], items: {} },
+      sales: { cats: [], items: {} },
     },
     advRules: [
       { id: 'ar1', label: '服务', value: '按实收金额' },
@@ -20746,11 +20793,12 @@ function billingNav(fn) {
   function openMask(id) { var el = $(id); if (el) el.classList.add('open'); }
   function closeMask(id) { var el = $(id); if (el) el.classList.remove('open'); }
   function closeAllEmpMasks() {
-    ['empMonthMask', 'empPctMask', 'empRuleMask', 'empSchemeMenuMask', 'empTypeSheetMask',
+    ['empMonthMask', 'empRuleMask', 'empSchemeMenuMask', 'empTypeSheetMask',
       'empHelpMask', 'empRoleMask', 'empPermMask', 'empStatusMask',
       'empGenderMask', 'empAgeBandMask', 'empAvatarActionMask', 'empAlbumMask', 'empCropMask',
       'empSwordTitleMask', 'empSwordMask'].forEach(closeMask);
     $('empNameDialogMask')?.classList.remove('show');
+    $('empPctDialogMask')?.classList.remove('show');
   }
   function fmtMoney(n) {
     return Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -21204,7 +21252,77 @@ function billingNav(fn) {
     return window.EmployeeStore.ach[state.achTab];
   }
 
+  function collectPrevAchPcts(bucket) {
+    var map = Object.create(null);
+    if (!bucket || !bucket.items) return map;
+    Object.keys(bucket.items).forEach(function (catId) {
+      (bucket.items[catId] || []).forEach(function (it) {
+        if (!it) return;
+        if (it.id) map['id:' + it.id] = it;
+        if (it.name) map['name:' + it.name] = it;
+      });
+    });
+    return map;
+  }
+
+  function buildAchBucketFromCatalog(list, prevBucket, idPrefix) {
+    var prev = collectPrevAchPcts(prevBucket);
+    var cats = [];
+    var items = {};
+    var catIds = Object.create(null);
+    var order = 0;
+    (list || []).forEach(function (p) {
+      var catName = (p.category || (idPrefix === 'sc' ? '产品' : '项目')).trim() || '未分组';
+      var catId = catIds[catName];
+      if (!catId) {
+        order += 1;
+        catId = idPrefix + order;
+        catIds[catName] = catId;
+        cats.push({ id: catId, name: catName });
+        items[catId] = [];
+      }
+      var old = prev['id:' + p.id] || prev['name:' + p.name];
+      items[catId].push({
+        id: p.id,
+        name: p.name,
+        price: Number(p.price) || 0,
+        designated: old && !isNaN(Number(old.designated)) ? Number(old.designated) : 100,
+        nonDesignated: old && !isNaN(Number(old.nonDesignated)) ? Number(old.nonDesignated) : 80,
+      });
+    });
+    return { cats: cats, items: items };
+  }
+
+  function syncAchFromCatalog() {
+    var projects = (typeof getCatalogProjects === 'function' ? getCatalogProjects() : []) || [];
+    var products = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []) || [];
+    if (!projects.length && typeof seedProjectCatalog === 'function') projects = seedProjectCatalog();
+    if (!products.length && typeof seedProductCatalog === 'function') products = seedProductCatalog();
+    var prev = window.EmployeeStore.ach || {};
+    window.EmployeeStore.ach = {
+      labor: buildAchBucketFromCatalog(projects, prev.labor, 'lc'),
+      sales: buildAchBucketFromCatalog(products, prev.sales, 'sc'),
+    };
+  }
+
+  function fmtAchPrice(n) {
+    var v = Number(n);
+    if (isNaN(v)) return '¥0';
+    return '¥' + v.toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function openAchPctDialog(itemId) {
+    var info = findAchItem(itemId);
+    if (!info) return;
+    state.pctEdit = { itemId: itemId };
+    $('empPctDialogTitle').textContent = info.item.name;
+    $('empPctDesignated').value = info.item.designated;
+    $('empPctNonDesignated').value = info.item.nonDesignated;
+    $('empPctDialogMask')?.classList.add('show');
+  }
+
   function renderAch() {
+    syncAchFromCatalog();
     var data = getAchData();
     var catsEl = $('empAchCats');
     var itemsEl = $('empAchItems');
@@ -21218,13 +21336,16 @@ function billingNav(fn) {
     }).join('');
     var items = (state.achCatId && data.items[state.achCatId]) || [];
     itemsEl.innerHTML = items.map(function (it) {
-      return '<div class="emp-ach-item" data-ach-item="' + it.id + '">' +
+      return '<div class="emp-ach-item" data-ach-item="' + it.id + '" role="button" tabindex="0">' +
+        '<div class="emp-ach-item__main">' +
         '<span class="emp-ach-item__name">' + esc(it.name) + '</span>' +
+        '<span class="emp-ach-item__price">' + fmtAchPrice(it.price) + '</span>' +
+        '</div>' +
         '<div class="emp-ach-item__pcts">' +
-        '<button type="button" class="emp-ach-pct" data-pct-type="designated" data-item-id="' + it.id + '">指定<em>' + it.designated + '%</em></button>' +
-        '<button type="button" class="emp-ach-pct" data-pct-type="nonDesignated" data-item-id="' + it.id + '">非指定<em>' + it.nonDesignated + '%</em></button>' +
+        '<span class="emp-ach-pct">指定<em>' + it.designated + '%</em></span>' +
+        '<span class="emp-ach-pct">非指定<em>' + it.nonDesignated + '%</em></span>' +
         '</div></div>';
-    }).join('');
+    }).join('') || '<div class="empty-cart" style="padding:24px 16px">暂无项目</div>';
     document.querySelectorAll('#empAchTabs .page-tabs__item').forEach(function (btn) {
       btn.classList.toggle('on', btn.dataset.achTab === state.achTab);
       btn.setAttribute('aria-selected', btn.dataset.achTab === state.achTab ? 'true' : 'false');
@@ -21250,19 +21371,53 @@ function billingNav(fn) {
     }).join('');
   }
 
+  function commSchemeIconSvg(type) {
+    if (type === 'ladder') {
+      return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+        '<path d="M4 18h4v-3H4v3zm6 0h4v-7h-4v7zm6 0h4V6h-4v12z" fill="currentColor" opacity=".92"/>' +
+        '</svg>';
+    }
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>' +
+      '<path d="M15.2 8.6a3.2 3.2 0 0 0-2.7-1.4c-1.8 0-3.1 1.2-3.1 2.8 0 1.5 1.1 2.3 2.9 2.8l.7.2c1.3.35 1.8.7 1.8 1.45 0 .85-.8 1.45-2 1.45-1.05 0-1.85-.45-2.25-1.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<path d="M12 6.8v1.5M12 15.7v1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+
   function renderCommList() {
     var root = $('empCommList');
     if (!root) return;
     root.innerHTML = window.EmployeeStore.schemes.map(function (sch) {
-      var sub = sch.type === 'ladder' ? '阶梯提成 · ' + sch.ladder.length + ' 档' :
-        '固定比例 · 劳动' + sch.laborPct + '%';
-      var assigned = sch.assigned.length ? sch.assigned.length + ' 人已分配' : '未分配';
+      var isLadder = sch.type === 'ladder';
+      var typeLabel = isLadder ? '阶梯提成' : '固定比例';
+      var ruleText;
+      if (isLadder) {
+        var ladder = sch.ladder || [];
+        var first = ladder[0] ? ladder[0].pct : 0;
+        var last = ladder.length ? ladder[ladder.length - 1].pct : 0;
+        ruleText = ladder.length + ' 档 · ' + first + '% → ' + last + '%';
+      } else {
+        ruleText = '劳动' + (sch.laborPct || 0) + '% · 销售' + (sch.salesPct || 0) + '% · 卡耗' + (sch.cardPct || 0) + '%';
+      }
+      var assignedN = (sch.assigned && sch.assigned.length) || 0;
+      var assignedText = assignedN ? assignedN + ' 人' : '未分配';
+      var iconMod = isLadder ? 'ladder' : 'single';
       return '<div class="emp-comm-card" data-scheme-id="' + sch.id + '">' +
-        '<div class="emp-comm-card__main"><div class="emp-comm-card__name">' + esc(sch.name) + '</div>' +
-        '<div class="emp-comm-card__sub">' + esc(sub) + ' · ' + assigned + '</div></div>' +
+        '<div class="emp-comm-card__top">' +
+        '<div class="emp-comm-card__who">' +
+        '<span class="emp-comm-card__icon emp-comm-card__icon--' + iconMod + '">' + commSchemeIconSvg(sch.type) + '</span>' +
+        '<div class="emp-comm-card__title-wrap">' +
+        '<div class="emp-comm-card__name">' + esc(sch.name) + '</div>' +
+        '<div class="emp-comm-card__type">' + esc(typeLabel) + '</div>' +
+        '</div></div>' +
         '<button type="button" class="emp-comm-card__menu" data-scheme-menu="' + sch.id + '" aria-label="更多">' +
-        '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button></div>';
-    }).join('');
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>' +
+        '</div>' +
+        '<div class="emp-comm-card__rows">' +
+        '<div class="emp-comm-card__row"><span>提成规则</span><span>' + esc(ruleText) + '</span></div>' +
+        '<div class="emp-comm-card__row' + (assignedN ? '' : ' is-muted') + '"><span>已分配</span><span>' + esc(assignedText) + '</span></div>' +
+        '</div></div>';
+    }).join('') || '<div class="empty-cart" style="padding:32px 16px">暂无提成方案</div>';
   }
 
   function openCommEditor(id) {
@@ -21647,27 +21802,34 @@ function billingNav(fn) {
       renderAch();
     });
     $('empAchItems')?.addEventListener('click', function (e) {
-      var pct = e.target.closest('.emp-ach-pct');
-      if (!pct) return;
-      state.pctEdit = { itemId: pct.dataset.itemId, type: pct.dataset.pctType };
-      var info = findAchItem(pct.dataset.itemId);
-      if (!info) return;
-      var isDes = pct.dataset.pctType === 'designated';
-      $('empPctTitle').textContent = info.item.name;
-      $('empPctLabel').textContent = (isDes ? '指定客' : '非指定客') + '比例 (%)';
-      $('empPctInput').value = info.item[pct.dataset.pctType];
-      openMask('empPctMask');
+      var row = e.target.closest('[data-ach-item]');
+      if (!row) return;
+      openAchPctDialog(row.dataset.achItem);
     });
-    $('empPctConfirm')?.addEventListener('click', function () {
+    $('empPctDialogOk')?.addEventListener('click', function () {
       if (!state.pctEdit) return;
       var info = findAchItem(state.pctEdit.itemId);
-      var val = parseFloat($('empPctInput').value);
-      if (info && !isNaN(val)) info.item[state.pctEdit.type] = val;
-      closeMask('empPctMask');
+      var des = parseFloat($('empPctDesignated').value);
+      var non = parseFloat($('empPctNonDesignated').value);
+      if (info) {
+        if (!isNaN(des)) info.item.designated = des;
+        if (!isNaN(non)) info.item.nonDesignated = non;
+      }
+      $('empPctDialogMask')?.classList.remove('show');
+      state.pctEdit = null;
       renderAch();
       toast('比例已更新');
     });
-    $('empPctCancel')?.addEventListener('click', function () { closeMask('empPctMask'); });
+    $('empPctDialogCancel')?.addEventListener('click', function () {
+      $('empPctDialogMask')?.classList.remove('show');
+      state.pctEdit = null;
+    });
+    $('empPctDialogMask')?.addEventListener('click', function (e) {
+      if (e.target === $('empPctDialogMask')) {
+        $('empPctDialogMask').classList.remove('show');
+        state.pctEdit = null;
+      }
+    });
 
     $('empBtnAchAdv')?.addEventListener('click', function () { renderAdv(); showScreen('screen-emp-ach-adv'); nav('staff-ach-adv'); });
     $('empAdvRules')?.addEventListener('click', function (e) {
@@ -21805,7 +21967,6 @@ function billingNav(fn) {
       if (e.target.id === 'empTypeCancel') closeMask('empTypeSheetMask');
     });
 
-    $('empBtnCommHelp')?.addEventListener('click', function () { openMask('empHelpMask'); });
     $('empBtnCommHelpTop')?.addEventListener('click', function () { openMask('empHelpMask'); });
     $('empHelpOk')?.addEventListener('click', function () { closeMask('empHelpMask'); });
 
@@ -21831,6 +21992,7 @@ function billingNav(fn) {
     });
 
     $('empFShop').textContent = window.EmployeeStore.shopName;
+    syncAchFromCatalog();
   }
 
   window.EmployeeDemo = {
@@ -21880,18 +22042,31 @@ window.__BILLING_EMBEDDED__ = true;
     { id: 'p11', name: '深层滋养', category: '护理', price: 198, benefitKey: '深层滋养' },
     { id: 'p12', name: '蛋白矫正', category: '护理', price: 598, benefitKey: '蛋白矫正' },
     { id: 'p13', name: '头疗', category: '护理', price: 138, benefitKey: '头疗' },
-    { id: 'p14', name: '时尚造型', category: '造型', price: 128, benefitKey: '时尚造型' },
+    { id: 'p14', name: '接发', category: '造型', price: 888, benefitKey: '接发' },
     { id: 'p15', name: '头皮护理', category: '护理', price: 168, benefitKey: '头皮护理' },
+    { id: 'p16', name: '挑染', category: '烫染', price: 198, benefitKey: '挑染' },
+    { id: 'p17', name: '时尚造型', category: '造型', price: 128, benefitKey: '时尚造型' },
+    { id: 'p18', name: '暖色漂褪', category: '烫染', price: 328, benefitKey: '暖色漂褪' },
   ];
   const PRODUCTS = [
-    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', category: '产品', price: 128 },
-    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', category: '产品', price: 98 },
-    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', category: '产品', price: 168 },
-    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', category: '产品', price: 88 },
-    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', category: '产品', price: 118 },
-    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', category: '产品', price: 148 },
-    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', category: '产品', price: 78 },
-    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', category: '产品', price: 138 },
+    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', category: '洗护', price: 128 },
+    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', category: '洗护', price: 98 },
+    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', category: '护理', price: 168 },
+    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', category: '造型', price: 88 },
+    { id: 'pd5', name: '剑琅染发护色套装', spec: '', category: '烫染', price: 198 },
+    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', category: '护理', price: 68 },
+    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', category: '洗护', price: 78 },
+    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', category: '洗护', price: 118 },
+    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', category: '护理', price: 148 },
+    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', category: '护理', price: 158 },
+    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', category: '造型', price: 78 },
+    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', category: '造型', price: 88 },
+    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', category: '烫染', price: 138 },
+    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', category: '烫染', price: 138 },
+    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', category: '洗护', price: 68 },
+    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', category: '护理', price: 128 },
+    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', category: '洗护', price: 88 },
+    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', category: '烫染', price: 118 },
   ];
 
   const CARD_COLORS = {
@@ -24142,13 +24317,13 @@ window.__BILLING_EMBEDDED__ = true;
       avatar: FLOW_AVATAR_GUEST,
       status: 'void',
       kind: 'project',
-      items: [{ id: 'fi-seed-7', name: '精致剪发', price: 88, type: 'project', qty: 1 }],
+      items: [{ id: 'fi-seed-7', name: '精致剪发', price: 98, type: 'project', qty: 1 }],
       staff: '阿Ken',
       staffSpecify: false,
       payMethod: '现金',
-      payments: [{ method: '现金', amount: 88 }],
-      amount: 88,
-      achievement: 88,
+      payments: [{ method: '现金', amount: 98 }],
+      amount: 98,
+      achievement: 98,
       commission: 0,
       discount: 0,
       benefitLabel: '无卡权益',
@@ -24269,9 +24444,9 @@ window.__BILLING_EMBEDDED__ = true;
       avatar: 'assets/billing/avatar-female.png',
       status: 'refunded',
       kind: 'project',
-      items: [{ name: '精致剪发', price: 88, type: 'project', qty: 1 }],
+      items: [{ name: '精致剪发', price: 98, type: 'project', qty: 1 }],
       payMethod: '微信',
-      amount: 88,
+      amount: 98,
       time: '2026.07.24 15:20',
       channel: '顾客自助',
     },
