@@ -487,7 +487,14 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .font-data-lg {
   font-family: var(--font-data); font-size: 32px; line-height: 40px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
-.member-card-item__cell.is-full .member-card-item__value { white-space: normal; }
+.member-card-item__cell.is-full .member-card-item__value {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.45;
+}
 .member-card-item__value.is-preline { white-space: pre-line; line-height: 1.45; }
 .guide-hint { margin: 12px 16px; padding: 10px 12px; background: var(--bg-page); border-radius: 8px; font-size: 12px; color: var(--text-sec); line-height: 1.65; }
 .guide-group { margin: 0 16px 14px; background: var(--card); border-radius: 12px; border: none; overflow: hidden; }
@@ -672,7 +679,10 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .benefit-expand .form-section {
   margin: 0; border-radius: 0; overflow: visible; background: transparent;
   box-shadow: none; border: none;
+  padding-top: 0; padding-bottom: 0;
 }
+.benefit-expand .form-section > .form-row:first-child { padding-top: 7px; }
+.benefit-expand .form-section > .form-row:last-child { padding-bottom: 7px; }
 .benefit-expand .form-row {
   background: transparent; padding: 7px 0; padding-left: 0; padding-right: 0;
   min-height: 44px; border-bottom: none;
@@ -880,13 +890,19 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
   box-shadow: none;
 }
 .toast-msg.show { opacity: 1; }
-.form-section { background: var(--card); margin-bottom: 12px; }
+.form-section {
+  background: var(--card); margin-bottom: 12px;
+  padding-top: 16px; padding-bottom: 16px;
+}
 /* 白卡内行间划线：左右与文字对齐（16px），不贴卡片两侧 */
 .form-row {
   position: relative;
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px 16px; border-bottom: none; min-height: 48px;
 }
+/* 卡片已有上下 16，首/末行去掉叠层，保证内容距卡边 16 */
+.form-section > .form-row:first-child { padding-top: 0; }
+.form-section > .form-row:last-child { padding-bottom: 0; }
 .form-row:not(:last-child)::after {
   content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px;
   background: var(--card-divider); transform: scaleY(0.5); transform-origin: center bottom;
@@ -894,7 +910,15 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 }
 .form-row:last-child { border-bottom: none; }
 .form-row .label { font-size: 14px; }
-.form-row .label .req { color: var(--brand); }
+/* 必填 *：统一在标题右侧 */
+.req,
+.label .req {
+  color: var(--brand);
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  margin-left: 2px;
+}
 .form-row--stack-label .label { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; flex-shrink: 0; max-width: 52%; }
 .form-row .label-hint { font-size: 11px; color: var(--text-sec); font-weight: 400; line-height: 1.35; }
 .form-row .value { flex: 1; text-align: right; font-size: 14px; color: var(--text-sec); border: none; background: transparent; outline: none; max-width: 180px; font-family: inherit; }
@@ -2761,7 +2785,10 @@ html.prd-capture #projProjectTable { overflow: visible; }
 }
 .proj-form-stack { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 16px; }
 .proj-section-label { font-size: 12px; color: var(--text-sec); margin-bottom: 8px; padding-left: 4px; }
-.proj-form-section { background: var(--card); border-radius: 12px; overflow: hidden; }
+.proj-form-section {
+  background: var(--card); border-radius: 12px; overflow: hidden;
+  padding-top: 16px; padding-bottom: 16px;
+}
 .proj-form-row {
   position: relative;
   display: flex; align-items: center; min-height: 56px; padding: 0 16px;
@@ -2774,7 +2801,14 @@ html.prd-capture #projProjectTable { overflow: visible; }
 .proj-form-row:last-child { border-bottom: none; }
 .proj-form-row.col { flex-direction: column; align-items: stretch; padding: 12px 16px; min-height: 0; }
 .proj-form-row .label { font-size: 14px; flex-shrink: 0; }
-.proj-form-row .label.req::before { content: "*"; color: var(--brand); margin-right: 2px; }
+.proj-form-row .label.req::after {
+  content: "*";
+  color: var(--brand);
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  margin-left: 2px;
+}
 .proj-form-row .field { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; }
 .proj-form-row .field-value { font-size: 14px; color: var(--text); }
 .proj-form-row input[type="text"], .proj-form-row .input-amount { border: none; text-align: right; font-size: 14px; font-family: inherit; width: 100%; max-width: 200px; outline: none; color: var(--text); background: transparent; }
@@ -3165,7 +3199,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .wb-tab--ai .wb-tab__icon { width: 45px; height: 45px; }
 .wb-tab--ai .wb-tab__icon img {
   width: 45px; height: 45px; object-fit: contain;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.24));
+  filter: drop-shadow(0 0 2.01px rgba(0, 0, 0, 0.24));
 }
 .wb-tab--ai > span:last-child { display: none; }
 
@@ -3179,6 +3213,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   box-shadow: none; border: none;
 }
 .emp-card + .emp-card { margin-top: 12px; }
+/* 员工表单卡：内容下边距 16（上边距由首行头像区 16 承担） */
+#screen-emp-form .emp-card {
+  padding-bottom: 16px;
+}
+#screen-emp-form .emp-card > .form-row:last-child { padding-bottom: 0; }
+#screen-emp-form .emp-form-row-avatar { padding-top: 16px; padding-bottom: 16px; }
 .emp-section { padding: 12px 16px 16px; }
 .emp-section__title {
   font-size: 13px; color: var(--text-sec); margin: 0 0 8px; font-weight: 400;
@@ -3417,6 +3457,8 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   background: #F2F2F2; flex-shrink: 0;
 }
 .emp-form-sword-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.emp-detail-card .form-row__trail { gap: 8px; }
+.emp-detail-card .emp-form-sword-thumb { margin-right: 0; }
 
 .emp-salary-summary {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
@@ -6590,9 +6632,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
           <nav class="wb-tabbar" aria-label="底部导航">
             <button type="button" class="wb-tab" data-wb-tab="home"><span class="wb-tab__icon"><img src="assets/workbench/tab-home.svg" alt="" width="24" height="24"></span><span>首页</span></button>
-            <button type="button" class="wb-tab" data-wb-tab="cust"><span class="wb-tab__icon"><img src="assets/workbench/tab-cust.png" alt="" width="24" height="24"></span><span>客户</span></button>
+            <button type="button" class="wb-tab" data-wb-tab="cust"><span class="wb-tab__icon"><img src="assets/workbench/tab-cust.svg" alt="" width="24" height="24"></span><span>客户</span></button>
             <button type="button" class="wb-tab wb-tab--ai" data-wb-tab="ai" aria-label="AI助手"><span class="wb-tab__icon"><img src="assets/workbench/ai.png" alt="" width="45" height="45"></span><span>AI</span></button>
-            <button type="button" class="wb-tab" data-wb-tab="perf"><span class="wb-tab__icon"><img src="assets/workbench/tab-perf.png" alt="" width="24" height="24"></span><span>业绩</span></button>
+            <button type="button" class="wb-tab" data-wb-tab="perf"><span class="wb-tab__icon"><img src="assets/workbench/tab-perf.svg" alt="" width="24" height="24"></span><span>业绩</span></button>
             <button type="button" class="wb-tab is-on" data-wb-tab="workbench"><span class="wb-tab__icon"><img src="assets/workbench/tab-workbench.svg" alt="" width="24" height="24"></span><span>工作台</span></button>
           </nav>
         </div>
@@ -11556,6 +11598,57 @@ function formatProjectQtySummary(item) {
   return `${purchase}次`;
 }
 
+/** 详情/卡面：共计池合并为一组，避免每个项目都标同一份次数 */
+function groupProjectItemsForDisplay(items) {
+  const list = items || [];
+  const groups = [];
+  const sharedSeen = new Set();
+  list.forEach(item => {
+    if (item.qtyScope === 'shared' && item.sharedGroupId) {
+      if (sharedSeen.has(item.sharedGroupId)) return;
+      sharedSeen.add(item.sharedGroupId);
+      const groupItems = list.filter(
+        i => i.qtyScope === 'shared' && i.sharedGroupId === item.sharedGroupId
+      );
+      groups.push({
+        kind: 'shared',
+        names: groupItems.map(i => i.name),
+        purchaseQty: Math.max(0, ...groupItems.map(i => i.purchaseQty || 0)),
+        giftQty: Math.max(0, ...groupItems.map(i => i.giftQty || 0)),
+        unlimited: groupItems.some(i => !!i.unlimited),
+      });
+      return;
+    }
+    groups.push({ kind: 'item', item });
+  });
+  return groups;
+}
+
+function formatProjectItemFaceLine(item) {
+  return `${item.name} · ${formatProjectQtySummary(item)}`;
+}
+
+function formatProjectDisplayGroupLine(group) {
+  if (group.kind === 'item') return formatProjectItemFaceLine(group.item);
+  const names = group.names.join('、');
+  if (group.unlimited) return `${names} · 共计不限次`;
+  const gift = group.giftQty || 0;
+  const purchase = group.purchaseQty || 0;
+  const qtyText = gift > 0 ? `${purchase}次+送${gift}次` : `${purchase}次`;
+  return `${names} · 共计${qtyText}`;
+}
+
+function formatProjectFaceLines(items) {
+  return groupProjectItemsForDisplay(items).map(formatProjectDisplayGroupLine);
+}
+
+function formatProjectFaceEntries(items) {
+  return groupProjectItemsForDisplay(items).map(group => ({
+    line: formatProjectDisplayGroupLine(group),
+    full: group.kind === 'shared',
+  }));
+}
+
 function buildProjectPickRowMetaHtml(projectName, draft, showQtySummary) {
   const price = formatProjectPrice(projectName);
   const pricePart = price ? `<span class="proj-item-price__catalog">${escapeHtml(price)}</span>` : '';
@@ -12566,7 +12659,7 @@ function normalizeProjectItemsFromTpl(p) {
 
 function formatProjectItemsLine(items) {
   if (!items?.length) return null;
-  return items.map(i => `${i.name} ${formatProjectQtySummary(i)}`).join('、');
+  return formatProjectFaceLines(items).join('、');
 }
 
 function emptyBenefits() {
@@ -15773,10 +15866,6 @@ function formatCardPurchasePrice(t) {
   return { text: formatMoneyDisplay(amount), data: true };
 }
 
-function formatProjectItemFaceLine(item) {
-  return `${item.name} ${formatProjectQtySummary(item)}`;
-}
-
 const CARD_FACE_COLLAPSE_LIMIT = 4;
 
 function renderFullItemGrid(cellHtmlList) {
@@ -15796,8 +15885,9 @@ function renderCollapsibleItemGrid(cellHtmlList) {
     <button type="button" class="member-card-item__expand" aria-expanded="false">${expandMoreLabel(hidden.length)}</button>`;
 }
 
-function renderCardGridCell(textHtml) {
-  return `<div class="member-card-item__cell"><span class="member-card-item__value">${textHtml}</span></div>`;
+function renderCardGridCell(textHtml, opts) {
+  const full = opts && opts.full;
+  return `<div class="member-card-item__cell${full ? ' is-full' : ''}"><span class="member-card-item__value">${textHtml}</span></div>`;
 }
 
 function renderCardSectionBlock(title, contentHtml) {
@@ -15867,7 +15957,7 @@ function renderCardFacePanel(tpl) {
   if (benefits.timesOrValidity) {
     const items = normalizeProjectItemsFromTpl(tpl);
     const cells = items.length
-      ? items.map(i => renderCardGridCell(escapeHtml(formatProjectItemFaceLine(i))))
+      ? formatProjectFaceEntries(items).map(e => renderCardGridCell(escapeHtml(e.line), { full: e.full }))
       : [];
     sections.push(renderCardSectionBlock('项目', renderCollapsibleItemGrid(cells)));
   }
@@ -16227,7 +16317,9 @@ function renderDetailFaceList(t) {
   rows.forEach(r => {
     if (r.label === '项目') {
       if (!projects.length) return;
-      const cells = projects.map(i => renderCardGridCell(escapeHtml(`${i.name} ${formatProjectQtySummary(i)}`)));
+      const cells = formatProjectFaceEntries(projects).map(e =>
+        renderCardGridCell(escapeHtml(e.line), { full: e.full })
+      );
       cards.push(renderDetailFaceGridSection('项目', cells));
       return;
     }
@@ -20735,7 +20827,7 @@ function billingNav(fn) {
       '<div class="emp-detail-head__role">' + esc(s.role) + ' · ' + esc(s.status) + '</div></div></div>' +
       '<div class="emp-card emp-detail-card">' +
       row('剑号', s.swordTitle || '暂未选择') +
-      row('宝剑', sw ? sw.name : '暂未选择') +
+      swordDetailRow(sw) +
       row('性别', s.gender || '未填写') +
       row('年龄段', s.ageBand || '未填写') +
       row('从业年限', (s.yearsExp != null && s.yearsExp !== '') ? (s.yearsExp + ' 年') : '未填写') +
@@ -20746,6 +20838,14 @@ function billingNav(fn) {
       row('基本工资', s.baseSalary ? fmtMoney(s.baseSalary) + ' 元' : '0 元') +
       row('提成方案', s.scheme) +
       '</div>';
+  }
+
+  function swordDetailRow(sw) {
+    var thumb = (sw && sw.src)
+      ? '<span class="emp-form-sword-thumb"><img src="' + esc(sw.src) + '" alt="" loading="lazy"></span>'
+      : '<span class="value has-val">暂未选择</span>';
+    return '<div class="form-row"><span class="label">宝剑</span>' +
+      '<span class="form-row__trail">' + thumb + '</span></div>';
   }
 
   function row(label, val, readonly) {
