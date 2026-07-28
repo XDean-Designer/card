@@ -61,11 +61,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.5-lite</td>
+<td>v1.6-lite</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-07-24</td>
+<td>2026-07-28</td>
 </tr>
 <tr>
 <td>文档类型</td>
@@ -192,6 +192,9 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
+<p>列表/详情卡面权益行与 Step2 ticket <strong>同组合并</strong>（共计多名一行；折扣同规则多名一行；文案多为 <code>名称 · 参数</code>；细则见完整稿 §6.1）  </p>
+</li>
+<li>
 <p>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
@@ -222,7 +225,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>次卡/项目次数类</td>
-<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次；保存后每项 = 一项目一 ticket</td>
+<td>开启 <strong>项目</strong>：选适用项目；每项或共计；购买/赠送次数或不定次；保存后每项 = 一项目一 ticket；<strong>共计</strong> → 共享池一票（票根「共」、卡面「共计」）</td>
 </tr>
 <tr>
 <td>产品次数/礼品类</td>
@@ -230,7 +233,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>折扣/会员价类</td>
-<td>开启 <strong>折扣</strong>：选适用项目；标尺折扣或固定金额</td>
+<td>开启 <strong>折扣</strong>：选适用项目；标尺折扣或固定金额；可一张 ticket 多项目；卡面按同规则合并展示</td>
 </tr>
 <tr>
 <td>期限卡</td>
@@ -393,7 +396,7 @@ flowchart LR
 <tr>
 <td>列表</td>
 <td>会员卡管理</td>
-<td>Tab：在售 / 已下架；底栏「添加会员卡」；空态可点插图创建</td>
+<td>Tab：在售 / 已下架；底栏「添加会员卡」；空态可点插图创建；权益摘要按完整稿卡面规则合并展示</td>
 </tr>
 <tr>
 <td>Step1</td>
@@ -418,7 +421,7 @@ flowchart LR
 <tr>
 <td>详情</td>
 <td>会员卡详情</td>
-<td>运营数据 + 卡面信息；在售顶栏下架/编辑</td>
+<td>运营数据 + 卡面信息（合并规则同列表）；在售顶栏下架/编辑</td>
 </tr>
 <tr>
 <td>项目权益页</td>

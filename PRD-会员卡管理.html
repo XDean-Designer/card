@@ -61,11 +61,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.5</td>
+<td>v1.6</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-07-24</td>
+<td>2026-07-28</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -951,11 +951,19 @@ flowchart LR
 </ul>
 <p><strong>在售 footer</strong>：<code>+复制建卡</code>、<code>办卡/退卡</code><br>
 <strong>已下架 footer</strong>：仅 <code>+复制建卡</code>  </p>
-<p><strong>卡面摘要面板</strong></p>
+<p><strong>卡面摘要面板</strong>（列表与详情「卡面信息」共用同一套规则；合并粒度对齐 Step2 权益 ticket）</p>
 <ul>
 <li>面值：<code>面值 ¥X · 赠送 ¥Y</code>（开启面值时；不展示可否购产品）  </li>
-<li>项目 / 折扣：双列网格；超过 4 条折叠，「展开 N 项」/「收起」  </li>
-<li>期限：有项目/折扣展示卡有效期；纯面值「永久有效」；否则「—」  </li>
+<li>项目 / 产品 / 折扣：双列网格；超过 4 条折叠，「展开 N 项」/「收起」；<strong>多名合并行通栏</strong>  </li>
+<li><strong>项目</strong>（对齐 Step2 项目 ticket）
+<ul>
+<li><strong>每项</strong>：一项一行；<code>项目名 · N次</code> / <code>项目名 · 不限次</code>；有赠送时参数为 <code>N次+送M次</code>  </li>
+<li><strong>共计</strong>：同共享池多名合并一行；<code>A、B · 共计N次</code>（卡面文案用「共计」；Step2 票根仍为「共」）  </li>
+</ul>
+</li>
+<li><strong>折扣</strong>（对齐 Step2 折扣 ticket）：<strong>同折扣规则</strong>的多名合并一行；<code>A、B · 8.5折</code>；全选键 <code>__ALL__</code> 展示为 <code>全部项目 · …</code>  </li>
+<li><strong>产品</strong>：一项一行（不合并）；<code>产品名 ×N</code>（名称与数量之间为空格，不加「·」）  </li>
+<li>期限：有项目/折扣/产品展示卡有效期；纯面值「永久有效」；否则「—」  </li>
 </ul>
 <p><strong>跳转</strong></p>
 <table>
@@ -1055,7 +1063,8 @@ flowchart LR
 <h3>6.3.4 折扣</h3>
 <ul>
 <li>+添加折扣权益；新建标尺默认「原价」，须改为非原价或固定金额&gt;0 才算已配置。  </li>
-<li><strong>仅适用服务项目</strong>（不可选产品）。</li>
+<li><strong>仅适用服务项目</strong>（不可选产品）。  </li>
+<li>一张折扣 ticket 可含 <strong>多个适用项目</strong>（左侧多名、右侧同一折扣参数）；列表/详情卡面按 <strong>同规则合并</strong> 展示（见 6.1），与 Step2 ticket 分组一致。</li>
 </ul>
 <p>底栏：下一步。</p>
 <h2>6.4 项目权益页</h2>
@@ -1128,7 +1137,7 @@ flowchart LR
 <li>已下架顶栏：已下架标记、复制建卡  </li>
 <li><strong>仅已下架有底栏</strong>：重新上架 | 已持卡管理  </li>
 <li>运营数据 + <code>?</code> 说明（定义见模块 9）  </li>
-<li>卡面信息含面值金额/赠送（不含可否购产品）；项目/产品/折扣超 4 展开；用卡策略各段可 <code>?</code></li>
+<li>卡面信息含面值金额/赠送（不含可否购产品）；<strong>项目/产品/折扣行规则同 6.1</strong>（含共计合并、折扣同规则合并、<code>名称 · 参数</code>）；超 4 展开；用卡策略各段可 <code>?</code></li>
 </ul>
 <h2>6.10 选择会员 Sheet</h2>
 <ul>
