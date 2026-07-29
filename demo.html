@@ -2518,32 +2518,29 @@ html.device-preview .status-bar {
 #screen-p-list .page-body {
   display: flex; flex-direction: column; background: #fff;
   border-radius: 0; margin-top: 0;
-  padding-bottom: calc(88px + var(--safe-bottom));
+  padding-bottom: calc(24px + var(--safe-bottom));
 }
-.catalog-fab {
-  position: absolute;
-  right: 16px;
-  bottom: calc(24px + var(--safe-bottom));
-  z-index: 24;
-  width: 56px;
-  height: 56px;
-  margin: 0;
-  padding: 0;
+#screen-p-list .page-title-bar .title-add-btn {
+  grid-column: 3; justify-self: end; align-self: center;
+  margin-right: 12px;
   border: none;
-  border-radius: 28px;
   background: var(--brand);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: inherit;
+  font-size: 13px; font-weight: 500; line-height: 1;
+  height: 28px; padding: 0 12px;
+  border-radius: 6px;
+  cursor: pointer; font-family: inherit;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 1px;
   -webkit-tap-highlight-color: transparent;
 }
-.catalog-fab.hidden { display: none; }
-.catalog-fab:active { opacity: .92; transform: scale(0.96); }
-.catalog-fab svg { display: block; width: 24px; height: 24px; pointer-events: none; }
+#screen-p-list .page-title-bar .title-add-btn__plus {
+  display: inline-block;
+  font-size: 20px; font-weight: 600; line-height: 1;
+  margin-right: 2px;
+  transform: translateY(-1px);
+}
+#screen-p-list .page-title-bar .title-add-btn:active { opacity: .92; }
 #screen-p-list .price-catalog-tabs {
   /* margin 10 + padTop 12 + 内容 33 = 对齐 Tab y119 / 有提示时 y153 */
   margin-top: 10px;
@@ -8828,7 +8825,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <header class="page-title-bar">
             <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
             <span class="title">价目表</span>
-            <button type="button" class="title-link" id="btnProjTitleAdd" aria-label="添加">+添加</button>
+            <button type="button" class="title-add-btn" id="btnProjTitleAdd" aria-label="添加"><span class="title-add-btn__plus" aria-hidden="true">+</span>添加</button>
           </header>
           <div class="proj-list-hint" id="projListDragHint">
             <svg class="proj-list-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -8872,9 +8869,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <button type="button" class="btn-proj-empty-add hidden" id="btnProjEmptyAddToGroup">添加项目到本组</button>
             </div>
           </div>
-          <button type="button" class="catalog-fab" id="btnProjGoAdd" aria-label="添加项目">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
         </div>
         <div class="screen hidden" id="screen-p-groups">
           <header class="page-title-bar">
@@ -10525,16 +10519,6 @@ function syncPriceCatalogTabs() {
   if (priceHead) priceHead.textContent = '价格（¥）';
   syncProjListDragHint();
   syncCatalogGroupChrome();
-  syncCatalogAddFab();
-}
-
-function syncCatalogAddFab() {
-  const fab = document.getElementById('btnProjGoAdd');
-  if (!fab) return;
-  const total = getActivePriceCatalog().length;
-  const isProduct = isProductCatalogTab();
-  fab.classList.toggle('hidden', !total);
-  fab.setAttribute('aria-label', isProduct ? '添加产品' : '添加项目');
 }
 
 function syncCatalogGroupChrome() {
@@ -15442,7 +15426,6 @@ function wireProjCatalogModule() {
       projRenderList();
     });
   });
-  document.getElementById('btnProjGoAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjTitleAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjEmptyAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('projTableHead')?.addEventListener('click', e => {
@@ -15802,6 +15785,8 @@ const FLOW_MAP_GROUPS = [
       { id: 'price-group-menu', label: '分组 · 行菜单 Sheet', screen: 'screen-p-groups' },
       { id: 'price-group-create', label: '分组 · 新建 Dialog', screen: 'screen-p-groups' },
       { id: 'price-group-rename', label: '分组 · 重命名 Dialog', screen: 'screen-p-groups' },
+      { id: 'price-group-delete', label: '分组 · 删除确认 Dialog', screen: 'screen-p-groups' },
+      { id: 'price-item-delete', label: '价目表 · 删除确认 Dialog', screen: 'screen-p-list' },
     ],
   },
   {
@@ -16087,6 +16072,25 @@ const FLOW_NAV = {
     openCatalogGroupManage();
     const g = (state.catalogGroups?.project || []).find(x => !x.system);
     if (g) openCatalogGroupNameDialog('rename', g.id);
+  },
+  'price-group-delete'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    openCatalogGroupManage();
+    const g = (state.catalogGroups?.project || []).find(x => !x.system);
+    if (g) openCatalogGroupDeleteConfirm(g.id);
+  },
+  'price-item-delete'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+    const first = getCatalogProjects().find(p => p.onSale && !p.hidden && !isCatalogDeleteLocked(p))
+      || getCatalogProjects().find(p => !isCatalogDeleteLocked(p))
+      || getCatalogProjects()[0];
+    if (first) openCatalogDeleteConfirm(first.id);
   },
 };
 

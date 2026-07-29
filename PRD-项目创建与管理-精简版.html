@@ -58,7 +58,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.4-lite</td>
+<td>v1.5-lite</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -134,7 +134,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <p><strong>先读这几条（贯穿全文）</strong></p>
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
-<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。列表为 <strong>在售区 →「已下架」分隔行 →「已隐藏」折叠</strong>，<strong>无状态列</strong>、<strong>无搜索</strong>。新建：标题栏「+添加」与有数据时的悬浮球均 <strong>跟当前 Tab 直接新建</strong>（项目 Tab→新增项目，产品 Tab→新增产品），<strong>不弹选择层</strong>。  </li>
+<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。列表为 <strong>在售区 →「已下架」分隔行 →「已隐藏」折叠</strong>，<strong>无状态列</strong>、<strong>无搜索</strong>。新建：标题栏品牌红「+添加」按钮 <strong>跟当前 Tab 直接新建</strong>（项目 Tab→新增项目，产品 Tab→新增产品），<strong>不弹选择层</strong>；<strong>无右下悬浮球</strong>。  </li>
 <li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。删除锁定以锁标呈现。  </li>
 <li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面等变更需 <strong>同步客户端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
@@ -152,7 +152,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>本期在整体产品（含会员卡权益组合）对齐前提下重构价目能力：</p>
 <ul>
 <li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格展示、价格），无列表配图堆叠、无行内状态列；  </li>
-<li><strong>操作紧凑</strong>：Tab、分组轨、标题栏「+添加」/悬浮球、左滑/长按菜单、拖拽排序集中在一屏；下架与隐藏以分区/折叠呈现；  </li>
+<li><strong>操作紧凑</strong>：Tab、分组轨、标题栏品牌红「+添加」按钮、左滑/长按菜单、拖拽排序集中在一屏；下架与隐藏以分区/折叠呈现；  </li>
 <li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）、<strong>隐藏</strong> 与系统「隐藏」分组；  </li>
 <li><strong>与会员卡 / 开单联结</strong>：价目为选权益、折扣适用范围及 <strong>开单选品</strong> 的数据源；支持从权益页「管理价目表」往返。</li>
 </ul>
@@ -193,7 +193,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </table>
 <h2>1.3 本期做（In）</h2>
 <ul>
-<li>价目表列表：项目 Tab / 产品 Tab、标题栏「+添加」（跟 Tab 直接新建、不弹窗）、有数据时悬浮球「+」、列头排序、空态（<strong>无搜索</strong>）  </li>
+<li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无悬浮球</strong>）、列头排序、空态（<strong>无搜索</strong>）  </li>
 <li>列表分区：<strong>在售区</strong> → <strong>「已下架」分区</strong> →（「全部」）<strong>「已隐藏」折叠</strong>（无数量）  </li>
 <li>新增 / 编辑 / 删除项目与产品（表单：基本信息 / 售卖设置 / 高级设置；<strong>上传封面图（选填）</strong>最多 1 张）  </li>
 <li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
@@ -350,11 +350,11 @@ tr:nth-child(even) td{background:#fafbfc}
 </blockquote>
 <pre><code>价目表
  ├─ 列表（项目 Tab / 产品 Tab）
- │    ├─ 标题栏「+添加」（跟当前 Tab，不弹窗）· 有数据时右下悬浮球「+」
+ │    ├─ 标题栏品牌红「+添加」按钮（跟当前 Tab，不弹窗；无悬浮球）
  │    ├─ 分组轨（灰底白胶囊 · 可横滑 · 全部/自定义/隐藏）· 深灰齿轮
  │    ├─ 在售区 →「已下架」分隔行 →（全部）「已隐藏」折叠
  │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作
- │    └─ 空态（无数据时隐藏悬浮球）
+ │    └─ 空态（保留空态 CTA）
  ├─ 新增项目 / 新增产品（基本信息 / 售卖设置 / 高级设置·封面）
  ├─ 项目详情 / 产品详情
  ├─ 分组管理
@@ -371,7 +371,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <h3>3.0 页面流（示意）</h3>
 <div class="mermaid">
 flowchart LR
-  L[价目表列表] -->|+添加或悬浮球| Add[新增表单]
+  L[价目表列表] -->|标题栏+添加| Add[新增表单]
   L -->|点行| Edit[详情编辑]
   L -->|齿轮| G[分组管理]
   G -->|编辑成员| M[编辑成员]
@@ -399,7 +399,7 @@ flowchart LR
 <tr>
 <td>列表</td>
 <td>价目表</td>
-<td>Tab 项目/产品；标题栏「+添加」跟 Tab 直接新建（不弹窗）+ 悬浮球同规则；项目列名称/时长/价格；产品列名称（规格）/价格</td>
+<td>Tab 项目/产品；标题栏品牌红「+添加」按钮跟 Tab 直接新建（不弹窗；无悬浮球）；项目列名称/时长/价格；产品列名称（规格）/价格</td>
 </tr>
 <tr>
 <td>新增</td>

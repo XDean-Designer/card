@@ -149,11 +149,12 @@ def main():
         CARD / 'PRD-项目创建与管理-精简版.html',
     ]:
         t = p.read_text(encoding='utf-8')
-        assert 'v1.4' in t, p
+        assert 'v1.5' in t, p
         assert '已下架' in t, p
         assert ('上传封面图' in t) or ('封面' in t), p
         assert '修改记录' not in t and '变更记录' not in t and '已知待修' not in t
-        assert '无关键字搜索' in t or '无搜索' in t or 'v1.4-lite' in t or t.count('+添加') >= 1
+        assert '无关键字搜索' in t or '无搜索' in t or 'v1.5-lite' in t or t.count('+添加') >= 1
+        assert '悬浮球' not in t or '无悬浮球' in t or '无右下悬浮球' in t, p
         print('ok', p.name)
     print('done')
 
