@@ -2116,6 +2116,66 @@ html.prd-capture .bottom-bar {
 html.prd-capture #screen-p-list .catalog-list-shell,
 html.prd-capture #projProjectTable { overflow: visible; }
 
+/* 真机预览：?device=1 — 仅手机画布，等比适配视口，固定 844 内滚（不与 capture 混用） */
+html.device-preview {
+  --phone-scale: 1;
+  height: 100%;
+}
+html.device-preview body {
+  background: #1a1a1a;
+  margin: 0;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+html.device-preview .shell {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  gap: 0;
+}
+html.device-preview .toolbar,
+html.device-preview .phone-label,
+html.device-preview .doc-link-stack {
+  display: none !important;
+}
+html.device-preview .phone-scale-slot {
+  width: calc(var(--phone-w) * var(--phone-scale));
+  height: calc(var(--phone-h) * var(--phone-scale));
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+html.device-preview .phone-wrap {
+  transform: scale(var(--phone-scale));
+  transform-origin: top center;
+}
+html.device-preview .phone {
+  border: none;
+  /* 保持设计稿高度，内部滚动，模拟真机裁切 */
+  height: var(--phone-h);
+  overflow: hidden;
+}
+html.device-preview .phone-shell {
+  height: 100%;
+  overflow: hidden;
+}
+html.device-preview .status-bar {
+  flex-shrink: 0;
+}
+
 /* Price catalog screens · 对齐 Figma 305:45 / 305:99 */
 .table-card.hidden { display: none; }
 .proj-list-toolbar {
@@ -4663,7 +4723,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .customer-row__name { font-size: 16px; font-weight: 500; }
 .customer-row__meta { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
 .customer-row__vip { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #B8860B; background: linear-gradient(90deg,#FFF8E1,#FFE082); }
-/* 会员信息卡 · Figma 151:5842（358×84） */
+/* 会员信息卡 · Figma 151:5842；有资产指标时加高 */
 .customer-card {
   box-sizing: border-box;
   width: calc(100% - 32px);
@@ -4680,6 +4740,36 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
     inset 0 1px 0 #fff;
   display: flex;
   align-items: center;
+}
+.customer-card--assets {
+  height: auto;
+  min-height: 84px;
+  padding: 14px 16px 12px;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.customer-card__body {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0;
+}
+.customer-card__metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  padding-top: 10px;
+  border-top: 0.5px solid rgba(117, 22, 22, 0.12);
+}
+.customer-card__metric {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; min-width: 0; text-align: center;
+}
+.customer-card__metric-val {
+  font-size: 14px; font-weight: 500; font-family: var(--font-data);
+  color: #751616; line-height: 18px; font-variant-numeric: tabular-nums;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.customer-card__metric-label {
+  font-size: 10px; font-weight: 400; color: #751616; opacity: .65; line-height: 14px;
 }
 .customer-card__bg {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -4779,10 +4869,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   padding: 12px 16px 16px; overflow: hidden;
 }
 .member-cards-wrap.collapsed .member-card-panel { display: none; }
-.member-cards-wrap.collapsed .member-summary { display: flex; }
+.member-cards-wrap.collapsed .member-summary { display: none !important; }
+.member-cards-wrap.collapsed .add-card-btn { display: none; }
+.member-cards-wrap.collapsed .member-cards-head { margin-bottom: 0; }
 .member-summary { display: none; gap: 16px; padding: 4px 0 8px; font-size: 12px; color: var(--text-mid); }
 .member-summary strong { color: var(--text); font-weight: 600; }
-.member-cards-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.member-cards-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; cursor: pointer; }
 .member-cards-head__title { font-size: 14px; font-weight: 500; color: var(--text); }
 .expand-toggle { border: none; background: transparent; padding: 4px 0; font-size: 12px; color: var(--text-mid); cursor: pointer; font-family: inherit; }
 .member-card-panel {
@@ -4795,6 +4887,54 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .member-card-panel__name { font-size: 15px; font-weight: 600; }
 .member-card-panel__tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--brand-soft); color: var(--brand); }
 .member-card-panel__row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-mid); padding: 4px 0; }
+.member-card-panel__acts {
+  display: flex; gap: 8px; margin-top: 10px; padding-top: 10px;
+  border-top: 0.5px solid rgba(0,0,0,.06);
+}
+.member-card-panel__act {
+  flex: 1; height: 32px; border: 1px solid var(--border); border-radius: 8px;
+  background: #fff; color: var(--text); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+}
+.member-card-panel__act:active { background: #FAFAFA; }
+.member-card-panel__act.is-primary {
+  border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand);
+}
+.bill-recharge-sheet .picker-body {
+  padding: 12px 20px;
+  flex: 1 1 auto; min-height: 0; max-height: 52vh;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+.bill-recharge-meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 13px; color: var(--text-sec); margin-bottom: 12px;
+}
+.bill-recharge-meta strong { color: var(--text); font-weight: 600; font-family: var(--font-data); }
+.bill-recharge-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 0; border-bottom: 0.5px solid #EDEDED;
+}
+.bill-recharge-row:last-child { border-bottom: none; }
+.bill-recharge-row__label { font-size: 14px; color: var(--text); }
+.bill-recharge-row__field {
+  min-width: 120px; height: 40px; padding: 0 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: #fff; text-align: right;
+  font-size: 16px; font-family: var(--font-data); color: var(--text); cursor: pointer;
+}
+.bill-recharge-row__field.is-empty { color: var(--text-sec); font-family: var(--font-text); font-size: 14px; }
+.bill-recharge-times-row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 0;
+  border-bottom: 0.5px solid #EDEDED;
+}
+.bill-recharge-times-row__main { flex: 1; min-width: 0; }
+.bill-recharge-times-row__name { font-size: 14px; font-weight: 500; color: var(--text); }
+.bill-recharge-times-row__sub { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+.bill-recharge-due {
+  margin-top: 8px; padding: 12px 0 4px; display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 14px; color: var(--text-sec);
+}
+.bill-recharge-due__amt { font-size: 20px; font-weight: 600; font-family: var(--font-data); color: var(--brand); }
+.dialog--bill-recharge-ok .dialog__body { text-align: center; }
 .add-card-btn { width: 100%; height: 40px; border: 1px dashed var(--border); border-radius: 8px; background: transparent; color: var(--text-mid); font-size: 14px; cursor: pointer; font-family: inherit; }
 .page-tabs { display: flex; height: 48px; background: var(--card); flex-shrink: 0; border-bottom: 1px solid var(--bg-page); }
 .page-tabs__item { flex: 1; border: none; background: none; cursor: pointer; font-family: inherit; position: relative; font-size: 16px; color: var(--text-sec); }
@@ -5240,75 +5380,448 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 /* ==== 流水订单 · 产品级精修 · 对齐剑琅设计规范 v1.6 ==== */
 #screen-flow-hub,
+#screen-flow-balance,
 #screen-flow-list,
 #screen-flow-detail,
 #screen-flow-self { background: var(--bg-page); }
-.flow-hub-body { padding: 16px 16px 24px; background: var(--bg-page); box-sizing: border-box; }
-.flow-hub-overview {
-  background: transparent; border-radius: 0; padding: 0; margin-bottom: 0;
-  overflow: visible; box-sizing: border-box;
+#screen-flow-hub { display: flex; flex-direction: column; }
+#screen-flow-hub.hidden { display: none; }
+#screen-flow-hub:not(.hidden) { display: flex; }
+#screen-flow-hub .flow-hub-body { flex: 1; }
+.flow-hub-body {
+  padding: 12px 16px 16px;
+  background: var(--bg-page);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
-.flow-hub-overview__head {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  margin-bottom: 12px; padding: 0 2px;
+.flow-hub-dash {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.flow-hub-overview__title { font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px; }
-.flow-hub-overview__sub { font-size: 12px; color: var(--text-sec); line-height: 18px; flex-shrink: 0; }
+.flow-hub-panel {
+  position: relative;
+  flex: 0 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #EBEBEB;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.flow-hub-panel__deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.flow-hub-panel__deco svg {
+  position: absolute;
+  opacity: .45;
+}
+.flow-hub-panel__deco-grid {
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: .35;
+}
+.flow-hub-panel__deco-arc {
+  right: -24px; bottom: -28px; width: 120px; height: 120px;
+}
+.flow-hub-panel__deco-arc--tl {
+  right: auto; bottom: auto; left: -28px; top: -32px; width: 100px; height: 100px;
+}
+.flow-hub-ring-stage {
+  position: relative;
+  z-index: 1;
+  min-height: 288px;
+  height: 288px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 10px;
+  box-sizing: border-box;
+}
+.flow-hub-metric {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  max-width: 38%;
+}
+.flow-hub-metric--tl { top: 16px; left: 16px; align-items: flex-start; text-align: left; }
+.flow-hub-metric--tr { top: 16px; right: 16px; align-items: flex-end; text-align: right; }
+.flow-hub-metric--bl { bottom: 16px; left: 16px; align-items: flex-start; text-align: left; }
+.flow-hub-metric--br { bottom: 16px; right: 16px; align-items: flex-end; text-align: right; }
+.flow-hub-metric__bar {
+  width: 2px; height: 10px; border-radius: 1px; flex-shrink: 0;
+  background: #F32F41;
+}
+.flow-hub-metric__bar--muted { background: #C8C8C8; }
+.flow-hub-metric__label-row {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.flow-hub-metric--tr .flow-hub-metric__label-row,
+.flow-hub-metric--br .flow-hub-metric__label-row { flex-direction: row-reverse; }
+.flow-hub-metric__label {
+  font-size: 11px; font-weight: 500; color: #929292; line-height: 16px;
+  letter-spacing: 0.02em;
+}
+.flow-hub-metric__val {
+  font-size: 16px; font-weight: 500; font-family: var(--font-data);
+  color: #E37318; line-height: 1.2; font-variant-numeric: tabular-nums;
+}
+.flow-hub-metric__val .yen { display: none; }
+.flow-hub-ring {
+  position: relative;
+  width: 188px;
+  height: 188px;
+  flex-shrink: 0;
+}
+.flow-hub-ring__svg {
+  width: 100%; height: 100%; display: block;
+  transform: rotate(-90deg);
+}
+.flow-hub-ring__track {
+  fill: none;
+  stroke: #EFEFEF;
+  stroke-width: 8;
+}
+.flow-hub-ring__arc {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: butt;
+  transition: stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1);
+}
+.flow-hub-ring__arc--income { /* stroke set inline via gradient id */ }
+.flow-hub-ring__arc--expense { stroke: #D0D0D0; }
+.flow-hub-ring__core {
+  position: absolute;
+  inset: 16%;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #F2F2F2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.flow-hub-ring__core-divider {
+  width: 24px; height: 1px; background: #EBEBEB; margin: 2px 0;
+}
+.flow-hub-ring__core-label {
+  font-size: 11px; font-weight: 500; color: #929292; line-height: 16px;
+}
+.flow-hub-ring__core-val {
+  font-size: 22px; font-weight: 600; font-family: var(--font-data);
+  color: #1A1A1A; line-height: 1.1; font-variant-numeric: tabular-nums;
+}
+.flow-hub-ring__core-val .yen { display: none; }
+.flow-hub-ring__core-sub {
+  font-size: 10px; color: #B0B0B0; line-height: 14px;
+}
 .flow-hub-entries {
-  display: flex; flex-direction: column; gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-bottom: 2px;
 }
 .flow-hub-card {
-  display: flex; align-items: flex-start; gap: 12px; width: 100%;
-  min-height: 112px; padding: 16px; box-sizing: border-box;
-  background: #fff; border: none; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  width: 100%;
+  min-height: 96px; padding: 12px 12px 14px;
+  box-sizing: border-box;
+  background: #fff; border: 1px solid #EBEBEB; border-radius: 12px;
   cursor: pointer; font-family: inherit; text-align: left;
   overflow: hidden;
-  transition: background-color .2s ease, box-shadow .2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: background-color .15s ease, border-color .15s ease;
+  box-shadow: none;
 }
 .flow-hub-card:active {
   background: #FAFAFA;
-  box-shadow: none;
+  border-color: #E0E0E0;
+  transform: none;
 }
 .flow-hub-card__icon {
-  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(145deg, #FF8A94 0%, #FFB088 100%);
-  color: #fff;
+  background: #FFF2F2;
+  color: #F32F41;
 }
 .flow-hub-card__icon svg {
-  width: 22px; height: 22px; display: block; stroke: currentColor; fill: none;
-  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+  width: 18px; height: 18px; display: block;
 }
 .flow-hub-card__icon--soft {
-  background: linear-gradient(145deg, #FFB088 0%, #FFC49A 100%);
-  color: #fff;
+  background: #FFF8F0;
+  color: #FF8A3D;
 }
 .flow-hub-card__body {
-  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; width: 100%;
 }
 .flow-hub-card__title-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px; width: 100%;
 }
 .flow-hub-card__title {
-  font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px;
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 20px;
 }
 .flow-hub-card__chev {
-  flex-shrink: 0; width: 16px; height: 16px; color: var(--text-sec);
+  flex-shrink: 0; width: 14px; height: 14px; color: #C0C0C0;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.flow-hub-card__chev svg { width: 16px; height: 16px; display: block; }
-.flow-hub-card__hint {
-  font-size: 12px; color: var(--text-sec); line-height: 18px;
-}
+.flow-hub-card__chev svg { width: 14px; height: 14px; display: block; }
 .flow-hub-card__metric {
-  display: flex; align-items: baseline; gap: 4px; margin-top: 6px;
+  display: flex; align-items: baseline; gap: 3px; margin-top: 4px;
 }
 .flow-hub-card__val {
-  font-size: 28px; font-weight: 700; font-family: var(--font-data); color: var(--text); line-height: 1.15;
+  font-size: 22px; font-weight: 500; font-family: var(--font-data); color: #E37318; line-height: 1.15;
 }
 .flow-hub-card__unit {
-  font-size: 12px; color: var(--text-sec); line-height: 18px;
+  font-size: 11px; color: #929292; line-height: 16px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-hub-ring__arc { transition: none; }
+  .flow-hub-card { transition: none; }
+}
+
+/* 收支结余 · Hub 信息标 + 详情页 */
+.flow-hub-panel.is-tappable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.flow-hub-panel.is-tappable:active {
+  background: #FCFCFC;
+}
+.flow-hub-ring__core-label-anchor {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+.flow-hub-ring__info {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 2px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #E37318;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  z-index: 3;
+}
+.flow-hub-ring__info svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  pointer-events: none;
+}
+.flow-hub-ring__info:active { opacity: .72; }
+#screen-flow-balance { background: var(--bg-page); display: flex; flex-direction: column; }
+#screen-flow-balance.hidden { display: none; }
+#screen-flow-balance:not(.hidden) { display: flex; }
+#screen-flow-balance .flow-balance-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px 24px;
+  box-sizing: border-box;
+}
+.flow-balance-tabs {
+  display: flex; align-items: stretch; height: 48px; width: 100%; max-width: 390px; margin: 0 auto;
+  background: #fff; border-bottom: 1px solid var(--bg-page);
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-shrink: 0;
+}
+.flow-balance-tabs::-webkit-scrollbar { display: none; }
+.flow-balance-tab {
+  position: relative; flex: 1 1 0; min-width: 56px; height: 48px; border: none; background: none;
+  cursor: pointer; font-family: inherit; padding: 0 2px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; line-height: 20px; color: var(--text-sec); text-align: center; white-space: nowrap;
+}
+.flow-balance-tab.is-active { color: var(--text); font-weight: 500; }
+.flow-balance-tab.is-active::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 28px; height: 3px; background: var(--brand); border-radius: 2px;
+}
+.flow-balance-panel.flow-hub-panel { margin-bottom: 12px; }
+.flow-balance-ring-stage.flow-hub-ring-stage {
+  min-height: 320px;
+  height: 320px;
+}
+.flow-hub-metric--ml {
+  top: 50%; left: 16px; transform: translateY(-50%);
+  align-items: flex-start; text-align: left;
+}
+.flow-hub-metric--mr {
+  top: 50%; right: 16px; transform: translateY(-50%);
+  align-items: flex-end; text-align: right;
+}
+.flow-hub-metric--mr .flow-hub-metric__label-row { flex-direction: row-reverse; }
+.flow-balance-pay {
+  background: #fff;
+  border: 1px solid #EBEBEB;
+  border-radius: 12px;
+  padding: 14px 14px 8px;
+  box-sizing: border-box;
+}
+.flow-balance-pay__title {
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 20px; margin: 0 0 12px;
+}
+.flow-balance-pay__row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+  border-top: 0.5px solid #EDEDED;
+}
+.flow-balance-pay__row:first-of-type { border-top: none; padding-top: 0; }
+.flow-balance-pay__left {
+  flex: 0 0 auto; width: 72px; display: flex; align-items: center; gap: 6px; min-width: 0;
+}
+.flow-balance-pay__dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.flow-balance-pay__name {
+  font-size: 13px; color: var(--text); line-height: 18px; white-space: nowrap;
+}
+.flow-balance-pay__bar-wrap {
+  flex: 1; min-width: 0; height: 8px; border-radius: 4px; background: #F2F2F2; overflow: hidden;
+}
+.flow-balance-pay__bar {
+  height: 100%; border-radius: 4px; min-width: 0;
+}
+.flow-balance-pay__right {
+  flex: 0 0 auto; min-width: 88px; text-align: right;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+}
+.flow-balance-pay__meta {
+  font-size: 11px; color: #929292; line-height: 16px; font-variant-numeric: tabular-nums;
+}
+.flow-balance-pay__amt {
+  font-size: 14px; font-weight: 500; font-family: var(--font-data);
+  color: #E37318; line-height: 18px; font-variant-numeric: tabular-nums;
+}
+.flow-balance-date-sheet .picker-head { text-align: center; }
+.flow-balance-cal-range {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 20px 4px; box-sizing: border-box;
+}
+.flow-balance-cal-chip {
+  flex: 1; min-width: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #F5F5F5;
+  border: 1px solid transparent;
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+}
+.flow-balance-cal-chip.is-on {
+  background: #FFF6EE;
+  border-color: #FFD4B0;
+}
+.flow-balance-cal-chip__label {
+  display: block; font-size: 11px; color: #929292; line-height: 16px; margin-bottom: 2px;
+}
+.flow-balance-cal-chip__val {
+  display: block; font-size: 14px; font-weight: 600; color: var(--text); line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.flow-balance-cal-chip.is-on .flow-balance-cal-chip__val { color: #E37318; }
+.flow-balance-cal-chip__val.is-placeholder { font-weight: 500; color: #B0B0B0; }
+.flow-balance-cal-sep {
+  flex-shrink: 0; font-size: 12px; color: #929292;
+}
+.flow-balance-cal {
+  padding: 8px 16px 4px; box-sizing: border-box;
+}
+.flow-balance-cal__nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; gap: 8px;
+}
+.flow-balance-cal__title {
+  font-size: 15px; font-weight: 600; color: var(--text); line-height: 22px;
+}
+.flow-balance-cal__nav-btn {
+  width: 36px; height: 36px; border: none; background: #F5F5F5; border-radius: 10px;
+  color: var(--text); cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center; padding: 0;
+}
+.flow-balance-cal__nav-btn:active { background: #EBEBEB; }
+.flow-balance-cal__nav-btn:disabled { opacity: .35; cursor: default; }
+.flow-balance-cal__nav-btn svg { width: 16px; height: 16px; display: block; }
+.flow-balance-cal__weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;
+  margin-bottom: 4px;
+}
+.flow-balance-cal__wd {
+  text-align: center; font-size: 11px; color: #B0B0B0; line-height: 24px;
+}
+.flow-balance-cal__grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 2px 0;
+  min-height: 240px;
+}
+.flow-balance-cal__day {
+  position: relative;
+  height: 40px;
+  border: none; background: none; padding: 0;
+  font-family: inherit; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text); font-size: 14px; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.flow-balance-cal__day.is-muted { color: #D0D0D0; cursor: default; }
+.flow-balance-cal__day.is-disabled { color: #E0E0E0; cursor: default; pointer-events: none; }
+.flow-balance-cal__day-num {
+  position: relative; z-index: 1;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.flow-balance-cal__day.is-in-range::before {
+  content: ''; position: absolute; top: 4px; bottom: 4px; left: 0; right: 0;
+  background: #FFF2F2; z-index: 0;
+}
+.flow-balance-cal__day.is-range-start.is-in-range::before { left: 50%; border-radius: 16px 0 0 16px; }
+.flow-balance-cal__day.is-range-end.is-in-range::before { right: 50%; border-radius: 0 16px 16px 0; }
+.flow-balance-cal__day.is-range-start.is-range-end.is-in-range::before { display: none; }
+.flow-balance-cal__day.is-range-start .flow-balance-cal__day-num,
+.flow-balance-cal__day.is-range-end .flow-balance-cal__day-num {
+  background: var(--brand); color: #fff; font-weight: 600;
+}
+.flow-balance-cal__day.is-today:not(.is-range-start):not(.is-range-end) .flow-balance-cal__day-num {
+  box-shadow: inset 0 0 0 1px #F32F41;
+  color: #F32F41;
+}
+.flow-balance-cal__hint {
+  padding: 4px 20px 8px;
+  font-size: 12px; color: #929292; line-height: 16px; text-align: center;
+}
+.dialog--flow-balance-help .dialog__body {
+  text-align: left;
+}
+.dialog--flow-balance-help .flow-balance-help__formula {
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5;
+  text-align: center; margin: 4px 0 10px;
+}
+.dialog--flow-balance-help .flow-balance-help__desc {
+  font-size: 13px; color: var(--text-sec); line-height: 1.55; margin: 0; text-align: center;
 }
 .flow-list-tabs {
   display: flex; align-items: stretch; height: 48px; width: 100%; max-width: 390px; margin: 0 auto;
@@ -7319,6 +7832,27 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 /* ==== /BILLING MODULE CSS ==== */
 </style>
 <script>
+(function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get('device') !== '1') return;
+    document.documentElement.classList.add('device-preview');
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+      meta.setAttribute(
+        'content',
+        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
+      );
+    }
+    var vw = window.innerWidth || 390;
+    var vh = window.innerHeight || 844;
+    var scale = Math.min(vw / 390, vh / 844);
+    document.documentElement.style.setProperty(
+      '--phone-scale',
+      String(Math.max(0.35, Math.min(1.35, scale)).toFixed(4))
+    );
+  } catch (_) {}
+})();
 if (new URLSearchParams(location.search).get('figma') || location.hash.includes('figmacapture')) {
   var figmaCaptureScript = document.createElement('script');
   figmaCaptureScript.src = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
@@ -8849,6 +9383,44 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body flow-hub-body" id="flowHubBody"></div>
           </div>
 
+          <!-- 流水订单 · 收支结余 -->
+          <div id="screen-flow-balance" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowBalanceBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">收支结余</div>
+            </div>
+            <div class="flow-balance-tabs" id="flowBalanceTabs" role="tablist"></div>
+            <div class="page-body flow-balance-body" id="flowBalanceBody"></div>
+          </div>
+
+          <div class="dialog-mask" id="flowBalanceHelpMask">
+            <div class="dialog dialog--flow-balance-help" role="dialog" aria-labelledby="flowBalanceHelpTitle">
+              <div class="dialog__title" id="flowBalanceHelpTitle">收支结余说明</div>
+              <div class="dialog__body">
+                <div class="flow-balance-help__formula">结余 = 营业额 − 会员消费 + 充值 − 支出 + 还款 − 欠款</div>
+                <p class="flow-balance-help__desc">按所选时间范围内门店收支汇总计算，用于快速查看经营结余情况。</p>
+              </div>
+              <div class="dialog__actions dialog__actions--single">
+                <button type="button" class="btn-main" id="btnFlowBalanceHelpOk">我知道了</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="flowBalanceDateMask">
+            <div class="picker-sheet flow-balance-date-sheet">
+              <div class="picker-head"><span class="picker-head__title-main">选择时间范围</span></div>
+              <div class="flow-balance-cal-range" id="flowBalanceCalRange"></div>
+              <div class="flow-balance-cal" id="flowBalanceCal"></div>
+              <div class="flow-balance-cal__hint" id="flowBalanceCalHint">请选择开始日期</div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="btnFlowBalanceDateCancel">取消</button>
+                <button type="button" class="btn-main" id="btnFlowBalanceDateOk">确定</button>
+              </div>
+            </div>
+          </div>
+
           <!-- 流水订单 · 门店流水列表 -->
           <div id="screen-flow-list" class="screen hidden">
             <div class="page-title-bar">
@@ -9261,6 +9833,40 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <button type="button" class="btn-main" id="btnAddCardNext">确认办卡</button>
                 </div>
                 <div class="bottom-bar__safe"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 开单 · 储值充值 -->
+          <div class="picker-mask picker-mask--bottom" id="billRechargeMask">
+            <div class="picker-sheet bill-recharge-sheet" role="dialog" aria-label="储值充值">
+              <div class="picker-head" id="billRechargeTitle">储值充值</div>
+              <div class="picker-body" id="billRechargeBody"></div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="btnBillRechargeCancel">取消</button>
+                <button type="button" class="btn-main" id="btnBillRechargePay">去支付</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 开单 · 计次充次 -->
+          <div class="picker-mask picker-mask--bottom" id="billTimesTopupMask">
+            <div class="picker-sheet bill-recharge-sheet" role="dialog" aria-label="计次充次">
+              <div class="picker-head" id="billTimesTopupTitle">计次充次</div>
+              <div class="picker-body" id="billTimesTopupBody"></div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="btnBillTimesCancel">取消</button>
+                <button type="button" class="btn-main" id="btnBillTimesPay">去支付</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dialog-mask" id="billRechargeOkMask">
+            <div class="dialog dialog--bill-recharge-ok" role="dialog" aria-labelledby="billRechargeOkTitle">
+              <div class="dialog__title" id="billRechargeOkTitle">充值成功</div>
+              <div class="dialog__body" id="billRechargeOkBody"></div>
+              <div class="dialog__actions dialog__actions--single">
+                <button type="button" class="btn-main" id="btnBillRechargeOk">完成</button>
               </div>
             </div>
           </div>
@@ -14992,6 +15598,7 @@ function closeAllFlowOverlays() {
   document.getElementById('catalogGroupNameMask')?.classList.remove('show');
   document.getElementById('catalogGroupDeleteMask')?.classList.remove('show');
   document.getElementById('flowEditLogMask')?.classList.remove('show');
+  document.getElementById('flowBalanceHelpMask')?.classList.remove('show');
   closeCatalogGroupRowMenu();
   closeCatalogRowActions();
   closeAllCatalogSwipes();
@@ -20946,9 +21553,27 @@ function isFigmaCaptureStep2() {
   return new URLSearchParams(location.search).get('figma') === 'step2';
 }
 
-/** PRD / 深链：?flow=<FLOW_NAV id>；可选 &capture=1 仅保留手机框便于截图 */
+/** PRD / 深链：?flow=<FLOW_NAV id>；可选 &capture=1 仅保留手机框便于截图；可选 &device=1 真机等比预览 */
 function getFlowDeepLinkId() {
   return new URLSearchParams(location.search).get('flow');
+}
+
+function isDevicePreviewMode() {
+  return document.documentElement.classList.contains('device-preview')
+    || new URLSearchParams(location.search).get('device') === '1';
+}
+
+/** 真机预览：按视口宽高等比缩放 390×844，居中展示 */
+function syncDevicePreviewScale() {
+  if (!isDevicePreviewMode()) return;
+  document.documentElement.classList.add('device-preview');
+  const vw = window.innerWidth || document.documentElement.clientWidth || 390;
+  const vh = window.innerHeight || document.documentElement.clientHeight || 844;
+  const phoneW = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--phone-w')) || 390;
+  const phoneH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--phone-h')) || 844;
+  const scale = Math.min(vw / phoneW, vh / phoneH);
+  const next = Math.max(0.35, Math.min(1.35, scale));
+  document.documentElement.style.setProperty('--phone-scale', String(Number(next.toFixed(4))));
 }
 
 function applyFlowDeepLink(flowId) {
@@ -21269,6 +21894,11 @@ if (isFigmaCaptureListActive()) {
     }, 0);
   }
 }
+if (typeof syncDevicePreviewScale === 'function') {
+  syncDevicePreviewScale();
+  window.addEventListener('resize', syncDevicePreviewScale);
+  window.addEventListener('orientationchange', () => setTimeout(syncDevicePreviewScale, 120));
+}
 wireWorkbench();
 renderProjectItemTags();
 renderStatsHelpBody();
@@ -21386,7 +22016,7 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-pick-benefit': 'bill-benefit', 'screen-discount': 'bill-discount',
       'screen-scan-me': 'bill-scan-me', 'screen-scan-cust': 'bill-scan-cust',
       'screen-coupon': 'bill-detail', 'screen-add-card': 'bill-add-card',
-      'screen-flow-hub': 'flow-hub', 'screen-flow-list': 'flow-list',
+      'screen-flow-hub': 'flow-hub', 'screen-flow-balance': 'flow-balance', 'screen-flow-list': 'flow-list',
       'screen-flow-detail': 'flow-detail', 'screen-flow-refund': 'flow-refund', 'screen-flow-edit': 'flow-edit',
       'screen-flow-edit-add': 'flow-edit-add', 'screen-flow-edit-item': 'flow-edit-item',
       'screen-flow-weikuan': 'flow-weikuan', 'screen-flow-weikuan-repay': 'flow-weikuan-repay',
@@ -21441,6 +22071,7 @@ function billingNav(fn) {
     title: '流水订单',
     nodes: [
       { id: 'flow-hub', label: '流水入口', screen: 'screen-flow-hub' },
+      { id: 'flow-balance', label: '收支结余', screen: 'screen-flow-balance' },
       { id: 'flow-list', label: '门店流水', screen: 'screen-flow-list' },
       { id: 'flow-detail', label: '流水详情', screen: 'screen-flow-detail' },
       { id: 'flow-refund', label: '选择退款', screen: 'screen-flow-refund' },
@@ -21463,6 +22094,7 @@ function billingNav(fn) {
       if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
       if (!window.BillingDemo) return;
       if (fn === 'hub' && window.BillingDemo.openFlowHub) window.BillingDemo.openFlowHub();
+      else if (fn === 'balance' && window.BillingDemo.openFlowBalance) window.BillingDemo.openFlowBalance();
       else if (fn === 'list' && window.BillingDemo.openFlowList) window.BillingDemo.openFlowList();
       else if (fn === 'detail' && window.BillingDemo.openFlowDetail) {
         window.BillingDemo.openFlowDetail(null, { fromSuccess: false });
@@ -21511,6 +22143,7 @@ function billingNav(fn) {
     }
     Object.assign(FLOW_NAV, {
       'flow-hub': flowNav('hub'),
+      'flow-balance': flowNav('balance'),
       'flow-list': flowNav('list'),
       'flow-detail': flowNav('detail'),
       'flow-refund': flowNav('refund'),
@@ -23233,16 +23866,34 @@ window.__BILLING_EMBEDDED__ = true;
     const benefits = tpl?.benefits
       ? { ...emptyBenefits(), ...tpl.benefits }
       : {
-          balance: Number(card.balance) > 0,
+          balance: Number(card.balance) > 0 || Number(card.rechargeBalance) > 0 || Number(card.giftBalance) > 0,
           timesOrValidity: (card.projects || []).length > 0,
           projectDiscount: !!card.discount,
         };
     const next = { ...card, templateId, benefits };
     delete next.type;
+    if (next.rechargeBalance == null && next.giftBalance == null) {
+      const total = Math.max(0, Number(next.balance) || 0);
+      if (total <= 0) {
+        next.rechargeBalance = 0;
+        next.giftBalance = 0;
+      } else {
+        next.giftBalance = Math.round(total * 0.25);
+        next.rechargeBalance = Math.round((total - next.giftBalance) * 100) / 100;
+      }
+    } else {
+      next.rechargeBalance = Math.max(0, Number(next.rechargeBalance) || 0);
+      next.giftBalance = Math.max(0, Number(next.giftBalance) || 0);
+    }
+    next.balance = Math.round(((Number(next.rechargeBalance) || 0) + (Number(next.giftBalance) || 0)) * 100) / 100;
     return next;
   }
   CUSTOMERS.forEach(c => {
     if (c.cards) c.cards = c.cards.map(normalizeHeldCard);
+    if (c.isMember && c.couponCount == null) {
+      const n = parseInt(String(c.id).replace(/\D/g, ''), 10) || 1;
+      c.couponCount = (n % 4) + 1;
+    }
   });
   const GUEST_UNSET = { id: 'guest', name: '散客', phone: '', isMember: false, vip: false, gender: null, avatar: 'assets/billing/avatar-guest-default.png' };
   const GUEST_MALE = { id: 'guest_m', name: '男散客', phone: '', isMember: false, vip: false, gender: 'male', avatar: 'assets/billing/avatar-male.png' };
@@ -23372,8 +24023,13 @@ window.__BILLING_EMBEDDED__ = true;
     cart: [],
     billTab: 'project',
     searchQuery: '',
-    cardsExpanded: true,
+    cardsExpanded: false,
     linkedCardIds: [],
+    billRechargeCardId: null,
+    billRechargeAmount: '',
+    billRechargeGift: '',
+    billTimesCardId: null,
+    billTimesAdds: {},
     benefitDraft: {},
     benefitApplied: {},
     technician: '未指定',
@@ -23401,6 +24057,14 @@ window.__BILLING_EMBEDDED__ = true;
     flowSelfDate: 'today',
     flowSelfStatus: 'all',
     flowSelfDd: null,
+    flowBalancePeriod: 'today',
+    flowBalanceCustomStart: '2026-07-01',
+    flowBalanceCustomEnd: '2026-07-29',
+    flowBalanceDateDraftStart: null,
+    flowBalanceDateDraftEnd: null,
+    flowBalanceCalFocus: 'start',
+    flowBalanceCalYear: 2026,
+    flowBalanceCalMonth: 6,
     flowWeikuanQuery: '',
     flowWeikuanFilter: { status: 'all', range: null, start: '', end: '', staffIds: [] },
     flowWeikuanFilterDraft: null,
@@ -23689,10 +24353,198 @@ window.__BILLING_EMBEDDED__ = true;
   function cardFaceSummary(card) {
     const b = cardBenefits(card);
     const parts = [];
-    if (b.balance) parts.push(Number(card.balance) > 0 ? `面值余额 ${formatYen(card.balance)}` : '面值');
+    if (b.balance) {
+      const r = Number(card.rechargeBalance);
+      const g = Number(card.giftBalance);
+      if (Number.isFinite(r) || Number.isFinite(g)) {
+        parts.push(`储值 ${formatYen(r || 0)} · 赠送 ${formatYen(g || 0)}`);
+      } else {
+        parts.push(Number(card.balance) > 0 ? `面值余额 ${formatYen(card.balance)}` : '面值');
+      }
+    }
     if (b.projectDiscount && card.discount) parts.push(`${(card.discount * 10).toFixed(1)}折`);
     if (!parts.length && b.timesOrValidity) return '项目权益';
     return parts.join(' · ') || '—';
+  }
+  function memberAssetMetrics(c) {
+    const cards = (c && c.cards) || [];
+    const recharge = cards.reduce((s, x) => s + (Number(x.rechargeBalance) || 0), 0);
+    const gift = cards.reduce((s, x) => s + (Number(x.giftBalance) || 0), 0);
+    return {
+      recharge: round2(recharge),
+      gift: round2(gift),
+      cardCount: cards.length,
+      couponCount: Number(c && c.couponCount) || 0,
+    };
+  }
+  function formatMetricYen(n) {
+    const v = Math.round((Number(n) || 0) * 100) / 100;
+    if (v >= 10000) return String(Math.round(v));
+    const s = v.toFixed(2).replace(/\.?0+$/, m => (m.includes('.') ? m.replace(/0+$/, '').replace(/\.$/, '') : ''));
+    return s || '0';
+  }
+  function findHeldCardById(cardId) {
+    const c = getCustomer();
+    return ((c && c.cards) || []).find(x => x.id === cardId) || null;
+  }
+  function syncHeldCardBalance(card) {
+    if (!card) return;
+    card.rechargeBalance = Math.max(0, Number(card.rechargeBalance) || 0);
+    card.giftBalance = Math.max(0, Number(card.giftBalance) || 0);
+    card.balance = round2(card.rechargeBalance + card.giftBalance);
+  }
+  const BILL_TIMES_UNIT_PRICE = 58;
+  function showBillAssetOk(title, bodyHtml) {
+    const titleEl = document.getElementById('billRechargeOkTitle');
+    const bodyEl = document.getElementById('billRechargeOkBody');
+    if (titleEl) titleEl.textContent = title || '操作成功';
+    if (bodyEl) bodyEl.innerHTML = bodyHtml || '';
+    document.getElementById('billRechargeOkMask')?.classList.add('show');
+  }
+  function closeBillAssetOk() {
+    document.getElementById('billRechargeOkMask')?.classList.remove('show');
+  }
+  function openBillRechargeSheet(cardId) {
+    const card = findHeldCardById(cardId);
+    if (!card || !cardBenefits(card).balance) {
+      showToast('该卡暂无储值权益');
+      return;
+    }
+    state.billRechargeCardId = cardId;
+    state.billRechargeAmount = '';
+    state.billRechargeGift = '';
+    renderBillRechargeSheet();
+    openMask('billRechargeMask');
+  }
+  function renderBillRechargeSheet() {
+    const card = findHeldCardById(state.billRechargeCardId);
+    if (!card) return;
+    const title = document.getElementById('billRechargeTitle');
+    if (title) title.textContent = `储值充值 · ${card.name}`;
+    const amt = state.billRechargeAmount;
+    const gift = state.billRechargeGift;
+    const due = Number(amt) || 0;
+    const body = document.getElementById('billRechargeBody');
+    if (!body) return;
+    body.innerHTML = `
+      <div class="bill-recharge-meta">
+        <span>储值 <strong>${formatYen(card.rechargeBalance || 0)}</strong></span>
+        <span>赠送 <strong>${formatYen(card.giftBalance || 0)}</strong></span>
+      </div>
+      <div class="bill-recharge-row">
+        <span class="bill-recharge-row__label">充值金额</span>
+        <input type="text" class="bill-recharge-row__field input-amount${!amt ? ' is-empty' : ''}" id="billRechargeAmt" readonly inputmode="decimal" placeholder="请输入" value="${amt ? escapeHtml(String(amt)) : ''}" data-bill-recharge-field="amount">
+      </div>
+      <div class="bill-recharge-row">
+        <span class="bill-recharge-row__label">赠送金额</span>
+        <input type="text" class="bill-recharge-row__field input-amount${!gift ? ' is-empty' : ''}" id="billRechargeGift" readonly inputmode="decimal" placeholder="选填" value="${gift ? escapeHtml(String(gift)) : ''}" data-bill-recharge-field="gift">
+      </div>
+      <div class="bill-recharge-due"><span>应付</span><span class="bill-recharge-due__amt">${formatYen(due)}</span></div>`;
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(body);
+    body.querySelectorAll('[data-bill-recharge-field]').forEach(el => {
+      el.addEventListener('input', () => {
+        const key = el.dataset.billRechargeField;
+        const v = String(el.value || '').replace(/^¥/, '').trim();
+        if (key === 'amount') state.billRechargeAmount = v;
+        else state.billRechargeGift = v;
+        el.classList.toggle('is-empty', !v);
+        const dueEl = body.querySelector('.bill-recharge-due__amt');
+        if (dueEl) dueEl.textContent = formatYen(Number(state.billRechargeAmount) || 0);
+      });
+    });
+  }
+  function payBillRecharge() {
+    const card = findHeldCardById(state.billRechargeCardId);
+    if (!card) return;
+    const amt = Number(state.billRechargeAmount) || 0;
+    const gift = Number(state.billRechargeGift) || 0;
+    if (amt <= 0) { showToast('请输入充值金额'); return; }
+    card.rechargeBalance = round2((Number(card.rechargeBalance) || 0) + amt);
+    card.giftBalance = round2((Number(card.giftBalance) || 0) + Math.max(0, gift));
+    syncHeldCardBalance(card);
+    closeMask('billRechargeMask');
+    const giftLine = gift > 0 ? `<div style="margin-top:6px">赠送 ${formatYen(gift)}</div>` : '';
+    showBillAssetOk('充值成功', `
+      <div>已为「${escapeHtml(card.name)}」充值 ${formatYen(amt)}</div>
+      ${giftLine}
+      <div style="margin-top:8px;color:var(--text)">储值 ${formatYen(card.rechargeBalance)} · 赠送 ${formatYen(card.giftBalance)}</div>`);
+    renderBillHeader();
+  }
+  function openBillTimesTopup(cardId) {
+    const card = findHeldCardById(cardId);
+    if (!card) return;
+    const projects = (card.projects || []).filter(p => !p.unlimited);
+    if (!projects.length) {
+      showToast('该卡暂无计次项目');
+      return;
+    }
+    state.billTimesCardId = cardId;
+    state.billTimesAdds = {};
+    projects.forEach(p => { state.billTimesAdds[p.key || p.label] = 0; });
+    renderBillTimesTopupSheet();
+    openMask('billTimesTopupMask');
+  }
+  function billTimesDue() {
+    const adds = state.billTimesAdds || {};
+    const totalQty = Object.values(adds).reduce((s, n) => s + (Number(n) || 0), 0);
+    return { totalQty, due: round2(totalQty * BILL_TIMES_UNIT_PRICE) };
+  }
+  function renderBillTimesTopupSheet() {
+    const card = findHeldCardById(state.billTimesCardId);
+    if (!card) return;
+    const title = document.getElementById('billTimesTopupTitle');
+    if (title) title.textContent = `计次充次 · ${card.name}`;
+    const projects = (card.projects || []).filter(p => !p.unlimited);
+    const { due, totalQty } = billTimesDue();
+    const body = document.getElementById('billTimesTopupBody');
+    if (!body) return;
+    if (!projects.length) {
+      body.innerHTML = '<div class="empty-cart">该卡暂无计次项目</div>';
+      return;
+    }
+    body.innerHTML = projects.map(p => {
+      const key = p.key || p.label;
+      const add = Number(state.billTimesAdds[key]) || 0;
+      const minusDisabled = add <= 0 ? ' disabled' : '';
+      return `<div class="bill-recharge-times-row">
+        <div class="bill-recharge-times-row__main">
+          <div class="bill-recharge-times-row__name">${escapeHtml(p.label)}</div>
+          <div class="bill-recharge-times-row__sub">当前余 ${p.remain} 次 · ¥${BILL_TIMES_UNIT_PRICE}/次</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="minus" data-times-d="-1" data-times-key="${escapeHtml(key)}" aria-label="减少"${minusDisabled}>${iconSvg('minus')}</button>
+          <span class="num">${add}</span>
+          <button type="button" class="plus" data-times-d="1" data-times-key="${escapeHtml(key)}" aria-label="增加">${iconSvg('plus')}</button>
+        </div>
+      </div>`;
+    }).join('') + `<div class="bill-recharge-due"><span>应付（${totalQty} 次）</span><span class="bill-recharge-due__amt">${formatYen(due)}</span></div>`;
+  }
+  function bumpBillTimesAdd(key, delta) {
+    const cur = Number(state.billTimesAdds[key]) || 0;
+    const next = Math.max(0, Math.min(99, cur + delta));
+    state.billTimesAdds[key] = next;
+    renderBillTimesTopupSheet();
+  }
+  function payBillTimesTopup() {
+    const card = findHeldCardById(state.billTimesCardId);
+    if (!card) return;
+    const { totalQty, due } = billTimesDue();
+    if (totalQty <= 0) { showToast('请选择充次次数'); return; }
+    const lines = [];
+    (card.projects || []).forEach(p => {
+      if (p.unlimited) return;
+      const key = p.key || p.label;
+      const add = Number(state.billTimesAdds[key]) || 0;
+      if (add <= 0) return;
+      p.remain = (Number(p.remain) || 0) + add;
+      lines.push(`${p.label} +${add} 次`);
+    });
+    closeMask('billTimesTopupMask');
+    showBillAssetOk('充次成功', `
+      <div>已为「${escapeHtml(card.name)}」充次</div>
+      <div style="margin-top:6px">${escapeHtml(lines.join(' · '))}</div>
+      <div style="margin-top:8px;color:var(--text)">实付 ${formatYen(due)}</div>`);
+    renderBillHeader();
   }
   function staffLabel(ids) {
     const list = (ids || []).map(id => getStaffPool().find(s => s.id === id)).filter(Boolean);
@@ -24034,26 +24886,23 @@ window.__BILLING_EMBEDDED__ = true;
 
   function renderBillHeader() {
     const c = getCustomer();
-    const balSum = isMemberBill() ? c.cards.reduce((s, x) => s + (x.balance || 0), 0) : 0;
-    const timesSum = isMemberBill() ? c.cards.reduce((s, x) => s + (x.projects || []).reduce((a, p) => {
-      if (p.unlimited) return a;
-      const n = Number(p.remain);
-      return a + (Number.isFinite(n) ? n : 0);
-    }, 0), 0) : 0;
-    const discCount = isMemberBill() ? c.cards.filter(x => cardBenefits(x).projectDiscount).length : 0;
+    const metrics = (c && c.isMember) ? memberAssetMetrics(c) : null;
     const cardBlock = (!state.billCustomerPickOpen && isMemberBill()) ? `
       <div class="member-cards-wrap ${state.cardsExpanded ? '' : 'collapsed'}" id="memberCardsWrap">
-        <div class="member-summary">
-          <span>面值 <strong class="num">${formatYen(balSum)}</strong></span>
-          <span>项目 <strong>${timesSum}</strong></span>
-          <span>折扣 <strong>${discCount}</strong> 张</span>
-        </div>
-        <div class="member-cards-head">
-          <span class="member-cards-head__title">会员卡 ${c.cards.length} 张</span>
+        <div class="member-cards-head" id="btnExpandCardsHit" role="button" tabindex="0" aria-expanded="${state.cardsExpanded ? 'true' : 'false'}">
+          <span class="member-cards-head__title">所持会员卡 ${c.cards.length} 张</span>
           <button type="button" class="expand-toggle" id="btnExpandCards">${state.cardsExpanded ? `收起 ${iconSvg('chevron-up', 'ui-icon')}` : `展开 ${iconSvg('chevron-down', 'ui-icon')}`}</button>
         </div>
         <div id="memberCardPanels">${c.cards.map(card => {
           const balText = cardFaceSummary(card);
+          const b = cardBenefits(card);
+          const acts = [];
+          if (b.balance) {
+            acts.push(`<button type="button" class="member-card-panel__act is-primary" data-bill-recharge="${escapeHtml(card.id)}">储值充值</button>`);
+          }
+          if (b.timesOrValidity && (card.projects || []).length) {
+            acts.push(`<button type="button" class="member-card-panel__act" data-bill-times-topup="${escapeHtml(card.id)}">计次充次</button>`);
+          }
           return `<div class="member-card-panel">
             <div class="member-card-panel__vip-row">
               <img src="assets/billing/customer-vip.png" alt="VIP" width="32" height="12">
@@ -24064,14 +24913,15 @@ window.__BILLING_EMBEDDED__ = true;
             </div>
             <div class="member-card-panel__row"><span>${escapeHtml(balText)}</span></div>
             ${(card.projects || []).map(p => `<div class="member-card-panel__row"><span>${escapeHtml(p.label)}</span><span>${p.unlimited ? '不限次' : `余 ${p.remain} 次`}</span></div>`).join('')}
+            ${acts.length ? `<div class="member-card-panel__acts">${acts.join('')}</div>` : ''}
           </div>`;
         }).join('')}
-        <button type="button" class="add-card-btn" id="btnBillAddCard">+ 添加卡</button>
+        ${state.cardsExpanded ? '<button type="button" class="add-card-btn" id="btnBillAddCard">+ 添加卡</button>' : ''}
       </div>` : '';
 
     if (state.billCustomerPickOpen) {
       document.getElementById('billBody').innerHTML = `
-      ${renderCustomerNameCard(c, { withActions: true })}
+      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
       <div class="bill-sheet bill-sheet--pick">
         <div class="search-bar search-bar--bill">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
@@ -24084,7 +24934,7 @@ window.__BILLING_EMBEDDED__ = true;
     }
 
     document.getElementById('billBody').innerHTML = `
-      ${renderCustomerNameCard(c, { withActions: true })}
+      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
       ${cardBlock}
       <div class="bill-sheet">
         <div class="page-tabs">
@@ -24933,7 +25783,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.selectedCouponId = h.selectedCouponId || null;
     state.manualOrderNo = h.manualOrderNo || '';
     state.technician = h.technician || '未指定';
-    state.cardsExpanded = !!(customer.isMember);
+    state.cardsExpanded = false;
     state.payAmounts = {};
     state.billFromHold = true;
     syncCartChrome();
@@ -25355,6 +26205,7 @@ window.__BILLING_EMBEDDED__ = true;
   ];
 
   const FLOW_SELF_ORDERS = [
+    /* 今日 2026.07.29 · 默认「今日」可见 */
     {
       id: 'fs-seed-1',
       customerId: 'm1',
@@ -25365,7 +26216,7 @@ window.__BILLING_EMBEDDED__ = true;
       items: [{ name: '洗剪吹', price: 68, type: 'project', qty: 1 }],
       payMethod: '微信',
       amount: 68,
-      time: '2026.07.27 10:18',
+      time: '2026.07.29 09:12',
       channel: '顾客自助',
     },
     {
@@ -25375,14 +26226,46 @@ window.__BILLING_EMBEDDED__ = true;
       avatar: 'assets/billing/avatar-female.png',
       status: 'success',
       kind: 'product',
-      items: [{ name: '剑琅修护洗发水', price: 128, type: 'product', qty: 1 }],
+      items: [{ name: '剑琅修护洗发水（500ml）', price: 128, type: 'product', qty: 1 }],
       payMethod: '支付宝',
       amount: 128,
-      time: '2026.07.27 11:05',
+      time: '2026.07.29 10:05',
       channel: '顾客自助',
     },
     {
       id: 'fs-seed-3',
+      customerId: 'm4',
+      customerName: '陈浩然',
+      avatar: 'assets/billing/avatar-male.png',
+      status: 'success',
+      kind: 'project',
+      items: [
+        { name: '精致剪发', price: 98, type: 'project', qty: 1 },
+        { name: '剑琅造型发蜡（80g）', price: 88, type: 'product', qty: 1 },
+      ],
+      payMethod: '微信',
+      amount: 186,
+      time: '2026.07.29 11:28',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-4',
+      customerId: 'm7',
+      customerName: '周婉清',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'success',
+      kind: 'product',
+      items: [
+        { name: '剑琅柔顺护发素（200ml）', price: 98, type: 'product', qty: 1 },
+        { name: '剑琅造型发泥（80g）', price: 96, type: 'product', qty: 1 },
+      ],
+      payMethod: '微信',
+      amount: 194,
+      time: '2026.07.29 13:40',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-5',
       customerId: null,
       customerName: '散客',
       avatar: FLOW_AVATAR_GUEST,
@@ -25391,11 +26274,51 @@ window.__BILLING_EMBEDDED__ = true;
       items: [{ name: '时尚洗吹', price: 58, type: 'project', qty: 1 }],
       payMethod: '微信',
       amount: 58,
-      time: '2026.07.27 12:32',
+      time: '2026.07.29 14:16',
       channel: '顾客自助',
     },
     {
-      id: 'fs-seed-4',
+      id: 'fs-seed-6',
+      customerId: 'm5',
+      customerName: '赵欣怡',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'success',
+      kind: 'project',
+      items: [{ name: '头皮护理', price: 168, type: 'project', qty: 1 }],
+      payMethod: '支付宝',
+      amount: 168,
+      time: '2026.07.29 15:52',
+      channel: '顾客自助',
+    },
+    /* 近7天 */
+    {
+      id: 'fs-seed-7',
+      customerId: 'm6',
+      customerName: '刘子轩',
+      avatar: 'assets/billing/avatar-male.png',
+      status: 'success',
+      kind: 'project',
+      items: [{ name: '男士精剪', price: 128, type: 'project', qty: 1 }],
+      payMethod: '微信',
+      amount: 128,
+      time: '2026.07.28 16:20',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-8',
+      customerId: 'm3',
+      customerName: '王思琪',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'success',
+      kind: 'product',
+      items: [{ name: '剑琅护色发膜（250ml）', price: 158, type: 'product', qty: 1 }],
+      payMethod: '支付宝',
+      amount: 158,
+      time: '2026.07.27 12:08',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-9',
       customerId: 'm1',
       customerName: '张雨晴',
       avatar: 'assets/billing/avatar-female.png',
@@ -25404,20 +26327,47 @@ window.__BILLING_EMBEDDED__ = true;
       items: [{ name: '精致剪发', price: 98, type: 'project', qty: 1 }],
       payMethod: '微信',
       amount: 98,
-      time: '2026.07.24 15:20',
+      time: '2026.07.26 15:20',
       channel: '顾客自助',
     },
     {
-      id: 'fs-seed-5',
+      id: 'fs-seed-10',
       customerId: 'm2',
       customerName: '李诗涵',
       avatar: 'assets/billing/avatar-female.png',
       status: 'refund_failed',
       kind: 'product',
-      items: [{ name: '剑琅造型发蜡', price: 88, type: 'product', qty: 1 }],
+      items: [{ name: '剑琅造型发蜡（80g）', price: 88, type: 'product', qty: 1 }],
       payMethod: '支付宝',
       amount: 88,
-      time: '2026.07.22 09:40',
+      time: '2026.07.25 09:40',
+      channel: '顾客自助',
+    },
+    {
+      id: 'fs-seed-11',
+      customerId: 'm8',
+      customerName: '吴佳宁',
+      avatar: 'assets/billing/avatar-female.png',
+      status: 'success',
+      kind: 'project',
+      items: [{ name: '烫染护理套餐', price: 398, type: 'project', qty: 1 }],
+      payMethod: '微信',
+      amount: 398,
+      time: '2026.07.24 11:05',
+      channel: '顾客自助',
+    },
+    /* 全部时间 · 超出近7天 */
+    {
+      id: 'fs-seed-12',
+      customerId: null,
+      customerName: '散客',
+      avatar: FLOW_AVATAR_GUEST,
+      status: 'refunded',
+      kind: 'product',
+      items: [{ name: '剑琅清爽洗发水（300ml）', price: 79, type: 'product', qty: 1 }],
+      payMethod: '微信',
+      amount: 79,
+      time: '2026.07.18 18:33',
       channel: '顾客自助',
     },
   ];
@@ -25481,12 +26431,12 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function flowIconStore() {
-    /* Lucide receipt · 门店流水（与空态单据同系） */
-    return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6"/><path d="M16 12h-6"/><path d="M16 16h-6"/></svg>`;
+    /* 面性单据 · 门店流水 */
+    return `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6 2.75A1.75 1.75 0 0 0 4.25 4.5v15.85c0 .55.62.87 1.07.55l1.93-1.38 1.93 1.38a.75.75 0 0 0 .84 0l1.93-1.38 1.93 1.38a.75.75 0 0 0 .84 0l1.93-1.38 1.93 1.38c.45.32 1.07 0 1.07-.55V4.5A1.75 1.75 0 0 0 18 2.75H6Zm2.25 5a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm0 3.5a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm0 3.5a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z"/></svg>`;
   }
   function flowIconSelf() {
-    /* Lucide smartphone · 自助收银 */
-    return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>`;
+    /* 面性手机 · 自助收银 */
+    return `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8.5 2.5A2.5 2.5 0 0 0 6 5v14a2.5 2.5 0 0 0 2.5 2.5h7A2.5 2.5 0 0 0 18 19V5A2.5 2.5 0 0 0 15.5 2.5h-7ZM12 17.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/><path d="M9.25 5.5h5.5a.75.75 0 0 1 0 1.5h-5.5a.75.75 0 0 1 0-1.5Z" opacity=".35"/></svg>`;
   }
   function flowIconChevron() {
     /* Lucide chevron-right · 辅助 16 */
@@ -25663,16 +26613,117 @@ window.__BILLING_EMBEDDED__ = true;
     return order;
   }
 
+  function flowHubFormatYen(n) {
+    const v = Math.round(Number(n) || 0);
+    const abs = Math.abs(v).toLocaleString('zh-CN');
+    return `${v < 0 ? '-' : ''}${abs}`;
+  }
+
+  function getFlowHubDemoStats() {
+    /* 演示数据 · 结余 = 营业额 - 会员消费 + 充值 - 支出 + 还款 - 欠款 */
+    const revenue = 12860;
+    const memberSpend = 8420;
+    const recharge = 3560;
+    const expense = 2180;
+    const repay = 960;
+    const debt = 1280;
+    const balance = revenue - memberSpend + recharge - expense + repay - debt;
+    const incomeSide = revenue + recharge + repay;
+    const expenseSide = memberSpend + expense + debt;
+    return { revenue, memberSpend, recharge, expense, repay, debt, balance, incomeSide, expenseSide };
+  }
+
+  function flowHubRingSvg(stats, gradId) {
+    const gid = gradId || 'flowHubGradIncome';
+    const r = 48;
+    const c = 2 * Math.PI * r;
+    const total = Math.max(1, (stats.incomeSide || 0) + (stats.expenseSide || 0));
+    const incomeLen = c * ((stats.incomeSide || 0) / total);
+    const expenseLen = c * ((stats.expenseSide || 0) / total);
+    const gap = 4;
+    const incomeDash = Math.max(0, incomeLen - gap);
+    const expenseDash = Math.max(0, expenseLen - gap);
+    const expenseOffset = -(incomeLen);
+    return `<svg class="flow-hub-ring__svg" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#F32F41"/>
+          <stop offset="100%" stop-color="#FF8A3D"/>
+        </linearGradient>
+      </defs>
+      <circle class="flow-hub-ring__track" cx="60" cy="60" r="${r}"></circle>
+      <circle class="flow-hub-ring__arc flow-hub-ring__arc--income" cx="60" cy="60" r="${r}"
+        stroke="url(#${gid})"
+        stroke-dasharray="${incomeDash.toFixed(2)} ${(c - incomeDash).toFixed(2)}"
+        stroke-dashoffset="0"></circle>
+      <circle class="flow-hub-ring__arc flow-hub-ring__arc--expense" cx="60" cy="60" r="${r}"
+        stroke-dasharray="${expenseDash.toFixed(2)} ${(c - expenseDash).toFixed(2)}"
+        stroke-dashoffset="${expenseOffset.toFixed(2)}"></circle>
+    </svg>`;
+  }
+
+  function flowHubMetricHtml(pos, label, amount, mutedBar) {
+    return `<div class="flow-hub-metric flow-hub-metric--${pos}">
+      <div class="flow-hub-metric__label-row">
+        <span class="flow-hub-metric__bar${mutedBar ? ' flow-hub-metric__bar--muted' : ''}" aria-hidden="true"></span>
+        <span class="flow-hub-metric__label">${escapeHtml(label)}</span>
+      </div>
+      <div class="flow-hub-metric__val">${flowHubFormatYen(amount)}</div>
+    </div>`;
+  }
+
+  function flowHubPanelDecoHtml(idPrefix) {
+    const p = idPrefix || 'flowHub';
+    return `<div class="flow-hub-panel__deco" aria-hidden="true">
+      <svg class="flow-hub-panel__deco-grid" viewBox="0 0 320 288" preserveAspectRatio="none">
+        <defs>
+          <pattern id="${p}Grid" width="16" height="16" patternUnits="userSpaceOnUse">
+            <path d="M16 0H0V16" fill="none" stroke="#E8E8E8" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="320" height="288" fill="url(#${p}Grid)" opacity="0.55"/>
+      </svg>
+      <svg class="flow-hub-panel__deco-arc flow-hub-panel__deco-arc--tl" viewBox="0 0 100 100">
+        <circle cx="20" cy="20" r="48" fill="none" stroke="#EDEDED" stroke-width="1"/>
+        <circle cx="20" cy="20" r="34" fill="none" stroke="#F2F2F2" stroke-width="1"/>
+      </svg>
+      <svg class="flow-hub-panel__deco-arc" viewBox="0 0 120 120">
+        <circle cx="100" cy="100" r="56" fill="none" stroke="#EDEDED" stroke-width="1"/>
+        <circle cx="100" cy="100" r="40" fill="none" stroke="#F2F2F2" stroke-width="1"/>
+      </svg>
+    </div>`;
+  }
+
   function renderFlowHub() {
     const storeCount = FLOW_ORDERS.filter(o => o.status !== 'void').length;
     const selfCount = FLOW_SELF_ORDERS.length;
+    const stats = getFlowHubDemoStats();
+    const incomeShare = Math.round((stats.incomeSide / Math.max(1, stats.incomeSide + stats.expenseSide)) * 100);
     const body = document.getElementById('flowHubBody');
     if (!body) return;
+    const infoSvg = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.25" fill="currentColor"/></svg>`;
     body.innerHTML = `
-      <div class="flow-hub-overview">
-        <div class="flow-hub-overview__head">
-          <div class="flow-hub-overview__title">流水概览</div>
-          <div class="flow-hub-overview__sub">今日数据</div>
+      <div class="flow-hub-dash">
+        <div class="flow-hub-panel is-tappable" data-flow-balance-open role="button" tabindex="0" aria-label="查看收支结余详情">
+          ${flowHubPanelDecoHtml('flowHub')}
+          <div class="flow-hub-ring-stage">
+            ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
+            ${flowHubMetricHtml('tr', '会员消费', stats.memberSpend, true)}
+            <div class="flow-hub-ring" role="img" aria-label="今日收支结余 ${stats.balance} 元">
+              ${flowHubRingSvg(stats, 'flowHubGradIncome')}
+              <div class="flow-hub-ring__core">
+                <div class="flow-hub-ring__core-label-anchor">
+                  <div class="flow-hub-ring__core-label">收支结余</div>
+                  <button type="button" class="flow-hub-ring__info" data-flow-balance-help aria-label="收支结余说明">${infoSvg}</button>
+                </div>
+                <div class="flow-hub-ring__core-val">${flowHubFormatYen(stats.balance)}</div>
+                <div class="flow-hub-ring__core-divider" aria-hidden="true"></div>
+                <div class="flow-hub-ring__core-sub">收入占比 ${incomeShare}%</div>
+              </div>
+            </div>
+            ${flowHubMetricHtml('bl', '支出', stats.expense, true)}
+            ${flowHubMetricHtml('br', '充值', stats.recharge, false)}
+          </div>
         </div>
         <div class="flow-hub-entries">
           <button type="button" class="flow-hub-card" data-flow-hub="store" aria-label="进入门店流水">
@@ -25682,7 +26733,6 @@ window.__BILLING_EMBEDDED__ = true;
                 <span class="flow-hub-card__title">门店流水</span>
                 <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
               </span>
-              <span class="flow-hub-card__hint">开单 · 办卡 · 充值等门店订单</span>
               <span class="flow-hub-card__metric">
                 <span class="flow-hub-card__val">${storeCount}</span>
                 <span class="flow-hub-card__unit">笔</span>
@@ -25696,7 +26746,6 @@ window.__BILLING_EMBEDDED__ = true;
                 <span class="flow-hub-card__title">自助收银</span>
                 <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
               </span>
-              <span class="flow-hub-card__hint">顾客端自助下单订单</span>
               <span class="flow-hub-card__metric">
                 <span class="flow-hub-card__val">${selfCount}</span>
                 <span class="flow-hub-card__unit">笔</span>
@@ -25918,6 +26967,319 @@ window.__BILLING_EMBEDDED__ = true;
     state.flowFromSuccess = false;
     renderFlowHub();
     showOnlyScreen('screen-flow-hub');
+  }
+
+  const FLOW_BALANCE_PERIOD_TABS = [
+    { id: 'today', label: '今日' },
+    { id: 'yesterday', label: '昨天' },
+    { id: 'week', label: '本周' },
+    { id: 'month', label: '本月' },
+    { id: 'custom', label: '自定义' },
+  ];
+
+  function getFlowBalanceDemoBundle(period) {
+    const scaleMap = {
+      today: 1,
+      yesterday: 0.92,
+      week: 5.4,
+      month: 18.6,
+      custom: 7.2,
+    };
+    const scale = scaleMap[period] != null ? scaleMap[period] : 1;
+    const base = getFlowHubDemoStats();
+    const round = n => Math.round(n * scale);
+    const revenue = round(base.revenue);
+    const memberSpend = round(base.memberSpend);
+    const recharge = round(base.recharge);
+    const expense = round(base.expense);
+    const repay = round(base.repay);
+    const debt = round(base.debt);
+    const balance = revenue - memberSpend + recharge - expense + repay - debt;
+    const incomeSide = revenue + recharge + repay;
+    const expenseSide = memberSpend + expense + debt;
+    const payScale = period === 'today' ? 1 : period === 'yesterday' ? 0.9 : period === 'week' ? 5.2 : period === 'month' ? 17.5 : 6.8;
+    const paysRaw = [
+      { id: 'wechat', name: '微信', color: '#07C160', count: Math.round(42 * payScale), amount: Math.round(4860 * payScale) },
+      { id: 'alipay', name: '支付宝', color: '#1677FF', count: Math.round(28 * payScale), amount: Math.round(3120 * payScale) },
+      { id: 'member', name: '会员卡', color: '#F32F41', count: Math.round(19 * payScale), amount: Math.round(2680 * payScale) },
+      { id: 'cash', name: '现金', color: '#E37318', count: Math.round(11 * payScale), amount: Math.round(980 * payScale) },
+      { id: 'meituan', name: '美团', color: '#FFC300', count: Math.round(7 * payScale), amount: Math.round(640 * payScale) },
+    ];
+    const payTotal = paysRaw.reduce((a, p) => a + p.amount, 0) || 1;
+    const payMethods = paysRaw.map(p => ({
+      ...p,
+      pct: Math.round((p.amount / payTotal) * 100),
+    }));
+    const pctSum = payMethods.reduce((a, p) => a + p.pct, 0);
+    if (payMethods.length && pctSum !== 100) {
+      payMethods[0].pct += (100 - pctSum);
+    }
+    return {
+      revenue, memberSpend, recharge, expense, repay, debt, balance, incomeSide, expenseSide, payMethods,
+    };
+  }
+
+  function flowBalanceInfoSvg() {
+    return `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.25" fill="currentColor"/></svg>`;
+  }
+
+  function openFlowBalanceHelp() {
+    document.getElementById('flowBalanceHelpMask')?.classList.add('show');
+  }
+  function closeFlowBalanceHelp() {
+    document.getElementById('flowBalanceHelpMask')?.classList.remove('show');
+  }
+
+  function flowBalanceTodayKey() {
+    return '2026-07-29';
+  }
+
+  function flowBalanceParseKey(key) {
+    const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return { y: +m[1], m: +m[2] - 1, d: +m[3], key: `${m[1]}-${m[2]}-${m[3]}` };
+  }
+
+  function flowBalanceFmtKey(y, m, d) {
+    return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
+  function flowBalanceFmtChip(key) {
+    const p = flowBalanceParseKey(key);
+    if (!p) return '';
+    return `${p.y}.${String(p.m + 1).padStart(2, '0')}.${String(p.d).padStart(2, '0')}`;
+  }
+
+  function flowBalanceMinKey() {
+    return '2025-01-01';
+  }
+
+  function flowBalanceMaxKey() {
+    return flowBalanceTodayKey();
+  }
+
+  function renderFlowBalanceCalChrome() {
+    const start = state.flowBalanceDateDraftStart;
+    const end = state.flowBalanceDateDraftEnd;
+    const focus = state.flowBalanceCalFocus || 'start';
+    const rangeEl = document.getElementById('flowBalanceCalRange');
+    if (rangeEl) {
+      const chip = (kind, label, key) => {
+        const on = focus === kind ? ' is-on' : '';
+        const val = key
+          ? `<span class="flow-balance-cal-chip__val">${escapeHtml(flowBalanceFmtChip(key))}</span>`
+          : `<span class="flow-balance-cal-chip__val is-placeholder">请选择</span>`;
+        return `<button type="button" class="flow-balance-cal-chip${on}" data-cal-focus="${kind}">
+          <span class="flow-balance-cal-chip__label">${label}</span>${val}
+        </button>`;
+      };
+      rangeEl.innerHTML = `${chip('start', '开始日期', start)}<span class="flow-balance-cal-sep">至</span>${chip('end', '结束日期', end)}`;
+    }
+    const hint = document.getElementById('flowBalanceCalHint');
+    if (hint) {
+      if (!start) hint.textContent = '请选择开始日期';
+      else if (!end) hint.textContent = '请选择结束日期';
+      else hint.textContent = '可重新点击日期调整范围';
+    }
+    const okBtn = document.getElementById('btnFlowBalanceDateOk');
+    if (okBtn) okBtn.disabled = !(start && end);
+  }
+
+  function renderFlowBalanceCalendar() {
+    const cal = document.getElementById('flowBalanceCal');
+    if (!cal) return;
+    let y = state.flowBalanceCalYear;
+    let m = state.flowBalanceCalMonth;
+    if (y == null || m == null) {
+      const anchor = flowBalanceParseKey(state.flowBalanceDateDraftEnd || state.flowBalanceDateDraftStart || flowBalanceTodayKey());
+      y = anchor ? anchor.y : 2026;
+      m = anchor ? anchor.m : 6;
+      state.flowBalanceCalYear = y;
+      state.flowBalanceCalMonth = m;
+    }
+    const minK = flowBalanceMinKey();
+    const maxK = flowBalanceMaxKey();
+    const minP = flowBalanceParseKey(minK);
+    const maxP = flowBalanceParseKey(maxK);
+    const canPrev = !(y === minP.y && m === minP.m);
+    const canNext = !(y === maxP.y && m === maxP.m);
+    const chevL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>`;
+    const chevR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
+    const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const startK = state.flowBalanceDateDraftStart;
+    const endK = state.flowBalanceDateDraftEnd;
+    const todayK = flowBalanceTodayKey();
+    const cells = [];
+    for (let i = 0; i < firstDow; i++) {
+      cells.push(`<span class="flow-balance-cal__day is-muted" aria-hidden="true"></span>`);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = flowBalanceFmtKey(y, m, d);
+      const disabled = key < minK || key > maxK;
+      const isStart = startK && key === startK;
+      const isEnd = endK && key === endK;
+      const inRange = startK && endK && key >= startK && key <= endK;
+      const cls = [
+        'flow-balance-cal__day',
+        disabled ? 'is-disabled' : '',
+        isStart ? 'is-range-start' : '',
+        isEnd ? 'is-range-end' : '',
+        inRange ? 'is-in-range' : '',
+        key === todayK ? 'is-today' : '',
+      ].filter(Boolean).join(' ');
+      cells.push(`<button type="button" class="${cls}" data-cal-day="${key}" ${disabled ? 'disabled' : ''} aria-label="${key}">
+        <span class="flow-balance-cal__day-num">${d}</span>
+      </button>`);
+    }
+    cal.innerHTML = `
+      <div class="flow-balance-cal__nav">
+        <button type="button" class="flow-balance-cal__nav-btn" data-cal-nav="-1" aria-label="上一月" ${canPrev ? '' : 'disabled'}>${chevL}</button>
+        <div class="flow-balance-cal__title">${y}年${m + 1}月</div>
+        <button type="button" class="flow-balance-cal__nav-btn" data-cal-nav="1" aria-label="下一月" ${canNext ? '' : 'disabled'}>${chevR}</button>
+      </div>
+      <div class="flow-balance-cal__weekdays">${weekdays.map(w => `<div class="flow-balance-cal__wd">${w}</div>`).join('')}</div>
+      <div class="flow-balance-cal__grid">${cells.join('')}</div>`;
+    renderFlowBalanceCalChrome();
+  }
+
+  function openFlowBalanceDateSheet() {
+    const startKey = state.flowBalanceCustomStart || null;
+    const endKey = state.flowBalanceCustomEnd || null;
+    state.flowBalanceDateDraftStart = startKey;
+    state.flowBalanceDateDraftEnd = endKey;
+    state.flowBalanceCalFocus = startKey && !endKey ? 'end' : 'start';
+    const anchor = flowBalanceParseKey(endKey || startKey || flowBalanceTodayKey());
+    state.flowBalanceCalYear = anchor ? anchor.y : 2026;
+    state.flowBalanceCalMonth = anchor ? anchor.m : 6;
+    renderFlowBalanceCalendar();
+    document.getElementById('flowBalanceDateMask')?.classList.add('open');
+  }
+
+  function closeFlowBalanceDateSheet() {
+    document.getElementById('flowBalanceDateMask')?.classList.remove('open');
+  }
+
+  function shiftFlowBalanceCalMonth(delta) {
+    let y = state.flowBalanceCalYear;
+    let m = state.flowBalanceCalMonth + delta;
+    while (m < 0) { m += 12; y -= 1; }
+    while (m > 11) { m -= 12; y += 1; }
+    const minP = flowBalanceParseKey(flowBalanceMinKey());
+    const maxP = flowBalanceParseKey(flowBalanceMaxKey());
+    if (y < minP.y || (y === minP.y && m < minP.m)) { y = minP.y; m = minP.m; }
+    if (y > maxP.y || (y === maxP.y && m > maxP.m)) { y = maxP.y; m = maxP.m; }
+    state.flowBalanceCalYear = y;
+    state.flowBalanceCalMonth = m;
+    renderFlowBalanceCalendar();
+  }
+
+  function pickFlowBalanceCalDay(key) {
+    if (!key) return;
+    const focus = state.flowBalanceCalFocus || 'start';
+    if (focus === 'start' || !state.flowBalanceDateDraftStart) {
+      state.flowBalanceDateDraftStart = key;
+      state.flowBalanceDateDraftEnd = null;
+      state.flowBalanceCalFocus = 'end';
+    } else if (focus === 'end') {
+      if (key < state.flowBalanceDateDraftStart) {
+        state.flowBalanceDateDraftEnd = state.flowBalanceDateDraftStart;
+        state.flowBalanceDateDraftStart = key;
+      } else {
+        state.flowBalanceDateDraftEnd = key;
+      }
+      state.flowBalanceCalFocus = 'start';
+    } else {
+      state.flowBalanceDateDraftStart = key;
+      state.flowBalanceDateDraftEnd = null;
+      state.flowBalanceCalFocus = 'end';
+    }
+    renderFlowBalanceCalendar();
+  }
+
+  function applyFlowBalanceDateSheet() {
+    let start = state.flowBalanceDateDraftStart || state.flowBalanceCustomStart;
+    let end = state.flowBalanceDateDraftEnd || state.flowBalanceCustomEnd;
+    if (!start || !end) {
+      showToast('请选择起止日期');
+      return;
+    }
+    if (start > end) {
+      const t = start; start = end; end = t;
+    }
+    state.flowBalanceCustomStart = start;
+    state.flowBalanceCustomEnd = end;
+    state.flowBalancePeriod = 'custom';
+    closeFlowBalanceDateSheet();
+    renderFlowBalance();
+    showToast(`${flowBalanceFmtChip(start).slice(5)} – ${flowBalanceFmtChip(end).slice(5)}`);
+  }
+
+  function renderFlowBalance() {
+    const period = state.flowBalancePeriod || 'today';
+    const tabsEl = document.getElementById('flowBalanceTabs');
+    if (tabsEl) {
+      tabsEl.innerHTML = FLOW_BALANCE_PERIOD_TABS.map(t =>
+        `<button type="button" class="flow-balance-tab${period === t.id ? ' is-active' : ''}" data-flow-balance-tab="${t.id}" role="tab" aria-selected="${period === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}</button>`
+      ).join('');
+    }
+    const stats = getFlowBalanceDemoBundle(period);
+    const incomeShare = Math.round((stats.incomeSide / Math.max(1, stats.incomeSide + stats.expenseSide)) * 100);
+    const body = document.getElementById('flowBalanceBody');
+    if (!body) return;
+    const payRows = (stats.payMethods || []).map(p => {
+      const width = Math.max(4, Math.min(100, p.pct));
+      return `<div class="flow-balance-pay__row">
+        <div class="flow-balance-pay__left">
+          <span class="flow-balance-pay__dot" style="background:${escapeHtml(p.color)}" aria-hidden="true"></span>
+          <span class="flow-balance-pay__name">${escapeHtml(p.name)}</span>
+        </div>
+        <div class="flow-balance-pay__bar-wrap" aria-hidden="true">
+          <div class="flow-balance-pay__bar" style="width:${width}%;background:${escapeHtml(p.color)}"></div>
+        </div>
+        <div class="flow-balance-pay__right">
+          <div class="flow-balance-pay__meta">${p.count}笔 · ${p.pct}%</div>
+          <div class="flow-balance-pay__amt">${flowHubFormatYen(p.amount)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    body.innerHTML = `
+      <div class="flow-hub-panel flow-balance-panel">
+        ${flowHubPanelDecoHtml('flowBalance')}
+        <div class="flow-hub-ring-stage flow-balance-ring-stage">
+          ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
+          ${flowHubMetricHtml('tr', '会员消费', stats.memberSpend, true)}
+          ${flowHubMetricHtml('ml', '充值', stats.recharge, false)}
+          ${flowHubMetricHtml('mr', '支出', stats.expense, true)}
+          <div class="flow-hub-ring" role="img" aria-label="收支结余 ${stats.balance} 元">
+            ${flowHubRingSvg(stats, 'flowBalanceGradIncome')}
+            <div class="flow-hub-ring__core">
+              <div class="flow-hub-ring__core-label-anchor">
+                <div class="flow-hub-ring__core-label">收支结余</div>
+                <button type="button" class="flow-hub-ring__info" data-flow-balance-help aria-label="收支结余说明">${flowBalanceInfoSvg()}</button>
+              </div>
+              <div class="flow-hub-ring__core-val">${flowHubFormatYen(stats.balance)}</div>
+              <div class="flow-hub-ring__core-divider" aria-hidden="true"></div>
+              <div class="flow-hub-ring__core-sub">收入占比 ${incomeShare}%</div>
+            </div>
+          </div>
+          ${flowHubMetricHtml('bl', '还款', stats.repay, false)}
+          ${flowHubMetricHtml('br', '欠款', stats.debt, true)}
+        </div>
+      </div>
+      <div class="flow-balance-pay">
+        <div class="flow-balance-pay__title">支付方式</div>
+        ${payRows}
+      </div>`;
+  }
+
+  function openFlowBalance() {
+    if (!state.flowBalancePeriod) state.flowBalancePeriod = 'today';
+    closeFlowBalanceHelp();
+    closeFlowBalanceDateSheet();
+    renderFlowBalance();
+    showOnlyScreen('screen-flow-balance');
   }
 
   function openFlowList() {
@@ -27491,7 +28853,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.detailExpandedId = null;
     state.billTab = 'project';
     state.searchQuery = '';
-    state.cardsExpanded = !!(customer && customer.isMember);
+    state.cardsExpanded = false;
     renderBillHeader();
     syncCartChrome();
     syncPickHoldsEntry();
@@ -27549,6 +28911,8 @@ window.__BILLING_EMBEDDED__ = true;
       id: tpl.id + '_' + customerId,
       name: tpl.name,
       balance: tpl.benefits && tpl.benefits.balance ? (Number(tpl.face) || 0) : 0,
+      rechargeBalance: tpl.benefits && tpl.benefits.balance ? (Number(tpl.face) || 0) : 0,
+      giftBalance: tpl.benefits && tpl.benefits.balance ? (Number(tpl.giftAmount) || 0) : 0,
       discount: tpl.benefits && tpl.benefits.projectDiscount ? 0.85 : undefined,
       projects: projects,
       templateId: tpl.id,
@@ -27590,7 +28954,7 @@ window.__BILLING_EMBEDDED__ = true;
         </button>`;
   }
 
-  function renderCustomerNameCard(c, { withActions = false, genderMode = false } = {}) {
+  function renderCustomerNameCard(c, { withActions = false, genderMode = false, assetMetrics = null } = {}) {
     const useGender = genderMode || isAnonymousGuest(c);
     if (useGender) {
       const selected = hasGuestGender();
@@ -27658,16 +29022,38 @@ window.__BILLING_EMBEDDED__ = true;
             <button type="button" class="pill-btn" id="btnChangeCustomer">更换顾客</button>
           </div>` : '';
     const avatar = c.avatar || 'assets/billing/avatar-female.png';
-    return `<div class="customer-card customer-card--member">
+    const metricsHtml = assetMetrics ? `
+        <div class="customer-card__metrics" aria-label="会员资产">
+          <div class="customer-card__metric">
+            <div class="customer-card__metric-val num">${formatMetricYen(assetMetrics.recharge)}</div>
+            <div class="customer-card__metric-label">储值余额</div>
+          </div>
+          <div class="customer-card__metric">
+            <div class="customer-card__metric-val num">${formatMetricYen(assetMetrics.gift)}</div>
+            <div class="customer-card__metric-label">赠送余额</div>
+          </div>
+          <div class="customer-card__metric">
+            <div class="customer-card__metric-val num">${assetMetrics.cardCount}</div>
+            <div class="customer-card__metric-label">卡项</div>
+          </div>
+          <div class="customer-card__metric">
+            <div class="customer-card__metric-val num">${assetMetrics.couponCount}</div>
+            <div class="customer-card__metric-label">优惠券</div>
+          </div>
+        </div>` : '';
+    return `<div class="customer-card customer-card--member${assetMetrics ? ' customer-card--assets' : ''}">
         <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
-        <div class="customer-card__row">
-          <img class="customer-card__avatar" src="${avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
-          <div class="customer-card__info">
-            <div class="customer-card__name">
-              <span class="customer-card__name-text">${escapeHtml(c.name)}</span>${vip}
-            </div>
-            <div class="customer-card__visit">${visit}</div>
-          </div>${actions}
+        <div class="customer-card__body">
+          <div class="customer-card__row">
+            <img class="customer-card__avatar" src="${avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
+            <div class="customer-card__info">
+              <div class="customer-card__name">
+                <span class="customer-card__name-text">${escapeHtml(c.name)}</span>${vip}
+              </div>
+              <div class="customer-card__visit">${visit}</div>
+            </div>${actions}
+          </div>
+          ${metricsHtml}
         </div>
       </div>`;
   }
@@ -28103,7 +29489,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.billCustomerPickOpen = false;
     state.guestGenderPickerOpen = false;
     state.searchQuery = '';
-    state.cardsExpanded = !!(c.cards && c.cards.length);
+    state.cardsExpanded = false;
     renderBillHeader();
     syncCartChrome();
     showToast(`已选择 ${c.name}`);
@@ -28127,8 +29513,16 @@ window.__BILLING_EMBEDDED__ = true;
       }
       return;
     }
-    if (e.target.id === 'btnExpandCards') { state.cardsExpanded = !state.cardsExpanded; renderBillHeader(); return; }
+    if (e.target.closest('#btnExpandCardsHit')) {
+      state.cardsExpanded = !state.cardsExpanded;
+      renderBillHeader();
+      return;
+    }
     if (e.target.id === 'btnBillAddCard' || e.target.id === 'btnIssueCard') { openAddCardScreen(); return; }
+    const rechargeBtn = e.target.closest('[data-bill-recharge]');
+    if (rechargeBtn) { openBillRechargeSheet(rechargeBtn.dataset.billRecharge); return; }
+    const timesBtn = e.target.closest('[data-bill-times-topup]');
+    if (timesBtn) { openBillTimesTopup(timesBtn.dataset.billTimesTopup); return; }
     const tab = e.target.closest('[data-tab]');
     if (tab) { state.billTab = tab.dataset.tab; renderBillHeader(); return; }
     const step = e.target.closest('[data-step]');
@@ -28137,6 +29531,25 @@ window.__BILLING_EMBEDDED__ = true;
       const item = catalog.find(x => x.id === step.dataset.step);
       if (item) setCartQty(item, Number(step.dataset.d));
     }
+  });
+  document.getElementById('btnBillRechargeCancel')?.addEventListener('click', () => closeMask('billRechargeMask'));
+  document.getElementById('btnBillRechargePay')?.addEventListener('click', payBillRecharge);
+  document.getElementById('billRechargeMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billRechargeMask') closeMask('billRechargeMask');
+  });
+  document.getElementById('btnBillTimesCancel')?.addEventListener('click', () => closeMask('billTimesTopupMask'));
+  document.getElementById('btnBillTimesPay')?.addEventListener('click', payBillTimesTopup);
+  document.getElementById('billTimesTopupMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billTimesTopupMask') closeMask('billTimesTopupMask');
+  });
+  document.getElementById('billTimesTopupBody')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-times-key][data-times-d]');
+    if (!btn || btn.disabled) return;
+    bumpBillTimesAdd(btn.dataset.timesKey, Number(btn.dataset.timesD) || 0);
+  });
+  document.getElementById('btnBillRechargeOk')?.addEventListener('click', closeBillAssetOk);
+  document.getElementById('billRechargeOkMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billRechargeOkMask') closeBillAssetOk();
   });
   document.getElementById('billBody').addEventListener('input', e => {
     if (e.target.id === 'billSearch') {
@@ -28757,10 +30170,65 @@ window.__BILLING_EMBEDDED__ = true;
     openFlowDetail(card.dataset.flowId, { fromSuccess: false });
   });
   document.getElementById('flowHubBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-balance-help]')) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFlowBalanceHelp();
+      return;
+    }
+    if (e.target.closest('[data-flow-balance-open]')) {
+      openFlowBalance();
+      return;
+    }
     const btn = e.target.closest('[data-flow-hub]');
     if (!btn) return;
     if (btn.dataset.flowHub === 'store') openFlowList();
     else if (btn.dataset.flowHub === 'self') openFlowSelf();
+  });
+  document.getElementById('flowBalanceBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('flowBalanceTabs')?.addEventListener('click', (e) => {
+    const tab = e.target.closest('[data-flow-balance-tab]');
+    if (!tab) return;
+    const id = tab.dataset.flowBalanceTab;
+    if (id === 'custom') {
+      openFlowBalanceDateSheet();
+      return;
+    }
+    state.flowBalancePeriod = id;
+    renderFlowBalance();
+  });
+  document.getElementById('flowBalanceBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-balance-help]')) {
+      e.preventDefault();
+      openFlowBalanceHelp();
+    }
+  });
+  document.getElementById('btnFlowBalanceHelpOk')?.addEventListener('click', () => closeFlowBalanceHelp());
+  document.getElementById('flowBalanceHelpMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'flowBalanceHelpMask') closeFlowBalanceHelp();
+  });
+  document.getElementById('btnFlowBalanceDateCancel')?.addEventListener('click', () => closeFlowBalanceDateSheet());
+  document.getElementById('btnFlowBalanceDateOk')?.addEventListener('click', () => applyFlowBalanceDateSheet());
+  document.getElementById('flowBalanceDateMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'flowBalanceDateMask') {
+      closeFlowBalanceDateSheet();
+      return;
+    }
+    const focusBtn = e.target.closest('[data-cal-focus]');
+    if (focusBtn) {
+      state.flowBalanceCalFocus = focusBtn.dataset.calFocus || 'start';
+      renderFlowBalanceCalChrome();
+      return;
+    }
+    const navBtn = e.target.closest('[data-cal-nav]');
+    if (navBtn && !navBtn.disabled) {
+      shiftFlowBalanceCalMonth(Number(navBtn.dataset.calNav) || 0);
+      return;
+    }
+    const dayBtn = e.target.closest('[data-cal-day]');
+    if (dayBtn && !dayBtn.disabled) {
+      pickFlowBalanceCalDay(dayBtn.dataset.calDay);
+    }
   });
   document.getElementById('flowDetailBody')?.addEventListener('click', (e) => {
     if (e.target.closest('[data-flow-expand]')) {
@@ -29179,6 +30647,7 @@ window.__BILLING_EMBEDDED__ = true;
     openHoldList() { openHoldList(); },
     show(id) { showOnlyScreen(id); },
     openFlowHub,
+    openFlowBalance,
     openFlowList,
     openFlowDetail,
     openFlowSelf,
