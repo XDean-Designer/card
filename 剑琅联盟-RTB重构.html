@@ -2258,29 +2258,30 @@ html.device-preview .status-bar {
 .catalog-list-shell.hidden { display: none; }
 .catalog-group-bar {
   display: flex; align-items: center; gap: 0;
-  padding: 0 16px; height: 28px; margin: 0 0 24px; flex-shrink: 0; background: #fff;
-  box-sizing: content-box;
+  padding: 8px 16px 16px; min-height: 32px; margin: 0; flex-shrink: 0; background: #fff;
+  box-sizing: border-box; position: relative;
 }
 /*
- * 分组 Chip + 右侧半透渐变（Figma 305:145 Rectangle 5024）
+ * 分组：灰轨 + 白胶囊文字 Tab（可横滑）
  */
 .catalog-group-segment {
   flex: 1;
   min-width: 0;
-  height: 28px;
+  height: 32px;
   box-sizing: border-box;
-  background: transparent;
-  border-radius: 0;
+  background: #F2F2F2;
+  border-radius: 16px;
   overflow: hidden;
-  padding: 0;
+  padding: 2px;
   display: flex;
   align-items: center;
   position: relative;
+  margin-right: 36px;
 }
 .catalog-group-scroll {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   width: 100%;
   height: 28px;
   min-width: 0;
@@ -2290,19 +2291,20 @@ html.device-preview .status-bar {
   scrollbar-width: none;
   touch-action: pan-x;
   cursor: grab;
-  scroll-padding-inline: 4px;
+  scroll-padding-inline: 8px;
   scroll-snap-type: x proximity;
-  padding-right: 28px;
+  padding-right: 36px;
   box-sizing: border-box;
 }
 .catalog-group-scroll::-webkit-scrollbar { display: none; }
 .catalog-group-scroll.is-panning { cursor: grabbing; user-select: none; }
 .catalog-group-fade {
   position: absolute;
-  right: 0; top: 50%; transform: translateY(-50%);
-  width: 66px; height: 33px;
+  right: 0; top: 0; bottom: 0;
+  width: 48px; height: auto;
   pointer-events: none; z-index: 2;
-  background: linear-gradient(-90deg, #fff 0%, #fff 77.318%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(-90deg, #F2F2F2 0%, #F2F2F2 35%, rgba(242, 242, 242, 0) 100%);
+  border-radius: 0 16px 16px 0;
 }
 .catalog-group-tab {
   position: relative;
@@ -2318,7 +2320,7 @@ html.device-preview .status-bar {
   max-height: none;
   background: transparent;
   box-shadow: none;
-  color: #1A1A1A;
+  color: #6C7279;
   font-family: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -2336,14 +2338,14 @@ html.device-preview .status-bar {
   height: 28px;
   min-height: 28px;
   max-height: 28px;
-  padding: 4px 16px;
-  border-radius: 8px;
+  padding: 0 14px;
+  border-radius: 14px;
   background: transparent;
-  border: 0.5px solid #E8E8E8;
+  border: none;
   box-shadow: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 18px;
   color: inherit;
   white-space: nowrap;
   box-sizing: border-box;
@@ -2384,8 +2386,8 @@ html.device-preview .status-bar {
   box-shadow: none;
 }
 .catalog-group-tab.on .catalog-group-tab__face {
-  background: #FFF2F2;
-  border-color: var(--brand);
+  background: #fff;
+  border: none;
   font-weight: 500;
   color: var(--brand);
   box-shadow: none;
@@ -2394,18 +2396,16 @@ html.device-preview .status-bar {
 .catalog-group-tab:focus,
 .catalog-group-tab:focus-visible { outline: none; }
 .catalog-group-gear {
-  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  position: absolute; right: 12px; top: 24px; transform: translateY(-50%);
   z-index: 3;
-  flex-shrink: 0; width: 24px; height: 24px; margin: 0; padding: 0;
-  border: none; background: transparent; color: var(--text-sec); cursor: pointer;
+  flex-shrink: 0; width: 32px; height: 32px; margin: 0; padding: 0;
+  border: none; background: transparent; color: #5C5C5C; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   font-family: inherit; -webkit-tap-highlight-color: transparent; border-radius: 0;
 }
-.catalog-group-bar { position: relative; }
-.catalog-group-segment { padding-right: 40px; box-sizing: border-box; }
 .catalog-group-gear:active { opacity: .75; }
 .catalog-group-gear img,
-.catalog-group-gear svg { display: block; width: 24px; height: 24px; pointer-events: none; }
+.catalog-group-gear svg { display: block; width: 18px; height: 18px; pointer-events: none; }
 .catalog-group-manage-list { padding: 12px 16px 24px; }
 .catalog-group-card {
   background: var(--card); border-radius: 12px; overflow: hidden;
@@ -2514,14 +2514,36 @@ html.device-preview .status-bar {
 .catalog-group-sheet-empty .btn-main { width: auto; min-width: 140px; margin: 0 auto; height: 40px; line-height: 40px; font-size: 14px; }
 #screen-p-list { background: #F7F7F7; }
 #screen-p-list .page-title-bar { background: #fff; }
-/* Figma 305:99/45：顶栏/提示下留 10px 灰缝，白底内容区含 Tab+搜索+列表 */
+/* 顶栏/提示下留 10px 灰缝，白底内容区含 Tab + 分组 + 列表 */
 #screen-p-list .page-body {
   display: flex; flex-direction: column; background: #fff;
   border-radius: 0; margin-top: 0;
+  padding-bottom: calc(88px + var(--safe-bottom));
 }
-#screen-p-list .proj-list-toolbar {
-  background: #fff; padding: 12px 16px 20px;
+.catalog-fab {
+  position: absolute;
+  right: 16px;
+  bottom: calc(24px + var(--safe-bottom));
+  z-index: 24;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 28px;
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
+.catalog-fab.hidden { display: none; }
+.catalog-fab:active { opacity: .92; transform: scale(0.96); }
+.catalog-fab svg { display: block; width: 24px; height: 24px; pointer-events: none; }
 #screen-p-list .price-catalog-tabs {
   /* margin 10 + padTop 12 + 内容 33 = 对齐 Tab y119 / 有提示时 y153 */
   margin-top: 10px;
@@ -2661,7 +2683,6 @@ html.device-preview .status-bar {
   position: relative;
   background: #fff;
 }
-.catalog-offsale-block::before,
 .catalog-hidden-block::before {
   content: '';
   position: absolute;
@@ -2675,32 +2696,29 @@ html.device-preview .status-bar {
   pointer-events: none;
 }
 .catalog-offsale-head {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 37px;
-  padding: 8px 12px;
+  justify-content: center;
+  height: 26px;
+  min-height: 26px;
+  max-height: 26px;
+  padding: 0 16px;
   margin: 0;
   color: var(--text-sec);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 400;
+  line-height: 18px;
   box-sizing: border-box;
-  background: #F7F7F7;
-}
-.catalog-offsale-head__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background: #E8E8E8;
-  color: #666;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-  box-sizing: border-box;
+  background-color: #fff;
+  /* 下沿浅灰划线：左右 16，避免 absolute 伪元素被父级 overflow 裁切 */
+  background-image: linear-gradient(#EBEBEB, #EBEBEB);
+  background-repeat: no-repeat;
+  background-size: calc(100% - 32px) 1px;
+  background-position: 16px 100%;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
 }
 .catalog-offsale-list .table-row-swipe { background: #fff; }
 .catalog-offsale-list .table-row { background: #fff; }
@@ -2768,7 +2786,7 @@ html.device-preview .status-bar {
 }
 #projProjectTable .table-row-swipe .table-row::after { display: block; }
 #projProjectTable .table-row-swipe:last-child .table-row::after { display: none; }
-.table-row-swipe:has(+ .catalog-offsale-block) .table-row::after,
+.table-row-swipe:has(+ .catalog-offsale-block) .table-row::after { display: none; }
 .table-row-swipe:has(+ .catalog-hidden-block) .table-row::after { display: block; }
 .table-row:active { background: var(--bg-page); }
 .table-row-swipe.is-off-sale .name-text,
@@ -3691,11 +3709,12 @@ html.device-preview .status-bar {
 .pick-group-shell { display: flex; flex-direction: column; min-width: 0; }
 .pick-group-bar {
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 8px 8px 12px; flex-shrink: 0;
+  padding: 8px 12px; flex-shrink: 0;
   border-bottom: 1px solid #EBEBEB;
+  min-height: 0; margin: 0; height: auto;
 }
 .pick-group-bar.hidden { display: none; }
-.pick-group-bar .catalog-group-segment { flex: 1; min-width: 0; }
+.pick-group-bar .catalog-group-segment { flex: 1; min-width: 0; margin-right: 0; }
 .proj-pick-group-empty {
   padding: 32px 16px 20px; text-align: center;
 }
@@ -8809,10 +8828,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <header class="page-title-bar">
             <button type="button" class="back" id="projBackFromList" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
             <span class="title">价目表</span>
+            <button type="button" class="title-link" id="btnProjTitleAdd" aria-label="添加">+添加</button>
           </header>
           <div class="proj-list-hint" id="projListDragHint">
             <svg class="proj-list-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p class="proj-list-hint__text">长按项目可拖动排序，左滑快捷操作</p>
+            <p class="proj-list-hint__text">长按项目可拖动排序，左滑快捷操作；分组可左右滑动</p>
             <button type="button" class="proj-list-hint__close" id="btnProjListHintClose" aria-label="关闭提示">
               <img src="assets/catalog/hint-close.svg" width="20" height="20" alt="" aria-hidden="true">
             </button>
@@ -8820,22 +8840,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-tabs price-catalog-tabs" id="priceCatalogTabs" role="tablist">
             <button type="button" class="page-tabs__item on" data-price-catalog-tab="project" role="tab" aria-selected="true">项目</button>
             <button type="button" class="page-tabs__item" data-price-catalog-tab="product" role="tab" aria-selected="false">产品</button>
-          </div>
-          <div class="proj-list-toolbar">
-            <div class="proj-search-row">
-              <div class="proj-search-box">
-                <img class="proj-search-box__icon" src="assets/catalog/search.svg" width="16" height="16" alt="" aria-hidden="true">
-                <input type="search" id="projSearchInput" placeholder="搜索项目名称或价格" autocomplete="off">
-                <span class="proj-search-box__divider" aria-hidden="true"></span>
-                <button type="button" class="proj-search-go" id="btnProjSearchGo">搜索</button>
-              </div>
-              <button type="button" class="btn-proj-add" id="btnProjGoAdd">
-                <span class="btn-proj-add__plus" aria-hidden="true">
-                  <img src="assets/catalog/add-plus.svg" width="12" height="12" alt="">
-                </span>
-                <span id="btnProjGoAddLabel">添加</span>
-              </button>
-            </div>
           </div>
           <div class="page-body">
             <div class="catalog-list-shell">
@@ -8845,7 +8849,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div class="catalog-group-fade" aria-hidden="true"></div>
                 </div>
                 <button type="button" class="catalog-group-gear" id="btnCatalogGroupManage" aria-label="分组管理">
-                  <img src="assets/catalog/gear.svg" width="24" height="24" alt="" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 21 20" fill="none" aria-hidden="true">
+                    <path d="M13.6338 0.882812C14.786 1.26977 15.8411 1.86545 16.7549 2.62305C16.6385 2.9904 16.5752 3.3808 16.5752 3.78516C16.5752 5.74918 18.0453 7.36153 19.9424 7.61914C20.1419 8.38846 20.25 9.19492 20.25 10.0273C20.25 10.4841 20.2151 10.9328 20.1533 11.3721C18.1554 11.5343 16.5752 13.1932 16.5752 15.2295C16.5752 15.9263 16.7624 16.5798 17.0869 17.1445C16.1709 17.9762 15.094 18.6361 13.9082 19.0742C13.2417 17.8842 11.9652 17.0801 10.5 17.0801C9.03459 17.0801 7.75726 17.884 7.09082 19.0742C5.90512 18.636 4.82807 17.9762 3.91211 17.1445C4.23683 16.5797 4.42477 15.9264 4.4248 15.2295C4.4248 13.1929 2.84413 11.5338 0.845703 11.3721C0.783923 10.9329 0.75 10.4841 0.75 10.0273C0.750014 9.195 0.857153 8.38838 1.05664 7.61914C2.95418 7.36195 4.4248 5.74951 4.4248 3.78516C4.42479 3.3807 4.3606 2.99048 4.24414 2.62305C5.1578 1.86541 6.21308 1.26986 7.36523 0.882812C8.07596 1.83601 9.21522 2.45508 10.5 2.45508C11.7846 2.45508 12.923 1.83574 13.6338 0.882812Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M10.5 13.5C12.433 13.5 14 11.933 14 10C14 8.067 12.433 6.5 10.5 6.5C8.567 6.5 7 8.067 7 10C7 11.933 8.567 13.5 10.5 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
                 </button>
               </div>
               <div class="table-card" id="projTableCard">
@@ -8865,6 +8872,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <button type="button" class="btn-proj-empty-add hidden" id="btnProjEmptyAddToGroup">添加项目到本组</button>
             </div>
           </div>
+          <button type="button" class="catalog-fab" id="btnProjGoAdd" aria-label="添加项目">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
         </div>
         <div class="screen hidden" id="screen-p-groups">
           <header class="page-title-bar">
@@ -10503,10 +10513,6 @@ function syncPriceCatalogTabs() {
     btn.setAttribute('aria-selected', on ? 'true' : 'false');
   });
   document.getElementById('projTableCard')?.classList.toggle('is-product-tab', tab === 'product');
-  const search = document.getElementById('projSearchInput');
-  if (search) search.placeholder = tab === 'product' ? '搜索产品名称或价格' : '搜索项目名称或价格';
-  const addLabel = document.getElementById('btnProjGoAddLabel');
-  if (addLabel) addLabel.textContent = '添加';
   const emptyAdd = document.getElementById('btnProjEmptyAdd');
   if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
   const emptyToGroup = document.getElementById('btnProjEmptyAddToGroup');
@@ -10519,6 +10525,16 @@ function syncPriceCatalogTabs() {
   if (priceHead) priceHead.textContent = '价格（¥）';
   syncProjListDragHint();
   syncCatalogGroupChrome();
+  syncCatalogAddFab();
+}
+
+function syncCatalogAddFab() {
+  const fab = document.getElementById('btnProjGoAdd');
+  if (!fab) return;
+  const total = getActivePriceCatalog().length;
+  const isProduct = isProductCatalogTab();
+  fab.classList.toggle('hidden', !total);
+  fab.setAttribute('aria-label', isProduct ? '添加产品' : '添加项目');
 }
 
 function syncCatalogGroupChrome() {
@@ -14523,7 +14539,6 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
 function projRenderList() {
   syncPriceCatalogTabs();
   const isProduct = isProductCatalogTab();
-  const q = (document.getElementById('projSearchInput')?.value || '').trim().toLowerCase();
   const groupId = getActiveCatalogGroupId();
   const bucket = getCatalogGroupBucket();
   const sysHidden = getSystemHiddenGroup(bucket);
@@ -14533,12 +14548,11 @@ function projRenderList() {
   let base = isCatalogColSortActive()
     ? sortCatalogByActiveCol(getActivePriceCatalog())
     : projSortCatalog(getActivePriceCatalog());
-  let list = filterCatalogByActiveGroup(base).filter(p => catalogItemMatchesSearch(p, q, isProduct));
+  let list = filterCatalogByActiveGroup(base);
   /* 「全部」Tab：主列表排除隐藏；底部折叠区可展开查看隐藏项 */
   let hiddenList = [];
   if (inAllTab) {
-    hiddenList = base.filter(p => !!p.hidden && catalogItemMatchesSearch(p, q, isProduct));
-    if (q && hiddenList.length) state.catalogHiddenExpanded = true;
+    hiddenList = base.filter(p => !!p.hidden);
   }
   const onSaleList = list.filter(p => !!p.onSale);
   const offSaleList = list.filter(p => !p.onSale);
@@ -14556,23 +14570,21 @@ function projRenderList() {
   tbody.innerHTML = '';
   tbody.classList.remove('is-reordering');
   if (!onSaleList.length && !offSaleList.length && !hiddenList.length) {
-    tableCard?.classList.toggle('hidden', !total || ((inCustomGroup || inHiddenTab) && !q));
+    tableCard?.classList.toggle('hidden', !total || inCustomGroup || inHiddenTab);
     listEmpty?.classList.remove('hidden');
     if (emptyTitle) {
-      if (q) emptyTitle.textContent = isProduct ? '暂无匹配产品' : '暂无匹配项目';
-      else if (inHiddenTab) emptyTitle.textContent = isProduct ? '暂无隐藏产品' : '暂无隐藏项目';
+      if (inHiddenTab) emptyTitle.textContent = isProduct ? '暂无隐藏产品' : '暂无隐藏项目';
       else if (inCustomGroup) emptyTitle.textContent = isProduct ? '本组暂无产品' : '本组暂无项目';
       else emptyTitle.textContent = isProduct ? '暂无产品' : '暂无项目';
     }
     if (emptyHint) {
-      if (q) emptyHint.textContent = '试试其他关键词，或清空搜索';
-      else if (inHiddenTab) emptyHint.textContent = '左滑条目可将项目/产品移入隐藏';
+      if (inHiddenTab) emptyHint.textContent = '左滑条目可将项目/产品移入隐藏';
       else if (inCustomGroup) emptyHint.textContent = '可将价目表中的条目加入本组';
       else emptyHint.textContent = isProduct ? '添加后可在开单记账中使用' : '添加后可在选择项目与办卡中使用';
       emptyHint.classList.toggle('hidden', false);
     }
-    emptyAdd?.classList.toggle('hidden', !!q || inCustomGroup || inHiddenTab);
-    emptyToGroup?.classList.toggle('hidden', !(inCustomGroup && !q && total));
+    emptyAdd?.classList.toggle('hidden', inCustomGroup || inHiddenTab);
+    emptyToGroup?.classList.toggle('hidden', !(inCustomGroup && total));
     return;
   }
   tableCard?.classList.remove('hidden');
@@ -14619,7 +14631,7 @@ function projRenderList() {
     tbody.appendChild(block);
   }
   wireCatalogRowInteractions(tbody, {
-    filterActive: !!q || inCustomGroup || inHiddenTab,
+    filterActive: inCustomGroup || inHiddenTab,
     colSortActive: isCatalogColSortActive(),
   });
 }
@@ -15383,8 +15395,6 @@ function openPriceCatalog(fromScreen) {
   state.priceCatalogReturn = fromScreen || 'screen0';
   state.navStack.push(state.priceCatalogReturn);
   state.catalogColSort = { key: null, dir: null };
-  const search = document.getElementById('projSearchInput');
-  if (search) search.value = '';
   projRenderList();
   projShowScreen('screen-p-list');
 }
@@ -15428,16 +15438,9 @@ function wireProjCatalogModule() {
       if (!tab || state.priceCatalogTab === tab) return;
       state.priceCatalogTab = tab;
       state.catalogColSort = { key: null, dir: null };
-      const search = document.getElementById('projSearchInput');
-      if (search) search.value = '';
       closeAllCatalogSwipes();
       projRenderList();
     });
-  });
-  document.getElementById('projSearchInput')?.addEventListener('input', projRenderList);
-  document.getElementById('btnProjSearchGo')?.addEventListener('click', () => {
-    document.getElementById('projSearchInput')?.focus();
-    projRenderList();
   });
   document.getElementById('btnProjGoAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjEmptyAdd')?.addEventListener('click', projOpenAdd);
@@ -21663,8 +21666,6 @@ function applyDemoListState(mode) {
   state.catalogMembersGroupId = null;
   state.catalogAssignItemId = null;
   state.catalogAssignBucket = null;
-  const search = document.getElementById('projSearchInput');
-  if (search) search.value = '';
   projRenderList();
   state.memberHoldings = {};
   state.memberHoldingsInvalid = {};
