@@ -15171,7 +15171,7 @@ function projRenderForm(container, mode) {
   const reqCls = isEdit ? '' : ' req';
   const s = state.projFormState;
   if (!container || !s) return;
-  const nameLabel = '项目名称';
+  const nameLabel = isProduct ? '产品名称' : '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
   const imageLabel = '上传封面图（选填）';
   container.innerHTML = `
@@ -15428,21 +15428,24 @@ function projBackFromCatalog() {
   closeAllFlowOverlays();
   state.navStack.pop();
   const from = state.priceCatalogReturn || 'screen0';
-  /* 保持权益选品分组 Tab（activePickGroupId），仅刷新列表数据 */
+  /* 权益返回：刷新分组 Tab（重置为「全部」）并重绘列表 */
   syncAllCatalogBindings();
   if (from === 'workbench') {
     state.priceCatalogReturn = null;
     openWorkbench();
   } else if (from === 'screen2') {
+    setActivePickGroupId('project', 'all');
     renderProjectList();
     if (state.projBenefitDraft) renderProjectPickParams();
     showOnlyScreen('screen2');
   } else if (from === 'screen2p') {
+    setActivePickGroupId('product', 'all');
     renderProductList();
     showOnlyScreen('screen2p');
   } else if (from === 'screen6') {
     showOnlyScreen('screen6');
   } else if (from === 'screen4') {
+    setActivePickGroupId('discount', 'all');
     renderMemberPriceProjectList();
     if (state.discBenefitDraft) renderDiscountPickParams();
     showOnlyScreen('screen4');
