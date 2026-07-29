@@ -4688,12 +4688,31 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .page-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 #screen-bill .page-body {
   display: block; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
 }
+/* 左右 16px：与顾客信息卡外缘对齐；散客与会员共用 */
 .bill-sheet {
   display: flex; flex-direction: column;
-  background: var(--card); border-radius: 16px 16px 0 0; margin-top: 12px;
+  background: var(--card);
+  border-radius: 12px;
+  margin: 0 16px 4px;
   min-height: 420px;
+  box-shadow: none;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.06);
+}
+/* 无所持会员卡（散客）时与顾客卡间距 16px */
+.bill-sheet--solo {
+  margin-top: 16px;
+}
+.bill-sheet-divider {
+  display: block;
+  height: 1px;
+  margin: 10px 16px;
+  padding: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
 }
 .bill-sheet .catalog-list { padding: 8px 16px 24px; }
 .search-bar { margin: 12px 16px; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
@@ -4883,6 +4902,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .member-cards-wrap {
   margin: 12px 16px 0; background: #FFFFFF; border-radius: 12px;
   padding: 12px 16px 16px; overflow: hidden;
+  border: 1px solid rgba(0,0,0,.06);
 }
 .member-cards-wrap.collapsed .member-card-panel { display: none; }
 .member-cards-wrap.collapsed .member-summary { display: none !important; }
@@ -4894,7 +4914,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .member-cards-head__title { font-size: 14px; font-weight: 500; color: var(--text); }
 .expand-toggle { border: none; background: transparent; padding: 4px 0; font-size: 12px; color: var(--text-mid); cursor: pointer; font-family: inherit; }
 .member-card-panel {
-  background: var(--bg-page); border: none; border-radius: 8px;
+  background: #F7F7F7; border: none; border-radius: 8px;
   padding: 12px; margin-bottom: 8px; overflow: hidden;
 }
 .member-card-panel:last-of-type { margin-bottom: 12px; }
@@ -5019,21 +5039,13 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   background: var(--bg-page); color: var(--text-mid); border: none;
 }
 .btn-main:disabled { background: #ededed; color: var(--text-sec); border-color: #ededed; cursor: not-allowed; }
-/* 开单记账底部 · Figma 42:858 */
+/* 开单记账底部 · 无顶部提示后收高度 */
 .bottom-bar--bill {
-  height: 130px; background: #fff;
+  height: 96px; background: #fff;
   box-shadow: var(--bottom-shadow);
 }
-.bottom-bar--bill .bottom-bar__hint {
-  gap: 5px; padding: 12px 16px 0; box-sizing: border-box;
-  background: transparent; box-shadow: none;
-  font-size: 12px; font-weight: 400; color: #1a1a1a; line-height: 18px;
-}
-.bottom-bar--bill .bottom-bar__hint-icon {
-  width: 14px; height: 14px; flex-shrink: 0; display: block;
-}
 .bottom-bar--bill .bottom-bar__action {
-  min-height: 0; height: 42px; padding: 0 16px; margin-top: 10px;
+  min-height: 0; height: 42px; padding: 0 16px; margin-top: 12px;
   background: transparent; gap: 12px; align-items: center;
   box-shadow: none;
 }
@@ -6766,7 +6778,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   top: 0;
   left: 0;
   right: 0;
-  bottom: 130px; /* = .bottom-bar--bill 高度；覆盖通用 inset:0 */
+  bottom: 96px; /* = .bottom-bar--bill 高度；覆盖通用 inset:0 */
   z-index: 28;
 }
 #cartSheetMask .picker-sheet {
@@ -9198,10 +9210,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
             <div class="page-body" id="billBody"></div>
             <div class="bottom-bar bottom-bar--bill">
-              <div class="bottom-bar__hint">
-                <img class="bottom-bar__hint-icon" src="assets/billing/bill-info.svg" alt="" aria-hidden="true">
-                具体金额以结算为准
-              </div>
               <div class="bottom-bar__action">
                 <button type="button" class="cart-icon-btn" id="btnOpenCart" aria-label="已选商品">
                   <img src="assets/billing/bill-cart.svg" alt="">
@@ -14521,6 +14529,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
 }
 
 function projRenderList() {
+  syncAllCatalogBindings();
   syncPriceCatalogTabs();
   const isProduct = isProductCatalogTab();
   const groupId = getActiveCatalogGroupId();
@@ -14615,7 +14624,8 @@ function projRenderList() {
     tbody.appendChild(block);
   }
   wireCatalogRowInteractions(tbody, {
-    filterActive: inCustomGroup || inHiddenTab,
+    /* 无关键字搜索；自定义分组内可拖。仅「隐藏」Tab / 列排序拦截 */
+    dragBlockedHiddenTab: inHiddenTab,
     colSortActive: isCatalogColSortActive(),
   });
 }
@@ -14725,11 +14735,32 @@ function handleCatalogRowAction(act) {
 
 function commitCatalogBucketOrder(tbody, bucket) {
   const catalog = getActivePriceCatalog();
-  const ids = [...tbody.querySelectorAll(`.table-row-swipe[data-sort-bucket="${bucket}"]`)]
+  const visibleIds = [...tbody.querySelectorAll(`.table-row-swipe[data-sort-bucket="${bucket}"]`)]
     .map(r => r.dataset.projId)
     .filter(Boolean);
+  if (!visibleIds.length) return false;
+
+  const isHiddenBucket = String(bucket).startsWith('hidden-');
+  const saleKey = isHiddenBucket ? String(bucket).slice('hidden-'.length) : bucket;
+  const fullIds = projSortCatalog(catalog.filter(p => {
+    if (getCatalogSortBucket(p) !== saleKey) return false;
+    return isHiddenBucket ? !!p.hidden : !p.hidden;
+  })).map(p => p.id);
+
+  const visibleSet = new Set(visibleIds);
+  const merged = [];
+  let vi = 0;
+  fullIds.forEach(id => {
+    if (visibleSet.has(id)) {
+      if (vi < visibleIds.length) merged.push(visibleIds[vi++]);
+    } else {
+      merged.push(id);
+    }
+  });
+  while (vi < visibleIds.length) merged.push(visibleIds[vi++]);
+
   let changed = false;
-  ids.forEach((id, i) => {
+  merged.forEach((id, i) => {
     const p = catalog.find(x => x.id === id);
     if (!p) return;
     if (p.sortOrder !== i) {
@@ -14742,11 +14773,11 @@ function commitCatalogBucketOrder(tbody, bucket) {
 
 function wireCatalogRowInteractions(tbody, opts = {}) {
   if (!tbody) return;
-  const filterActive = !!opts.filterActive;
+  const dragBlockedHiddenTab = !!opts.dragBlockedHiddenTab || !!opts.filterActive;
   const colSortActive = !!opts.colSortActive;
   const dragBlockToast = () => {
     if (colSortActive) return '请先取消列排序后再手动排序';
-    if (filterActive) return '请清空搜索后再排序';
+    if (dragBlockedHiddenTab) return '「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组';
     return null;
   };
   tbody.querySelectorAll('.table-row-swipe').forEach(wrap => {
@@ -14791,11 +14822,12 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
           break;
         }
       }
-      if (insertBefore) tbody.insertBefore(placeholder, insertBefore);
-      else {
+      if (insertBefore) {
+        insertBefore.parentElement?.insertBefore(placeholder, insertBefore);
+      } else {
         const rows = [...tbody.querySelectorAll(`.table-row-swipe[data-sort-bucket="${bucket}"]`)];
         const last = rows[rows.length - 1];
-        if (last) tbody.insertBefore(placeholder, last.nextElementSibling);
+        if (last) last.parentElement?.insertBefore(placeholder, last.nextElementSibling);
       }
     };
 
@@ -14888,7 +14920,9 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
       armed = false;
       clearPress();
       detachDocListeners();
-      if (placeholder && dragCard) tbody.insertBefore(dragCard, placeholder);
+      if (placeholder && dragCard) {
+        (placeholder.parentElement || tbody).insertBefore(dragCard, placeholder);
+      }
       placeholder?.remove();
       placeholder = null;
       clearDragStyles();
@@ -14948,7 +14982,8 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
       placeholder.className = 'table-row-drag-placeholder';
       placeholder.dataset.sortBucket = bucket;
       placeholder.style.height = `${rect.height / dragScale}px`;
-      tbody.insertBefore(placeholder, wrap);
+      /* 下架区分挂在 .catalog-offsale-list 内，须插回原父节点，不能一律用 tbody */
+      (wrap.parentElement || tbody).insertBefore(placeholder, wrap);
       dragMount.appendChild(wrap);
       wrap.classList.add('is-dragging');
       tbody.classList.add('is-reordering');
@@ -14977,8 +15012,9 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
       document.addEventListener('pointercancel', onDocPointerEnd);
       pressTimer = setTimeout(() => {
         pressTimer = null;
-        if (filterActive) {
-          showToast('请清空搜索后再排序', true);
+        const block = dragBlockToast();
+        if (block) {
+          showToast(block, true);
           activePointerId = null;
           detachDocListeners();
           return;
@@ -15309,6 +15345,10 @@ function projValidateForm() {
   const dur = parseInt(state.projFormState?.duration, 10) || 0;
   const isProduct = state.projFormKind === 'product';
   if (!name) { showToast(isProduct ? '请填写产品名称' : '请填写项目名称', true); return false; }
+  const catalog = isProduct ? (state.productCatalog || []) : (state.projectCatalog || []);
+  const nameNorm = name.trim();
+  const dup = catalog.some(p => p.id !== state.projEditingId && String(p.name || '').trim() === nameNorm);
+  if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
   if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
   if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
@@ -15379,6 +15419,7 @@ function openPriceCatalog(fromScreen) {
   state.priceCatalogReturn = fromScreen || 'screen0';
   state.navStack.push(state.priceCatalogReturn);
   state.catalogColSort = { key: null, dir: null };
+  syncAllCatalogBindings();
   projRenderList();
   projShowScreen('screen-p-list');
 }
@@ -15387,19 +15428,24 @@ function projBackFromCatalog() {
   closeAllFlowOverlays();
   state.navStack.pop();
   const from = state.priceCatalogReturn || 'screen0';
+  /* 权益返回：刷新分组 Tab（重置为「全部」）并重绘列表 */
+  syncAllCatalogBindings();
   if (from === 'workbench') {
     state.priceCatalogReturn = null;
     openWorkbench();
   } else if (from === 'screen2') {
+    setActivePickGroupId('project', 'all');
     renderProjectList();
     if (state.projBenefitDraft) renderProjectPickParams();
     showOnlyScreen('screen2');
   } else if (from === 'screen2p') {
+    setActivePickGroupId('product', 'all');
     renderProductList();
     showOnlyScreen('screen2p');
   } else if (from === 'screen6') {
     showOnlyScreen('screen6');
   } else if (from === 'screen4') {
+    setActivePickGroupId('discount', 'all');
     renderMemberPriceProjectList();
     if (state.discBenefitDraft) renderDiscountPickParams();
     showOnlyScreen('screen4');
@@ -24036,6 +24082,7 @@ window.__BILLING_EMBEDDED__ = true;
     billRechargeGift: '',
     billTimesCardId: null,
     billTimesAdds: {},
+    billAssetPay: null,
     benefitDraft: {},
     benefitApplied: {},
     technician: '未指定',
@@ -24216,6 +24263,11 @@ window.__BILLING_EMBEDDED__ = true;
       state.successIssueCardHtml = '';
       state.lastIssueFromCardMgmt = false;
       state.payAmounts = {};
+    }
+    if (id === 'payMask' && state.billAssetPay) {
+      state.billAssetPay = null;
+      state.payAmounts = {};
+      state.payManualEdit = {};
     }
   }
   function openMask(id) { document.getElementById(id)?.classList.add('open'); }
@@ -24465,16 +24517,18 @@ window.__BILLING_EMBEDDED__ = true;
     const amt = Number(state.billRechargeAmount) || 0;
     const gift = Number(state.billRechargeGift) || 0;
     if (amt <= 0) { showToast('请输入充值金额'); return; }
-    card.rechargeBalance = round2((Number(card.rechargeBalance) || 0) + amt);
-    card.giftBalance = round2((Number(card.giftBalance) || 0) + Math.max(0, gift));
-    syncHeldCardBalance(card);
+    state.billAssetPay = {
+      type: 'recharge',
+      cardId: card.id,
+      amount: round2(amt),
+      gift: Math.max(0, round2(gift)),
+    };
     closeMask('billRechargeMask');
-    const giftLine = gift > 0 ? `<div style="margin-top:6px">赠送 ${formatYen(gift)}</div>` : '';
-    showBillAssetOk('充值成功', `
-      <div>已为「${escapeHtml(card.name)}」充值 ${formatYen(amt)}</div>
-      ${giftLine}
-      <div style="margin-top:8px;color:var(--text)">储值 ${formatYen(card.rechargeBalance)} · 赠送 ${formatYen(card.giftBalance)}</div>`);
-    renderBillHeader();
+    state.payAmounts = {};
+    state.payManualEdit = {};
+    state.payChannel = 'alipay';
+    renderPayChannels();
+    openMask('payMask');
   }
   function openBillTimesTopup(cardId) {
     const card = findHeldCardById(cardId);
@@ -24536,21 +24590,84 @@ window.__BILLING_EMBEDDED__ = true;
     if (!card) return;
     const { totalQty, due } = billTimesDue();
     if (totalQty <= 0) { showToast('请选择充次次数'); return; }
+    const adds = {};
     const lines = [];
     (card.projects || []).forEach(p => {
       if (p.unlimited) return;
       const key = p.key || p.label;
       const add = Number(state.billTimesAdds[key]) || 0;
       if (add <= 0) return;
-      p.remain = (Number(p.remain) || 0) + add;
+      adds[key] = add;
       lines.push(`${p.label} +${add} 次`);
     });
+    state.billAssetPay = {
+      type: 'times',
+      cardId: card.id,
+      amount: round2(due),
+      totalQty,
+      adds,
+      lines,
+    };
     closeMask('billTimesTopupMask');
-    showBillAssetOk('充次成功', `
-      <div>已为「${escapeHtml(card.name)}」充次</div>
-      <div style="margin-top:6px">${escapeHtml(lines.join(' · '))}</div>
-      <div style="margin-top:8px;color:var(--text)">实付 ${formatYen(due)}</div>`);
-    renderBillHeader();
+    state.payAmounts = {};
+    state.payManualEdit = {};
+    state.payChannel = 'alipay';
+    renderPayChannels();
+    openMask('payMask');
+  }
+  function getActivePayDue() {
+    if (state.billAssetPay) return round2(Number(state.billAssetPay.amount) || 0);
+    return round2(calcSettlement().dueCash);
+  }
+  function finalizeBillAssetPay() {
+    const pending = state.billAssetPay;
+    if (!pending) return false;
+    const card = findHeldCardById(pending.cardId);
+    if (!card) {
+      showToast('会员卡不存在');
+      return true;
+    }
+    if (pending.type === 'recharge') {
+      const amt = round2(Number(pending.amount) || 0);
+      const gift = Math.max(0, round2(Number(pending.gift) || 0));
+      card.rechargeBalance = round2((Number(card.rechargeBalance) || 0) + amt);
+      card.giftBalance = round2((Number(card.giftBalance) || 0) + gift);
+      syncHeldCardBalance(card);
+      state.billAssetPay = null;
+      state.payAmounts = {};
+      state.payManualEdit = {};
+      closeMask('payMask');
+      const giftLine = gift > 0 ? `<div style="margin-top:6px">赠送 ${formatYen(gift)}</div>` : '';
+      showBillAssetOk('充值成功', `
+        <div>已为「${escapeHtml(card.name)}」充值 ${formatYen(amt)}</div>
+        ${giftLine}
+        <div style="margin-top:8px;color:var(--text)">储值 ${formatYen(card.rechargeBalance)} · 赠送 ${formatYen(card.giftBalance)}</div>`);
+      renderBillHeader();
+      return true;
+    }
+    if (pending.type === 'times') {
+      const adds = pending.adds || {};
+      (card.projects || []).forEach(p => {
+        if (p.unlimited) return;
+        const key = p.key || p.label;
+        const add = Number(adds[key]) || 0;
+        if (add > 0) p.remain = (Number(p.remain) || 0) + add;
+      });
+      const due = round2(Number(pending.amount) || 0);
+      const lines = pending.lines || [];
+      state.billAssetPay = null;
+      state.payAmounts = {};
+      state.payManualEdit = {};
+      closeMask('payMask');
+      showBillAssetOk('充次成功', `
+        <div>已为「${escapeHtml(card.name)}」充次</div>
+        <div style="margin-top:6px">${escapeHtml(lines.join(' · '))}</div>
+        <div style="margin-top:8px;color:var(--text)">实付 ${formatYen(due)}</div>`);
+      renderBillHeader();
+      return true;
+    }
+    state.billAssetPay = null;
+    return false;
   }
   function staffLabel(ids) {
     const list = (ids || []).map(id => getStaffPool().find(s => s.id === id)).filter(Boolean);
@@ -24942,7 +25059,8 @@ window.__BILLING_EMBEDDED__ = true;
     document.getElementById('billBody').innerHTML = `
       ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
       ${cardBlock}
-      <div class="bill-sheet">
+      ${cardBlock ? '<div class="bill-sheet-divider" role="separator" aria-hidden="true"></div>' : ''}
+      <div class="bill-sheet${cardBlock ? '' : ' bill-sheet--solo'}">
         <div class="page-tabs">
           <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
           <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
@@ -25402,6 +25520,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function canPayWithMembercardFace() {
+    if (state.billAssetPay) return false;
     if (!isMemberBill()) return false;
     if (isIssuingCardWithFaceBenefit()) return false;
     return getMembercardBalanceTotal() > 0;
@@ -25439,7 +25558,7 @@ window.__BILLING_EMBEDDED__ = true;
 
   /** 当前渠道可填入金额：full=应付现金；remain=扣除其他渠道后剩余（会员卡封顶可用面值） */
   function payChannelFillAmount(id, mode) {
-    const due = round2(calcSettlement().dueCash);
+    const due = getActivePayDue();
     if (id === 'membercard') {
       const avail = getMembercardBalanceAvailable();
       if (mode === 'full') return round2(Math.min(due, avail));
@@ -25569,17 +25688,18 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function updatePaySheetTotals() {
+    const dueCash = getActivePayDue();
     const s = calcSettlement();
     const filled = payFilledTotal();
     const cashFilled = payCashFilledTotal();
     const amtEl = document.getElementById('payAmount');
-    if (amtEl) amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(s.dueCash)}</span>`;
+    if (amtEl) amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(dueCash)}</span>`;
     const tip = document.querySelector('#payChannels > div:last-child');
     if (tip) {
-      if (s.balanceDeduct > 0 && round2(Number(state.payAmounts?.membercard) || 0) > 0) {
-        tip.textContent = `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}`;
+      if (!state.billAssetPay && s.balanceDeduct > 0 && round2(Number(state.payAmounts?.membercard) || 0) > 0) {
+        tip.textContent = `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(dueCash + s.balanceDeduct)}`;
       } else {
-        tip.textContent = `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`;
+        tip.textContent = `已填 ${formatYen(filled)} / 应付 ${formatYen(dueCash)}`;
       }
     }
     return s;
@@ -25620,10 +25740,11 @@ window.__BILLING_EMBEDDED__ = true;
 
   function renderPayChannels() {
     clearMembercardPayIfBlocked();
+    const dueCash = getActivePayDue();
     const s = calcSettlement();
     const channels = payChannelDefs();
     if (!channels.find(c => c.id === state.payChannel)) state.payChannel = channels[0]?.id || 'alipay';
-    if (!state.payAmounts || !Object.keys(state.payAmounts).length) initPayAmounts(s.dueCash);
+    if (!state.payAmounts || !Object.keys(state.payAmounts).length) initPayAmounts(dueCash);
     channels.forEach(ch => {
       if (state.payAmounts[ch.id] == null) state.payAmounts[ch.id] = 0;
     });
@@ -25635,7 +25756,7 @@ window.__BILLING_EMBEDDED__ = true;
     const faceCards = getMemberFaceCards();
     const selectedCard = faceCards.find(c => c.id === state.payMembercardCardId);
     const amtEl = document.getElementById('payAmount');
-    amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(s.dueCash)}</span>`;
+    amtEl.innerHTML = `<span class="yen">¥</span><span class="val">${formatPayAmt(dueCash)}</span>`;
     const channelHtml = channels.map(ch => {
       const amt = formatPayAmt(state.payAmounts[ch.id] || 0);
       const active = Number(state.payAmounts[ch.id]) > 0 || state.payChannel === ch.id;
@@ -25661,8 +25782,11 @@ window.__BILLING_EMBEDDED__ = true;
       }
       return row;
     }).join('');
+    const tipHtml = (!state.billAssetPay && s.balanceDeduct > 0 && mcPay > 0)
+      ? `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(dueCash + s.balanceDeduct)}`
+      : `已填 ${formatYen(filled)} / 应付 ${formatYen(dueCash)}`;
     document.getElementById('payChannels').innerHTML = channelHtml
-      + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${s.balanceDeduct > 0 && mcPay > 0 ? `已填 ${formatYen(cashFilled)} + 面值 ${formatYen(s.balanceDeduct)} / 合计 ${formatYen(s.dueCash + s.balanceDeduct)}` : `已填 ${formatYen(filled)} / 应付 ${formatYen(s.dueCash)}`}</div>`;
+      + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${tipHtml}</div>`;
   }
 
   function createHoldOrder() {
@@ -30045,10 +30169,10 @@ window.__BILLING_EMBEDDED__ = true;
     const focusedPay = ae && ae.closest ? ae.closest('[data-pay-amt]') : null;
     if (focusedPay) commitPayInputEl(focusedPay);
     paySkipBlurClear = false;
-    const s = calcSettlement();
+    const dueCash = getActivePayDue();
     const cashFilled = payCashFilledTotal();
-    if (s.dueCash > 0 && cashFilled + 0.001 < s.dueCash) {
-      showToast(`支付金额不足，还差 ${formatYen(s.dueCash - cashFilled)}`);
+    if (dueCash > 0 && cashFilled + 0.001 < dueCash) {
+      showToast(`支付金额不足，还差 ${formatYen(dueCash - cashFilled)}`);
       return;
     }
     const mcReq = round2(Number(state.payAmounts?.membercard) || 0);
@@ -30073,10 +30197,16 @@ window.__BILLING_EMBEDDED__ = true;
     const splits = payChannelDefs()
       .map(ch => ({ id: ch.id, amount: round2(Number(state.payAmounts[ch.id]) || 0) }))
       .filter(p => p.amount > 0 && p.id !== 'membercard');
-    if (s.dueCash > 0 && !splits.length) {
+    if (dueCash > 0 && !splits.length && mcReq <= 0) {
       showToast('请填写支付金额');
       return;
     }
+    if (state.billAssetPay) {
+      if (splits.length) state.payChannel = splits[0].id;
+      finalizeBillAssetPay();
+      return;
+    }
+    const s = calcSettlement();
     if (splits.length) state.payChannel = splits[0].id;
     s.paySplits = splits;
     s.manualOrderNo = state.manualOrderNo || '';

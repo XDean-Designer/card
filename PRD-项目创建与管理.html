@@ -58,7 +58,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.5</td>
+<td>v1.6</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -167,7 +167,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td style="text-align: center;">✓</td>
 <td style="text-align: center;">部分</td>
 <td style="text-align: center;">✓</td>
-<td>文案；权限占位</td>
+<td>文案；店主/店员权限</td>
 </tr>
 <tr>
 <td>10</td>
@@ -199,11 +199,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
 <li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </li>
-<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。  </li>
-<li>B 端改价、上下架、时长、隐藏、封面等变更需 <strong>同步客户端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
-<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
+<li>项目可被会员卡权益 <strong>按名称绑定</strong>（项目桶、产品桶内 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。<code>boundToCard</code> 随模板引用 <strong>自动派生并刷新</strong>。  </li>
+<li>B 端改价、上下架、时长、隐藏、封面等变更需 <strong>同步客户端展示</strong>（开单侧为 <strong>实时目录/价格</strong>；推送细节【待联调确认】）；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
+<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进入价目再返回时 <strong>刷新权益选品分组 Tab</strong>（重置为「全部」并重绘）；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
 <li><strong>开单选品</strong> 读取价目表 <strong>实时目录</strong>（含已下架与已隐藏条目）；<strong>建卡权益选品</strong> 仅 <code>onSale &amp;&amp; !hidden</code>。  </li>
-<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</li>
+<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式接口文档 <strong>暂无交付时间</strong>；不臆造现网 URL。  </li>
+<li><strong>本期仅单店</strong>；价目管理权限：<strong>店主可编辑</strong>，<strong>店员不可编辑</strong>。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。</p>
 <hr />
@@ -274,9 +275,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>顾客端 / 小程序预约页、开单页的 UI 规格（仅消费价目结果）  </li>
 <li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
-<li>真实图片上传链路（原型为封面轨点选添加演示图，非正式 OSS/相册）  </li>
+<li>真实图片上传 / 正式 OSS / 封面 B→C 专项验收（<strong>本期不做</strong>；原型仅为演示图）  </li>
 <li>原型「无数据/有数据」造数开关  </li>
-<li>审核流、多门店价目同步策略（原型未表现则不写死）</li>
+<li>审核流、<strong>多门店</strong>价目同步与店间隔离（<strong>本期仅单店</strong>）  </li>
+<li>旧价目数据迁移方案（<strong>暂无</strong>；后续或通过 AI 助手能力补齐）  </li>
+<li>正式接口文档交付排期（<strong>暂无具体时间</strong>）</li>
 </ul>
 <h2>1.5 旧 → 新能力映射（不写废弃产品名）</h2>
 <table>
@@ -338,11 +341,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>店主（默认）</td>
-<td>可进行本文全部操作</td>
+<td>可进行本文全部价目操作（增删改查、分组、排序等）</td>
 </tr>
 <tr>
 <td>店员</td>
-<td><strong>【待产品确认】</strong> 原型未表现差异；见模块 9.2</td>
+<td><strong>不可编辑/修改价目表</strong>（无价目管理写入权限；本期原型按店主路径演示）</td>
 </tr>
 </tbody>
 </table>
@@ -404,7 +407,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>从建卡管价目</td>
 <td>权益页点「管理价目表」补货后返回继续选</td>
-<td>返回原权益页且列表刷新</td>
+<td>返回原权益页、列表刷新，<strong>分组 Tab 刷新为「全部」</strong></td>
 </tr>
 </tbody>
 </table>
@@ -567,7 +570,8 @@ flowchart LR
 <li>展开「已隐藏」后，将折叠标题滚到列表滚动区顶部附近。</li>
 </ul>
 <h2>4.3 绑卡锁定（项目为主）</h2>
-<p>绑定依据：项目/产品 <strong>名称</strong> 出现在会员卡模板权益引用中（项目次数、折扣键、产品权益等）时，同步 <code>boundToCard</code> 及模板名列表。</p>
+<p>绑定依据：项目/产品 <strong>名称</strong>（同桶内 <strong>trim 后唯一</strong>）出现在会员卡模板权益引用中（项目次数、折扣键、产品权益等）时，同步 <code>boundToCard</code> 及模板名列表。</p>
+<p><strong>自动刷新</strong>：<code>boundToCard</code>（及关联模板列表）由当前模板引用 <strong>自动派生</strong>；模板解除对某名称的引用后，下次同步/进入价目相关页即更新，<strong>无需商户手动刷新</strong>。是否落库由联调确认（见模块 7）。</p>
 <table>
 <thead>
 <tr>
@@ -687,6 +691,10 @@ flowchart LR
 <tr>
 <td>产品名称为空</td>
 <td>请填写产品名称</td>
+</tr>
+<tr>
+<td>同桶名称已存在（trim 后全等，排除自身）</td>
+<td>名称已存在</td>
 </tr>
 <tr>
 <td>价格无效</td>
@@ -871,7 +879,7 @@ flowchart LR
 <td>项目名称</td>
 <td style="text-align: center;">✓</td>
 <td>空</td>
-<td>最多 30 字；绑卡后锁定；placeholder「请输入」</td>
+<td>最多 30 字；<strong>同桶唯一</strong>（trim 后）；绑卡后锁定；placeholder「请输入」</td>
 </tr>
 <tr>
 <td>基本信息</td>
@@ -953,7 +961,7 @@ flowchart LR
 <td>名称</td>
 <td style="text-align: center;">✓</td>
 <td>空</td>
-<td>表单标签文案为「项目名称」（与项目共用控件文案）；校验空名时 toast「请填写产品名称」</td>
+<td>表单标签文案为「项目名称」（与项目共用控件文案）；<strong>同桶唯一</strong>（trim 后）；校验空名时 toast「请填写产品名称」；重名 toast「名称已存在」</td>
 </tr>
 <tr>
 <td>基本信息</td>
@@ -1042,7 +1050,7 @@ flowchart LR
 <tbody>
 <tr>
 <td>添加项目权益 / 添加产品权益 / 添加折扣权益 标题「管理价目表」</td>
-<td><code>openPriceCatalog</code>，记录返回页；返回后刷新对应选择列表</td>
+<td><code>openPriceCatalog</code>，记录返回页；返回后刷新对应选择列表，并 <strong>刷新分组 Tab</strong>（重置为「全部」）</td>
 </tr>
 <tr>
 <td>权益选择列表</td>
@@ -1054,7 +1062,7 @@ flowchart LR
 </tr>
 <tr>
 <td><strong>开单选品</strong></td>
-<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目 <strong>全量</strong> 实时目录（含已下架、已隐藏）；改价后开单价格同步</td>
+<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目 <strong>全量实时目录</strong>（含已下架、已隐藏）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
 </tr>
 </tbody>
 </table>
@@ -1082,7 +1090,7 @@ flowchart LR
 <tr>
 <td>name</td>
 <td>string</td>
-<td>展示与绑卡匹配键</td>
+<td>展示与绑卡匹配键；<strong>同桶唯一</strong>（trim 后）</td>
 </tr>
 <tr>
 <td>price</td>
@@ -1127,7 +1135,7 @@ flowchart LR
 <tr>
 <td>boundToCard</td>
 <td>boolean</td>
-<td>派生或落库【待联调确认】</td>
+<td><strong>按模板引用自动派生并刷新</strong>；是否另落库【待联调确认】</td>
 </tr>
 <tr>
 <td>boundToCoupon / boundToMall</td>
@@ -1164,7 +1172,7 @@ flowchart LR
 <tr>
 <td>name</td>
 <td>string</td>
-<td></td>
+<td><strong>同桶唯一</strong>（trim 后）</td>
 </tr>
 <tr>
 <td>spec</td>
@@ -1241,7 +1249,7 @@ flowchart LR
 </tbody>
 </table>
 <p>桶：<code>project</code> | <code>product</code> 两套分组互不影响。</p>
-<h2>7.4 能力清单（路径【待联调确认】）</h2>
+<h2>7.4 能力清单（路径【待联调确认】；正式文档暂无交付时间）</h2>
 <table>
 <thead>
 <tr>
@@ -1252,11 +1260,11 @@ flowchart LR
 <tbody>
 <tr>
 <td>列表查询</td>
-<td>按类型、关键字、分组、排序</td>
+<td>按类型、分组、排序；<strong>分页见下</strong></td>
 </tr>
 <tr>
 <td>创建/更新/删除项目或产品</td>
-<td>校验；删前校验绑卡/优惠券/商城</td>
+<td>校验（含同桶名称唯一）；删前校验绑卡/优惠券/商城</td>
 </tr>
 <tr>
 <td>上下架 / 隐藏</td>
@@ -1276,15 +1284,15 @@ flowchart LR
 </tr>
 <tr>
 <td>封面图上传</td>
-<td>正式上限与存储【待联调确认】；原型最多 1 张演示</td>
+<td><strong>本期不做正式 OSS</strong>；原型最多 1 张演示</td>
 </tr>
 <tr>
 <td>绑卡状态查询或同步</td>
-<td>与会员卡模板引用对齐</td>
+<td>与会员卡模板引用对齐；<strong>自动刷新</strong></td>
 </tr>
 <tr>
 <td>开单价目桥接</td>
-<td>全量目录供开单模块消费</td>
+<td>全量实时目录供开单模块消费</td>
 </tr>
 <tr>
 <td>变更后通知顾客端缓存/展示</td>
@@ -1292,6 +1300,13 @@ flowchart LR
 </tr>
 </tbody>
 </table>
+<h3>列表分页（常规方案）</h3>
+<ul>
+<li>默认 <strong>每页 20 条</strong>，上拉/翻页加载更多。  </li>
+<li><strong>优先服务端过滤（类型/分组/排序）后再分页</strong>；客户端仅渲染当前页。【若联调改为端内全量再切片，需书面确认】  </li>
+<li>单店预期体量 <strong>≤500 条目</strong>；列表首屏可交互目标作联调参考（非硬 SLA）。  </li>
+<li><strong>本期仅单店</strong>数据范围。</li>
+</ul>
 <h2>7.5 时序（示意）</h2>
 <pre><code>商户保存项目
   → API 更新价目
@@ -1315,17 +1330,19 @@ flowchart LR
 <li><strong>权益选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true &amp;&amp; hidden=false</code>。  </li>
 <li><strong>开单选品范围</strong>：读取价目全量目录（含已下架、已隐藏）；与顾客端/权益选品 <strong>解耦</strong>。  </li>
 <li><strong>顾客端可见</strong>：<code>onSale &amp;&amp; !hidden</code>；项目预约另需 <code>bookable</code>。  </li>
-<li><strong>绑卡匹配</strong>：以 <strong>名称</strong> 与模板权益引用对齐；改名锁定避免孤儿引用。  </li>
+<li><strong>绑卡匹配</strong>：以 <strong>名称</strong> 与模板权益引用对齐；<strong>同桶名称唯一</strong>；改名锁定避免孤儿引用；解除引用后 <code>boundToCard</code> <strong>自动刷新</strong>。  </li>
 <li><strong>绑卡上下架</strong>：绑卡 <strong>不</strong> 阻止改 <code>onSale</code>。  </li>
 <li><strong>删组</strong>：只移除分组实体与成员关系，不删除项目/产品。  </li>
 <li><strong>多分组</strong>：同一条目可出现在多个 <code>itemIds</code> 中；加入系统「隐藏」组即 <code>hidden=true</code>。  </li>
 <li><strong>排序桶</strong>：<strong>在售</strong> / <strong>下架</strong> 两桶隔离；<code>sortOrder</code> 仅在桶内生效。  </li>
 <li><strong>下架与预约</strong>：项目下架 ⇒ <code>bookable=false</code> 且不可开，直到重新在售。  </li>
-<li><strong>B→C 同步</strong>：价格、时长、在售、隐藏、封面等变更「在价目表及客户端同步生效」；顾客端页面结构不在范围。  </li>
+<li><strong>B→C / 开单同步</strong>：价目变更后客户端与开单侧按 <strong>实时目录/价格</strong> 语义生效；推送与缓存细节【待联调确认】；顾客端页面结构不在范围。  </li>
 <li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序并回到「全部」分组。  </li>
 <li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。  </li>
-<li><strong>权益选品分组 Tab</strong>：仅自定义组 +「全部」；<strong>不展示</strong> 系统「隐藏」Tab。  </li>
-<li><strong>封面图</strong>：选填；演示与正式上限均为 <strong>1 张</strong>【待联调确认正式存储】。</li>
+<li><strong>权益选品分组 Tab</strong>：仅自定义组 +「全部」；<strong>不展示</strong> 系统「隐藏」Tab；从「管理价目表」返回后 <strong>刷新分组 Tab（重置为「全部」）</strong>。  </li>
+<li><strong>封面图</strong>：选填；演示最多 <strong>1 张</strong>；正式 OSS <strong>本期不做</strong>。  </li>
+<li><strong>权限</strong>：店主可编辑价目；店员不可编辑。  </li>
+<li><strong>门店范围</strong>：<strong>本期仅单店</strong>。</li>
 </ol>
 <hr />
 <h1>模块 9　文案清单与权限</h1>
@@ -1334,11 +1351,29 @@ flowchart LR
 </blockquote>
 <h2>9.1 文案清单（须与原型一致）</h2>
 <p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、上传封面图（选填）、添加图片、在售、已下架、已隐藏、手机端可预约、规格、时长（分钟）、价格（¥）、全部。</p>
-<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请清空搜索后再排序（分组筛选拦截拖拽时）、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面；以及模块 5.5 绑卡/预约/删除拦截句。</p>
+<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请清空搜索后再排序（分组筛选拦截拖拽时）、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面；以及模块 5.5 绑卡/预约/删除拦截句。</p>
 <p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
 <p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
-<h2>9.2 权限（占位）</h2>
-<p>本期按 <strong>店主可操作全文</strong> 实现；店员差异 <strong>【待产品确认】</strong>，原型未表现。</p>
+<h2>9.2 权限</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>价目表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>店主</td>
+<td>增删改查、分组、排序、上下架/隐藏等全文操作</td>
+</tr>
+<tr>
+<td>店员</td>
+<td><strong>不可编辑/修改</strong>价目表（无写入权限）</td>
+</tr>
+</tbody>
+</table>
+<p>本期交互原型按 <strong>店主</strong> 路径演示，不单独做店员只读壳。</p>
 <hr />
 <h1>模块 10　验收 P0 + 造数场景</h1>
 <blockquote>
@@ -1380,13 +1415,15 @@ flowchart LR
 <li><strong>Given</strong> 在售区两行，<strong>When</strong> 拖拽换序，<strong>Then</strong> 刷新后顺序保持。  </li>
 <li><strong>Given</strong> 当前「隐藏」Tab 或自定义分组筛选，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请清空搜索后再排序」。  </li>
 <li><strong>Given</strong> 列排序激活，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请先取消列排序后再手动排序」。  </li>
-<li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目。  </li>
+<li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目，<strong>分组 Tab 刷新为「全部」</strong>。  </li>
 <li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 仍可选中且价格为价目表实时价格。  </li>
 <li><strong>Given</strong> 项目详情高级设置，<strong>When</strong> 添加第 2 张封面，<strong>Then</strong> toast「仅可上传 1 张封面」。  </li>
 <li><strong>Given</strong> 「全部」列表有下架与隐藏条目，<strong>When</strong> 浏览，<strong>Then</strong> 无状态列；可见居中「已下架」分隔行（下沿线）与「已隐藏」折叠（无数量）。  </li>
 <li><strong>Given</strong> 当前为项目 Tab 且列表有数据，<strong>When</strong> 点标题栏「+添加」，<strong>Then</strong> <strong>不弹窗</strong>，直接进入「新增项目」。  </li>
 <li><strong>Given</strong> 当前为产品 Tab 且列表有数据，<strong>When</strong> 点标题栏「+添加」，<strong>Then</strong> <strong>不弹窗</strong>，直接进入「新增产品」。  </li>
-<li><strong>Given</strong> 任意价目表列表态，<strong>When</strong> 查看界面，<strong>Then</strong> <strong>无</strong>右下悬浮球「+」；整表无数据时可用空态 CTA 添加，标题栏「+添加」始终可用。</li>
+<li><strong>Given</strong> 任意价目表列表态，<strong>When</strong> 查看界面，<strong>Then</strong> <strong>无</strong>右下悬浮球「+」；整表无数据时可用空态 CTA 添加，标题栏「+添加」始终可用。  </li>
+<li><strong>Given</strong> 同桶已存在名称「精致剪发」，<strong>When</strong> 再保存同名项目（trim 后相同），<strong>Then</strong> toast「名称已存在」且不写入。  </li>
+<li><strong>Given</strong> 模板已解除对某项目名称的引用，<strong>When</strong> 进入价目列表或触发绑卡同步，<strong>Then</strong> 该条目 <code>boundToCard</code> 自动为 false，无需手动刷新。</li>
 </ol>
 <hr />
 <h1>模块 11　非功能（极简）</h1>
@@ -1395,9 +1432,10 @@ flowchart LR
 </blockquote>
 <ul>
 <li>画布与动效对齐原型 390×844。  </li>
-<li>列表需支撑门店常见百级条目的滚动与分组筛选（具体分页【待联调确认】）。  </li>
+<li>列表分页与体量见模块 7.4（默认每页 20；单店 ≤500 为预期体量）。  </li>
 <li>埋点：无专表；若现网统一规范另案。  </li>
-<li>图片正式上传的大小/格式限制【待联调确认】（原型演示封面最多 1 张）。</li>
+<li>图片正式上传 / OSS：<strong>本期不做</strong>（原型演示封面最多 1 张）。  </li>
+<li><strong>本期仅单店</strong>。</li>
 </ul>
 <hr />
 <h1>模块 12　交付物</h1>

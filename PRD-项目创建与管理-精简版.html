@@ -58,7 +58,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.5-lite</td>
+<td>v1.6-lite</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -135,11 +135,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
 <li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。列表为 <strong>在售区 →「已下架」分隔行 →「已隐藏」折叠</strong>，<strong>无状态列</strong>、<strong>无搜索</strong>。新建：标题栏品牌红「+添加」按钮 <strong>跟当前 Tab 直接新建</strong>（项目 Tab→新增项目，产品 Tab→新增产品），<strong>不弹选择层</strong>；<strong>无右下悬浮球</strong>。  </li>
-<li>项目可被会员卡权益 <strong>按名称绑定</strong>；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。删除锁定以锁标呈现。  </li>
-<li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面等变更需 <strong>同步客户端展示</strong>；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
-<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
+<li>项目可被会员卡权益 <strong>按名称绑定</strong>（同桶 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。<code>boundToCard</code> <strong>自动派生刷新</strong>。删除锁定以锁标呈现。  </li>
+<li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面等变更需 <strong>同步客户端展示</strong>（开单为 <strong>实时目录/价格</strong>；细节【待联调】）；顾客端具体 UI <strong>不在本文展开</strong>。封面正式 OSS <strong>本期不做</strong>。  </li>
+<li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进价目再返回时 <strong>刷新分组 Tab（重置为「全部」）</strong>；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
 <li><strong>可见性</strong>：顾客端 <code>onSale &amp;&amp; !hidden</code>；<strong>开单选品</strong> 读价目全量（含下架/隐藏）；<strong>建卡权益选品</strong> 仅 <code>onSale &amp;&amp; !hidden</code>。  </li>
-<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，不臆造现网 URL。</li>
+<li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式文档 <strong>暂无交付时间</strong>。  </li>
+<li><strong>本期仅单店</strong>；<strong>店主可编辑价目，店员不可编辑</strong>。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-项目创建与管理.md</code>。</p>
 <hr />
@@ -209,9 +210,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>顾客端 / 小程序预约页、开单页的 UI 规格（仅消费价目结果）  </li>
 <li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
-<li>真实图片上传链路（原型为封面轨点选演示图）  </li>
+<li>真实图片上传 / 正式 OSS（<strong>本期不做</strong>；原型演示图）  </li>
 <li>原型「无数据/有数据」造数开关  </li>
-<li>审核流、多门店价目同步策略（原型未表现则不写死）</li>
+<li>审核流、<strong>多门店</strong>价目策略（<strong>本期仅单店</strong>）  </li>
+<li>旧价目迁移方案（<strong>暂无</strong>；后续或 AI 助手补齐）  </li>
+<li>正式接口文档排期（<strong>暂无具体时间</strong>）</li>
 </ul>
 <h2>1.5 旧 → 新能力映射（不写废弃产品名）</h2>
 <table>
@@ -273,11 +276,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>店主（默认）</td>
-<td>可进行本文全部操作</td>
+<td>可进行本文全部价目操作</td>
 </tr>
 <tr>
 <td>店员</td>
-<td><strong>【待产品确认】</strong> 原型未表现差异；见完整稿权限占位</td>
+<td><strong>不可编辑/修改价目表</strong></td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +342,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>从建卡管价目</td>
 <td>权益页点「管理价目表」补货后返回继续选</td>
-<td>返回原权益页且列表刷新</td>
+<td>返回原权益页、列表刷新，<strong>分组 Tab 刷新为「全部」</strong></td>
 </tr>
 </tbody>
 </table>
@@ -399,7 +402,7 @@ flowchart LR
 <tr>
 <td>列表</td>
 <td>价目表</td>
-<td>Tab 项目/产品；标题栏品牌红「+添加」按钮跟 Tab 直接新建（不弹窗；无悬浮球）；项目列名称/时长/价格；产品列名称（规格）/价格</td>
+<td>Tab 项目/产品；标题栏品牌红「+添加」；同桶名称唯一；店主可编辑/店员不可；本期单店</td>
 </tr>
 <tr>
 <td>新增</td>
