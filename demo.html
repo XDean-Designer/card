@@ -8334,9 +8334,12 @@ button.exp-flow-row:active { opacity: .92; }
 .empty-cart { text-align: center; padding: 40px 20px; color: var(--text-sec); font-size: 14px; }
 .tech-select { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; font-size: 14px; font-family: inherit; background: var(--card); }
 
-/* 添加卡页 · Figma 1:3244（无五类 Tab，纵向卡列表对齐会员卡列表） */
+/* 添加卡页 · 列表可滚 · 决策区固定 */
 .add-card-page { display: flex; flex-direction: column; flex: 1; min-height: 0; background: #fff; }
-.add-card-page > .page-body { flex: 1; min-height: 0; background: #fff; }
+.add-card-page > .page-body {
+  flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: #fff;
+}
 #addCardCustomer { flex-shrink: 0; }
 .add-card-section { padding: 8px 16px 0; background: #fff; }
 .add-card-section:first-of-type { padding-top: 12px; }
@@ -8362,27 +8365,94 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .add-card-create-btn:active { opacity: .88; background: #FFF2F2; }
 .add-card-list {
-  display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 8px;
+  display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 20px;
 }
-.add-card-staff {
-  padding: 8px 0 20px; background: #fff;
-  border-top: 8px solid #F7F7F7;
+.add-card-decision {
+  flex-shrink: 0; background: #fff;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 2;
 }
-.add-card-staff__hint {
+.add-card-picked {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border-top: 1px solid var(--card-divider);
+  background: #FFF9F9; min-height: 52px; box-sizing: border-box;
+}
+.add-card-picked.is-empty { background: #FAFAFA; }
+.add-card-picked__face {
+  width: 40px; height: 28px; border-radius: 6px; flex-shrink: 0;
+  background-size: cover; background-position: center;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.add-card-picked__meta { flex: 1; min-width: 0; }
+.add-card-picked__name {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 20px;
+}
+.add-card-picked__price {
+  font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 1px;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.add-card-picked__empty {
+  flex: 1; font-size: 13px; color: var(--text-sec);
+}
+.add-card-picked__change {
+  flex-shrink: 0; border: none; background: transparent;
+  color: var(--brand); font-size: 13px; font-family: inherit; cursor: pointer; padding: 4px 0 4px 8px;
+}
+.add-card-staff-row {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 16px; border: none; border-top: 1px solid var(--card-divider);
+  background: #fff; cursor: pointer; font-family: inherit; text-align: left; box-sizing: border-box;
+}
+.add-card-staff-row:active { background: #FAFAFA; }
+.add-card-staff-row__icon {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--brand-soft); color: var(--brand);
+}
+.add-card-staff-row__icon svg { width: 16px; height: 16px; display: block; }
+.add-card-staff-row__lbl {
+  flex-shrink: 0; font-size: 15px; font-weight: 600; color: var(--text); line-height: 22px;
+}
+.add-card-staff-row__val {
+  flex: 1; min-width: 0; font-size: 14px; color: var(--text); text-align: right;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.add-card-staff-row__val.is-placeholder { color: #B0B0B0; }
+.add-card-staff-row__chev {
+  flex-shrink: 0; color: #C0C0C0; display: inline-flex;
+}
+.add-card-staff-sheet__hint {
   margin: 0 16px 10px; font-size: 12px; line-height: 1.45; color: var(--text-sec);
 }
-.add-card-staff__body {
-  margin: 0 16px; padding: 12px; background: #FAFAFA; border-radius: 12px;
-  box-sizing: border-box;
+.add-card-staff-sheet__body {
+  margin: 0 16px 16px; padding: 12px; background: #FAFAFA; border-radius: 12px;
+  box-sizing: border-box; max-height: min(52vh, 420px); overflow-y: auto;
 }
-.add-card-staff__body .detail-item__staff-block { margin: 0; }
-.add-card-staff__body .detail-item__panel-row--staff-head { display: none; }
+.add-card-staff-sheet__body .detail-item__staff-block { margin: 0; }
+.add-card-staff-sheet__body .detail-item__panel-row--staff-head { display: none; }
+#screen-add-card .member-card-item {
+  position: relative;
+}
 #screen-add-card .member-card-item__footer {
   background: #fff;
 }
 #screen-add-card .member-card-item.is-selected .member-card-item__footer {
   background: var(--brand-soft);
 }
+#screen-add-card .member-card-item.is-selected {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+  box-shadow: 0 0 0 1px var(--brand), 0 4px 12px rgba(243, 47, 65, 0.12);
+}
+#screen-add-card .member-card-item__check {
+  position: absolute; right: 10px; bottom: 10px; top: auto; z-index: 3;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 4px rgba(243, 47, 65, 0.35);
+}
+#screen-add-card .member-card-item__check svg { width: 12px; height: 12px; display: block; }
 .member-card-item {
   cursor: pointer; border: 1.5px solid var(--border-light); border-radius: 12px;
   overflow: hidden; background: var(--card); text-align: left; width: 100%;
@@ -8450,7 +8520,7 @@ button.exp-flow-row:active { opacity: .92; }
   min-width: 0; font-size: 12px; line-height: 1.35; color: var(--text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.add-card-page .bottom-bar__action { box-shadow: var(--bottom-shadow); }
+.add-card-decision .bottom-bar__action { box-shadow: none; }
 
 /* 选择优惠券 · Figma 1:3684 */
 .coupon-page { display: flex; flex-direction: column; flex: 1; min-height: 0; background: var(--bg-page); }
@@ -11860,17 +11930,34 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </div>
               <div class="page-body" style="background:#fff">
                 <div class="add-card-list" id="addCardList"></div>
-                <div class="add-card-staff" id="addCardStaffSection">
-                  <div class="add-card-section__title" style="padding:0 16px 8px">选择服务员工</div>
-                  <p class="add-card-staff__hint" id="addCardStaffHint"></p>
-                  <div class="add-card-staff__body" id="addCardStaffRoot"></div>
+              </div>
+              <div class="add-card-decision" id="addCardDecision">
+                <div class="add-card-picked is-empty" id="addCardPicked"></div>
+                <button type="button" class="add-card-staff-row" id="addCardStaffRow" aria-haspopup="dialog">
+                  <span class="add-card-staff-row__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.75a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Z"/><path d="M4.6 19.35C5.55 16.4 8.4 14.5 12 14.5s6.45 1.9 7.4 4.85c.18.54-.26 1.15-.84 1.15H5.44c-.58 0-1.02-.61-.84-1.15Z"/></svg>
+                  </span>
+                  <span class="add-card-staff-row__lbl">服务员工</span>
+                  <span class="add-card-staff-row__val is-placeholder" id="addCardStaffRowVal">请选择</span>
+                  <span class="add-card-staff-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                </button>
+                <div class="bottom-bar">
+                  <div class="bottom-bar__action">
+                    <button type="button" class="btn-main" id="btnAddCardNext">确认办卡</button>
+                  </div>
+                  <div class="bottom-bar__safe"></div>
                 </div>
               </div>
-              <div class="bottom-bar">
-                <div class="bottom-bar__action">
-                  <button type="button" class="btn-main" id="btnAddCardNext">确认办卡</button>
-                </div>
-                <div class="bottom-bar__safe"></div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="addCardStaffMask">
+            <div class="picker-sheet tall" role="dialog" aria-label="选择服务员工">
+              <div class="picker-head">选择服务员工</div>
+              <p class="add-card-staff-sheet__hint" id="addCardStaffHint"></p>
+              <div class="add-card-staff-sheet__body" id="addCardStaffRoot"></div>
+              <div class="picker-foot">
+                <button type="button" class="btn-main" id="btnAddCardStaffDone">完成</button>
               </div>
             </div>
           </div>
@@ -30457,14 +30544,46 @@ window.__BILLING_EMBEDDED__ = true;
   function renderAddCardStaffOnly() {
     const root = document.getElementById('addCardStaffRoot');
     const hint = document.getElementById('addCardStaffHint');
-    if (!root) return;
-    const avg = getAchCalcModeForKind('card') !== 'station';
-    if (hint) {
-      hint.textContent = avg
-        ? '可多选员工；点选后选择是否顾客指定。'
-        : `可多选员工；点选后选择是否指定，再选择工位（${stationRoleLabelsJoined()}）。`;
+    if (root) {
+      const avg = getAchCalcModeForKind('card') !== 'station';
+      if (hint) {
+        hint.textContent = avg
+          ? '可多选员工；点选后选择是否顾客指定。'
+          : `可多选员工；点选后选择是否指定，再选择工位（${stationRoleLabelsJoined()}）。`;
+      }
+      root.innerHTML = renderStaffPickerHtml(getIssueStaffRow());
     }
-    root.innerHTML = renderStaffPickerHtml(getIssueStaffRow());
+    renderAddCardStaffRow();
+  }
+
+  function renderAddCardStaffRow() {
+    const valEl = document.getElementById('addCardStaffRowVal');
+    if (!valEl) return;
+    const row = getIssueStaffRow();
+    const ids = row.staffIds || [];
+    if (!ids.length) {
+      valEl.textContent = '请选择';
+      valEl.classList.add('is-placeholder');
+      return;
+    }
+    const pool = getStaffPool();
+    const names = ids.map(id => {
+      const st = pool.find(s => s.id === id);
+      return st ? st.name : id;
+    });
+    valEl.textContent = names.join('、');
+    valEl.classList.remove('is-placeholder');
+  }
+
+  function openAddCardStaffSheet() {
+    renderAddCardStaffOnly();
+    openMask('addCardStaffMask');
+  }
+
+  function closeAddCardStaffSheet() {
+    clearStaffCardEdit();
+    closeMask('addCardStaffMask');
+    renderAddCardStaffRow();
   }
   function issueStaffSelectionError() {
     const row = getIssueStaffRow();
@@ -36161,12 +36280,14 @@ window.__BILLING_EMBEDDED__ = true;
       </div>`;
   }
 
-  function renderAddCardPage() {
+  function renderAddCardPage(opts) {
+    opts = opts || {};
     const c = getCustomer() || GUEST;
     document.getElementById('addCardCustomer').innerHTML = renderCustomerNameCard(c);
     document.querySelectorAll('#addCardMode [data-add-mode]').forEach(btn => {
       btn.classList.toggle('is-on', btn.dataset.addMode === state.addCardMode);
     });
+    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
     document.getElementById('addCardList').innerHTML = CARD_TEMPLATES.map(tpl => {
       const selected = state.selectedTemplateId === tpl.id;
       const grad = CARD_COLORS[tpl.cardColor] || CARD_COLORS.brand_red;
@@ -36197,6 +36318,7 @@ window.__BILLING_EMBEDDED__ = true;
         <div class="member-card-item__section-content"><div class="member-card-item__line">${escapeHtml(tpl.validity)}</div></div>
       </div></div>`);
       return `<div class="member-card-item ${selected ? 'is-selected' : ''}" data-template-id="${tpl.id}" role="button" tabindex="0" aria-pressed="${selected ? 'true' : 'false'}">
+        ${selected ? `<span class="member-card-item__check">${checkSvg}</span>` : ''}
         <div class="member-card-compact" style="background:${grad}">
           <div class="member-card-compact__title">
             <img class="member-card-compact__vip" src="assets/billing/member-card-vip.svg" alt="" width="41" height="16">
@@ -36210,7 +36332,35 @@ window.__BILLING_EMBEDDED__ = true;
         </div>
       </div>`;
     }).join('');
+    renderAddCardPicked();
     renderAddCardStaffOnly();
+    if (opts.scrollSelected) {
+      requestAnimationFrame(() => {
+        const el = document.querySelector('#addCardList .member-card-item.is-selected');
+        if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+    }
+  }
+
+  function renderAddCardPicked() {
+    const box = document.getElementById('addCardPicked');
+    if (!box) return;
+    const tpl = CARD_TEMPLATES.find(t => t.id === state.selectedTemplateId)
+      || (typeof getTemplate === 'function' ? getTemplate(state.selectedTemplateId) : null);
+    if (!tpl) {
+      box.className = 'add-card-picked is-empty';
+      box.innerHTML = '<span class="add-card-picked__empty">请选择卡模板</span>';
+      return;
+    }
+    const grad = CARD_COLORS[tpl.cardColor] || CARD_COLORS.brand_red;
+    box.className = 'add-card-picked';
+    box.innerHTML =
+      `<span class="add-card-picked__face" style="background:${grad}" aria-hidden="true"></span>` +
+      `<div class="add-card-picked__meta">` +
+      `<div class="add-card-picked__name">${escapeHtml(tpl.name)}</div>` +
+      `<div class="add-card-picked__price">¥${tpl.price}</div>` +
+      `</div>` +
+      `<button type="button" class="add-card-picked__change" data-add-card-change>更换</button>`;
   }
 
 
@@ -37030,15 +37180,17 @@ window.__BILLING_EMBEDDED__ = true;
   window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
   [
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
-    'billRechargeMask', 'billTimesTopupMask',
+    'billRechargeMask', 'billTimesTopupMask', 'addCardStaffMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
     'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask',
   ].forEach(function (id) {
     window.__pickerMaskClosers[id] = function () { closeMask(id); };
   });
+  window.__pickerMaskClosers.addCardStaffMask = function () { closeAddCardStaffSheet(); };
   window.__pickerMaskClosers.flowBalanceDateMask = closeFlowBalanceDateSheet;
   document.getElementById('addCardBack').addEventListener('click', () => {
     clearStaffCardEdit();
+    closeMask('addCardStaffMask');
     /* 会员卡列表「办卡」进入选员工时，返回卡列表而非开单台 */
     if (state.lastIssueFromCardMgmt && state.cardIssuePending) {
       state.pendingOpenCard = null;
@@ -37083,9 +37235,24 @@ window.__BILLING_EMBEDDED__ = true;
     const card = e.target.closest('[data-template-id]');
     if (!card) return;
     state.selectedTemplateId = card.dataset.templateId;
-    renderAddCardPage();
+    renderAddCardPage({ scrollSelected: true });
   });
-  document.getElementById('addCardStaffSection')?.addEventListener('click', e => {
+  document.getElementById('addCardPicked')?.addEventListener('click', e => {
+    if (!e.target.closest('[data-add-card-change]')) return;
+    const el = document.querySelector('#addCardList .member-card-item.is-selected');
+    if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+  document.getElementById('addCardStaffRow')?.addEventListener('click', () => {
+    openAddCardStaffSheet();
+  });
+  document.getElementById('btnAddCardStaffDone')?.addEventListener('click', () => {
+    closeAddCardStaffSheet();
+  });
+  document.getElementById('addCardStaffMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('addCardStaffMask')) {
+      closeAddCardStaffSheet();
+      return;
+    }
     if (e.target.closest('[data-staff-scrim]')) {
       const editId = state.staffCardEdit && state.staffCardEdit.cartId;
       clearStaffCardEdit();
