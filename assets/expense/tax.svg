@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="40" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C0A0E8"/>
+      <stop offset="1" stop-color="#A890E0"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#bg)"/>
+  <!-- 天平 · 以 x=24 水平镜像对称 -->
+  <g fill="#fff" fill-opacity=".95">
+    <rect x="22.6" y="12.2" width="2.8" height="3" rx="0.6"/>
+    <rect x="10.5" y="15" width="27" height="2.2" rx="1.1"/>
+    <rect x="23" y="17.2" width="2" height="14.2"/>
+    <rect x="18.5" y="31.4" width="11" height="1.8" rx="0.4"/>
+    <rect x="15.5" y="33.2" width="17" height="2.4" rx="0.8"/>
+    <!-- 左盘：支点 x=12 -->
+    <path d="M12 17.2 7.4 27.6h1.7L12 20.2l2.9 7.4h1.7L12 17.2Z"/>
+    <path d="M7.4 27.6h9.2a4.6 4.6 0 0 1-9.2 0Z"/>
+    <!-- 右盘：支点 x=36（=48-12）与左盘镜像 -->
+    <path d="M36 17.2 40.6 27.6h-1.7L36 20.2l-2.9 7.4h-1.7L36 17.2Z"/>
+    <path d="M40.6 27.6h-9.2a4.6 4.6 0 0 0 9.2 0Z"/>
+  </g>
+</svg>

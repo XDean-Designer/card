@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="40" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B6FD8"/>
+      <stop offset="1" stop-color="#7A88E0"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#bg)"/>
+  <g fill="#fff" fill-opacity=".96">
+    <!-- 伞面 -->
+    <path d="M24 11C16.3 11 10 17.3 10 25h28C38 17.3 31.7 11 24 11Z"/>
+    <!-- 伞骨分割（淡色凹痕，贴合底色） -->
+    <path d="M24 12.5V25M16.2 25c1.2-5.2 4.2-8.5 7.8-9.8M31.8 25c-1.2-5.2-4.2-8.5-7.8-9.8" stroke="#5B6FD8" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+  <!-- 伞柄 -->
+  <path d="M24 25v10.5" stroke="#fff" stroke-opacity=".96" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M24 35.5c0 2 1.6 3.5 3.5 3.5" stroke="#fff" stroke-opacity=".96" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</svg>
