@@ -116,22 +116,64 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   font-size: 11px; color: var(--text-sec); line-height: 1.5; margin-top: 10px;
   padding-top: 10px; border-top: 1px solid var(--bg-page);
 }
-.doc-link-entry {
-  display: block; margin: 12px 0 0; padding: 12px 14px;
-  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600;
-  transition: border-color .15s, background .15s, box-shadow .15s;
-  position: relative; z-index: 6; cursor: pointer;
+.doc-link-stack {
+  margin: 10px 0 12px; position: relative; z-index: 6;
+  display: flex; flex-direction: column; gap: 8px;
 }
-.doc-link-entry:hover {
+.doc-link-group {
+  padding: 8px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+}
+.doc-link-group--prd {
+  background: #f8f9fb;
+  border-color: #e3e5ea;
+}
+.doc-link-group--case {
+  background: #fff8f8;
+  border-color: var(--brand-border);
+}
+.doc-link-group__head {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+}
+.doc-link-group__tag {
+  display: inline-flex; align-items: center; height: 18px; padding: 0 6px;
+  border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .04em;
+  line-height: 1;
+}
+.doc-link-group--prd .doc-link-group__tag {
+  background: #e8eaed; color: #4e5969;
+}
+.doc-link-group--case .doc-link-group__tag {
+  background: var(--brand-soft); color: var(--brand);
+}
+.doc-link-group__desc {
+  font-size: 11px; color: var(--text-sec); font-weight: 400;
+}
+.doc-link-row__btns {
+  display: flex; flex-wrap: wrap; gap: 6px; min-width: 0;
+}
+.doc-link-chip {
+  display: inline-flex; align-items: center; height: 28px; padding: 0 10px;
+  border: 1px solid var(--border); border-radius: 6px; background: #fff;
+  color: var(--text); text-decoration: none; font-size: 12px; font-weight: 500;
+  line-height: 1; cursor: pointer; transition: border-color .15s, background .15s, color .15s;
+}
+.doc-link-chip:hover {
   border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand);
 }
-.doc-link-entry__hint {
-  display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: var(--text-sec); line-height: 1.45;
+.doc-link-chip--prd::before {
+  content: "PRD";
+  display: inline-block; margin-right: 5px; padding: 1px 4px;
+  border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: .03em;
+  background: #e8eaed; color: #646a73; line-height: 1.2;
 }
-.doc-link-entry:hover .doc-link-entry__hint { color: var(--text-sec); }
-.doc-link-stack { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-.doc-link-stack .doc-link-entry { margin-top: 0; }
+.doc-link-chip--prd:hover::before { background: #ffd6db; color: var(--brand); }
+.doc-link-chip--accent {
+  border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); font-weight: 600;
+}
+.doc-link-chip--accent:hover { background: #ffe8eb; }
 .demo-state-bar { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 13px; }
 .demo-state-bar h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
 .demo-state-btns { display: flex; gap: 8px; }
@@ -4004,10 +4046,31 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .toolbar h1 { font-size: 18px; margin: 6px 0; }
 .toolbar p { font-size: 13px; color: var(--text-sec); margin-bottom: 10px; }
 .toolbar a { color: var(--brand); text-decoration: none; font-size: 13px; }
-.doc-link-stack { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-.doc-link-entry { display: block; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600; transition: .15s; position: relative; z-index: 6; cursor: pointer; }
-.doc-link-entry:hover { border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); }
-.doc-link-entry__hint { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: var(--text-sec); }
+.doc-link-stack { margin: 10px 0 12px; position: relative; z-index: 6; display: flex; flex-direction: column; gap: 8px; }
+.doc-link-group { padding: 8px 10px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+.doc-link-group--prd { background: #f8f9fb; border-color: #e3e5ea; }
+.doc-link-group--case { background: #fff8f8; border-color: var(--brand-border); }
+.doc-link-group__head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.doc-link-group__tag { display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .04em; line-height: 1; }
+.doc-link-group--prd .doc-link-group__tag { background: #e8eaed; color: #4e5969; }
+.doc-link-group--case .doc-link-group__tag { background: var(--brand-soft); color: var(--brand); }
+.doc-link-group__desc { font-size: 11px; color: var(--text-sec); font-weight: 400; }
+.doc-link-row__btns { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.doc-link-chip {
+  display: inline-flex; align-items: center; height: 28px; padding: 0 10px;
+  border: 1px solid var(--border); border-radius: 6px; background: #fff;
+  color: var(--text); text-decoration: none; font-size: 12px; font-weight: 500; line-height: 1;
+  cursor: pointer; transition: .15s;
+}
+.doc-link-chip:hover { border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); }
+.doc-link-chip--prd::before {
+  content: "PRD"; display: inline-block; margin-right: 5px; padding: 1px 4px;
+  border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: .03em;
+  background: #e8eaed; color: #646a73; line-height: 1.2;
+}
+.doc-link-chip--prd:hover::before { background: #ffd6db; color: var(--brand); }
+.doc-link-chip--accent { border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+.doc-link-chip--accent:hover { background: #ffe8eb; }
 /* ==== 工作台（Figma 入口） ==== */
 #screen-workbench { background: #fff; }
 .wb-body {
@@ -6591,6 +6654,7 @@ button.exp-flow-row:active { opacity: .92; }
   position: relative;
   display: flex; align-items: center; gap: 12px; padding: 14px 16px;
   background: var(--card); border-bottom: none; cursor: pointer;
+  min-height: 72px; box-sizing: border-box;
 }
 .customer-row:not(:last-child)::after {
   content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px;
@@ -6598,9 +6662,34 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .customer-row:active { background: #fafafa; }
 .customer-row__avatar { width: 44px; height: 44px; min-width: 44px; min-height: 44px; max-width: 44px; max-height: 44px; border-radius: 50%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; background: var(--brand-soft); flex-shrink: 0; }
-.customer-row__name { font-size: 16px; font-weight: 500; }
-.customer-row__meta { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
-.customer-row__vip { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #B8860B; background: linear-gradient(90deg,#FFF8E1,#FFE082); }
+.customer-row__main { flex: 1; min-width: 0; padding-right: 8px; }
+.customer-row__name { font-size: 16px; font-weight: 500; color: var(--text); line-height: 22px; }
+.customer-row__meta { font-size: 12px; color: var(--text-sec); margin-top: 2px; line-height: 17px; }
+.customer-row__recent {
+  font-size: 12px; color: var(--text-sec); margin-top: 4px; line-height: 17px;
+}
+.customer-row__stats {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; justify-content: center;
+  gap: 6px; min-width: 96px;
+}
+.customer-row__stat {
+  display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+  min-width: 0;
+}
+.customer-row__stat-icon {
+  flex-shrink: 0; width: 14px; height: 14px; color: #B2B2B2;
+  display: block;
+}
+.customer-row__spend {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 20px;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.customer-row__spend .yen { font-size: 12px; font-weight: 500; margin-right: 1px; }
+.customer-row__cards {
+  font-size: 12px; color: var(--text-sec); line-height: 17px; white-space: nowrap;
+}
+.customer-row__vip { display: none; }
 /* 会员信息卡 · Figma 151:5842；有资产指标时加高 */
 .customer-card {
   box-sizing: border-box;
@@ -9931,22 +10020,27 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <p>创建分两步：基本信息 → 权益组合（勾选后在下方展开配置）。列表卡面可快捷办卡。</p>
     <p><a href="index.html">← 演示包入口</a> · <a href="剑琅联盟-卡模板-无类型版.html">权益定制版</a> · <a href="剑琅联盟-会员卡竞品对比与优化建议.html">竞品对比</a></p>
     <div class="doc-link-stack">
-      <a class="doc-link-entry" id="btnOpenPrd" href="PRD-会员卡管理.html">
-        PRD · 会员卡管理
-        <span class="doc-link-entry__hint">排版预览 · 开发用 Markdown 可在预览页下载</span>
-      </a>
-      <a class="doc-link-entry" id="btnOpenPrdLite" href="PRD-会员卡管理-精简版.html">
-        PRD · 会员卡管理（精简）
-        <span class="doc-link-entry__hint">仅模块 1–3 · 无视觉索引</span>
-      </a>
-      <a class="doc-link-entry" id="btnOpenPrdPrice" href="PRD-项目创建与管理.html">
-        PRD · 项目创建与管理
-        <span class="doc-link-entry__hint">价目表（项目·产品）· 排版预览</span>
-      </a>
-      <a class="doc-link-entry" id="btnOpenPrdPriceLite" href="PRD-项目创建与管理-精简版.html">
-        PRD · 项目创建与管理（精简）
-        <span class="doc-link-entry__hint">仅模块 1–3</span>
-      </a>
+      <div class="doc-link-group doc-link-group--prd">
+        <div class="doc-link-group__head">
+          <span class="doc-link-group__tag">PRD</span>
+          <span class="doc-link-group__desc">产品需求文档</span>
+        </div>
+        <div class="doc-link-row__btns">
+          <a class="doc-link-chip doc-link-chip--prd" id="btnOpenPrd" href="PRD-会员卡管理.html" title="PRD · 会员卡管理">会员卡</a>
+          <a class="doc-link-chip doc-link-chip--prd" id="btnOpenPrdLite" href="PRD-会员卡管理-精简版.html" title="PRD · 会员卡管理（精简）">会员卡精简</a>
+          <a class="doc-link-chip doc-link-chip--prd" id="btnOpenPrdPrice" href="PRD-项目创建与管理.html" title="PRD · 项目创建与管理">项目</a>
+          <a class="doc-link-chip doc-link-chip--prd" id="btnOpenPrdPriceLite" href="PRD-项目创建与管理-精简版.html" title="PRD · 项目创建与管理（精简）">项目精简</a>
+        </div>
+      </div>
+      <div class="doc-link-group doc-link-group--case">
+        <div class="doc-link-group__head">
+          <span class="doc-link-group__tag">案例</span>
+          <span class="doc-link-group__desc">现实门店资料整理</span>
+        </div>
+        <div class="doc-link-row__btns">
+          <a class="doc-link-chip doc-link-chip--accent" id="btnOpenIndustryCase" href="行业案例-美业门店案例整理.html" title="行业案例 · 美业门店案例整理">美业门店案例</a>
+        </div>
+      </div>
     </div>
     <div class="demo-state-bar">
       <h3>列表演示状态</h3>
@@ -25452,11 +25546,11 @@ document.getElementById('btnDiscPickSelectAll').onclick = () => selectAllSimpleP
 document.getElementById('btnDiscPickInvert').onclick = () => invertSimplePick('discount');
 document.getElementById('btnDemoEmpty').onclick = () => applyDemoListState('empty');
 document.getElementById('btnDemoFilled').onclick = () => applyDemoListState('filled');
-document.querySelectorAll('.doc-link-stack .doc-link-entry').forEach(el => {
+document.querySelectorAll('.doc-link-stack a.doc-link-chip[href]').forEach(el => {
   el.addEventListener('click', e => {
     const href = e.currentTarget.getAttribute('href');
     if (!href) return;
-    // 嵌入式预览常拦截 target=_blank；强制同页跳转保证可进 PRD
+    // 嵌入式预览常拦截 target=_blank；强制同页跳转保证可进文档预览
     e.preventDefault();
     location.assign(new URL(href, location.href).href);
   });
@@ -32172,28 +32266,28 @@ window.__BILLING_EMBEDDED__ = true;
 
   const CUSTOMERS = [
     {
-      id: 'm1', name: '张雨晴', phone: '138****8821', isMember: true, vip: true,
+      id: 'm1', name: '张雨晴', phone: '138****8821', isMember: true, vip: true, totalSpend: 4680,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m1', name: '新客首开卡', balance: 300, projects: [] },
         { id: 'demo_year_wash_m1', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 11 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
       ],
     },
     {
-      id: 'm2', name: '李诗涵', phone: '139****6612', isMember: true, vip: true,
+      id: 'm2', name: '李诗涵', phone: '139****6612', isMember: true, vip: true, totalSpend: 8920,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m2', name: '新客首开卡', balance: 170, projects: [] },
         { id: 'demo_lifetime_balance_m2', name: '永久储值卡', balance: 950, projects: [] },
       ],
     },
     {
-      id: 'm3', name: '王思琪', phone: '136****9033', isMember: true, vip: true,
+      id: 'm3', name: '王思琪', phone: '136****9033', isMember: true, vip: true, totalSpend: 2150,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m3', name: '新客首开卡', balance: 20, projects: [] },
         { id: 'demo_retail_policy_m3', name: '减值策略演示卡', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 9 }] },
       ],
     },
     {
-      id: 'm4', name: '陈浩然', phone: '137****5520', isMember: true, vip: true,
+      id: 'm4', name: '陈浩然', phone: '137****5520', isMember: true, vip: true, totalSpend: 12680,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_new_first_m4', name: '新客首开卡', balance: 300, projects: [] },
         { id: 'demo_retail_perm_color_m4', name: '减值烫染卡', balance: 0, discount: 0.85, projects: [] },
@@ -32201,47 +32295,47 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm5', name: '赵欣怡', phone: '135****7788', isMember: true, vip: true,
+      id: 'm5', name: '赵欣怡', phone: '135****7788', isMember: true, vip: true, totalSpend: 5340,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m5', name: '新客首开卡', balance: 350, projects: [] },
         { id: 'demo_year_wash_m5', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '头皮护理', label: '头皮护理', remain: 1 }] },
       ],
     },
     {
-      id: 'm6', name: '刘子轩', phone: '133****1205', isMember: true, vip: false,
+      id: 'm6', name: '刘子轩', phone: '133****1205', isMember: true, vip: false, totalSpend: 3200,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_old_renew_m6', name: '老客续充卡', balance: 1000, discount: 0.85, projects: [] },
       ],
     },
     {
-      id: 'm7', name: '周婉清', phone: '132****3344', isMember: true, vip: false,
+      id: 'm7', name: '周婉清', phone: '132****3344', isMember: true, vip: false, totalSpend: 1880,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_old_renew_m7', name: '老客续充卡', balance: 600, discount: 0.85, projects: [] },
       ],
     },
     {
-      id: 'm8', name: '吴佳宁', phone: '131****5566', isMember: true, vip: true,
+      id: 'm8', name: '吴佳宁', phone: '131****5566', isMember: true, vip: true, totalSpend: 7650,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_old_renew_m8', name: '老客续充卡', balance: 150, discount: 0.85, projects: [] },
         { id: 'demo_lifetime_balance_m8', name: '永久储值卡', balance: 480, projects: [] },
       ],
     },
     {
-      id: 'm9', name: '郑一鸣', phone: '130****7789', isMember: true, vip: true,
+      id: 'm9', name: '郑一鸣', phone: '130****7789', isMember: true, vip: true, totalSpend: 9420,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_old_renew_m9', name: '老客续充卡', balance: 1000, discount: 0.85, projects: [] },
         { id: 'demo_retail_perm_color_m9', name: '减值烫染卡', balance: 0, discount: 0.85, projects: [] },
       ],
     },
     {
-      id: 'm10', name: '孙梦洁', phone: '158****0012', isMember: true, vip: true,
+      id: 'm10', name: '孙梦洁', phone: '158****0012', isMember: true, vip: true, totalSpend: 6100,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_old_renew_m10', name: '老客续充卡', balance: 1200, discount: 0.85, projects: [] },
         { id: 'demo_year_wash_m10', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 3 }] },
       ],
     },
     {
-      id: 'm11', name: '钱小姐', phone: '159****2233', isMember: true, vip: true,
+      id: 'm11', name: '钱小姐', phone: '159****2233', isMember: true, vip: true, totalSpend: 28600,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_vip_combo_m11', name: '尊享组合卡', balance: 2300, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 9 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
         { id: 'demo_kids_times_m11', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 9 }] },
@@ -32249,7 +32343,7 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm12', name: '冯启航', phone: '157****4455', isMember: true, vip: true,
+      id: 'm12', name: '冯启航', phone: '157****4455', isMember: true, vip: true, totalSpend: 22140,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_vip_combo_m12', name: '尊享组合卡', balance: 1600, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 7 }, { key: '头皮护理', label: '头皮护理', remain: 2 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
         { id: 'demo_kids_times_m12', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 6 }] },
@@ -32257,7 +32351,7 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm13', name: '陈小姐', phone: '156****6677', isMember: true, vip: true,
+      id: 'm13', name: '陈小姐', phone: '156****6677', isMember: true, vip: true, totalSpend: 19880,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_vip_combo_m13', name: '尊享组合卡', balance: 300, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 2 }, { key: '头皮护理', label: '头皮护理', remain: 1 }, { key: '时尚造型', label: '时尚造型', remain: 1 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
         { id: 'demo_kids_times_m13', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 2 }] },
@@ -32266,7 +32360,7 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm14', name: '褚女士', phone: '155****8899', isMember: true, vip: true,
+      id: 'm14', name: '褚女士', phone: '155****8899', isMember: true, vip: true, totalSpend: 25420,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_vip_combo_m14', name: '尊享组合卡', balance: 2000, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
         { id: 'demo_kids_times_m14', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 1 }] },
@@ -32275,7 +32369,7 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm15', name: '卫文博', phone: '153****1122', isMember: true, vip: true,
+      id: 'm15', name: '卫文博', phone: '153****1122', isMember: true, vip: true, totalSpend: 3120,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_vip_combo_m15', name: '尊享组合卡', balance: 2500, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
         { id: 'demo_kids_times_m15', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 10 }] },
@@ -32283,34 +32377,34 @@ window.__BILLING_EMBEDDED__ = true;
       ],
     },
     {
-      id: 'm16', name: '蒋小姐', phone: '152****3344', isMember: true, vip: true,
+      id: 'm16', name: '蒋小姐', phone: '152****3344', isMember: true, vip: true, totalSpend: 8700,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_perm_color_discount_m16', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_lifetime_balance_m16', name: '永久储值卡', balance: 800, projects: [] },
       ],
     },
     {
-      id: 'm17', name: '沈女士', phone: '151****5566', isMember: true, vip: false,
+      id: 'm17', name: '沈女士', phone: '151****5566', isMember: true, vip: false, totalSpend: 1560,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_perm_color_discount_m17', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
       ],
     },
     {
-      id: 'm18', name: '韩立晨', phone: '150****7788', isMember: true, vip: true,
+      id: 'm18', name: '韩立晨', phone: '150****7788', isMember: true, vip: true, totalSpend: 11200,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
         { id: 'demo_perm_color_discount_m18', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_retail_policy_m18', name: '减值策略演示卡', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 10 }] },
       ],
     },
     {
-      id: 'm19', name: '杨小姐', phone: '188****9900', isMember: true, vip: true,
+      id: 'm19', name: '杨小姐', phone: '188****9900', isMember: true, vip: true, totalSpend: 6890,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_perm_color_discount_m19', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_lifetime_balance_m19', name: '永久储值卡', balance: 1100, projects: [] },
       ],
     },
     {
-      id: 'm20', name: '朱女士', phone: '187****2211', isMember: true, vip: true,
+      id: 'm20', name: '朱女士', phone: '187****2211', isMember: true, vip: true, totalSpend: 4320,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_perm_color_discount_m20', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_year_wash_m20', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 12 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
@@ -33430,6 +33524,41 @@ window.__BILLING_EMBEDDED__ = true;
     return parts.length ? parts.join(' · ') : '未使用权益';
   }
 
+  function formatPickSpend(n) {
+    const v = Math.round(Number(n) || 0);
+    return v.toLocaleString('zh-CN');
+  }
+
+  function customerPickMetrics(c) {
+    const cardCount = Array.isArray(c.cards) ? c.cards.length : 0;
+    const spend = Number(c.totalSpend);
+    return {
+      cardCount,
+      totalSpend: Number.isFinite(spend) ? spend : 0,
+    };
+  }
+
+  function customerPickRowHtml(c, dataAttr) {
+    const m = customerPickMetrics(c);
+    const recent = c.lastVisit
+      ? `最近消费：${escapeHtml(c.lastVisit)}`
+      : '最近消费：未消费';
+    const spendIcon = '<svg class="customer-row__stat-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.2v5.6M5.2 5.6c.35-.55 1-.9 1.8-.9 1.1 0 1.9.6 1.9 1.45S8.1 7.6 7 7.6 5.1 8.15 5.1 9c0 .9.85 1.5 1.95 1.5.75 0 1.4-.3 1.75-.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    const cardIcon = '<svg class="customer-row__stat-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="1.5" y="3.5" width="11" height="7.5" rx="1.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 6.2h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 9.2h2.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    return `<div class="customer-row" ${dataAttr}>
+      <img class="customer-row__avatar" src="${c.avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
+      <div class="customer-row__main">
+        <div class="customer-row__name">${escapeHtml(c.name)}</div>
+        <div class="customer-row__meta">${escapeHtml(c.phone || '')}</div>
+        <div class="customer-row__recent">${recent}</div>
+      </div>
+      <div class="customer-row__stats" aria-label="消费与持卡">
+        <div class="customer-row__stat">${spendIcon}<span class="customer-row__spend"><span class="yen">¥</span>${formatPickSpend(m.totalSpend)}</span></div>
+        <div class="customer-row__stat">${cardIcon}<span class="customer-row__cards">持卡 ${m.cardCount}</span></div>
+      </div>
+    </div>`;
+  }
+
   function renderCustomerList() {
     const q = state.searchQuery.trim().toLowerCase();
     const list = CUSTOMERS.filter(c => {
@@ -33445,22 +33574,7 @@ window.__BILLING_EMBEDDED__ = true;
     });
     const letters = Object.keys(groups).sort((a, b) => (a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)));
     const html = letters.map(L => {
-      const rows = groups[L].map(c => {
-        const vipLv = c.vip ? (c.id.charCodeAt(c.id.length - 1) % 2 ? 'VIP1' : 'VIP2') : '';
-        const cardHint = (c.cards && c.cards[0]) ? c.cards[0].name : '未消费';
-        const amt = (c.cards && c.cards[0] && c.cards[0].balance > 0) ? `【¥${Math.round(c.cards[0].balance)}】` : (c.cards && c.cards[0] ? '【¥298】' : '');
-        const recent = c.lastVisit
-          ? `最近消费：${escapeHtml(c.lastVisit)} ${escapeHtml(cardHint)} ${amt}`
-          : '最近消费：未消费';
-        return `<div class="customer-row" data-pick="${c.id}">
-          <img class="customer-row__avatar" src="${c.avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
-          <div>
-            <div class="customer-row__name">${escapeHtml(c.name)}${vipLv ? `<span class="customer-row__vip1">${vipLv}</span>` : ''}</div>
-            <div class="customer-row__meta">${escapeHtml(c.phone || '')}</div>
-            <div class="customer-row__meta">${recent}</div>
-          </div>
-        </div>`;
-      }).join('');
+      const rows = groups[L].map(c => customerPickRowHtml(c, `data-pick="${c.id}"`)).join('');
       return `<div class="pick-letter" data-letter="${L}">${L}</div>${rows}`;
     }).join('');
     document.getElementById('customerList').innerHTML = html || '<div class="empty-cart">无匹配顾客</div>';
@@ -33592,17 +33706,7 @@ window.__BILLING_EMBEDDED__ = true;
     });
     const letters = Object.keys(groups).sort((a, b) => (a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)));
     const memberHtml = letters.map(L => {
-      const rows = groups[L].map(c => {
-        const vipLv = c.vip ? (c.id.charCodeAt(c.id.length - 1) % 2 ? 'VIP1' : 'VIP2') : '';
-        return `<div class="customer-row" data-bill-pick-member="${c.id}">
-          <img class="customer-row__avatar" src="${c.avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
-          <div>
-            <div class="customer-row__name">${escapeHtml(c.name)}${vipLv ? `<span class="customer-row__vip1">${vipLv}</span>` : ''}</div>
-            <div class="customer-row__meta">${escapeHtml(c.phone || '')}</div>
-            <div class="customer-row__meta">${c.lastVisit ? `最近消费：${escapeHtml(c.lastVisit)}` : '最近消费：未消费'}</div>
-          </div>
-        </div>`;
-      }).join('');
+      const rows = groups[L].map(c => customerPickRowHtml(c, `data-bill-pick-member="${c.id}"`)).join('');
       return `<div class="pick-letter" data-letter="${L}">${L}</div>${rows}`;
     }).join('');
     const guestBlock = guestRows.length

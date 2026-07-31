@@ -11,7 +11,8 @@ Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinu
   }
 Start-Sleep -Milliseconds 400
 
-$py = (Get-Command python -ErrorAction SilentlyContinue)?.Source
+$pyCmd = Get-Command python -ErrorAction SilentlyContinue
+$py = if ($pyCmd) { $pyCmd.Source } else { $null }
 if (-not $py) { throw '未找到 python，请先安装并加入 PATH' }
 
 $ip = (Get-NetIPAddress -AddressFamily IPv4 |
