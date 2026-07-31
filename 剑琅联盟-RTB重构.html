@@ -240,7 +240,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   width: 32px; height: 3px; border-radius: 2px; background: transparent;
 }
 .page-tabs__item.on .page-tabs__indicator { background: var(--brand); }
-.list-shelf-seg + .list-page-body .list-page { padding-top: 16px; }
+.list-shelf-seg + .list-page-body .list-page { padding-top: 8px; }
+.list-shelf-seg + .list-page-body .card-list-shell { padding-top: 8px; }
+.list-shelf-seg + .list-page-body .card-list-shell .list-page { padding-top: 0; }
 .issue-picker-tabs.page-tabs { margin: 0; }
 .issue-picker-tabs--holders-only .page-tabs__item[data-issue-tab="new"] { display: none; }
 .member-card-item--shelved { border-color: var(--border); }
@@ -351,7 +353,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 /* 描边按钮：禁止填充，仅描边 + 品牌字色（全站 secondary / outline 统一遵守） */
 .btn-main.secondary,
 .btn-main.btn-outline-brand {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand); margin-top: 8px;
+  background: transparent; color: var(--brand); border: 1px solid var(--brand); margin-top: 8px;
 }
 .btn-main:disabled {
   background: var(--disabled); color: var(--text-sec); border: 1px solid var(--disabled);
@@ -466,22 +468,32 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item__line-val.is-validity.is-muted { color: var(--text-sec); }
 .member-card-item__empty { font-size: 12px; color: var(--text-sec); margin: 0; line-height: 1.45; }
 .member-card-item__footer {
-  display: flex; justify-content: space-between; align-items: flex-end; gap: 8px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
   padding: 8px 12px 10px; border-top: 1px solid var(--bg-page);
+}
+.member-card-item__footer-left {
+  flex: 1; min-width: 0; display: flex; align-items: center;
+}
+.member-card-item__footer-right {
+  flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px;
 }
 .card-face-act {
   border: none; cursor: pointer; font-family: inherit;
   padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1.2;
 }
 .card-face-act--clone-text {
-  padding: 0 0 5px; border-radius: 0; background: transparent; border: none;
+  padding: 0; border-radius: 0; background: transparent; border: none;
   color: var(--switch-include-on); font-size: 12px; font-weight: 600; line-height: 1.2;
 }
 .card-face-act--outline {
   background: transparent; color: var(--brand); border: 1px solid var(--brand);
+  box-sizing: border-box; min-height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .card-face-act--solid {
   background: var(--brand); color: #fff; border: 1px solid var(--brand);
+  box-sizing: border-box; min-height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .card-face-act:active { opacity: .88; }
 .member-card-item__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
@@ -1048,7 +1060,7 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 }
 .picker-mask--bottom .picker-foot--row .btn-main { flex: 1 1 0; width: auto; min-width: 0; }
 .picker-mask--bottom .picker-foot .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand); margin-top: 0;
+  background: transparent; color: var(--brand); border: 1px solid var(--brand); margin-top: 0;
 }
 .picker-head { padding: 20px 20px 0; border-bottom: none; font-weight: 600; text-align: center; font-size: 17px; color: var(--text); line-height: 1.35; }
 .picker-head--stack { padding: 12px 16px 10px; }
@@ -3491,7 +3503,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600;
 }
 #screen-p-edit .bottom-bar--dual .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand); font-weight: 600;
+  background: transparent; color: var(--brand); border: 1px solid var(--brand); font-weight: 600;
 }
 #screen-p-edit .bottom-bar--dual .bottom-bar__action { gap: 16px; }
 #screen-p-edit .alert-banner {
@@ -3512,40 +3524,55 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 }
 
 /* ========== Figma 305:751 · 分组管理 ========== */
-#screen-p-groups { background: #F7F7F7; }
-#screen-p-groups .page-body { background: #F7F7F7; }
-#screen-p-groups .catalog-group-manage-list { padding: 12px 16px 24px; }
-#screen-p-groups .catalog-group-card { border-radius: 12px; }
-#screen-p-groups .catalog-group-manage-row { min-height: 69px; }
-#screen-p-groups .catalog-group-manage-row + .catalog-group-manage-row::before {
+#screen-p-groups,
+#screen-card-groups { background: #F7F7F7; }
+#screen-p-groups .page-body,
+#screen-card-groups .page-body { background: #F7F7F7; }
+#screen-p-groups .catalog-group-manage-list,
+#screen-card-groups .catalog-group-manage-list { padding: 12px 16px 24px; }
+#screen-p-groups .catalog-group-card,
+#screen-card-groups .catalog-group-card { border-radius: 12px; }
+#screen-p-groups .catalog-group-manage-row,
+#screen-card-groups .catalog-group-manage-row { min-height: 69px; }
+#screen-p-groups .catalog-group-manage-row + .catalog-group-manage-row::before,
+#screen-card-groups .catalog-group-manage-row + .catalog-group-manage-row::before {
   left: 16px; right: 16px; height: 0.5px; background: rgba(0, 0, 0, 0.04);
   transform: none;
 }
-#screen-p-groups .catalog-group-manage-row__drag {
+#screen-p-groups .catalog-group-manage-row__drag,
+#screen-card-groups .catalog-group-manage-row__drag {
   color: #929292; width: 44px; height: 64px;
 }
 #screen-p-groups .catalog-group-manage-row__drag img,
-#screen-p-groups .catalog-group-manage-row__drag svg {
+#screen-p-groups .catalog-group-manage-row__drag svg,
+#screen-card-groups .catalog-group-manage-row__drag img,
+#screen-card-groups .catalog-group-manage-row__drag svg {
   display: block; width: 18px; height: 18px; pointer-events: none;
 }
-#screen-p-groups .catalog-group-manage-row__name {
+#screen-p-groups .catalog-group-manage-row__name,
+#screen-card-groups .catalog-group-manage-row__name {
   font-size: 16px; font-weight: 600; color: #1A1A1A; line-height: 20.8px;
 }
-#screen-p-groups .catalog-group-manage-row__meta {
+#screen-p-groups .catalog-group-manage-row__meta,
+#screen-card-groups .catalog-group-manage-row__meta {
   margin-top: 0; padding-top: 4px; font-size: 12px; font-weight: 400;
   color: #929292; line-height: 15.6px;
 }
-#screen-p-groups .catalog-group-manage-row__more {
+#screen-p-groups .catalog-group-manage-row__more,
+#screen-card-groups .catalog-group-manage-row__more {
   color: #929292; font-size: 20px; letter-spacing: 1px;
 }
-#screen-p-groups .bottom-bar__action {
+#screen-p-groups .bottom-bar__action,
+#screen-card-groups .bottom-bar__action {
   background: transparent; box-shadow: none; border: none;
   min-height: 0; padding: 0 16px 8px;
 }
-#screen-p-groups .bottom-bar__safe {
+#screen-p-groups .bottom-bar__safe,
+#screen-card-groups .bottom-bar__safe {
   background: transparent; box-shadow: none;
 }
-#screen-p-groups .bottom-bar .btn-main {
+#screen-p-groups .bottom-bar .btn-main,
+#screen-card-groups .bottom-bar .btn-main {
   height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600;
 }
 
@@ -3594,60 +3621,114 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 .picker-sheet--menu .catalog-action-safe { background: #F7F7F7; height: 34px; }
 
 /* ========== Figma 305:865 · 设置分组 ========== */
-#catalogItemGroupMask .picker-sheet.tall {
+#catalogItemGroupMask .picker-sheet.tall,
+#cardItemGroupMask .picker-sheet.tall {
   background: linear-gradient(180deg, #fff 0%, #F7F7F7 30%, #F7F7F7 100%);
   border-radius: 16px 16px 0 0;
   padding: 0;
   max-height: 85%;
 }
-#catalogItemGroupMask .picker-head--stack {
+#catalogItemGroupMask .picker-head--stack,
+#cardItemGroupMask .picker-head--stack {
   display: flex; flex-direction: column; align-items: center;
   padding: 14px 20px 12px; border-bottom: none; background: transparent;
 }
-#catalogItemGroupMask .picker-head__title {
+#catalogItemGroupMask .picker-head__title,
+#cardItemGroupMask .picker-head__title {
   font-size: 18px; font-weight: 600; color: #1A1A1A; line-height: 25px; text-align: center;
 }
-#catalogItemGroupMask .picker-head__sub {
+#catalogItemGroupMask .picker-head__sub,
+#cardItemGroupMask .picker-head__sub {
   margin-top: 8px; font-size: 14px; font-weight: 400; color: #929292; line-height: 20px;
   text-align: center;
 }
-#catalogItemGroupMask .catalog-group-sheet-list {
+#catalogItemGroupMask .catalog-group-sheet-list,
+#cardItemGroupMask .catalog-group-sheet-list {
   flex: 1; min-height: 0; overflow-y: auto;
   padding: 8px 8px 12px; display: flex; flex-direction: column; gap: 8px;
 }
-#catalogItemGroupMask .catalog-group-assign-row {
+#catalogItemGroupMask .catalog-group-assign-row,
+#cardItemGroupMask .catalog-group-assign-row {
   display: flex; align-items: center; justify-content: space-between;
   height: 60px; padding: 0 12px; margin: 0;
   background: #fff; border-radius: 8px; cursor: pointer;
   box-sizing: border-box;
 }
-#catalogItemGroupMask .catalog-group-assign-row__name {
+#catalogItemGroupMask .catalog-group-assign-row__name,
+#cardItemGroupMask .catalog-group-assign-row__name {
   font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
 }
-#catalogItemGroupMask .catalog-group-assign-row__check {
+#catalogItemGroupMask .catalog-group-assign-row__check,
+#cardItemGroupMask .catalog-group-assign-row__check {
   width: 20px; height: 20px; flex-shrink: 0;
   box-sizing: border-box;
   display: inline-flex; align-items: center; justify-content: center;
   border: none; border-radius: 0; background: transparent;
   position: relative;
 }
-#catalogItemGroupMask .catalog-group-assign-row__check svg {
+#catalogItemGroupMask .catalog-group-assign-row__check svg,
+#cardItemGroupMask .catalog-group-assign-row__check svg {
   display: block; width: 20px; height: 20px;
 }
-#catalogItemGroupMask .catalog-group-assign-row__check .catalog-check-on { display: none; }
-#catalogItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-off { display: none; }
-#catalogItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-on { display: block; }
-#catalogItemGroupMask .catalog-group-assign-row input { position: absolute; opacity: 0; pointer-events: none; }
-#catalogItemGroupMask .picker-foot--row {
+#catalogItemGroupMask .catalog-group-assign-row__check .catalog-check-on,
+#cardItemGroupMask .catalog-group-assign-row__check .catalog-check-on { display: none; }
+#catalogItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-off,
+#cardItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-off { display: none; }
+#catalogItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-on,
+#cardItemGroupMask .catalog-group-assign-row.is-on .catalog-group-assign-row__check .catalog-check-on { display: block; }
+#catalogItemGroupMask .catalog-group-assign-row input,
+#cardItemGroupMask .catalog-group-assign-row input { position: absolute; opacity: 0; pointer-events: none; }
+#catalogItemGroupMask .picker-foot--row,
+#cardItemGroupMask .picker-foot--row {
   padding: 16px; gap: 16px; background: #fff;
   box-shadow: none; border-top: none;
 }
-#catalogItemGroupMask .picker-foot--row .btn-main {
+#catalogItemGroupMask .picker-foot--row .btn-main,
+#cardItemGroupMask .picker-foot--row .btn-main {
   height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600; flex: 1;
 }
-#catalogItemGroupMask .picker-foot--row .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+#catalogItemGroupMask .picker-foot--row .btn-main.secondary,
+#cardItemGroupMask .picker-foot--row .btn-main.secondary {
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
 }
+.catalog-group-bar--nogear .catalog-group-segment {
+  margin-right: 0;
+}
+.catalog-group-bar--nogear {
+  padding: 8px 16px 12px;
+}
+#screen0 .list-page-body {
+  overflow: hidden;
+}
+#screen0 .card-list-shell {
+  min-width: 0; width: 100%; min-height: 0;
+  display: flex; flex-direction: column; flex: 1;
+  overflow-x: hidden; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#screen0 .catalog-group-bar {
+  margin: 0; padding: 8px 16px 10px; width: 100%; box-sizing: border-box;
+  flex-shrink: 0; position: sticky; top: 0; z-index: 2;
+}
+#screen0 .card-list-shell .list-page,
+#screen0 .card-list-shell .card-list {
+  flex: 0 0 auto;
+  min-height: auto;
+}
+#screen-add-card .catalog-group-bar--nogear {
+  padding: 0 0 12px; background: transparent;
+}
+#screen-add-card .catalog-group-bar--nogear .catalog-group-segment {
+  margin-right: 0;
+}
+.emp-ach-items .catalog-group-bar--nogear {
+  padding: 8px 16px 10px; background: #fff;
+}
+.emp-ach-items.is-tpl-list .catalog-group-bar--nogear {
+  background: #F7F7F7;
+}
+#screen-card-group-members { background: #F7F7F7; }
+#screen-card-group-members .page-body { background: #F7F7F7; }
 
 #durPickerMask.open { z-index: 45; }
 .dialog-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 50; display: none; align-items: center; justify-content: center; padding: 0 32px; box-sizing: border-box; }
@@ -3843,7 +3924,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 .benefit-param-card__params .mp-ruler-wrap { margin-top: 8px; padding-bottom: 4px; }
 .benefit-param-card__foot { padding: 4px 16px 16px; }
 .benefit-param-card__save {
-  width: 100%; height: 44px; border: 1.5px solid var(--brand); border-radius: 10px;
+  width: 100%; height: 44px; border: 1px solid var(--brand); border-radius: 10px;
   background: transparent; color: var(--brand); font-size: 14px; font-weight: 600;
   cursor: pointer; font-family: inherit; box-sizing: border-box;
 }
@@ -4639,8 +4720,8 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-items { flex: 1; overflow-y: auto; min-width: 0; }
 .emp-ach-items.is-tpl-list { background: #F7F7F7; }
 .emp-ach-item {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 10px 16px; position: relative; cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  padding: 12px 16px; position: relative; cursor: pointer;
   width: 100%; border: none; background: #fff; font: inherit; text-align: left;
   box-sizing: border-box; color: inherit;
 }
@@ -4649,12 +4730,131 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   height: 1px; background: var(--card-divider);
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
-.emp-ach-item:active { background: rgba(0, 0, 0, .03); }
-.emp-ach-item__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.emp-ach-item:active { background: rgba(0, 0, 0, .02); }
+.emp-ach-item__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; padding-top: 4px; }
 .emp-ach-item__name { font-size: 14px; color: var(--text); line-height: 1.3; }
 .emp-ach-item__price {
   font-size: 12px; color: var(--text-sec); font-family: var(--font-data); line-height: 1.2;
 }
+.emp-ach-item__cost {
+  font-size: 11px; color: var(--text-sec); line-height: 14px; text-align: right;
+}
+
+/* 指定 / 非指定 · 轻拟物双胶囊 */
+.emp-ach-twins { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.emp-ach-twins__pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px; min-width: 148px;
+}
+.emp-ach-twins--stations { gap: 8px; min-width: 168px; }
+.emp-ach-twins__station {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.emp-ach-twins__station-name {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; color: var(--text-sec); line-height: 14px;
+}
+.emp-ach-twins__station-name i {
+  width: 6px; height: 6px; border-radius: 50%; background: #C4A484; flex-shrink: 0;
+}
+.emp-ach-twins__station:nth-child(2) .emp-ach-twins__station-name i { background: #8FA3B8; }
+.emp-ach-twins__station:nth-child(3) .emp-ach-twins__station-name i { background: #A8B5A2; }
+.emp-ach-cap {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 2px; min-height: 44px; padding: 6px 8px 7px;
+  border: 1px solid #E6E6E6; border-radius: 10px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 1px 2px rgba(0,0,0,.04);
+  cursor: pointer; font-family: inherit; text-align: left; color: inherit;
+  box-sizing: border-box; width: 100%;
+}
+.emp-ach-cap:active {
+  background: linear-gradient(180deg, #F3F3F3 0%, #EEEEEE 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.06);
+}
+.emp-ach-cap--des { border-color: #FFD5D9; }
+.emp-ach-cap--des::before {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+  border-radius: 0 2px 2px 0; background: var(--brand);
+}
+.emp-ach-cap--non { border-color: #DCE3EA; }
+.emp-ach-cap--non::before {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px;
+  border-radius: 0 2px 2px 0; background: #8FA3B8;
+}
+.emp-ach-cap__label {
+  font-size: 10px; color: var(--text-sec); line-height: 12px; padding-left: 4px;
+}
+.emp-ach-cap__val {
+  display: inline-flex; align-items: baseline; gap: 1px;
+  font-family: var(--font-data); font-size: 15px; font-weight: 600; color: var(--text);
+  line-height: 18px; padding-left: 4px; font-variant-numeric: tabular-nums;
+}
+.emp-ach-cap__val em {
+  font-style: normal; font-size: 11px; font-weight: 500; color: var(--text-sec); margin: 0 1px;
+}
+.emp-ach-cap--des .emp-ach-cap__val { color: #C62828; }
+.emp-ach-income-card .emp-ach-twins__pair { min-width: 0; }
+.emp-ach-tpl-row__trail .emp-ach-twins__pair { min-width: 0; width: 100%; }
+
+/* 编辑 Sheet · 左右双卡（对齐列表色语，扁平无阴影） */
+.emp-ach-pads {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 20px 12px;
+}
+.emp-ach-pad {
+  position: relative; display: flex; flex-direction: column; gap: 8px;
+  padding: 10px 10px 10px 12px; border-radius: 10px;
+  border: 1px solid #E6E6E6; background: #FAFAFA; box-shadow: none;
+  box-sizing: border-box; min-width: 0;
+}
+.emp-ach-pad--des { border-color: #FFD5D9; }
+.emp-ach-pad--des::before {
+  content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px;
+  border-radius: 0 2px 2px 0; background: var(--brand);
+}
+.emp-ach-pad--non { border-color: #DCE3EA; }
+.emp-ach-pad--non::before {
+  content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px;
+  border-radius: 0 2px 2px 0; background: #8FA3B8;
+}
+.emp-ach-pad__label {
+  font-size: 11px; font-weight: 500; color: var(--text-sec); margin: 0; line-height: 14px;
+  padding-left: 4px;
+}
+.emp-ach-pad--des .emp-ach-pad__label { color: var(--brand); font-weight: 600; }
+.emp-ach-pad--non .emp-ach-pad__label { color: #6B7C8C; }
+.emp-ach-pad__ctrl {
+  display: flex; align-items: center; gap: 4px;
+}
+.emp-ach-pad__step {
+  flex-shrink: 0; width: 32px; height: 36px; border-radius: 8px;
+  border: 1px solid #EDEDED; background: #fff;
+  color: var(--text); font-size: 18px; line-height: 1; font-family: inherit;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: none; padding: 0;
+}
+.emp-ach-pad__step:active {
+  background: #F3F3F3;
+}
+.emp-ach-pad__input-wrap {
+  flex: 1; min-width: 0; position: relative;
+}
+.emp-ach-pad__input-wrap input {
+  width: 100%; height: 36px; border: 1px solid #EDEDED; border-radius: 8px;
+  background: #fff; box-shadow: none;
+  font-size: 16px; font-weight: 600; font-family: var(--font-data); color: var(--text);
+  text-align: center; box-sizing: border-box; padding: 0 18px;
+  font-variant-numeric: tabular-nums;
+}
+.emp-ach-pad--des .emp-ach-pad__input-wrap input { color: #C62828; }
+.emp-ach-pad__input-wrap input:focus {
+  outline: none; border-color: var(--brand); background: #fff;
+}
+.emp-ach-pad__unit {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; color: var(--text-sec); pointer-events: none;
+}
+.emp-ach-pad__unit.is-prefix { right: auto; left: 6px; }
+.emp-ach-pad__input-wrap.has-prefix input { padding-left: 18px; padding-right: 6px; }
 .emp-ach-item__pcts {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
   flex: 0 0 auto; width: 148px;
@@ -4684,7 +4884,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 #empAchTabs .page-tabs__label { font-size: 15px; }
 .emp-ach-card-rules {
-  padding: 8px 0 20px;
+  padding: 8px 0 20px; min-width: 0; overflow-x: hidden;
 }
 .emp-ach-rule-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -4723,16 +4923,18 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-size: 14px; color: var(--text); margin-bottom: 10px; line-height: 20px;
 }
 .emp-ach-income-cards {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  min-width: 0; width: 100%;
 }
-.emp-ach-income-cards--4 {
-  grid-template-columns: 1fr 1fr;
-}
+.emp-ach-income-block--solo::before { display: none; }
+.emp-ach-income-cards--1 { grid-template-columns: 1fr; }
+.emp-ach-income-cards--1 .emp-ach-income-card { min-height: 0; }
 .emp-ach-income-card {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
-  padding: 14px 12px; border: 1px solid #EDEDED; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: stretch; gap: 6px;
+  padding: 10px 8px; border: 1px solid #EDEDED; border-radius: 12px;
   background: #FAFAFA; cursor: pointer; font-family: inherit; text-align: left;
-  box-sizing: border-box; min-height: 76px;
+  box-sizing: border-box; min-height: 76px; min-width: 0; width: 100%;
+  overflow: hidden;
 }
 .emp-ach-income-card:active { background: #F3F3F3; }
 .emp-ach-income-card__label {
@@ -4751,6 +4953,21 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-income-card__sub {
   font-size: 11px; color: var(--text-sec); line-height: 15px;
 }
+.emp-ach-income-card .emp-ach-twins,
+.emp-ach-income-card .emp-ach-twins__pair {
+  width: 100%; min-width: 0;
+}
+.emp-ach-income-card .emp-ach-twins__pair { gap: 4px; }
+.emp-ach-income-card .emp-ach-cap {
+  min-width: 0; padding: 5px 5px 6px; min-height: 40px;
+}
+.emp-ach-income-card .emp-ach-cap__label {
+  font-size: 9px; line-height: 11px; padding-left: 3px;
+}
+.emp-ach-income-card .emp-ach-cap__val {
+  font-size: 13px; line-height: 16px; padding-left: 3px;
+}
+.emp-ach-income-card .emp-ach-cap__val em { font-size: 10px; }
 .page-title-bar .title.title--with-help {
   display: inline-flex; align-items: center; justify-content: center; gap: 4px;
 }
@@ -4762,11 +4979,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-help-btn:active { color: var(--text-sec); }
 .emp-ach-help-btn svg { display: block; width: 16px; height: 16px; }
 .emp-ach-item__trail {
-  display: flex; flex-direction: row; align-items: center; gap: 6px; flex-shrink: 0;
-  max-width: 56%;
+  display: flex; flex-direction: column; align-items: stretch; gap: 4px; flex-shrink: 0;
+  max-width: 62%; min-width: 148px;
 }
+.emp-ach-item__trail .emp-ach-twins { width: 100%; }
 .emp-ach-item__trail-text {
   display: flex; flex-direction: column; align-items: flex-end; gap: 4px; min-width: 0;
+}
+.emp-ach-income-card__head {
+  display: block; width: 100%; border: none; background: transparent; padding: 0; margin: 0;
+  cursor: pointer; font-family: inherit; text-align: left; color: inherit;
 }
 .emp-ach-item__summary {
   font-size: 13px; color: var(--text); line-height: 18px; text-align: right;
@@ -4808,7 +5030,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-ach-tpl-rows { background: #fff; }
 .emp-ach-tpl-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
   width: 100%; padding: 14px 16px; border: none; background: #fff;
   font-family: inherit; text-align: left; box-sizing: border-box; cursor: pointer;
   position: relative; color: inherit;
@@ -4820,10 +5042,11 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-ach-tpl-row:active { background: rgba(0, 0, 0, .03); }
 .emp-ach-tpl-row__label {
-  flex-shrink: 0; font-size: 15px; color: var(--text); line-height: 22px;
+  flex-shrink: 0; font-size: 15px; color: var(--text); line-height: 22px; padding-top: 10px;
 }
 .emp-ach-tpl-row__trail {
-  display: inline-flex; align-items: center; gap: 6px; min-width: 0; max-width: 68%;
+  display: flex; flex-direction: column; align-items: stretch; gap: 4px; min-width: 0; max-width: 68%;
+  flex: 1;
 }
 .emp-ach-tpl-row__vals {
   display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 0;
@@ -4842,8 +5065,52 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-edit-body { padding: 0 0 8px; max-height: min(62vh, 520px); overflow-y: auto; }
 .emp-ach-edit-section { padding: 12px 20px 4px; }
 .emp-ach-edit-section__title {
-  font-size: 13px; color: var(--text-sec); margin-bottom: 10px; line-height: 18px;
+  font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px;
 }
+.emp-ach-station-banner {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0; padding: 8px 12px 8px 16px;
+  background: #FFF2F2; border-bottom: 1px solid var(--brand-border);
+  flex-shrink: 0;
+}
+.emp-ach-station-banner.hidden { display: none; }
+.emp-ach-station-banner__text {
+  flex: 1; min-width: 0; font-size: 12px; line-height: 1.4; color: var(--brand); font-weight: 500;
+}
+.emp-ach-station-banner__close {
+  flex-shrink: 0; width: 28px; height: 28px; border: none; background: transparent;
+  color: var(--brand); font-size: 18px; line-height: 1; cursor: pointer; font-family: inherit;
+}
+.emp-ach-item__summary.is-station {
+  font-size: 11px; line-height: 15px; letter-spacing: -0.02em;
+  white-space: normal; text-align: right; max-width: 11.5em;
+}
+.emp-ach-station-segs {
+  display: flex; gap: 8px; padding: 0;
+}
+.emp-ach-station-seg {
+  flex: 1; min-width: 0; height: 36px; border-radius: 10px;
+  border: 1px solid #E8E8E8; background: #F7F7F7;
+  font-size: 13px; font-weight: 500; color: var(--text); font-family: inherit;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+}
+.emp-ach-station-seg.on {
+  border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 600;
+}
+.emp-ach-station-seg__dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #C8C8C8; flex-shrink: 0;
+}
+.emp-ach-station-seg.on .emp-ach-station-seg__dot { background: var(--brand); }
+.emp-ach-edit-station-tip {
+  margin: 8px 0 0; font-size: 12px; line-height: 1.4; color: var(--text-sec);
+}
+.emp-ach-apply-stations {
+  display: block; width: calc(100% - 40px); margin: 4px 20px 8px;
+  height: 36px; border-radius: 10px; border: 1px dashed rgba(243, 47, 65, 0.45);
+  background: #FFF7F7; color: var(--brand); font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+}
+.emp-ach-apply-stations:active { opacity: .88; }
 .emp-ach-edit-chips {
   display: flex; flex-wrap: wrap; gap: 8px;
 }
@@ -4854,6 +5121,23 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-edit-chip.on {
   border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 600;
 }
+.emp-ach-edit-radios {
+  display: flex; align-items: center; gap: 24px;
+}
+.emp-ach-edit-radio {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text); cursor: pointer; font-family: inherit;
+}
+.emp-ach-edit-radio input[type="radio"] {
+  width: 18px; height: 18px; margin: 0; accent-color: var(--brand); flex-shrink: 0; cursor: pointer;
+}
+.emp-ach-edit-chips--cost {
+  flex-wrap: nowrap; gap: 6px;
+}
+.emp-ach-edit-chips--cost .emp-ach-edit-chip {
+  flex: 1 1 0; min-width: 0; padding: 8px 2px; font-size: 12px; line-height: 16px;
+  text-align: center; white-space: nowrap; border-radius: 8px;
+}
 .emp-ach-edit-fields { padding: 4px 20px 12px; display: flex; flex-direction: column; gap: 12px; }
 .emp-ach-edit-field label {
   display: flex; flex-direction: column; gap: 6px;
@@ -4863,6 +5147,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   height: 44px; border: 1px solid #EDEDED; border-radius: 10px; padding: 0 12px;
   font-size: 16px; font-family: var(--font-data); color: var(--text); background: #FAFAFA;
   box-sizing: border-box; width: 100%;
+}
+.emp-ach-edit-fields--inline .emp-ach-edit-field label {
+  flex-direction: row; align-items: center; gap: 12px;
+  font-size: 14px; color: var(--text);
+}
+.emp-ach-edit-fields--inline .emp-ach-edit-field label > span {
+  flex-shrink: 0; white-space: nowrap; color: var(--text);
+}
+.emp-ach-edit-fields--inline .emp-ach-edit-field input {
+  flex: 1; min-width: 0; width: auto; height: 40px;
 }
 .emp-ach-edit-hint {
   margin: 0 20px 8px; font-size: 12px; color: var(--text-sec); line-height: 1.5;
@@ -4880,19 +5174,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   margin: 12px 16px; padding: 10px 12px; background: #fff; border-radius: 12px;
   font-size: 12px; color: var(--text-sec); line-height: 1.55;
 }
-/* 业绩高级设置 · 对齐新增项目分区排版 */
+/* 业绩高级设置 · 组头条浅底 + 紧凑选项（方案 A） */
 #screen-emp-ach-adv { background: #F7F7F7; }
 #screen-emp-ach-adv .emp-ach-adv-body { background: #F7F7F7; }
 .emp-ach-adv-stack {
-  padding: 10px 16px 24px; display: flex; flex-direction: column; gap: 20px;
-}
-.emp-ach-adv-tip {
-  margin: 0; border-radius: 8px; background: #fff;
+  padding: 10px 16px 24px; display: flex; flex-direction: column; gap: 14px;
 }
 .emp-ach-adv-label {
   position: relative;
   display: flex; align-items: center;
-  margin: 0 0 10px; padding: 0 0 0 7px;
+  margin: 0 0 8px; padding: 0 0 0 7px;
   font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
 }
 .emp-ach-adv-label::before {
@@ -4901,27 +5192,31 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-adv-rules-section,
 .emp-calc-modes-section {
-  border-radius: 8px; padding: 0; overflow: hidden; background: #fff;
+  border-radius: 12px; padding: 0; overflow: hidden; background: #fff;
 }
-.emp-adv-rule-block { padding: 4px 0 8px; position: relative; }
+.emp-adv-rule-block { padding: 0; position: relative; margin: 0; }
 .emp-adv-rule-block + .emp-adv-rule-block {
-  margin-top: 4px; padding-top: 8px;
+  margin-top: 0; padding-top: 0;
 }
-.emp-adv-rule-block + .emp-adv-rule-block::before {
+.emp-adv-rule-block + .emp-adv-rule-block::before { display: none; }
+/* L2 组头条：与白底选项 / 页底 #F7F7F7 拉开对比 */
+.emp-adv-rule-block__title {
+  margin: 0; padding: 8px 16px; font-size: 12px; font-weight: 500;
+  color: #666666; line-height: 18px; background: #EBEBEB;
+  pointer-events: none; user-select: none;
+}
+.emp-adv-rule-opt {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 44px; padding: 11px 16px; box-sizing: border-box;
+  position: relative; cursor: pointer; border: none;
+  width: 100%; background: #fff; font-family: inherit; text-align: left;
+}
+.emp-adv-rule-opt + .emp-adv-rule-opt::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
   height: 1px; background: #EBEBEB;
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
-.emp-adv-rule-block__title {
-  margin: 0; padding: 8px 16px 2px; font-size: 13px; font-weight: 500;
-  color: var(--text-sec); line-height: 20px;
-}
-.emp-adv-rule-opt {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; position: relative; cursor: pointer; border: none;
-  width: 100%; background: transparent; font-family: inherit; text-align: left;
-}
-.emp-adv-rule-opt__lbl { font-size: 14px; color: var(--text); }
+.emp-adv-rule-opt__lbl { font-size: 14px; color: #1A1A1A; line-height: 20px; }
 .emp-adv-rule-opt__lbl.is-special { color: var(--brand); }
 .emp-adv-rule-opt__radio {
   width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #D7D7D5;
@@ -4940,15 +5235,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-calc-mode {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 16px; position: relative; cursor: pointer; border: none;
-  width: 100%; background: transparent; font-family: inherit; text-align: left;
+  min-height: 44px; padding: 11px 16px; box-sizing: border-box;
+  position: relative; cursor: pointer; border: none;
+  width: 100%; background: #fff; font-family: inherit; text-align: left;
 }
 .emp-calc-mode + .emp-calc-mode::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
   height: 1px; background: #EBEBEB;
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
-.emp-calc-mode__lbl { font-size: 14px; color: var(--text); }
+.emp-calc-mode__lbl { font-size: 14px; color: #1A1A1A; line-height: 20px; }
 .emp-calc-mode__radio {
   width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #D7D7D5;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -4965,12 +5261,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   opacity: 1; transform: scale(1);
 }
 .emp-station-map-section {
-  border-radius: 8px; padding: 0; overflow: hidden; background: #fff;
+  border-radius: 12px; padding: 0; overflow: hidden; background: #fff;
 }
 .emp-station-map-row {
   position: relative;
-  display: flex; align-items: center; min-height: 52px; padding: 0 16px;
-  gap: 6px; flex-wrap: nowrap;
+  display: flex; align-items: center; min-height: 48px; padding: 0 16px;
+  gap: 6px; flex-wrap: nowrap; background: #fff;
 }
 .emp-station-map-row + .emp-station-map-row::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
@@ -5000,7 +5296,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-ach-adv-label-row {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; margin: 0 0 10px;
+  gap: 12px; margin: 0 0 8px;
 }
 .emp-ach-adv-label-row .emp-ach-adv-label {
   margin: 0;
@@ -5684,7 +5980,7 @@ button.exp-card:active { opacity: .92; }
 }
 .exp-type-manage {
   margin: 8px 16px 24px; height: 44px; width: calc(100% - 32px);
-  border: 1.5px solid var(--brand); border-radius: 12px; background: transparent;
+  border: 1px solid var(--brand); border-radius: 12px; background: transparent;
   color: var(--brand); font-size: 14px; font-weight: 500; cursor: pointer;
   font-family: inherit;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -5910,7 +6206,7 @@ button.exp-flow-row:active { opacity: .92; }
   height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600;
 }
 #screen-exp-detail .exp-detail-actions .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
 }
 #screen-exp-list:not(.hidden),
 #screen-exp-add:not(.hidden),
@@ -6108,7 +6404,7 @@ button.exp-flow-row:active { opacity: .92; }
   max-width: 358px;
   height: 44px;
   margin: 12px 16px;
-  border: 1.5px solid var(--brand);
+  border: 1px solid var(--brand);
   border-radius: 12px;
   background: transparent;
   color: var(--brand);
@@ -6143,7 +6439,7 @@ button.exp-flow-row:active { opacity: .92; }
   max-height: 48px;
   box-sizing: border-box;
   flex-shrink: 0;
-  border: 1.5px solid var(--brand);
+  border: 1px solid var(--brand);
   border-radius: 12px;
   background: transparent;
   color: var(--brand);
@@ -6472,7 +6768,7 @@ button.exp-flow-row:active { opacity: .92; }
 /* 描边按钮：全站禁止填充（覆盖任何局部二次定义） */
 .btn-main.secondary,
 .btn-main.btn-outline-brand {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
 }
 .btn-main:disabled { background: #ededed; color: var(--text-sec); border-color: #ededed; cursor: not-allowed; }
 /* 开单记账底部 · 无顶部提示后收高度 */
@@ -6512,11 +6808,11 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .bottom-bar--bill .btn-main.secondary {
   flex: none; width: 80px; min-width: 80px; max-width: 80px; height: 42px; min-height: 42px;
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand); border-radius: 8px;
+  background: transparent; color: var(--brand); border: 1px solid var(--brand); border-radius: 8px;
   font-size: 16px; font-weight: 500; margin: 0; box-sizing: border-box;
 }
 #btnDiscountBatch.btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
   box-sizing: border-box;
 }
 .bottom-bar--bill .btn-main.btn-next {
@@ -7818,7 +8114,7 @@ button.exp-flow-row:active { opacity: .92; }
   flex-shrink: 0; font-size: 13px; color: #B0B0B0; line-height: 18px;
 }
 #flowWeikuanFilterMask .flow-filter-foot .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
   box-shadow: none;
 }
 #flowWeikuanFilterMask .picker-sheet.flow-filter-sheet {
@@ -7835,7 +8131,7 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .flow-filter-foot .btn-main { flex: 1; min-height: 48px; }
 .flow-filter-foot .btn-main.secondary {
-  background: transparent; color: var(--brand); border: 1.5px solid var(--brand);
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
 }
 .flow-tip {
   margin: 0 0 12px; padding: 10px 12px; border-radius: 8px;
@@ -8334,8 +8630,8 @@ button.exp-flow-row:active { opacity: .92; }
 .empty-cart { text-align: center; padding: 40px 20px; color: var(--text-sec); font-size: 14px; }
 .tech-select { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; font-size: 14px; font-family: inherit; background: var(--card); }
 
-/* 添加卡页 · 列表可滚 · 决策区固定 */
-.add-card-page { display: flex; flex-direction: column; flex: 1; min-height: 0; background: #fff; }
+/* 添加卡页 · 列表可滚 · 决策区叠在列表上（已选 bar 真半透） */
+.add-card-page { display: flex; flex-direction: column; flex: 1; min-height: 0; background: #fff; position: relative; }
 .add-card-page > .page-body {
   flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
   background: #fff;
@@ -8365,23 +8661,38 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .add-card-create-btn:active { opacity: .88; background: #FFF2F2; }
 .add-card-list {
-  display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 20px;
+  display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 200px;
 }
 .add-card-decision {
-  flex-shrink: 0; background: #fff;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
-  z-index: 2;
+  position: absolute; left: 0; right: 0; bottom: 0;
+  z-index: 3; background: transparent;
+  box-shadow: none; pointer-events: none;
 }
+.add-card-decision > * { pointer-events: auto; }
 .add-card-picked {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px; border-top: 1px solid var(--card-divider);
-  background: #FFF9F9; min-height: 52px; box-sizing: border-box;
+  padding: 10px 16px; border-top: none;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+  min-height: 52px; box-sizing: border-box;
 }
-.add-card-picked.is-empty { background: #FAFAFA; }
+.add-card-picked.is-empty {
+  background: rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+}
 .add-card-picked__face {
   width: 40px; height: 28px; border-radius: 6px; flex-shrink: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: #fff; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+.add-card-picked__face-head {
+  flex: 0 0 14px; width: 100%;
   background-size: cover; background-position: center;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+.add-card-picked__face-body {
+  flex: 1; width: 100%; background: #fff;
 }
 .add-card-picked__meta { flex: 1; min-width: 0; }
 .add-card-picked__name {
@@ -8389,15 +8700,16 @@ button.exp-flow-row:active { opacity: .92; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 20px;
 }
 .add-card-picked__price {
-  font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 1px;
+  font-size: 12px; color: #555; line-height: 16px; margin-top: 1px;
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
 }
 .add-card-picked__empty {
-  flex: 1; font-size: 13px; color: var(--text-sec);
+  flex: 1; font-size: 13px; color: #555;
 }
-.add-card-picked__change {
+.add-card-picked__status {
   flex-shrink: 0; border: none; background: transparent;
-  color: var(--brand); font-size: 13px; font-family: inherit; cursor: pointer; padding: 4px 0 4px 8px;
+  color: #666; font-size: 12px; font-weight: 500; font-family: inherit;
+  cursor: pointer; padding: 4px 0 4px 8px; white-space: nowrap;
 }
 .add-card-staff-row {
   display: flex; align-items: center; gap: 10px;
@@ -8418,10 +8730,24 @@ button.exp-flow-row:active { opacity: .92; }
   flex: 1; min-width: 0; font-size: 14px; color: var(--text); text-align: right;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.add-card-staff-row__val.is-placeholder { color: #B0B0B0; }
-.add-card-staff-row__chev {
-  flex-shrink: 0; color: #C0C0C0; display: inline-flex;
+.add-card-staff-row__cta {
+  flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px;
+  height: 30px; padding: 0 12px; border-radius: 999px; margin-left: auto;
+  border: 1px solid var(--brand); background: #fff;
+  color: var(--brand); font-size: 13px; font-weight: 600; line-height: 1;
+  pointer-events: none;
 }
+.add-card-staff-row__cta svg {
+  width: 14px; height: 14px; display: block; flex-shrink: 0;
+}
+.add-card-staff-row__val.is-placeholder { display: none; }
+.add-card-staff-row.has-staff .add-card-staff-row__cta { display: none; }
+.add-card-staff-row.has-staff .add-card-staff-row__val { display: block; }
+.add-card-staff-row:not(.has-staff) .add-card-staff-row__val { display: none; }
+.add-card-staff-row__chev {
+  flex-shrink: 0; color: #C0C0C0; display: none;
+}
+.add-card-staff-row.has-staff .add-card-staff-row__chev { display: inline-flex; }
 .add-card-staff-sheet__hint {
   margin: 0 16px 10px; font-size: 12px; line-height: 1.45; color: var(--text-sec);
 }
@@ -8519,6 +8845,10 @@ button.exp-flow-row:active { opacity: .92; }
 .member-card-item__cell {
   min-width: 0; font-size: 12px; line-height: 1.35; color: var(--text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.add-card-decision .bottom-bar,
+.add-card-decision .bottom-bar__action {
+  background: #fff;
 }
 .add-card-decision .bottom-bar__action { box-shadow: none; }
 
@@ -9141,7 +9471,7 @@ button.exp-flow-row:active { opacity: .92; }
 .bottom-bar--detail .bottom-bar__action { gap: 10px; }
 .bottom-bar--detail .bottom-bar__btns { display: flex; gap: 10px; margin-left: auto; }
 .bottom-bar--detail .btn-hold-detail {
-  height: 42px; min-width: 80px; border: 1.5px solid var(--brand); border-radius: 8px;
+  height: 42px; min-width: 80px; border: 1px solid var(--brand); border-radius: 8px;
   background: transparent; color: var(--brand); font-size: 16px; font-weight: 500;
   cursor: pointer; font-family: inherit; box-sizing: border-box;
 }
@@ -9723,6 +10053,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <svg class="page-top-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <p class="page-top-hint__text">注意此处修改业绩，而不是提成！</p>
   </div>
+  <div class="emp-ach-station-banner hidden" id="empAchStationBanner">
+    <span class="emp-ach-station-banner__text" id="empAchStationBannerText">按工位分配中 · 点项目可分工位设置指定/非指定</span>
+    <button type="button" class="emp-ach-station-banner__close" id="empAchStationBannerClose" aria-label="关闭提示">×</button>
+  </div>
   <div class="page-body" style="padding:0;display:flex;flex-direction:column;min-height:0;flex:1;">
     <div class="emp-ach-wrap">
       <div class="emp-ach-cats" id="empAchCats"></div>
@@ -9736,9 +10070,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <button type="button" class="back" data-emp-back-ach aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
     <span class="title">高级设置</span>
   </div>
+  <div class="page-top-hint">
+    <svg class="page-top-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p class="page-top-hint__text">业绩规则仅保留外层未覆盖的场景口径。计算模式可按项目/产品/办卡分别设置；选「平均分配」时开单无需选工位，「按工位分配」时需选择工位。工位显示名称可在下方「工位映射」中修改（每项最多 3 个字）。</p>
+  </div>
   <div class="page-body emp-ach-adv-body">
     <div class="emp-ach-adv-stack">
-      <p class="emp-notice-muted emp-ach-adv-tip">业绩规则仅保留外层未覆盖的场景口径。计算模式可按项目/产品/办卡分别设置；选「平均分配」时开单无需选工位，「按工位分配」时需选择工位。工位显示名称可在下方「工位映射」中修改（每项最多 3 个字）。</p>
       <div>
         <div class="proj-section-label emp-ach-adv-label">业绩规则</div>
         <div class="proj-form-section emp-adv-rules-section" id="empAdvRules"></div>
@@ -10164,6 +10501,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
 </div>
 
+<div class="dialog-mask" id="empCalcModeConfirmMask">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="empCalcModeConfirmTitle">
+    <div class="dialog__title" id="empCalcModeConfirmTitle">切换计算模式？</div>
+    <div class="dialog__body" id="empCalcModeConfirmBody">切换后将影响开单选工位与业绩配置方式。</div>
+    <div class="dialog__actions dialog__actions--row">
+      <button type="button" class="btn-main secondary" id="empCalcModeConfirmCancel">取消</button>
+      <button type="button" class="btn-main" id="empCalcModeConfirmOk">去配置业绩</button>
+    </div>
+  </div>
+</div>
+
 <div class="picker-mask picker-mask--bottom" id="empGenderMask">
   <div class="picker-sheet">
     <div class="picker-head">选择性别</div>
@@ -10520,11 +10868,123 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </button>
           </div>
           <div class="page-body list-page-body">
-            <div class="list-page">
-              <div class="card-list" id="templateList"></div>
+            <div class="card-list-shell">
+              <div class="catalog-group-bar hidden" id="cardGroupBar">
+                <div class="catalog-group-segment">
+                  <div class="catalog-group-scroll" id="cardGroupTabs" role="tablist" aria-label="会员卡分组"></div>
+                  <div class="catalog-group-fade" aria-hidden="true"></div>
+                </div>
+                <button type="button" class="catalog-group-gear" id="btnCardGroupManage" aria-label="分组管理">
+                  <svg width="18" height="18" viewBox="0 0 21 20" fill="none" aria-hidden="true">
+                    <path d="M13.6338 0.882812C14.786 1.26977 15.8411 1.86545 16.7549 2.62305C16.6385 2.9904 16.5752 3.3808 16.5752 3.78516C16.5752 5.74918 18.0453 7.36153 19.9424 7.61914C20.1419 8.38846 20.25 9.19492 20.25 10.0273C20.25 10.4841 20.2151 10.9328 20.1533 11.3721C18.1554 11.5343 16.5752 13.1932 16.5752 15.2295C16.5752 15.9263 16.7624 16.5798 17.0869 17.1445C16.1709 17.9762 15.094 18.6361 13.9082 19.0742C13.2417 17.8842 11.9652 17.0801 10.5 17.0801C9.03459 17.0801 7.75726 17.884 7.09082 19.0742C5.90512 18.636 4.82807 17.9762 3.91211 17.1445C4.23683 16.5797 4.42477 15.9264 4.4248 15.2295C4.4248 13.1929 2.84413 11.5338 0.845703 11.3721C0.783923 10.9329 0.75 10.4841 0.75 10.0273C0.750014 9.195 0.857153 8.38838 1.05664 7.61914C2.95418 7.36195 4.4248 5.74951 4.4248 3.78516C4.42479 3.3807 4.3606 2.99048 4.24414 2.62305C5.1578 1.86541 6.21308 1.26986 7.36523 0.882812C8.07596 1.83601 9.21522 2.45508 10.5 2.45508C11.7846 2.45508 12.923 1.83574 13.6338 0.882812Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M10.5 13.5C12.433 13.5 14 11.933 14 10C14 8.067 12.433 6.5 10.5 6.5C8.567 6.5 7 8.067 7 10C7 11.933 8.567 13.5 10.5 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="list-page">
+                <div class="card-list" id="templateList"></div>
+              </div>
+              <div class="proj-list-empty hidden" id="cardGroupListEmpty">
+                <img class="proj-list-empty__illust" src="assets/catalog/empty-box.svg" width="144" height="144" alt="" aria-hidden="true">
+                <p class="proj-list-empty__title">本组暂无会员卡</p>
+                <p class="proj-list-empty__hint">可编辑成员，或切换其他分组查看</p>
+                <button type="button" class="btn-proj-empty-add" id="btnCardEmptyAddToGroup">添加卡到本组</button>
+              </div>
             </div>
           </div>
           <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnAddCard">添加会员卡</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+        </div>
+
+        <div class="screen hidden" id="screen-card-groups">
+          <header class="page-title-bar">
+            <button type="button" class="back" id="cardBackFromGroups" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="title">分组管理</span>
+          </header>
+          <div class="page-body">
+            <div class="catalog-group-manage-list" id="cardGroupManageList"></div>
+            <div class="catalog-group-manage-empty hidden" id="cardGroupManageEmpty">
+              <div class="catalog-group-manage-empty__icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h10M4 17h6"/></svg>
+              </div>
+              <p class="catalog-group-manage-empty__title">暂无分组</p>
+              <p class="catalog-group-manage-empty__hint">创建分组后可快速筛选会员卡</p>
+            </div>
+          </div>
+          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCardGroupCreate">新建分组</button></div><div class="bottom-bar__safe"></div></div>
+        </div>
+
+        <div class="screen hidden" id="screen-card-group-members">
+          <header class="page-title-bar">
+            <button type="button" class="back" id="cardBackFromGroupMembers" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="title" id="cardGroupMembersTitle">编辑成员</span>
+          </header>
+          <div class="pick-select-bar catalog-members-bar">
+            <span class="pick-select-bar__title" id="cardGroupMembersCount">已选 0</span>
+            <div class="pick-select-bar__btns">
+              <button type="button" class="pick-select-bar__btn" id="btnCardMembersInvert">反选</button>
+              <button type="button" class="pick-select-bar__btn" id="btnCardMembersSelectAll">全选</button>
+            </div>
+          </div>
+          <div class="page-body">
+            <div class="catalog-member-card">
+              <div class="catalog-member-list" id="cardGroupMembersList"></div>
+            </div>
+          </div>
+          <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCardGroupMembersSave">确定</button></div><div class="bottom-bar__safe"></div></div>
+        </div>
+
+        <div class="dialog-mask" id="cardGroupNameMask">
+          <div class="dialog">
+            <div class="dialog__title" id="cardGroupNameTitle">新建分组</div>
+            <input type="text" class="catalog-group-name-field" id="cardGroupNameInput" placeholder="请输入分组名称" maxlength="20" autocomplete="off">
+            <p class="catalog-group-name-hint">最多 20 字，不可与已有分组重名</p>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main secondary" id="cardGroupNameCancel">取消</button>
+              <button type="button" class="btn-main" id="cardGroupNameConfirm">确定</button>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-mask" id="cardGroupDeleteMask">
+          <div class="dialog">
+            <div class="dialog__title">删除分组？</div>
+            <div class="dialog__body">仅删除分组，不会删除会员卡。</div>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main secondary" id="cardGroupDeleteCancel">取消</button>
+              <button type="button" class="btn-main" id="cardGroupDeleteConfirm">删除</button>
+            </div>
+          </div>
+        </div>
+        <div class="picker-mask picker-mask--bottom" id="cardGroupMenuMask">
+          <div class="picker-sheet picker-sheet--menu">
+            <div class="catalog-action-card">
+              <div class="picker-sheet__grabber" aria-hidden="true"></div>
+              <div class="picker-head picker-head--stack">
+                <div class="picker-head__title" id="cardGroupMenuTitle">分组</div>
+              </div>
+              <div class="catalog-action-list">
+                <button type="button" class="catalog-action-item" data-card-group-menu-act="members">编辑成员</button>
+                <button type="button" class="catalog-action-item" data-card-group-menu-act="rename">重命名</button>
+                <button type="button" class="catalog-action-item catalog-action-item--danger" data-card-group-menu-act="delete">删除</button>
+              </div>
+            </div>
+            <div class="catalog-action-foot">
+              <button type="button" class="catalog-action-item catalog-action-item--cancel" data-card-group-menu-act="cancel">取消</button>
+            </div>
+            <div class="catalog-action-safe" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="picker-mask picker-mask--bottom" id="cardItemGroupMask">
+          <div class="picker-sheet tall">
+            <div class="picker-head picker-head--stack">
+              <div class="picker-head__title" id="cardItemGroupTitle">设置分组</div>
+              <div class="picker-head__sub">可同时加入多个分组</div>
+            </div>
+            <div class="catalog-group-sheet-list" id="cardItemGroupList"></div>
+            <div class="picker-foot picker-foot--row">
+              <button type="button" class="btn-main secondary" id="cardItemGroupCancel">取消</button>
+              <button type="button" class="btn-main" id="cardItemGroupConfirm">确定</button>
+            </div>
+          </div>
         </div>
 
         <div class="screen hidden" id="screen10">
@@ -11929,7 +12389,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <button type="button" class="add-card-create-btn" id="btnAddCardCreate">+ 新建会员卡</button>
               </div>
               <div class="page-body" style="background:#fff">
+                <div class="catalog-group-bar catalog-group-bar--nogear hidden" id="addCardGroupBar">
+                  <div class="catalog-group-segment">
+                    <div class="catalog-group-scroll" id="addCardGroupTabs" role="tablist" aria-label="会员卡分组"></div>
+                    <div class="catalog-group-fade" aria-hidden="true"></div>
+                  </div>
+                </div>
                 <div class="add-card-list" id="addCardList"></div>
+                <div class="proj-list-empty hidden" id="addCardGroupEmpty" style="padding:24px 16px">
+                  <p class="proj-list-empty__title">本组暂无在售会员卡</p>
+                  <p class="proj-list-empty__hint">可切换其他分组，或到会员卡管理调整分组</p>
+                </div>
               </div>
               <div class="add-card-decision" id="addCardDecision">
                 <div class="add-card-picked is-empty" id="addCardPicked"></div>
@@ -11939,6 +12409,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   </span>
                   <span class="add-card-staff-row__lbl">服务员工</span>
                   <span class="add-card-staff-row__val is-placeholder" id="addCardStaffRowVal">请选择</span>
+                  <span class="add-card-staff-row__cta" aria-hidden="true">请选择<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></span>
                   <span class="add-card-staff-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
                 </button>
                 <div class="bottom-bar">
@@ -14536,6 +15007,14 @@ const state = {
   catalogGroups: { project: [], product: [] },
   activeCatalogGroupId: { project: 'all', product: 'all' },
   activePickGroupId: { project: 'all', discount: 'all', product: 'all' },
+  cardGroups: [],
+  activeCardGroupIdBySurface: { list: 'all', billing: 'all', empAch: 'all', empScope: 'all' },
+  cardGroupNameMode: null,
+  cardGroupEditingId: null,
+  cardGroupDeletingId: null,
+  cardMembersGroupId: null,
+  cardAssignTemplateId: null,
+  cardGroupMenuId: null,
   catalogGroupNameMode: null,
   catalogGroupEditingId: null,
   catalogGroupDeletingId: null,
@@ -17833,9 +18312,12 @@ function closeAllFlowOverlays() {
   document.getElementById('projDialogMask')?.classList.remove('show');
   document.getElementById('catalogGroupNameMask')?.classList.remove('show');
   document.getElementById('catalogGroupDeleteMask')?.classList.remove('show');
+  document.getElementById('cardGroupNameMask')?.classList.remove('show');
+  document.getElementById('cardGroupDeleteMask')?.classList.remove('show');
   document.getElementById('flowEditLogMask')?.classList.remove('show');
   document.getElementById('flowBalanceHelpMask')?.classList.remove('show');
   closeCatalogGroupRowMenu();
+  if (typeof closeCardGroupRowMenu === 'function') closeCardGroupRowMenu();
   closeCatalogRowActions();
   closeAllCatalogSwipes();
   closeAmountKeypad();
@@ -17846,6 +18328,11 @@ function closeAllFlowOverlays() {
   state.catalogGroupNameMode = null;
   state.catalogGroupEditingId = null;
   state.catalogGroupDeletingId = null;
+  state.cardAssignTemplateId = null;
+  state.cardGroupMenuId = null;
+  state.cardGroupNameMode = null;
+  state.cardGroupEditingId = null;
+  state.cardGroupDeletingId = null;
 }
 
 function ensureDemoFilled() {
@@ -17870,6 +18357,9 @@ function ensureDemoFilled() {
     state.templates = buildDemoTemplates();
     if (!Object.keys(state.memberHoldings || {}).length) seedDemoMemberHoldings();
   }
+  if (!Array.isArray(state.cardGroups)) state.cardGroups = [];
+  if (state.templates.length && !state.cardGroups.length) state.cardGroups = seedCardGroups();
+  ensureActiveCardGroupIdBySurface();
   /* 须在 templates 就绪后再同步，否则绑卡标记会全为 false */
   syncAllCatalogBindings();
   ensureProjDemoImages();
@@ -18050,6 +18540,10 @@ const FLOW_MAP_GROUPS = [
     nodes: [
       { id: 'list-active', label: '会员卡列表 · 在售', screen: 'screen0' },
       { id: 'list-shelved', label: '会员卡列表 · 已下架', screen: 'screen0' },
+      { id: 'card-groups', label: '会员卡 · 分组管理', screen: 'screen-card-groups' },
+      { id: 'card-group-members', label: '会员卡 · 编辑成员', screen: 'screen-card-group-members' },
+      { id: 'card-group-create', label: '会员卡 · 新建分组 Dialog', screen: 'screen-card-groups' },
+      { id: 'card-item-group', label: '会员卡 · 设置分组 Sheet', screen: 'screen0' },
       { id: 'detail-active', label: '会员卡详情 · 在售', screen: 'screen6' },
       { id: 'detail-shelved', label: '会员卡详情 · 已下架', screen: 'screen6' },
       { id: 'create-step1', label: 'Step1 基本信息', screen: 'screen10' },
@@ -18102,6 +18596,27 @@ const FLOW_NAV = {
     ensureDemoFilled();
     state.listShelfTab = 'shelved';
     setStep(0);
+  },
+  'card-groups'() {
+    ensureDemoFilled();
+    openCardGroupManage();
+  },
+  'card-group-members'() {
+    ensureDemoFilled();
+    const g = (state.cardGroups || []).find(x => (x.itemIds || []).length) || (state.cardGroups || [])[0];
+    if (g) openCardGroupMembers(g.id);
+    else openCardGroupManage();
+  },
+  'card-group-create'() {
+    ensureDemoFilled();
+    openCardGroupManage();
+    openCardGroupNameDialog('create');
+  },
+  'card-item-group'() {
+    ensureDemoFilled();
+    state.listShelfTab = 'active';
+    setStep(0);
+    openCardItemGroupSheet('demo_vip_combo');
   },
   'detail-active'() {
     ensureDemoFilled();
@@ -18462,6 +18977,10 @@ function syncFlowMapFromAppState() {
   if (visibleScreen === 'screen-workbench') id = 'workbench';
   else if (visibleScreen === 'screen0') {
     id = state.listShelfTab === 'shelved' ? 'list-shelved' : 'list-active';
+  } else if (visibleScreen === 'screen-card-groups') {
+    id = 'card-groups';
+  } else if (visibleScreen === 'screen-card-group-members') {
+    id = 'card-group-members';
   } else if (visibleScreen === 'screen10') id = 'create-step1';
   else if (visibleScreen === 'screen9') id = 'create-step2';
   else if (visibleScreen === 'screen11') id = 'create-step3';
@@ -20007,15 +20526,18 @@ function renderMemberCardItemHtml(t, opts = {}) {
   const showFooter = !!opts.showFooter;
   const showIssue = opts.showIssue !== false;
   const showClone = opts.showClone !== false;
+  const showGroup = !!opts.showGroup;
   const isShelved = !!t.shelved;
   const grad = getCardGradient(t.cardColor);
   const price = formatCardPurchasePrice(t);
   const priceHtml = `<span class="member-card-compact__price"><span class="member-card-compact__price-label">价格</span><span class="member-card-compact__price-val is-data">${escapeHtml(price.text)}</span></span>`;
-  const acts = [];
-  if (showClone) acts.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}">+复制建卡</button>`);
-  if (showIssue) acts.push(`<button type="button" class="card-face-act card-face-act--solid" data-issue-template="${escapeAttr(t.id)}">办卡/退卡</button>`);
-  const footer = showFooter && acts.length
-    ? `<div class="member-card-item__footer">${acts.join('')}</div>`
+  const leftActs = [];
+  const rightActs = [];
+  if (showClone) leftActs.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}">+复制建卡</button>`);
+  if (showGroup) rightActs.push(`<button type="button" class="card-face-act card-face-act--outline" data-card-group-template="${escapeAttr(t.id)}">快速分组</button>`);
+  if (showIssue) rightActs.push(`<button type="button" class="card-face-act card-face-act--solid" data-issue-template="${escapeAttr(t.id)}">办卡/退卡</button>`);
+  const footer = showFooter && (leftActs.length || rightActs.length)
+    ? `<div class="member-card-item__footer"><div class="member-card-item__footer-left">${leftActs.join('')}</div><div class="member-card-item__footer-right">${rightActs.join('')}</div></div>`
     : '';
   const rootAttrs = opts.templateIdAttr ? ` data-template-id="${escapeAttr(t.id)}"` : '';
   const shelvedClass = isShelved ? ' member-card-item--shelved' : '';
@@ -20088,16 +20610,567 @@ function syncListShelfSeg() {
   });
 }
 
+function seedCardGroups() {
+  return [
+    { id: 'cg_combo', name: '组合储值', itemIds: ['demo_vip_combo', 'demo_old_renew', 'demo_lifetime_balance', 'demo_editable'] },
+    { id: 'cg_times', name: '次卡套餐', itemIds: ['demo_year_wash', 'demo_kids_times'] },
+    { id: 'cg_discount', name: '会员价/烫染', itemIds: ['demo_perm_color_discount', 'demo_retail_perm_color', 'demo_retail_policy'] },
+    { id: 'cg_new', name: '新客活动', itemIds: ['demo_new_first'] },
+    { id: 'cg_empty', name: '待配置', itemIds: [] },
+  ];
+}
+
+function ensureCardGroups() {
+  if (!Array.isArray(state.cardGroups)) state.cardGroups = [];
+  return state.cardGroups;
+}
+
+function emptyActiveCardGroupIdBySurface() {
+  return { list: 'all', billing: 'all', empAch: 'all', empScope: 'all' };
+}
+
+function ensureActiveCardGroupIdBySurface() {
+  if (!state.activeCardGroupIdBySurface || typeof state.activeCardGroupIdBySurface !== 'object') {
+    state.activeCardGroupIdBySurface = emptyActiveCardGroupIdBySurface();
+  }
+  ['list', 'billing', 'empAch', 'empScope'].forEach(function (k) {
+    if (!state.activeCardGroupIdBySurface[k]) state.activeCardGroupIdBySurface[k] = 'all';
+  });
+  /* 兼容旧单字段 */
+  if (state.activeCardGroupId && state.activeCardGroupIdBySurface.list === 'all') {
+    state.activeCardGroupIdBySurface.list = state.activeCardGroupId;
+  }
+  return state.activeCardGroupIdBySurface;
+}
+
+function getActiveCardGroupId(surface) {
+  const map = ensureActiveCardGroupIdBySurface();
+  const key = surface || 'list';
+  return map[key] || 'all';
+}
+
+function setActiveCardGroupId(surfaceOrId, maybeId) {
+  const map = ensureActiveCardGroupIdBySurface();
+  let surface = 'list';
+  let id = 'all';
+  if (maybeId !== undefined) {
+    surface = surfaceOrId || 'list';
+    id = maybeId || 'all';
+  } else {
+    id = surfaceOrId || 'all';
+  }
+  if (!map[surface]) surface = 'list';
+  map[surface] = id || 'all';
+  if (surface === 'list') state.activeCardGroupId = map.list;
+}
+
+function findCardGroupById(id) {
+  if (!id || id === 'all') return null;
+  return ensureCardGroups().find(g => g.id === id) || null;
+}
+
+function cardGroupUid() {
+  return 'cg_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+}
+
+function purgeTemplateFromCardGroups(templateId) {
+  if (!templateId) return;
+  ensureCardGroups().forEach(g => {
+    g.itemIds = (g.itemIds || []).filter(id => id !== templateId);
+  });
+}
+
+function filterTemplatesByCardGroup(list, surface) {
+  const gid = getActiveCardGroupId(surface || 'list');
+  if (!gid || gid === 'all') return list;
+  const g = findCardGroupById(gid);
+  const ids = new Set(g?.itemIds || []);
+  return list.filter(t => ids.has(t.id));
+}
+
+function filterTemplatesByActiveCardGroup(list) {
+  return filterTemplatesByCardGroup(list, 'list');
+}
+
+/** 无齿轮筛选轨：复用于开单 / 业绩等表面 */
+function renderCardGroupFilterTabs(el, opts) {
+  opts = opts || {};
+  if (!el) return;
+  const surface = opts.surface || 'list';
+  const dataAttr = opts.dataAttr || 'data-card-group';
+  let active = getActiveCardGroupId(surface);
+  const groups = ensureCardGroups();
+  const tabs = [{ id: 'all', name: '全部' }, ...groups.map(g => ({ id: g.id, name: g.name }))];
+  if (!tabs.some(t => t.id === active)) {
+    setActiveCardGroupId(surface, 'all');
+    active = 'all';
+  }
+  el.innerHTML = tabs.map(t =>
+    `<button type="button" class="catalog-group-tab${t.id === active ? ' on' : ''}" ${dataAttr}="${escapeAttr(t.id)}" role="tab" aria-selected="${t.id === active ? 'true' : 'false'}">
+      <span class="catalog-group-tab__face"><span class="catalog-group-tab__label"><span class="catalog-group-tab__label-text">${escapeHtml(t.name)}</span></span></span>
+    </button>`
+  ).join('');
+  if (typeof wirePickGroupScrollPan === 'function') wirePickGroupScrollPan(el);
+  requestAnimationFrame(() => {
+    const on = el.querySelector('.catalog-group-tab.on');
+    if (on && typeof ensureGroupTabFullyVisible === 'function') ensureGroupTabFullyVisible(el, on);
+  });
+}
+
+function cardGroupFilterBarHtml(opts) {
+  opts = opts || {};
+  const id = opts.tabsId || 'cardGroupTabs';
+  const barId = opts.barId || '';
+  const label = opts.ariaLabel || '会员卡分组';
+  return `<div class="catalog-group-bar catalog-group-bar--nogear"${barId ? ` id="${escapeAttr(barId)}"` : ''}>
+    <div class="catalog-group-segment">
+      <div class="catalog-group-scroll" id="${escapeAttr(id)}" role="tablist" aria-label="${escapeAttr(label)}"></div>
+      <div class="catalog-group-fade" aria-hidden="true"></div>
+    </div>
+  </div>`;
+}
+
+function syncCardGroupChrome() {
+  const bar = document.getElementById('cardGroupBar');
+  const anyCards = (state.templates || []).length > 0;
+  if (!anyCards) {
+    bar?.classList.add('hidden');
+    if (getActiveCardGroupId('list') !== 'all') setActiveCardGroupId('list', 'all');
+    return;
+  }
+  bar?.classList.remove('hidden');
+  renderCardGroupTabs();
+}
+
+function renderCardGroupTabs() {
+  renderCardGroupFilterTabs(document.getElementById('cardGroupTabs'), {
+    surface: 'list',
+    dataAttr: 'data-card-group',
+  });
+}
+
+function openCardGroupManage() {
+  renderCardGroupManage();
+  showOnlyScreen('screen-card-groups');
+}
+
+function renderCardGroupManage() {
+  const listEl = document.getElementById('cardGroupManageList');
+  const emptyEl = document.getElementById('cardGroupManageEmpty');
+  if (!listEl) return;
+  const groups = ensureCardGroups();
+  if (!groups.length) {
+    listEl.innerHTML = '';
+    emptyEl?.classList.remove('hidden');
+    return;
+  }
+  emptyEl?.classList.add('hidden');
+  listEl.innerHTML = `<div class="catalog-group-card" id="cardGroupCard">${groups.map(g => {
+    const n = (g.itemIds || []).length;
+    return `<div class="catalog-group-manage-row" data-card-group-id="${escapeAttr(g.id)}">
+      <button type="button" class="catalog-group-manage-row__drag" data-card-group-drag="${escapeAttr(g.id)}" aria-label="拖动排序">${CATALOG_GROUP_DRAG_ICON}</button>
+      <button type="button" class="catalog-group-manage-row__main" data-card-group-members="${escapeAttr(g.id)}">
+        <span class="catalog-group-manage-row__name">${escapeHtml(g.name)}</span>
+        <span class="catalog-group-manage-row__meta">${n} 张卡</span>
+      </button>
+      <button type="button" class="catalog-group-manage-row__more" data-card-group-menu="${escapeAttr(g.id)}" aria-label="更多">⋯</button>
+    </div>`;
+  }).join('')}</div>`;
+  wireCardGroupManageDrag();
+}
+
+function wireCardGroupManageDrag() {
+  const card = document.getElementById('cardGroupCard');
+  if (!card) return;
+  let draggingRow = null;
+  let placeholder = null;
+  let startY = 0;
+
+  const finishDrag = () => {
+    if (!draggingRow || !placeholder) return;
+    card.insertBefore(draggingRow, placeholder);
+    placeholder.remove();
+    draggingRow.classList.remove('is-dragging');
+    draggingRow.style.transform = '';
+    draggingRow = null;
+    placeholder = null;
+    commitCardGroupOrderFromDom();
+  };
+
+  card.querySelectorAll('[data-card-group-drag]').forEach(handle => {
+    handle.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const row = handle.closest('.catalog-group-manage-row');
+      if (!row) return;
+      draggingRow = row;
+      startY = e.clientY;
+      placeholder = document.createElement('div');
+      placeholder.className = 'catalog-group-manage-row is-drag-placeholder';
+      placeholder.dataset.cardGroupId = row.dataset.cardGroupId;
+      row.parentNode.insertBefore(placeholder, row);
+      row.classList.add('is-dragging');
+      handle.setPointerCapture(e.pointerId);
+      const onMove = ev => {
+        if (!draggingRow) return;
+        draggingRow.style.transform = `translateY(${ev.clientY - startY}px)`;
+        const slots = [...card.querySelectorAll('.catalog-group-manage-row:not(.is-dragging)')];
+        let insertBefore = null;
+        for (const slot of slots) {
+          if (slot === placeholder) continue;
+          const rect = slot.getBoundingClientRect();
+          if (ev.clientY < rect.top + rect.height / 2) {
+            insertBefore = slot;
+            break;
+          }
+        }
+        if (insertBefore) card.insertBefore(placeholder, insertBefore);
+        else card.appendChild(placeholder);
+      };
+      const onUp = () => {
+        handle.releasePointerCapture(e.pointerId);
+        handle.removeEventListener('pointermove', onMove);
+        handle.removeEventListener('pointerup', onUp);
+        handle.removeEventListener('pointercancel', onUp);
+        finishDrag();
+      };
+      handle.addEventListener('pointermove', onMove);
+      handle.addEventListener('pointerup', onUp);
+      handle.addEventListener('pointercancel', onUp);
+    });
+  });
+}
+
+function commitCardGroupOrderFromDom() {
+  const card = document.getElementById('cardGroupCard');
+  if (!card) return;
+  const groups = ensureCardGroups();
+  const ids = [...card.querySelectorAll('.catalog-group-manage-row[data-card-group-id]')]
+    .map(r => r.dataset.cardGroupId)
+    .filter(Boolean);
+  const ordered = ids.map(id => groups.find(g => g.id === id)).filter(Boolean);
+  if (ordered.length !== groups.length) return;
+  groups.splice(0, groups.length, ...ordered);
+  renderCardGroupTabs();
+}
+
+function openCardGroupRowMenu(groupId) {
+  const g = findCardGroupById(groupId);
+  if (!g) return;
+  state.cardGroupMenuId = groupId;
+  const title = document.getElementById('cardGroupMenuTitle');
+  if (title) title.textContent = g.name;
+  document.getElementById('cardGroupMenuMask')?.classList.add('open');
+}
+
+function closeCardGroupRowMenu() {
+  document.getElementById('cardGroupMenuMask')?.classList.remove('open');
+  state.cardGroupMenuId = null;
+}
+
+function handleCardGroupMenuAction(act) {
+  const id = state.cardGroupMenuId;
+  closeCardGroupRowMenu();
+  if (!id || act === 'cancel') return;
+  if (act === 'members') openCardGroupMembers(id);
+  else if (act === 'rename') openCardGroupNameDialog('rename', id);
+  else if (act === 'delete') openCardGroupDeleteConfirm(id);
+}
+
+function openCardGroupNameDialog(mode, groupId) {
+  state.cardGroupNameMode = mode;
+  state.cardGroupEditingId = groupId || null;
+  const title = document.getElementById('cardGroupNameTitle');
+  const input = document.getElementById('cardGroupNameInput');
+  if (title) title.textContent = mode === 'rename' ? '重命名分组' : '新建分组';
+  if (input) {
+    const g = findCardGroupById(groupId);
+    input.value = mode === 'rename' && g ? g.name : '';
+    input.classList.remove('is-error');
+  }
+  document.getElementById('cardGroupNameMask')?.classList.add('show');
+  setTimeout(() => input?.focus(), 50);
+}
+
+function closeCardGroupNameDialog() {
+  document.getElementById('cardGroupNameMask')?.classList.remove('show');
+  state.cardGroupNameMode = null;
+  state.cardGroupEditingId = null;
+}
+
+function confirmCardGroupNameDialog() {
+  const input = document.getElementById('cardGroupNameInput');
+  const name = (input?.value || '').trim();
+  input?.classList.remove('is-error');
+  if (!name) {
+    input?.classList.add('is-error');
+    showToast('请输入分组名称', true);
+    return;
+  }
+  const groups = ensureCardGroups();
+  const mode = state.cardGroupNameMode;
+  const editingId = state.cardGroupEditingId;
+  if (groups.some(g => g.name === name && g.id !== editingId)) {
+    input?.classList.add('is-error');
+    showToast('分组名称已存在', true);
+    return;
+  }
+  if (mode === 'rename' && editingId) {
+    const g = findCardGroupById(editingId);
+    if (g) g.name = name;
+    showToast('已重命名');
+  } else {
+    const g = { id: cardGroupUid(), name, itemIds: [] };
+    groups.push(g);
+    setActiveCardGroupId('list', g.id);
+    showToast('已新建分组');
+  }
+  closeCardGroupNameDialog();
+  renderCardGroupManage();
+  renderCardGroupTabs();
+}
+
+function openCardGroupDeleteConfirm(groupId) {
+  state.cardGroupDeletingId = groupId;
+  document.getElementById('cardGroupDeleteMask')?.classList.add('show');
+}
+
+function closeCardGroupDeleteConfirm() {
+  document.getElementById('cardGroupDeleteMask')?.classList.remove('show');
+  state.cardGroupDeletingId = null;
+}
+
+function confirmCardGroupDelete() {
+  const id = state.cardGroupDeletingId;
+  const groups = ensureCardGroups();
+  const idx = groups.findIndex(g => g.id === id);
+  if (idx >= 0) groups.splice(idx, 1);
+  if (getActiveCardGroupId('list') === id) setActiveCardGroupId('list', 'all');
+  closeCardGroupDeleteConfirm();
+  renderCardGroupManage();
+  renderCardGroupTabs();
+  showToast('已删除分组');
+}
+
+function openCardGroupMembers(groupId) {
+  const g = findCardGroupById(groupId);
+  if (!g) return;
+  state.cardMembersGroupId = groupId;
+  const title = document.getElementById('cardGroupMembersTitle');
+  if (title) title.textContent = `编辑成员 · ${g.name}`;
+  renderCardGroupMembers();
+  showOnlyScreen('screen-card-group-members');
+}
+
+function syncCardGroupMembersCount() {
+  const listEl = document.getElementById('cardGroupMembersList');
+  const countEl = document.getElementById('cardGroupMembersCount');
+  if (!listEl || !countEl) return;
+  const n = listEl.querySelectorAll('input[data-card-member-id]:checked').length;
+  countEl.textContent = `已选 ${n}`;
+}
+
+function renderCardGroupMembers() {
+  const listEl = document.getElementById('cardGroupMembersList');
+  if (!listEl) return;
+  const g = findCardGroupById(state.cardMembersGroupId);
+  const selected = new Set(g?.itemIds || []);
+  const catalog = [...(state.templates || [])].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  if (!catalog.length) {
+    listEl.innerHTML = '<div class="catalog-group-manage-empty" style="padding:32px 16px"><p class="catalog-group-manage-empty__hint">暂无会员卡</p></div>';
+    syncCardGroupMembersCount();
+    return;
+  }
+  listEl.innerHTML = catalog.map(t => {
+    const checked = selected.has(t.id) ? ' checked' : '';
+    const price = formatCardPurchasePrice(t);
+    const shelved = t.shelved ? ' · 已下架' : '';
+    return `<label class="catalog-member-item">
+      <input type="checkbox" data-card-member-id="${escapeAttr(t.id)}"${checked}>
+      ${CATALOG_MEMBER_CHECK_ICON}
+      <span class="catalog-member-item__main">
+        <span class="catalog-member-item__name">${escapeHtml(t.name)}${shelved}</span>
+      </span>
+      <span class="catalog-member-item__price">${escapeHtml(price.text)}</span>
+    </label>`;
+  }).join('');
+  syncCardGroupMembersCount();
+}
+
+function saveCardGroupMembers() {
+  const g = findCardGroupById(state.cardMembersGroupId);
+  if (!g) return;
+  const listEl = document.getElementById('cardGroupMembersList');
+  g.itemIds = [...(listEl?.querySelectorAll('input[data-card-member-id]:checked') || [])]
+    .map(el => el.dataset.cardMemberId)
+    .filter(Boolean);
+  showToast('已更新成员');
+  openCardGroupManage();
+}
+
+function openCardItemGroupSheet(templateId) {
+  const t = getTemplateById(templateId);
+  if (!t) return;
+  state.cardAssignTemplateId = templateId;
+  const title = document.getElementById('cardItemGroupTitle');
+  if (title) title.textContent = t.name;
+  const listEl = document.getElementById('cardItemGroupList');
+  if (!listEl) return;
+  const groups = ensureCardGroups();
+  if (!groups.length) {
+    listEl.innerHTML = `<div class="catalog-group-sheet-empty">
+      <p class="catalog-group-sheet-empty__title">暂无分组</p>
+      <p class="catalog-group-sheet-empty__hint">请先创建分组，再把会员卡加入</p>
+      <button type="button" class="btn-main btn-outline-brand" id="btnCardItemGroupGoManage">去新建分组</button>
+    </div>`;
+    document.getElementById('btnCardItemGroupGoManage')?.addEventListener('click', () => {
+      closeCardItemGroupSheet();
+      openCardGroupManage();
+    });
+  } else {
+    listEl.innerHTML = groups.map(g => {
+      const on = (g.itemIds || []).includes(templateId);
+      const count = (g.itemIds || []).length;
+      return `<label class="catalog-group-assign-row${on ? ' is-on' : ''}">
+        <input type="checkbox" data-card-assign-group="${escapeAttr(g.id)}"${on ? ' checked' : ''}>
+        <span class="catalog-group-assign-row__name">${escapeHtml(g.name)}（${count}）</span>
+        <span class="catalog-group-assign-row__check" aria-hidden="true">${CATALOG_CHECK_OFF_ICON}${CATALOG_CHECK_ON_ICON}</span>
+      </label>`;
+    }).join('');
+    listEl.querySelectorAll('.catalog-group-assign-row').forEach(row => {
+      const input = row.querySelector('input');
+      input?.addEventListener('change', () => row.classList.toggle('is-on', !!input.checked));
+    });
+  }
+  document.getElementById('cardItemGroupMask')?.classList.add('open');
+}
+
+function closeCardItemGroupSheet() {
+  document.getElementById('cardItemGroupMask')?.classList.remove('open');
+  state.cardAssignTemplateId = null;
+}
+
+function confirmCardItemGroupSheet() {
+  const templateId = state.cardAssignTemplateId;
+  if (!templateId) {
+    closeCardItemGroupSheet();
+    return;
+  }
+  const listEl = document.getElementById('cardItemGroupList');
+  const selected = new Set(
+    [...(listEl?.querySelectorAll('input[data-card-assign-group]:checked') || [])]
+      .map(el => el.dataset.cardAssignGroup)
+      .filter(Boolean)
+  );
+  ensureCardGroups().forEach(g => {
+    const set = new Set(g.itemIds || []);
+    if (selected.has(g.id)) set.add(templateId);
+    else set.delete(templateId);
+    g.itemIds = [...set];
+  });
+  closeCardItemGroupSheet();
+  showToast('已更新分组');
+  renderTemplateList();
+}
+
+function wireCardGroupUi() {
+  if (wireCardGroupUi._done) return;
+  wireCardGroupUi._done = true;
+  const tabsEl = document.getElementById('cardGroupTabs');
+  if (typeof wirePickGroupScrollPan === 'function') wirePickGroupScrollPan(tabsEl);
+  document.getElementById('cardGroupTabs')?.addEventListener('click', e => {
+    if (tabsEl?.classList.contains('is-panning')) return;
+    const tab = e.target.closest('[data-card-group]');
+    if (!tab) return;
+    const id = tab.dataset.cardGroup;
+    if (!id || id === getActiveCardGroupId('list')) return;
+    setActiveCardGroupId('list', id);
+    renderTemplateList();
+  });
+  document.getElementById('btnCardGroupManage')?.addEventListener('click', openCardGroupManage);
+  document.getElementById('cardBackFromGroups')?.addEventListener('click', () => setStep(0));
+  document.getElementById('btnCardGroupCreate')?.addEventListener('click', () => openCardGroupNameDialog('create'));
+  document.getElementById('cardGroupManageList')?.addEventListener('click', e => {
+    if (e.target.closest('[data-card-group-drag]')) return;
+    const menu = e.target.closest('[data-card-group-menu]');
+    if (menu) {
+      openCardGroupRowMenu(menu.dataset.cardGroupMenu);
+      return;
+    }
+    const members = e.target.closest('[data-card-group-members]');
+    if (members) openCardGroupMembers(members.dataset.cardGroupMembers);
+  });
+  document.getElementById('cardGroupMenuMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('cardGroupMenuMask')) closeCardGroupRowMenu();
+  });
+  document.getElementById('cardGroupMenuMask')?.querySelectorAll('[data-card-group-menu-act]').forEach(btn => {
+    btn.addEventListener('click', () => handleCardGroupMenuAction(btn.dataset.cardGroupMenuAct));
+  });
+  document.getElementById('cardGroupNameCancel')?.addEventListener('click', closeCardGroupNameDialog);
+  document.getElementById('cardGroupNameConfirm')?.addEventListener('click', confirmCardGroupNameDialog);
+  document.getElementById('cardGroupNameMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('cardGroupNameMask')) closeCardGroupNameDialog();
+  });
+  document.getElementById('cardGroupNameInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmCardGroupNameDialog();
+  });
+  document.getElementById('cardGroupDeleteCancel')?.addEventListener('click', closeCardGroupDeleteConfirm);
+  document.getElementById('cardGroupDeleteConfirm')?.addEventListener('click', confirmCardGroupDelete);
+  document.getElementById('cardGroupDeleteMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('cardGroupDeleteMask')) closeCardGroupDeleteConfirm();
+  });
+  document.getElementById('cardBackFromGroupMembers')?.addEventListener('click', openCardGroupManage);
+  document.getElementById('btnCardGroupMembersSave')?.addEventListener('click', saveCardGroupMembers);
+  document.getElementById('cardGroupMembersList')?.addEventListener('change', e => {
+    if (e.target.matches('input[data-card-member-id]')) syncCardGroupMembersCount();
+  });
+  document.getElementById('btnCardMembersInvert')?.addEventListener('click', () => {
+    document.getElementById('cardGroupMembersList')?.querySelectorAll('input[data-card-member-id]').forEach(el => {
+      el.checked = !el.checked;
+    });
+    syncCardGroupMembersCount();
+  });
+  document.getElementById('btnCardMembersSelectAll')?.addEventListener('click', () => {
+    document.getElementById('cardGroupMembersList')?.querySelectorAll('input[data-card-member-id]').forEach(el => {
+      el.checked = true;
+    });
+    syncCardGroupMembersCount();
+  });
+  document.getElementById('btnCardEmptyAddToGroup')?.addEventListener('click', () => {
+    const gid = getActiveCardGroupId('list');
+    if (gid && gid !== 'all') openCardGroupMembers(gid);
+  });
+  document.getElementById('cardItemGroupCancel')?.addEventListener('click', closeCardItemGroupSheet);
+  document.getElementById('cardItemGroupConfirm')?.addEventListener('click', confirmCardItemGroupSheet);
+  document.getElementById('cardItemGroupMask')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('cardItemGroupMask')) closeCardItemGroupSheet();
+  });
+  if (typeof window.__pickerMaskClosers === 'object') {
+    window.__pickerMaskClosers.cardGroupMenuMask = closeCardGroupRowMenu;
+    window.__pickerMaskClosers.cardItemGroupMask = closeCardItemGroupSheet;
+  }
+}
+
 function renderTemplateList() {
+  wireCardGroupUi();
   syncListShelfSeg();
+  syncCardGroupChrome();
   const listEl = document.getElementById('templateList');
+  const emptyGroupEl = document.getElementById('cardGroupListEmpty');
   const isShelvedTab = state.listShelfTab === 'shelved';
-  const list = isShelvedTab ? getShelvedTemplates() : getActiveTemplates();
-  if (!list.length) {
+  const baseList = isShelvedTab ? getShelvedTemplates() : getActiveTemplates();
+  const list = filterTemplatesByActiveCardGroup(baseList);
+  emptyGroupEl?.classList.add('hidden');
+  if (!baseList.length) {
     listEl.innerHTML = renderEmptyState(isShelvedTab ? 'shelved' : 'active');
     if (!isShelvedTab) {
       document.getElementById('emptyStateCreateBtn')?.addEventListener('click', openCreateFlow);
     }
+    return;
+  }
+  if (!list.length) {
+    listEl.innerHTML = '';
+    emptyGroupEl?.classList.remove('hidden');
     return;
   }
   listEl.innerHTML = list.map(t => renderMemberCardItemHtml(t, {
@@ -20105,6 +21178,7 @@ function renderTemplateList() {
     templateIdAttr: true,
     showIssue: !isShelvedTab,
     showClone: true,
+    showGroup: true,
   })).join('');
   listEl.querySelectorAll('[data-template-id]').forEach(el => {
     el.addEventListener('click', e => {
@@ -20122,6 +21196,12 @@ function renderTemplateList() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       openDuplicateFlow(btn.dataset.cloneTemplate);
+    });
+  });
+  listEl.querySelectorAll('[data-card-group-template]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openCardItemGroupSheet(btn.dataset.cardGroupTemplate);
     });
   });
 }
@@ -24007,6 +25087,15 @@ function applyDemoListState(mode) {
   ensureSystemHiddenGroups();
   state.activeCatalogGroupId = emptyActiveCatalogGroupId();
   state.activePickGroupId = emptyActivePickGroupId();
+  state.cardGroups = mode === 'filled' ? seedCardGroups() : [];
+  state.activeCardGroupIdBySurface = emptyActiveCardGroupIdBySurface();
+  state.activeCardGroupId = 'all';
+  state.cardGroupNameMode = null;
+  state.cardGroupEditingId = null;
+  state.cardGroupDeletingId = null;
+  state.cardMembersGroupId = null;
+  state.cardAssignTemplateId = null;
+  state.cardGroupMenuId = null;
   state.priceCatalogTab = 'project';
   state.templates = mode === 'filled' ? buildDemoTemplates() : [];
   if (mode === 'filled') syncAllCatalogBindings();
@@ -24419,6 +25508,7 @@ function billingNav(fn) {
       { id: 'bill-scan-cust', label: '我扫客户', screen: 'screen-scan-cust' },
       { id: 'bill-expand', label: '展卡', screen: 'screen-bill' },
       { id: 'bill-add-card', label: '添加卡', screen: 'screen-add-card' },
+      { id: 'bill-add-card-group', label: '添加卡 · 分组筛选', screen: 'screen-add-card' },
       { id: 'bill-benefit', label: '选择权益', screen: 'screen-pick-benefit' },
       { id: 'bill-discount', label: '折扣权益', screen: 'screen-discount' },
       { id: 'bill-hold', label: '挂单列表', screen: 'screen-holds' },
@@ -24487,6 +25577,16 @@ function billingNav(fn) {
         'bill-scan-cust': billingNav('scan-cust'),
         'bill-expand': billingNav('expand'),
         'bill-add-card': billingNav('add-card'),
+        'bill-add-card-group'() {
+          if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+          if (typeof setActiveCardGroupId === 'function') {
+            var g = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []).find(function (x) {
+              return (x.itemIds || []).length;
+            }) || (typeof ensureCardGroups === 'function' ? ensureCardGroups()[0] : null);
+            setActiveCardGroupId('billing', g ? g.id : 'all');
+          }
+          return billingNav('add-card')();
+        },
         'bill-benefit': billingNav('benefit'),
         'bill-discount': billingNav('discount'),
         'bill-hold': billingNav('hold'),
@@ -24573,12 +25673,14 @@ function billingNav(fn) {
     { id: 'junior', defaultLabel: '小工' },
   ];
   var STATION_NAME_MAX = 3;
+  var ACH_STATION_IDS = STAFF_STATION_DEFS.map(function (d) { return d.id; });
 
   var state = {
     currentStaffId: null,
     formMode: 'create',
     achTab: 'labor',
     achCatId: null,
+    achStationBannerDismissed: false,
     salaryMonth: '2026-07',
     rewardDraft: null,
     editingRewardId: null,
@@ -24587,6 +25689,7 @@ function billingNav(fn) {
     rewardStaffPicking: false,
     pctEdit: null,
     achEdit: null,
+    calcModePending: null,
     ruleEditIdx: null,
     schemeMenuId: null,
     schemeDraftName: '',
@@ -24784,7 +25887,7 @@ function billingNav(fn) {
       'empAchEditMask', 'empRoleMask', 'empPermMask', 'empStatusMask', 'empSchemePickMask',
       'empGenderMask', 'empAgeBandMask', 'empAvatarActionMask', 'empAlbumMask', 'empCropMask',
       'empSwordTitleMask', 'empSwordMask', 'empScopeSelectedMask', 'empItemCommEditMask'].forEach(closeMask);
-    ['empHelpMask', 'empAchHelpMask', 'empNameDialogMask', 'empPctDialogMask', 'empLeaveConfirmMask'].forEach(closeEmpDialog);
+    ['empHelpMask', 'empAchHelpMask', 'empNameDialogMask', 'empPctDialogMask', 'empLeaveConfirmMask', 'empCalcModeConfirmMask'].forEach(closeEmpDialog);
   }
   function fmtMoney(n) {
     return Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -25811,18 +26914,95 @@ function billingNav(fn) {
     { key: 'extend', label: '延期' },
   ];
 
+  function cloneAchStationPair(src, fallback) {
+    src = src || {};
+    fallback = fallback || {};
+    function num(v, fb, def) {
+      if (!isNaN(Number(v))) return Number(v);
+      if (!isNaN(Number(fb))) return Number(fb);
+      return def;
+    }
+    return {
+      designated: num(src.designated, fallback.designated, 100),
+      nonDesignated: num(src.nonDesignated, fallback.nonDesignated, 80),
+      designatedAmt: num(src.designatedAmt, fallback.designatedAmt, 0),
+      nonDesignatedAmt: num(src.nonDesignatedAmt, fallback.nonDesignatedAmt, 0),
+    };
+  }
+
   function cloneAchScheme(src) {
     src = src || {};
+    var designated = !isNaN(Number(src.designated)) ? Number(src.designated) : 100;
+    var nonDesignated = !isNaN(Number(src.nonDesignated)) ? Number(src.nonDesignated) : 80;
+    var designatedAmt = !isNaN(Number(src.designatedAmt)) ? Number(src.designatedAmt) : (!isNaN(Number(src.fixedAmount)) ? Number(src.fixedAmount) : 0);
+    var nonDesignatedAmt = !isNaN(Number(src.nonDesignatedAmt)) ? Number(src.nonDesignatedAmt) : (!isNaN(Number(src.fixedAmount)) ? Number(src.fixedAmount) : 0);
+    var flat = {
+      designated: designated,
+      nonDesignated: nonDesignated,
+      designatedAmt: designatedAmt,
+      nonDesignatedAmt: nonDesignatedAmt,
+    };
+    var stations = {};
+    ACH_STATION_IDS.forEach(function (id) {
+      stations[id] = cloneAchStationPair(src.stations && src.stations[id], flat);
+    });
     return {
       valueMode: src.valueMode === 'amount' ? 'amount' : 'pct',
-      designated: !isNaN(Number(src.designated)) ? Number(src.designated) : 100,
-      nonDesignated: !isNaN(Number(src.nonDesignated)) ? Number(src.nonDesignated) : 80,
-      designatedAmt: !isNaN(Number(src.designatedAmt)) ? Number(src.designatedAmt) : (!isNaN(Number(src.fixedAmount)) ? Number(src.fixedAmount) : 0),
-      nonDesignatedAmt: !isNaN(Number(src.nonDesignatedAmt)) ? Number(src.nonDesignatedAmt) : (!isNaN(Number(src.fixedAmount)) ? Number(src.fixedAmount) : 0),
+      designated: designated,
+      nonDesignated: nonDesignated,
+      designatedAmt: designatedAmt,
+      nonDesignatedAmt: nonDesignatedAmt,
+      stations: stations,
       costMode: (['receipt', 'price', 'fixed'].indexOf(src.costMode) >= 0) ? src.costMode : 'off',
       costPct: !isNaN(Number(src.costPct)) ? Number(src.costPct) : 0,
       costFixed: !isNaN(Number(src.costFixed)) ? Number(src.costFixed) : 0,
     };
+  }
+
+  function ensureAchStations(scheme) {
+    return cloneAchScheme(scheme);
+  }
+
+  function syncAchFlatFromStation(scheme, stationId) {
+    scheme = ensureAchStations(scheme);
+    var sid = stationId || 'senior';
+    var pair = scheme.stations[sid] || scheme.stations.senior;
+    scheme.designated = pair.designated;
+    scheme.nonDesignated = pair.nonDesignated;
+    scheme.designatedAmt = pair.designatedAmt;
+    scheme.nonDesignatedAmt = pair.nonDesignatedAmt;
+    return scheme;
+  }
+
+  function syncAchStationsFromFlat(scheme) {
+    scheme = ensureAchStations(scheme);
+    var flat = {
+      designated: scheme.designated,
+      nonDesignated: scheme.nonDesignated,
+      designatedAmt: scheme.designatedAmt,
+      nonDesignatedAmt: scheme.nonDesignatedAmt,
+    };
+    ACH_STATION_IDS.forEach(function (id) {
+      scheme.stations[id] = cloneAchStationPair(flat, flat);
+    });
+    return scheme;
+  }
+
+  function stationShortLabel(roleId) {
+    var label = getStationLabel(roleId);
+    return label ? String(label).charAt(0) : '?';
+  }
+
+  function formatAchPairCompact(pair, valueMode) {
+    pair = pair || {};
+    if (valueMode === 'amount') {
+      var a = Number(pair.designatedAmt) || 0;
+      var b = Number(pair.nonDesignatedAmt) || 0;
+      if (a === b) return '¥' + a;
+      return '¥' + a + '/' + b;
+    }
+    return String(pair.designated != null ? pair.designated : '—') + '/' +
+      String(pair.nonDesignated != null ? pair.nonDesignated : '—');
   }
 
   function defaultAchScheme() {
@@ -25854,6 +27034,13 @@ function billingNav(fn) {
     var items = {};
     var catIds = Object.create(null);
     var order = 0;
+    var rulesId = idPrefix === 'sc' ? 'sales_rules' : 'labor_rules';
+    var defaultScheme = ensureAchStations(mergeAchScheme(
+      prevBucket && prevBucket.defaultScheme,
+      defaultAchScheme()
+    ));
+    cats.push({ id: rulesId, name: '通用规则' });
+    items[rulesId] = [];
     (list || []).forEach(function (p) {
       var catName = (p.category || (idPrefix === 'sc' ? '产品' : '项目')).trim() || '未分组';
       var catId = catIds[catName];
@@ -25865,20 +27052,34 @@ function billingNav(fn) {
         items[catId] = [];
       }
       var old = prev['id:' + p.id] || prev['name:' + p.name];
-      var scheme = mergeAchScheme(old, {
-        designated: old && !isNaN(Number(old.designated)) ? Number(old.designated) : 100,
-        nonDesignated: old && !isNaN(Number(old.nonDesignated)) ? Number(old.nonDesignated) : 80,
-      });
+      var scheme = mergeAchScheme(old, defaultScheme);
       items[catId].push(Object.assign({
         id: p.id,
         name: p.name,
         price: Number(p.price) || 0,
       }, scheme));
     });
-    return { cats: cats, items: items };
+    return { cats: cats, items: items, defaultScheme: defaultScheme };
   }
 
   function getAchCardTemplates() {
+    if (typeof getActiveTemplates === 'function') {
+      var live = getActiveTemplates();
+      if (live && live.length) {
+        return live.map(function (t) {
+          var recharge = t.recharge != null ? Number(t.recharge) : (Number(t.price) || 0);
+          return {
+            id: t.id,
+            name: t.name,
+            price: recharge,
+            face: t.face != null ? Number(t.face) : recharge,
+            giftAmount: t.giftAmount != null ? Number(t.giftAmount) : 0,
+            cardColor: t.cardColor || 'brand_red',
+            benefits: t.benefits || {},
+          };
+        });
+      }
+    }
     if (typeof window.__billingGetCardTemplates === 'function') {
       var list = window.__billingGetCardTemplates();
       if (list && list.length) return list;
@@ -25930,11 +27131,7 @@ function billingNav(fn) {
     var card = ensureCardAchDefaults(prevCard);
     var prev = collectPrevAchPcts(prevCard);
     var list = getAchCardTemplates();
-    var cats = [
-      { id: 'card_rules', name: '通用规则' },
-      { id: 'card_tpl', name: '卡模板' },
-    ];
-    var items = { card_rules: [], card_tpl: [] };
+    var byId = Object.create(null);
     list.forEach(function (t) {
       var old = prev['id:' + t.id] || prev['name:' + t.name] || {};
       var benefits = t.benefits || {};
@@ -25945,7 +27142,7 @@ function billingNav(fn) {
         var fromDefault = card.incomeTypes[k];
         types[k] = mergeAchScheme(fromOld, fromDefault);
       });
-      items.card_tpl.push({
+      byId[t.id] = {
         id: t.id,
         name: t.name,
         price: Number(t.price) || 0,
@@ -25955,11 +27152,41 @@ function billingNav(fn) {
         types: types,
         designated: types.open ? types.open.designated : card.incomeTypes.open.designated,
         nonDesignated: types.open ? types.open.nonDesignated : card.incomeTypes.open.nonDesignated,
-      });
+      };
     });
+    var groups = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []) || [];
+    var cats = [{ id: 'card_rules', name: '通用规则' }];
+    var items = { card_rules: [] };
+    if (groups.length) {
+      groups.forEach(function (g) {
+        if (!g || !g.id) return;
+        cats.push({ id: g.id, name: g.name || '未命名分组' });
+        items[g.id] = (g.itemIds || []).map(function (id) { return byId[id]; }).filter(Boolean);
+      });
+    } else {
+      /* 尚无分组时回退「卡模板」整表，避免业绩页空白 */
+      cats.push({ id: 'card_tpl', name: '卡模板' });
+      items.card_tpl = list.map(function (t) { return byId[t.id]; }).filter(Boolean);
+    }
     card.cats = cats;
     card.items = items;
     return card;
+  }
+
+  function getAllCardAchTplItems(card) {
+    card = card || (window.EmployeeStore && window.EmployeeStore.ach && window.EmployeeStore.ach.card);
+    if (!card || !card.items) return [];
+    var seen = Object.create(null);
+    var out = [];
+    Object.keys(card.items).forEach(function (catId) {
+      if (catId === 'card_rules') return;
+      (card.items[catId] || []).forEach(function (it) {
+        if (!it || !it.id || seen[it.id]) return;
+        seen[it.id] = true;
+        out.push(it);
+      });
+    });
+    return out;
   }
 
   function syncAchFromCatalog() {
@@ -25989,12 +27216,23 @@ function billingNav(fn) {
         it.designatedAmt = 0;
         it.nonDesignatedAmt = 0;
         it.costMode = 'off';
+        it.stations = {
+          senior: { designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0 },
+          mid: { designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0 },
+          junior: { designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0 },
+        };
       });
     });
   }
 
-  function formatAchSchemeShort(scheme) {
-    scheme = scheme || defaultAchScheme();
+  function formatAchSchemeShort(scheme, tabKind) {
+    scheme = ensureAchStations(scheme || defaultAchScheme());
+    var kind = tabKind || state.achTab || 'labor';
+    if (getAchCalcMode(kind) === 'station') {
+      return ACH_STATION_IDS.map(function (id) {
+        return stationShortLabel(id) + ' ' + formatAchPairCompact(scheme.stations[id], scheme.valueMode);
+      }).join(' · ');
+    }
     if (scheme.valueMode === 'amount') {
       var a = Number(scheme.designatedAmt) || 0;
       var b = Number(scheme.nonDesignatedAmt) || 0;
@@ -26002,6 +27240,75 @@ function billingNav(fn) {
       return '¥' + a + ' / ¥' + b;
     }
     return String(scheme.designated) + '% / ' + String(scheme.nonDesignated) + '%';
+  }
+
+  function renderAchCapBtn(opts) {
+    opts = opts || {};
+    var isAmt = !!opts.isAmt;
+    var val = opts.value;
+    var kind = opts.kind === 'non' ? 'non' : 'des';
+    var label = kind === 'non' ? '非指定' : '指定';
+    var attrs = '';
+    if (opts.itemId) attrs += ' data-ach-cap-item="' + esc(opts.itemId) + '"';
+    if (opts.typeKey) attrs += ' data-ach-cap-type="' + esc(opts.typeKey) + '"';
+    if (opts.stationId) attrs += ' data-ach-cap-station="' + esc(opts.stationId) + '"';
+    if (opts.cardDefault) attrs += ' data-ach-cap-card-default="1"';
+    if (opts.tabDefault) attrs += ' data-ach-cap-tab-default="1"';
+    var valHtml = isAmt
+      ? '<em>¥</em>' + esc(String(val))
+      : esc(String(val)) + '<em>%</em>';
+    return '<button type="button" class="emp-ach-cap emp-ach-cap--' + kind + '"' + attrs + '>' +
+      '<span class="emp-ach-cap__label">' + label + '</span>' +
+      '<span class="emp-ach-cap__val">' + valHtml + '</span></button>';
+  }
+
+  function renderAchTwinCapsHtml(scheme, opts) {
+    opts = opts || {};
+    scheme = ensureAchStations(scheme || defaultAchScheme());
+    var isAmt = scheme.valueMode === 'amount';
+    var stationMode = !!opts.stationMode;
+    if (stationMode) {
+      return '<div class="emp-ach-twins emp-ach-twins--stations">' +
+        ACH_STATION_IDS.map(function (id) {
+          var pair = scheme.stations[id] || {};
+          var des = isAmt ? (Number(pair.designatedAmt) || 0) : (Number(pair.designated) || 0);
+          var non = isAmt ? (Number(pair.nonDesignatedAmt) || 0) : (Number(pair.nonDesignated) || 0);
+          return '<div class="emp-ach-twins__station">' +
+            '<span class="emp-ach-twins__station-name"><i aria-hidden="true"></i>' + esc(getStationLabel(id)) + '</span>' +
+            '<div class="emp-ach-twins__pair">' +
+            renderAchCapBtn({ kind: 'des', value: des, isAmt: isAmt, itemId: opts.itemId, typeKey: opts.typeKey, stationId: id, cardDefault: opts.cardDefault, tabDefault: opts.tabDefault }) +
+            renderAchCapBtn({ kind: 'non', value: non, isAmt: isAmt, itemId: opts.itemId, typeKey: opts.typeKey, stationId: id, cardDefault: opts.cardDefault, tabDefault: opts.tabDefault }) +
+            '</div></div>';
+        }).join('') + '</div>';
+    }
+    var des = isAmt ? (Number(scheme.designatedAmt) || 0) : (Number(scheme.designated) || 0);
+    var non = isAmt ? (Number(scheme.nonDesignatedAmt) || 0) : (Number(scheme.nonDesignated) || 0);
+    return '<div class="emp-ach-twins"><div class="emp-ach-twins__pair">' +
+      renderAchCapBtn({ kind: 'des', value: des, isAmt: isAmt, itemId: opts.itemId, typeKey: opts.typeKey, cardDefault: opts.cardDefault, tabDefault: opts.tabDefault }) +
+      renderAchCapBtn({ kind: 'non', value: non, isAmt: isAmt, itemId: opts.itemId, typeKey: opts.typeKey, cardDefault: opts.cardDefault, tabDefault: opts.tabDefault }) +
+      '</div></div>';
+  }
+
+  function renderAchEditPad(opts) {
+    var isAmt = !!opts.isAmt;
+    var id = opts.inputId;
+    var val = opts.value;
+    var kind = opts.kind === 'non' ? 'non' : 'des';
+    var label = kind === 'non' ? '非指定' : '指定';
+    var stepField = isAmt ? (kind === 'non' ? 'nonAmt' : 'desAmt') : (kind === 'non' ? 'non' : 'des');
+    return '<div class="emp-ach-pad emp-ach-pad--' + kind + '">' +
+      '<div class="emp-ach-pad__label">' + label + (isAmt ? ' · ¥' : ' · %') + '</div>' +
+      '<div class="emp-ach-pad__ctrl">' +
+      '<button type="button" class="emp-ach-pad__step" data-ach-step="' + stepField + '" data-ach-dir="-1" aria-label="减少">−</button>' +
+      '<div class="emp-ach-pad__input-wrap' + (isAmt ? ' has-prefix' : '') + '">' +
+      (isAmt ? '<span class="emp-ach-pad__unit is-prefix">¥</span>' : '') +
+      '<input type="number" id="' + id + '" inputmode="decimal" min="0"' +
+      (isAmt ? ' step="1"' : ' max="100" step="1"') +
+      ' value="' + esc(String(val)) + '" aria-label="' + label + '" />' +
+      (isAmt ? '' : '<span class="emp-ach-pad__unit">%</span>') +
+      '</div>' +
+      '<button type="button" class="emp-ach-pad__step" data-ach-step="' + stepField + '" data-ach-dir="1" aria-label="增加">+</button>' +
+      '</div></div>';
   }
 
   function formatAchCostShort(scheme) {
@@ -26017,6 +27324,38 @@ function billingNav(fn) {
     return def ? def.label : key;
   }
 
+  function getAchCommonRulesCatId(tab) {
+    return tab === 'sales' ? 'sales_rules' : 'labor_rules';
+  }
+
+  function isAchCommonRulesCat(catId, tab) {
+    tab = tab || state.achTab;
+    return !!catId && catId === getAchCommonRulesCatId(tab) && (tab === 'labor' || tab === 'sales');
+  }
+
+  function getAchTabDefaultScheme(tab) {
+    var bucket = window.EmployeeStore.ach && window.EmployeeStore.ach[tab];
+    return ensureAchStations(mergeAchScheme(bucket && bucket.defaultScheme, defaultAchScheme()));
+  }
+
+  function renderTabAchRulesHtml(tab, data) {
+    var sch = ensureAchStations((data && data.defaultScheme) || getAchTabDefaultScheme(tab));
+    var stationOn = getAchCalcMode(tab) === 'station';
+    var cost = formatAchCostShort(sch);
+    var noun = tab === 'sales' ? '产品' : '项目';
+    return '<div class="emp-ach-card-rules">' +
+      '<div class="emp-ach-income-block emp-ach-income-block--solo">' +
+      '<div class="emp-ach-income-block__title">默认业绩方案</div>' +
+      '<div class="emp-ach-income-cards emp-ach-income-cards--1">' +
+      '<div class="emp-ach-income-card" data-ach-tab-default="' + esc(tab) + '">' +
+      '<button type="button" class="emp-ach-income-card__head" data-ach-tab-default="' + esc(tab) + '">' +
+      '<span class="emp-ach-income-card__label"><span>默认方案</span>' + navChevHtml() + '</span></button>' +
+      renderAchTwinCapsHtml(sch, { stationMode: stationOn, tabDefault: true }) +
+      (cost ? '<span class="emp-ach-income-card__sub">' + esc(cost) + '</span>' : '') +
+      '</div></div></div>' +
+      '<p class="emp-ach-card-hint">新建' + noun + '默认沿用此方案；已单独设置的' + noun + '不受影响。</p></div>';
+  }
+
   function renderCardAchRulesHtml(card) {
     var chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
     var incomeTypes = card.incomeTypes || ensureCardIncomeTypes(card);
@@ -26030,11 +27369,12 @@ function billingNav(fn) {
       CARD_ACH_TYPE_DEFS.map(function (def) {
         var sch = incomeTypes[def.key] || defaultAchScheme();
         var cost = formatAchCostShort(sch);
-        return '<button type="button" class="emp-ach-income-card" data-card-income-type="' + def.key + '">' +
-          '<span class="emp-ach-income-card__label"><span>' + esc(def.label) + '</span>' + navChevHtml() + '</span>' +
-          '<span class="emp-ach-income-card__val">' + esc(formatAchSchemeShort(sch)) + '</span>' +
+        return '<div class="emp-ach-income-card" data-card-income-type="' + def.key + '">' +
+          '<button type="button" class="emp-ach-income-card__head" data-card-income-type="' + def.key + '">' +
+          '<span class="emp-ach-income-card__label"><span>' + esc(def.label) + '</span>' + navChevHtml() + '</span></button>' +
+          renderAchTwinCapsHtml(sch, { stationMode: getAchCalcMode('card') === 'station', typeKey: def.key, cardDefault: true }) +
           (cost ? '<span class="emp-ach-income-card__sub">' + esc(cost) + '</span>' : '') +
-          '</button>';
+          '</div>';
       }).join('') +
       '</div></div>' +
       '<p class="emp-ach-card-hint">按卡模板权益展示开卡/充值/续次/延期的默认收入比例与计入基数。</p></div>';
@@ -26055,116 +27395,223 @@ function billingNav(fn) {
   }
 
   function renderAchEditBody(scheme) {
-    scheme = mergeAchScheme(scheme);
-    var isAmt = scheme.valueMode === 'amount';
-    var cost = scheme.costMode || 'off';
+    scheme = ensureAchStations(scheme);
+    var isAmt = (state.achEdit && state.achEdit.valueMode === 'amount') || scheme.valueMode === 'amount';
+    var cost = (state.achEdit && state.achEdit.costMode) || scheme.costMode || 'off';
+    var tabKind = (state.achEdit && state.achEdit.tab) || state.achTab || 'labor';
+    var stationMode = getAchCalcMode(tabKind) === 'station';
+    var stationId = (state.achEdit && state.achEdit.stationId) || 'senior';
+    var pair = stationMode ? (scheme.stations[stationId] || scheme.stations.senior) : scheme;
     var html = '';
+    if (stationMode) {
+      html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">选择工位</div>' +
+        '<div class="emp-ach-station-segs" role="tablist" aria-label="工位">';
+      ACH_STATION_IDS.forEach(function (id) {
+        var on = id === stationId;
+        var label = getStationLabel(id);
+        html += '<button type="button" class="emp-ach-station-seg' + (on ? ' on' : '') +
+          '" data-ach-edit-station="' + esc(id) + '" role="tab" aria-selected="' + (on ? 'true' : 'false') + '">' +
+          '<span class="emp-ach-station-seg__dot" aria-hidden="true"></span>' +
+          esc(label) + '</button>';
+      });
+      html += '</div>' +
+        '<p class="emp-ach-edit-station-tip">开单选该工位时，按下方指定/非指定计算业绩</p></div>';
+    }
     html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">业绩取值</div>' +
-      '<div class="emp-ach-edit-chips" role="radiogroup" aria-label="业绩取值">' +
-      '<button type="button" class="emp-ach-edit-chip' + (!isAmt ? ' on' : '') + '" data-ach-value-mode="pct">按比例 %</button>' +
-      '<button type="button" class="emp-ach-edit-chip' + (isAmt ? ' on' : '') + '" data-ach-value-mode="amount">固定金额 ¥</button>' +
+      '<div class="emp-ach-edit-radios" role="radiogroup" aria-label="业绩取值">' +
+      '<label class="emp-ach-edit-radio" data-ach-value-mode="pct">' +
+      '<input type="radio" name="empAchValueMode" value="pct"' + (!isAmt ? ' checked' : '') + ' />按比例</label>' +
+      '<label class="emp-ach-edit-radio" data-ach-value-mode="amount">' +
+      '<input type="radio" name="empAchValueMode" value="amount"' + (isAmt ? ' checked' : '') + ' />固定金额</label>' +
       '</div></div>';
-    html += '<div class="emp-ach-edit-fields" id="empAchEditValueFields">';
+    html += '<div class="emp-ach-pads" id="empAchEditValueFields">';
     if (isAmt) {
-      html += '<div class="emp-ach-edit-field"><label><span>指定客金额 (¥)</span><input type="number" id="empAchEditDesAmt" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.designatedAmt)) + '" /></label></div>';
-      html += '<div class="emp-ach-edit-field"><label><span>非指定客金额 (¥)</span><input type="number" id="empAchEditNonAmt" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.nonDesignatedAmt)) + '" /></label></div>';
+      html += renderAchEditPad({ kind: 'des', isAmt: true, inputId: 'empAchEditDesAmt', value: pair.designatedAmt });
+      html += renderAchEditPad({ kind: 'non', isAmt: true, inputId: 'empAchEditNonAmt', value: pair.nonDesignatedAmt });
     } else {
-      html += '<div class="emp-ach-edit-field"><label><span>指定客比例 (%)</span><input type="number" id="empAchEditDes" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.designated)) + '" /></label></div>';
-      html += '<div class="emp-ach-edit-field"><label><span>非指定客比例 (%)</span><input type="number" id="empAchEditNon" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.nonDesignated)) + '" /></label></div>';
+      html += renderAchEditPad({ kind: 'des', isAmt: false, inputId: 'empAchEditDes', value: pair.designated });
+      html += renderAchEditPad({ kind: 'non', isAmt: false, inputId: 'empAchEditNon', value: pair.nonDesignated });
     }
     html += '</div>';
+    if (stationMode) {
+      html += '<button type="button" class="emp-ach-apply-stations" id="empAchApplyStations">应用到全部工位</button>';
+    }
     html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">扣除成本</div>' +
-      '<div class="emp-ach-edit-chips" role="radiogroup" aria-label="扣除成本">' +
+      '<div class="emp-ach-edit-chips emp-ach-edit-chips--cost" role="radiogroup" aria-label="扣除成本">' +
       '<button type="button" class="emp-ach-edit-chip' + (cost === 'off' ? ' on' : '') + '" data-ach-cost-mode="off">不扣除</button>' +
       '<button type="button" class="emp-ach-edit-chip' + (cost === 'receipt' ? ' on' : '') + '" data-ach-cost-mode="receipt">实收比例</button>' +
       '<button type="button" class="emp-ach-edit-chip' + (cost === 'price' ? ' on' : '') + '" data-ach-cost-mode="price">售价比例</button>' +
       '<button type="button" class="emp-ach-edit-chip' + (cost === 'fixed' ? ' on' : '') + '" data-ach-cost-mode="fixed">固定成本</button>' +
       '</div></div>';
-    html += '<div class="emp-ach-edit-fields" id="empAchEditCostFields">';
+    html += '<div class="emp-ach-edit-fields emp-ach-edit-fields--inline" id="empAchEditCostFields">';
     if (cost === 'receipt' || cost === 'price') {
-      html += '<div class="emp-ach-edit-field"><label><span>成本比例 (%)</span><input type="number" id="empAchEditCostPct" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.costPct)) + '" /></label></div>';
+      html += '<div class="emp-ach-edit-field"><label><span>成本比例</span><input type="number" id="empAchEditCostPct" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.costPct)) + '" aria-label="成本比例" /></label></div>';
     } else if (cost === 'fixed') {
-      html += '<div class="emp-ach-edit-field"><label><span>固定成本 (¥)</span><input type="number" id="empAchEditCostFixed" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.costFixed)) + '" /></label></div>';
+      html += '<div class="emp-ach-edit-field"><label><span>固定成本</span><input type="number" id="empAchEditCostFixed" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.costFixed)) + '" aria-label="固定成本" /></label></div>';
     }
     html += '</div>';
     html += '<p class="emp-ach-edit-hint">有扣除成本时，先按实收或售价减去成本再计算业绩。</p>';
     return html;
   }
 
-  function readAchEditSchemeFromDom(base) {
-    var scheme = mergeAchScheme(base);
-    scheme.valueMode = state.achEdit && state.achEdit.valueMode === 'amount' ? 'amount' : 'pct';
-    scheme.costMode = (state.achEdit && state.achEdit.costMode) || 'off';
-    if (scheme.valueMode === 'amount') {
-      scheme.designatedAmt = parseFloat(($('empAchEditDesAmt') || {}).value);
-      scheme.nonDesignatedAmt = parseFloat(($('empAchEditNonAmt') || {}).value);
-      if (isNaN(scheme.designatedAmt) || scheme.designatedAmt < 0) return { error: '请输入有效的指定客金额' };
-      if (isNaN(scheme.nonDesignatedAmt) || scheme.nonDesignatedAmt < 0) return { error: '请输入有效的非指定客金额' };
+  function revealAchEditCostField() {
+    var fields = $('empAchEditCostFields');
+    if (!fields || !fields.children.length) return;
+    requestAnimationFrame(function () {
+      var input = fields.querySelector('input');
+      var target = input || fields;
+      if (target && target.scrollIntoView) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+      }
+    });
+  }
+
+  function flushAchEditStationFromDom(opts) {
+    opts = opts || {};
+    var strict = !!opts.strict;
+    if (!state.achEdit || !state.achEdit.draft) return { ok: true };
+    var draft = ensureAchStations(state.achEdit.draft);
+    draft.valueMode = state.achEdit.valueMode === 'amount' ? 'amount' : 'pct';
+    draft.costMode = state.achEdit.costMode || 'off';
+    var tabKind = state.achEdit.tab || state.achTab || 'labor';
+    var stationMode = getAchCalcMode(tabKind) === 'station';
+    var sid = state.achEdit.stationId || 'senior';
+    var pair = stationMode ? draft.stations[sid] : draft;
+    if (draft.valueMode === 'amount') {
+      var desAmtEl = $('empAchEditDesAmt');
+      var nonAmtEl = $('empAchEditNonAmt');
+      if (desAmtEl) {
+        var desAmt = parseFloat(desAmtEl.value);
+        if (strict && (isNaN(desAmt) || desAmt < 0)) return { error: '请输入有效的指定客金额' };
+        if (!isNaN(desAmt)) pair.designatedAmt = desAmt;
+      }
+      if (nonAmtEl) {
+        var nonAmt = parseFloat(nonAmtEl.value);
+        if (strict && (isNaN(nonAmt) || nonAmt < 0)) return { error: '请输入有效的非指定客金额' };
+        if (!isNaN(nonAmt)) pair.nonDesignatedAmt = nonAmt;
+      }
+      if (!stationMode) {
+        draft.designatedAmt = pair.designatedAmt;
+        draft.nonDesignatedAmt = pair.nonDesignatedAmt;
+      }
     } else {
-      scheme.designated = parseFloat(($('empAchEditDes') || {}).value);
-      scheme.nonDesignated = parseFloat(($('empAchEditNon') || {}).value);
-      if (isNaN(scheme.designated) || scheme.designated < 0 || scheme.designated > 100) return { error: '指定客比例需在 0–100' };
-      if (isNaN(scheme.nonDesignated) || scheme.nonDesignated < 0 || scheme.nonDesignated > 100) return { error: '非指定客比例需在 0–100' };
+      var desEl = $('empAchEditDes');
+      var nonEl = $('empAchEditNon');
+      if (desEl) {
+        var des = parseFloat(desEl.value);
+        if (strict && (isNaN(des) || des < 0 || des > 100)) return { error: '指定客比例需在 0–100' };
+        if (!isNaN(des)) pair.designated = des;
+      }
+      if (nonEl) {
+        var non = parseFloat(nonEl.value);
+        if (strict && (isNaN(non) || non < 0 || non > 100)) return { error: '非指定客比例需在 0–100' };
+        if (!isNaN(non)) pair.nonDesignated = non;
+      }
+      if (!stationMode) {
+        draft.designated = pair.designated;
+        draft.nonDesignated = pair.nonDesignated;
+      }
     }
-    if (scheme.costMode === 'receipt' || scheme.costMode === 'price') {
-      scheme.costPct = parseFloat(($('empAchEditCostPct') || {}).value);
-      if (isNaN(scheme.costPct) || scheme.costPct < 0 || scheme.costPct > 100) return { error: '成本比例需在 0–100' };
-    } else if (scheme.costMode === 'fixed') {
-      scheme.costFixed = parseFloat(($('empAchEditCostFixed') || {}).value);
-      if (isNaN(scheme.costFixed) || scheme.costFixed < 0) return { error: '请输入有效的固定成本' };
+    if (draft.costMode === 'receipt' || draft.costMode === 'price') {
+      var costPctEl = $('empAchEditCostPct');
+      if (costPctEl) {
+        draft.costPct = parseFloat(costPctEl.value);
+        if (strict && (isNaN(draft.costPct) || draft.costPct < 0 || draft.costPct > 100)) {
+          return { error: '成本比例需在 0–100' };
+        }
+      }
+    } else if (draft.costMode === 'fixed') {
+      var costFixedEl = $('empAchEditCostFixed');
+      if (costFixedEl) {
+        draft.costFixed = parseFloat(costFixedEl.value);
+        if (strict && (isNaN(draft.costFixed) || draft.costFixed < 0)) {
+          return { error: '请输入有效的固定成本' };
+        }
+      }
     } else {
-      scheme.costMode = 'off';
-      scheme.costPct = 0;
-      scheme.costFixed = 0;
+      draft.costMode = 'off';
+      draft.costPct = 0;
+      draft.costFixed = 0;
     }
+    if (stationMode) {
+      syncAchFlatFromStation(draft, 'senior');
+    } else {
+      syncAchStationsFromFlat(draft);
+    }
+    state.achEdit.draft = draft;
+    return { ok: true, scheme: draft };
+  }
+
+  function readAchEditSchemeFromDom() {
+    var flushed = flushAchEditStationFromDom({ strict: true });
+    if (flushed.error) return { error: flushed.error };
+    var scheme = ensureAchStations((state.achEdit && state.achEdit.draft) || defaultAchScheme());
     return { scheme: cloneAchScheme(scheme) };
+  }
+
+  function syncAchEditFoot() {
+    var solo = !!(state.achEdit && state.achEdit.kind === 'tabDefault');
+    var saveBtn = $('empAchEditSave');
+    var copyBtn = $('empAchEditSaveCopy');
+    var foot = saveBtn && saveBtn.closest('.picker-foot');
+    if (copyBtn) copyBtn.classList.toggle('hidden', solo);
+    if (saveBtn) {
+      saveBtn.classList.toggle('secondary', !solo);
+      saveBtn.textContent = '保存';
+    }
+    if (foot) {
+      foot.classList.toggle('picker-foot--row', true);
+      foot.classList.toggle('picker-foot--solo', solo);
+    }
   }
 
   function openAchSchemeEditor(opts) {
     opts = opts || {};
-    var scheme = mergeAchScheme(opts.scheme);
+    var scheme = ensureAchStations(mergeAchScheme(opts.scheme));
+    var tab = opts.tab || state.achTab;
     state.achEdit = {
       kind: opts.kind || 'item',
       itemId: opts.itemId || null,
       typeKey: opts.typeKey || null,
       catId: opts.catId || state.achCatId,
-      tab: opts.tab || state.achTab,
+      tab: tab,
       valueMode: scheme.valueMode,
       costMode: scheme.costMode,
       title: opts.title || '业绩方案',
+      stationId: opts.stationId || 'senior',
+      draft: scheme,
     };
     $('empAchEditTitle').textContent = state.achEdit.title;
     $('empAchEditBody').innerHTML = renderAchEditBody(scheme);
+    syncAchEditFoot();
     openMask('empAchEditMask');
   }
 
   function refreshAchEditBody() {
     if (!state.achEdit) return;
-    var draft = {
-      valueMode: state.achEdit.valueMode,
-      costMode: state.achEdit.costMode,
-      designated: 100,
-      nonDesignated: 80,
-      designatedAmt: 0,
-      nonDesignatedAmt: 0,
-      costPct: 0,
-      costFixed: 0,
-    };
-    var curDes = $('empAchEditDes');
-    var curNon = $('empAchEditNon');
-    var curDesAmt = $('empAchEditDesAmt');
-    var curNonAmt = $('empAchEditNonAmt');
-    var curCostPct = $('empAchEditCostPct');
-    var curCostFixed = $('empAchEditCostFixed');
-    if (curDes) draft.designated = parseFloat(curDes.value) || 0;
-    if (curNon) draft.nonDesignated = parseFloat(curNon.value) || 0;
-    if (curDesAmt) draft.designatedAmt = parseFloat(curDesAmt.value) || 0;
-    if (curNonAmt) draft.nonDesignatedAmt = parseFloat(curNonAmt.value) || 0;
-    if (curCostPct) draft.costPct = parseFloat(curCostPct.value) || 0;
-    if (curCostFixed) draft.costFixed = parseFloat(curCostFixed.value) || 0;
+    flushAchEditStationFromDom();
+    var draft = ensureAchStations(state.achEdit.draft || defaultAchScheme());
     draft.valueMode = state.achEdit.valueMode;
     draft.costMode = state.achEdit.costMode;
+    state.achEdit.draft = draft;
     $('empAchEditBody').innerHTML = renderAchEditBody(draft);
+  }
+
+  function applyAchEditToAllStations() {
+    if (!state.achEdit) return;
+    var flushed = flushAchEditStationFromDom({ strict: true });
+    if (flushed.error) { toast(flushed.error, true); return; }
+    if (!window.confirm('将当前工位的指定/非指定应用到大工、中工、小工全部工位？')) return;
+    var draft = ensureAchStations(state.achEdit.draft);
+    var sid = state.achEdit.stationId || 'senior';
+    var src = cloneAchStationPair(draft.stations[sid], draft.stations[sid]);
+    ACH_STATION_IDS.forEach(function (id) {
+      draft.stations[id] = cloneAchStationPair(src, src);
+    });
+    syncAchFlatFromStation(draft, 'senior');
+    state.achEdit.draft = draft;
+    $('empAchEditBody').innerHTML = renderAchEditBody(draft);
+    toast('已应用到全部工位');
   }
 
   function applySchemeToItem(item, scheme) {
@@ -26179,14 +27626,18 @@ function billingNav(fn) {
     var edit = state.achEdit;
     var copied = 0;
 
-    if (edit.kind === 'cardDefault') {
+    if (edit.kind === 'tabDefault') {
+      var tabKey = edit.tab === 'sales' ? 'sales' : 'labor';
+      var bucket = window.EmployeeStore.ach[tabKey];
+      if (!bucket) { toast('未找到业绩数据', true); return; }
+      bucket.defaultScheme = cloneAchScheme(scheme);
+    } else if (edit.kind === 'cardDefault') {
       var card = window.EmployeeStore.ach.card || ensureCardAchDefaults();
       card.incomeTypes = ensureCardIncomeTypes(card);
       card.incomeTypes[edit.typeKey] = cloneAchScheme(scheme);
       window.EmployeeStore.ach.card = card;
       if (copyToGroup) {
-        var tplItems = (card.items && card.items.card_tpl) || [];
-        tplItems.forEach(function (it) {
+        getAllCardAchTplItems(card).forEach(function (it) {
           if (!it.types) it.types = {};
           if ((it.typeKeys || []).indexOf(edit.typeKey) < 0) return;
           it.types[edit.typeKey] = cloneAchScheme(scheme);
@@ -26203,9 +27654,10 @@ function billingNav(fn) {
         info.item.nonDesignated = scheme.nonDesignated;
       }
       if (copyToGroup) {
-        var siblings = (window.EmployeeStore.ach.card.items.card_tpl) || [];
+        var groupCatId = edit.catId || info.catId;
+        var siblings = (window.EmployeeStore.ach.card.items && window.EmployeeStore.ach.card.items[groupCatId]) || [];
         siblings.forEach(function (it) {
-          if (it.id === info.item.id) return;
+          if (!it || it.id === info.item.id) return;
           if ((it.typeKeys || []).indexOf(edit.typeKey) < 0) return;
           if (!it.types) it.types = {};
           it.types[edit.typeKey] = cloneAchScheme(scheme);
@@ -26233,7 +27685,19 @@ function billingNav(fn) {
     else toast('业绩方案已保存');
   }
 
-  function openAchItemEditor(itemId) {
+  function openTabDefaultEditor(tab, stationId) {
+    tab = tab === 'sales' ? 'sales' : 'labor';
+    openAchSchemeEditor({
+      kind: 'tabDefault',
+      tab: tab,
+      catId: getAchCommonRulesCatId(tab),
+      scheme: getAchTabDefaultScheme(tab),
+      title: '通用规则 · 默认方案',
+      stationId: stationId || 'senior',
+    });
+  }
+
+  function openAchItemEditor(itemId, stationId) {
     var info = findAchItem(itemId);
     if (!info) return;
     openAchSchemeEditor({
@@ -26243,32 +27707,39 @@ function billingNav(fn) {
       tab: info.tab,
       scheme: info.item,
       title: info.item.name,
+      stationId: stationId || 'senior',
     });
   }
 
-  function openCardIncomeTypeEditor(typeKey) {
+  function openCardIncomeTypeEditor(typeKey, stationId) {
     var card = window.EmployeeStore.ach.card || ensureCardAchDefaults();
     card.incomeTypes = ensureCardIncomeTypes(card);
     openAchSchemeEditor({
       kind: 'cardDefault',
       typeKey: typeKey,
+      tab: 'card',
       scheme: card.incomeTypes[typeKey],
       title: '默认 · ' + cardTypeLabel(typeKey),
+      stationId: stationId || 'senior',
     });
   }
 
-  function openCardItemTypeEditor(itemId, typeKey) {
+  function openCardItemTypeEditor(itemId, typeKey, stationId) {
     var info = findAchItem(itemId);
     if (!info || !info.item) return;
     var sch = (info.item.types && info.item.types[typeKey]) || defaultAchScheme();
+    var catId = (state.achTab === 'card' && state.achCatId && state.achCatId !== 'card_rules')
+      ? state.achCatId
+      : info.catId;
     openAchSchemeEditor({
       kind: 'cardType',
       itemId: itemId,
       typeKey: typeKey,
-      catId: info.catId,
+      catId: catId,
       tab: 'card',
       scheme: sch,
       title: info.item.name + ' · ' + cardTypeLabel(typeKey),
+      stationId: stationId || 'senior',
     });
   }
 
@@ -26278,23 +27749,23 @@ function billingNav(fn) {
   }
 
   function renderCardTplListHtml(cardItems) {
-    if (!cardItems || !cardItems.length) {
-      return '<div class="empty-cart" style="padding:24px 16px">暂无卡模板</div>';
+    var filtered = cardItems || [];
+    if (!filtered.length) {
+      return '<div class="empty-cart" style="padding:24px 16px">本组暂无卡模板</div>';
     }
-    return '<div class="emp-ach-card-section">按模板权益设置</div><div class="emp-ach-tpl-list">' + cardItems.map(function (it) {
+    return '<div class="emp-ach-card-section">按模板权益设置</div><div class="emp-ach-tpl-list">' + filtered.map(function (it) {
       var keys = it.typeKeys || cardAchApplicableTypes(it.benefits);
       var grad = cardTplGradient(it.cardColor);
+      var stationOnCard = getAchCalcMode('card') === 'station';
       var rows = keys.map(function (k) {
         var sch = (it.types && it.types[k]) || defaultAchScheme();
         var cost = formatAchCostShort(sch);
-        return '<button type="button" class="emp-ach-tpl-row" data-ach-card-type="' + k + '" aria-label="' + esc(cardTypeLabel(k)) + '">' +
+        return '<div class="emp-ach-tpl-row" data-ach-card-type="' + k + '" role="button" tabindex="0" aria-label="' + esc(cardTypeLabel(k)) + '">' +
           '<span class="emp-ach-tpl-row__label">' + esc(cardTypeLabel(k)) + '</span>' +
-          '<span class="emp-ach-tpl-row__trail">' +
-          '<span class="emp-ach-tpl-row__vals">' +
-          '<span class="emp-ach-tpl-row__val">' + esc(formatAchSchemeShort(sch)) + '</span>' +
+          '<div class="emp-ach-tpl-row__trail">' +
+          renderAchTwinCapsHtml(sch, { itemId: it.id, typeKey: k, stationMode: stationOnCard }) +
           (cost ? '<span class="emp-ach-tpl-row__cost">' + esc(cost) + '</span>' : '') +
-          '</span>' + navChevHtml() +
-          '</span></button>';
+          '</div></div>';
       }).join('');
       return '<article class="emp-ach-tpl-card" data-ach-item="' + esc(it.id) + '">' +
         '<div class="emp-ach-tpl-face" style="background:' + esc(grad) + '">' +
@@ -26315,6 +27786,17 @@ function billingNav(fn) {
     if (!state.achCatId || !data.cats.some(function (c) { return c.id === state.achCatId; })) {
       state.achCatId = data.cats[0] ? data.cats[0].id : null;
     }
+    var banner = $('empAchStationBanner');
+    var bannerText = $('empAchStationBannerText');
+    var stationOn = getAchCalcMode(state.achTab) === 'station';
+    if (banner) {
+      var showBanner = stationOn && !state.achStationBannerDismissed;
+      banner.classList.toggle('hidden', !showBanner);
+      if (bannerText && showBanner) {
+        var names = getStationLabels().map(function (s) { return s.label; }).join('/');
+        bannerText.textContent = '按工位分配中（' + names + '）· 点项目可分别设置指定/非指定';
+      }
+    }
     catsEl.innerHTML = data.cats.map(function (c) {
       return '<button type="button" class="emp-ach-cat' + (c.id === state.achCatId ? ' on' : '') +
         '" data-ach-cat="' + c.id + '">' + esc(c.name) + '</button>';
@@ -26322,6 +27804,9 @@ function billingNav(fn) {
 
     if (state.achTab === 'card' && state.achCatId === 'card_rules') {
       itemsEl.innerHTML = renderCardAchRulesHtml(data);
+      itemsEl.classList.remove('is-tpl-list');
+    } else if ((state.achTab === 'labor' || state.achTab === 'sales') && isAchCommonRulesCat(state.achCatId, state.achTab)) {
+      itemsEl.innerHTML = renderTabAchRulesHtml(state.achTab, data);
       itemsEl.classList.remove('is-tpl-list');
     } else if (state.achTab === 'card') {
       var cardItems = (state.achCatId && data.items[state.achCatId]) || [];
@@ -26331,16 +27816,15 @@ function billingNav(fn) {
       var items = (state.achCatId && data.items[state.achCatId]) || [];
       itemsEl.innerHTML = items.map(function (it) {
         var cost = formatAchCostShort(it);
-        return '<button type="button" class="emp-ach-item" data-ach-item="' + it.id + '">' +
+        return '<div class="emp-ach-item" data-ach-item="' + it.id + '" role="button" tabindex="0">' +
           '<div class="emp-ach-item__main">' +
           '<span class="emp-ach-item__name">' + esc(it.name) + '</span>' +
           '<span class="emp-ach-item__price">' + fmtAchPrice(it.price) + '</span>' +
           '</div>' +
           '<div class="emp-ach-item__trail">' +
-          '<div class="emp-ach-item__trail-text">' +
-          '<span class="emp-ach-item__summary">' + esc(formatAchSchemeShort(it)) + '</span>' +
+          renderAchTwinCapsHtml(it, { itemId: it.id, stationMode: stationOn }) +
           (cost ? '<span class="emp-ach-item__cost">' + esc(cost) + '</span>' : '') +
-          '</div>' + navChevHtml() + '</div></button>';
+          '</div></div>';
       }).join('') || '<div class="empty-cart" style="padding:24px 16px">暂无项目</div>';
       itemsEl.classList.remove('is-tpl-list');
     }
@@ -26404,9 +27888,10 @@ function billingNav(fn) {
     return store.calcModeLabor === 'station' ? 'station' : 'avg';
   }
 
-  function setAchCalcMode(kind, mode) {
+  function setAchCalcMode(kind, mode, opts) {
     ensureCalcModes();
     var next = mode === 'station' ? 'station' : 'avg';
+    var prev = getAchCalcMode(kind);
     var store = window.EmployeeStore;
     if (!store) return;
     if (kind === 'sales') store.calcModeSales = next;
@@ -26415,6 +27900,130 @@ function billingNav(fn) {
       store.calcModeLabor = next;
       store.calcMode = next;
     }
+    if (opts && opts.skipMigrate) return;
+    if (prev !== next) {
+      if (next === 'station') migrateAchKindToStation(kind);
+      else migrateAchKindToAvg(kind);
+    }
+  }
+
+  function snapshotAchKind(kind) {
+    var bucket = window.EmployeeStore && window.EmployeeStore.ach && window.EmployeeStore.ach[kind];
+    if (!bucket) return null;
+    try { return JSON.parse(JSON.stringify(bucket)); } catch (e) { return null; }
+  }
+
+  function restoreAchKind(kind, snap) {
+    if (!window.EmployeeStore || !window.EmployeeStore.ach || !snap) return;
+    window.EmployeeStore.ach[kind] = JSON.parse(JSON.stringify(snap));
+  }
+
+  function calcModeGroupLabel(kind) {
+    var g = CALC_MODE_GROUPS.find(function (x) { return x.key === kind; });
+    return (g && g.label) || '业绩';
+  }
+
+  function closeCalcModeConfirm(revert) {
+    var pending = state.calcModePending;
+    if (revert && pending) {
+      restoreAchKind(pending.kind, pending.achSnapshot);
+      setAchCalcMode(pending.kind, pending.prevMode, { skipMigrate: true });
+    }
+    state.calcModePending = null;
+    closeEmpDialog('empCalcModeConfirmMask');
+    if (revert) renderAdv();
+  }
+
+  function openCalcModeConfirm(kind, prevMode, nextMode) {
+    var label = calcModeGroupLabel(kind);
+    var titleEl = $('empCalcModeConfirmTitle');
+    var bodyEl = $('empCalcModeConfirmBody');
+    var okEl = $('empCalcModeConfirmOk');
+    if (nextMode === 'station') {
+      if (titleEl) titleEl.textContent = '切换为按工位分配？';
+      if (bodyEl) {
+        bodyEl.textContent = '「' + label + '」改为按工位分配后，开单需选择工位；可在业绩设置中为各工位分别配置指定/非指定方案。';
+      }
+      if (okEl) okEl.textContent = '去配置业绩';
+    } else {
+      if (titleEl) titleEl.textContent = '切换为平均分配？';
+      if (bodyEl) {
+        bodyEl.textContent = '「' + label + '」改为平均分配后，开单无需选择工位；该类型下各工位方案将合并为统一配置。';
+      }
+      if (okEl) okEl.textContent = '查看业绩设置';
+    }
+    state.calcModePending = {
+      kind: kind,
+      prevMode: prevMode,
+      nextMode: nextMode,
+      achSnapshot: snapshotAchKind(kind)
+    };
+    setAchCalcMode(kind, nextMode);
+    renderAdv();
+    openEmpDialog('empCalcModeConfirmMask');
+  }
+
+  function confirmCalcModeAndGoAch() {
+    var pending = state.calcModePending;
+    if (!pending) {
+      closeEmpDialog('empCalcModeConfirmMask');
+      return;
+    }
+    state.achTab = pending.kind;
+    if (pending.kind === 'card' && !state.achCatId) state.achCatId = 'card_rules';
+    if ((pending.kind === 'labor' || pending.kind === 'sales') && !state.achCatId) {
+      state.achCatId = getAchCommonRulesCatId(pending.kind);
+    }
+    state.calcModePending = null;
+    closeEmpDialog('empCalcModeConfirmMask');
+    openAch();
+  }
+
+  function walkAchSchemes(kind, fn) {
+    var bucket = window.EmployeeStore.ach && window.EmployeeStore.ach[kind];
+    if (!bucket) return;
+    if (kind === 'card') {
+      var types = ensureCardIncomeTypes(bucket);
+      Object.keys(types).forEach(function (k) { fn(types[k]); });
+      bucket.incomeTypes = types;
+      var seenTpl = Object.create(null);
+      Object.keys(bucket.items || {}).forEach(function (catId) {
+        (bucket.items[catId] || []).forEach(function (it) {
+          if (!it) return;
+          if (it.id) {
+            if (seenTpl[it.id]) return;
+            seenTpl[it.id] = true;
+          }
+          if (it.types) {
+            Object.keys(it.types).forEach(function (tk) { fn(it.types[tk]); });
+          } else {
+            fn(it);
+          }
+        });
+      });
+      return;
+    }
+    if (bucket.defaultScheme) {
+      bucket.defaultScheme = ensureAchStations(mergeAchScheme(bucket.defaultScheme, defaultAchScheme()));
+      fn(bucket.defaultScheme);
+    }
+    Object.keys(bucket.items || {}).forEach(function (catId) {
+      (bucket.items[catId] || []).forEach(function (it) { fn(it); });
+    });
+  }
+
+  function migrateAchKindToStation(kind) {
+    walkAchSchemes(kind, function (scheme) {
+      var next = syncAchStationsFromFlat(ensureAchStations(scheme));
+      Object.assign(scheme, next);
+    });
+  }
+
+  function migrateAchKindToAvg(kind) {
+    walkAchSchemes(kind, function (scheme) {
+      var next = syncAchFlatFromStation(ensureAchStations(scheme), 'senior');
+      Object.assign(scheme, next);
+    });
   }
 
   function ensureStationMap() {
@@ -26752,7 +28361,9 @@ function billingNav(fn) {
     });
   }
   function getScopeGroups(type) {
-    if (type === 'card') return [];
+    if (type === 'card') {
+      return (typeof ensureCardGroups === 'function') ? (ensureCardGroups() || []) : [];
+    }
     if (typeof getCustomCatalogGroups === 'function') {
       return getCustomCatalogGroups(type === 'product' ? 'product' : 'project') || [];
     }
@@ -26760,7 +28371,7 @@ function billingNav(fn) {
   }
   function scopeVisibleItems(type, groupId) {
     var items = getScopeCatalogItems(type);
-    if (type === 'card' || !groupId || groupId === 'all') return items;
+    if (!groupId || groupId === 'all') return items;
     var g = getScopeGroups(type).find(function (x) { return x.id === groupId; });
     if (!g) return items;
     var set = {};
@@ -26794,14 +28405,18 @@ function billingNav(fn) {
     var scroll = $('empScopeGroupScroll');
     if (!bar || !scroll) return;
     var type = state.scopeType || 'project';
-    if (type === 'card') {
+    var groups = getScopeGroups(type);
+    if (!groups.length) {
       bar.classList.add('hidden');
       scroll.innerHTML = '';
       return;
     }
     bar.classList.remove('hidden');
-    var groups = getScopeGroups(type);
     var gid = state.scopeGroupId || 'all';
+    if (type === 'card' && typeof getActiveCardGroupId === 'function') {
+      gid = getActiveCardGroupId('empScope') || 'all';
+      state.scopeGroupId = gid;
+    }
     var html = '<button type="button" class="emp-scope-group-chip' + (gid === 'all' ? ' on' : '') + '" data-scope-group="all">全部</button>';
     groups.forEach(function (g) {
       html += '<button type="button" class="emp-scope-group-chip' + (gid === g.id ? ' on' : '') + '" data-scope-group="' + esc(g.id) + '">' + esc(g.name) + '</button>';
@@ -26839,7 +28454,7 @@ function billingNav(fn) {
       syncScopeSelectAllBtn();
       return;
     }
-    if (type !== 'card' && gid === 'all') {
+    if (gid === 'all') {
       var groups = getScopeGroups(type);
       var used = {};
       var html = '';
@@ -27597,6 +29212,9 @@ function billingNav(fn) {
     closeAllEmpMasks();
     if (!state.achTab) state.achTab = 'labor';
     if (state.achTab === 'card' && !state.achCatId) state.achCatId = 'card_rules';
+    if ((state.achTab === 'labor' || state.achTab === 'sales') && !state.achCatId) {
+      state.achCatId = getAchCommonRulesCatId(state.achTab);
+    }
     renderAch();
     showScreen('screen-emp-ach');
     nav('staff-ach');
@@ -28119,7 +29737,9 @@ function billingNav(fn) {
       var tab = e.target.closest('[data-ach-tab]');
       if (!tab) return;
       state.achTab = tab.dataset.achTab;
-      state.achCatId = state.achTab === 'card' ? 'card_rules' : null;
+      if (state.achTab === 'card') state.achCatId = 'card_rules';
+      else if (state.achTab === 'labor' || state.achTab === 'sales') state.achCatId = getAchCommonRulesCatId(state.achTab);
+      else state.achCatId = null;
       renderAch();
     });
     $('empAchCats')?.addEventListener('click', function (e) {
@@ -28129,6 +29749,27 @@ function billingNav(fn) {
       renderAch();
     });
     $('empAchItems')?.addEventListener('click', function (e) {
+      var cap = e.target.closest('.emp-ach-cap');
+      if (cap) {
+        e.stopPropagation();
+        var stationId = cap.dataset.achCapStation || undefined;
+        if (cap.dataset.achCapTabDefault) {
+          openTabDefaultEditor(state.achTab, stationId);
+          return;
+        }
+        if (cap.dataset.achCapCardDefault && cap.dataset.achCapType) {
+          openCardIncomeTypeEditor(cap.dataset.achCapType, stationId);
+          return;
+        }
+        if (cap.dataset.achCapType && cap.dataset.achCapItem) {
+          openCardItemTypeEditor(cap.dataset.achCapItem, cap.dataset.achCapType, stationId);
+          return;
+        }
+        if (cap.dataset.achCapItem) {
+          openAchItemEditor(cap.dataset.achCapItem, stationId);
+          return;
+        }
+      }
       if (e.target.closest('[data-card-ach-base]')) {
         state.ruleEditIdx = 'card_base';
         $('empRuleTitle').textContent = '计入基数';
@@ -28141,8 +29782,18 @@ function billingNav(fn) {
         openMask('empRuleMask');
         return;
       }
+      var tabDefaultHead = e.target.closest('[data-ach-tab-default]');
+      if (tabDefaultHead) {
+        openTabDefaultEditor(tabDefaultHead.dataset.achTabDefault || state.achTab);
+        return;
+      }
+      var incomeHead = e.target.closest('.emp-ach-income-card__head[data-card-income-type]');
+      if (incomeHead) {
+        openCardIncomeTypeEditor(incomeHead.dataset.cardIncomeType);
+        return;
+      }
       var incomeType = e.target.closest('[data-card-income-type]');
-      if (incomeType) {
+      if (incomeType && !e.target.closest('.emp-ach-cap')) {
         openCardIncomeTypeEditor(incomeType.dataset.cardIncomeType);
         return;
       }
@@ -28153,7 +29804,7 @@ function billingNav(fn) {
         return;
       }
       var itemRow = e.target.closest('[data-ach-item]');
-      if (itemRow && state.achTab !== 'card') {
+      if (itemRow && state.achTab !== 'card' && !isAchCommonRulesCat(state.achCatId, state.achTab)) {
         openAchItemEditor(itemRow.dataset.achItem);
       }
     });
@@ -28163,17 +29814,63 @@ function billingNav(fn) {
       if (e.target === $('empAchHelpMask')) closeEmpDialog('empAchHelpMask');
     });
     $('empAchEditBody')?.addEventListener('click', function (e) {
+      var stepBtn = e.target.closest('[data-ach-step]');
+      if (stepBtn && state.achEdit) {
+        var field = stepBtn.dataset.achStep;
+        var dir = parseInt(stepBtn.dataset.achDir, 10) || 0;
+        var idMap = { des: 'empAchEditDes', non: 'empAchEditNon', desAmt: 'empAchEditDesAmt', nonAmt: 'empAchEditNonAmt' };
+        var input = $(idMap[field]);
+        if (!input) return;
+        var step = (field === 'desAmt' || field === 'nonAmt') ? 1 : 1;
+        var cur = parseFloat(input.value);
+        if (isNaN(cur)) cur = 0;
+        var next = cur + dir * step;
+        if (field === 'des' || field === 'non') {
+          if (next < 0) next = 0;
+          if (next > 100) next = 100;
+        } else {
+          if (next < 0) next = 0;
+        }
+        input.value = String(next);
+        return;
+      }
+      var stBtn = e.target.closest('[data-ach-edit-station]');
+      if (stBtn && state.achEdit) {
+        var flushed = flushAchEditStationFromDom();
+        if (flushed.error) { toast(flushed.error, true); return; }
+        state.achEdit.stationId = stBtn.dataset.achEditStation;
+        refreshAchEditBody();
+        return;
+      }
+      if (e.target.closest('#empAchApplyStations')) {
+        applyAchEditToAllStations();
+        return;
+      }
       var vm = e.target.closest('[data-ach-value-mode]');
       if (vm && state.achEdit) {
-        state.achEdit.valueMode = vm.dataset.achValueMode;
+        var nextMode = vm.dataset.achValueMode;
+        if (state.achEdit.valueMode === nextMode) return;
+        flushAchEditStationFromDom();
+        state.achEdit.valueMode = nextMode;
         refreshAchEditBody();
         return;
       }
       var cm = e.target.closest('[data-ach-cost-mode]');
       if (cm && state.achEdit) {
-        state.achEdit.costMode = cm.dataset.achCostMode;
+        var nextCost = cm.dataset.achCostMode;
+        if (state.achEdit.costMode === nextCost) return;
+        flushAchEditStationFromDom();
+        state.achEdit.costMode = nextCost;
         refreshAchEditBody();
+        if (nextCost === 'receipt' || nextCost === 'price' || nextCost === 'fixed') {
+          revealAchEditCostField();
+        }
       }
+    });
+    $('empAchStationBannerClose')?.addEventListener('click', function () {
+      state.achStationBannerDismissed = true;
+      var banner = $('empAchStationBanner');
+      if (banner) banner.classList.add('hidden');
     });
     $('empAchEditSave')?.addEventListener('click', function () { saveAchEdit(false); });
     $('empAchEditSaveCopy')?.addEventListener('click', function () { saveAchEdit(true); });
@@ -28263,8 +29960,19 @@ function billingNav(fn) {
     $('empCalcModes')?.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-calc-kind][data-calc-mode]');
       if (!btn) return;
-      setAchCalcMode(btn.dataset.calcKind, btn.dataset.calcMode);
-      renderAdv();
+      if (state.calcModePending) return;
+      var kind = btn.dataset.calcKind;
+      var next = btn.dataset.calcMode === 'station' ? 'station' : 'avg';
+      var prev = getAchCalcMode(kind);
+      if (prev === next) return;
+      openCalcModeConfirm(kind, prev, next);
+    });
+    $('empCalcModeConfirmCancel')?.addEventListener('click', function () {
+      closeCalcModeConfirm(true);
+    });
+    $('empCalcModeConfirmOk')?.addEventListener('click', confirmCalcModeAndGoAch);
+    $('empCalcModeConfirmMask')?.addEventListener('click', function (e) {
+      if (e.target === $('empCalcModeConfirmMask')) closeCalcModeConfirm(true);
     });
     $('empStationMap')?.addEventListener('input', function (e) {
       var inp = e.target.closest('[data-station-id]');
@@ -28294,7 +30002,16 @@ function billingNav(fn) {
     $('empBtnSaveAdv')?.addEventListener('click', function () {
       var stationErr = validateStationMapForSave();
       if (stationErr) { toast(stationErr, true); return; }
-      toast('高级规则已保存');
+      var stationKinds = [];
+      if (getAchCalcMode('labor') === 'station') stationKinds.push('项目');
+      if (getAchCalcMode('sales') === 'station') stationKinds.push('产品');
+      if (getAchCalcMode('card') === 'station') stationKinds.push('办卡');
+      if (stationKinds.length) {
+        state.achStationBannerDismissed = false;
+        toast('已保存。返回业绩设置后，可为' + stationKinds.join('/') + '分工位配置指定与非指定');
+      } else {
+        toast('高级规则已保存');
+      }
       openAch();
     });
 
@@ -28608,7 +30325,11 @@ function billingNav(fn) {
     document.querySelectorAll('.emp-scope-type-tab').forEach(function (btn) {
       btn.addEventListener('click', function () {
         state.scopeType = btn.dataset.scopeType || 'project';
-        state.scopeGroupId = 'all';
+        if (state.scopeType === 'card' && typeof getActiveCardGroupId === 'function') {
+          state.scopeGroupId = getActiveCardGroupId('empScope') || 'all';
+        } else {
+          state.scopeGroupId = 'all';
+        }
         renderScopeScreen();
       });
     });
@@ -28616,6 +30337,9 @@ function billingNav(fn) {
       var chip = e.target.closest('[data-scope-group]');
       if (!chip) return;
       state.scopeGroupId = chip.dataset.scopeGroup || 'all';
+      if (state.scopeType === 'card' && typeof setActiveCardGroupId === 'function') {
+        setActiveCardGroupId('empScope', state.scopeGroupId);
+      }
       renderScopeGroupChips();
       renderScopeList();
     });
@@ -30557,6 +32281,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function renderAddCardStaffRow() {
+    const rowEl = document.getElementById('addCardStaffRow');
     const valEl = document.getElementById('addCardStaffRowVal');
     if (!valEl) return;
     const row = getIssueStaffRow();
@@ -30564,6 +32289,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (!ids.length) {
       valEl.textContent = '请选择';
       valEl.classList.add('is-placeholder');
+      if (rowEl) rowEl.classList.remove('has-staff');
       return;
     }
     const pool = getStaffPool();
@@ -30573,6 +32299,7 @@ window.__BILLING_EMBEDDED__ = true;
     });
     valEl.textContent = names.join('、');
     valEl.classList.remove('is-placeholder');
+    if (rowEl) rowEl.classList.add('has-staff');
   }
 
   function openAddCardStaffSheet() {
@@ -36287,8 +38014,50 @@ window.__BILLING_EMBEDDED__ = true;
     document.querySelectorAll('#addCardMode [data-add-mode]').forEach(btn => {
       btn.classList.toggle('is-on', btn.dataset.addMode === state.addCardMode);
     });
+    if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+    if (typeof ensureBillingTemplatesFromCardModule === 'function') ensureBillingTemplatesFromCardModule();
+
+    const bar = document.getElementById('addCardGroupBar');
+    const emptyEl = document.getElementById('addCardGroupEmpty');
+    const listEl = document.getElementById('addCardList');
+    const activeTpl = typeof getActiveTemplates === 'function' ? getActiveTemplates() : [];
+    const anyGroups = typeof ensureCardGroups === 'function' && ensureCardGroups().length > 0;
+    if (bar) {
+      if (activeTpl.length && anyGroups) {
+        bar.classList.remove('hidden');
+        if (typeof renderCardGroupFilterTabs === 'function') {
+          renderCardGroupFilterTabs(document.getElementById('addCardGroupTabs'), {
+            surface: 'billing',
+            dataAttr: 'data-add-card-group',
+          });
+        }
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    let filteredTpl = activeTpl;
+    if (typeof filterTemplatesByCardGroup === 'function') {
+      filteredTpl = filterTemplatesByCardGroup(activeTpl, 'billing');
+    }
+    const idSet = new Set(filteredTpl.map(t => t.id));
+    const list = CARD_TEMPLATES.filter(tpl => idSet.has(tpl.id));
+
+    emptyEl?.classList.add('hidden');
+    if (!list.length) {
+      listEl.innerHTML = '';
+      if (activeTpl.length && getActiveCardGroupId && getActiveCardGroupId('billing') !== 'all') {
+        emptyEl?.classList.remove('hidden');
+      } else {
+        listEl.innerHTML = '<div class="empty-cart" style="padding:24px 16px">暂无在售会员卡</div>';
+      }
+      renderAddCardPicked();
+      renderAddCardStaffOnly();
+      return;
+    }
+
     const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
-    document.getElementById('addCardList').innerHTML = CARD_TEMPLATES.map(tpl => {
+    listEl.innerHTML = list.map(tpl => {
       const selected = state.selectedTemplateId === tpl.id;
       const grad = CARD_COLORS[tpl.cardColor] || CARD_COLORS.brand_red;
       const b = tpl.benefits || {};
@@ -36355,12 +38124,14 @@ window.__BILLING_EMBEDDED__ = true;
     const grad = CARD_COLORS[tpl.cardColor] || CARD_COLORS.brand_red;
     box.className = 'add-card-picked';
     box.innerHTML =
-      `<span class="add-card-picked__face" style="background:${grad}" aria-hidden="true"></span>` +
+      `<span class="add-card-picked__face" aria-hidden="true">` +
+      `<span class="add-card-picked__face-head" style="background:${grad}"></span>` +
+      `<span class="add-card-picked__face-body"></span></span>` +
       `<div class="add-card-picked__meta">` +
       `<div class="add-card-picked__name">${escapeHtml(tpl.name)}</div>` +
       `<div class="add-card-picked__price">¥${tpl.price}</div>` +
       `</div>` +
-      `<button type="button" class="add-card-picked__change" data-add-card-change>更换</button>`;
+      `<button type="button" class="add-card-picked__status" data-add-card-change>当前选择</button>`;
   }
 
 
@@ -36381,6 +38152,7 @@ window.__BILLING_EMBEDDED__ = true;
     { title: '会员卡关联', nodes: [
       { id: 'expand', label: '展卡', screen: 'screen-bill' },
       { id: 'add-card', label: '添加卡', screen: 'screen-add-card' },
+      { id: 'add-card-group', label: '添加卡 · 分组筛选', screen: 'screen-add-card' },
       { id: 'benefit', label: '选择权益', screen: 'screen-pick-benefit' },
       { id: 'discount', label: '折扣权益', screen: 'screen-discount' },
     ]},
@@ -36438,6 +38210,15 @@ window.__BILLING_EMBEDDED__ = true;
       state.cardsExpanded = true; renderBillHeader(); showOnlyScreen('screen-bill');
     },
     'add-card'() { if (!state.customer) enterBill(CUSTOMERS[0]); openAddCardScreen(); },
+    'add-card-group'() {
+      if (!state.customer) enterBill(CUSTOMERS[0]);
+      if (typeof setActiveCardGroupId === 'function') {
+        const g = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []).find(x => (x.itemIds || []).length)
+          || (typeof ensureCardGroups === 'function' ? ensureCardGroups()[0] : null);
+        setActiveCardGroupId('billing', g ? g.id : 'all');
+      }
+      openAddCardScreen();
+    },
     benefit() {
       if (!isMemberBill()) { enterBill(CUSTOMERS[0]); }
       if (!state.cart.length) setCartQty(PROJECTS[1], 1);
@@ -37219,6 +39000,16 @@ window.__BILLING_EMBEDDED__ = true;
     else if (window.CardHost && typeof window.CardHost.openCreateFlowFromBilling === 'function') {
       window.CardHost.openCreateFlowFromBilling();
     }
+  });
+  document.getElementById('addCardGroupTabs')?.addEventListener('click', e => {
+    const tabsEl = document.getElementById('addCardGroupTabs');
+    if (tabsEl?.classList.contains('is-panning')) return;
+    const tab = e.target.closest('[data-add-card-group]');
+    if (!tab) return;
+    const id = tab.dataset.addCardGroup;
+    if (!id || (typeof getActiveCardGroupId === 'function' && id === getActiveCardGroupId('billing'))) return;
+    if (typeof setActiveCardGroupId === 'function') setActiveCardGroupId('billing', id);
+    renderAddCardPage();
   });
   document.getElementById('addCardList').addEventListener('click', e => {
     const cloneBtn = e.target.closest('[data-clone-template]');
