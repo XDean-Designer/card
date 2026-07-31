@@ -6669,8 +6669,8 @@ button.exp-flow-row:active { opacity: .92; }
   font-size: 12px; color: var(--text-sec); margin-top: 4px; line-height: 17px;
 }
 .customer-row__stats {
-  flex-shrink: 0; display: flex; flex-direction: column; align-items: stretch; justify-content: center;
-  gap: 6px; min-width: 96px;
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+  gap: 6px; min-width: 128px;
 }
 .customer-row__stat {
   display: flex; align-items: center; justify-content: flex-end; gap: 4px;
@@ -6679,6 +6679,10 @@ button.exp-flow-row:active { opacity: .92; }
 .customer-row__stat-icon {
   flex-shrink: 0; width: 14px; height: 14px; color: #B2B2B2;
   display: block;
+}
+.customer-row__spend-label {
+  font-size: 12px; font-weight: 400; color: var(--text-sec); line-height: 17px;
+  white-space: nowrap; margin-right: 4px;
 }
 .customer-row__spend {
   font-size: 15px; font-weight: 500; color: var(--text); line-height: 20px;
@@ -7433,7 +7437,7 @@ button.exp-flow-row:active { opacity: .92; }
   flex-direction: column;
   gap: 2px;
   min-width: 0;
-  max-width: 38%;
+  max-width: 46%;
 }
 .flow-hub-metric--tl { top: 16px; left: 16px; align-items: flex-start; text-align: left; }
 .flow-hub-metric--tr { top: 16px; right: 16px; align-items: flex-end; text-align: right; }
@@ -7451,7 +7455,7 @@ button.exp-flow-row:active { opacity: .92; }
 .flow-hub-metric--br .flow-hub-metric__label-row { flex-direction: row-reverse; }
 .flow-hub-metric__label {
   font-size: 11px; font-weight: 500; color: #929292; line-height: 16px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.02em; white-space: nowrap;
 }
 .flow-hub-metric__val {
   font-size: 16px; font-weight: 500; font-family: var(--font-data);
@@ -7481,7 +7485,7 @@ button.exp-flow-row:active { opacity: .92; }
 .flow-hub-ring__arc--income { /* stroke set inline via gradient id */ }
 .flow-hub-ring__arc--expense { stroke: #D0D0D0; }
 .flow-hub-metric {
-  transition: opacity .42s cubic-bezier(.2, .7, .2, 1), transform .42s cubic-bezier(.2, .7, .2, 1);
+  transition: opacity .21s cubic-bezier(.2, .7, .2, 1), transform .21s cubic-bezier(.2, .7, .2, 1);
 }
 .flow-hub-ring-stage.is-anim-pending:not(.is-entered) .flow-hub-metric {
   opacity: 0;
@@ -7496,20 +7500,20 @@ button.exp-flow-row:active { opacity: .92; }
   opacity: 1;
   transform: none;
 }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--tl { transition-delay: .38s; }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--tr { transition-delay: .46s; }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--ml { transition-delay: .50s; }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--mr { transition-delay: .54s; }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--bl { transition-delay: .54s; }
-.flow-hub-ring-stage.is-entered .flow-hub-metric--br { transition-delay: .62s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--tl { transition-delay: .19s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--tr { transition-delay: .23s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--ml { transition-delay: .25s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--mr { transition-delay: .27s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--bl { transition-delay: .27s; }
+.flow-hub-ring-stage.is-entered .flow-hub-metric--br { transition-delay: .31s; }
 .flow-hub-ring__core-label-anchor,
 .flow-hub-ring__core-divider,
 .flow-hub-ring__core-sub {
-  transition: opacity .36s cubic-bezier(.2, .7, .2, 1);
+  transition: opacity .18s cubic-bezier(.2, .7, .2, 1);
 }
-.flow-hub-ring-stage.is-entered .flow-hub-ring__core-label-anchor { opacity: 1; transition-delay: .12s; }
-.flow-hub-ring-stage.is-entered .flow-hub-ring__core-divider { opacity: 1; transition-delay: .55s; }
-.flow-hub-ring-stage.is-entered .flow-hub-ring__core-sub { opacity: 1; transition-delay: .62s; }
+.flow-hub-ring-stage.is-entered .flow-hub-ring__core-label-anchor { opacity: 1; transition-delay: .06s; }
+.flow-hub-ring-stage.is-entered .flow-hub-ring__core-divider { opacity: 1; transition-delay: .275s; }
+.flow-hub-ring-stage.is-entered .flow-hub-ring__core-sub { opacity: 1; transition-delay: .31s; }
 .flow-hub-ring__core {
   position: absolute;
   inset: 16%;
@@ -12189,7 +12193,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="dialog dialog--flow-balance-help" role="dialog" aria-labelledby="flowBalanceHelpTitle">
               <div class="dialog__title" id="flowBalanceHelpTitle">收支结余说明</div>
               <div class="dialog__body">
-                <div class="flow-balance-help__formula">结余 = 营业额 − 会员消费 + 充值 − 支出 + 还款 − 欠款</div>
+                <div class="flow-balance-help__formula">结余 = 营业额 − 会员卡消费 + 开卡/充卡 − 支出 + 还款 − 欠款</div>
                 <p class="flow-balance-help__desc">按所选时间范围内门店收支汇总计算，用于快速查看经营结余情况。</p>
               </div>
               <div class="dialog__actions dialog__actions--single">
@@ -33529,6 +33533,7 @@ window.__BILLING_EMBEDDED__ = true;
     return v.toLocaleString('zh-CN');
   }
 
+  /** totalSpend = 本店该顾客所有消费的实付金额合计（不含卡金抵扣/赠送/未付/已退款） */
   function customerPickMetrics(c) {
     const cardCount = Array.isArray(c.cards) ? c.cards.length : 0;
     const spend = Number(c.totalSpend);
@@ -33543,7 +33548,8 @@ window.__BILLING_EMBEDDED__ = true;
     const recent = c.lastVisit
       ? `最近消费：${escapeHtml(c.lastVisit)}`
       : '最近消费：未消费';
-    const spendIcon = '<svg class="customer-row__stat-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.2v5.6M5.2 5.6c.35-.55 1-.9 1.8-.9 1.1 0 1.9.6 1.9 1.45S8.1 7.6 7 7.6 5.1 8.15 5.1 9c0 .9.85 1.5 1.95 1.5.75 0 1.4-.3 1.75-.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    /* Stratis UI · currency-coin-yen */
+    const spendIcon = '<svg class="customer-row__stat-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.28V12.24M12 12.24L8.4 7.2M12 12.24L15.6 7.2M9.12 15.84h5.76M9.12 12.96h5.76M21.6 12c0 5.302-4.298 9.6-9.6 9.6S2.4 17.302 2.4 12 6.698 2.4 12 2.4s9.6 4.298 9.6 9.6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const cardIcon = '<svg class="customer-row__stat-icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="1.5" y="3.5" width="11" height="7.5" rx="1.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 6.2h11" stroke="currentColor" stroke-width="1.2"/><path d="M4 9.2h2.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
     return `<div class="customer-row" ${dataAttr}>
       <img class="customer-row__avatar" src="${c.avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
@@ -33553,7 +33559,7 @@ window.__BILLING_EMBEDDED__ = true;
         <div class="customer-row__recent">${recent}</div>
       </div>
       <div class="customer-row__stats" aria-label="消费与持卡">
-        <div class="customer-row__stat">${spendIcon}<span class="customer-row__spend"><span class="yen">¥</span>${formatPickSpend(m.totalSpend)}</span></div>
+        <div class="customer-row__stat">${spendIcon}<span class="customer-row__spend-label">总消费</span><span class="customer-row__spend"><span class="yen">¥</span>${formatPickSpend(m.totalSpend)}</span></div>
         <div class="customer-row__stat">${cardIcon}<span class="customer-row__cards">持卡 ${m.cardCount}</span></div>
       </div>
     </div>`;
@@ -35902,12 +35908,13 @@ window.__BILLING_EMBEDDED__ = true;
       requestAnimationFrame(function () {
         if (token !== flowHubRingAnimToken) return;
         stage.classList.add('is-entered');
-        flowHubAnimateArcLen(income, 0, g.incomeDash, g.c, 0, 560, 40, token);
-        flowHubAnimateArcLen(expense, 0, g.expenseDash, g.c, g.expenseOffset, 480, 300, token);
-        flowHubAnimateCount(coreVal, 0, Number(stats.balance) || 0, 720, 160, token);
+        /* 时长均为原值一半：仅流水入口结余环播放 */
+        flowHubAnimateArcLen(income, 0, g.incomeDash, g.c, 0, 280, 20, token);
+        flowHubAnimateArcLen(expense, 0, g.expenseDash, g.c, g.expenseOffset, 240, 150, token);
+        flowHubAnimateCount(coreVal, 0, Number(stats.balance) || 0, 360, 80, token);
         setTimeout(function () {
           if (token === flowHubRingAnimToken) stage.classList.remove('is-anim-pending');
-        }, 1100);
+        }, 550);
       });
     });
   }
@@ -35921,8 +35928,8 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function getFlowHubDemoStats() {
-    /* 演示数据 · 结余 = 营业额 - 会员消费 + 充值 - 支出 + 还款 - 欠款
-       支出 / 还款与 ExpenseStore、FLOW_WEIKUAN_REPAY 种子对齐 */
+    /* 演示数据 · 结余 = 营业额 - 会员卡消费 + 开卡/充卡 - 支出 + 还款 - 欠款
+       开卡/充卡 = 开卡+充值+续次+延期实付合计（演示常数）；支出/还款与 ExpenseStore、FLOW_WEIKUAN_REPAY 对齐 */
     const revenue = 12860;
     const memberSpend = 8420;
     const recharge = 3560;
@@ -35983,7 +35990,7 @@ window.__BILLING_EMBEDDED__ = true;
           ${flowHubPanelDecoHtml('flowHub')}
           <div class="flow-hub-ring-stage">
             ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
-            ${flowHubMetricHtml('tr', '会员消费', stats.memberSpend, true)}
+            ${flowHubMetricHtml('tr', '会员卡消费', stats.memberSpend, true)}
             <div class="flow-hub-ring" role="img" aria-label="今日收支结余 ${stats.balance} 元">
               ${flowHubRingSvg(stats, 'flowHubGradIncome')}
               <div class="flow-hub-ring__core">
@@ -35997,7 +36004,7 @@ window.__BILLING_EMBEDDED__ = true;
               </div>
             </div>
             ${flowHubMetricHtml('bl', '支出', stats.expense, true)}
-            ${flowHubMetricHtml('br', '充值', stats.recharge, false)}
+            ${flowHubMetricHtml('br', '开卡/充卡', stats.recharge, false)}
           </div>
         </div>
         <div class="flow-hub-entries">
@@ -36528,8 +36535,8 @@ window.__BILLING_EMBEDDED__ = true;
         ${flowHubPanelDecoHtml('flowBalance')}
         <div class="flow-hub-ring-stage flow-balance-ring-stage">
           ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
-          ${flowHubMetricHtml('tr', '会员消费', stats.memberSpend, true)}
-          ${flowHubMetricHtml('ml', '充值', stats.recharge, false)}
+          ${flowHubMetricHtml('tr', '会员卡消费', stats.memberSpend, true)}
+          ${flowHubMetricHtml('ml', '开卡/充卡', stats.recharge, false)}
           ${flowHubMetricHtml('mr', '支出', stats.expense, true)}
           <div class="flow-hub-ring" role="img" aria-label="收支结余 ${stats.balance} 元">
             ${flowHubRingSvg(stats, 'flowBalanceGradIncome')}
@@ -36551,7 +36558,12 @@ window.__BILLING_EMBEDDED__ = true;
         <div class="flow-balance-pay__title">支付方式</div>
         ${payRows}
       </div>`;
-    queueFlowHubRingEnter(body, stats);
+    /* 收支结余详情：结余环直接终态，不播进入动效 */
+    const balanceStage = body.querySelector('.flow-hub-ring-stage');
+    if (balanceStage) {
+      balanceStage.classList.remove('is-anim-pending');
+      balanceStage.classList.add('is-entered');
+    }
   }
 
   function openFlowBalance() {
