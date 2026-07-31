@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="commLadderBg" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0C070"/>
+      <stop offset="1" stop-color="#F5DC80"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#commLadderBg)"/>
+  <rect x="11.5" y="27" width="7.2" height="9.5" rx="2" fill="#fff" fill-opacity=".88"/>
+  <rect x="20.4" y="20.5" width="7.2" height="16" rx="2" fill="#fff" fill-opacity=".95"/>
+  <rect x="29.3" y="13.5" width="7.2" height="23" rx="2" fill="#fff" fill-opacity=".95"/>
+</svg>
