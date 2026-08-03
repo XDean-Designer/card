@@ -143,7 +143,7 @@ tr:nth-child(even) td{background:#fafbfc}
    - <strong>价目列表</strong>：空显示「—」，有值（含 0）显示数字；列头「库存」。<br />
    - <strong>开单</strong>：有上限时展示「库存 N」，达上限「+」禁用；<code>0</code> → Toast「库存不足」；超限 →「库存不足，最多 N 件」并钳制。<br />
    - <strong>支付</strong>：打开/确认前钳制购物车（钳空 →「购物车为空」；仍超 →「库存不足，请返回调整数量」）；支付成功按数量扣减；<strong>办卡 / 续卡不扣</strong>。<br />
-   - 独立「库存管理」模块 <strong>本期不做</strong>。  </li>
+   - <strong>与后续「库存管理」关联</strong>：价目产品 <code>stock</code> 与后续库存管理的可售数量为 <strong>同一业务量</strong>（按产品 <code>id</code> 对齐【待联调】）；本期可在价目表单手工维护；库存管理上线后以其为主更新，价目侧展示须一致；入库/盘点等 <strong>不在本文</strong>。  </li>
 <li><strong>可见性</strong>：顾客端 / <strong>开单选品</strong> / <strong>建卡权益选品</strong> 均为 <code>onSale &amp;&amp; !hidden</code>。开单中价目改价 → 支付 Dialog「支付金额已变化」。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式文档 <strong>暂无交付时间</strong>。  </li>
 <li><strong>本期仅单店</strong>；<strong>店主可编辑价目，店员不可编辑</strong>。</li>
@@ -203,7 +203,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无悬浮球</strong>）、列头排序、空态（<strong>无搜索</strong>）  </li>
 <li>列表分区：<strong>在售区</strong> → <strong>「已下架」分区</strong> →（「全部」）<strong>「已隐藏」折叠</strong>（无数量）  </li>
 <li>新增 / 编辑 / 删除项目与产品（表单：基本信息 / 售卖设置 / 高级设置；产品含 <strong>规格/库存选填</strong>；<strong>上传封面图（选填）</strong>最多 1 张）  </li>
-<li><strong>产品库存规则</strong>（选填；列表列；开单限购与支付扣减要点见先读第 6 条；完整稿 <strong>8.1</strong>）  </li>
+<li><strong>产品库存规则</strong>（选填；列表列；开单限购与支付扣减；<strong>预埋关联后续「库存管理」</strong>；见先读第 6 条 / 完整稿 <strong>8.1</strong>）  </li>
 <li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
 <li>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
 <li>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内）  </li>
@@ -216,7 +216,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>1.4 本期不做（Out）</h2>
 <ul>
 <li>顾客端 / 小程序预约页、开单页的完整 UI 规格（仅约定消费价目结果与库存规则）  </li>
-<li>独立「库存管理」模块（工作台入口若存在，本期不展开）  </li>
+<li><strong>「库存管理」完整功能</strong>（入库/出库/盘点等）：<strong>后续上线</strong>；本期价目产品 <code>stock</code> 为预埋关联字段（见先读第 6 条）  </li>
 <li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
 <li>真实图片上传 / 正式 OSS（<strong>本期不做</strong>；原型演示图）  </li>
 <li>原型「无数据/有数据」造数开关  </li>
@@ -329,8 +329,8 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>产品库存</td>
-<td>选填库存限制开单加购</td>
-<td>空=不限购；<code>0</code>→「库存不足」；超限→「最多 N 件」；支付前钳制；支付成功扣减（办卡/续卡不扣）</td>
+<td>选填库存限制开单加购；关联后续库存管理</td>
+<td>空=不限购；<code>0</code>→「库存不足」；超限钳制；支付扣减（办卡/续卡不扣）；<code>stock</code> 与后续库存管理同一数量</td>
 </tr>
 <tr>
 <td>分组运营</td>
