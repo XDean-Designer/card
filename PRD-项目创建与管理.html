@@ -33,6 +33,9 @@ th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-
 th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
 tr:nth-child(even) td{background:#fafbfc}
 .foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
+.article td img{max-width:160px;margin:6px 0}
+.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
 .mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
 .mermaid svg{max-width:100%;height:auto}
 </style>
@@ -384,7 +387,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>隐藏</td>
 <td>对顾客端隐藏但 B 端保留</td>
-<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选</td>
+<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭「手机端可预约」，取消隐藏后仍关，须手动再开</strong></td>
 </tr>
 <tr>
 <td>产品库存</td>
@@ -444,24 +447,18 @@ tr:nth-child(even) td{background:#fafbfc}
       └─ 金额键盘（价格）
 </code></pre>
 <h3>3.0 页面流（示意）</h3>
-<div class="mermaid">
-flowchart LR
-  L[价目表列表] -->|标题栏+添加| Add[新增表单]
-  L -->|点行| Edit[详情编辑]
-  L -->|齿轮| G[分组管理]
-  G -->|编辑成员| M[编辑成员]
-  G -->|新建或重命名| D[[分组名称 Dialog]]
-  L -->|长按或左滑| A[[行操作 Sheet]]
-  A -->|设置分组| IG[[多选分组 Sheet]]
-
-</div>
+<div class="mermaid">flowchart LR
+  L[价目表列表] --&gt;|标题栏+添加| Add[新增表单]
+  L --&gt;|点行| Edit[详情编辑]
+  L --&gt;|齿轮| G[分组管理]
+  G --&gt;|编辑成员| M[编辑成员]
+  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
+  L --&gt;|长按或左滑| A[[行操作 Sheet]]
+  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
 <p>从会员卡权益页进入：</p>
-<div class="mermaid">
-flowchart LR
-  P[权益选品页] -->|管理价目表| L[价目表列表]
-  L -->|返回| P
-
-</div>
+<div class="mermaid">flowchart LR
+  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
+  L --&gt;|返回| P</div>
 <table>
 <thead>
 <tr>
@@ -546,7 +543,8 @@ flowchart LR
 </code></pre>
 <ul>
 <li>绑卡 <strong>项目/产品</strong>：<strong>允许</strong> 改在售/下架（左滑、行操作 Sheet、详情表单 Switch 均可）。  </li>
-<li>项目下架时：<strong>手机端可预约</strong> 强制关闭并锁定，直至重新在售。</li>
+<li>项目下架时：<strong>手机端可预约</strong> 强制关闭并锁定，直至重新在售。  </li>
+<li>项目隐藏时：<strong>手机端可预约</strong> 强制关闭并锁定；<strong>取消隐藏后仍保持关闭</strong>，须商户在详情中 <strong>手动再打开</strong>（不自动恢复）。</li>
 </ul>
 <h2>4.2 隐藏状态 <code>hidden</code></h2>
 <table>
@@ -574,7 +572,8 @@ flowchart LR
 <ul>
 <li>系统「隐藏」组：<strong>不可重命名、不可删除</strong>；Tab 排在自定义组 <strong>之后</strong>；分组管理页 <strong>不可拖拽</strong> 排序；<strong>无 ⋯ 菜单</strong>（点主行进入编辑成员）。  </li>
 <li>列表筛选：Tab「<strong>全部</strong>」主列表排除 hidden，<strong>底部</strong>提供可折叠「<strong>已隐藏</strong>」（无数量角标），展开后可查看/操作；Tab「<strong>隐藏</strong>」仅 hidden；自定义组 Tab 仅显示 <strong>非 hidden</strong> 成员。  </li>
-<li>展开「已隐藏」后，将折叠标题滚到列表滚动区顶部附近。</li>
+<li>展开「已隐藏」后，将折叠标题滚到列表滚动区顶部附近。  </li>
+<li><strong>与预约</strong>：凡使项目 <code>hidden=true</code>（左滑/行操作隐藏、加入系统「隐藏」组、编辑成员勾选进隐藏组等）⇒ <code>bookable=false</code>；取消隐藏 <strong>不</strong> 自动打开预约。</li>
 </ul>
 <h2>4.3 绑卡锁定（项目为主）</h2>
 <p>绑定依据：项目/产品 <strong>名称</strong>（同桶内 <strong>trim 后唯一</strong>）出现在会员卡模板权益引用中（项目次数、折扣键、产品权益等）时，同步 <code>boundToCard</code> 及模板名列表。</p>
@@ -788,6 +787,10 @@ flowchart LR
 <td>项目已下架，请先开启「在售」后再设置手机端预约</td>
 </tr>
 <tr>
+<td>隐藏时点预约</td>
+<td>项目已隐藏，取消隐藏后需手动开启手机端可预约</td>
+</tr>
+<tr>
 <td>删绑卡项</td>
 <td>该项目已绑定会员卡，不可删除</td>
 </tr>
@@ -924,7 +927,7 @@ flowchart LR
 <td>手机端可预约</td>
 <td style="text-align: center;">—</td>
 <td>开</td>
-<td>hint：打开后项目会在小程序-预约中显示；下架或绑卡时锁定</td>
+<td>hint：打开后项目会在小程序-预约中显示；<strong>下架、隐藏或绑卡时锁定</strong>；隐藏解除后仍为关，须手动开</td>
 </tr>
 <tr>
 <td>高级设置</td>
@@ -1375,6 +1378,7 @@ flowchart LR
 <li><strong>多分组</strong>：同一条目可出现在多个 <code>itemIds</code> 中；加入系统「隐藏」组即 <code>hidden=true</code>。  </li>
 <li><strong>排序桶</strong>：<strong>在售</strong> / <strong>下架</strong> 两桶隔离；<code>sortOrder</code> 仅在桶内生效。  </li>
 <li><strong>下架与预约</strong>：项目下架 ⇒ <code>bookable=false</code> 且不可开，直到重新在售。  </li>
+<li><strong>隐藏与预约</strong>：项目隐藏 ⇒ <code>bookable=false</code> 且隐藏期间不可开；<strong>取消隐藏后仍为关</strong>，须手动再开「手机端可预约」。  </li>
 <li><strong>B→C / 开单同步</strong>：价目变更后客户端与开单侧按 <strong>实时目录/价格/库存</strong> 语义生效；推送与缓存细节【待联调确认】；顾客端页面结构不在范围。  </li>
 <li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序并回到「全部」分组。  </li>
 <li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。  </li>
@@ -1480,7 +1484,7 @@ flowchart LR
 </blockquote>
 <h2>9.1 文案清单（须与原型一致）</h2>
 <p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、上传封面图（选填）、添加图片、在售、已下架、已隐藏、手机端可预约、规格、库存、时长（分钟）、价格（¥）、全部、知道了。</p>
-<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请填写有效库存（0～999999 的整数）、库存不能超过 999999、库存不足、库存不足，最多 N 件、库存不足，请返回调整数量、请清空搜索后再排序（分组筛选拦截拖拽时）、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面；以及模块 5.5 绑卡/预约/删除拦截句。</p>
+<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请填写有效库存（0～999999 的整数）、库存不能超过 999999、库存不足、库存不足，最多 N 件、库存不足，请返回调整数量、请清空搜索后再排序（分组筛选拦截拖拽时）、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启手机端可预约；以及模块 5.5 绑卡/预约/删除拦截句。</p>
 <p><strong>Dialog（开单支付）</strong>：标题「支付金额已变化」；正文「价目表已更新，当前应付与开单时不一致，请返回核对后再支付。」；按钮「知道了」。</p>
 <p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
 <p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
@@ -1541,8 +1545,8 @@ flowchart LR
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改在售/下架并保存或左滑，<strong>Then</strong> 操作成功。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改价格并保存，<strong>Then</strong> 保存成功。  </li>
 <li><strong>Given</strong> 已下架项目详情，<strong>When</strong> 查看预约开关，<strong>Then</strong> 关闭且不可开，直到重新在售。  </li>
-<li><strong>Given</strong> 条目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」主列表不显示但底部「已隐藏」折叠可展开；「隐藏」Tab 显示；顾客端与开单均不可见。  </li>
-<li><strong>Given</strong> 隐藏条目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」主列表可见（在售时顾客端可见）。  </li>
+<li><strong>Given</strong> 在售且可预约的项目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」主列表不显示但底部「已隐藏」折叠可展开；「隐藏」Tab 显示；顾客端与开单均不可见；<strong><code>bookable=false</code></strong>。  </li>
+<li><strong>Given</strong> 隐藏前可预约的项目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」主列表可见（在售时顾客端可见）；<strong>「手机端可预约」仍为关</strong>，须手动再开。  </li>
 <li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示非 hidden 成员。  </li>
 <li><strong>Given</strong> 条目属于两组，<strong>When</strong> 删除其中一组，<strong>Then</strong> 条目仍在，另一组关系保留。  </li>
 <li><strong>Given</strong> 在售区两行，<strong>When</strong> 拖拽换序，<strong>Then</strong> 刷新后顺序保持。  </li>

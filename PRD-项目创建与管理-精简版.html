@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRD-项目创建与管理 · 精简版（预览）</title>
+<title>PRD-项目创建与管理-精简版（预览）</title>
 <style>
 :root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -33,13 +33,16 @@ th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-
 th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
 tr:nth-child(even) td{background:#fafbfc}
 .foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
+.article td img{max-width:160px;margin:6px 0}
+.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
 .mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
 .mermaid svg{max-width:100%;height:auto}
 </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="topbar__title">PRD-项目创建与管理 · 精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
+    <div class="topbar__title">PRD-项目创建与管理-精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
     <div class="topbar__actions">
       <a class="ghost" href="demo.html">打开交互原型</a>
       <a class="ghost" href="PRD-项目创建与管理-精简版.md" download>下载 Markdown</a>
@@ -134,7 +137,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <p><strong>先读这几条（贯穿全文）</strong></p>
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
-<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。列表为 <strong>在售区 →「已下架」分隔行 →「已隐藏」折叠</strong>，<strong>无状态列</strong>、<strong>无搜索</strong>。新建：标题栏品牌红「+添加」按钮 <strong>跟当前 Tab 直接新建</strong>（项目 Tab→新增项目，产品 Tab→新增产品），<strong>不弹选择层</strong>；<strong>无右下悬浮球</strong>。  </li>
+<li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。列表为 <strong>在售区 →「已下架」分隔行 →「已隐藏」折叠</strong>，<strong>无状态列</strong>、<strong>无搜索</strong>。新建：标题栏品牌红「+添加」按钮 <strong>跟当前 Tab 直接新建</strong>（项目 Tab→新增项目，产品 Tab→新增产品），<strong>不弹选择层</strong>；<strong>无右下悬浮球</strong>。项目 <strong>隐藏</strong> 时自动关闭「手机端可预约」；<strong>取消隐藏后仍关</strong>，须手动再开。  </li>
 <li>项目可被会员卡权益 <strong>按名称绑定</strong>（同桶 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。<code>boundToCard</code> <strong>自动派生刷新</strong>。删除锁定以锁标呈现。  </li>
 <li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面、<strong>产品库存</strong>等变更需 <strong>同步客户端展示</strong>（开单为 <strong>实时目录/价格/库存</strong>；细节【待联调】）；顾客端具体 UI <strong>不在本文展开</strong>。封面正式 OSS <strong>本期不做</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进价目再返回时 <strong>刷新分组 Tab（重置为「全部」）</strong>；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
@@ -259,7 +262,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>对 C 端隐藏但 B 端保留</td>
-<td><strong>隐藏</strong>（底部「已隐藏」折叠；开单不可选）</td>
+<td><strong>隐藏</strong>（底部「已隐藏」折叠；开单不可选）；项目隐藏关预约，取消隐藏后仍关须手动开</td>
 </tr>
 <tr>
 <td>被卡引用后的保护</td>
@@ -325,7 +328,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>隐藏</td>
 <td>对顾客端隐藏但 B 端保留</td>
-<td>「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选</td>
+<td>「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭预约，取消隐藏后仍关，须手动再开</strong></td>
 </tr>
 <tr>
 <td>产品库存</td>
@@ -385,24 +388,18 @@ tr:nth-child(even) td{background:#fafbfc}
       └─ 金额键盘（价格）
 </code></pre>
 <h3>3.0 页面流（示意）</h3>
-<div class="mermaid">
-flowchart LR
-  L[价目表列表] -->|标题栏+添加| Add[新增表单]
-  L -->|点行| Edit[详情编辑]
-  L -->|齿轮| G[分组管理]
-  G -->|编辑成员| M[编辑成员]
-  G -->|新建或重命名| D[[分组名称 Dialog]]
-  L -->|长按或左滑| A[[行操作 Sheet]]
-  A -->|设置分组| IG[[多选分组 Sheet]]
-
-</div>
+<div class="mermaid">flowchart LR
+  L[价目表列表] --&gt;|标题栏+添加| Add[新增表单]
+  L --&gt;|点行| Edit[详情编辑]
+  L --&gt;|齿轮| G[分组管理]
+  G --&gt;|编辑成员| M[编辑成员]
+  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
+  L --&gt;|长按或左滑| A[[行操作 Sheet]]
+  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
 <p>从会员卡权益页进入：</p>
-<div class="mermaid">
-flowchart LR
-  P[权益选品页] -->|管理价目表| L[价目表列表]
-  L -->|返回| P
-
-</div>
+<div class="mermaid">flowchart LR
+  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
+  L --&gt;|返回| P</div>
 <table>
 <thead>
 <tr>
@@ -481,7 +478,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p class="foot-note">精简版仅含模块 1–3；完整规格见 <code>PRD-项目创建与管理.md</code>。交互以 <code>demo.html</code> 为准。</p>
+<p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-项目创建与管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
 
 <script src="assets/vendor/mermaid.min.js"></script>

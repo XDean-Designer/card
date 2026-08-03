@@ -7648,6 +7648,65 @@ button.exp-flow-row:active { opacity: .92; }
 .bottom-bar--bill .bottom-bar__safe {
   flex: 1; min-height: 0; height: auto; background: #fff;
 }
+
+/* 开单四步 · 横线圆形步骤条 */
+.bill-step-bar {
+  display: flex; align-items: flex-start; flex-shrink: 0;
+  background: #fff; border-bottom: 0.5px solid #EDEDED;
+  padding: 12px 8px 10px;
+}
+.bill-step-bar__item {
+  flex: 1; position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: inherit; border: none; background: transparent; padding: 0;
+  cursor: default; min-width: 0;
+}
+.bill-step-bar__item:not(:last-child)::after {
+  content: ''; position: absolute; z-index: 0;
+  top: 9px; left: calc(50% + 12px); right: calc(-50% + 12px);
+  height: 1.5px; background: #E6E6E6; pointer-events: none;
+}
+.bill-step-bar__item.is-done:not(:last-child)::after { background: var(--brand); }
+.bill-step-bar__dot {
+  position: relative; z-index: 1;
+  width: 20px; height: 20px; border-radius: 50%; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  background: #fff; color: #B2B2B2; border: 1.5px solid #D9D9D9;
+}
+.bill-step-bar__item.on .bill-step-bar__dot {
+  background: var(--brand); color: #fff; border-color: var(--brand);
+}
+.bill-step-bar__item.is-done .bill-step-bar__dot {
+  background: var(--brand); color: #fff; border-color: var(--brand);
+}
+.bill-step-bar__dot svg { display: block; width: 11px; height: 11px; }
+.bill-step-bar__label {
+  font-size: 11px; line-height: 14px; color: #B2B2B2;
+  white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+}
+.bill-step-bar__item.on .bill-step-bar__label {
+  color: var(--brand); font-weight: 600;
+}
+.bill-step-bar__item.is-done .bill-step-bar__label { color: #666; }
+#screen-bill-staff .page-body { background: var(--bg-page); padding: 12px 0 20px; }
+.bill-staff-hint {
+  margin: 0 16px 12px; font-size: 13px; color: var(--text-sec); line-height: 18px;
+}
+.bill-staff-line {
+  margin: 0 16px 10px; background: #fff; border-radius: 12px; overflow: hidden;
+}
+.bill-staff-line__head {
+  width: 100%; border: none; background: transparent; padding: 14px 16px;
+  display: flex; align-items: center; gap: 10px; text-align: left; font-family: inherit;
+  color: inherit; cursor: pointer; box-sizing: border-box;
+}
+.bill-staff-line__name { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; color: #1A1A1A; }
+.bill-staff-line__meta { font-size: 12px; color: var(--text-sec); flex-shrink: 0; }
+.bill-staff-line__status { font-size: 12px; color: var(--brand); font-weight: 500; flex-shrink: 0; }
+.bill-staff-line__status.is-empty { color: #C47A00; }
+.bill-staff-line__body { padding: 0 8px 12px; border-top: 0.5px solid #F0F0F0; }
+.bill-staff-line__body .detail-item__staff-block { margin: 0; }
 .search-bar--bill { margin: 8px 16px 4px; height: 42px; padding: 0 12px; gap: 6px; border-radius: 8px; border: 0.5px solid #d7d7d5; background: #fff; }
 .search-bar--bill:focus-within { border-color: #d7d7d5; }
 .search-bar--bill .search-go { color: #666; font-size: 14px; flex-shrink: 0; border: none; border-left: 0.5px solid #d7d7d5; background: none; cursor: pointer; font-family: inherit; padding-left: 10px; height: 26px; }
@@ -9582,6 +9641,59 @@ button.exp-flow-row:active { opacity: .92; }
 .add-card-staff-row.has-staff .add-card-staff-row__cta { display: none; }
 .add-card-staff-row.has-staff .add-card-staff-row__val { display: block; }
 .add-card-staff-row:not(.has-staff) .add-card-staff-row__val { display: none; }
+/* 会员卡管理 · 快捷确认办卡（卡已锁定，不含选卡/补录） */
+.quick-issue-page {
+  display: flex; flex-direction: column; flex: 1; min-height: 0;
+  background: var(--bg-page, #F7F7F7);
+}
+.quick-issue-page__body {
+  flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 12px 16px 24px; box-sizing: border-box;
+}
+.quick-issue-block {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  margin-bottom: 12px;
+}
+.quick-issue-block--customer { padding: 0; background: transparent; }
+.quick-issue-block--customer .customer-card {
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 #fff;
+}
+.quick-issue-label {
+  font-size: 13px; font-weight: 500; color: #929292; line-height: 18px;
+  padding: 12px 16px 0;
+}
+.quick-issue-card {
+  padding: 12px 16px 16px;
+}
+.quick-issue-card .member-card-compact {
+  border-radius: 10px;
+  pointer-events: none;
+}
+.quick-issue-card__summary {
+  margin: 10px 0 0; padding: 0;
+  font-size: 13px; line-height: 20px; color: #666;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.quick-issue-pay {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 14px 16px; margin-bottom: 12px;
+  background: #fff; border-radius: 12px;
+}
+.quick-issue-pay__lbl { font-size: 15px; font-weight: 600; color: var(--text); }
+.quick-issue-pay__val {
+  font-size: 20px; font-weight: 700; color: var(--brand);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.quick-issue-page .add-card-staff-row {
+  border-radius: 12px; border-top: none; margin-bottom: 12px;
+}
+.quick-issue-page .bottom-bar { flex-shrink: 0; background: #fff; }
 .add-card-staff-row__chev {
   flex-shrink: 0; color: #C0C0C0; display: none;
 }
@@ -10150,11 +10262,18 @@ button.exp-flow-row:active { opacity: .92; }
   -webkit-tap-highlight-color: transparent;
 }
 .staff-card.is-dim { opacity: .38; pointer-events: none; }
-.detail-item__staff-block--cards.is-picking .staff-grid { pointer-events: none; }
+.detail-item__staff-block--cards.is-picking {
+  overflow: visible;
+}
+.detail-item__staff-block--cards.is-picking .staff-grid {
+  overflow: visible;
+  pointer-events: none;
+}
 .staff-card.is-editing {
-  z-index: 3;
+  z-index: 5;
   pointer-events: auto;
   opacity: 1;
+  perspective: 800px;
 }
 .staff-card__panel {
   position: relative;
@@ -10171,9 +10290,11 @@ button.exp-flow-row:active { opacity: .92; }
   font-family: inherit;
   color: #1a1a1a;
   transition: border-color .2s, background .2s, box-shadow .28s cubic-bezier(.2,.8,.2,1),
-    transform .32s cubic-bezier(.2,.85,.25,1);
+    transform .32s cubic-bezier(.2,.85,.25,1), width .32s cubic-bezier(.2,.85,.25,1),
+    height .32s cubic-bezier(.2,.85,.25,1), border-radius .28s;
   transform-origin: var(--staff-origin, center center);
   -webkit-tap-highlight-color: transparent;
+  perspective: 600px;
 }
 .staff-card__panel:active { transform: scale(.97); }
 .staff-card.is-done .staff-card__panel {
@@ -10181,24 +10302,111 @@ button.exp-flow-row:active { opacity: .92; }
   border-color: #FFD5D9;
   box-shadow: inset 0 0 0 1px rgba(243, 47, 65, .04);
 }
-.staff-card.is-editing .staff-card__panel {
-  transform: scale(1.5);
+/* 编辑态 · 点客/散客：放大圆角正方形，左右对切 */
+.staff-card.is-editing .staff-card__panel[data-face="designate"] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 112px;
+  height: 112px;
+  min-height: 0;
+  padding: 0;
+  gap: 0;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
   background: #fff;
-  border-color: #FFD5D9;
-  box-shadow: 0 14px 36px rgba(26, 26, 26, .18);
+  box-shadow: 0 16px 40px rgba(26, 26, 26, .2);
   cursor: default;
-  padding: 10px 8px;
-  gap: 8px;
-  animation: staffCardFlipIn .34s cubic-bezier(.2,.85,.25,1);
+  transform: translate(-50%, -50%) scale(1);
+  animation: staffCardFlipSquare .34s cubic-bezier(.2,.85,.25,1);
 }
-.staff-card.is-editing .staff-card__panel:active { transform: scale(1.5); }
-@keyframes staffCardFlipIn {
-  0% { transform: scale(1.18) rotateY(-92deg); opacity: .35; }
-  100% { transform: scale(1.5) rotateY(0); opacity: 1; }
+.staff-card.is-editing .staff-card__panel[data-face="designate"]:active {
+  transform: translate(-50%, -50%) scale(1);
+}
+/* 编辑态 · 工位：宽>高圆角矩形，横向三等分 */
+.staff-card.is-editing .staff-card__panel[data-face="role"] {
+  position: absolute;
+  top: 50%;
+  width: min(248px, 72vw);
+  height: calc(min(248px, 72vw) / 2.2);
+  min-height: 0;
+  padding: 0;
+  gap: 0;
+  border: none;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(26, 26, 26, .2);
+  cursor: default;
+  animation: staffCardFlipWide .34s cubic-bezier(.2,.85,.25,1);
+}
+.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"] {
+  left: 0; transform: translateY(-50%);
+}
+.staff-card.is-editing[data-origin="center"] .staff-card__panel[data-face="role"] {
+  left: 50%; transform: translate(-50%, -50%);
+}
+.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"] {
+  right: 0; left: auto; transform: translateY(-50%);
+}
+.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"]:active {
+  transform: translateY(-50%);
+}
+.staff-card.is-editing[data-origin="center"] .staff-card__panel[data-face="role"]:active {
+  transform: translate(-50%, -50%);
+}
+.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"]:active {
+  transform: translateY(-50%);
+}
+@keyframes staffCardFlipSquare {
+  0% { transform: translate(-50%, -50%) scale(.92) rotateY(-88deg); opacity: .4; }
+  100% { transform: translate(-50%, -50%) scale(1) rotateY(0); opacity: 1; }
+}
+@keyframes staffCardFlipWide {
+  0% { transform: translate(-50%, -50%) scale(.9) rotateY(88deg); opacity: .4; }
+  100% { transform: translate(-50%, -50%) scale(1) rotateY(0); opacity: 1; }
+}
+.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"] {
+  animation-name: staffCardFlipWideLeft;
+}
+.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"] {
+  animation-name: staffCardFlipWideRight;
+}
+@keyframes staffCardFlipWideLeft {
+  0% { transform: translateY(-50%) scale(.9) rotateY(88deg); opacity: .4; }
+  100% { transform: translateY(-50%) scale(1) rotateY(0); opacity: 1; }
+}
+@keyframes staffCardFlipWideRight {
+  0% { transform: translateY(-50%) scale(.9) rotateY(-88deg); opacity: .4; }
+  100% { transform: translateY(-50%) scale(1) rotateY(0); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .staff-card.is-editing .staff-card__panel { animation: none; }
+  .staff-card.is-editing .staff-card__panel { animation: none !important; }
   .staff-card__panel { transition: none; }
+}
+.staff-card__split {
+  display: flex; align-items: stretch; width: 100%; height: 100%;
+}
+.staff-card__split-btn {
+  flex: 1 1 0; min-width: 0;
+  margin: 0; padding: 0 6px;
+  border: none; background: #fff;
+  color: var(--brand);
+  font-size: 15px; font-weight: 600; line-height: 1.2;
+  font-family: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s, color .15s;
+}
+.staff-card__split-btn + .staff-card__split-btn {
+  border-left: 1px solid #FFE0E3;
+}
+.staff-card__split-btn:active {
+  background: #FFF2F2;
+}
+.staff-card__split--3 .staff-card__split-btn {
+  font-size: 14px; font-weight: 600;
 }
 .staff-card__avatar {
   width: 40px; height: 40px; border-radius: 20px; object-fit: cover;
@@ -12819,7 +13027,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
           <!-- ==== BILLING MODULE SCREENS (embedded) ==== -->
-<!-- 选择顾客（会员列表，非开单入口） -->
+<!-- 选择顾客（开单第一步） -->
           <div id="screen-pick" class="screen hidden">
             <div class="page-title-bar">
               <button type="button" class="back" id="pickBack" aria-label="返回">
@@ -12827,6 +13035,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </button>
               <div class="title">选择顾客</div>
             </div>
+            <div class="bill-step-bar" id="billCustomerSteps" aria-hidden="true"></div>
             <div class="page-body pick-page">
               <div class="search-bar">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
@@ -12847,7 +13056,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <!-- 开单台 -->
           <div id="screen-bill" class="screen hidden">
             <div class="page-title-bar">
-              <button type="button" class="back hidden" id="billBack" aria-label="返回挂单列表" aria-hidden="true">
+              <button type="button" class="back hidden" id="billBack" aria-label="返回选择顾客" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <div class="title">开单记账</div>
@@ -12856,6 +13065,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
               </button>
             </div>
+            <div class="bill-step-bar" id="billCatalogSteps" aria-hidden="true"></div>
             <div class="page-body" id="billBody"></div>
             <div class="bottom-bar bottom-bar--bill">
               <div class="bottom-bar__action">
@@ -12887,18 +13097,38 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body" id="holdList" style="background:var(--bg-page)"></div>
           </div>
 
-          <!-- 开单详情 · Figma 151:4723 -->
+          <!-- 开单 · ③ 选择服务人 -->
+          <div id="screen-bill-staff" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="billStaffBack" aria-label="返回点单">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">选择服务人</div>
+            </div>
+            <div class="bill-step-bar" id="billStaffSteps" aria-hidden="true"></div>
+            <div class="page-body" id="billStaffBody"></div>
+            <div class="bottom-bar bottom-bar--dual">
+              <div class="bottom-bar__action">
+                <button type="button" class="btn-main secondary" id="billStaffSkip">暂不指定</button>
+                <button type="button" class="btn-main" id="billStaffNext">结算确认</button>
+              </div>
+              <div class="bottom-bar__safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 开单详情 · ④ 结算确认 -->
           <div id="screen-detail" class="screen hidden">
             <div class="page-title-bar">
               <button type="button" class="back" id="detailBack" aria-label="返回">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-              <div class="title">开单记账</div>
+              <div class="title">结算确认</div>
               <button type="button" class="action" id="btnDetailDate" aria-label="开单日期">
                 <span>2026.7.18</span>
                 <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
               </button>
             </div>
+            <div class="bill-step-bar" id="billSettleSteps" aria-hidden="true"></div>
             <div class="page-body detail-page-body" id="detailBody"></div>
             <div class="bottom-bar bottom-bar--detail">
               <div class="bottom-bar__action">
@@ -13510,7 +13740,49 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
 
-          <!-- 添加卡 · Figma 1:3244 -->
+          <!-- 会员卡管理 · 快捷确认办卡（卡/会员已定，仅确认+选员工） -->
+          <div id="screen-quick-issue" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="quickIssueBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">确认办卡</div>
+              <button type="button" class="action" id="btnQuickIssueDate" aria-label="办卡日期">
+                <span id="quickIssueDateLabel">2026.7.20</span>
+                <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
+              </button>
+            </div>
+            <div class="quick-issue-page">
+              <div class="quick-issue-page__body">
+                <div class="quick-issue-block quick-issue-block--customer" id="quickIssueCustomer"></div>
+                <div class="quick-issue-block">
+                  <div class="quick-issue-label">办理会员卡</div>
+                  <div class="quick-issue-card" id="quickIssueCard"></div>
+                </div>
+                <div class="quick-issue-pay">
+                  <span class="quick-issue-pay__lbl">应付</span>
+                  <span class="quick-issue-pay__val" id="quickIssuePayVal">¥0</span>
+                </div>
+                <button type="button" class="add-card-staff-row" id="quickIssueStaffRow" aria-haspopup="dialog">
+                  <span class="add-card-staff-row__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.75a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Z"/><path d="M4.6 19.35C5.55 16.4 8.4 14.5 12 14.5s6.45 1.9 7.4 4.85c.18.54-.26 1.15-.84 1.15H5.44c-.58 0-1.02-.61-.84-1.15Z"/></svg>
+                  </span>
+                  <span class="add-card-staff-row__lbl">服务员工</span>
+                  <span class="add-card-staff-row__val is-placeholder" id="quickIssueStaffRowVal">请选择</span>
+                  <span class="add-card-staff-row__cta" aria-hidden="true">请选择</span>
+                  <span class="add-card-staff-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                </button>
+              </div>
+              <div class="bottom-bar">
+                <div class="bottom-bar__action">
+                  <button type="button" class="btn-main" id="btnQuickIssueNext">确认办卡</button>
+                </div>
+                <div class="bottom-bar__safe" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 添加卡 · Figma 1:3244（开单选卡入口；非会员卡管理快捷办卡） -->
           <div id="screen-add-card" class="screen hidden">
             <div class="page-title-bar">
               <button type="button" class="back" id="addCardBack" aria-label="返回">
@@ -13556,7 +13828,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   </span>
                   <span class="add-card-staff-row__lbl">服务员工</span>
                   <span class="add-card-staff-row__val is-placeholder" id="addCardStaffRowVal">请选择</span>
-                  <span class="add-card-staff-row__cta" aria-hidden="true">请选择<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></span>
+                  <span class="add-card-staff-row__cta" aria-hidden="true">请选择</span>
                   <span class="add-card-staff-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
                 </button>
                 <div class="bottom-bar">
@@ -13727,6 +13999,7 @@ const PROJ_LOCK_TOAST = {
   name: '该项目已绑定会员卡，项目名称不可修改',
   bookable_bound: '该项目已绑定会员卡，预约设置不可修改',
   bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
+  bookable_hidden: '项目已隐藏，取消隐藏后需手动开启手机端可预约',
   delete: '该项目已绑定会员卡，不可删除',
 };
 const CATALOG_SYS_HIDDEN_GROUP = {
@@ -13811,8 +14084,8 @@ function seedProjectCatalog() {
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
   if (byId.p16) byId.p16.boundToCoupon = true;
   if (byId.p9) byId.p9.boundToMall = true;
-  if (byId.p13) byId.p13.hidden = true;
-  if (byId.p5) byId.p5.hidden = true;
+  if (byId.p13) { byId.p13.hidden = true; byId.p13.bookable = false; }
+  if (byId.p5) { byId.p5.hidden = true; byId.p5.bookable = false; }
   /* Figma 305:325 · 绑卡详情默认展开多图，右侧可看出渐隐 */
   if (byId.p4) {
     byId.p4.images = PROJ_DEMO_IMG_POOL.slice(0, 4);
@@ -13985,8 +14258,16 @@ function syncItemHiddenFromSystemGroup(g, bucket) {
   if (!g || !isCatalogSystemGroup(g)) return;
   const ids = new Set(g.itemIds || []);
   getCatalogItemsForBucket(bucket).forEach(item => {
-    item.hidden = ids.has(item.id);
+    const next = ids.has(item.id);
+    item.hidden = next;
+    applyCatalogHiddenClearsBookable(item, next);
   });
+}
+
+/** 项目隐藏时强制关闭「手机端可预约」；取消隐藏不自动恢复 */
+function applyCatalogHiddenClearsBookable(item, hidden) {
+  if (!item || !hidden) return;
+  if (item.bookable != null) item.bookable = false;
 }
 
 function setCatalogItemHidden(item, hidden) {
@@ -13994,6 +14275,7 @@ function setCatalogItemHidden(item, hidden) {
   const next = !!hidden;
   if (!!item.hidden === next) return;
   item.hidden = next;
+  applyCatalogHiddenClearsBookable(item, next);
   const bucket = getCatalogProducts().some(x => x.id === item.id) ? 'product' : 'project';
   ensureSystemHiddenGroups();
   const sys = getSystemHiddenGroup(bucket);
@@ -14885,7 +15167,11 @@ function confirmCatalogItemGroupSheet() {
   });
   const item = findCatalogItemById(itemId);
   const sysHidden = getSystemHiddenGroup(bucket);
-  if (item && sysHidden) item.hidden = (sysHidden.itemIds || []).includes(itemId);
+  if (item && sysHidden) {
+    const nextHidden = (sysHidden.itemIds || []).includes(itemId);
+    item.hidden = nextHidden;
+    applyCatalogHiddenClearsBookable(item, nextHidden);
+  }
   closeCatalogItemGroupSheet();
   showToast('已更新分组');
   projRenderList();
@@ -15620,7 +15906,7 @@ const OPTIMIZATION_LOG = [
   '支出新增类型可选：礼品/培训/保险/保洁/网络 5 个同风格图标',
   '分类管理：预设/自定义均可改名改图标与删除；行点击编辑；删除需确认；流水保留原类型名快照',
   '支出详情：列表/流水可点进编辑表单；卡片下方并排「删除」「保存」；删除需确认后移除流水',
-  '办卡选员工：添加卡页内嵌开单同款员工卡（多选·是否指定·按工位时选工位）；确认办卡前必选；列表办卡先进入该页',
+  '办卡选员工：会员卡管理走「确认办卡」简洁页（卡已锁定）；开单「添加卡」仍选卡+员工；确认后进结账',
   '描边按钮全站规范：secondary / outline / 品牌描边 CTA 统一透明底 + 品牌描边字色，禁止填充',
   '分类管理入口按钮：透明底 + 品牌描边，无白底填充',
   '分类管理列表：右侧仅垃圾桶；支持长按拖拽排序（同步记一笔类型宫格顺序）',
@@ -19044,12 +19330,15 @@ function projSyncBookableLock(container, bound) {
   const bookableRow = bookableBtn?.closest('.proj-form-row');
   if (!bookableBtn || !bookableRow || bound) return;
   const offSale = !state.projFormState.onSale;
-  if (offSale) {
+  const isHidden = !!findCatalogItemById(state.projEditingId)?.hidden;
+  if (offSale || isHidden) {
     bookableBtn.disabled = true;
     state.projFormState.bookable = false;
     bookableBtn.classList.remove('on');
     bookableRow.classList.add('is-locked');
-    bookableRow.dataset.lockToast = PROJ_LOCK_TOAST.bookable_offSale;
+    bookableRow.dataset.lockToast = isHidden && !offSale
+      ? PROJ_LOCK_TOAST.bookable_hidden
+      : PROJ_LOCK_TOAST.bookable_offSale;
   } else {
     bookableBtn.disabled = false;
     bookableRow.classList.remove('is-locked');
@@ -19062,8 +19351,11 @@ function projRenderForm(container, mode) {
   const isProduct = state.projFormKind === 'product';
   const bound = !!p?.boundToCard && !isProduct;
   const offSale = !!p && !p.onSale;
-  const lockBookable = bound || offSale;
-  const lockBookableToast = bound ? PROJ_LOCK_TOAST.bookable_bound : PROJ_LOCK_TOAST.bookable_offSale;
+  const isHidden = !!p && !!p.hidden;
+  const lockBookable = bound || offSale || isHidden;
+  const lockBookableToast = bound
+    ? PROJ_LOCK_TOAST.bookable_bound
+    : (isHidden ? PROJ_LOCK_TOAST.bookable_hidden : PROJ_LOCK_TOAST.bookable_offSale);
   const isEdit = mode === 'edit';
   const reqCls = isEdit ? '' : ' req';
   const s = state.projFormState;
@@ -19103,12 +19395,13 @@ function projRenderForm(container, mode) {
         </div>
       </div>
     </div>`;
-  projBindFormEvents(container, { bound, offSale, isProduct });
+  projBindFormEvents(container, { bound, offSale, isHidden, isProduct });
 }
 
 function projBindFormEvents(container, lockCtx) {
   const bound = !!lockCtx?.bound;
   const offSale = !!lockCtx?.offSale;
+  const isHidden = !!lockCtx?.isHidden;
   const isProduct = !!lockCtx?.isProduct;
   const bindSwitch = (id, key, opts = {}) => {
     const el = container.querySelector(id);
@@ -19123,7 +19416,8 @@ function projBindFormEvents(container, lockCtx) {
     afterToggle: () => projSyncBookableLock(container, bound),
   });
   if (!isProduct) {
-    bindSwitch('#fProjBookable', 'bookable', { disabled: bound || (offSale && !state.projFormState.onSale) });
+    const bookableLocked = bound || isHidden || (offSale && !state.projFormState.onSale);
+    bindSwitch('#fProjBookable', 'bookable', { disabled: bookableLocked });
   }
   if (!isProduct) projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
@@ -19812,6 +20106,7 @@ const FLOW_MAP_GROUPS = [
       { id: 'pick-discount-group', label: '选折扣 · 分组筛选', screen: 'screen4' },
       /* 浮层 / 叠加态（截图 deep-link · 底图多为详情在售） */
       { id: 'card-issue-new', label: '选择会员 · 办卡 Tab', screen: 'screen6' },
+      { id: 'card-quick-issue', label: '确认办卡（快捷）', screen: 'screen-quick-issue' },
       { id: 'card-issue-holders', label: '选择会员 · 退卡/延期 Tab', screen: 'screen6' },
       { id: 'card-extend', label: '持卡延期 · 行内面板', screen: 'screen6' },
       { id: 'card-refund', label: '退卡估值 Sheet', screen: 'screen6' },
@@ -19949,6 +20244,25 @@ const FLOW_NAV = {
   'card-issue-new'() {
     openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
     openIssueMemberPicker(CARD_OVERLAY_DETAIL_ID);
+  },
+  'card-quick-issue'() {
+    closeAllFlowOverlays();
+    ensureDemoFilled();
+    const tid = CARD_OVERLAY_DETAIL_ID;
+    const tpl = getTemplate(tid);
+    const member = (typeof DEMO_MEMBERS !== 'undefined' ? DEMO_MEMBERS : []).find(m => !memberHoldsTemplate(tid, m.id))
+      || (typeof DEMO_MEMBERS !== 'undefined' ? DEMO_MEMBERS[0] : null);
+    if (!tpl || !member || !window.BillingDemo?.startCardIssueCheckout) {
+      showToast('快捷办卡演示上下文未就绪', true);
+      return;
+    }
+    window.BillingDemo.startCardIssueCheckout({
+      templateId: tid,
+      memberId: member.id,
+      cardName: tpl.name,
+      amount: getTemplatePurchaseAmount(tpl),
+      cardHtml: renderStaticCardItemHtml(tpl),
+    });
   },
   'card-issue-holders'() {
     openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
@@ -20239,6 +20553,7 @@ function syncFlowMapFromAppState() {
   else if (visibleScreen === 'screen11') id = 'create-step3';
   else if (visibleScreen === 'screen7') id = 'create-success';
   else if (visibleScreen === 'screen8') id = 'issue-success';
+  else if (visibleScreen === 'screen-quick-issue') id = 'card-quick-issue';
   else if (visibleScreen === 'screen6') {
     const t = getTemplateById(state.viewingTemplateId);
     id = t?.shelved ? 'detail-shelved' : 'detail-active';
@@ -21669,8 +21984,61 @@ function formatMemberPriceFaceSummary(prices) {
 
 function formatCardPurchasePrice(t) {
   const purchase = parseAmount(t?.recharge);
-  const amount = String(t?.recharge ?? '').trim() && purchase > 0 ? purchase : 0;
+  let amount = String(t?.recharge ?? '').trim() && purchase > 0 ? purchase : 0;
+  /* 开单侧 CARD_TEMPLATES / mapTemplateToBillingListItem 用 price，无 recharge */
+  if (!(amount > 0)) {
+    const p = Number(t?.price);
+    if (Number.isFinite(p) && p > 0) amount = p;
+  }
   return { text: formatMoneyDisplay(amount), data: true };
+}
+
+/** 办卡应付：优先结账草稿金额，再 recharge / price */
+function resolveCardIssueAmount(tpl, fallbackAmount) {
+  const pending = Number(fallbackAmount);
+  if (Number.isFinite(pending) && pending > 0) return pending;
+  if (tpl && typeof getTemplatePurchaseAmount === 'function') {
+    const fromRecharge = getTemplatePurchaseAmount(tpl);
+    if (fromRecharge > 0) return fromRecharge;
+  }
+  const fromPrice = Number(tpl?.price);
+  if (Number.isFinite(fromPrice) && fromPrice > 0) return fromPrice;
+  return 0;
+}
+
+/** 快捷办卡页：卡权益一行摘要（名称/价格另展示） */
+function formatQuickIssueBenefitLine(tpl) {
+  if (!tpl) return '—';
+  const parts = [];
+  const b = tpl.benefits || {};
+  if (b.balance) {
+    parts.push(`面值¥${tpl.face != null ? tpl.face : 0}`);
+    const gift = parseAmount(tpl.giftAmount);
+    if (gift > 0) parts.push(`赠¥${tpl.giftAmount}`);
+  }
+  if (b.timesOrValidity) {
+    const projs = (tpl.projects && tpl.projects.length)
+      ? tpl.projects
+      : (tpl.projectItems || []).map(i => i?.name).filter(Boolean);
+    if (projs.length === 1) parts.push(String(projs[0]));
+    else if (projs.length > 1) parts.push(`${projs[0]}等${projs.length}项`);
+  }
+  if (b.products) {
+    const prods = tpl.productItems || tpl.products || [];
+    const names = Array.isArray(prods)
+      ? prods.map(p => (typeof p === 'string' ? p : p?.name)).filter(Boolean)
+      : [];
+    if (names.length === 1) parts.push(String(names[0]));
+    else if (names.length > 1) parts.push(`${names[0]}等${names.length}件`);
+  }
+  if (b.projectDiscount) {
+    const discs = tpl.discounts || [];
+    if (discs.length === 1) parts.push(String(discs[0]));
+    else if (discs.length > 1) parts.push(`${discs[0]}等${discs.length}项折扣`);
+  }
+  const validity = formatCardValidity(tpl);
+  if (validity) parts.push(validity);
+  return parts.length ? parts.join(' · ') : '—';
 }
 
 const CARD_FACE_COLLAPSE_LIMIT = 4;
@@ -26774,11 +27142,13 @@ window.CardHost.renderIssueSuccessCardFace = function (templateId) {
 window.CardHost.onBillingScreen = function (id) {
   if (typeof setFlowNavHighlight === 'function') {
     const map = {
+      'screen-bill-staff': 'bill-staff',
       'screen-pick': 'bill-pick', 'screen-bill': 'bill-bill', 'screen-detail': 'bill-detail',
       'screen-success': 'bill-success', 'screen-holds': 'bill-hold',
       'screen-pick-benefit': 'bill-benefit', 'screen-discount': 'bill-discount',
       'screen-scan-me': 'bill-scan-me', 'screen-scan-cust': 'bill-scan-cust',
       'screen-coupon': 'bill-detail', 'screen-add-card': 'bill-add-card',
+      'screen-quick-issue': 'card-quick-issue',
       'screen-flow-hub': 'flow-hub', 'screen-flow-balance': 'flow-balance', 'screen-flow-list': 'flow-list',
       'screen-biz-hub': 'biz-hub', 'screen-biz-balance': 'biz-balance',
       'screen-flow-detail': 'flow-detail', 'screen-flow-refund': 'flow-refund', 'screen-flow-edit': 'flow-edit',
@@ -26815,10 +27185,11 @@ function billingNav(fn) {
   const group = {
     title: '开单记账',
     nodes: [
-      { id: 'bill-bill', label: '开单台', screen: 'screen-bill' },
-      { id: 'bill-pick', label: '选择顾客', screen: 'screen-pick' },
+      { id: 'bill-pick', label: '① 选择顾客', screen: 'screen-pick' },
+      { id: 'bill-bill', label: '② 点单台', screen: 'screen-bill' },
+      { id: 'bill-staff', label: '③ 服务人', screen: 'screen-bill-staff' },
+      { id: 'bill-detail', label: '④ 结算确认', screen: 'screen-detail' },
       { id: 'bill-cart', label: '已选', screen: 'cartSheetMask' },
-      { id: 'bill-detail', label: '详情', screen: 'screen-detail' },
       { id: 'bill-checkout', label: '结账方式', screen: 'checkoutMask' },
       { id: 'bill-pay', label: '开单分账', screen: 'payMask' },
       { id: 'bill-pay-price-changed', label: '价目变更拦截 Dialog', screen: 'payAmountChangedMask' },
@@ -26898,8 +27269,15 @@ function billingNav(fn) {
       if (g) g.nodes = group.nodes;
     }
     Object.assign(FLOW_NAV, {
+      'bill-pick'() {
+        if (window.BillingDemo && window.BillingDemo.openBillCustomer) window.BillingDemo.openBillCustomer({ reset: true });
+        else billingNav('pick')();
+      },
       'bill-bill': billingNav('bill'),
-      'bill-pick': billingNav('pick'),
+      'bill-staff'() {
+        if (window.BillingDemo && window.BillingDemo.openBillStaff) window.BillingDemo.openBillStaff();
+        else billingNav('detail')();
+      },
       'bill-cart': billingNav('cart'),
       'bill-detail': billingNav('detail'),
       'bill-checkout': billingNav('checkout'),
@@ -34426,8 +34804,8 @@ window.__BILLING_EMBEDDED__ = true;
       const avg = getAchCalcModeForKind('card') !== 'station';
       if (hint) {
         hint.textContent = avg
-          ? '可多选员工；点选后选择是否顾客指定。'
-          : `可多选员工；点选后选择是否指定，再选择工位（${stationRoleLabelsJoined()}）。`;
+          ? '可多选员工；点卡片后选择点客或散客。'
+          : `可多选员工；点卡片后选择点客/散客，再选择工位（${stationRoleLabelsJoined()}）。`;
       }
       root.innerHTML = renderStaffPickerHtml(getIssueStaffRow());
     }
@@ -34435,25 +34813,147 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function renderAddCardStaffRow() {
-    const rowEl = document.getElementById('addCardStaffRow');
-    const valEl = document.getElementById('addCardStaffRowVal');
-    if (!valEl) return;
-    const row = getIssueStaffRow();
-    const ids = row.staffIds || [];
-    if (!ids.length) {
-      valEl.textContent = '请选择';
-      valEl.classList.add('is-placeholder');
-      if (rowEl) rowEl.classList.remove('has-staff');
-      return;
-    }
+    const ids = (getIssueStaffRow().staffIds || []);
     const pool = getStaffPool();
     const names = ids.map(id => {
       const st = pool.find(s => s.id === id);
       return st ? st.name : id;
     });
-    valEl.textContent = names.join('、');
-    valEl.classList.remove('is-placeholder');
-    if (rowEl) rowEl.classList.add('has-staff');
+    const text = names.length ? names.join('、') : '请选择';
+    const hasStaff = names.length > 0;
+    [
+      { row: 'addCardStaffRow', val: 'addCardStaffRowVal' },
+      { row: 'quickIssueStaffRow', val: 'quickIssueStaffRowVal' },
+    ].forEach(({ row, val }) => {
+      const rowEl = document.getElementById(row);
+      const valEl = document.getElementById(val);
+      if (!valEl) return;
+      valEl.textContent = text;
+      valEl.classList.toggle('is-placeholder', !hasStaff);
+      if (rowEl) rowEl.classList.toggle('has-staff', hasStaff);
+    });
+  }
+
+  function formatQuickIssueBenefitLineLocal(tpl) {
+    if (typeof formatQuickIssueBenefitLine === 'function') return formatQuickIssueBenefitLine(tpl);
+    return '—';
+  }
+
+  function renderQuickIssuePage() {
+    const pending = state.cardIssuePending;
+    const templateId = pending?.templateId || state.selectedTemplateId;
+    const memberId = pending?.memberId;
+    const c = (CUSTOMERS || []).find(x => x.id === memberId) || getCustomer() || GUEST;
+    const custEl = document.getElementById('quickIssueCustomer');
+    if (custEl) custEl.innerHTML = renderCustomerNameCard(c);
+
+    /* 优先会员卡模块完整模板（含 recharge）；开单列表项仅有 price */
+    const cardTpl = (typeof getTemplate === 'function' ? getTemplate(templateId) : null)
+      || (typeof getTemplateById === 'function' ? getTemplateById(templateId) : null);
+    const billTpl = CARD_TEMPLATES.find(t => t.id === templateId)
+      || (typeof CARD_TPL_BY_ID !== 'undefined' ? CARD_TPL_BY_ID[templateId] : null);
+    const tpl = cardTpl || billTpl;
+    const cardEl = document.getElementById('quickIssueCard');
+    const payEl = document.getElementById('quickIssuePayVal');
+    if (!tpl) {
+      if (cardEl) cardEl.innerHTML = '<p class="quick-issue-card__summary">未找到会员卡模板</p>';
+      if (payEl) payEl.textContent = '¥0';
+      renderAddCardStaffOnly();
+      return;
+    }
+    state.selectedTemplateId = tpl.id;
+    const theme = (typeof getCardTheme === 'function')
+      ? getCardTheme(tpl.cardColor)
+      : { gradient: (CARD_COLORS && CARD_COLORS[tpl.cardColor]) || '#F32F41' };
+    const amountNum = (typeof resolveCardIssueAmount === 'function')
+      ? resolveCardIssueAmount(tpl, state.pendingOpenCard?.amount)
+      : round2(Number(state.pendingOpenCard?.amount) || Number(tpl.price) || Number(tpl.recharge) || 0);
+    const priceText = (typeof formatMoneyDisplay === 'function')
+      ? formatMoneyDisplay(amountNum)
+      : (`¥${amountNum}`);
+    /* 摘要优先用开单侧已格式化的 projects/discounts 文案 */
+    const summaryTpl = billTpl && (billTpl.projects?.length || billTpl.discounts?.length)
+      ? { ...tpl, projects: billTpl.projects || tpl.projects, discounts: billTpl.discounts || tpl.discounts, benefits: billTpl.benefits || tpl.benefits }
+      : tpl;
+    const summary = formatQuickIssueBenefitLineLocal(summaryTpl);
+    const nameBlock = (typeof renderCardCompactTitleHtml === 'function')
+      ? renderCardCompactTitleHtml(tpl.name, { cardColor: tpl.cardColor })
+      : `<div class="member-card-compact__title"><span class="member-card-compact__name">${escapeHtml(tpl.name)}</span></div>`;
+    if (cardEl) {
+      cardEl.innerHTML =
+        `<div class="member-card-compact" style="background:${theme.gradient}">` +
+        `${nameBlock}` +
+        `<span class="member-card-compact__price"><span class="member-card-compact__price-val is-data">${escapeHtml(priceText)}</span></span>` +
+        `</div>` +
+        `<p class="quick-issue-card__summary">${escapeHtml(summary)}</p>`;
+    }
+    if (payEl) payEl.textContent = priceText;
+
+    const dateSrc = document.getElementById('addCardDateLabel');
+    const dateDst = document.getElementById('quickIssueDateLabel');
+    if (dateSrc && dateDst) dateDst.textContent = dateSrc.textContent;
+
+    renderAddCardStaffOnly();
+  }
+
+  function confirmQuickIssueCheckout() {
+    const pending = state.cardIssuePending;
+    const templateId = pending?.templateId || state.selectedTemplateId;
+    const cardTpl = (typeof getTemplate === 'function' ? getTemplate(templateId) : null)
+      || (typeof getTemplateById === 'function' ? getTemplateById(templateId) : null);
+    const tpl = cardTpl
+      || CARD_TEMPLATES.find(t => t.id === templateId)
+      || (typeof getTemplate === 'function' ? getTemplate(templateId) : null);
+    if (!tpl) {
+      showToast('未找到该卡模板');
+      return;
+    }
+    const staffErr = issueStaffSelectionError();
+    if (staffErr) {
+      showToast(staffErr, true);
+      return;
+    }
+    const memberId = pending?.memberId || getCustomer()?.id;
+    const c = (CUSTOMERS || []).find(x => x.id === memberId) || getCustomer();
+    if (!c || c.isMember === false || String(c.id || '').indexOf('guest') === 0) {
+      showToast('请先选择会员顾客再办卡', true);
+      return;
+    }
+    const amount = round2(
+      (typeof resolveCardIssueAmount === 'function')
+        ? resolveCardIssueAmount(tpl, state.pendingOpenCard?.amount)
+        : (Number(state.pendingOpenCard?.amount) || Number(tpl.price) || Number(tpl.recharge) || 0)
+    );
+    if (!(amount > 0)) {
+      showToast('该卡未设置购买金额', true);
+      return;
+    }
+    const staff = snapshotIssueStaff();
+    startCardIssueCheckout({
+      templateId: tpl.id,
+      memberId: c.id,
+      cardName: tpl.name,
+      amount,
+      cardHtml: (window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function')
+        ? window.CardHost.renderIssueSuccessCardFace(tpl.id)
+        : '',
+      staff,
+      skipStaffScreen: true,
+    });
+  }
+
+  function leaveQuickIssueToCardList() {
+    clearStaffCardEdit();
+    closeMask('addCardStaffMask');
+    state.pendingOpenCard = null;
+    state.cardIssuePending = null;
+    state.successIssueTemplateId = null;
+    state.successIssueCardHtml = '';
+    state.lastIssueFromCardMgmt = false;
+    resetIssueStaffDraft();
+    if (typeof setStep === 'function') setStep(0);
+    showOnlyScreen('screen0');
+    if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('list');
   }
 
   function openAddCardStaffSheet() {
@@ -34544,6 +35044,9 @@ window.__BILLING_EMBEDDED__ = true;
     benefitDraft: {},
     benefitApplied: {},
     technician: '未指定',
+    cashierId: null,
+    billWizardStep: 'customer',
+    billStaffExpandedId: null,
     payChannel: 'alipay',
     payAmounts: {},
     payManualEdit: {},
@@ -34773,10 +35276,9 @@ window.__BILLING_EMBEDDED__ = true;
   function syncBillBackChrome() {
     const btn = document.getElementById('billBack');
     if (!btn) return;
-    const on = !!state.billFromHold || window.__wbEntry === 'bill';
-    btn.classList.toggle('hidden', !on);
-    btn.setAttribute('aria-hidden', on ? 'false' : 'true');
-    btn.setAttribute('aria-label', state.billFromHold ? '返回挂单列表' : '返回工作台');
+    btn.classList.remove('hidden');
+    btn.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-label', state.billFromHold ? '返回挂单列表' : '返回选择顾客');
   }
 
   function enterBillUnselected() {
@@ -34784,17 +35286,158 @@ window.__BILLING_EMBEDDED__ = true;
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
     state.billFromHold = false;
-    enterBill(GUEST_UNSET);
+    openBillCustomer({ reset: true });
   }
-  function openMemberPicker() {
-    state.guestGender = null;
+
+  const BILL_WIZARD_STEPS = [
+    { id: 'customer', label: '顾客' },
+    { id: 'catalog', label: '点单' },
+    { id: 'staff', label: '服务人' },
+    { id: 'settle', label: '结算' },
+  ];
+
+  function ensureCashierId() {
+    const pool = getStaffPool();
+    if (state.cashierId && pool.some(s => s.id === state.cashierId)) return state.cashierId;
+    state.cashierId = (pool[0] && pool[0].id) || null;
+    return state.cashierId;
+  }
+
+  function getCashierStaff() {
+    const id = ensureCashierId();
+    return getStaffPool().find(s => s.id === id) || null;
+  }
+
+  function renderBillStepBar(activeId) {
+    const idx = BILL_WIZARD_STEPS.findIndex(s => s.id === activeId);
+    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5 5L20 7"/></svg>';
+    return BILL_WIZARD_STEPS.map((s, i) => {
+      const on = s.id === activeId;
+      const done = i < idx;
+      const cls = `bill-step-bar__item${on ? ' on' : ''}${done ? ' is-done' : ''}`;
+      const dotInner = done ? checkSvg : String(i + 1);
+      return `<div class="${cls}" data-bill-step="${escapeHtml(s.id)}">` +
+        `<span class="bill-step-bar__dot">${dotInner}</span>` +
+        `<span class="bill-step-bar__label">${escapeHtml(s.label)}</span></div>`;
+    }).join('');
+  }
+
+  function syncBillStepBars(activeId) {
+    state.billWizardStep = activeId;
+    ['billCustomerSteps', 'billCatalogSteps', 'billStaffSteps', 'billSettleSteps'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = renderBillStepBar(activeId);
+    });
+    if (typeof setFlowNavHighlight === 'function') {
+      const map = { customer: 'bill-pick', catalog: 'bill-bill', staff: 'bill-staff', settle: 'bill-detail' };
+      if (map[activeId]) setFlowNavHighlight(map[activeId]);
+    }
+  }
+
+  function openBillCustomer(opts) {
+    opts = opts || {};
+    if (opts.reset) {
+      state.customer = GUEST_UNSET;
+      state.guestGender = null;
+      state.cardsExpanded = false;
+    }
+    ensureCashierId();
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
-    state.customer = GUEST_UNSET;
-    state.cardsExpanded = false;
     syncPickHoldsEntry();
+    state.searchQuery = '';
+    const search = document.getElementById('pickSearch');
+    if (search) search.value = '';
     renderCustomerList();
+    syncBillStepBars('customer');
     showOnlyScreen('screen-pick');
+  }
+
+  /** 只设顾客，不跳屏 */
+  function enterBillCustomerOnly(customer) {
+    state.guestGenderPickerOpen = false;
+    state.billCustomerPickOpen = false;
+    state.billFromHold = false;
+    if (isAnonymousGuest(customer)) {
+      if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
+      state.customer = currentGuest();
+    } else {
+      if (customer && customer.isMember) refreshCustomerCardsFromHoldings(customer);
+      state.customer = customer;
+      if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
+      else if (customer && customer.isMember) state.guestGender = null;
+    }
+  }
+
+  function openBillCatalog() {
+    if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+    ensureCashierId();
+    if (!state.customer) enterBillCustomerOnly(GUEST_UNSET);
+    renderBillHeader();
+    syncCartChrome();
+    syncPickHoldsEntry();
+    syncBillBackChrome();
+    syncBillStepBars('catalog');
+    showOnlyScreen('screen-bill');
+  }
+
+  function cartLineStaffSummary(it) {
+    ensureCartStaffState(it);
+    const n = (it.staffIds || []).length;
+    if (!n) return { text: '未指定', empty: true };
+    const names = (it.staffIds || []).map(id => {
+      const st = getStaffPool().find(s => s.id === id);
+      return st ? st.name : id;
+    }).filter(Boolean);
+    return { text: names.slice(0, 2).join('、') + (names.length > 2 ? ' 等' : ''), empty: false };
+  }
+
+  function renderBillStaff() {
+    const root = document.getElementById('billStaffBody');
+    if (!root) return;
+    if (!state.cart.length) {
+      root.innerHTML = '<div class="stk-empty" style="padding:48px 24px;text-align:center;color:var(--text-sec)">暂无商品，请返回点单</div>';
+      return;
+    }
+    if (!state.billStaffExpandedId || !state.cart.some(x => x.id === state.billStaffExpandedId)) {
+      state.billStaffExpandedId = state.cart[0].id;
+    }
+    root.innerHTML =
+      `<p class="bill-staff-hint">为每项服务指定服务人（可多选）</p>` +
+      state.cart.map(it => {
+        const open = state.billStaffExpandedId === it.id;
+        const sum = cartLineStaffSummary(it);
+        return `<div class="bill-staff-line" data-bill-staff-line="${escapeHtml(it.id)}">` +
+          `<button type="button" class="bill-staff-line__head" data-bill-staff-toggle="${escapeHtml(it.id)}">` +
+          `<span class="bill-staff-line__name">${escapeHtml(it.name || it.label || '项目')}</span>` +
+          `<span class="bill-staff-line__meta">×${Number(it.qty) || 1}</span>` +
+          `<span class="bill-staff-line__status${sum.empty ? ' is-empty' : ''}">${escapeHtml(sum.text)}</span>` +
+          `</button>` +
+          (open ? `<div class="bill-staff-line__body">${renderStaffPickerHtml(it)}</div>` : '') +
+          `</div>`;
+      }).join('');
+  }
+
+  function openBillStaff() {
+    state.detailExpandedId = state.cart[0]?.id || null;
+    state.billStaffExpandedId = state.cart[0]?.id || null;
+    state.staffCardEdit = null;
+    renderBillStaff();
+    syncBillStepBars('staff');
+    showOnlyScreen('screen-bill-staff');
+  }
+
+  function openBillSettle() {
+    state.detailExpandedId = state.cart[0]?.id || null;
+    closeMask('cartSheetMask');
+    closeMask('checkoutMask');
+    renderDetail();
+    syncBillStepBars('settle');
+    showOnlyScreen('screen-detail');
+  }
+
+  function openMemberPicker() {
+    openBillCustomer({ reset: true });
   }
   function isMemberBill() { const c = getCustomer(); return c.isMember && c.cards && c.cards.length; }
   function refreshCustomerCardsFromHoldings(customer) {
@@ -35593,6 +36236,27 @@ window.__BILLING_EMBEDDED__ = true;
 
   function renderCustomerList() {
     const q = state.searchQuery.trim().toLowerCase();
+    const showMale = !q || '男散客'.includes(q) || '男'.includes(q) || '散客'.includes(q);
+    const showFemale = !q || '女散客'.includes(q) || '女'.includes(q) || '散客'.includes(q);
+    const guestRows = [];
+    if (showMale) {
+      guestRows.push(`<div class="customer-row customer-row--guest-pin" data-pick-guest="male">
+        <img class="customer-row__avatar" src="${AVATAR_MALE}" alt="">
+        <div>
+          <div class="customer-row__name">男散客</div>
+          <div class="customer-row__meta">未注册顾客 · 男</div>
+        </div>
+      </div>`);
+    }
+    if (showFemale) {
+      guestRows.push(`<div class="customer-row customer-row--guest-pin" data-pick-guest="female">
+        <img class="customer-row__avatar" src="${AVATAR_FEMALE}" alt="">
+        <div>
+          <div class="customer-row__name">女散客</div>
+          <div class="customer-row__meta">未注册顾客 · 女</div>
+        </div>
+      </div>`);
+    }
     const list = CUSTOMERS.filter(c => {
       if (!q) return true;
       const letter = customerLetter(c).toLowerCase();
@@ -35605,11 +36269,17 @@ window.__BILLING_EMBEDDED__ = true;
       groups[L].push(c);
     });
     const letters = Object.keys(groups).sort((a, b) => (a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)));
-    const html = letters.map(L => {
+    const memberHtml = letters.map(L => {
       const rows = groups[L].map(c => customerPickRowHtml(c, `data-pick="${c.id}"`)).join('');
       return `<div class="pick-letter" data-letter="${L}">${L}</div>${rows}`;
     }).join('');
-    document.getElementById('customerList').innerHTML = html || '<div class="empty-cart">无匹配顾客</div>';
+    const guestBlock = guestRows.length
+      ? `<div class="bill-pick-section-label">散客</div>${guestRows.join('')}`
+      : '';
+    const memberBlock = memberHtml
+      ? `${guestRows.length ? '<div class="bill-pick-section-label">会员</div>' : ''}${memberHtml}`
+      : '';
+    document.getElementById('customerList').innerHTML = guestBlock + memberBlock || '<div class="empty-cart">无匹配顾客</div>';
     state.pickAvailableLetters = letters;
     if (!letters.includes(state.pickLetter) && letters.length) state.pickLetter = letters[0];
     renderPickIndex();
@@ -36057,40 +36727,26 @@ window.__BILLING_EMBEDDED__ = true;
       const isEdit = !!(edit && edit.staffId === st.id);
       const dim = !!(edit && !isEdit);
       const origin = staffCardOrigin(index);
+      const originSide = index % 3 === 0 ? 'left' : index % 3 === 2 ? 'right' : 'center';
       let body = '';
       const jobTitle = staffJobTitleHtml(st);
       if (isEdit && edit.face === 'designate') {
-        body = `
-          <div class="staff-card__edit-head">
-            ${staffAvatarHtml(st)}
-            <div class="staff-card__name">${escapeHtml(st.name)}</div>
-            ${jobTitle}
-            <p class="staff-card__hint">是否顾客指定</p>
-          </div>
-          <div class="staff-card__opts" role="group" aria-label="是否指定">
-            <button type="button" class="staff-card__opt" data-staff-opt-designate="0" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">未指定</button>
-            <button type="button" class="staff-card__opt" data-staff-opt-designate="1" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">指定</button>
-          </div>`;
+        body = `<div class="staff-card__split" role="group" aria-label="点客或散客">
+          <button type="button" class="staff-card__split-btn" data-staff-opt-designate="1" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">点客</button>
+          <button type="button" class="staff-card__split-btn" data-staff-opt-designate="0" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">散客</button>
+        </div>`;
       } else if (isEdit && edit.face === 'role') {
         const roleBtns = STAFF_ROLE_PICK_ORDER.map(rid => {
           const label = staffRoleLabel(rid);
-          return `<button type="button" class="staff-card__opt" data-staff-opt-role="${escapeHtml(rid)}" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">${escapeHtml(label)}</button>`;
+          return `<button type="button" class="staff-card__split-btn" data-staff-opt-role="${escapeHtml(rid)}" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">${escapeHtml(label)}</button>`;
         }).join('');
-        body = `
-          <div class="staff-card__edit-head">
-            ${staffAvatarHtml(st)}
-            <div class="staff-card__name">${escapeHtml(st.name)}</div>
-            ${jobTitle}
-            <p class="staff-card__hint">${edit.draftDesignated ? '指定' : '未指定'} · 选择工位</p>
-          </div>
-          <div class="staff-card__opts staff-card__opts--row" role="group" aria-label="工位">
-            ${roleBtns}
-          </div>`;
+        body = `<div class="staff-card__split staff-card__split--3" role="group" aria-label="选择工位">${roleBtns}</div>`;
       } else {
+        const guestLabel = designated ? '点客' : '散客';
         const meta = done
           ? (isAvgAchCalcModeForItem(it)
-            ? (designated ? '指定' : '未指定')
-            : `${designated ? '指定' : '未指定'} · ${escapeHtml(staffRoleLabel(role) || '')}`)
+            ? guestLabel
+            : `${guestLabel} · ${escapeHtml(staffRoleLabel(role) || '')}`)
           : '';
         body = `
           ${done ? `<span class="staff-card__check">${checkSvg}</span>` : ''}
@@ -36105,12 +36761,14 @@ window.__BILLING_EMBEDDED__ = true;
       if (isEdit) {
         return `<div class="staff-card is-editing${done ? ' is-done' : ''}"
           style="--staff-origin:${origin}"
+          data-origin="${originSide}"
           data-staff-card data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">
           <div class="staff-card__panel" data-face="${escapeHtml(edit.face)}">${body}</div>
         </div>`;
       }
       return `<div class="staff-card${done ? ' is-done' : ''}${dim ? ' is-dim' : ''}"
         style="--staff-origin:${origin}"
+        data-origin="${originSide}"
         data-staff-card data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">
         ${clearBtn}
         <button type="button" class="staff-card__panel" data-staff-card-hit data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}" aria-label="${escapeHtml(st.name)}">
@@ -36628,6 +37286,7 @@ window.__BILLING_EMBEDDED__ = true;
       selectedCouponId: state.selectedCouponId,
       manualOrderNo: state.manualOrderNo || '',
       technician: state.technician,
+      cashierId: state.cashierId,
       listTotal: cartListTotal(),
       priceEdited: !!state.billDueEdited,
     };
@@ -36852,15 +37511,15 @@ window.__BILLING_EMBEDDED__ = true;
     state.selectedCouponId = h.selectedCouponId || null;
     state.manualOrderNo = h.manualOrderNo || '';
     state.technician = h.technician || '未指定';
+    if (h.cashierId) state.cashierId = h.cashierId;
+    ensureCashierId();
     state.cardsExpanded = false;
     state.payAmounts = {};
     state.billFromHold = true;
     state.billDueEdited = !!h.priceEdited;
     syncCartChrome();
     syncPickHoldsEntry();
-    renderBillHeader();
-    syncBillBackChrome();
-    showOnlyScreen('screen-bill');
+    openBillCatalog();
     showToast('已取单');
   }
 
@@ -36946,7 +37605,7 @@ window.__BILLING_EMBEDDED__ = true;
         const names = state.pendingOpenCard.staffIds.map(sid => {
           const st = pool.find(s => s.id === sid);
           const nm = st ? st.name : sid;
-          const des = state.pendingOpenCard.staffDesignated && state.pendingOpenCard.staffDesignated[sid] ? '指定' : '未指定';
+          const des = state.pendingOpenCard.staffDesignated && state.pendingOpenCard.staffDesignated[sid] ? '点客' : '散客';
           const role = state.pendingOpenCard.staffRoles && state.pendingOpenCard.staffRoles[sid]
             ? staffRoleLabel(state.pendingOpenCard.staffRoles[sid]) : '';
           return avg ? `${nm}（${des}）` : `${nm}（${des}·${role || '—'}）`;
@@ -37777,6 +38436,8 @@ window.__BILLING_EMBEDDED__ = true;
     const kind = items.every(i => i.type === 'quick') ? 'quick'
       : (items.every(i => i.type === 'product') ? 'product' : 'project');
     const defaultStaff = (STAFFS[0] && STAFFS[0].name) || '林屿森';
+    const cashierStaff = getCashierStaff();
+    const cashierName = (cashierStaff && cashierStaff.name) || defaultStaff;
     const staffName = state.technician && state.technician !== '未指定' ? state.technician : defaultStaff;
     const isGuest = !c || isGuestCustomer(c);
     const order = {
@@ -37798,7 +38459,7 @@ window.__BILLING_EMBEDDED__ = true;
       discount: round2((s.discountDeduct || 0) + (s.couponDeduct || 0) + (s.projectDeduct || 0) + (s.balanceDeduct || 0)),
       benefitLabel: (s.projectDeduct || s.balanceDeduct) ? '会员卡权益' : '无卡权益',
       time: formatFlowTime(new Date()),
-      cashier: defaultStaff,
+      cashier: cashierName,
       manualOrderNo: s.manualOrderNo || state.manualOrderNo || '',
     };
     FLOW_ORDERS.unshift(order);
@@ -40224,14 +40885,15 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('cartSheetMask');
     closeMask('payMask', { keepCardExtendDraft: true });
 
-    /* 默认先进入添加卡页选服务员工；确认办卡后再进结账 */
+    /* 会员卡管理办卡：进简洁「确认办卡」页（卡已锁定）；开单「添加卡」仍走选卡页 */
     if (!skipStaffScreen) {
       state.addCardMode = 'new';
       state.selectedTemplateId = templateId;
       resetIssueStaffDraft();
-      renderAddCardPage();
-      showOnlyScreen('screen-add-card');
-      setFlowNavHighlight('add-card');
+      renderQuickIssuePage();
+      showOnlyScreen('screen-quick-issue');
+      if (typeof window.setFlowNavHighlight === 'function') window.setFlowNavHighlight('card-quick-issue');
+      else if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('card-quick-issue');
       if (typeof syncFlowMapFromAppState === 'function') syncFlowMapFromAppState();
       return;
     }
@@ -40340,11 +41002,8 @@ window.__BILLING_EMBEDDED__ = true;
     state.cardsExpanded = false;
     state.billDueEdited = false;
     state.payDueSnapshot = null;
-    renderBillHeader();
-    syncCartChrome();
-    syncPickHoldsEntry();
-    syncBillBackChrome();
-    showOnlyScreen('screen-bill');
+    ensureCashierId();
+    openBillCatalog();
   }
 
   function resetOrder() {
@@ -40675,10 +41334,11 @@ window.__BILLING_EMBEDDED__ = true;
 
   const FLOW_MAP_GROUPS = [
     { title: '开单主流程', nodes: [
-      { id: 'bill', label: '开单台', screen: 'screen-bill' },
-      { id: 'pick', label: '选择顾客', screen: 'screen-pick' },
+      { id: 'pick', label: '① 选择顾客', screen: 'screen-pick' },
+      { id: 'bill', label: '② 点单台', screen: 'screen-bill' },
+      { id: 'staff', label: '③ 服务人', screen: 'screen-bill-staff' },
+      { id: 'detail', label: '④ 结算确认', screen: 'screen-detail' },
       { id: 'cart', label: '已选', screen: 'cartSheetMask' },
-      { id: 'detail', label: '详情', screen: 'screen-detail' },
       { id: 'checkout', label: '结账方式', screen: 'checkoutMask' },
       { id: 'pay', label: '开单分账', screen: 'payMask' },
       { id: 'success', label: '成功', screen: 'screen-success' },
@@ -40700,20 +41360,25 @@ window.__BILLING_EMBEDDED__ = true;
   ];
 
   const FLOW_NAV = {
-    pick() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openMemberPicker(); },
-    bill() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); if (!state.customer) enterBillUnselected(); else { renderBillHeader(); showOnlyScreen('screen-bill'); } },
+    pick() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openBillCustomer({ reset: true }); },
+    bill() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openBillCatalog(); },
     cart() {
-      if (!state.customer) enterBillUnselected();
-      else { renderBillHeader(); showOnlyScreen('screen-bill'); }
+      openBillCatalog();
       if (!state.cart.length) setCartQty(PROJECTS[0], 1);
       renderCartList('cartSheetList');
       syncCartChrome();
       openMask('cartSheetMask');
       setFlowNavHighlight('cart');
     },
+    staff() {
+      closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask');
+      if (!state.cart.length) setCartQty(PROJECTS[0], 1);
+      if (!state.customer) enterBillCustomerOnly(GUEST_UNSET);
+      openBillStaff();
+    },
     detail() {
       if (!state.cart.length) { showToast('请先添加商品'); return; }
-      renderDetail(); showOnlyScreen('screen-detail');
+      openBillSettle();
     },
     checkout() {
       if (!state.cart.length) { showToast('请先添加商品'); return; }
@@ -40792,7 +41457,8 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const vis = document.querySelector('.phone .screen:not(.hidden)')?.id;
     const map = {
-      'screen-pick': 'pick', 'screen-bill': state.cardsExpanded ? 'expand' : 'bill', 'screen-detail': 'detail',
+      'screen-pick': 'pick', 'screen-bill': state.cardsExpanded ? 'expand' : 'bill',
+      'screen-bill-staff': 'staff', 'screen-detail': 'detail',
       'screen-pick-benefit': 'benefit', 'screen-coupon': 'detail', 'screen-holds': 'hold', 'screen-success': 'success',
       'screen-scan-me': 'scan-me', 'screen-scan-cust': 'scan-cust', 'screen-discount': 'discount',
     };
@@ -40800,6 +41466,9 @@ window.__BILLING_EMBEDDED__ = true;
     else if (document.getElementById('checkoutMask')?.classList.contains('open')) setFlowNavHighlight('checkout');
     else if (document.getElementById('cartSheetMask').classList.contains('open')) setFlowNavHighlight('cart');
     else if (!document.getElementById('screen-add-card').classList.contains('hidden')) setFlowNavHighlight('add-card');
+    else if (!document.getElementById('screen-quick-issue')?.classList.contains('hidden')) {
+      if (typeof window.setFlowNavHighlight === 'function') window.setFlowNavHighlight('card-quick-issue');
+    }
     else if (map[vis]) setFlowNavHighlight(map[vis]);
   }
   function renderFlowMap() {
@@ -40818,13 +41487,15 @@ window.__BILLING_EMBEDDED__ = true;
 
   document.getElementById('pickSearch').addEventListener('input', e => { state.searchQuery = e.target.value; renderCustomerList(); });
   document.getElementById('pickBack')?.addEventListener('click', () => {
-    if (!state.customer) state.customer = GUEST_UNSET;
-    renderBillHeader();
-    syncCartChrome();
-    syncPickHoldsEntry();
-    showOnlyScreen('screen-bill');
+    if (typeof openWorkbench === 'function') openWorkbench();
   });
   document.getElementById('customerList').addEventListener('click', e => {
+    const guest = e.target.closest('[data-pick-guest]');
+    if (guest) {
+      const gender = guest.getAttribute('data-pick-guest');
+      enterBill(gender === 'male' ? GUEST_MALE : GUEST_FEMALE);
+      return;
+    }
     const row = e.target.closest('[data-pick]');
     if (!row) return;
     const c = CUSTOMERS.find(x => x.id === row.dataset.pick);
@@ -40877,10 +41548,7 @@ window.__BILLING_EMBEDDED__ = true;
       openHoldList();
       return;
     }
-    if (window.__wbEntry === 'bill' && typeof openWorkbench === 'function') {
-      window.__wbEntry = null;
-      openWorkbench();
-    }
+    openBillCustomer();
   });
   document.getElementById('btnBillDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('btnHold').addEventListener('click', createHoldOrder);
@@ -40891,10 +41559,7 @@ window.__BILLING_EMBEDDED__ = true;
       openWorkbench();
       return;
     }
-    renderBillHeader();
-    syncPickHoldsEntry();
-    syncBillBackChrome();
-    showOnlyScreen('screen-bill');
+    openBillCatalog();
   });
   document.getElementById('holdList')?.addEventListener('click', e => {
     const del = e.target.closest('[data-del-hold]');
@@ -40923,11 +41588,90 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('请先选择散客性别或会员');
       return;
     }
-    state.detailExpandedId = state.cart[0]?.id || null;
     closeMask('cartSheetMask');
     closeMask('checkoutMask');
-    renderDetail();
-    showOnlyScreen('screen-detail');
+    openBillStaff();
+  });
+  document.getElementById('billStaffBack')?.addEventListener('click', () => openBillCatalog());
+  document.getElementById('billStaffSkip')?.addEventListener('click', () => openBillSettle());
+  document.getElementById('billStaffNext')?.addEventListener('click', () => {
+    if (cartHasUnsetStaffRoles && cartHasUnsetStaffRoles()) {
+      showToast('还有服务人未选工位，可点行内补全或暂不指定');
+    }
+    openBillSettle();
+  });
+  document.getElementById('billStaffBody')?.addEventListener('click', (e) => {
+    const toggle = e.target.closest('[data-bill-staff-toggle]');
+    if (toggle) {
+      const id = toggle.getAttribute('data-bill-staff-toggle');
+      state.billStaffExpandedId = state.billStaffExpandedId === id ? null : id;
+      state.staffCardEdit = null;
+      renderBillStaff();
+      return;
+    }
+    /* reuse detail staff-card handlers by re-dispatching through detailBody logic — mirror key paths */
+    const hit = e.target.closest('[data-staff-card-hit]');
+    if (hit) {
+      const cartId = hit.getAttribute('data-cart-id');
+      const staffId = hit.getAttribute('data-staff-id');
+      state.staffCardEdit = { cartId, staffId, face: 'designate' };
+      renderBillStaff();
+      return;
+    }
+    const des = e.target.closest('[data-staff-opt-designate]');
+    if (des) {
+      const cartId = des.getAttribute('data-cart-id');
+      const staffId = des.getAttribute('data-staff-id');
+      const it = state.cart.find(x => x.id === cartId);
+      if (!it) return;
+      ensureCartStaffState(it);
+      const designated = des.getAttribute('data-staff-opt-designate') === '1';
+      if (!it.staffIds.includes(staffId)) it.staffIds.push(staffId);
+      it.staffDesignated[staffId] = designated;
+      if (isAvgAchCalcModeForItem(it)) {
+        it.staffRoles[staffId] = STAFF_ROLE_DEFAULT;
+        state.staffCardEdit = null;
+      } else {
+        state.staffCardEdit = { cartId, staffId, face: 'role', draftDesignated: designated };
+      }
+      renderBillStaff();
+      return;
+    }
+    const role = e.target.closest('[data-staff-opt-role]');
+    if (role) {
+      const cartId = role.getAttribute('data-cart-id');
+      const staffId = role.getAttribute('data-staff-id');
+      const rid = role.getAttribute('data-staff-opt-role');
+      const it = state.cart.find(x => x.id === cartId);
+      if (!it) return;
+      ensureCartStaffState(it);
+      if (!it.staffIds.includes(staffId)) it.staffIds.push(staffId);
+      it.staffRoles[staffId] = rid;
+      if (state.staffCardEdit && state.staffCardEdit.draftDesignated != null) {
+        it.staffDesignated[staffId] = !!state.staffCardEdit.draftDesignated;
+      }
+      state.staffCardEdit = null;
+      renderBillStaff();
+      return;
+    }
+    const clr = e.target.closest('[data-staff-clear]');
+    if (clr) {
+      const cartId = clr.getAttribute('data-cart-id');
+      const staffId = clr.getAttribute('data-staff-id');
+      const it = state.cart.find(x => x.id === cartId);
+      if (!it) return;
+      ensureCartStaffState(it);
+      it.staffIds = (it.staffIds || []).filter(id => id !== staffId);
+      delete it.staffRoles[staffId];
+      delete it.staffDesignated[staffId];
+      state.staffCardEdit = null;
+      renderBillStaff();
+      return;
+    }
+    if (e.target.closest('[data-staff-scrim]')) {
+      state.staffCardEdit = null;
+      renderBillStaff();
+    }
   });
   document.getElementById('btnOpenCart').addEventListener('click', () => { renderCartList('cartSheetList'); openMask('cartSheetMask'); });
   function onClearCart() {
@@ -41166,7 +41910,7 @@ window.__BILLING_EMBEDDED__ = true;
     }
   });
 
-  document.getElementById('detailBack').addEventListener('click', () => showOnlyScreen('screen-bill'));
+  document.getElementById('detailBack').addEventListener('click', () => openBillStaff());
   document.getElementById('btnDetailHold')?.addEventListener('click', createHoldOrder);
   document.getElementById('btnDetailDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('detailBody').addEventListener('click', e => {
@@ -41526,19 +42270,21 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('addCardStaffMask');
     /* 会员卡列表「办卡」进入选员工时，返回卡列表而非开单台 */
     if (state.lastIssueFromCardMgmt && state.cardIssuePending) {
-      state.pendingOpenCard = null;
-      state.cardIssuePending = null;
-      state.successIssueTemplateId = null;
-      state.successIssueCardHtml = '';
-      state.lastIssueFromCardMgmt = false;
-      resetIssueStaffDraft();
-      if (typeof setStep === 'function') setStep(0);
-      showOnlyScreen('screen0');
-      if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('list');
+      leaveQuickIssueToCardList();
       return;
     }
     renderBillHeader();
     showOnlyScreen('screen-bill');
+  });
+  document.getElementById('quickIssueBack')?.addEventListener('click', () => {
+    leaveQuickIssueToCardList();
+  });
+  document.getElementById('btnQuickIssueDate')?.addEventListener('click', () => showToast('办卡日期后续开放'));
+  document.getElementById('quickIssueStaffRow')?.addEventListener('click', () => {
+    openAddCardStaffSheet();
+  });
+  document.getElementById('btnQuickIssueNext')?.addEventListener('click', () => {
+    confirmQuickIssueCheckout();
   });
   document.getElementById('btnAddCardDate').addEventListener('click', () => showToast('办卡日期后续开放'));
   document.getElementById('addCardMode').addEventListener('click', e => {
@@ -42531,6 +43277,10 @@ window.__BILLING_EMBEDDED__ = true;
     nav: typeof FLOW_NAV !== 'undefined' ? FLOW_NAV : {},
     enterPick() { if (typeof FLOW_NAV !== 'undefined' && FLOW_NAV.pick) FLOW_NAV.pick(); },
     enterBillUnselected() { enterBillUnselected(); },
+    openBillCustomer(opts) { openBillCustomer(opts); },
+    openBillCatalog() { openBillCatalog(); },
+    openBillStaff() { openBillStaff(); },
+    openBillSettle() { openBillSettle(); },
     openHoldList() { openHoldList(); },
     show(id) { showOnlyScreen(id); },
     openFlowHub,
