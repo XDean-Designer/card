@@ -20,11 +20,11 @@ $ip = (Get-NetIPAddress -AddressFamily IPv4 |
   Select-Object -First 1 -ExpandProperty IPAddress)
 if (-not $ip) { $ip = '本机局域网IP' }
 
-$encName = [uri]::EscapeDataString('剑琅联盟-RTB重构.html')
+# 使用 ASCII 文件名，避免部分手机浏览器对中文路径解析失败；窄屏会自动真机预览，?device=1 仍可强制
 Write-Host "Serving: $root"
-Write-Host "本机:   http://127.0.0.1:$port/$encName`?device=1"
-Write-Host "手机:   http://${ip}:$port/$encName`?device=1"
-Write-Host "价目表: http://${ip}:$port/$encName`?device=1&flow=price-list-filled"
+Write-Host "本机:   http://127.0.0.1:$port/demo.html"
+Write-Host "手机:   http://${ip}:$port/demo.html"
+Write-Host "价目表: http://${ip}:$port/demo.html?flow=price-list-filled"
 Write-Host '按 Ctrl+C 结束'
 Set-Location $root
 & $py -m http.server $port --bind 0.0.0.0

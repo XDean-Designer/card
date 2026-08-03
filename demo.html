@@ -1,9 +1,9 @@
-﻿<html lang="zh-CN">
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>剑琅联盟·RTB重构</title>
-<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 <style>
 @font-face {
   font-family: 'TCloudNumber';
@@ -2553,7 +2553,7 @@ html.prd-capture .bottom-bar {
 html.prd-capture #screen-p-list .catalog-list-shell,
 html.prd-capture #projProjectTable { overflow: visible; }
 
-/* 真机预览：?device=1 — 仅手机画布，等比适配视口，固定 844 内滚（不与 capture 混用） */
+/* 真机预览：?device=1 或窄屏自动 — 仅手机画布，等比适配视口，固定 844 内滚（不与 capture 混用） */
 html.device-preview {
   --phone-scale: 1;
   height: 100%;
@@ -5331,9 +5331,37 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-style: normal; font-family: var(--font-data); color: var(--brand);
   font-weight: 600; margin-left: 2px;
 }
-#empAchTabs .page-tabs__label { font-size: 15px; }
+#empAchTabs .page-tabs__label { font-size: 14px; }
+#empAchTabs .page-tabs__item { padding: 0 4px 10px; }
 .emp-ach-card-rules {
   padding: 8px 0 20px; min-width: 0; overflow-x: hidden;
+}
+.emp-ach-calc-block {
+  margin: 0 12px 12px; padding: 12px 12px 10px;
+  background: #fff; border-radius: 12px; box-sizing: border-box;
+}
+.emp-ach-calc-block__title {
+  font-size: 14px; font-weight: 500; color: var(--text); line-height: 20px; margin: 0 0 10px;
+}
+.emp-ach-calc-seg {
+  display: flex; align-items: stretch; gap: 0;
+  padding: 3px; border-radius: 10px; background: #F2F2F2;
+  box-sizing: border-box;
+}
+.emp-ach-calc-seg__btn {
+  flex: 1 1 0; min-width: 0;
+  height: 34px; border: none; border-radius: 8px;
+  background: transparent; color: #929292;
+  font-size: 13px; font-weight: 500; line-height: 1; font-family: inherit;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.emp-ach-calc-seg__btn.on {
+  background: #fff; color: var(--brand); font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+}
+.emp-ach-calc-seg__btn:active { opacity: .88; }
+.emp-ach-calc-block__hint {
+  margin: 8px 2px 0; font-size: 12px; line-height: 1.45; color: var(--text-sec);
 }
 .emp-ach-rule-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -5516,6 +5544,9 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-edit-section__title {
   font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 10px;
 }
+.emp-ach-edit-value-only {
+  margin: 0; font-size: 14px; color: var(--text); line-height: 20px; font-weight: 500;
+}
 .emp-ach-station-banner {
   display: flex; align-items: center; gap: 8px;
   margin: 0; padding: 8px 12px 8px 16px;
@@ -5623,36 +5654,45 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   margin: 12px 16px; padding: 10px 12px; background: #fff; border-radius: 12px;
   font-size: 12px; color: var(--text-sec); line-height: 1.55;
 }
-/* 业绩高级设置 · 组头条浅底 + 紧凑选项（方案 A） */
-#screen-emp-ach-adv { background: #F7F7F7; }
-#screen-emp-ach-adv .emp-ach-adv-body { background: #F7F7F7; }
-.emp-ach-adv-stack {
-  padding: 10px 16px 24px; display: flex; flex-direction: column; gap: 14px;
+/* 业绩基础设置 · 灰底双白卡轻拟物（H1 C1） */
+#empAchBasePanel {
+  flex: 1; min-height: 0; overflow-y: auto; background: #F7F7F7;
+  -webkit-overflow-scrolling: touch;
 }
-.emp-ach-adv-label {
-  position: relative;
-  display: flex; align-items: center;
-  margin: 0 0 8px; padding: 0 0 0 7px;
-  font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
+#empAchBasePanel.hidden { display: none; }
+#screen-emp-ach .emp-ach-wrap.hidden { display: none; }
+.emp-ach-base-stack {
+  padding: 4px 16px 24px; display: flex; flex-direction: column; gap: 4px;
 }
-.emp-ach-adv-label::before {
-  content: ''; position: absolute; left: 0; top: 3px;
-  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4A7BF4;
+.emp-ach-base-sec-title {
+  margin: 0; padding: 12px 4px 8px; font-size: 13px; color: var(--text-sec); font-weight: 400;
 }
-.emp-adv-rules-section,
-.emp-calc-modes-section {
-  border-radius: 12px; padding: 0; overflow: hidden; background: #fff;
+.emp-ach-base-sec-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding-right: 4px;
 }
-.emp-adv-rule-block { padding: 0; position: relative; margin: 0; }
+.emp-ach-base-sec-row .emp-ach-base-sec-title { flex: 1; min-width: 0; }
+/* 业绩规则：每组独立白卡，四角圆角 */
+.emp-adv-rules-section {
+  display: flex; flex-direction: column; gap: 10px;
+  background: transparent; border-radius: 0; padding: 0; overflow: visible;
+}
+.emp-adv-rule-block {
+  margin: 0; padding: 0; position: relative;
+  background: #fff; border-radius: 12px; overflow: hidden;
+}
 .emp-adv-rule-block + .emp-adv-rule-block {
-  margin-top: 0; padding-top: 0;
+  margin-top: 0; padding-top: 0; border-top: none;
 }
-.emp-adv-rule-block + .emp-adv-rule-block::before { display: none; }
-/* L2 组头条：与白底选项 / 页底 #F7F7F7 拉开对比 */
+/* 标题灰条：相对白卡更高对比 */
 .emp-adv-rule-block__title {
-  margin: 0; padding: 8px 16px; font-size: 12px; font-weight: 500;
-  color: #666666; line-height: 18px; background: #EBEBEB;
+  margin: 0; padding: 8px 16px; font-size: 13px; font-weight: 500;
+  color: #555555; line-height: 18px; background: #E8E8E8;
   pointer-events: none; user-select: none;
+}
+.emp-calc-modes-section,
+.emp-station-map-section {
+  border-radius: 12px; padding: 0; overflow: hidden; background: #fff;
 }
 .emp-adv-rule-opt {
   display: flex; align-items: center; justify-content: space-between;
@@ -5662,7 +5702,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-adv-rule-opt + .emp-adv-rule-opt::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
-  height: 1px; background: #EBEBEB;
+  height: 1px; background: var(--card-divider, #EBEBEB);
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
 .emp-adv-rule-opt__lbl { font-size: 14px; color: #1A1A1A; line-height: 20px; }
@@ -5709,49 +5749,42 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-calc-mode.on .emp-calc-mode__radio::after {
   opacity: 1; transform: scale(1);
 }
-.emp-station-map-section {
-  border-radius: 12px; padding: 0; overflow: hidden; background: #fff;
-}
 .emp-station-map-row {
   position: relative;
-  display: flex; align-items: center; min-height: 48px; padding: 0 16px;
-  gap: 6px; flex-wrap: nowrap; background: #fff;
+  display: flex; align-items: center; min-height: 52px; padding: 10px 16px;
+  gap: 8px; flex-wrap: nowrap; background: #fff; box-sizing: border-box;
 }
 .emp-station-map-row + .emp-station-map-row::before {
   content: ''; position: absolute; left: 16px; right: 16px; top: 0;
-  height: 1px; background: #EBEBEB;
+  height: 1px; background: var(--card-divider, #EBEBEB);
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
 .emp-station-map-row__lbl {
-  flex-shrink: 0; font-size: 14px; color: #1A1A1A; line-height: 20px;
+  flex-shrink: 0; font-size: 14px; color: #1A1A1A; line-height: 20px; min-width: 2.5em;
 }
 .emp-station-map-row__verb {
   flex-shrink: 0; font-size: 12px; color: var(--text-sec); line-height: 18px;
 }
 .emp-station-map-row__field {
-  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
 }
+/* 轻拟物凹槽输入 */
 .emp-station-map-row__input {
-  flex: 1; min-width: 0; max-width: 96px; height: 32px; border: 1px solid #EBEBEB;
-  border-radius: 6px; outline: none; text-align: left; font-size: 14px;
-  font-family: inherit; color: #1A1A1A; background: #fff; padding: 0 8px;
-  box-sizing: border-box;
+  flex: 1; min-width: 0; max-width: 112px; height: 36px;
+  border: 1px solid #E6E6E6; border-radius: 10px; outline: none;
+  text-align: left; font-size: 14px; font-family: inherit; color: #1A1A1A;
+  background: #F2F2F2; padding: 0 12px; box-sizing: border-box;
 }
-.emp-station-map-row__input:focus { border-color: #C2C4CC; }
+.emp-station-map-row__input:focus {
+  background: #fff; border-color: var(--brand);
+}
 .emp-station-map-row__input::placeholder { color: var(--text-sec); }
 .emp-station-map-row__hint {
   flex-shrink: 0; font-size: 11px; color: var(--text-sec); line-height: 16px;
   white-space: nowrap;
 }
-.emp-ach-adv-label-row {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; margin: 0 0 8px;
-}
-.emp-ach-adv-label-row .emp-ach-adv-label {
-  margin: 0;
-}
 .emp-station-map-reset {
-  border: none; background: none; padding: 0; margin: 0;
+  border: none; background: none; padding: 0; margin: 0 0 0 auto;
   font-family: inherit; font-size: 13px; line-height: 20px;
   color: var(--brand); cursor: pointer; flex-shrink: 0;
 }
@@ -7130,27 +7163,23 @@ button.exp-flow-row:active { opacity: .92; }
   display: block; overflow-y: auto; -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
 }
-/* 价目表卡：相对顾客卡左右各外扩 8px（margin 8） */
+/* 价目白卡：与顾客卡左右对齐（16px）；含快速消费 + Tab + 列表 */
 .bill-sheet {
   display: flex; flex-direction: column;
   box-sizing: border-box;
-  width: calc(100% - 16px);
-  max-width: 374px;
+  width: calc(100% - 32px);
+  max-width: 358px;
   background: var(--card);
   border-radius: 12px;
-  margin: 0 8px 4px;
-  min-height: 420px;
+  margin: 12px 16px 4px;
+  min-height: 0;
   box-shadow: none;
   overflow: hidden;
   border: 1px solid rgba(0,0,0,.06);
 }
-/* 无所持会员卡（散客）：宽度与顾客卡对齐，不外扩 */
-.bill-sheet--solo {
-  margin-top: 0;
-  width: calc(100% - 32px);
-  max-width: 358px;
-  margin-left: 16px;
-  margin-right: 16px;
+.bill-sheet--pick {
+  min-height: 420px;
+  margin-top: 12px;
 }
 .bill-sheet-divider {
   display: block;
@@ -7166,19 +7195,31 @@ button.exp-flow-row:active { opacity: .92; }
 .bill-sheet .bill-group-bar {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 12px; flex-shrink: 0;
-  border-bottom: 1px solid #EBEBEB;
+  border: none;
   min-height: 0; margin: 0; height: auto;
   background: #fff; box-sizing: border-box;
 }
+.bill-sheet .pick-group-bar { border-bottom: none; }
 .bill-sheet .bill-group-bar .catalog-group-segment {
   flex: 1; min-width: 0; margin-right: 0;
 }
+.bill-sheet .page-tabs {
+  background: var(--card);
+  border-bottom: none;
+}
 .bill-quick-consume {
   box-sizing: border-box;
-  width: calc(100% - 32px);
-  max-width: 358px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  max-width: none;
   height: 44px;
-  margin: 12px 16px;
+  min-height: 44px;
+  margin: 12px 16px 8px;
+  align-self: stretch;
   border: 1px solid var(--brand);
   border-radius: 12px;
   background: transparent;
@@ -7188,14 +7229,9 @@ button.exp-flow-row:active { opacity: .92; }
   line-height: 1;
   cursor: pointer;
   font-family: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   padding: 0 16px;
-}
-.bill-sheet-divider + .bill-quick-consume {
-  margin-top: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .bill-quick-consume:active { background: var(--brand-soft); }
 .bill-quick-consume svg {
@@ -7689,6 +7725,103 @@ button.exp-flow-row:active { opacity: .92; }
   color: var(--brand); font-weight: 600;
 }
 .bill-step-bar__item.is-done .bill-step-bar__label { color: #666; }
+
+/* 开单 · 选卡门闩 + 点单模式条 */
+.bill-card-gate {
+  padding: 8px 16px 20px;
+}
+.bill-card-gate__intro {
+  margin: 4px 0 16px;
+}
+.bill-card-gate__title-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.bill-card-gate__intro h3 {
+  margin: 0; font-size: 17px; font-weight: 600; color: #1A1A1A; line-height: 24px;
+  flex: 1; min-width: 0;
+}
+.bill-card-gate__intro p {
+  margin: 6px 0 0; font-size: 13px; color: var(--text-sec); line-height: 18px;
+}
+.bill-card-gate__list { display: flex; flex-direction: column; gap: 10px; }
+.bill-card-gate__card {
+  width: 100%; border: 1px solid #EBEBEB; border-radius: 12px; background: #fff;
+  padding: 14px 14px 12px; text-align: left; font-family: inherit; color: inherit;
+  cursor: pointer; position: relative; box-sizing: border-box;
+}
+.bill-card-gate__card.is-on {
+  border-color: var(--brand); background: var(--brand-soft);
+}
+.bill-card-gate__card-check {
+  position: absolute; top: 12px; right: 12px; width: 20px; height: 20px; border-radius: 50%;
+  border: 1.5px solid #D9D9D9; background: #fff; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.bill-card-gate__card.is-on .bill-card-gate__card-check {
+  border-color: var(--brand); background: var(--brand);
+}
+.bill-card-gate__card-check svg { width: 11px; height: 11px; display: block; }
+.bill-card-gate__card-name {
+  font-size: 15px; font-weight: 600; color: #1A1A1A; padding-right: 28px; line-height: 22px;
+}
+.bill-card-gate__card-meta {
+  margin-top: 4px; font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.bill-card-gate__card-chips { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.bill-card-gate__skip {
+  flex-shrink: 0; height: 28px; padding: 0 12px; border-radius: 14px;
+  border: 1px solid var(--brand); background: #fff; color: var(--brand);
+  font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer;
+  line-height: 26px; box-sizing: border-box;
+}
+.bill-card-gate__skip:active { background: var(--brand-soft); }
+#screen-bill.is-card-gate .bottom-bar--bill { display: none; }
+#screen-bill:not(.is-card-gate) .bottom-bar--gate { display: none; }
+.bottom-bar--gate .bottom-bar__action {
+  display: flex; align-items: center; padding: 10px 16px 8px; background: #fff;
+  box-shadow: var(--bottom-shadow, 0 -0.5px 4px 0 rgba(0,0,0,0.08));
+}
+.bottom-bar--gate .btn-main {
+  flex: 1; margin: 0; max-width: none; height: 44px; border-radius: 22px;
+}
+.bottom-bar--gate .btn-main:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
+.bottom-bar--gate .bottom-bar__safe { flex: 1; min-height: 0; height: auto; background: #fff; }
+
+.bill-card-mode {
+  margin: 8px 16px 0; padding: 10px 12px; border-radius: 10px;
+  background: #fff; border: 0.5px solid #EBEBEB;
+  display: flex; align-items: center; gap: 10px;
+}
+.bill-card-mode__main { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 8px; }
+.bill-card-mode__mark {
+  width: 4px; align-self: stretch; min-height: 28px; border-radius: 2px;
+  background: var(--brand); flex-shrink: 0; margin-top: 2px;
+}
+.bill-card-mode__mark.is-muted { background: #D0D0D0; }
+.bill-card-mode__title {
+  font-size: 13px; font-weight: 600; color: #1A1A1A; line-height: 18px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bill-card-mode__sub {
+  margin-top: 2px; font-size: 11px; color: var(--text-sec); line-height: 16px;
+}
+.bill-card-mode__acts {
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.bill-card-mode__act {
+  border: none; background: transparent; color: var(--brand);
+  font-size: 12px; font-family: inherit; padding: 4px 6px; cursor: pointer; white-space: nowrap;
+}
+.bill-card-mode__act.is-muted { color: var(--text-mid); }
+.benefit-card.is-preferred {
+  outline: 1px solid var(--brand-border);
+  border-radius: 12px;
+}
+.bill-card-gate-empty {
+  padding: 48px 24px; text-align: center; color: var(--text-sec); font-size: 14px; line-height: 22px;
+}
 #screen-bill-staff .page-body { background: var(--bg-page); padding: 12px 0 20px; }
 .bill-staff-hint {
   margin: 0 16px 12px; font-size: 13px; color: var(--text-sec); line-height: 18px;
@@ -9707,6 +9840,59 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .add-card-staff-sheet__body .detail-item__staff-block { margin: 0; }
 .add-card-staff-sheet__body .detail-item__panel-row--staff-head { display: none; }
+.bill-staff-sheet__body .detail-item__panel-row--staff-head { display: none; }
+.detail-staff-block {
+  margin: 0; padding: 0 0 8px; box-sizing: border-box;
+  border-top: 0.5px solid #F0F0F0;
+}
+.detail-staff-entry {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  padding: 10px 0; border: none; background: transparent;
+  font-family: inherit; color: inherit; cursor: pointer; text-align: left;
+  box-sizing: border-box;
+}
+.detail-staff-entry__lbl {
+  flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: #1A1A1A;
+}
+.detail-staff-entry__val {
+  flex-shrink: 0; font-size: 13px; color: var(--text-sec);
+  display: inline-flex; align-items: center; gap: 2px;
+}
+.detail-staff-entry__val.has-staff { color: var(--brand); font-weight: 500; }
+.detail-staff-entry__arrow {
+  font-size: 13px; color: #C0C0C0; line-height: 1; font-weight: 400;
+  margin-left: 2px;
+}
+.detail-staff-entry__val.has-staff .detail-staff-entry__arrow { color: var(--brand); }
+.detail-staff-summary {
+  display: flex; flex-direction: column; gap: 8px; padding: 0 0 4px;
+}
+.detail-staff-summary__row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: #F7F7F7; border-radius: 10px;
+  box-sizing: border-box;
+}
+.detail-staff-summary__avatar {
+  width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  background: #E8E8E8;
+}
+.detail-staff-summary__main { flex: 1; min-width: 0; }
+.detail-staff-summary__name {
+  font-size: 14px; font-weight: 600; color: #1A1A1A; line-height: 20px;
+}
+.detail-staff-summary__role {
+  margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 16px;
+}
+.detail-staff-summary__meta {
+  margin-top: 2px; font-size: 12px; color: var(--brand); line-height: 16px;
+}
+.detail-staff-summary__del {
+  flex-shrink: 0; width: 28px; height: 28px; border: none; border-radius: 50%;
+  background: transparent; color: #B2B2B2; cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.detail-staff-summary__del:active { background: #EBEBEB; color: #666; }
+.detail-staff-summary__del svg { width: 16px; height: 16px; display: block; }
 #screen-add-card .member-card-item {
   position: relative;
 }
@@ -10206,7 +10392,12 @@ button.exp-flow-row:active { opacity: .92; }
   width: 18px; min-width: 18px;
   background: linear-gradient(-48deg, #5B6CFF 13%, #7B8CFF 84%);
 }
-.detail-item__name { font-size: 14px; font-weight: 500; flex: 1; }
+.detail-item__name { font-size: 14px; font-weight: 500; flex: 1; min-width: 0; }
+.detail-item__amt {
+  flex-shrink: 0; font-size: 16px; font-weight: 500; color: #1A1A1A;
+  font-family: var(--font-data); line-height: 22px; margin-top: 0;
+  white-space: nowrap;
+}
 .detail-item__expand {
   border: none; background: none; color: var(--text-sec); cursor: pointer; padding: 0;
   width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center;
@@ -10328,13 +10519,13 @@ button.exp-flow-row:active { opacity: .92; }
 .staff-card.is-editing .staff-card__panel[data-face="role"] {
   position: absolute;
   top: 50%;
-  width: min(248px, 72vw);
-  height: calc(min(248px, 72vw) / 2.2);
+  width: min(196px, 56vw);
+  height: calc(min(196px, 56vw) / 2.15);
   min-height: 0;
   padding: 0;
   gap: 0;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 16px 40px rgba(26, 26, 26, .2);
@@ -10406,7 +10597,7 @@ button.exp-flow-row:active { opacity: .92; }
   background: #FFF2F2;
 }
 .staff-card__split--3 .staff-card__split-btn {
-  font-size: 14px; font-weight: 600;
+  font-size: 13px; font-weight: 600;
 }
 .staff-card__avatar {
   width: 40px; height: 40px; border-radius: 20px; object-fit: cover;
@@ -10820,7 +11011,11 @@ button.exp-flow-row:active { opacity: .92; }
 (function () {
   try {
     var q = new URLSearchParams(location.search);
-    if (q.get('device') !== '1') return;
+    /* capture / figma 截图模式保持原布局，不抢真机预览 */
+    if (q.get('capture') === '1' || q.get('figma')) return;
+    var force = q.get('device') === '1';
+    var narrow = !!(window.matchMedia && window.matchMedia('(max-width: 960px)').matches);
+    if (!force && !narrow) return;
     document.documentElement.classList.add('device-preview');
     var meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
@@ -11098,63 +11293,40 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
 </div>
 
 <div class="screen hidden" id="screen-emp-ach">
-  <div class="page-title-bar">
+  <div class="page-title-bar page-title-bar--no-action">
     <button type="button" class="back" data-emp-back aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
     <span class="title title--with-help">业绩设置<button type="button" class="emp-ach-help-btn" id="empBtnAchHelp" aria-label="业绩说明"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.25v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.2" r="0.85" fill="currentColor"/></svg></button></span>
-    <button type="button" class="action emp-title-link" id="empBtnAchAdv">高级设置</button>
   </div>
   <div class="page-tabs" id="empAchTabs" role="tablist">
+    <button type="button" class="page-tabs__item" data-ach-tab="base" role="tab"><span class="page-tabs__label">基础设置</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
     <button type="button" class="page-tabs__item on" data-ach-tab="labor" role="tab"><span class="page-tabs__label">项目业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
     <button type="button" class="page-tabs__item" data-ach-tab="sales" role="tab"><span class="page-tabs__label">产品业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
     <button type="button" class="page-tabs__item" data-ach-tab="card" role="tab"><span class="page-tabs__label">办卡业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
-  </div>
-  <div class="page-top-hint">
-    <svg class="page-top-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <p class="page-top-hint__text">注意此处修改业绩，而不是提成！</p>
   </div>
   <div class="emp-ach-station-banner hidden" id="empAchStationBanner">
     <span class="emp-ach-station-banner__text" id="empAchStationBannerText">按工位分配中 · 点项目可分工位设置指定/非指定</span>
     <button type="button" class="emp-ach-station-banner__close" id="empAchStationBannerClose" aria-label="关闭提示">×</button>
   </div>
   <div class="page-body" style="padding:0;display:flex;flex-direction:column;min-height:0;flex:1;">
-    <div class="emp-ach-wrap">
+    <div class="emp-ach-wrap" id="empAchListWrap">
       <div class="emp-ach-cats" id="empAchCats"></div>
       <div class="emp-ach-items" id="empAchItems"></div>
     </div>
-  </div>
-</div>
-
-<div class="screen hidden" id="screen-emp-ach-adv">
-  <div class="page-title-bar">
-    <button type="button" class="back" data-emp-back-ach aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <span class="title">高级设置</span>
-  </div>
-  <div class="page-top-hint">
-    <svg class="page-top-hint__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <p class="page-top-hint__text">业绩规则仅保留外层未覆盖的场景口径。计算模式可按项目/产品/办卡分别设置；选「平均分配」时开单无需选工位，「按工位分配」时需选择工位。工位显示名称可在下方「工位映射」中修改（每项最多 3 个字）。</p>
-  </div>
-  <div class="page-body emp-ach-adv-body">
-    <div class="emp-ach-adv-stack">
-      <div>
-        <div class="proj-section-label emp-ach-adv-label">业绩规则</div>
-        <div class="proj-form-section emp-adv-rules-section" id="empAdvRules"></div>
-      </div>
-      <div>
-        <div class="proj-section-label emp-ach-adv-label">计算模式</div>
-        <div class="proj-form-section emp-calc-modes-section" id="empCalcModes"></div>
-      </div>
-      <div>
-        <div class="emp-ach-adv-label-row">
-          <div class="proj-section-label emp-ach-adv-label">工位映射</div>
-          <button type="button" class="emp-station-map-reset" id="empBtnStationMapReset">恢复为默认</button>
+    <div class="hidden" id="empAchBasePanel" aria-label="基础设置">
+      <div class="emp-ach-base-stack">
+        <div>
+          <p class="emp-section__title emp-ach-base-sec-title">业绩规则</p>
+          <div class="emp-adv-rules-section" id="empAdvRules"></div>
         </div>
-        <div class="proj-form-section emp-station-map-section" id="empStationMap"></div>
+        <div>
+          <div class="emp-ach-base-sec-row">
+            <p class="emp-section__title emp-ach-base-sec-title">工位映射</p>
+            <button type="button" class="emp-station-map-reset" id="empBtnStationMapReset">恢复为默认</button>
+          </div>
+          <div class="emp-card emp-station-map-section" id="empStationMap"></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="bottom-bar">
-    <div class="bottom-bar__action"><button type="button" class="btn-main" id="empBtnSaveAdv">保存</button></div>
-    <div class="bottom-bar__safe" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -11505,8 +11677,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <p>提成 = 对应业绩 × 比例，或按固定金额。若业绩已设置「扣除成本」，提成不再重复扣成本。</p>
       <h4>分配与复制</h4>
       <p>可在方案列表菜单或方案详情页选择被分配员工，支持自由多选；一人仅绑定一个方案，新分配会覆盖旧方案。</p>
-      <h4>免单与计算模式</h4>
-      <p>高级规则可配置赠金耗卡、赠送服务、免单与抵用券等场景口径；计算模式可按项目/产品/办卡分别设置平均或按工位；工位映射可改工位显示名（最多 3 字）。</p>
+      <h4>免单与基础设置</h4>
+      <p>「基础设置」可配置消耗赠送金额、赠送项目（产品）、免单与抵用券等场景口径；工位映射可改工位显示名（最多 3 字）。计算模式（平均分配 / 按工位分配）请在业绩设置 · 通用规则中按项目/产品/办卡分别切换。</p>
     </div>
     <div class="dialog__actions dialog__actions--single">
       <button type="button" class="btn-main" id="empHelpOk">知道了</button>
@@ -11519,9 +11691,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="dialog__title" id="empAchHelpTitle">业绩说明</div>
     <div class="dialog__scroll emp-help-body">
       <p>若设置扣除成本，则根据实收或售价减去成本再计算。</p>
-      <p>按比例设定：业绩=(售价-成本)*百分比</p>
-      <p>按固定设定：业绩=固定金额</p>
+      <p>按比例设定：业绩=(售价-成本)*百分比。项目/产品「通用规则」仅支持按比例。</p>
+      <p>单项业绩可另设固定金额：业绩=固定金额。</p>
       <p>快速消费默认计入项目业绩。</p>
+      <p>计算模式在「通用规则」中切换：平均分配无需选工位；按工位分配需选工位并可分工位配置。</p>
+      <p>「基础设置」可配置消耗赠送金额、免单等场景口径，以及工位显示名称。</p>
     </div>
     <div class="dialog__actions dialog__actions--single">
       <button type="button" class="btn-main" id="empAchHelpOk">知道了</button>
@@ -13084,6 +13258,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </div>
               <div class="bottom-bar__safe"></div>
             </div>
+            <div class="bottom-bar bottom-bar--gate" id="billGateBar" hidden>
+              <div class="bottom-bar__action">
+                <button type="button" class="btn-main" id="btnBillGateOk" disabled>确定</button>
+              </div>
+              <div class="bottom-bar__safe"></div>
+            </div>
           </div>
 
           <!-- 挂单列表 -->
@@ -13848,6 +14028,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="add-card-staff-sheet__body" id="addCardStaffRoot"></div>
               <div class="picker-foot">
                 <button type="button" class="btn-main" id="btnAddCardStaffDone">完成</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="billStaffMask">
+            <div class="picker-sheet tall" role="dialog" aria-label="选择员工">
+              <div class="picker-head">选择员工</div>
+              <p class="add-card-staff-sheet__hint" id="billStaffSheetHint"></p>
+              <div class="add-card-staff-sheet__body bill-staff-sheet__body" id="billStaffSheetRoot"></div>
+              <div class="picker-foot">
+                <button type="button" class="btn-main" id="btnBillStaffSheetDone">完成</button>
               </div>
             </div>
           </div>
@@ -26670,14 +26861,27 @@ function getFlowDeepLinkId() {
   return new URLSearchParams(location.search).get('flow');
 }
 
-function isDevicePreviewMode() {
-  return document.documentElement.classList.contains('device-preview')
-    || new URLSearchParams(location.search).get('device') === '1';
+/** ?device=1，或窄屏（手机浏览器 / DevTools 设备模式）自动真机预览 */
+function shouldUseDevicePreview() {
+  const q = new URLSearchParams(location.search);
+  if (q.get('capture') === '1' || q.get('figma')) return false;
+  if (q.get('device') === '1') return true;
+  return typeof window.matchMedia === 'function'
+    && window.matchMedia('(max-width: 960px)').matches;
 }
 
-/** 真机预览：按视口宽高等比缩放 390×844，居中展示 */
+function isDevicePreviewMode() {
+  return document.documentElement.classList.contains('device-preview')
+    || shouldUseDevicePreview();
+}
+
+/** 真机预览：按视口宽高等比缩放 390×844，居中展示；离开窄屏时恢复桌面壳 */
 function syncDevicePreviewScale() {
-  if (!isDevicePreviewMode()) return;
+  if (!shouldUseDevicePreview()) {
+    document.documentElement.classList.remove('device-preview');
+    document.documentElement.style.removeProperty('--phone-scale');
+    return;
+  }
   document.documentElement.classList.add('device-preview');
   const vw = window.innerWidth || document.documentElement.clientWidth || 390;
   const vh = window.innerHeight || document.documentElement.clientHeight || 844;
@@ -27187,8 +27391,7 @@ function billingNav(fn) {
     nodes: [
       { id: 'bill-pick', label: '① 选择顾客', screen: 'screen-pick' },
       { id: 'bill-bill', label: '② 点单台', screen: 'screen-bill' },
-      { id: 'bill-staff', label: '③ 服务人', screen: 'screen-bill-staff' },
-      { id: 'bill-detail', label: '④ 结算确认', screen: 'screen-detail' },
+      { id: 'bill-detail', label: '③ 结算确认', screen: 'screen-detail' },
       { id: 'bill-cart', label: '已选', screen: 'cartSheetMask' },
       { id: 'bill-checkout', label: '结账方式', screen: 'checkoutMask' },
       { id: 'bill-pay', label: '开单分账', screen: 'payMask' },
@@ -27274,10 +27477,7 @@ function billingNav(fn) {
         else billingNav('pick')();
       },
       'bill-bill': billingNav('bill'),
-      'bill-staff'() {
-        if (window.BillingDemo && window.BillingDemo.openBillStaff) window.BillingDemo.openBillStaff();
-        else billingNav('detail')();
-      },
+      'bill-staff': billingNav('detail'),
       'bill-cart': billingNav('cart'),
       'bill-detail': billingNav('detail'),
       'bill-checkout': billingNav('checkout'),
@@ -27363,8 +27563,8 @@ function billingNav(fn) {
   ];
   var RULE_OPTS = ['按实收金额', '按耗卡金额', '按售价', '不计算业绩', '按原价金额'];
   var ADV_RULE_DEFS = [
-    { id: 'ar4', label: '赠金耗卡', options: ['不计算业绩', '按卡耗金额计算'], defaultValue: '按卡耗金额计算' },
-    { id: 'ar5', label: '赠送服务', options: ['不计算业绩', '按原价计算'], defaultValue: '不计算业绩' },
+    { id: 'ar4', label: '消耗赠送金额', options: ['不计算业绩', '按卡耗金额计算'], defaultValue: '按卡耗金额计算' },
+    { id: 'ar5', label: '赠送项目（产品）', options: ['不计算业绩', '按原价计算'], defaultValue: '不计算业绩' },
     { id: 'ar9', label: '免单', options: ['不计算业绩提成', '计算业绩，不计算提成', '计算业绩和提成'], defaultValue: '不计算业绩提成' },
     { id: 'ar7', label: '抵用券', options: ['不计算业绩', '按原价计算'], defaultValue: '不计算业绩' },
   ];
@@ -27540,13 +27740,13 @@ function billingNav(fn) {
       },
     },
     advRules: [
-      { id: 'ar4', label: '赠金耗卡', value: '按卡耗金额计算' },
-      { id: 'ar5', label: '赠送服务', value: '不计算业绩', special: true },
+      { id: 'ar4', label: '消耗赠送金额', value: '按卡耗金额计算' },
+      { id: 'ar5', label: '赠送项目（产品）', value: '不计算业绩', special: true },
       { id: 'ar9', label: '免单', value: '不计算业绩提成', special: true },
       { id: 'ar7', label: '抵用券', value: '不计算业绩', special: true },
     ],
-    calcMode: 'avg',
-    calcModeLabor: 'avg',
+    calcMode: 'station',
+    calcModeLabor: 'station',
     calcModeSales: 'avg',
     calcModeCard: 'avg',
     stationMap: { senior: '大工', mid: '中工', junior: '小工' },
@@ -28843,7 +29043,7 @@ function billingNav(fn) {
   }
 
   function syncCardBaseToAdvRule() {
-    /* 开卡计入基数仅在「办卡业绩」维护，高级设置不再重复「开卡」规则 */
+    /* 开卡计入基数仅在「办卡业绩」维护，基础设置不再重复「开卡」规则 */
   }
 
   function buildCardAchBucket(prevCard) {
@@ -29054,7 +29254,37 @@ function billingNav(fn) {
 
   function getAchTabDefaultScheme(tab) {
     var bucket = window.EmployeeStore.ach && window.EmployeeStore.ach[tab];
-    return ensureAchStations(mergeAchScheme(bucket && bucket.defaultScheme, defaultAchScheme()));
+    var sch = ensureAchStations(mergeAchScheme(bucket && bucket.defaultScheme, defaultAchScheme()));
+    /* S1 M1：项目/产品通用规则仅按比例；历史 amount 收敛并写回 */
+    if (sch.valueMode === 'amount') {
+      sch.valueMode = 'pct';
+      if (bucket) bucket.defaultScheme = cloneAchScheme(sch);
+    } else {
+      sch.valueMode = 'pct';
+    }
+    return sch;
+  }
+
+  function isAchTabDefaultEdit() {
+    return !!(state.achEdit && state.achEdit.kind === 'tabDefault');
+  }
+
+  function renderAchCalcModeSegHtml(kind) {
+    ensureCalcModes();
+    var cur = getAchCalcMode(kind);
+    var opts = CALC_MODES.map(function (m) {
+      var on = m.id === cur;
+      return '<button type="button" class="emp-ach-calc-seg__btn' + (on ? ' on' : '') +
+        '" data-calc-kind="' + esc(kind) + '" data-calc-mode="' + m.id +
+        '" role="radio" aria-checked="' + (on ? 'true' : 'false') + '">' + esc(m.label) + '</button>';
+    }).join('');
+    var hint = cur === 'station'
+      ? '按工位分配：开单需选择工位，并可分工位配置指定/非指定。'
+      : '平均分配：开单无需选择工位，多人平分业绩。';
+    return '<div class="emp-ach-calc-block">' +
+      '<div class="emp-ach-calc-block__title">计算模式</div>' +
+      '<div class="emp-ach-calc-seg" role="radiogroup" aria-label="计算模式">' + opts + '</div>' +
+      '<p class="emp-ach-calc-block__hint">' + esc(hint) + '</p></div>';
   }
 
   function renderTabAchRulesHtml(tab, data) {
@@ -29063,6 +29293,7 @@ function billingNav(fn) {
     var cost = formatAchCostShort(sch);
     var noun = tab === 'sales' ? '产品' : '项目';
     return '<div class="emp-ach-card-rules">' +
+      renderAchCalcModeSegHtml(tab) +
       '<div class="emp-ach-income-block emp-ach-income-block--solo">' +
       '<div class="emp-ach-income-block__title">默认业绩方案</div>' +
       '<div class="emp-ach-income-cards emp-ach-income-cards--1">' +
@@ -29079,6 +29310,7 @@ function billingNav(fn) {
     var chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
     var incomeTypes = card.incomeTypes || ensureCardIncomeTypes(card);
     var html = '<div class="emp-ach-card-rules">' +
+      renderAchCalcModeSegHtml('card') +
       '<button type="button" class="emp-ach-rule-row" data-card-ach-base>' +
       '<span>计入基数</span>' +
       '<span class="emp-ach-rule-row__val has-val">' + esc(card.baseMode || '按实收金额') + chev + '</span></button>' +
@@ -29115,7 +29347,10 @@ function billingNav(fn) {
 
   function renderAchEditBody(scheme) {
     scheme = ensureAchStations(scheme);
-    var isAmt = (state.achEdit && state.achEdit.valueMode === 'amount') || scheme.valueMode === 'amount';
+    var pctOnly = isAchTabDefaultEdit();
+    var isAmt = pctOnly
+      ? false
+      : ((state.achEdit && state.achEdit.valueMode === 'amount') || scheme.valueMode === 'amount');
     var cost = (state.achEdit && state.achEdit.costMode) || scheme.costMode || 'off';
     var tabKind = (state.achEdit && state.achEdit.tab) || state.achTab || 'labor';
     var stationMode = getAchCalcMode(tabKind) === 'station';
@@ -29136,13 +29371,17 @@ function billingNav(fn) {
       html += '</div>' +
         '<p class="emp-ach-edit-station-tip">开单选该工位时，按下方指定/非指定计算业绩</p></div>';
     }
-    html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">业绩取值</div>' +
-      '<div class="emp-ach-edit-radios" role="radiogroup" aria-label="业绩取值">' +
-      '<label class="emp-ach-edit-radio" data-ach-value-mode="pct">' +
-      '<input type="radio" name="empAchValueMode" value="pct"' + (!isAmt ? ' checked' : '') + ' />按比例</label>' +
-      '<label class="emp-ach-edit-radio" data-ach-value-mode="amount">' +
-      '<input type="radio" name="empAchValueMode" value="amount"' + (isAmt ? ' checked' : '') + ' />固定金额</label>' +
-      '</div></div>';
+    html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">业绩取值</div>';
+    if (pctOnly) {
+      html += '<p class="emp-ach-edit-value-only">按比例</p></div>';
+    } else {
+      html += '<div class="emp-ach-edit-radios" role="radiogroup" aria-label="业绩取值">' +
+        '<label class="emp-ach-edit-radio" data-ach-value-mode="pct">' +
+        '<input type="radio" name="empAchValueMode" value="pct"' + (!isAmt ? ' checked' : '') + ' />按比例</label>' +
+        '<label class="emp-ach-edit-radio" data-ach-value-mode="amount">' +
+        '<input type="radio" name="empAchValueMode" value="amount"' + (isAmt ? ' checked' : '') + ' />固定金额</label>' +
+        '</div></div>';
+    }
     html += '<div class="emp-ach-pads" id="empAchEditValueFields">';
     if (isAmt) {
       html += renderAchEditPad({ kind: 'des', isAmt: true, inputId: 'empAchEditDesAmt', value: pair.designatedAmt });
@@ -29190,7 +29429,12 @@ function billingNav(fn) {
     var strict = !!opts.strict;
     if (!state.achEdit || !state.achEdit.draft) return { ok: true };
     var draft = ensureAchStations(state.achEdit.draft);
-    draft.valueMode = state.achEdit.valueMode === 'amount' ? 'amount' : 'pct';
+    if (isAchTabDefaultEdit()) {
+      state.achEdit.valueMode = 'pct';
+      draft.valueMode = 'pct';
+    } else {
+      draft.valueMode = state.achEdit.valueMode === 'amount' ? 'amount' : 'pct';
+    }
     draft.costMode = state.achEdit.costMode || 'off';
     var tabKind = state.achEdit.tab || state.achTab || 'labor';
     var stationMode = getAchCalcMode(tabKind) === 'station';
@@ -29288,13 +29532,15 @@ function billingNav(fn) {
     opts = opts || {};
     var scheme = ensureAchStations(mergeAchScheme(opts.scheme));
     var tab = opts.tab || state.achTab;
+    var kind = opts.kind || 'item';
+    if (kind === 'tabDefault') scheme.valueMode = 'pct';
     state.achEdit = {
-      kind: opts.kind || 'item',
+      kind: kind,
       itemId: opts.itemId || null,
       typeKey: opts.typeKey || null,
       catId: opts.catId || state.achCatId,
       tab: tab,
-      valueMode: scheme.valueMode,
+      valueMode: kind === 'tabDefault' ? 'pct' : scheme.valueMode,
       costMode: scheme.costMode,
       title: opts.title || '业绩方案',
       stationId: opts.stationId || 'senior',
@@ -29349,6 +29595,7 @@ function billingNav(fn) {
       var tabKey = edit.tab === 'sales' ? 'sales' : 'labor';
       var bucket = window.EmployeeStore.ach[tabKey];
       if (!bucket) { toast('未找到业绩数据', true); return; }
+      scheme.valueMode = 'pct';
       bucket.defaultScheme = cloneAchScheme(scheme);
     } else if (edit.kind === 'cardDefault') {
       var card = window.EmployeeStore.ach.card || ensureCardAchDefaults();
@@ -29497,6 +29744,22 @@ function billingNav(fn) {
   }
 
   function renderAch() {
+    var isBase = state.achTab === 'base';
+    var listWrap = $('empAchListWrap');
+    var basePanel = $('empAchBasePanel');
+    var banner = $('empAchStationBanner');
+    var bannerText = $('empAchStationBannerText');
+    if (listWrap) listWrap.classList.toggle('hidden', isBase);
+    if (basePanel) basePanel.classList.toggle('hidden', !isBase);
+    document.querySelectorAll('#empAchTabs .page-tabs__item').forEach(function (btn) {
+      btn.classList.toggle('on', btn.dataset.achTab === state.achTab);
+      btn.setAttribute('aria-selected', btn.dataset.achTab === state.achTab ? 'true' : 'false');
+    });
+    if (isBase) {
+      if (banner) banner.classList.add('hidden');
+      renderAdv();
+      return;
+    }
     syncAchFromCatalog();
     var data = getAchData();
     var catsEl = $('empAchCats');
@@ -29505,8 +29768,6 @@ function billingNav(fn) {
     if (!state.achCatId || !data.cats.some(function (c) { return c.id === state.achCatId; })) {
       state.achCatId = data.cats[0] ? data.cats[0].id : null;
     }
-    var banner = $('empAchStationBanner');
-    var bannerText = $('empAchStationBannerText');
     var stationOn = getAchCalcMode(state.achTab) === 'station';
     if (banner) {
       var showBanner = stationOn && !state.achStationBannerDismissed;
@@ -29547,10 +29808,6 @@ function billingNav(fn) {
       }).join('') || '<div class="empty-cart" style="padding:24px 16px">暂无项目</div>';
       itemsEl.classList.remove('is-tpl-list');
     }
-    document.querySelectorAll('#empAchTabs .page-tabs__item').forEach(function (btn) {
-      btn.classList.toggle('on', btn.dataset.achTab === state.achTab);
-      btn.setAttribute('aria-selected', btn.dataset.achTab === state.achTab ? 'true' : 'false');
-    });
   }
 
   function ensureAdvRules() {
@@ -29650,7 +29907,10 @@ function billingNav(fn) {
     }
     state.calcModePending = null;
     closeEmpDialog('empCalcModeConfirmMask');
-    if (revert) renderAdv();
+    if (revert) {
+      if (typeof renderAdv === 'function') renderAdv();
+      renderAch();
+    }
   }
 
   function openCalcModeConfirm(kind, prevMode, nextMode) {
@@ -29663,13 +29923,13 @@ function billingNav(fn) {
       if (bodyEl) {
         bodyEl.textContent = '「' + label + '」改为按工位分配后，开单需选择工位；可在业绩设置中为各工位分别配置指定/非指定方案。';
       }
-      if (okEl) okEl.textContent = '去配置业绩';
+      if (okEl) okEl.textContent = '确定';
     } else {
       if (titleEl) titleEl.textContent = '切换为平均分配？';
       if (bodyEl) {
         bodyEl.textContent = '「' + label + '」改为平均分配后，开单无需选择工位；该类型下各工位方案将合并为统一配置。';
       }
-      if (okEl) okEl.textContent = '查看业绩设置';
+      if (okEl) okEl.textContent = '确定';
     }
     state.calcModePending = {
       kind: kind,
@@ -29678,7 +29938,7 @@ function billingNav(fn) {
       achSnapshot: snapshotAchKind(kind)
     };
     setAchCalcMode(kind, nextMode);
-    renderAdv();
+    renderAch();
     openEmpDialog('empCalcModeConfirmMask');
   }
 
@@ -29689,10 +29949,9 @@ function billingNav(fn) {
       return;
     }
     state.achTab = pending.kind;
-    if (pending.kind === 'card' && !state.achCatId) state.achCatId = 'card_rules';
-    if ((pending.kind === 'labor' || pending.kind === 'sales') && !state.achCatId) {
-      state.achCatId = getAchCommonRulesCatId(pending.kind);
-    }
+    if (pending.kind === 'card') state.achCatId = 'card_rules';
+    else state.achCatId = getAchCommonRulesCatId(pending.kind);
+    state.achStationBannerDismissed = false;
     state.calcModePending = null;
     closeEmpDialog('empCalcModeConfirmMask');
     openAch();
@@ -29805,11 +30064,9 @@ function billingNav(fn) {
 
   function renderAdv() {
     var rulesEl = $('empAdvRules');
-    var modesEl = $('empCalcModes');
     var stationEl = $('empStationMap');
-    if (!rulesEl || !modesEl || !stationEl) return;
+    if (!rulesEl || !stationEl) return;
     var rules = ensureAdvRules();
-    ensureCalcModes();
     ensureStationMap();
     rulesEl.innerHTML = rules.map(function (r) {
       var opts = advRuleOptsForLabel(r.label);
@@ -29822,19 +30079,6 @@ function billingNav(fn) {
       }).join('');
       return '<div class="emp-adv-rule-block" role="radiogroup" aria-label="' + esc(r.label) + '">' +
         '<p class="emp-adv-rule-block__title">' + esc(r.label) + '</p>' +
-        optsHtml +
-        '</div>';
-    }).join('');
-    modesEl.innerHTML = CALC_MODE_GROUPS.map(function (g) {
-      var cur = getAchCalcMode(g.key);
-      var optsHtml = CALC_MODES.map(function (m) {
-        var on = m.id === cur;
-        return '<button type="button" class="emp-calc-mode' + (on ? ' on' : '') + '" data-calc-kind="' + esc(g.key) + '" data-calc-mode="' + m.id + '" role="radio" aria-checked="' + (on ? 'true' : 'false') + '">' +
-          '<span class="emp-calc-mode__lbl">' + esc(m.label) + '</span>' +
-          '<span class="emp-calc-mode__radio" aria-hidden="true"></span></button>';
-      }).join('');
-      return '<div class="emp-adv-rule-block" role="radiogroup" aria-label="' + esc(g.label) + '">' +
-        '<p class="emp-adv-rule-block__title">' + esc(g.label) + '</p>' +
         optsHtml +
         '</div>';
     }).join('');
@@ -31005,7 +31249,7 @@ function billingNav(fn) {
 
   function openAch() {
     closeAllEmpMasks();
-    if (!state.achTab) state.achTab = 'labor';
+    if (!state.achTab || state.achTab === 'base') state.achTab = 'labor';
     if (state.achTab === 'card' && !state.achCatId) state.achCatId = 'card_rules';
     if ((state.achTab === 'labor' || state.achTab === 'sales') && !state.achCatId) {
       state.achCatId = getAchCommonRulesCatId(state.achTab);
@@ -31013,6 +31257,14 @@ function billingNav(fn) {
     renderAch();
     showScreen('screen-emp-ach');
     nav('staff-ach');
+  }
+
+  function openAchBase() {
+    closeAllEmpMasks();
+    state.achTab = 'base';
+    renderAch();
+    showScreen('screen-emp-ach');
+    nav('staff-ach-adv');
   }
 
   function openComm() {
@@ -31070,7 +31322,7 @@ function billingNav(fn) {
         nav('staff-rewards');
       },
       'staff-ach': openAch,
-      'staff-ach-adv': function () { renderAdv(); showScreen('screen-emp-ach-adv'); nav('staff-ach-adv'); },
+      'staff-ach-adv': openAchBase,
       'staff-comm': openComm,
       'staff-comm-create': function () { openCreateSchemeTypeDialog(); showScreen('screen-emp-comm'); nav('staff-comm-create'); },
       'staff-comm-single': function () { var id = state.editingSchemeId || 'sch1'; openCommEditor(id); },
@@ -31108,7 +31360,7 @@ function billingNav(fn) {
           { id: 'staff-reward-detail', label: '奖惩明细', screen: 'screen-emp-reward-detail' },
           { id: 'staff-rewards', label: '奖惩设置', screen: 'screen-emp-rewards' },
           { id: 'staff-ach', label: '业绩设置', screen: 'screen-emp-ach' },
-          { id: 'staff-ach-adv', label: '高级规则', screen: 'screen-emp-ach-adv' },
+          { id: 'staff-ach-adv', label: '基础设置', screen: 'screen-emp-ach' },
           { id: 'staff-comm', label: '提成设置', screen: 'screen-emp-comm' },
           { id: 'staff-comm-create', label: '新建方案', screen: 'screen-emp-comm' },
           { id: 'staff-comm-single', label: '固定比例', screen: 'screen-emp-comm-edit' },
@@ -31136,6 +31388,10 @@ function billingNav(fn) {
         });
         empGroup.nodes.forEach(function (n) {
           if (n.id === 'staff-salary-detail') n.label = '员工业绩提成明细';
+          if (n.id === 'staff-ach-adv') {
+            n.label = '基础设置';
+            n.screen = 'screen-emp-ach';
+          }
         });
         empGroup.nodes = empGroup.nodes.filter(function (n) { return n.id !== 'staff-card-share'; });
         if (typeof renderFlowMap === 'function') renderFlowMap();
@@ -31195,9 +31451,6 @@ function billingNav(fn) {
         }
         openSalary();
       });
-    });
-    document.querySelectorAll('[data-emp-back-ach]').forEach(function (btn) {
-      btn.addEventListener('click', openAch);
     });
     document.querySelectorAll('[data-emp-back-comm]').forEach(function (btn) {
       btn.addEventListener('click', openComm);
@@ -31537,10 +31790,16 @@ function billingNav(fn) {
       var tab = e.target.closest('[data-ach-tab]');
       if (!tab) return;
       state.achTab = tab.dataset.achTab;
+      if (state.achTab === 'base') {
+        renderAch();
+        nav('staff-ach-adv');
+        return;
+      }
       if (state.achTab === 'card') state.achCatId = 'card_rules';
       else if (state.achTab === 'labor' || state.achTab === 'sales') state.achCatId = getAchCommonRulesCatId(state.achTab);
       else state.achCatId = null;
       renderAch();
+      nav('staff-ach');
     });
     $('empAchCats')?.addEventListener('click', function (e) {
       var cat = e.target.closest('[data-ach-cat]');
@@ -31549,6 +31808,17 @@ function billingNav(fn) {
       renderAch();
     });
     $('empAchItems')?.addEventListener('click', function (e) {
+      var calcBtn = e.target.closest('[data-calc-kind][data-calc-mode]');
+      if (calcBtn) {
+        e.stopPropagation();
+        if (state.calcModePending) return;
+        var kind = calcBtn.dataset.calcKind;
+        var next = calcBtn.dataset.calcMode === 'station' ? 'station' : 'avg';
+        var prev = getAchCalcMode(kind);
+        if (prev === next) return;
+        openCalcModeConfirm(kind, prev, next);
+        return;
+      }
       var cap = e.target.closest('.emp-ach-cap');
       if (cap) {
         e.stopPropagation();
@@ -31648,6 +31918,7 @@ function billingNav(fn) {
       }
       var vm = e.target.closest('[data-ach-value-mode]');
       if (vm && state.achEdit) {
+        if (isAchTabDefaultEdit()) return;
         var nextMode = vm.dataset.achValueMode;
         if (state.achEdit.valueMode === nextMode) return;
         flushAchEditStationFromDom();
@@ -31726,7 +31997,6 @@ function billingNav(fn) {
       }
     });
 
-    $('empBtnAchAdv')?.addEventListener('click', function () { renderAdv(); showScreen('screen-emp-ach-adv'); nav('staff-ach-adv'); });
     $('empAdvRules')?.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-adv-rule-id][data-adv-rule-val]');
       if (!opt) return;
@@ -31757,16 +32027,6 @@ function billingNav(fn) {
       state.ruleEditIdx = null;
     });
     $('empRuleCancel')?.addEventListener('click', function () { closeMask('empRuleMask'); });
-    $('empCalcModes')?.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-calc-kind][data-calc-mode]');
-      if (!btn) return;
-      if (state.calcModePending) return;
-      var kind = btn.dataset.calcKind;
-      var next = btn.dataset.calcMode === 'station' ? 'station' : 'avg';
-      var prev = getAchCalcMode(kind);
-      if (prev === next) return;
-      openCalcModeConfirm(kind, prev, next);
-    });
     $('empCalcModeConfirmCancel')?.addEventListener('click', function () {
       closeCalcModeConfirm(true);
     });
@@ -31798,21 +32058,6 @@ function billingNav(fn) {
       resetStationMapToDefault();
       renderAdv();
       toast('已恢复为默认工位名称');
-    });
-    $('empBtnSaveAdv')?.addEventListener('click', function () {
-      var stationErr = validateStationMapForSave();
-      if (stationErr) { toast(stationErr, true); return; }
-      var stationKinds = [];
-      if (getAchCalcMode('labor') === 'station') stationKinds.push('项目');
-      if (getAchCalcMode('sales') === 'station') stationKinds.push('产品');
-      if (getAchCalcMode('card') === 'station') stationKinds.push('办卡');
-      if (stationKinds.length) {
-        state.achStationBannerDismissed = false;
-        toast('已保存。返回业绩设置后，可为' + stationKinds.join('/') + '分工位配置指定与非指定');
-      } else {
-        toast('高级规则已保存');
-      }
-      openAch();
     });
 
     $('empCommList')?.addEventListener('click', function (e) {
@@ -34794,9 +35039,102 @@ window.__BILLING_EMBEDDED__ = true;
     return (state.cart || []).find(x => x.id === cartId) || null;
   }
   function refreshStaffPickerUi(cartId) {
-    if (cartId === '__issue__') renderAddCardStaffOnly();
-    else renderDetail();
+    if (cartId === '__issue__') {
+      renderAddCardStaffOnly();
+      return;
+    }
+    const mask = document.getElementById('billStaffMask');
+    const sheetOpen = !!(mask && mask.classList.contains('open'));
+    if (sheetOpen && state.billStaffSheetCartId === cartId) {
+      renderBillStaffSheet();
+      return;
+    }
+    renderDetail();
   }
+
+  function renderDetailStaffSummary(it) {
+    ensureCartStaffState(it);
+    const ids = it.staffIds || [];
+    if (!ids.length) return '';
+    const pool = getStaffPool();
+    const delSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    const rows = ids.map(sid => {
+      const st = pool.find(s => s.id === sid);
+      const name = st ? st.name : sid;
+      const job = st && st.role ? st.role : '';
+      const designated = it.staffDesignated[sid] === true;
+      const guestLabel = designated ? '点客' : '散客';
+      const role = it.staffRoles[sid];
+      const params = isAvgAchCalcModeForItem(it)
+        ? guestLabel
+        : `${guestLabel}${role ? ` · ${staffRoleLabel(role)}` : ''}`;
+      const av = st && st.avatar
+        ? `<img class="detail-staff-summary__avatar" src="${escapeHtml(st.avatar)}" alt="" width="36" height="36">`
+        : `<span class="detail-staff-summary__avatar" style="display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;background:#B2B2B2">${escapeHtml((st && st.short) || String(name).slice(0, 1))}</span>`;
+      return `<div class="detail-staff-summary__row">
+        ${av}
+        <div class="detail-staff-summary__main">
+          <div class="detail-staff-summary__name">${escapeHtml(name)}</div>
+          ${job ? `<div class="detail-staff-summary__role">${escapeHtml(job)}</div>` : ''}
+          <div class="detail-staff-summary__meta">${escapeHtml(params)}</div>
+        </div>
+        <button type="button" class="detail-staff-summary__del" data-staff-summary-del data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(sid)}" aria-label="移除 ${escapeHtml(name)}">${delSvg}</button>
+      </div>`;
+    }).join('');
+    return `<div class="detail-staff-summary">${rows}</div>`;
+  }
+
+  function renderDetailStaffSection(it) {
+    ensureCartStaffState(it);
+    const n = (it.staffIds || []).length;
+    const val = n ? `已选 ${n} 人` : '未选择';
+    return `<div class="detail-staff-block">
+      <button type="button" class="detail-staff-entry" data-open-bill-staff="${escapeHtml(it.id)}">
+        <span class="detail-staff-entry__lbl">选择员工</span>
+        <span class="detail-staff-entry__val${n ? ' has-staff' : ''}">${escapeHtml(val)}<span class="detail-staff-entry__arrow" aria-hidden="true">＞</span></span>
+      </button>
+      ${renderDetailStaffSummary(it)}
+    </div>`;
+  }
+
+  function renderBillStaffSheet() {
+    const root = document.getElementById('billStaffSheetRoot');
+    const hint = document.getElementById('billStaffSheetHint');
+    const cartId = state.billStaffSheetCartId;
+    const it = (state.cart || []).find(x => x.id === cartId);
+    if (!root || !it) return;
+    ensureCartStaffState(it);
+    const avg = isAvgAchCalcModeForItem(it);
+    if (hint) {
+      hint.textContent = avg
+        ? '可多选员工；点卡片后选择点客或散客（即时生效）。'
+        : `可多选员工；点卡片后选择点客/散客，再选工位（${stationRoleLabelsJoined()}），即时生效。`;
+    }
+    root.innerHTML = renderStaffPickerHtml(it);
+    const editingPanel = root.querySelector('.staff-card.is-editing .staff-card__panel');
+    if (editingPanel) {
+      editingPanel.style.animation = 'none';
+      void editingPanel.offsetWidth;
+      editingPanel.style.animation = '';
+    }
+  }
+
+  function openBillStaffSheet(cartId) {
+    const it = (state.cart || []).find(x => x.id === cartId);
+    if (!it) return;
+    state.billStaffSheetCartId = cartId;
+    state.staffCardEdit = null;
+    renderBillStaffSheet();
+    openMask('billStaffMask');
+  }
+
+  function closeBillStaffSheet() {
+    clearStaffCardEdit();
+    state.billStaffSheetCartId = null;
+    closeMask('billStaffMask');
+    if (!document.getElementById('screen-detail')?.classList.contains('hidden')) renderDetail();
+  }
+
   function renderAddCardStaffOnly() {
     const root = document.getElementById('addCardStaffRoot');
     const hint = document.getElementById('addCardStaffHint');
@@ -35034,6 +35372,10 @@ window.__BILLING_EMBEDDED__ = true;
     billGroupId: { project: 'all', product: 'all' },
     searchQuery: '',
     cardsExpanded: false,
+    billCardGateOpen: false,
+    billCardGateDone: false,
+    billPickCardId: null,
+    billGateDraftCardId: null,
     linkedCardIds: [],
     billRechargeCardId: null,
     billRechargeAmount: '',
@@ -35047,6 +35389,7 @@ window.__BILLING_EMBEDDED__ = true;
     cashierId: null,
     billWizardStep: 'customer',
     billStaffExpandedId: null,
+    billStaffSheetCartId: null,
     payChannel: 'alipay',
     payAmounts: {},
     payManualEdit: {},
@@ -35278,7 +35621,11 @@ window.__BILLING_EMBEDDED__ = true;
     if (!btn) return;
     btn.classList.remove('hidden');
     btn.setAttribute('aria-hidden', 'false');
-    btn.setAttribute('aria-label', state.billFromHold ? '返回挂单列表' : '返回选择顾客');
+    let label = '返回选择顾客';
+    if (state.billFromHold) label = '返回挂单列表';
+    else if (state.billCardGateOpen) label = '返回选择顾客';
+    else if (shouldOfferBillCardGate() && state.billCardGateDone) label = '返回选择会员卡';
+    btn.setAttribute('aria-label', label);
   }
 
   function enterBillUnselected() {
@@ -35292,7 +35639,6 @@ window.__BILLING_EMBEDDED__ = true;
   const BILL_WIZARD_STEPS = [
     { id: 'customer', label: '顾客' },
     { id: 'catalog', label: '点单' },
-    { id: 'staff', label: '服务人' },
     { id: 'settle', label: '结算' },
   ];
 
@@ -35324,12 +35670,12 @@ window.__BILLING_EMBEDDED__ = true;
 
   function syncBillStepBars(activeId) {
     state.billWizardStep = activeId;
-    ['billCustomerSteps', 'billCatalogSteps', 'billStaffSteps', 'billSettleSteps'].forEach(id => {
+    ['billCustomerSteps', 'billCatalogSteps', 'billSettleSteps'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = renderBillStepBar(activeId);
     });
     if (typeof setFlowNavHighlight === 'function') {
-      const map = { customer: 'bill-pick', catalog: 'bill-bill', staff: 'bill-staff', settle: 'bill-detail' };
+      const map = { customer: 'bill-pick', catalog: 'bill-bill', settle: 'bill-detail' };
       if (map[activeId]) setFlowNavHighlight(map[activeId]);
     }
   }
@@ -35340,10 +35686,12 @@ window.__BILLING_EMBEDDED__ = true;
       state.customer = GUEST_UNSET;
       state.guestGender = null;
       state.cardsExpanded = false;
+      resetBillCardPick();
     }
     ensureCashierId();
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
+    state.billCardGateOpen = false;
     syncPickHoldsEntry();
     state.searchQuery = '';
     const search = document.getElementById('pickSearch');
@@ -35369,16 +35717,262 @@ window.__BILLING_EMBEDDED__ = true;
     }
   }
 
-  function openBillCatalog() {
+  function openBillCatalog(opts) {
+    opts = opts || {};
     if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
     ensureCashierId();
     if (!state.customer) enterBillCustomerOnly(GUEST_UNSET);
+    if (opts.resetCardPick) resetBillCardPick();
+    const needGate = !opts.skipGate && shouldOfferBillCardGate() && !state.billCardGateDone;
+    state.billCardGateOpen = !!needGate;
+    if (needGate) {
+      state.billCustomerPickOpen = false;
+      state.billGateDraftCardId = state.billPickCardId || null;
+    } else {
+      state.billGateDraftCardId = null;
+    }
     renderBillHeader();
     syncCartChrome();
     syncPickHoldsEntry();
     syncBillBackChrome();
+    syncBillCardGateChrome();
     syncBillStepBars('catalog');
     showOnlyScreen('screen-bill');
+  }
+
+  function resetBillCardPick() {
+    state.billCardGateOpen = false;
+    state.billCardGateDone = false;
+    state.billPickCardId = null;
+    state.billGateDraftCardId = null;
+  }
+
+  function shouldOfferBillCardGate() {
+    return isMemberBill();
+  }
+
+  function getBillPickCard() {
+    if (!state.billPickCardId) return null;
+    return findHeldCardById(state.billPickCardId);
+  }
+
+  function syncBillGateOkBtn() {
+    const ok = document.getElementById('btnBillGateOk');
+    if (!ok) return;
+    const cards = (getCustomer().cards || []);
+    if (!cards.length) {
+      ok.disabled = false;
+      return;
+    }
+    ok.disabled = !state.billGateDraftCardId;
+  }
+
+  function syncBillCardGateChrome() {
+    const on = !!state.billCardGateOpen;
+    document.getElementById('screen-bill')?.classList.toggle('is-card-gate', on);
+    const gateBar = document.getElementById('billGateBar');
+    if (gateBar) {
+      if (on) gateBar.removeAttribute('hidden');
+      else gateBar.setAttribute('hidden', '');
+    }
+    syncBillGateOkBtn();
+  }
+
+  function openBillCardGate() {
+    if (!shouldOfferBillCardGate()) {
+      state.billCardGateOpen = false;
+      state.billCardGateDone = true;
+      state.billGateDraftCardId = null;
+      renderBillHeader();
+      syncBillCardGateChrome();
+      return;
+    }
+    state.billCardGateOpen = true;
+    state.billCustomerPickOpen = false;
+    state.billGateDraftCardId = state.billPickCardId || null;
+    renderBillHeader();
+    syncBillBackChrome();
+    syncBillCardGateChrome();
+    syncBillStepBars('catalog');
+    showOnlyScreen('screen-bill');
+  }
+
+  function getCardCatalogScope(card) {
+    if (!card) return { mode: 'all', universal: false };
+    const namesProj = new Set();
+    const namesProd = new Set();
+    const idsProj = new Set();
+    const idsProd = new Set();
+    (card.projects || []).forEach(p => {
+      if (p && p.key) namesProj.add(String(p.key));
+      if (p && p.label) namesProj.add(String(p.label));
+    });
+    const tpl = CARD_TPL_BY_ID[heldTemplateId(card)];
+    (tpl && tpl.projectItems || []).forEach(i => {
+      if (i && i.name) namesProj.add(String(i.name));
+      if (i && i.id) idsProj.add(String(i.id));
+    });
+    (tpl && tpl.productItems || []).forEach(i => {
+      if (i && i.name) namesProd.add(String(i.name));
+      if (i && i.id) idsProd.add(String(i.id));
+    });
+    if (namesProj.size || namesProd.size || idsProj.size || idsProd.size) {
+      return { mode: 'filter', namesProj, namesProd, idsProj, idsProd };
+    }
+    return { mode: 'all', universal: true };
+  }
+
+  function catalogItemMatchesScope(it, scope, asProduct) {
+    if (!scope || scope.mode === 'all') return true;
+    if (!it) return false;
+    const name = String(it.name || '');
+    const key = String(it.benefitKey || it.name || '');
+    const id = String(it.id || '');
+    if (asProduct) return scope.namesProd.has(name) || scope.idsProd.has(id);
+    return scope.namesProj.has(name) || scope.namesProj.has(key) || scope.idsProj.has(id);
+  }
+
+  function countCardScopeItems(card) {
+    const scope = getCardCatalogScope(card);
+    if (scope.mode === 'all') return null;
+    const bridge = window.CardCatalogBridge;
+    const projects = bridge?.getBillProjects?.() || PROJECTS;
+    const products = bridge?.getBillProducts?.() || PRODUCTS;
+    let n = 0;
+    projects.forEach(it => { if (catalogItemMatchesScope(it, scope, false)) n += 1; });
+    products.forEach(it => { if (catalogItemMatchesScope(it, scope, true)) n += 1; });
+    return n;
+  }
+
+  function countCartOutsideCardScope(cardId) {
+    if (!cardId) return 0;
+    const card = findHeldCardById(cardId);
+    if (!card) return 0;
+    const scope = getCardCatalogScope(card);
+    if (scope.mode === 'all') return 0;
+    return state.cart.filter(it => !catalogItemMatchesScope(it, scope, isBillProductItem(it))).length;
+  }
+
+  function pruneCartOutsideCardScope(cardId) {
+    if (!cardId) return 0;
+    const card = findHeldCardById(cardId);
+    if (!card) return 0;
+    const scope = getCardCatalogScope(card);
+    if (scope.mode === 'all') return 0;
+    const before = state.cart.length;
+    state.cart = state.cart.filter(it => catalogItemMatchesScope(it, scope, isBillProductItem(it)));
+    return before - state.cart.length;
+  }
+
+  function finishBillCardGate(opts) {
+    opts = opts || {};
+    const nextId = opts.skip ? null : (opts.cardId || null);
+    if (!opts.skip && nextId && !findHeldCardById(nextId)) {
+      showToast('会员卡不存在', true);
+      return;
+    }
+    const removedNeed = nextId ? countCartOutsideCardScope(nextId) : 0;
+    if (removedNeed > 0 && !opts.force) {
+      if (!window.confirm(`切换后将移除不适用商品（${removedNeed}）`)) return;
+    }
+    if (nextId) pruneCartOutsideCardScope(nextId);
+    state.billPickCardId = nextId;
+    state.billGateDraftCardId = null;
+    state.billCardGateDone = true;
+    state.billCardGateOpen = false;
+    state.billTab = 'project';
+    renderBillHeader();
+    syncCartChrome();
+    syncBillCardGateChrome();
+    showToast(nextId ? `已选用 ${findHeldCardById(nextId).name}` : '已跳过选卡 · 可浏览全部');
+  }
+
+  function filterBillCatalogByCard(list) {
+    const card = getBillPickCard();
+    if (!card) return list;
+    const scope = getCardCatalogScope(card);
+    if (scope.mode === 'all') return list;
+    const asProduct = state.billTab === 'product';
+    return list.filter(it => catalogItemMatchesScope(it, scope, asProduct));
+  }
+
+  function renderBillCardModeStrip() {
+    if (!shouldOfferBillCardGate() || !state.billCardGateDone) return '';
+    const card = getBillPickCard();
+    if (card) {
+      const scope = getCardCatalogScope(card);
+      const n = countCardScopeItems(card);
+      const sub = scope.mode === 'all'
+        ? '储值通用 · 显示全部项目/产品'
+        : `适用 ${n == null ? 0 : n} 项 · 已筛选目录`;
+      return `<div class="bill-card-mode" id="billCardMode">
+        <div class="bill-card-mode__main">
+          <span class="bill-card-mode__mark" aria-hidden="true"></span>
+          <div style="min-width:0">
+            <div class="bill-card-mode__title">${escapeHtml(card.name)}</div>
+            <div class="bill-card-mode__sub">${escapeHtml(sub)}</div>
+          </div>
+        </div>
+        <div class="bill-card-mode__acts">
+          <button type="button" class="bill-card-mode__act" data-bill-card-change>更换</button>
+          <button type="button" class="bill-card-mode__act is-muted" data-bill-card-clear>不限卡</button>
+        </div>
+      </div>`;
+    }
+    return `<div class="bill-card-mode" id="billCardMode">
+      <div class="bill-card-mode__main">
+        <span class="bill-card-mode__mark is-muted" aria-hidden="true"></span>
+        <div style="min-width:0">
+          <div class="bill-card-mode__title">未用会员卡</div>
+          <div class="bill-card-mode__sub">显示全部项目/产品 · 结算时可再选权益</div>
+        </div>
+      </div>
+      <div class="bill-card-mode__acts">
+        <button type="button" class="bill-card-mode__act" data-bill-card-change>选卡筛选</button>
+      </div>
+    </div>`;
+  }
+
+  function renderBillCardGate() {
+    const c = getCustomer();
+    const cards = (c && c.cards) || [];
+    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l5 5L20 7"/></svg>';
+    const skipBtn = `<button type="button" class="bill-card-gate__skip" data-bill-gate-skip>暂不选卡</button>`;
+    if (!cards.length) {
+      return `<div class="bill-card-gate">
+        <div class="bill-card-gate__intro">
+          <div class="bill-card-gate__title-row">
+            <h3>选择本单会员卡</h3>
+            ${skipBtn}
+          </div>
+          <p>暂无所持会员卡，可暂不选卡浏览全部，或去添加卡</p>
+        </div>
+      </div>`;
+    }
+    const list = cards.map(card => {
+      const on = card.id === state.billGateDraftCardId;
+      const scope = getCardCatalogScope(card);
+      const n = countCardScopeItems(card);
+      const scopeText = scope.mode === 'all'
+        ? '储值通用 · 可选全部项目'
+        : `适用 ${n == null ? 0 : n} 个项目/产品`;
+      return `<button type="button" class="bill-card-gate__card${on ? ' is-on' : ''}" data-bill-gate-card="${escapeHtml(card.id)}">
+        <span class="bill-card-gate__card-check">${checkSvg}</span>
+        <div class="bill-card-gate__card-name">${escapeHtml(card.name)}</div>
+        <div class="bill-card-gate__card-meta">${escapeHtml(cardFaceSummary(card))} · ${escapeHtml(scopeText)}</div>
+        <div class="bill-card-gate__card-chips">${benefitChipsHtml(card)}</div>
+      </button>`;
+    }).join('');
+    return `<div class="bill-card-gate">
+      <div class="bill-card-gate__intro">
+        <div class="bill-card-gate__title-row">
+          <h3>选择本单会员卡</h3>
+          ${skipBtn}
+        </div>
+        <p>用于筛选可用项目；也可稍后在结算权益里再选</p>
+      </div>
+      <div class="bill-card-gate__list">${list}</div>
+    </div>`;
   }
 
   function cartLineStaffSummary(it) {
@@ -35419,12 +36013,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function openBillStaff() {
-    state.detailExpandedId = state.cart[0]?.id || null;
-    state.billStaffExpandedId = state.cart[0]?.id || null;
-    state.staffCardEdit = null;
-    renderBillStaff();
-    syncBillStepBars('staff');
-    showOnlyScreen('screen-bill-staff');
+    openBillSettle();
   }
 
   function openBillSettle() {
@@ -35875,7 +36464,7 @@ window.__BILLING_EMBEDDED__ = true;
     block.hidden = false;
     if (note) {
       if (state.orderIsFree) {
-        note.textContent = '免单规则：' + freeOrderRuleText() + '（可在业绩设置 · 高级规则中调整）';
+        note.textContent = '免单规则：' + freeOrderRuleText() + '（可在业绩设置 · 基础设置中调整）';
         note.classList.remove('hidden');
       } else {
         note.textContent = '';
@@ -36423,37 +37012,14 @@ window.__BILLING_EMBEDDED__ = true;
   function renderBillHeader() {
     const c = getCustomer();
     const metrics = (c && c.isMember) ? memberAssetMetrics(c) : null;
-    const cardBlock = (!state.billCustomerPickOpen && isMemberBill()) ? `
-      <div class="member-cards-wrap ${state.cardsExpanded ? '' : 'collapsed'}" id="memberCardsWrap">
-        <div class="member-cards-head" id="btnExpandCardsHit" role="button" tabindex="0" aria-expanded="${state.cardsExpanded ? 'true' : 'false'}">
-          <span class="member-cards-head__title">所持会员卡 ${c.cards.length} 张</span>
-          <button type="button" class="expand-toggle" id="btnExpandCards">${state.cardsExpanded ? `收起 ${iconSvg('chevron-up', 'ui-icon')}` : `展开 ${iconSvg('chevron-down', 'ui-icon')}`}</button>
-        </div>
-        <div id="memberCardPanels">${c.cards.map(card => {
-          const balText = cardFaceSummary(card);
-          const b = cardBenefits(card);
-          const acts = [];
-          if (b.balance) {
-            acts.push(`<button type="button" class="member-card-panel__act is-primary" data-bill-recharge="${escapeHtml(card.id)}">储值充值</button>`);
-          }
-          if (b.timesOrValidity && (card.projects || []).length) {
-            acts.push(`<button type="button" class="member-card-panel__act" data-bill-times-topup="${escapeHtml(card.id)}">计次充次</button>`);
-          }
-          return `<div class="member-card-panel">
-            <div class="member-card-panel__vip-row">
-              <img src="assets/billing/customer-vip.png" alt="VIP" width="32" height="12">
-              <div class="member-card-panel__benefits">${benefitChipsHtml(card)}</div>
-            </div>
-            <div class="member-card-panel__head">
-              <span class="member-card-panel__name">${escapeHtml(card.name)}</span>
-            </div>
-            <div class="member-card-panel__row"><span>${escapeHtml(balText)}</span></div>
-            ${(card.projects || []).map(p => `<div class="member-card-panel__row"><span>${escapeHtml(p.label)}</span><span>${p.unlimited ? '不限次' : `余 ${p.remain} 次`}</span></div>`).join('')}
-            ${acts.length ? `<div class="member-card-panel__acts">${acts.join('')}</div>` : ''}
-          </div>`;
-        }).join('')}
-        ${state.cardsExpanded ? '<button type="button" class="add-card-btn" id="btnBillAddCard">+ 添加卡</button>' : ''}
-      </div>` : '';
+    syncBillCardGateChrome();
+
+    if (state.billCardGateOpen && !state.billCustomerPickOpen) {
+      document.getElementById('billBody').innerHTML = `
+      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
+      ${renderBillCardGate()}`;
+      return;
+    }
 
     if (state.billCustomerPickOpen) {
       document.getElementById('billBody').innerHTML = `
@@ -36469,15 +37035,15 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
 
+    const modeStrip = renderBillCardModeStrip();
     document.getElementById('billBody').innerHTML = `
       ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
-      ${cardBlock}
-      ${cardBlock ? '<div class="bill-sheet-divider" role="separator" aria-hidden="true"></div>' : ''}
-      <button type="button" class="bill-quick-consume" id="btnQuickConsume">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
-        快速消费
-      </button>
-      <div class="bill-sheet${cardBlock ? '' : ' bill-sheet--solo'}">
+      ${modeStrip}
+      <div class="bill-sheet">
+        <button type="button" class="bill-quick-consume" id="btnQuickConsume">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
+          快速消费
+        </button>
         <div class="page-tabs">
           <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
           <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
@@ -36562,10 +37128,19 @@ window.__BILLING_EMBEDDED__ = true;
     const src = state.billTab === 'project'
       ? (bridge?.getBillProjects?.() || PROJECTS)
       : (bridge?.getBillProducts?.() || PRODUCTS);
-    const items = filterBillCatalogByGroup(src);
-    const emptyLabel = getActiveBillGroupId() !== 'all'
-      ? (state.billTab === 'product' ? '本组暂无产品' : '本组暂无项目')
-      : '暂无匹配项';
+    const items = filterBillCatalogByCard(filterBillCatalogByGroup(src));
+    const scoped = !!getBillPickCard() && getCardCatalogScope(getBillPickCard()).mode === 'filter';
+    const emptyLabel = !items.length && scoped
+      ? '该卡暂无适用项目/产品'
+      : (getActiveBillGroupId() !== 'all'
+        ? (state.billTab === 'product' ? '本组暂无产品' : '本组暂无项目')
+        : '暂无匹配项');
+    const emptyExtra = !items.length && scoped
+      ? `<div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+          <button type="button" class="bill-card-mode__act" data-bill-card-change>换卡</button>
+          <button type="button" class="bill-card-mode__act is-muted" data-bill-card-clear>浏览全部</button>
+        </div>`
+      : '';
     document.getElementById('catalogList').innerHTML = items.map(it => {
       const qty = getCartQty(it.id);
       const cap = state.billTab === 'product' ? productStockCap(it) : null;
@@ -36584,7 +37159,7 @@ window.__BILLING_EMBEDDED__ = true;
           <button type="button" class="plus" data-step="${it.id}" data-d="1" aria-label="增加"${plusDisabled ? ' disabled' : ''}>${iconSvg('plus')}</button>
         </div>
       </div>`;
-    }).join('') || `<div class="empty-cart">${emptyLabel}</div>`;
+    }).join('') || `<div class="empty-cart">${emptyLabel}${emptyExtra}</div>`;
   }
 
   function renderCartList(targetId) {
@@ -36802,10 +37377,11 @@ window.__BILLING_EMBEDDED__ = true;
             <div class="detail-item__top">
               <span class="detail-item__badge${badge.cls}">${badge.text}</span>
               <div class="detail-item__name">${escapeHtml(it.name)}${it.qty > 1 ? ` ×${it.qty}` : ''}</div>
+              <span class="detail-item__amt num">${formatYen(lineAmt)}</span>
               <button type="button" class="detail-item__expand" data-expand-item="${it.id}" aria-label="${open ? '收起' : '展开'}">${iconSvg(open ? 'chevron-up' : 'chevron-down')}</button>
             </div>
+            ${renderDetailStaffSection(it)}
             ${open ? `<div class="detail-item__panel">
-              ${renderStaffPickerHtml(it)}
               <div class="detail-item__panel-row">
                 <span>小计</span>
                 <div class="detail-item__price-edit">
@@ -36813,10 +37389,6 @@ window.__BILLING_EMBEDDED__ = true;
                   <input class="num" type="number" min="0" step="0.01" data-unit-price="${it.id}" value="${unit}">
                   <span class="ui-icon" aria-hidden="true">${iconSvg('edit', 'ui-icon')}</span>
                 </div>
-              </div>
-              <div class="detail-item__panel-row">
-                <span>应付</span>
-                <span class="num" style="font-size:16px;font-weight:500">${formatYen(lineAmt)}</span>
               </div>
               ${isMemberBill() ? `<div class="detail-item__panel-row detail-line--click" data-open-benefit>
                 <span>优惠权益</span><span class="detail-line__right" style="color:var(--text-sec);display:inline-flex;align-items:center;gap:4px">${escapeHtml(benefitSummaryText())}${iconSvg('chevron-right', 'ui-icon')}</span>
@@ -36910,7 +37482,12 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     const draft = state.benefitDraft;
-    const cards = getCustomer().cards.map(card => {
+    const allCards = getCustomer().cards.slice();
+    const preferId = state.billPickCardId;
+    if (preferId) {
+      allCards.sort((a, b) => (a.id === preferId ? -1 : b.id === preferId ? 1 : 0));
+    }
+    const cards = allCards.map(card => {
       if (!draft[card.id]) {
         draft[card.id] = { balanceUse: 0, discountOn: false, fixedUse: 0, projects: (card.projects || []).map(p => ({ key: p.key, label: p.label, qty: 0, max: p.remain })) };
       }
@@ -36931,10 +37508,14 @@ window.__BILLING_EMBEDDED__ = true;
           <button type="button" data-proj="${card.id}" data-idx="${idx}" data-d="1" aria-label="增加" ${pr.qty >= p.remain ? 'disabled' : ''}>${iconSvg('plus')}</button>
         </div></div>`;
       });
-      return `<div class="benefit-card"><div class="benefit-card__title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${escapeHtml(card.name)}${benefitChipsHtml(card)}</div>${inner || '<div style="font-size:13px;color:var(--text-sec)">无可选权益</div>'}</div>`;
+      const preferred = card.id === preferId
+        ? '<span class="benefit-chip is-face" style="margin-left:4px">本单已选</span>'
+        : '';
+      return `<div class="benefit-card${card.id === preferId ? ' is-preferred' : ''}"><div class="benefit-card__title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${escapeHtml(card.name)}${preferred}${benefitChipsHtml(card)}</div>${inner || '<div style="font-size:13px;color:var(--text-sec)">无可选权益</div>'}</div>`;
     }).join('');
     document.getElementById('benefitBody').innerHTML = `
       <button type="button" class="benefit-none-btn" data-benefit-none>不使用权益</button>
+      ${preferId ? '<p class="benefit-skip-hint" style="margin:0 0 10px">已按点单所选会员卡优先展示，仍可改选其它卡权益</p>' : ''}
       ${cards}
       <div class="benefit-extra">
         <label><input type="checkbox" id="benefitDefaultPay" ${state.benefitAsDefaultPay ? 'checked' : ''}> 确认并设为本单默认支付方式</label>
@@ -37287,6 +37868,7 @@ window.__BILLING_EMBEDDED__ = true;
       manualOrderNo: state.manualOrderNo || '',
       technician: state.technician,
       cashierId: state.cashierId,
+      billPickCardId: state.billPickCardId,
       listTotal: cartListTotal(),
       priceEdited: !!state.billDueEdited,
     };
@@ -37513,13 +38095,16 @@ window.__BILLING_EMBEDDED__ = true;
     state.technician = h.technician || '未指定';
     if (h.cashierId) state.cashierId = h.cashierId;
     ensureCashierId();
+    state.billPickCardId = h.billPickCardId || null;
+    state.billCardGateDone = true;
+    state.billCardGateOpen = false;
     state.cardsExpanded = false;
     state.payAmounts = {};
     state.billFromHold = true;
     state.billDueEdited = !!h.priceEdited;
     syncCartChrome();
     syncPickHoldsEntry();
-    openBillCatalog();
+    openBillCatalog({ skipGate: true });
     showToast('已取单');
   }
 
@@ -41003,6 +41588,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.billDueEdited = false;
     state.payDueSnapshot = null;
     ensureCashierId();
+    resetBillCardPick();
     openBillCatalog();
   }
 
@@ -41336,8 +41922,7 @@ window.__BILLING_EMBEDDED__ = true;
     { title: '开单主流程', nodes: [
       { id: 'pick', label: '① 选择顾客', screen: 'screen-pick' },
       { id: 'bill', label: '② 点单台', screen: 'screen-bill' },
-      { id: 'staff', label: '③ 服务人', screen: 'screen-bill-staff' },
-      { id: 'detail', label: '④ 结算确认', screen: 'screen-detail' },
+      { id: 'detail', label: '③ 结算确认', screen: 'screen-detail' },
       { id: 'cart', label: '已选', screen: 'cartSheetMask' },
       { id: 'checkout', label: '结账方式', screen: 'checkoutMask' },
       { id: 'pay', label: '开单分账', screen: 'payMask' },
@@ -41363,7 +41948,11 @@ window.__BILLING_EMBEDDED__ = true;
     pick() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openBillCustomer({ reset: true }); },
     bill() { closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask'); openBillCatalog(); },
     cart() {
-      openBillCatalog();
+      if (shouldOfferBillCardGate() && !state.billCardGateDone) {
+        state.billCardGateDone = true;
+        state.billCardGateOpen = false;
+      }
+      openBillCatalog({ skipGate: true });
       if (!state.cart.length) setCartQty(PROJECTS[0], 1);
       renderCartList('cartSheetList');
       syncCartChrome();
@@ -41374,7 +41963,7 @@ window.__BILLING_EMBEDDED__ = true;
       closeMask('payMask'); closeMask('cartSheetMask'); closeMask('checkoutMask');
       if (!state.cart.length) setCartQty(PROJECTS[0], 1);
       if (!state.customer) enterBillCustomerOnly(GUEST_UNSET);
-      openBillStaff();
+      openBillSettle();
     },
     detail() {
       if (!state.cart.length) { showToast('请先添加商品'); return; }
@@ -41548,7 +42137,28 @@ window.__BILLING_EMBEDDED__ = true;
       openHoldList();
       return;
     }
+    if (state.billCardGateOpen) {
+      resetBillCardPick();
+      openBillCustomer();
+      return;
+    }
+    if (shouldOfferBillCardGate() && state.billCardGateDone) {
+      openBillCardGate();
+      return;
+    }
     openBillCustomer();
+  });
+  document.getElementById('btnBillGateOk')?.addEventListener('click', () => {
+    const cards = (getCustomer().cards || []);
+    if (!cards.length) {
+      finishBillCardGate({ skip: true });
+      return;
+    }
+    if (!state.billGateDraftCardId) {
+      showToast('请选择会员卡');
+      return;
+    }
+    finishBillCardGate({ cardId: state.billGateDraftCardId });
   });
   document.getElementById('btnBillDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('btnHold').addEventListener('click', createHoldOrder);
@@ -41590,87 +42200,98 @@ window.__BILLING_EMBEDDED__ = true;
     }
     closeMask('cartSheetMask');
     closeMask('checkoutMask');
-    openBillStaff();
+    openBillSettle();
   });
   document.getElementById('billStaffBack')?.addEventListener('click', () => openBillCatalog());
   document.getElementById('billStaffSkip')?.addEventListener('click', () => openBillSettle());
-  document.getElementById('billStaffNext')?.addEventListener('click', () => {
-    if (cartHasUnsetStaffRoles && cartHasUnsetStaffRoles()) {
-      showToast('还有服务人未选工位，可点行内补全或暂不指定');
-    }
-    openBillSettle();
+  document.getElementById('billStaffNext')?.addEventListener('click', () => openBillSettle());
+  document.getElementById('btnBillStaffSheetDone')?.addEventListener('click', () => closeBillStaffSheet());
+  document.getElementById('billStaffMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billStaffMask') closeBillStaffSheet();
   });
-  document.getElementById('billStaffBody')?.addEventListener('click', (e) => {
-    const toggle = e.target.closest('[data-bill-staff-toggle]');
-    if (toggle) {
-      const id = toggle.getAttribute('data-bill-staff-toggle');
-      state.billStaffExpandedId = state.billStaffExpandedId === id ? null : id;
-      state.staffCardEdit = null;
-      renderBillStaff();
-      return;
-    }
-    /* reuse detail staff-card handlers by re-dispatching through detailBody logic — mirror key paths */
-    const hit = e.target.closest('[data-staff-card-hit]');
-    if (hit) {
-      const cartId = hit.getAttribute('data-cart-id');
-      const staffId = hit.getAttribute('data-staff-id');
-      state.staffCardEdit = { cartId, staffId, face: 'designate' };
-      renderBillStaff();
-      return;
-    }
-    const des = e.target.closest('[data-staff-opt-designate]');
-    if (des) {
-      const cartId = des.getAttribute('data-cart-id');
-      const staffId = des.getAttribute('data-staff-id');
-      const it = state.cart.find(x => x.id === cartId);
-      if (!it) return;
-      ensureCartStaffState(it);
-      const designated = des.getAttribute('data-staff-opt-designate') === '1';
-      if (!it.staffIds.includes(staffId)) it.staffIds.push(staffId);
-      it.staffDesignated[staffId] = designated;
-      if (isAvgAchCalcModeForItem(it)) {
-        it.staffRoles[staffId] = STAFF_ROLE_DEFAULT;
-        state.staffCardEdit = null;
-      } else {
-        state.staffCardEdit = { cartId, staffId, face: 'role', draftDesignated: designated };
-      }
-      renderBillStaff();
-      return;
-    }
-    const role = e.target.closest('[data-staff-opt-role]');
-    if (role) {
-      const cartId = role.getAttribute('data-cart-id');
-      const staffId = role.getAttribute('data-staff-id');
-      const rid = role.getAttribute('data-staff-opt-role');
-      const it = state.cart.find(x => x.id === cartId);
-      if (!it) return;
-      ensureCartStaffState(it);
-      if (!it.staffIds.includes(staffId)) it.staffIds.push(staffId);
-      it.staffRoles[staffId] = rid;
-      if (state.staffCardEdit && state.staffCardEdit.draftDesignated != null) {
-        it.staffDesignated[staffId] = !!state.staffCardEdit.draftDesignated;
-      }
-      state.staffCardEdit = null;
-      renderBillStaff();
-      return;
-    }
-    const clr = e.target.closest('[data-staff-clear]');
-    if (clr) {
-      const cartId = clr.getAttribute('data-cart-id');
-      const staffId = clr.getAttribute('data-staff-id');
-      const it = state.cart.find(x => x.id === cartId);
-      if (!it) return;
-      ensureCartStaffState(it);
-      it.staffIds = (it.staffIds || []).filter(id => id !== staffId);
-      delete it.staffRoles[staffId];
-      delete it.staffDesignated[staffId];
-      state.staffCardEdit = null;
-      renderBillStaff();
-      return;
-    }
+  document.getElementById('billStaffSheetRoot')?.addEventListener('click', e => {
     if (e.target.closest('[data-staff-scrim]')) {
-      state.staffCardEdit = null;
-      renderBillStaff();
+      clearStaffCardEdit();
+      renderBillStaffSheet();
+      return;
+    }
+    const staffClear = e.target.closest('[data-staff-clear]');
+    if (staffClear) {
+      e.preventDefault();
+      e.stopPropagation();
+      const cartId = staffClear.dataset.cartId;
+      const row = resolveStaffRow(cartId);
+      if (!row) return;
+      ensureCartStaffState(row);
+      const sid = staffClear.dataset.staffId;
+      row.staffIds = (row.staffIds || []).filter(x => x !== sid);
+      delete row.staffRoles[sid];
+      delete row.staffDesignated[sid];
+      if (state.staffCardEdit && state.staffCardEdit.cartId === cartId && state.staffCardEdit.staffId === sid) {
+        clearStaffCardEdit();
+      }
+      tapStaffHaptic();
+      refreshStaffPickerUi(cartId);
+      return;
+    }
+    const designateOpt = e.target.closest('[data-staff-opt-designate]');
+    if (designateOpt) {
+      e.preventDefault();
+      e.stopPropagation();
+      const cartId = designateOpt.dataset.cartId;
+      const sid = designateOpt.dataset.staffId;
+      if (!state.staffCardEdit || state.staffCardEdit.cartId !== cartId || state.staffCardEdit.staffId !== sid) return;
+      const designated = designateOpt.dataset.staffOptDesignate === '1';
+      const row = resolveStaffRow(cartId);
+      if (!row) return;
+      if (isAvgAchCalcModeForItem(row)) {
+        ensureCartStaffState(row);
+        if (!row.staffIds.includes(sid)) row.staffIds.push(sid);
+        row.staffDesignated[sid] = designated;
+        row.staffRoles[sid] = STAFF_ROLE_DEFAULT;
+        clearStaffCardEdit();
+        tapStaffHaptic();
+        refreshStaffPickerUi(cartId);
+        return;
+      }
+      state.staffCardEdit = {
+        cartId,
+        staffId: sid,
+        face: 'role',
+        draftDesignated: designated,
+      };
+      tapStaffHaptic();
+      refreshStaffPickerUi(cartId);
+      return;
+    }
+    const roleOpt = e.target.closest('[data-staff-opt-role]');
+    if (roleOpt) {
+      e.preventDefault();
+      e.stopPropagation();
+      const cartId = roleOpt.dataset.cartId;
+      const sid = roleOpt.dataset.staffId;
+      const row = resolveStaffRow(cartId);
+      if (!row || !state.staffCardEdit || state.staffCardEdit.cartId !== cartId || state.staffCardEdit.staffId !== sid) return;
+      ensureCartStaffState(row);
+      if (!row.staffIds.includes(sid)) row.staffIds.push(sid);
+      row.staffDesignated[sid] = !!state.staffCardEdit.draftDesignated;
+      row.staffRoles[sid] = roleOpt.dataset.staffOptRole || STAFF_ROLE_DEFAULT;
+      clearStaffCardEdit();
+      tapStaffHaptic();
+      refreshStaffPickerUi(cartId);
+      return;
+    }
+    const staffHit = e.target.closest('[data-staff-card-hit]');
+    if (staffHit) {
+      e.preventDefault();
+      const cartId = staffHit.dataset.cartId;
+      const sid = staffHit.dataset.staffId;
+      const row = resolveStaffRow(cartId);
+      if (!row) return;
+      ensureCartStaffState(row);
+      state.staffCardEdit = { cartId, staffId: sid, face: 'designate', draftDesignated: null };
+      tapStaffHaptic();
+      refreshStaffPickerUi(cartId);
     }
   });
   document.getElementById('btnOpenCart').addEventListener('click', () => { renderCartList('cartSheetList'); openMask('cartSheetMask'); });
@@ -41799,21 +42420,22 @@ window.__BILLING_EMBEDDED__ = true;
     state.guestGenderPickerOpen = false;
     state.searchQuery = '';
     state.cardsExpanded = false;
-    renderBillHeader();
-    syncCartChrome();
+    resetBillCardPick();
+    openBillCatalog({ skipGate: true });
     showToast(gender === 'male' ? '已选择男散客' : '已选择女散客');
   }
   function pickBillMember(id) {
     const c = CUSTOMERS.find(x => x.id === id);
     if (!c) return;
     state.guestGender = null;
+    if (c.isMember) refreshCustomerCardsFromHoldings(c);
     state.customer = c;
     state.billCustomerPickOpen = false;
     state.guestGenderPickerOpen = false;
     state.searchQuery = '';
     state.cardsExpanded = false;
-    renderBillHeader();
-    syncCartChrome();
+    resetBillCardPick();
+    openBillCatalog();
     showToast(`已选择 ${c.name}`);
   }
   document.getElementById('billBody').addEventListener('click', e => {
@@ -41823,6 +42445,25 @@ window.__BILLING_EMBEDDED__ = true;
     if (guestPick) { pickBillGuest(guestPick.dataset.billPickGuest); return; }
     const memberPick = e.target.closest('[data-bill-pick-member]');
     if (memberPick) { pickBillMember(memberPick.dataset.billPickMember); return; }
+    const gateCard = e.target.closest('[data-bill-gate-card]');
+    if (gateCard) {
+      state.billGateDraftCardId = gateCard.getAttribute('data-bill-gate-card');
+      renderBillHeader();
+      syncBillGateOkBtn();
+      return;
+    }
+    if (e.target.closest('[data-bill-gate-skip]')) {
+      finishBillCardGate({ skip: true });
+      return;
+    }
+    if (e.target.closest('[data-bill-card-change]')) {
+      openBillCardGate();
+      return;
+    }
+    if (e.target.closest('[data-bill-card-clear]')) {
+      finishBillCardGate({ skip: true });
+      return;
+    }
     if (e.target.closest('#btnRecordGuest')) { openGuestRecordSheet(); return; }
     if (e.target.id === 'btnChangeCustomer') {
       if (isAnonymousGuest(getCustomer()) || state.billCustomerPickOpen) {
@@ -41910,7 +42551,10 @@ window.__BILLING_EMBEDDED__ = true;
     }
   });
 
-  document.getElementById('detailBack').addEventListener('click', () => openBillStaff());
+  document.getElementById('detailBack').addEventListener('click', () => {
+    closeBillStaffSheet();
+    openBillCatalog({ skipGate: true });
+  });
   document.getElementById('btnDetailHold')?.addEventListener('click', createHoldOrder);
   document.getElementById('btnDetailDate')?.addEventListener('click', () => showToast('选日期后续开放'));
   document.getElementById('detailBody').addEventListener('click', e => {
@@ -41921,6 +42565,27 @@ window.__BILLING_EMBEDDED__ = true;
     if (e.target.id === 'btnChangeCustomer' || e.target.id === 'btnIssueCard') {
       if (e.target.id === 'btnIssueCard') openAddCardScreen();
       else openMemberPicker();
+      return;
+    }
+    const openStaff = e.target.closest('[data-open-bill-staff]');
+    if (openStaff) {
+      openBillStaffSheet(openStaff.getAttribute('data-open-bill-staff'));
+      return;
+    }
+    const summaryDel = e.target.closest('[data-staff-summary-del]');
+    if (summaryDel) {
+      e.preventDefault();
+      e.stopPropagation();
+      const cartId = summaryDel.getAttribute('data-cart-id');
+      const sid = summaryDel.getAttribute('data-staff-id');
+      const row = resolveStaffRow(cartId);
+      if (!row) return;
+      ensureCartStaffState(row);
+      row.staffIds = (row.staffIds || []).filter(x => x !== sid);
+      delete row.staffRoles[sid];
+      delete row.staffDesignated[sid];
+      tapStaffHaptic();
+      renderDetail();
       return;
     }
     const del = e.target.closest('[data-del-cart]');
