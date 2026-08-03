@@ -260,14 +260,56 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .page-title-bar:not(:has(.back)) .title { grid-column: 1 / -1; }
-.phone-step-bar { padding: 8px 16px 10px; background: var(--card); border-bottom: 1px solid var(--bg-page); flex-shrink: 0; }
+/* Figma 422:1087/1312/1238 · 创建会员卡步骤条 + 顶区蓝洗（下沿柔化，首卡叠入） */
+#screen10,
+#screen9,
+#screen11 {
+  background: #f7f7f7;
+  position: relative;
+}
+.phone-step-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; padding: 0 16px; height: 63px; box-sizing: border-box;
+  background: transparent; border-bottom: none; flex-shrink: 0;
+  position: relative; z-index: 0;
+}
+.phone-step-bar::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; bottom: -28px;
+  background: linear-gradient(
+    180deg,
+    #f4f7fe 0%,
+    #f4f7fe 42%,
+    rgba(244, 247, 254, 0.55) 72%,
+    rgba(247, 247, 247, 0) 100%
+  );
+  pointer-events: none; z-index: -1;
+}
 .phone-step-bar.hidden { display: none !important; }
-.phone-step-bar__segments { display: flex; gap: 6px; margin-bottom: 8px; }
-.phone-step-seg { flex: 1; height: 4px; border-radius: 2px; background: var(--disabled); transition: background .2s; }
-.phone-step-seg.done { background: #2BA471; }
-.phone-step-seg.active { background: var(--brand); }
-.phone-step-bar__text { font-size: 12px; color: var(--text-sec); line-height: 1.45; }
-.phone-step-bar__text strong { color: var(--text); font-weight: 600; }
+.phone-step-bar.hidden::before { display: none; }
+.phone-step-bar__steps {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 358px;
+  position: relative; z-index: 1;
+}
+.phone-step-bar__item {
+  flex: 0 0 auto; margin: 0; padding: 0; border: none; background: none;
+  font-family: inherit; line-height: normal; white-space: nowrap;
+  color: #929292; font-size: 12px; font-weight: 400;
+  cursor: default; pointer-events: none;
+}
+.phone-step-bar__item.is-active {
+  color: #4a7bf4; font-size: 16px; font-weight: 600;
+}
+.phone-step-bar__line {
+  flex: 1 1 auto; height: 0; margin: 0 8px; min-width: 24px; max-width: 53px;
+  border: none; border-top: 1px solid #d8d8d8;
+}
+.phone-step-bar__line.is-done { border-top-color: #4a7bf4; }
+/* legacy stubs kept for safety if old markup briefly present */
+.phone-step-bar__segments,
+.phone-step-bar__text { display: none !important; }
+.phone-step-seg { display: none; }
 .btn-main.btn-outline-brand {
   /* 继承 .btn-main.secondary 描边规范；此处仅补布局细节 */
   line-height: 1.2; margin-top: 0;
@@ -291,9 +333,13 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   cursor: not-allowed; opacity: 1;
 }
 .detail-edit-btn.is-disabled:active { opacity: 1; }
+/* 详情卡头 · 与 Figma 422:1026 同款 */
 .detail-shelf-status {
-  border: none; background: rgba(255,255,255,.92); color: var(--text-sec); font-size: 12px; font-weight: 600;
-  padding: 6px 14px; border-radius: 999px; line-height: 1.2; flex-shrink: 0;
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; height: 17px; padding: 0 3px;
+  border: 0.5px solid #929292; border-radius: 2px; background: transparent;
+  font-size: 12px; font-weight: 400; line-height: normal; color: #929292;
+  white-space: nowrap;
 }
 .list-shelf-seg { margin-top: 0; margin-bottom: 0; flex-shrink: 0; }
 .page-tabs {
@@ -347,10 +393,13 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   flex: 0 1 auto; min-width: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+/* Figma 422:1026 · 已下架 */
 .member-card-compact__shelved-tag {
-  flex-shrink: 0; display: inline-flex; align-items: center;
-  font-size: 10px; font-weight: 600; line-height: 1.2; color: #6c7279;
-  background: rgba(255,255,255,.88); border-radius: 999px; padding: 2px 8px;
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; height: 17px; padding: 0 3px;
+  border: 0.5px solid #929292; border-radius: 2px; background: transparent;
+  font-size: 12px; font-weight: 400; line-height: normal; color: #929292;
+  white-space: nowrap;
 }
 .detail-clone-btn {
   border: 1px solid rgba(255,255,255,.92); background: rgba(255,255,255,.92); color: var(--brand);
@@ -480,7 +529,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .list-empty-state__title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
 .list-empty-state__desc { font-size: 13px; color: var(--text-sec); line-height: 1.6; max-width: 260px; }
 .member-card-item {
-  cursor: pointer; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card);
+  cursor: pointer; border: none; border-radius: 12px; overflow: hidden; background: var(--card);
   --card-accent: #C4A394;
 }
 .member-card-item .card-face-act--solid {
@@ -488,7 +537,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   border-radius: 24px; min-height: 28px; padding: 4px 20px; font-size: 14px; font-weight: 600;
 }
 .member-card-item .card-face-act--outline {
-  background: transparent; color: var(--card-accent); border: 1.5px solid var(--card-accent);
+  background: transparent; color: var(--card-accent); border: 1px solid var(--card-accent);
   border-radius: 24px; min-height: 28px; padding: 4px 16px; font-size: 14px; font-weight: 600;
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;
 }
@@ -497,7 +546,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .member-card-item .card-face-act--clone-text {
   color: #4a7bf4; font-size: 12px; font-weight: 500;
-  display: inline-flex; align-items: center; gap: 4px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.member-card-item .card-face-act--clone-text img {
+  width: 16px; height: 16px; display: block; flex-shrink: 0;
 }
 .member-card-item:active { opacity: .95; }
 .member-card-compact {
@@ -508,10 +560,12 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-compact::after {
   content: '';
   position: absolute; inset: 0;
-  background: url("assets/member-card-header-deco.png") right center / cover no-repeat;
+  background: url("assets/member-card-header-deco.png") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1;
+  /* Figma image 210: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
   mix-blend-mode: plus-lighter;
-  opacity: .6;
+  opacity: 1;
+  border-radius: inherit;
 }
 .member-card-compact__name {
   font-size: 16px; font-weight: 500; color: #1a1a1a;
@@ -582,7 +636,12 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-item__empty { font-size: 12px; color: var(--text-sec); margin: 0; line-height: 1.45; }
 .member-card-item__footer {
   display: flex; justify-content: space-between; align-items: center; gap: 8px;
-  padding: 8px 12px 10px; border-top: 1px solid var(--bg-page);
+  padding: 8px 12px 10px; border-top: none; position: relative;
+}
+.member-card-item__footer::before {
+  content: '';
+  position: absolute; left: 16px; right: 16px; top: 0;
+  border-top: 1px dashed #e5e6eb; pointer-events: none;
 }
 .member-card-item__footer-left {
   flex: 1; min-width: 0; display: flex; align-items: center;
@@ -637,8 +696,20 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .guide-group { margin: 0 16px 14px; background: var(--card); border-radius: 12px; border: none; overflow: hidden; }
 .guide-group.benefit-blocks { overflow: visible; }
 .guide-group-head { padding: 10px 14px 8px; font-size: 12px; font-weight: 600; color: var(--text-sec); }
-/* Step2：步骤条与权益内容卡间距 16px */
-#screen9 .page-body { padding-top: 16px; background: var(--bg-page); }
+/* Step2：步骤条与权益内容卡间距；分卡 + 蓝条标题（Figma 422:1312） */
+#screen9 .page-body {
+  padding: 16px 8px 16px; margin-top: -16px;
+  background: transparent; position: relative; z-index: 1;
+}
+#screen9 .guide-group.benefit-blocks {
+  margin: 0; background: transparent; border-radius: 0; overflow: visible;
+  display: flex; flex-direction: column; gap: 10px;
+}
+#screen9 .benefit-block {
+  background: #fff; border-radius: 8px; overflow: hidden;
+}
+#screen9 .benefit-block:not(:first-child)::before { display: none; }
+#screen9 .benefit-check:not(:first-of-type)::before { display: none; }
 .benefit-check {
   position: relative;
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
@@ -649,13 +720,40 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: var(--card-divider); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
 .benefit-check:first-of-type { border-top: none; }
-.benefit-check__main { flex: 1; min-width: 0; }
-.benefit-check__title { display: block; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--text); }
-.benefit-check__desc { display: block; margin: 4px 0 0; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+.benefit-check__main { flex: 1; min-width: 0; padding-left: 8px; }
+.benefit-check__title {
+  position: relative; display: block; font-size: 14px; font-weight: 500; line-height: 1.35; color: #1a1a1a;
+}
+.benefit-check__desc { display: block; margin: 4px 0 0; font-size: 12px; color: #929292; line-height: 1.5; }
 .benefit-check .switch { margin-top: 2px; flex-shrink: 0; }
-.guide-group.benefit-blocks .benefit-check { padding: 14px 14px 10px; }
+/* Figma：蓝条贴卡左边、与标题行（14/20）中轴对齐；正文左距 12 */
+#screen9 .guide-group.benefit-blocks .benefit-check {
+  padding: 16px 12px 12px;
+}
+#screen9 .guide-group.benefit-blocks .benefit-check__main {
+  padding-left: 0;
+}
+#screen9 .guide-group.benefit-blocks .benefit-check__title {
+  line-height: 20px;
+}
+#screen9 .guide-group.benefit-blocks .benefit-check__desc {
+  margin-top: 4px; line-height: 17px;
+}
+#screen9 .guide-group.benefit-blocks .benefit-check__title::before { display: none; }
+#screen9 .guide-group.benefit-blocks .benefit-block > .benefit-check::after {
+  content: '';
+  position: absolute; left: 0; top: 19px;
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0;
+  background: #4a7bf4; pointer-events: none;
+}
+#screen9 .guide-group.benefit-blocks .benefit-check .switch {
+  margin-top: 0; align-self: flex-start;
+}
+#screen9 .benefit-check .switch.on {
+  background: #ff7043;
+}
 .guide-group.benefit-blocks .benefit-expand--tree .benefit-expand__inner {
-  margin: 2px 16px 10px; padding: 2px 0 4px;
+  margin: 4px 12px 10px; padding: 2px 0 4px;
 }
 .benefit-block { position: relative; border-top: none; }
 .benefit-block:not(:first-child)::before {
@@ -668,149 +766,86 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .benefit-expand--tree .benefit-expand__inner {
   position: relative; margin: 3px 16px 10px; padding: 3px 0 4px;
 }
+.step2-benefit-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 4px 0 8px; min-height: 28px;
+}
+.step2-benefit-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; height: 22px; padding: 0 8px; box-sizing: border-box;
+  border-radius: 999px; background: #f2f2f2; color: #929292;
+  font-size: 12px; font-weight: 500; line-height: 1; white-space: nowrap;
+}
+.step2-benefit-count.hidden { display: none !important; }
 .btn-add-benefit {
-  display: flex; align-items: center; justify-content: center; width: 100%;
-  min-height: 40px; margin: 8px 0 4px; padding: 0 12px;
-  border: 1px solid var(--brand); border-radius: 10px; background: transparent;
-  color: var(--brand); font-size: 14px; font-weight: 600; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: flex-end;
+  margin: 0 0 0 auto; padding: 0; min-height: 0; width: auto;
+  border: none; border-radius: 0; background: transparent;
+  color: #4a7bf4; font-size: 14px; font-weight: 500; font-family: inherit;
   cursor: pointer; box-sizing: border-box;
 }
-.btn-add-benefit:active { opacity: .88; background: var(--brand-soft); }
+.btn-add-benefit:active { opacity: .88; background: transparent; }
+/* 流水编辑等仍用全宽描边时，用修饰类覆盖 */
+.btn-add-benefit.btn-add-benefit--block {
+  display: flex; align-items: center; justify-content: center; width: 100%;
+  min-height: 40px; margin: 8px 0 4px; padding: 0 12px;
+  border: 1px solid var(--brand); border-radius: 10px;
+  color: var(--brand); font-weight: 600;
+}
+.btn-add-benefit.btn-add-benefit--block:active { background: var(--brand-soft); }
+/* Figma 422:1312 · Step2 权益项：简单列表行（左名称 / 右次数·折扣 / 圆形减号） */
 .step2-benefit-cards {
-  display: flex; flex-direction: column; gap: 12px; margin: 0 0 4px;
-  padding: 4px 2px 8px; /* 给外层 drop-shadow 留出空间 */
+  display: flex; flex-direction: column; gap: 20px; margin: 0 0 12px; padding: 0;
 }
-/* 方案 A · 柔和票券（对齐预览图）：阴影在无 mask 外层 */
-.step2-benefit-card-wrap {
-  --ticket-shadow:
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.04))
-    drop-shadow(0 6px 14px rgba(0, 0, 0, 0.05));
-  filter: var(--ticket-shadow);
-  border-radius: 12px;
-}
-.step2-benefit-card-wrap:active { filter: brightness(.99) var(--ticket-shadow); }
+.step2-benefit-card-wrap { display: contents; }
 .step2-benefit-card {
-  --ticket-notch-r: 7px;
-  --ticket-stub-w: 90px;
-  --ticket-cut-x: calc(100% - var(--ticket-stub-w));
-  --ticket-meta: #8F8F8F;
-  position: relative; display: flex; align-items: stretch;
-  width: 100%; box-sizing: border-box; min-height: 72px;
-  padding: 16px 8px 16px 18px;
-  border: none; border-radius: 12px; background: #FFFFFF; overflow: visible;
+  position: relative; display: flex; align-items: center; gap: 12px;
+  width: 100%; box-sizing: border-box; min-height: 20px;
+  padding: 0; border: none; border-radius: 0; background: transparent;
   box-shadow: none; cursor: pointer;
-  /* 两层 mask：上下半圆缺口对齐撕票线 */
-  -webkit-mask-image:
-    radial-gradient(circle at var(--ticket-cut-x) 0, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px)),
-    radial-gradient(circle at var(--ticket-cut-x) 100%, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px));
-  -webkit-mask-size: 100% 100%, 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-composite: source-in;
-  mask-image:
-    radial-gradient(circle at var(--ticket-cut-x) 0, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px)),
-    radial-gradient(circle at var(--ticket-cut-x) 100%, transparent var(--ticket-notch-r), #000 calc(var(--ticket-notch-r) + 0.5px));
-  mask-size: 100% 100%, 100% 100%;
-  mask-repeat: no-repeat;
-  mask-composite: intersect;
+  -webkit-mask-image: none; mask-image: none;
 }
-/* 撕票虚线（票根纯白，无灰底） */
-.step2-benefit-card::before {
-  content: '';
-  position: absolute;
-  top: var(--ticket-notch-r); bottom: var(--ticket-notch-r);
-  left: var(--ticket-cut-x); width: 2px; margin-left: -1px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='14' viewBox='0 0 2 14'%3E%3Cline x1='1' y1='1.5' x2='1' y2='6.5' stroke='%23DCDCDC' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-position: center 0;
-  background-size: 2px 14px;
-  background-repeat: repeat-y;
-  pointer-events: none; z-index: 1;
-}
-/* 左侧短圆角品牌条（约半高、垂直居中） */
-.step2-benefit-card::after {
-  content: '';
-  position: absolute; left: 0; top: 50%;
-  transform: translateY(-50%);
-  width: 3px; height: 44%; min-height: 28px; max-height: 36px;
-  background: var(--brand); border-radius: 2px;
-  pointer-events: none; z-index: 2;
-}
-/* Figma capture：CSS mask 无法导入，capture 模式改用 DOM 半圆撕口 */
-.step2-benefit-card__notch {
-  display: none; position: absolute; left: var(--ticket-cut-x);
-  width: calc(var(--ticket-notch-r) * 2); height: calc(var(--ticket-notch-r) * 2);
-  margin-left: calc(var(--ticket-notch-r) * -1); border-radius: 50%;
-  background: var(--bg-page); pointer-events: none; z-index: 4;
-}
-.step2-benefit-card__notch--top { top: calc(var(--ticket-notch-r) * -1); }
-.step2-benefit-card__notch--bottom { bottom: calc(var(--ticket-notch-r) * -1); }
-html.prd-capture .step2-benefit-card {
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-html.prd-capture .step2-benefit-card__notch { display: block; }
+.step2-benefit-card::before,
+.step2-benefit-card::after { display: none !important; content: none !important; }
+.step2-benefit-card__notch { display: none !important; }
 .step2-benefit-card__body {
-  position: relative; z-index: 1;
-  flex: 1; min-width: 0; display: flex; align-items: stretch;
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;
   text-align: left; border: none; background: transparent; padding: 0;
   font-family: inherit; color: inherit; pointer-events: none;
 }
 .step2-benefit-card__main {
   flex: 1 1 auto; min-width: 0; display: flex; align-items: center;
-  padding-right: 12px; padding-left: 6px;
 }
 .step2-benefit-card__side {
-  flex: 0 0 var(--ticket-stub-w); width: var(--ticket-stub-w); min-width: var(--ticket-stub-w);
-  box-sizing: border-box;
-  display: flex; align-items: center; justify-content: flex-end; gap: 0;
-  padding: 0 2px 0 10px;
-  pointer-events: auto;
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end;
+  gap: 8px; pointer-events: auto;
 }
 .step2-benefit-card__title {
-  display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; row-gap: 2px;
-  font-size: 15px; font-weight: 600; color: #1A1A1A; line-height: 1.4;
-  white-space: normal; overflow: visible; width: 100%;
+  display: block; width: 100%;
+  font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.step2-benefit-card__proj {
-  flex-shrink: 0; max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
-}
-.step2-benefit-card__meta {
-  flex: 1 1 auto; min-width: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 1px;
-  color: var(--ticket-meta); text-align: center;
-  white-space: normal; overflow-wrap: anywhere; word-break: break-word;
-  pointer-events: none;
-}
-.step2-benefit-card__meta-main {
-  display: inline-flex; align-items: baseline; justify-content: center;
-  flex-wrap: nowrap; white-space: nowrap; gap: 0;
-  max-width: 100%;
-}
-.step2-benefit-card__meta-scope {
-  display: inline; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
-}
-.step2-benefit-card__meta-qty {
-  display: inline; font-size: 13px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
-}
-.step2-benefit-card__meta-gift {
-  display: block; font-size: 12px; font-weight: 500; line-height: 1.25; color: var(--ticket-meta);
-}
+.step2-benefit-card__proj { display: inline; }
+.step2-benefit-card__meta,
+.step2-benefit-card__meta-main,
+.step2-benefit-card__meta-scope,
+.step2-benefit-card__meta-qty,
+.step2-benefit-card__meta-gift,
 .step2-benefit-card__meta--single {
-  font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ticket-meta);
+  display: inline; flex: 0 0 auto;
+  font-size: 14px; font-weight: 400; line-height: 20px; color: #929292;
+  white-space: nowrap; text-align: right; pointer-events: none;
 }
 .step2-benefit-card__rm {
-  position: static; transform: none;
-  flex: 0 0 28px; width: 28px; height: 28px; padding: 0; margin: 0;
-  border: none; border-radius: 8px;
-  background: transparent; color: #8F8F8F; cursor: pointer;
+  flex: 0 0 20px; width: 20px; height: 20px; padding: 0; margin: 0;
+  border: none; border-radius: 50%;
+  background: transparent; color: #b2b2b2; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   box-sizing: border-box;
 }
-.step2-benefit-card__rm:active {
-  background: rgba(0, 0, 0, 0.04); color: #666666;
-}
+.step2-benefit-card__rm:active { opacity: .72; }
 .step2-benefit-card__rm svg {
-  display: block; width: 18px; height: 18px; pointer-events: none;
+  display: block; width: 16px; height: 16px; pointer-events: none;
 }
 .benefit-tree-node { position: relative; }
 .benefit-expand .form-section {
@@ -843,48 +878,119 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .benefit-expand .proj-tag-list { padding: 2px 0 6px; }
 .benefit-expand .mp-tag-list { padding: 2px 0 6px; }
 .phone-shell--success {
-  background:
-    linear-gradient(180deg, rgba(83, 255, 114, 0.22) 0%, rgba(224, 251, 165, 0.22) 24.052%, rgba(247, 247, 247, 0.22) 48.104%),
-    #F7F7F7;
+  background: #F7F7F7;
 }
 .phone-shell--success .status-bar { background: transparent; }
-#screen7, #screen8 { background: transparent; }
+/* Figma 422:1769 · 办卡成功 / 422:1553 · 会员卡已创建（共享金黄顶区） */
+.phone-shell--issue-success {
+  background: #F7F7F7;
+}
+.phone-shell--issue-success .status-bar { background: transparent; }
+#screen7,
+#screen8 {
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+.issue-success-deco,
+.create-success-deco {
+  position: absolute; inset: 0 0 auto 0; height: 373px;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.issue-success-deco__grad,
+.create-success-deco__grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, #fff8db 0%, #ffffff 100%);
+}
+.issue-success-deco__wave,
+.create-success-deco__wave {
+  position: absolute; left: -14%; top: -28%;
+  width: 138%; height: 145%;
+  background: url("assets/issue-success-bg-wave.png") center bottom / cover no-repeat;
+  opacity: .55;
+  transform: rotate(50.63deg);
+  transform-origin: center center;
+}
+#screen7 > .page-title-bar,
+#screen7 > .page-body,
+#screen7 > .bottom-bar,
+#screen8 > .page-title-bar,
+#screen8 > .page-body,
+#screen8 > .bottom-bar {
+  position: relative; z-index: 1;
+}
+#screen7 .page-title-bar,
+#screen8 .page-title-bar {
+  background: transparent;
+}
+.issue-success-body,
 .create-success-body {
   display: flex; flex-direction: column; align-items: center;
-  padding: 24px 16px; text-align: center; gap: 20px;
+  padding: 8px 12px 16px; text-align: center; gap: 0;
+  background: transparent;
 }
+.issue-success-hero,
 .create-success-hero {
   display: flex; justify-content: center; width: 100%;
+  margin-bottom: 14px;
 }
+.issue-success-icon,
 .create-success-icon {
-  position: relative; width: 100%; height: 112px; flex-shrink: 0;
+  position: relative; width: 200px; height: 150px; flex-shrink: 0;
 }
-.create-success-icon__glow-wrap {
-  position: absolute; left: 50%; top: 25px; transform: translateX(-50%);
-  width: 154px; height: 95px; pointer-events: none;
-}
+.issue-success-icon__glow,
 .create-success-icon__glow {
-  display: block; width: 100%; height: 100%;
+  position: absolute; left: 50%; top: 72px; transform: translateX(-50%) scaleY(-1);
+  width: 191px; height: 57px; pointer-events: none;
+  display: block;
 }
-.create-success-icon__mark-wrap {
-  position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
-  width: 112px; height: 112px; pointer-events: none;
-}
+.issue-success-icon__mark,
 .create-success-icon__mark {
-  display: block; width: 112px; height: 112px;
-  object-fit: contain;
+  position: absolute; inset: 0;
+  display: block; width: 200px; height: 150px;
+  object-fit: contain; pointer-events: none;
 }
+.issue-success-title,
 .create-success-title {
-  font-size: 20px; font-weight: 500; color: var(--text); margin: 0;
-  letter-spacing: .02em; line-height: 1.5; width: 100%;
+  margin: 0; font-size: 20px; font-weight: 600; color: #1a1a1a;
+  line-height: normal; width: 100%;
 }
-.create-success-card-slot {
-  width: 100%; text-align: left; flex-shrink: 0; padding-bottom: 16px;
-}
-.create-success-card-slot .member-card-item { cursor: default; pointer-events: none; flex-shrink: 0; }
+.issue-success-desc,
 .create-success-desc {
-  font-size: 16px; font-weight: 500; color: #7f7f7f;
-  line-height: 1.375; width: 100%; margin: 0;
+  margin: 12px 0 0; padding: 0;
+  font-size: 14px; font-weight: 400; color: #666;
+  line-height: normal; width: 100%;
+}
+.issue-success-card-slot,
+#screen7 .create-success-card-slot {
+  width: 100%; margin: 22px 0 0; text-align: left; flex-shrink: 0;
+}
+.issue-success-card-slot .member-card-item,
+#screen7 .create-success-card-slot .member-card-item {
+  cursor: default; flex-shrink: 0;
+  pointer-events: auto;
+}
+#screen7 .bottom-bar--create-success,
+#screen8 .bottom-bar--issue-success {
+  background: #fff;
+}
+#screen7 .bottom-bar--create-success .bottom-bar__action,
+#screen8 .bottom-bar--issue-success .bottom-bar__action {
+  gap: 16px;
+}
+#screen7 .bottom-bar--create-success .btn-main,
+#screen8 .bottom-bar--issue-success .btn-main {
+  flex: 1; margin: 0; max-width: none;
+  height: 48px; min-height: 48px; border-radius: 12px;
+  font-size: 16px; font-weight: 500; line-height: 1.2;
+}
+#screen7 .bottom-bar--create-success .btn-main.secondary,
+#screen8 .bottom-bar--issue-success .btn-main.secondary {
+  background: #fff2f2; color: #f32f41; border: none; margin-top: 0;
+}
+#screen7 .bottom-bar--create-success .btn-main:not(.secondary),
+#screen8 .bottom-bar--issue-success .btn-main:not(.secondary) {
+  background: #f32f41; color: #fff; border: none;
 }
 .issue-member-row__avatar {
   width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -907,7 +1013,7 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .issue-member-row__phone { font-size: 13px; color: #929292; margin-top: 2px; display: block; line-height: 1.35; }
 .picker-foot .btn-main:disabled { opacity: .45; cursor: not-allowed; }
 .success-card-face { margin: 0 16px 12px; }
-.success-card-face .member-card-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.success-card-face .member-card-item { border: none; border-radius: 12px; overflow: hidden; }
 .success-issue-card-slot {
   width: calc(100% - 32px);
   margin: 0 16px 24px;
@@ -940,10 +1046,44 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
   font-size: 14px; font-weight: 400; color: var(--brand);
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
 }
-#screen10 .page-body { background: var(--card); }
-#screen10 .form-section { margin-bottom: 0; }
+#screen10 .page-body {
+  background: transparent; padding: 16px 8px 16px; margin-top: -16px;
+  position: relative; z-index: 1;
+}
+#screen10 .form-section {
+  margin: 0; padding: 0; background: transparent; border-radius: 0; overflow: visible;
+  display: flex; flex-direction: column; gap: 12px;
+}
+#screen10 .step1-basic-card {
+  background: #fff; border-radius: 8px; overflow: hidden;
+}
+#screen10 .step1-theme-card {
+  background: #fff; border-radius: 8px; overflow: hidden; padding-bottom: 12px;
+}
+#screen10 .step1-theme-card .form-row--card-theme-label {
+  position: relative;
+  min-height: 0;
+  padding: 16px 12px 8px;
+  border-bottom: none;
+}
+#screen10 .step1-theme-card .form-row--card-theme-label .label {
+  font-size: 14px; font-weight: 500; line-height: 20px; color: #1a1a1a;
+}
+#screen10 .step1-theme-card .form-row--card-theme-label::before {
+  content: '';
+  position: absolute; left: 0; top: 19px; transform: none;
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4a7bf4;
+}
+#screen10 .step1-theme-card .form-row--card-theme-label:not(:last-child)::after { display: none; }
+#screen10 .card-theme-colors { margin: 0 12px; }
+#screen10 .card-theme-preview-slot { margin: 12px 12px 4px; }
+#screen10 .bottom-bar .btn-main,
+#screen9 .bottom-bar .btn-main,
+#screen11 .bottom-bar .btn-main {
+  border-radius: 12px; height: 48px; font-weight: 600;
+}
 #step1CardTheme .form-row--card-theme-label {
-  border-bottom: none; min-height: 0; padding-bottom: 4px;
+  border-bottom: none; min-height: 0;
 }
 .card-theme-colors { margin: 0 16px; padding: 0 0 2px; }
 .card-theme-colors .color-chips { padding: 4px 0 0; }
@@ -1166,6 +1306,9 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .picker-mask--bottom .validity-sheet-body,
 .picker-mask--bottom .picker-body { padding: 12px 20px 0; flex-shrink: 0; }
 .picker-mask--bottom .picker-search { padding: 12px 20px 0; flex-shrink: 0; }
+.picker-mask--bottom .picker-search.search-bar--member {
+  margin: 8px 16px; padding: 0 12px; flex-shrink: 0;
+}
 .picker-mask--bottom .issue-picker-tabs { flex-shrink: 0; }
 .picker-mask--bottom .picker-list {
   padding: 0 20px; flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -1191,36 +1334,70 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .picker-head--stack .picker-head__sub { font-size: 12px; color: var(--text-sec); font-weight: 500; margin-top: 4px; line-height: 1.4; }
 .issue-picker-tabs.page-tabs {
   flex-shrink: 0; height: auto; min-height: 40px; padding: 4px 0 0;
-  justify-content: center; gap: 48px; background: #fff; border-bottom: 1px solid #f0f0f0;
+  justify-content: center; gap: 48px; background: transparent; border-bottom: none;
 }
-.issue-picker-tabs .page-tabs__item { flex: 0 0 auto; width: auto; padding: 0 8px 10px; }
-.issue-picker-tabs .page-tabs__label { font-size: 16px; letter-spacing: .32px; color: #6c7279; }
+.issue-picker-tabs .page-tabs__item { flex: 0 0 auto; width: auto; padding: 0 12px 10px; }
+.issue-picker-tabs .page-tabs__label { font-size: 16px; letter-spacing: .32px; color: #6c7279; font-weight: 400; }
 .issue-picker-tabs .page-tabs__item.on .page-tabs__label { color: #1a1a1a; font-weight: 600; }
-.issue-picker-tabs .page-tabs__indicator { width: 27px; height: 3px; border-radius: 4px; bottom: 0; }
+.issue-picker-tabs .page-tabs__indicator { width: 27px; height: 3px; border-radius: 4px; bottom: 0; background: transparent; }
+.issue-picker-tabs .page-tabs__item.on .page-tabs__indicator { background: #ff0f23; }
 #issueMemberMask .picker-head--stack {
-  padding: 16px 16px 8px; text-align: center;
+  position: relative;
+  display: block;
+  padding: 16px 48px 10px;
+  text-align: center;
+  border-bottom: none;
 }
-#issueMemberMask .picker-head--stack .picker-head__title { font-size: 17px; font-weight: 600; color: #1a1a1a; }
-#issueMemberMask .picker-head--stack .picker-head__sub { font-size: 13px; color: #929292; margin-top: 4px; }
-#issueMemberMask .picker-search {
-  margin: 8px 16px 4px; padding: 0 12px; height: 36px; border-radius: 8px;
-  background: #f7f7f7; border: none; display: flex; align-items: center;
+#issueMemberMask .picker-head--stack .picker-head__title {
+  font-size: 18px; font-weight: 600; line-height: 25px; color: #1a1a1a;
 }
-#issueMemberMask .picker-search input {
-  background: transparent; border: none; width: 100%; font-size: 14px; color: #1a1a1a;
+#issueMemberMask .picker-head--stack .picker-head__sub {
+  font-size: 14px; font-weight: 400; color: #666; margin-top: 8px; line-height: 1.4;
 }
-#issueMemberMask .picker-search input::placeholder { color: #b2b2b2; }
+#issueMemberMask .picker-head--stack .picker-head__close {
+  position: absolute; right: 16px; top: 16px;
+  width: 20px; height: 20px; color: #929292;
+}
+#issueMemberMask .picker-head--stack .picker-head__close svg {
+  width: 20px; height: 20px;
+}
+#issueMemberMask .picker-search.search-bar--member {
+  margin: 8px 16px 8px; padding: 0 12px; height: 42px; border-radius: 8px;
+  background: #fff; border: 0.5px solid #d7d7d5; display: flex; align-items: center; gap: 6px;
+  box-sizing: border-box;
+}
+#issueMemberMask .picker-search.search-bar--member input {
+  background: transparent; border: none; width: auto; flex: 1; min-width: 0;
+  font-size: 14px; color: #1a1a1a; outline: none; font-family: inherit;
+}
+#issueMemberMask .picker-search.search-bar--member input::placeholder { color: #666; }
 #issueMemberMask .picker-list { padding: 0 16px 8px; }
 .issue-picker-tip {
   margin: 8px 0 4px; padding: 10px 12px; border-radius: 8px;
   background: #fff8f0; color: #b86a2d; font-size: 12px; line-height: 1.5;
 }
 .issue-member-item {
+  position: relative;
   display: flex; align-items: center; gap: 12px; padding: 14px 0;
   border-bottom: 1px solid #f0f0f0; cursor: pointer;
 }
 .issue-member-item input[type="radio"] {
   position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+/* Figma 422:2633 · 办卡列表右侧红色单选（选中红底白勾 / 未选灰描边） */
+.issue-member-radio {
+  flex-shrink: 0; width: 20px; height: 20px; margin-left: auto;
+  box-sizing: border-box; border-radius: 50%;
+  border: 1px solid #c7c7cc; background: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: transparent; pointer-events: none;
+}
+.issue-member-radio svg {
+  display: block; width: 10px; height: 8px;
+}
+.issue-member-item:has(input[type="radio"]:checked) .issue-member-radio,
+.issue-member-item input[type="radio"]:checked ~ .issue-member-radio {
+  border-color: #f32f41; background: #f32f41; color: #fff;
 }
 .issue-member-row__chev {
   flex-shrink: 0; width: 16px; height: 16px; color: #c2c4cc; margin-left: auto;
@@ -1332,6 +1509,24 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .proj-item-main[data-proj-row-main] { cursor: pointer; }
 .proj-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0; cursor: pointer; }
 .proj-switch input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+/* 添加项目/产品权益 · 右侧可多选打勾圆选（对齐办卡列表 radio 视觉） */
+.proj-pick-check {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; flex-shrink: 0; cursor: pointer; margin-left: auto;
+}
+.proj-pick-check input {
+  position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1;
+}
+.proj-pick-check__icon {
+  box-sizing: border-box; width: 20px; height: 20px; border-radius: 50%;
+  border: 1px solid #c7c7cc; background: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: transparent; pointer-events: none;
+}
+.proj-pick-check__icon svg { display: block; width: 10px; height: 8px; }
+.proj-pick-check input:checked + .proj-pick-check__icon {
+  border-color: #f32f41; background: #f32f41; color: #fff;
+}
 .proj-item-name { flex: 1; min-width: 0; font-size: 14px; display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
 .proj-item-price { font-size: 13px; color: var(--text-sec); font-variant-numeric: tabular-nums; flex-shrink: 0; }
 .proj-item-price__discount {
@@ -1569,7 +1764,7 @@ input[type=number]::-webkit-inner-spin-button {
 .form-row--duration { align-items: center; }
 .form-row--duration .form-row__trail--duration { max-width: none; flex: 1; margin-left: 12px; justify-content: flex-end; }
 .duration-input {
-  display: flex; align-items: center; gap: 8px; width: 196px; flex-shrink: 0; margin-left: auto;
+  display: flex; align-items: center; gap: 8px; width: 212px; flex-shrink: 0; margin-left: auto;
 }
 .duration-input__field {
   flex: 0 0 68px; width: 68px;
@@ -1587,7 +1782,7 @@ input[type=number]::-webkit-inner-spin-button {
 .duration-input__num:focus { outline: none; border-color: #ededed; color: #1a1a1a; }
 .duration-input__num.is-confirmed { color: #1a1a1a; font-weight: 500; }
 .duration-input__units {
-  position: relative; flex: 0 0 114px; width: 114px; height: 32px;
+  position: relative; flex: 0 0 136px; width: 136px; height: 32px;
   padding: var(--dur-seg-inset, 3px); box-sizing: border-box;
   display: grid; grid-template-columns: repeat(4, 1fr); align-items: center;
   background: #fff; border: 1px solid #ededed; border-radius: 8px;
@@ -1600,9 +1795,10 @@ input[type=number]::-webkit-inner-spin-button {
   transition: transform .2s ease; pointer-events: none; z-index: 0;
 }
 .duration-input__unit {
-  position: relative; z-index: 1; height: 26px; margin: 0; padding: 0 8px; border: none;
-  border-radius: 6px; background: transparent; font-size: 14px; font-weight: 500;
+  position: relative; z-index: 1; height: 26px; margin: 0; padding: 0 2px; border: none;
+  border-radius: 6px; background: transparent; font-size: 13px; font-weight: 500;
   color: #929292; cursor: pointer; font-family: inherit; line-height: 26px; text-align: center;
+  white-space: nowrap; overflow: hidden;
 }
 .duration-input__unit.is-active { color: #4a7bf4; font-weight: 500; }
 .unlimited-validity-dialog__dur { display: flex; justify-content: center; margin: 16px 0 4px; }
@@ -1639,6 +1835,13 @@ input[type=number]::-webkit-inner-spin-button {
 .picker-foot--extend { padding-top: 12px; }
 .radio-opt { display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer; }
 .radio-opt input { accent-color: var(--brand); }
+/* 覆盖 .phone input 灰色 accent，打折/固定金额等单选保持品牌红 */
+.phone .radio-opt input[type="radio"],
+.phone .mp-modes input[type="radio"] {
+  accent-color: #f32f41;
+  width: 16px; height: 16px; margin: 0;
+  flex-shrink: 0;
+}
 .form-row .value.mp-summary { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .form-row .value.de-equity-val { max-width: 220px; white-space: normal; text-align: right; line-height: 1.5; }
 .form-row .value.de-equity-val.is-preline { white-space: pre-line; }
@@ -1700,30 +1903,44 @@ input[type=number]::-webkit-inner-spin-button {
 .form-row .value.readonly-val { color: var(--text); pointer-events: none; }
 .form-row .value.readonly-val.is-warn { color: var(--brand); }
 .policy-options { padding: 4px 16px 12px; }
-.page-body--usage-policy { background: var(--bg-page); }
+.page-body--usage-policy {
+  background: transparent; padding: 16px 8px 16px; margin-top: -16px;
+  position: relative; z-index: 1;
+}
 .usage-policy-cards {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 12px 16px 16px;
+  gap: 12px;
+  padding: 0;
 }
 .usage-policy-card {
-  background: var(--card);
-  border-radius: 12px;
+  background: #fff;
+  border-radius: 8px;
   overflow: hidden;
-  padding: 0 16px 14px;
+  padding: 0 0 14px;
   flex-shrink: 0;
 }
-.usage-policy-card .section-head { padding: 12px 0 8px; }
-.usage-policy-card .policy-options { padding: 0; }
+.usage-policy-card .section-head {
+  position: relative;
+  padding: 16px 12px 12px;
+  font-size: 14px; font-weight: 500; line-height: 20px; color: #1a1a1a;
+}
+.usage-policy-card .section-head::before {
+  content: '';
+  position: absolute; left: 0; top: 19px; transform: none;
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4a7bf4;
+}
+.usage-policy-card .policy-options { padding: 0 12px; }
 .policy-option {
   display: block; width: 100%; text-align: left; padding: 14px 14px 12px; margin-bottom: 8px;
-  border: 1px solid var(--border); border-radius: 10px; background: var(--card); cursor: pointer; font-family: inherit;
+  border: 0.67px solid #ededed; border-radius: 10px; background: #fff; cursor: pointer; font-family: inherit;
   box-sizing: border-box;
 }
 .policy-option:last-child { margin-bottom: 0; }
 .policy-option:has(.policy-option__radio:checked),
-.policy-option.is-active { border-color: var(--brand); background: var(--brand-soft); }
+.policy-option.is-active {
+  border: 1px solid #f32f41; background: #fff2f2;
+}
 .policy-option__head { display: flex; align-items: center; gap: 8px; }
 .policy-option__radio-wrap {
   position: relative; flex-shrink: 0; width: 18px; height: 18px;
@@ -2200,39 +2417,50 @@ input[type=number]::-webkit-inner-spin-button {
 .discount-slider-block__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 .discount-slider-block__name { font-size: 15px; font-weight: 600; }
 .discount-slider-block__val { font-size: 14px; font-weight: 600; color: var(--brand); }
+/* Figma 422:2391 · 设置折扣标尺（轨道 6 / 滑块 20 / 刻度在下） */
 .discount-ruler { position: relative; user-select: none; touch-action: none; }
-.ruler--pill { padding: 10px 4px var(--safe-bottom); }
+.ruler--pill {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 58px;
+  padding: 0;
+  overflow: visible;
+}
 .ruler--pill .discount-ruler__track {
-  position: relative; height: 8px; border-radius: 999px; margin: 0 11px;
-  background: #ECECEF;
+  position: relative; height: 6px; border-radius: 999px;
+  margin: 7px 10px 0;
+  background: #ededed;
+  overflow: visible;
 }
 .ruler--pill .discount-ruler__fill {
   position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px;
-  background: var(--brand); pointer-events: none;
+  background: #f32f41; pointer-events: none;
 }
 .ruler--pill .discount-ruler__ticks {
-  position: absolute; left: 11px; right: 11px; top: 22px; height: 22px; pointer-events: none;
+  position: absolute; left: 12px; right: 12px; top: 23px; height: 35px; pointer-events: none;
 }
 .ruler--pill .discount-ruler__tick {
-  position: absolute; top: 0; width: 2px; height: 6px; background: #D1D1D6;
+  position: absolute; top: 0; width: 2px; height: 6px; background: #d7d7d5;
   transform: translateX(-50%); border-radius: 1px;
 }
-.ruler--pill .discount-ruler__tick.is-anchor { height: 10px; background: #AEAEB2; }
+.ruler--pill .discount-ruler__tick.is-anchor { height: 10px; background: #b2b2b2; }
 .ruler--pill .discount-ruler__mark {
-  position: absolute; top: 12px; transform: translateX(-50%);
-  font-size: 11px; font-weight: 500; color: var(--text-sec); white-space: nowrap;
+  position: absolute; top: 18px; transform: translateX(-50%);
+  font-size: 12px; font-weight: 400; line-height: 17px; color: #929292; white-space: nowrap;
 }
 .ruler--pill .discount-ruler__mark--retail {
-  color: var(--text-sec); font-weight: 400;
+  color: #929292; font-weight: 400;
 }
 .ruler--pill .discount-ruler__thumb {
-  position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; margin-left: -11px;
-  border-radius: 50%; background: var(--brand); border: 3px solid #fff;
+  position: absolute; top: 50%; width: 20px; height: 20px; margin-top: -10px; margin-left: -10px;
+  border-radius: 50%; background: #f32f41; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   cursor: grab; z-index: 2; transition: transform .12s ease;
+  box-sizing: border-box;
 }
-.ruler--pill .discount-ruler__thumb:active { cursor: grabbing; transform: scale(1.08); }
-.ruler-block { padding: 0 0 4px; }
-.ruler-block .ruler--pill { padding-bottom: 38px; }
+.ruler--pill .discount-ruler__thumb:active { cursor: grabbing; transform: scale(1.06); }
+.ruler-block { padding: 0; }
+.ruler-block .ruler--pill { padding-bottom: 0; min-height: 58px; }
 
 /* Figma capture: ?figma=list-active | issue-success | step2 — phone-only */
 html.figma-capture-list-active,
@@ -4067,7 +4295,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 }
 .pick-section-card .ruler-block .ruler--pill,
 .pick-section-card .mp-ruler-wrap .ruler--pill {
-  padding-bottom: 40px;
+  padding-bottom: 0; min-height: 58px;
 }
 .pick-confirm-inline {
   margin: 4px 0 0; width: 100%; box-sizing: border-box; flex-shrink: 0;
@@ -4121,7 +4349,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   padding: 8px 16px 12px; background: transparent; overflow: visible;
 }
 .benefit-param-card__params .mp-mode-bar { margin-bottom: 14px; }
-.benefit-param-card__params .mp-ruler-wrap { margin-top: 8px; padding-bottom: 4px; }
+.benefit-param-card__params .mp-ruler-wrap { margin-top: 8px; padding-bottom: 0; }
 .benefit-param-card__foot { padding: 4px 16px 16px; }
 .benefit-param-card__save {
   width: 100%; height: 44px; border: 1px solid var(--brand); border-radius: 10px;
@@ -6532,6 +6760,237 @@ button.exp-flow-row:active { opacity: .92; }
 #screen-exp-detail:not(.hidden) {
   display: flex; flex-direction: column;
 }
+
+/* ==== STOCK MODULE CSS ==== */
+[id^="screen-stock-"]:not(.hidden) { display: flex; flex-direction: column; }
+#screen-stock-hub,
+#screen-stock-in,
+#screen-stock-out,
+#screen-stock-goods,
+#screen-stock-sku,
+#screen-stock-types,
+#screen-stock-transfer,
+#screen-stock-transfer-add,
+#screen-stock-pick {
+  background: #F7F7F7;
+}
+.stk-summary {
+  margin: 12px 16px 8px; padding: 16px 16px 14px; border-radius: 16px;
+  background: #fff; border: 1px solid #EBEBEB;
+}
+.stk-summary__label { font-size: 12px; color: var(--text-sec); line-height: 16px; }
+.stk-summary__value {
+  margin-top: 4px; font-family: var(--font-data); font-size: 28px; font-weight: 600;
+  color: var(--brand); letter-spacing: .02em; line-height: 34px;
+}
+.stk-summary__meta {
+  margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  font-size: 12px; color: var(--text-sec); line-height: 16px;
+}
+.stk-summary__warn { color: #E85A28; font-weight: 500; }
+.stk-summary__types {
+  margin-left: auto; height: 28px; padding: 0 12px; border-radius: 8px;
+  border: 1px solid #E0E0E0; background: #fff; color: #3D3D3D;
+  font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.stk-summary__types:active { background: #F7F7F7; }
+.stk-actions {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  padding: 4px 12px 8px;
+}
+.stk-action {
+  border: none; background: transparent; padding: 8px 4px 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: inherit; color: var(--text); cursor: pointer;
+}
+.stk-action:active { opacity: .78; transform: scale(.97); }
+.stk-action__icon {
+  width: 48px; height: 48px; border-radius: 14px; overflow: hidden;
+}
+.stk-action__icon img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.stk-action__label { font-size: 12px; line-height: 16px; color: #3D3D3D; }
+.stk-search {
+  margin: 4px 16px 8px; height: 36px; border-radius: 10px; background: #fff;
+  border: 1px solid #EBEBEB; display: flex; align-items: center; gap: 8px; padding: 0 12px;
+  box-sizing: border-box;
+}
+.stk-search input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-size: 14px; color: var(--text); min-width: 0;
+}
+.stk-search input::placeholder { color: #B2B2B2; }
+.stk-search__scan {
+  border: none; background: transparent; padding: 4px; color: var(--brand);
+  display: inline-flex; cursor: pointer;
+}
+.stk-tabs {
+  display: flex; gap: 0; padding: 0 8px; background: #fff;
+  border-bottom: 1px solid #F0F0F0; flex-shrink: 0;
+}
+.stk-tabs__btn {
+  flex: 1; border: none; background: transparent; height: 42px;
+  font-size: 14px; color: #6C7279; position: relative; font-family: inherit; cursor: pointer;
+}
+.stk-tabs__btn.on { color: #1A1A1A; font-weight: 600; }
+.stk-tabs__btn.on::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 24px; height: 3px; border-radius: 2px; background: var(--brand);
+}
+.stk-list {
+  padding: 0 0 20px; background: #fff;
+}
+.stk-sku-card,
+.stk-doc-card {
+  position: relative;
+  margin: 0; padding: 14px 16px; background: #fff; border-radius: 0;
+  box-sizing: border-box; border: none; width: 100%;
+  font-family: inherit; text-align: left; color: inherit; display: block; cursor: pointer;
+  box-shadow: none;
+}
+.stk-sku-card:not(:last-child)::after,
+.stk-doc-card:not(:last-child)::after {
+  content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 1px;
+  background: var(--card-divider); transform: scaleY(0.5); transform-origin: center bottom;
+  pointer-events: none;
+}
+.stk-sku-card:active, .stk-doc-card:active { opacity: .92; }
+.stk-sku-card.is-low { border-left: 3px solid #E85A28; padding-left: 13px; }
+.stk-sku-card.is-on {
+  background: #FFF7F8;
+}
+.stk-sku-card__check {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid #D0D0D0; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.stk-sku-card.is-on .stk-sku-card__check {
+  border-color: var(--brand); background: var(--brand); color: #fff;
+}
+.stk-sku-card__check svg { display: none; }
+.stk-sku-card.is-on .stk-sku-card__check svg { display: block; }
+.stk-sku-card__main { flex: 1; min-width: 0; }
+.stk-pick-row {
+  display: flex; align-items: flex-start; gap: 12px; width: 100%;
+}
+.stk-sku-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.stk-sku-card__name { font-size: 15px; font-weight: 600; color: #1A1A1A; line-height: 22px; min-width: 0; }
+.stk-sku-card__spec { font-weight: 500; color: #6C7279; }
+.stk-sku-card__qty {
+  font-family: var(--font-data); font-size: 20px; font-weight: 600; color: #1A1A1A; line-height: 22px;
+}
+.stk-sku-card__qty.is-low { color: #E85A28; }
+.stk-sku-card__meta {
+  margin-top: 8px; display: flex; justify-content: space-between; gap: 12px;
+  font-size: 12px; color: var(--text-sec); line-height: 16px;
+}
+.stk-badge {
+  display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 4px;
+  font-size: 10px; font-weight: 600; background: #FFF0EB; color: #E85A28;
+}
+.stk-doc-card__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stk-doc-card__title { font-size: 15px; font-weight: 600; color: #1A1A1A; }
+.stk-doc-card__meta { margin-top: 8px; font-size: 12px; color: var(--text-sec); line-height: 18px; }
+.stk-status {
+  display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px;
+  border-radius: 11px; font-size: 11px; font-weight: 500;
+}
+.stk-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.stk-status--pending { background: #FFF6E8; color: #C47A00; }
+.stk-status--shipping { background: #EEF2FF; color: #3D5BD9; }
+.stk-status--done { background: #EAF8F1; color: #1F9A5C; }
+.stk-status--reject { background: #FFF0F1; color: #D11F30; }
+.stk-status--withdraw { background: #F2F2F2; color: #6C7279; }
+.stk-banner {
+  margin: 12px 16px 0; padding: 10px 14px; border-radius: 12px;
+  display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500;
+}
+.stk-banner--in {
+  background: linear-gradient(90deg, #EAF8F1, #F4FBF7);
+  color: #1F9A5C; border: 1px solid #C8EBD9;
+}
+.stk-banner--out {
+  background: linear-gradient(90deg, #FFF2F2, #FFF8F8);
+  color: var(--brand); border: 1px solid var(--brand-border);
+}
+.stk-form-card {
+  margin: 12px 16px 0; background: #fff; border-radius: 12px; overflow: hidden;
+}
+.stk-form-card .form-row {
+  width: 100%; border: none; background: transparent; font: inherit; color: inherit;
+  text-align: left; appearance: none; box-sizing: border-box;
+}
+.stk-add-row {
+  margin: 12px 16px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.stk-add-btn {
+  height: 48px; border-radius: 12px; border: 1px dashed #D8D8D8; background: #fff;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 14px; font-weight: 500; color: #3D3D3D; font-family: inherit; cursor: pointer;
+}
+.stk-add-btn:active { background: #FAFAFA; }
+.stk-add-btn--brand { border-style: solid; border-color: var(--brand-border); color: var(--brand); background: var(--brand-soft); }
+.stk-line {
+  margin: 10px 16px 0; padding: 12px 14px; background: #fff; border-radius: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center;
+}
+.stk-line__name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+.stk-line__sub { font-size: 12px; color: var(--text-sec); }
+.stk-stepper {
+  display: inline-flex; align-items: center; gap: 0; border: 1px solid #EBEBEB; border-radius: 8px; overflow: hidden;
+}
+.stk-stepper button {
+  width: 32px; height: 32px; border: none; background: #F7F7F7; color: #1A1A1A;
+  font-size: 16px; cursor: pointer; font-family: inherit;
+}
+.stk-stepper span {
+  min-width: 36px; text-align: center; font-family: var(--font-data); font-size: 15px; font-weight: 600;
+}
+.stk-empty {
+  padding: 48px 24px; text-align: center; color: var(--text-sec); font-size: 14px;
+}
+.stk-empty .btn-main { margin: 16px auto 0; max-width: 180px; }
+.stk-shop-pill {
+  border: none; background: #F2F2F2; border-radius: 14px; height: 28px; padding: 0 10px;
+  font-size: 12px; color: #3D3D3D; font-family: inherit; max-width: 140px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
+}
+.stk-foot-dual {
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; padding: 10px 16px;
+  background: #fff; border-top: 1px solid #F0F0F0;
+}
+.stk-foot-dual .btn-main.secondary {
+  background: #fff; color: var(--text); border: 1px solid #E0E0E0;
+}
+.stk-transfer-rail {
+  margin: 12px 16px 0; padding: 14px; background: #fff; border-radius: 12px;
+  display: grid; grid-template-columns: 1fr 36px 1fr; gap: 8px; align-items: center;
+}
+.stk-transfer-rail__box {
+  padding: 10px; border-radius: 10px; background: #F7F7F7; min-height: 64px;
+}
+.stk-transfer-rail__lab { font-size: 11px; color: var(--text-sec); }
+.stk-transfer-rail__val { margin-top: 4px; font-size: 13px; font-weight: 600; color: #1A1A1A; }
+.stk-transfer-rail__arrow {
+  width: 36px; height: 36px; border-radius: 50%; background: #5B7CFF;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+}
+.stk-type-row {
+  margin: 0 16px 10px; padding: 14px 16px; background: #fff; border-radius: 12px;
+  display: flex; align-items: center; gap: 12px;
+}
+.stk-type-row__icon { width: 36px; height: 36px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+.stk-type-row__icon img { width: 100%; height: 100%; display: block; }
+.stk-type-row__body { flex: 1; min-width: 0; }
+.stk-type-row__name { font-size: 15px; font-weight: 600; color: #1A1A1A; }
+.stk-type-row__sub { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+.stk-hint {
+  margin: 0 16px 8px; padding: 10px 12px; border-radius: 8px; background: #FFF8F0;
+  color: #B86A2D; font-size: 12px; line-height: 1.5;
+}
+/* ==== /STOCK MODULE CSS ==== */
+
 /* ==== /EXPENSE MODULE CSS ==== */
 
 .flow-map-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 13px; }
@@ -6743,10 +7202,27 @@ button.exp-flow-row:active { opacity: .92; }
   width: 18px; height: 18px; flex-shrink: 0; display: block;
   color: var(--brand);
 }
-.search-bar { margin: 12px 16px; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
-.search-bar input { flex: 1; border: none; outline: none; font-size: 14px; font-family: inherit; background: transparent; color: var(--text); }
+.search-bar { margin: 12px 16px; display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-sizing: border-box; }
+.search-bar input { flex: 1; min-width: 0; border: none; outline: none; font-size: 14px; font-family: inherit; background: transparent; color: var(--text); }
+.search-bar input::placeholder { color: #666; }
 .search-bar:focus-within { border-color: var(--input-border-focus); }
-.search-bar svg { flex-shrink: 0; color: var(--text-sec); }
+.search-bar svg,
+.search-bar__icon { flex-shrink: 0; width: 16px; height: 16px; color: #666; display: block; }
+.search-bar .search-go {
+  flex-shrink: 0; height: 26px; margin: 0; padding: 0 0 0 10px;
+  border: none; border-left: 0.5px solid #d7d7d5; background: none;
+  color: #666; font-size: 14px; font-weight: 400; line-height: 26px;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.search-bar .search-go:active { opacity: .72; }
+/* Figma 422:2634 / 403:128 · 姓名/手机搜索栏统一款 */
+.search-bar--member {
+  margin: 8px 16px; height: 42px; padding: 0 12px; gap: 6px;
+  background: #fff; border: 0.5px solid #d7d7d5; border-radius: 8px;
+}
+.search-bar--member:focus-within { border-color: #d7d7d5; }
+.search-bar--member input { color: #1a1a1a; }
+.search-bar--member input::placeholder { color: #666; }
 .guest-btn {
   margin: 0 16px 12px;
   width: calc(100% - 32px);
@@ -7172,8 +7648,9 @@ button.exp-flow-row:active { opacity: .92; }
 .bottom-bar--bill .bottom-bar__safe {
   flex: 1; min-height: 0; height: auto; background: #fff;
 }
-.search-bar--bill { margin: 8px 16px 4px; height: 42px; border-radius: 8px; border-color: var(--border-light); }
-.search-bar--bill .search-go { color: var(--text-sec); font-size: 14px; flex-shrink: 0; border: none; background: none; cursor: pointer; font-family: inherit; padding-left: 10px; border-left: 1px solid var(--border-light); height: 26px; }
+.search-bar--bill { margin: 8px 16px 4px; height: 42px; padding: 0 12px; gap: 6px; border-radius: 8px; border: 0.5px solid #d7d7d5; background: #fff; }
+.search-bar--bill:focus-within { border-color: #d7d7d5; }
+.search-bar--bill .search-go { color: #666; font-size: 14px; flex-shrink: 0; border: none; border-left: 0.5px solid #d7d7d5; background: none; cursor: pointer; font-family: inherit; padding-left: 10px; height: 26px; }
 /* 确认支付弹窗 · Figma 1:2310 */
 .picker-sheet--pay {
   background: #F7F7F7; max-height: 85%; height: min(652px, 85%);
@@ -8769,8 +9246,10 @@ button.exp-flow-row:active { opacity: .92; }
   border-bottom: none;
 }
 .flow-weikuan-toolbar .search-bar {
-  margin: 12px; height: 40px; border-radius: 8px;
+  margin: 12px; height: 42px; border-radius: 8px;
+  border: 0.5px solid #d7d7d5; background: #fff; gap: 6px;
 }
+.flow-weikuan-toolbar .search-bar:focus-within { border-color: #d7d7d5; }
 .flow-weikuan-list {
   display: flex; flex-direction: column; gap: 12px;
   padding: 0; box-sizing: border-box;
@@ -9139,13 +9618,13 @@ button.exp-flow-row:active { opacity: .92; }
 }
 #screen-add-card .member-card-item__check svg { width: 12px; height: 12px; display: block; }
 .member-card-item {
-  cursor: pointer; border: 1.5px solid var(--border-light); border-radius: 12px;
+  cursor: pointer; border: none; border-radius: 12px;
   overflow: hidden; background: var(--card); text-align: left; width: 100%;
   padding: 0; font-family: inherit; color: inherit;
   --card-accent: #C4A394;
 }
 .member-card-item.is-selected {
-  border-color: var(--brand); background: var(--brand-soft);
+  border: 1.5px solid var(--brand); background: var(--brand-soft);
 }
 .member-card-compact {
   height: 54px; position: relative; overflow: hidden;
@@ -9156,10 +9635,12 @@ button.exp-flow-row:active { opacity: .92; }
 .member-card-compact::after {
   content: '';
   position: absolute; inset: 0;
-  background: url("assets/member-card-header-deco.png") right center / cover no-repeat;
+  background: url("assets/member-card-header-deco.png") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1;
+  /* Figma image 210: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
   mix-blend-mode: plus-lighter;
-  opacity: .6;
+  opacity: 1;
+  border-radius: inherit;
 }
 .member-card-compact__title {
   position: absolute; left: 16px; right: 108px; top: 50%; transform: translateY(-50%);
@@ -11246,6 +11727,211 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     </div>
   </div>
 </div>
+
+        <!-- ==== STOCK MODULE HTML ==== -->
+<div class="screen hidden" id="screen-stock-hub">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkHubBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">库存管理</span>
+    <button type="button" class="stk-shop-pill" id="stkHubShop" title="切换门店">旗舰体验店</button>
+  </div>
+  <div class="page-body" style="padding:0;background:#F7F7F7">
+    <div class="stk-summary">
+      <div class="stk-summary__label">现库存总值</div>
+      <div class="stk-summary__value" id="stkHubValue">¥0</div>
+      <div class="stk-summary__meta">
+        <span id="stkHubSkuCount">0 个规格</span>
+        <span class="stk-summary__warn" id="stkHubLow" hidden>0 低库存</span>
+        <button type="button" class="stk-summary__types" id="stkHubTypes">入出类别</button>
+      </div>
+    </div>
+    <div class="stk-actions">
+      <button type="button" class="stk-action" data-stk-go="in"><span class="stk-action__icon"><img src="assets/stock/in.svg" alt="" width="48" height="48"></span><span class="stk-action__label">入库</span></button>
+      <button type="button" class="stk-action" data-stk-go="out"><span class="stk-action__icon"><img src="assets/stock/out.svg" alt="" width="48" height="48"></span><span class="stk-action__label">出库</span></button>
+      <button type="button" class="stk-action" data-stk-go="transfer"><span class="stk-action__icon"><img src="assets/stock/transfer.svg" alt="" width="48" height="48"></span><span class="stk-action__label">调拨</span></button>
+      <button type="button" class="stk-action" data-stk-go="goods"><span class="stk-action__icon"><img src="assets/stock/goods.svg" alt="" width="48" height="48"></span><span class="stk-action__label">商品</span></button>
+    </div>
+    <div class="stk-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B2B2B2" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+      <input type="search" id="stkHubSearch" placeholder="搜索规格名称 / 条码" autocomplete="off">
+      <button type="button" class="stk-search__scan" id="stkHubScan" aria-label="扫码"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2M7 12h10"/></svg></button>
+    </div>
+    <div class="stk-tabs" id="stkHubTabs" role="tablist">
+      <button type="button" class="stk-tabs__btn on" data-stk-tab="sku">在库</button>
+      <button type="button" class="stk-tabs__btn" data-stk-tab="in">入库</button>
+      <button type="button" class="stk-tabs__btn" data-stk-tab="out">出库</button>
+      <button type="button" class="stk-tabs__btn" data-stk-tab="transfer">调拨</button>
+    </div>
+    <div class="stk-list" id="stkHubList"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-in">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkInBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">商品入库</span>
+  </div>
+  <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
+    <div class="stk-banner stk-banner--in">您正在入库 · 数量将增加至在库规格</div>
+    <div class="stk-form-card">
+      <div class="form-row"><span class="label">入库门店</span><span class="value has-val" id="stkInShop">—</span></div>
+      <button type="button" class="form-row clickable" id="stkInTypeRow"><span class="label">入库类别</span><span class="form-row__trail"><span class="value has-val" id="stkInType">正常入库</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></button>
+      <div class="form-row"><span class="label">入库日期</span><span class="value has-val" id="stkInDate">—</span></div>
+      <div class="form-row"><span class="label">备注</span><input class="value" id="stkInRemark" type="text" placeholder="选填"></div>
+    </div>
+    <div class="stk-add-row">
+      <button type="button" class="stk-add-btn" id="stkInScan">扫码添加</button>
+      <button type="button" class="stk-add-btn stk-add-btn--brand" id="stkInPick">手动添加</button>
+    </div>
+    <div id="stkInLines"></div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-bar__action"><button type="button" class="btn-main" id="stkInSave">保存入库</button></div>
+    <div class="bottom-bar__safe" aria-hidden="true"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-out">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkOutBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">商品出库</span>
+  </div>
+  <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
+    <div class="stk-banner stk-banner--out">您正在出库 · 不可超过当前库存</div>
+    <div class="stk-form-card">
+      <div class="form-row"><span class="label">出库门店</span><span class="value has-val" id="stkOutShop">—</span></div>
+      <button type="button" class="form-row clickable" id="stkOutTypeRow"><span class="label">出库类别</span><span class="form-row__trail"><span class="value has-val" id="stkOutType">销售出库</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></button>
+      <div class="form-row"><span class="label">出库日期</span><span class="value has-val" id="stkOutDate">—</span></div>
+      <div class="form-row"><span class="label">备注</span><input class="value" id="stkOutRemark" type="text" placeholder="选填"></div>
+    </div>
+    <div class="stk-add-row">
+      <button type="button" class="stk-add-btn" id="stkOutScan">扫码添加</button>
+      <button type="button" class="stk-add-btn stk-add-btn--brand" id="stkOutPick">手动添加</button>
+    </div>
+    <div id="stkOutLines"></div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-bar__action"><button type="button" class="btn-main" id="stkOutSave">保存出库</button></div>
+    <div class="bottom-bar__safe" aria-hidden="true"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-goods">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkGoodsBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">商品管理</span>
+  </div>
+  <div class="stk-search" style="margin-top:10px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B2B2B2" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+    <input type="search" id="stkGoodsSearch" placeholder="搜索商品 / 规格" autocomplete="off">
+  </div>
+  <div class="page-body" style="padding:0;background:#F7F7F7">
+    <div class="stk-list" id="stkGoodsList"></div>
+  </div>
+  <div class="stk-foot-dual">
+    <button type="button" class="btn-main secondary" id="stkGoodsCats">分类</button>
+    <button type="button" class="btn-main" id="stkGoodsAdd">新增规格</button>
+  </div>
+  <div class="bottom-bar__safe" style="background:#fff" aria-hidden="true"></div>
+</div>
+
+<div class="screen hidden" id="screen-stock-sku">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkSkuBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title" id="stkSkuTitle">规格详情</span>
+  </div>
+  <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
+    <div class="stk-hint" id="stkSkuLockHint" hidden>该规格已发生出入库，名称/单位等关键信息不可修改。</div>
+    <div class="stk-form-card">
+      <div class="form-row"><span class="label">商品名称<span class="req">*</span></span><input class="value" id="stkSkuProduct" type="text" placeholder="请输入"></div>
+      <div class="form-row"><span class="label">规格名称<span class="req">*</span></span><input class="value" id="stkSkuName" type="text" placeholder="如 500ml"></div>
+      <div class="form-row"><span class="label">规格条码</span><input class="value" id="stkSkuBarcode" type="text" placeholder="选填"></div>
+      <div class="form-row"><span class="label">成本价</span><input class="value input-amount" id="stkSkuCost" type="number" inputmode="decimal" placeholder="选填"></div>
+      <div class="form-row"><span class="label">单位</span><input class="value" id="stkSkuUnit" type="text" placeholder="如 ml / 瓶"></div>
+      <div class="form-row"><span class="label">当前库存</span><span class="value has-val" id="stkSkuStock">—</span></div>
+      <div class="form-row"><span class="label">价目关联</span><span class="value" id="stkSkuCatalog">未关联</span></div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-bar__action"><button type="button" class="btn-main" id="stkSkuSave">保存</button></div>
+    <div class="bottom-bar__safe" aria-hidden="true"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-types">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkTypesBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">入出类别</span>
+  </div>
+  <div class="stk-tabs" id="stkTypesTabs">
+    <button type="button" class="stk-tabs__btn on" data-stk-type-tab="in">入库</button>
+    <button type="button" class="stk-tabs__btn" data-stk-type-tab="out">出库</button>
+  </div>
+  <div class="page-body" style="padding:12px 0 20px;background:#F7F7F7">
+    <div id="stkTypesList"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-transfer">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkTfBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">调拨管理</span>
+    <button type="button" class="action emp-title-link" id="stkTfNew">新建</button>
+  </div>
+  <div class="page-body" style="padding:0;background:#F7F7F7">
+    <div class="stk-list" id="stkTfList"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-transfer-add">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkTfAddBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">新建调拨</span>
+  </div>
+  <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
+    <div class="stk-transfer-rail">
+      <div class="stk-transfer-rail__box"><div class="stk-transfer-rail__lab">调出仓库</div><div class="stk-transfer-rail__val" id="stkTfFrom">旗舰体验店</div></div>
+      <div class="stk-transfer-rail__arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="stk-transfer-rail__box"><div class="stk-transfer-rail__lab">调入仓库</div><div class="stk-transfer-rail__val" id="stkTfTo">请选择</div></div>
+    </div>
+    <div class="stk-form-card">
+      <div class="form-row"><span class="label">经办人</span><span class="value has-val" id="stkTfHandler">王静</span></div>
+      <div class="form-row"><span class="label">备注</span><input class="value" id="stkTfRemark" type="text" placeholder="选填，最多200字" maxlength="200"></div>
+    </div>
+    <div class="stk-add-row" style="grid-template-columns:1fr">
+      <button type="button" class="stk-add-btn stk-add-btn--brand" id="stkTfPick">添加商品</button>
+    </div>
+    <div id="stkTfLines"></div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-bar__action"><button type="button" class="btn-main" id="stkTfSave">保存调拨</button></div>
+    <div class="bottom-bar__safe" aria-hidden="true"></div>
+  </div>
+</div>
+
+<div class="screen hidden" id="screen-stock-pick">
+  <div class="page-title-bar">
+    <button type="button" class="back" id="stkPickBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="title">选择规格</span>
+  </div>
+    <div class="page-body" style="padding:0 0 8px;background:#fff">
+    <div class="stk-list" id="stkPickList" style="padding-bottom:12px"></div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-bar__action"><button type="button" class="btn-main" id="stkPickOk">确定</button></div>
+    <div class="bottom-bar__safe" aria-hidden="true"></div>
+  </div>
+</div>
+        <!-- ==== STOCK TYPE SHEET ==== -->
+<div class="picker-mask picker-mask--bottom" id="stkTypeMask">
+  <div class="picker-sheet">
+    <div class="picker-head" id="stkTypeMaskTitle">选择类别</div>
+    <div class="emp-picker-list" id="stkTypeList"></div>
+    <div class="picker-foot"><button type="button" class="btn-main secondary" id="stkTypeCancel">取消</button></div>
+  </div>
+</div>
+        <!-- ==== /STOCK MODULE HTML ==== -->
+
         <!-- ==== /EXPENSE MODULE HTML ==== -->
 
         <div class="screen hidden" id="screen0">
@@ -11389,12 +12075,18 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <span class="title" id="step1Title">添加会员卡</span>
           </div>
           <div class="phone-step-bar hidden" aria-hidden="true">
-            <div class="phone-step-bar__segments"><span class="phone-step-seg"></span><span class="phone-step-seg"></span><span class="phone-step-seg"></span></div>
-            <p class="phone-step-bar__text"></p>
+            <div class="phone-step-bar__steps" role="list">
+              <span class="phone-step-bar__item" data-step-item="1" role="listitem">1 基本信息</span>
+              <span class="phone-step-bar__line" data-step-line="1" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="2" role="listitem">2 权益组合</span>
+              <span class="phone-step-bar__line" data-step-line="2" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="3" role="listitem">3 用卡策略</span>
+            </div>
           </div>
           <div class="duplicate-banner hidden" id="duplicateBannerStep1"></div>
           <div class="page-body">
             <div class="form-section">
+              <div class="step1-basic-card">
               <div class="form-row"><span class="label">卡名称<span class="req">*</span></span><input class="value" id="fName" placeholder="请输入" /></div>
               <div class="form-row" id="rowRecharge"><span class="label">购买金额<span class="req">*</span></span><input class="value input-amount" id="fRecharge" type="number" min="0" step="0.01" placeholder="请输入" /></div>
               <div class="form-row form-row--duration" id="rowCardValidity">
@@ -11414,7 +12106,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   </div>
                 </div>
               </div>
-              <div id="step1CardTheme">
+              </div>
+              <div class="step1-theme-card" id="step1CardTheme">
                 <div class="form-row form-row--card-theme-label">
                   <span class="label">卡面模板</span>
                 </div>
@@ -11446,8 +12139,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <span class="title">权益组合</span>
           </div>
           <div class="phone-step-bar hidden" aria-hidden="true">
-            <div class="phone-step-bar__segments"><span class="phone-step-seg"></span><span class="phone-step-seg"></span><span class="phone-step-seg"></span></div>
-            <p class="phone-step-bar__text"></p>
+            <div class="phone-step-bar__steps" role="list">
+              <span class="phone-step-bar__item" data-step-item="1" role="listitem">1 基本信息</span>
+              <span class="phone-step-bar__line" data-step-line="1" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="2" role="listitem">2 权益组合</span>
+              <span class="phone-step-bar__line" data-step-line="2" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="3" role="listitem">3 用卡策略</span>
+            </div>
           </div>
           <div class="duplicate-banner hidden" id="duplicateBannerStep2"></div>
           <div class="page-body">
@@ -11456,7 +12154,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-check">
                   <div class="benefit-check__main">
                     <span class="benefit-check__title">面值</span>
-                    <span class="benefit-check__desc">购买与赠送的面值，永久有效。</span>
+                    <span class="benefit-check__desc">购买与赠送的面值，永久有效</span>
                   </div>
                   <button type="button" class="switch" id="benBalance" role="switch" aria-checked="false" aria-label="面值"></button>
                 </div>
@@ -11485,14 +12183,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-check">
                   <div class="benefit-check__main">
                     <span class="benefit-check__title">项目</span>
-                    <span class="benefit-check__desc">包含、赠送项目的次数</span>
+                    <span class="benefit-check__desc">包含赠送的项目次数</span>
                   </div>
                   <button type="button" class="switch" id="benTimesOrValidity" role="switch" aria-checked="false" aria-label="项目"></button>
                 </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandTimesValidity">
                   <div class="benefit-expand__inner benefit-tree">
                     <div id="projectBenefitCardsStep2" class="step2-benefit-cards"></div>
-                    <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">+添加项目权益</button>
+                    <div class="step2-benefit-foot">
+                      <span class="step2-benefit-count hidden" id="projectBenefitCountStep2">0项</span>
+                      <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">添加项目权益</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -11500,14 +12201,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-check">
                   <div class="benefit-check__main">
                     <span class="benefit-check__title">产品</span>
-                    <span class="benefit-check__desc">包含、赠送产品的数量</span>
+                    <span class="benefit-check__desc">包含赠送的产品数量</span>
                   </div>
                   <button type="button" class="switch" id="benProducts" role="switch" aria-checked="false" aria-label="产品"></button>
                 </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandProduct">
                   <div class="benefit-expand__inner benefit-tree">
                     <div id="productBenefitCardsStep2" class="step2-benefit-cards"></div>
-                    <button type="button" class="btn-add-benefit" id="btnAddProductBenefitStep2">+添加产品权益</button>
+                    <div class="step2-benefit-foot">
+                      <span class="step2-benefit-count hidden" id="productBenefitCountStep2">0项</span>
+                      <button type="button" class="btn-add-benefit" id="btnAddProductBenefitStep2">添加产品权益</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -11522,7 +12226,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandDiscount">
                   <div class="benefit-expand__inner benefit-tree">
                     <div id="discountBenefitCardsStep2" class="step2-benefit-cards"></div>
-                    <button type="button" class="btn-add-benefit" id="btnAddDiscountBenefitStep2">+添加折扣权益</button>
+                    <div class="step2-benefit-foot">
+                      <span class="step2-benefit-count hidden" id="discountBenefitCountStep2">0项</span>
+                      <button type="button" class="btn-add-benefit" id="btnAddDiscountBenefitStep2">添加折扣权益</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -11538,8 +12245,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <span class="title">用卡策略</span>
           </div>
           <div class="phone-step-bar hidden" aria-hidden="true">
-            <div class="phone-step-bar__segments"><span class="phone-step-seg"></span><span class="phone-step-seg"></span><span class="phone-step-seg"></span></div>
-            <p class="phone-step-bar__text"></p>
+            <div class="phone-step-bar__steps" role="list">
+              <span class="phone-step-bar__item" data-step-item="1" role="listitem">1 基本信息</span>
+              <span class="phone-step-bar__line" data-step-line="1" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="2" role="listitem">2 权益组合</span>
+              <span class="phone-step-bar__line" data-step-line="2" aria-hidden="true"></span>
+              <span class="phone-step-bar__item" data-step-item="3" role="listitem">3 用卡策略</span>
+            </div>
           </div>
           <div class="duplicate-banner hidden" id="duplicateBannerStep3"></div>
           <div class="page-body page-body--usage-policy">
@@ -11558,47 +12270,54 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         </div>
 
         <div class="screen hidden" id="screen7">
+          <div class="create-success-deco" aria-hidden="true">
+            <div class="create-success-deco__grad"></div>
+            <div class="create-success-deco__wave"></div>
+          </div>
+          <div class="page-title-bar">
+            <button type="button" class="back" id="backFromCreateSuccess" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+          </div>
           <div class="page-body create-success-body">
             <div class="create-success-hero" aria-hidden="true">
               <div class="create-success-icon">
-                <div class="create-success-icon__glow-wrap" aria-hidden="true">
-                  <img class="create-success-icon__glow" src="assets/success-icon-glow.svg" alt="">
-                </div>
-                <div class="create-success-icon__mark-wrap" aria-hidden="true">
-                  <img class="create-success-icon__mark" src="assets/success-icon-3d.png" alt="" width="112" height="112">
-                </div>
+                <img class="create-success-icon__glow" src="assets/issue-success-icon-glow.svg" alt="">
+                <img class="create-success-icon__mark" src="assets/issue-success-icon-3d.png" alt="" width="200" height="150">
               </div>
             </div>
             <p class="create-success-title">会员卡已创建</p>
             <p class="create-success-desc" id="createSuccessDesc">已上架，可立即为会员办理</p>
             <div class="create-success-card-slot" id="createSuccessCard"></div>
           </div>
-          <div class="bottom-bar bottom-bar--dual">
+          <div class="bottom-bar bottom-bar--dual bottom-bar--create-success">
             <div class="bottom-bar__action">
               <button type="button" class="btn-main secondary" id="btnSuccessBackList">返回列表</button>
-              <button type="button" class="btn-main" id="btnSuccessIssue">立即为会员办卡</button>
+              <button type="button" class="btn-main" id="btnSuccessIssue">立即办卡</button>
             </div>
             <div class="bottom-bar__safe" aria-hidden="true"></div>
           </div>
         </div>
 
         <div class="screen hidden" id="screen8">
-          <div class="page-body create-success-body">
-            <div class="create-success-hero" aria-hidden="true">
-              <div class="create-success-icon">
-                <div class="create-success-icon__glow-wrap" aria-hidden="true">
-                  <img class="create-success-icon__glow" src="assets/success-icon-glow.svg" alt="">
-                </div>
-                <div class="create-success-icon__mark-wrap" aria-hidden="true">
-                  <img class="create-success-icon__mark" src="assets/success-icon-3d.png" alt="" width="112" height="112">
-                </div>
+          <div class="issue-success-deco" aria-hidden="true">
+            <div class="issue-success-deco__grad"></div>
+            <div class="issue-success-deco__wave"></div>
+          </div>
+          <div class="page-title-bar">
+            <button type="button" class="back" id="backFromIssueSuccess" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <span class="title">办卡成功</span>
+          </div>
+          <div class="page-body issue-success-body">
+            <div class="issue-success-hero" aria-hidden="true">
+              <div class="issue-success-icon">
+                <img class="issue-success-icon__glow" src="assets/issue-success-icon-glow.svg" alt="">
+                <img class="issue-success-icon__mark" src="assets/issue-success-icon-3d.png" alt="" width="200" height="150">
               </div>
             </div>
-            <p class="create-success-title">办卡成功</p>
-            <p class="create-success-desc" id="issueSuccessDesc">—</p>
-            <div class="create-success-card-slot" id="issueSuccessCard"></div>
+            <p class="issue-success-title">办卡成功</p>
+            <p class="issue-success-desc" id="issueSuccessDesc">—</p>
+            <div class="issue-success-card-slot" id="issueSuccessCard"></div>
           </div>
-          <div class="bottom-bar bottom-bar--dual">
+          <div class="bottom-bar bottom-bar--dual bottom-bar--issue-success">
             <div class="bottom-bar__action">
               <button type="button" class="btn-main secondary" id="btnIssueSuccessBackList">返回列表</button>
               <button type="button" class="btn-main" id="btnIssueSuccessContinue">继续办卡</button>
@@ -12074,6 +12793,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="picker-head picker-head--stack">
               <div class="picker-head__title">选择会员</div>
               <div class="picker-head__sub" id="issuePickerCardName">—</div>
+              <button type="button" class="picker-head__close" id="btnIssueMemberClose" aria-label="关闭">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M14 6L6 14M14 14L6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
             </div>
             <div class="page-tabs issue-picker-tabs" id="issuePickerTabs" role="tablist">
               <button type="button" class="page-tabs__item issue-picker-tab on" data-issue-tab="new" role="tab" aria-selected="true">
@@ -12085,7 +12807,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <span class="page-tabs__indicator" aria-hidden="true"></span>
               </button>
             </div>
-            <div class="picker-search"><input type="search" id="issueMemberSearch" placeholder="搜索姓名或手机" /></div>
+            <div class="picker-search search-bar search-bar--member">
+              <svg width="16" height="16" viewBox="0 0 13 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#666" stroke-linejoin="round"/><path d="M9.5 10.5L12.5 13.5" stroke="#666" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="search" id="issueMemberSearch" placeholder="搜索姓名或手机" autocomplete="off" />
+              <button type="button" class="search-go" id="issueMemberSearchGo">搜索</button>
+            </div>
             <div class="picker-list" id="issueMemberList"></div>
             <div class="picker-foot picker-foot--issue-new" id="issuePickerFootNew">
               <button type="button" class="btn-main" id="btnIssueMemberOk" disabled>去结账</button>
@@ -12526,9 +13252,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </div>
             </div>
             <div class="flow-weikuan-toolbar">
-              <div class="search-bar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="search" id="flowWeikuanSearch" placeholder="搜索顾客姓名/手机号" autocomplete="off">
+              <div class="search-bar search-bar--member">
+                <svg width="16" height="16" viewBox="0 0 13 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#666" stroke-linejoin="round"/><path d="M9.5 10.5L12.5 13.5" stroke="#666" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <input type="search" id="flowWeikuanSearch" placeholder="搜索姓名或手机" autocomplete="off">
+                <button type="button" class="search-go" id="flowWeikuanSearchGo">搜索</button>
               </div>
             </div>
             <div class="page-body flow-weikuan-body" id="flowWeikuanBody"></div>
@@ -14883,6 +15610,7 @@ const OPTIMIZATION_LOG = [
   '员工四模块：工作台四入口 + FLOW_NAV「员工」；管理/薪资/业绩/提成按设计规范 v1.6；与开单共用员工池',
   '业绩提成增强：免单规则三档；阶梯区间可编辑；方案自由选人分配；提成单位可切 % / ¥',
   '支出管理链路：列表/记一笔/类型宫格/分类管理/支出流水；工作台入口；FLOW「支出」',
+  '库存管理工作台：摘要卡/四快捷/在库·单据 Tab；入库出库调拨·商品规格；FLOW「库存」',
   '演示数据统一：店名/员工/今日日历/支出还款看板与种子同源；提成 assigned 对齐；自助流水商品对齐价目',
   '支出类型图标：商务渐变 SVG（assets/expense）替换面性单色图标',
   '流水入口图标：门店流水 / 自助收银对齐支出类型美术（圆角渐变底 + 白色面性，assets/flow）',
@@ -15798,7 +16526,9 @@ function buildDurationInputHtml(opts = {}) {
   const gridCols = units.length;
   const activeIdx = Math.max(0, units.indexOf(unit));
   const indicatorStyle = `width:calc((100% - 2 * var(--dur-seg-inset, 2px)) / ${gridCols});transform:translateX(${activeIdx * 100}%)`;
-  const unitsWidth = Math.max(72, gridCols * 30);
+  // 含「永久」时每格至少 ~34px，避免两字换行出框
+  const colW = units.includes('permanent') ? 34 : 30;
+  const unitsWidth = Math.max(units.includes('permanent') ? 136 : 90, gridCols * colW);
   const rootWidth = 68 + 8 + unitsWidth;
   return `<div class="duration-input"${idAttr}${dataId} style="width:${rootWidth}px">
     <div class="duration-input__field${fieldHidden}" data-duration-field>
@@ -16149,12 +16879,12 @@ function formatProductScopeTitleHtml(products) {
   }
   return products.map(name =>
     `<span class="step2-benefit-card__proj">${escapeHtml(name)}</span>`
-  ).join('');
+  ).join('<span class="step2-benefit-card__proj">、</span>');
 }
 
 function formatProductBenefitCardQtyMetaHtml(card) {
   const qty = Math.max(1, parseInt(card?.qty, 10) || 1);
-  return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(`×${qty}`)}</span>`;
+  return `<span class="step2-benefit-card__meta">${escapeHtml(`×${qty}`)}</span>`;
 }
 
 function formatBenefitCardQtyScopeLabel(card) {
@@ -16189,34 +16919,7 @@ function formatBenefitCardQtySummary(card) {
 }
 
 function formatBenefitCardQtyMetaHtml(card) {
-  const scopeLabel = formatBenefitCardQtyScopeLabel(card);
-  const qtyMain = (scope, qtyText) => {
-    if (!scope) {
-      return `<span class="step2-benefit-card__meta-qty">${escapeHtml(qtyText)}</span>`;
-    }
-    // 「共」与次数同一行不换行
-    return `<span class="step2-benefit-card__meta-main"><span class="step2-benefit-card__meta-scope">${escapeHtml(scope)}</span><span class="step2-benefit-card__meta-qty">${escapeHtml(qtyText)}</span></span>`;
-  };
-  if (card.unlimited) {
-    if (!scopeLabel) {
-      return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml('不限次')}</span>`;
-    }
-    return `<span class="step2-benefit-card__meta">${qtyMain(scopeLabel, '不限次')}</span>`;
-  }
-  const purchase = card.purchaseQty ?? 0;
-  const gift = card.giftQty ?? 0;
-  const purchaseText = `${purchase}次`;
-  // 有赠送：第一行「共N次」（共与次数不换行）；第二行「+送M次」
-  if (gift > 0) {
-    return `<span class="step2-benefit-card__meta">
-      ${qtyMain(scopeLabel, purchaseText)}
-      <span class="step2-benefit-card__meta-gift">${escapeHtml(`+送${gift}次`)}</span>
-    </span>`;
-  }
-  if (!scopeLabel) {
-    return `<span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(purchaseText)}</span>`;
-  }
-  return `<span class="step2-benefit-card__meta">${qtyMain(scopeLabel, purchaseText)}</span>`;
+  return `<span class="step2-benefit-card__meta">${escapeHtml(formatBenefitCardQtyValue(card))}</span>`;
 }
 
 function formatProjectQtySummary(item) {
@@ -18840,7 +19543,10 @@ function showOnlyScreen(id) {
     else el.classList.toggle('hidden', el.id !== id || isPrice);
   });
   const shell = document.querySelector('.phone-shell');
-  if (shell) shell.classList.toggle('phone-shell--success', id === 'screen7' || id === 'screen8');
+  if (shell) {
+    shell.classList.toggle('phone-shell--success', id === 'screen7');
+    shell.classList.toggle('phone-shell--issue-success', id === 'screen8');
+  }
   syncFlowMapFromAppState();
 }
 
@@ -19004,6 +19710,11 @@ function launchWorkbenchTile(key) {
     case 'expense':
       window.__wbEntry = 'expense';
       if (window.ExpenseDemo && typeof window.ExpenseDemo.openList === 'function') window.ExpenseDemo.openList();
+      else showToast('演示未接入');
+      break;
+    case 'stock':
+      window.__wbEntry = 'stock';
+      if (window.StockDemo && typeof window.StockDemo.openHub === 'function') window.StockDemo.openHub();
       else showToast('演示未接入');
       break;
     default:
@@ -19951,16 +20662,16 @@ function syncPhoneCreateStepper(step) {
   document.querySelectorAll('.phone-step-bar').forEach(bar => {
     bar.classList.toggle('hidden', !show);
     bar.setAttribute('aria-hidden', show ? 'false' : 'true');
-    bar.querySelectorAll('.phone-step-seg').forEach((seg, i) => {
-      const idx = i + 1;
-      seg.classList.remove('done', 'active');
-      if (idx < step) seg.classList.add('done');
-      else if (idx === step) seg.classList.add('active');
+    if (!show) return;
+    bar.querySelectorAll('[data-step-item]').forEach(item => {
+      const idx = Number(item.getAttribute('data-step-item'));
+      item.classList.toggle('is-active', idx === step);
     });
-    const textEl = bar.querySelector('.phone-step-bar__text');
-    if (textEl && show) {
-      textEl.innerHTML = `<strong>第 ${step}/3 步</strong> · ${CREATE_STEP_LABELS[step - 1]}`;
-    }
+    bar.querySelectorAll('[data-step-line]').forEach(line => {
+      const idx = Number(line.getAttribute('data-step-line'));
+      /* 线在步骤之间：完成到下一步之前的连线高亮 */
+      line.classList.toggle('is-done', idx < step);
+    });
   });
 }
 
@@ -20520,6 +21231,16 @@ function applyBenefitVisibility() {
 function updateStep2NextChrome() {
   const btn = document.getElementById('btnStep2Next');
   if (btn) btn.textContent = '下一步';
+  const syncCount = (elId, n) => {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const count = Number(n) || 0;
+    el.textContent = `${count}项`;
+    el.classList.toggle('hidden', count <= 0);
+  };
+  syncCount('projectBenefitCountStep2', (state.projectBenefitCards || []).filter(c => c.saved).length);
+  syncCount('productBenefitCountStep2', (state.productBenefitCards || []).filter(c => c.saved).length);
+  syncCount('discountBenefitCountStep2', (state.discountBenefitCards || []).filter(c => c.saved).length);
 }
 
 function renderDuplicateBannerHtml(srcName) {
@@ -21101,7 +21822,7 @@ function renderMemberCardItemHtml(t, opts = {}) {
   const priceHtml = `<span class="member-card-compact__price"><span class="member-card-compact__price-val is-data">${escapeHtml(priceText)}</span></span>`;
   const leftActs = [];
   const rightActs = [];
-  if (showClone) leftActs.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}">复制建卡</button>`);
+  if (showClone) leftActs.push(`<button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${escapeAttr(t.id)}"><img src="assets/member-card-clone.svg" alt="" width="16" height="16" />复制建卡</button>`);
   if (showGroup) rightActs.push(`<button type="button" class="card-face-act card-face-act--outline" data-card-group-template="${escapeAttr(t.id)}">快速分组</button>`);
   if (showIssue) rightActs.push(`<button type="button" class="card-face-act card-face-act--solid" data-issue-template="${escapeAttr(t.id)}">办卡/退卡</button>`);
   const footer = showFooter && (leftActs.length || rightActs.length)
@@ -22299,8 +23020,9 @@ function showIssueSuccess(templateId, memberIds) {
   const count = memberIds.length;
   const firstName = DEMO_MEMBERS.find(m => m.id === memberIds[0])?.name;
   let desc;
-  if (count === 1 && firstName) desc = `已为 ${firstName} 办理「${t.name}」`;
-  else desc = `已为 ${count} 位会员办理「${t.name}」`;
+  /* 文案对齐 Figma 422:1769：已为钱小姐办理【尊享组合卡】 */
+  if (count === 1 && firstName) desc = `已为${firstName}办理【${t.name}】`;
+  else desc = `已为${count}位会员办理【${t.name}】`;
   state.lastIssuedTemplateId = templateId;
   document.getElementById('issueSuccessCard').innerHTML = renderStaticCardItemHtml(t);
   document.getElementById('issueSuccessDesc').textContent = desc;
@@ -22731,7 +23453,7 @@ function renderIssueMemberList() {
   const selectedId = state.issueMemberSelectedId;
 
   if (state.issuePickerTab === 'new') {
-    const chev = '<span class="issue-member-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>';
+    const radioIcon = '<span class="issue-member-radio" aria-hidden="true"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4.2L3.6 6.6L9 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
     const newMembers = list.filter(m => !tid || !memberHoldsTemplate(tid, m.id));
     const itemsHtml = newMembers.length
       ? newMembers.map(m =>
@@ -22742,7 +23464,7 @@ function renderIssueMemberList() {
             <span class="issue-member-row__name">${escapeHtml(m.name)}</span>
             <span class="issue-member-row__phone">${escapeHtml(m.phone)}</span>
           </span>
-          ${chev}
+          ${radioIcon}
         </label>`
       ).join('')
       : '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">所有会员均已持有该卡</p>';
@@ -23192,7 +23914,7 @@ function formatProjectScopeTitleHtml(projects) {
   }
   return projects.map(name =>
     `<span class="step2-benefit-card__proj">${escapeHtml(name)}</span>`
-  ).join('');
+  ).join('<span class="step2-benefit-card__proj">、</span>');
 }
 
 function projectItemsToBenefitCards(items) {
@@ -23412,9 +24134,9 @@ function getDiscountBenefitCard(id) {
 
 const PROJ_SCOPE_CHEV = '<span class="chevron"><svg class="icon-chevron-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>';
 const BENEFIT_TAG_CHEV = '<span class="proj-tag__chev" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span>';
-/* 方案 A：细线描边垃圾桶（与预览一致） */
+/* 流水编辑等仍用垃圾桶；Step2 列表行用圆形减号（Figma 422:1342） */
 const BENEFIT_TRASH_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M10 4h4"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M7 7l1 13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
-const STEP2_BENEFIT_NOTCHES = '<span class="step2-benefit-card__notch step2-benefit-card__notch--top" aria-hidden="true"></span><span class="step2-benefit-card__notch step2-benefit-card__notch--bottom" aria-hidden="true"></span>';
+const STEP2_BENEFIT_MINUS_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7.25" stroke="#B2B2B2" stroke-width="1.5"/><path d="M4 8h8" stroke="#B2B2B2" stroke-width="1.5" stroke-linecap="round"/></svg>';
 
 function renderProjectItemTags() {
   const el = document.getElementById('projectBenefitCardsStep2');
@@ -23422,17 +24144,14 @@ function renderProjectItemTags() {
   ensureProjectBenefitCardsFromItems();
   const saved = state.projectBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card => {
-    return `<div class="step2-benefit-card-wrap">
-      <div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
-        ${STEP2_BENEFIT_NOTCHES}
-        <div class="step2-benefit-card__body">
-          <div class="step2-benefit-card__main">
-            <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
-          </div>
-          <div class="step2-benefit-card__side">
-            ${formatBenefitCardQtyMetaHtml(card)}
-            <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
-          </div>
+    return `<div class="step2-benefit-card" data-edit-project-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+      <div class="step2-benefit-card__body">
+        <div class="step2-benefit-card__main">
+          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+        </div>
+        <div class="step2-benefit-card__side">
+          ${formatBenefitCardQtyMetaHtml(card)}
+          <button type="button" class="step2-benefit-card__rm" data-rm-project-card="${escapeAttr(card.id)}" aria-label="删除">${STEP2_BENEFIT_MINUS_ICON}</button>
         </div>
       </div>
     </div>`;
@@ -23521,17 +24240,14 @@ function renderProductItemTags() {
   ensureProductBenefitCardsFromItems();
   const saved = state.productBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card => {
-    return `<div class="step2-benefit-card-wrap">
-      <div class="step2-benefit-card" data-edit-product-card="${escapeAttr(card.id)}" role="button" tabindex="0">
-        ${STEP2_BENEFIT_NOTCHES}
-        <div class="step2-benefit-card__body">
-          <div class="step2-benefit-card__main">
-            <span class="step2-benefit-card__title">${formatProductScopeTitleHtml(card.products)}</span>
-          </div>
-          <div class="step2-benefit-card__side">
-            ${formatProductBenefitCardQtyMetaHtml(card)}
-            <button type="button" class="step2-benefit-card__rm" data-rm-product-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
-          </div>
+    return `<div class="step2-benefit-card" data-edit-product-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+      <div class="step2-benefit-card__body">
+        <div class="step2-benefit-card__main">
+          <span class="step2-benefit-card__title">${formatProductScopeTitleHtml(card.products)}</span>
+        </div>
+        <div class="step2-benefit-card__side">
+          ${formatProductBenefitCardQtyMetaHtml(card)}
+          <button type="button" class="step2-benefit-card__rm" data-rm-product-card="${escapeAttr(card.id)}" aria-label="删除">${STEP2_BENEFIT_MINUS_ICON}</button>
         </div>
       </div>
     </div>`;
@@ -23615,17 +24331,14 @@ function renderMemberPriceTags() {
   ensureDiscountBenefitCardsFromPrices();
   const saved = state.discountBenefitCards.filter(c => c.saved);
   el.innerHTML = saved.map(card =>
-    `<div class="step2-benefit-card-wrap">
-      <div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
-        ${STEP2_BENEFIT_NOTCHES}
-        <div class="step2-benefit-card__body">
-          <div class="step2-benefit-card__main">
-            <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
-          </div>
-          <div class="step2-benefit-card__side">
-            <span class="step2-benefit-card__meta step2-benefit-card__meta--single">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
-            <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${BENEFIT_TRASH_ICON}</button>
-          </div>
+    `<div class="step2-benefit-card" data-edit-discount-card="${escapeAttr(card.id)}" role="button" tabindex="0">
+      <div class="step2-benefit-card__body">
+        <div class="step2-benefit-card__main">
+          <span class="step2-benefit-card__title">${formatProjectScopeTitleHtml(card.projects)}</span>
+        </div>
+        <div class="step2-benefit-card__side">
+          <span class="step2-benefit-card__meta">${escapeHtml(formatMemberPriceDisplay(card.rule))}</span>
+          <button type="button" class="step2-benefit-card__rm" data-rm-discount-card="${escapeAttr(card.id)}" aria-label="删除">${STEP2_BENEFIT_MINUS_ICON}</button>
         </div>
       </div>
     </div>`
@@ -24273,51 +24986,33 @@ function renderProductList() {
   }
   syncSimpleProdPickOnFromQty();
   const names = getProductNamesForPickerByGroup();
+  const defaultQty = Math.max(1, Math.min(999, parseInt(state.prodBenefitDraft?.qty, 10) || 1));
   container.innerHTML = names.map(p => {
-    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty?.[p], 10) || 0));
+    const checked = !!state.simpleProdPickOn[p];
     return `<div class="proj-pick-card">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
-        ${projQtyStepperHtml(p, 'prodrow', qty, 0)}
+        ${projPickCheckHtml(p, checked)}
       </div>
     </div>`;
   }).join('');
-  wireSimpleProductPicker(container);
+  wireSimpleProductPicker(container, defaultQty);
   updateSimplePickCount('product');
 }
 
-function wireSimpleProductPicker(container) {
-  const applyQty = (name, next, inputEl) => {
-    setSimpleProdPickQty(name, next);
-    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty[name], 10) || 0));
-    if (inputEl) inputEl.value = String(qty);
-  };
-  container.querySelectorAll('.qty-stepper').forEach(wrap => {
+function wireSimpleProductPicker(container, defaultQty = 1) {
+  const qtyOn = Math.max(1, Math.min(999, parseInt(defaultQty, 10) || 1));
+  container.querySelectorAll('.proj-pick-check').forEach(wrap => {
     wrap.addEventListener('click', e => e.stopPropagation());
   });
-  container.querySelectorAll('[data-prodrow-minus]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.getAttribute('data-prodrow-minus');
-      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
-      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
-      applyQty(name, cur - 1, input);
+  container.querySelectorAll('.proj-pick-sw').forEach(sw => {
+    sw.addEventListener('change', () => {
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[sw.value], 10) || 0);
+      setSimpleProdPickQty(sw.value, sw.checked ? (cur >= 1 ? cur : qtyOn) : 0);
+      updateSimplePickCount('product');
     });
-  });
-  container.querySelectorAll('[data-prodrow-plus]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.getAttribute('data-prodrow-plus');
-      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
-      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
-      applyQty(name, cur + 1, input);
-    });
-  });
-  container.querySelectorAll('[data-prodrow-input]').forEach(input => {
-    const name = input.getAttribute('data-prodrow-input');
-    const commit = () => applyQty(name, input.value, input);
-    input.addEventListener('change', commit);
-    input.addEventListener('blur', commit);
   });
 }
 
@@ -24420,7 +25115,7 @@ function cancelDiscountBenefitEditor() {
 
 function wireSimpleProjectPicker(container, mode) {
   const pickState = mode === 'project' ? state.simpleProjPickOn : state.simpleDiscPickOn;
-  container.querySelectorAll('.proj-switch').forEach(wrap => {
+  container.querySelectorAll('.proj-switch, .proj-pick-check').forEach(wrap => {
     wrap.addEventListener('click', e => e.stopPropagation());
   });
   container.querySelectorAll('.proj-pick-sw').forEach(sw => {
@@ -24808,6 +25503,13 @@ function projPickSwitchHtml(value, checked, extraAttrs = '') {
   return `<label class="proj-switch"><input type="checkbox" class="proj-pick-sw" value="${escapeAttr(value)}"${checked ? ' checked' : ''}${extraAttrs}/><span class="proj-switch__track" aria-hidden="true"></span></label>`;
 }
 
+const PROJ_PICK_CHECK_SVG = '<svg viewBox="0 0 10 8" fill="none"><path d="M1 4.2L3.6 6.6L9 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/** 添加项目/产品权益列表：可多选打勾圆选（checkbox，非单选） */
+function projPickCheckHtml(value, checked, extraAttrs = '') {
+  return `<label class="proj-pick-check"><input type="checkbox" class="proj-pick-sw" value="${escapeAttr(value)}"${checked ? ' checked' : ''}${extraAttrs}/><span class="proj-pick-check__icon" aria-hidden="true">${PROJ_PICK_CHECK_SVG}</span></label>`;
+}
+
 function setProjectPickAll(checked) {
   state.pickerAllOn = checked;
   if (checked) {
@@ -25050,7 +25752,7 @@ function getPhoneWrapScale() {
 }
 
 function projPickDragIgnoresTarget(target) {
-  return !!target.closest('.proj-switch, .proj-config-panel, .qty-stepper, .mp-config-block, input, button, label.radio-opt, .discount-ruler, .proj-mode-head');
+  return !!target.closest('.proj-switch, .proj-pick-check, .proj-config-panel, .qty-stepper, .mp-config-block, input, button, label.radio-opt, .discount-ruler, .proj-mode-head');
 }
 
 function commitProjPickDragOrder(container) {
@@ -25453,7 +26155,7 @@ function renderProjectList() {
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
-        ${projPickSwitchHtml(p, checked)}
+        ${projPickCheckHtml(p, checked)}
       </div>
     </div>`;
   }).join('');
@@ -25782,10 +26484,11 @@ document.getElementById('qtyScopeHelpMask').onclick = event => {
   if (event.target.id === 'qtyScopeHelpMask') closeQtyScopeHelp();
 };
 document.getElementById('btnSuccessBackList').onclick = () => setStep(0);
+document.getElementById('backFromCreateSuccess')?.addEventListener('click', () => setStep(0));
 document.getElementById('btnSuccessIssue').onclick = () => {
   if (state.lastCreatedTemplateId) openIssueMemberPicker(state.lastCreatedTemplateId);
 };
-document.getElementById('btnIssueSuccessBackList').onclick = () => {
+function leaveIssueSuccess() {
   if (state.issueFromBilling && window.BillingDemo && window.BillingDemo.nav && window.BillingDemo.nav.bill) {
     state.issueFromBilling = false;
     window.BillingDemo.nav.bill();
@@ -25793,7 +26496,9 @@ document.getElementById('btnIssueSuccessBackList').onclick = () => {
   }
   state.issueFromBilling = false;
   setStep(0);
-};
+}
+document.getElementById('btnIssueSuccessBackList').onclick = leaveIssueSuccess;
+document.getElementById('backFromIssueSuccess')?.addEventListener('click', leaveIssueSuccess);
 document.getElementById('btnIssueSuccessContinue').onclick = () => {
   if (state.issueFromBilling && window.BillingDemo && window.BillingDemo.nav && window.BillingDemo.nav['add-card']) {
     state.issueFromBilling = false;
@@ -25803,13 +26508,22 @@ document.getElementById('btnIssueSuccessContinue').onclick = () => {
   if (state.lastIssuedTemplateId) openIssueMemberPicker(state.lastIssuedTemplateId);
 };
 document.getElementById('issueMemberSearch').oninput = renderIssueMemberList;
-document.getElementById('btnIssueMemberOk').onclick = startIssueCheckoutFromPicker;
-document.getElementById('issueMemberMask').addEventListener('click', e => {
-  if (e.target === document.getElementById('issueMemberMask')) {
-    document.getElementById('issueMemberMask').classList.remove('open');
-    state.issuePickerHoldersOnly = false;
-  }
+document.getElementById('issueMemberSearchGo')?.addEventListener('click', () => {
+  document.getElementById('issueMemberSearch')?.focus();
+  renderIssueMemberList();
 });
+document.getElementById('btnIssueMemberOk').onclick = startIssueCheckoutFromPicker;
+function closeIssueMemberPicker() {
+  document.getElementById('issueMemberMask')?.classList.remove('open');
+  state.issuePickerHoldersOnly = false;
+  resetIssueExtendDraft?.();
+}
+document.getElementById('btnIssueMemberClose')?.addEventListener('click', closeIssueMemberPicker);
+document.getElementById('issueMemberMask').addEventListener('click', e => {
+  if (e.target === document.getElementById('issueMemberMask')) closeIssueMemberPicker();
+});
+window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
+window.__pickerMaskClosers.issueMemberMask = closeIssueMemberPicker;
 document.getElementById('backFromStep1').onclick = () => {
   if (state.returnAfterFlow === 'billing-issue') {
     state.billingIssueCustomerId = null;
@@ -32501,6 +33215,732 @@ function billingNav(fn) {
 })();
 /* ==== /EXPENSE MODULE JS ==== */
 </script>
+
+<script>
+/* ==== STOCK MODULE JS ==== */
+(function () {
+  'use strict';
+
+  var STOCK_SCREENS = [
+    'screen-stock-hub', 'screen-stock-in', 'screen-stock-out', 'screen-stock-goods',
+    'screen-stock-sku', 'screen-stock-types', 'screen-stock-transfer',
+    'screen-stock-transfer-add', 'screen-stock-pick'
+  ];
+
+  function $(id) { return document.getElementById(id); }
+  function toast(msg, err) {
+    if (typeof showToast === 'function') showToast(msg, !!err);
+    else console.log(msg);
+  }
+  function todayStr() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+  function money(n) {
+    var x = Math.round((Number(n) || 0) * 100) / 100;
+    return '¥' + x.toFixed(x % 1 ? 2 : 0);
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function nav(id) {
+    if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight(id);
+  }
+
+  window.StockStore = {
+    shopName: '旗舰体验店',
+    lowThreshold: 5,
+    categories: [
+      { id: 'sc1', name: '洗护' },
+      { id: 'sc2', name: '造型' },
+      { id: 'sc3', name: '工具' },
+      { id: 'sc4', name: '耗材' }
+    ],
+    skus: [
+      { id: 'sk1', product: '剑琅修护洗发水', name: '500ml', barcode: '690001', cost: 40, unit: '瓶', stock: 36, moved: true, catalogStock: 36 },
+      { id: 'sk2', product: '剑琅修护洗发水', name: '250ml', barcode: '690011', cost: 24, unit: '瓶', stock: 48, moved: true, catalogStock: 48 },
+      { id: 'sk3', product: '剑琅滋养护发素', name: '500ml', barcode: '690002', cost: 32, unit: '瓶', stock: 28, moved: true, catalogStock: 28 },
+      { id: 'sk4', product: '剑琅滋养护发素', name: '200ml', barcode: '690012', cost: 18, unit: '瓶', stock: 3, moved: true, catalogStock: 3 },
+      { id: 'sk5', product: '剑琅头皮精华', name: '100ml', barcode: '690004', cost: 55, unit: '瓶', stock: 12, moved: false, catalogStock: null },
+      { id: 'sk6', product: '剑琅头皮精华', name: '30ml体验装', barcode: '690014', cost: 18, unit: '支', stock: 5, moved: true, catalogStock: 5 },
+      { id: 'sk7', product: '剑琅造型发蜡', name: '80g', barcode: '690003', cost: 22, unit: '盒', stock: 4, moved: true, catalogStock: 4 },
+      { id: 'sk8', product: '剑琅定型喷雾', name: '300ml', barcode: '690005', cost: 28, unit: '瓶', stock: 0, moved: true, catalogStock: 0 },
+      { id: 'sk9', product: '剑琅定型喷雾', name: '150ml', barcode: '690015', cost: 16, unit: '瓶', stock: 22, moved: true, catalogStock: 22 },
+      { id: 'sk10', product: '剑琅轻盈发泥', name: '100g', barcode: '690016', cost: 26, unit: '盒', stock: 15, moved: true, catalogStock: 15 },
+      { id: 'sk11', product: '剑琅染后锁色乳', name: '200ml', barcode: '690017', cost: 38, unit: '瓶', stock: 9, moved: true, catalogStock: 9 },
+      { id: 'sk12', product: '剑琅烫后修护膜', name: '500ml', barcode: '690018', cost: 45, unit: '罐', stock: 2, moved: true, catalogStock: 2 },
+      { id: 'sk13', product: '剑琅专业剪发梳', name: '标准款', barcode: '690019', cost: 12, unit: '把', stock: 40, moved: true, catalogStock: 40 },
+      { id: 'sk14', product: '剑琅陶瓷电卷棒', name: '32mm', barcode: '690020', cost: 168, unit: '支', stock: 6, moved: true, catalogStock: 6 },
+      { id: 'sk15', product: '剑琅离子吹风机', name: '2000W', barcode: '690021', cost: 320, unit: '台', stock: 1, moved: true, catalogStock: 1 },
+      { id: 'sk16', product: '剑琅一次性围脖', name: '50片/包', barcode: '690022', cost: 8, unit: '包', stock: 86, moved: true, catalogStock: 86 },
+      { id: 'sk17', product: '剑琅烫染手套', name: '100只/盒', barcode: '690023', cost: 15, unit: '盒', stock: 0, moved: true, catalogStock: 0 },
+      { id: 'sk18', product: '剑琅毛巾（黑）', name: '34×80cm', barcode: '690024', cost: 9, unit: '条', stock: 64, moved: false, catalogStock: null }
+    ],
+    inTypes: ['正常入库', '采购入库', '退货入库', '调拨入库'],
+    outTypes: ['销售出库', '损耗出库', '调拨出库'],
+    inDocs: [
+      { id: 'in1', type: '采购入库', date: '2026-07-02', lines: 4, qty: 48, remark: '月初补货' },
+      { id: 'in2', type: '正常入库', date: '2026-07-08', lines: 2, qty: 20, remark: '总部调入验收' },
+      { id: 'in3', type: '退货入库', date: '2026-07-11', lines: 1, qty: 3, remark: '客诉换货退回' },
+      { id: 'in4', type: '采购入库', date: '2026-07-15', lines: 6, qty: 72, remark: '洗护大促备货' },
+      { id: 'in5', type: '调拨入库', date: '2026-07-18', lines: 2, qty: 12, remark: '城东分店调入' },
+      { id: 'in6', type: '正常入库', date: '2026-07-22', lines: 3, qty: 30, remark: '工具耗材补仓' },
+      { id: 'in7', type: '采购入库', date: '2026-07-26', lines: 5, qty: 55, remark: '造型线新品' },
+      { id: 'in8', type: '退货入库', date: '2026-07-29', lines: 1, qty: 2, remark: '供应商质量退货' }
+    ],
+    outDocs: [
+      { id: 'out1', type: '销售出库', date: '2026-07-03', lines: 2, qty: 5, remark: '' },
+      { id: 'out2', type: '销售出库', date: '2026-07-09', lines: 3, qty: 8, remark: '会员日零售' },
+      { id: 'out3', type: '损耗出库', date: '2026-07-12', lines: 1, qty: 2, remark: '开封试用报损' },
+      { id: 'out4', type: '调拨出库', date: '2026-07-16', lines: 2, qty: 10, remark: '支援城西' },
+      { id: 'out5', type: '销售出库', date: '2026-07-20', lines: 4, qty: 14, remark: '' },
+      { id: 'out6', type: '损耗出库', date: '2026-07-23', lines: 1, qty: 1, remark: '破损报废' },
+      { id: 'out7', type: '销售出库', date: '2026-07-27', lines: 5, qty: 18, remark: '周末零售高峰' },
+      { id: 'out8', type: '调拨出库', date: '2026-07-30', lines: 2, qty: 6, remark: '调往城东分店' }
+    ],
+    transfers: [
+      { id: 'tf1', from: '旗舰体验店', to: '城西分店', status: 'pending', date: '2026-07-28', qty: 6 },
+      { id: 'tf2', from: '旗舰体验店', to: '城东分店', status: 'shipping', date: '2026-07-25', qty: 8 },
+      { id: 'tf3', from: '旗舰体验店', to: '城东分店', status: 'done', date: '2026-07-16', qty: 10 },
+      { id: 'tf4', from: '城西分店', to: '旗舰体验店', status: 'done', date: '2026-07-10', qty: 4 },
+      { id: 'tf5', from: '旗舰体验店', to: '城南分店', status: 'reject', date: '2026-07-19', qty: 12 },
+      { id: 'tf6', from: '旗舰体验店', to: '城西分店', status: 'withdraw', date: '2026-07-21', qty: 3 }
+    ]
+  };
+
+  var state = {
+    wired: false,
+    hubTab: 'sku',
+    hubQuery: '',
+    typeTab: 'in',
+    draftIn: { type: '正常入库', lines: [] },
+    draftOut: { type: '销售出库', lines: [] },
+    draftTf: { lines: [] },
+    pickMode: '',
+    pickSelected: {},
+    editingSkuId: null,
+    typePickMode: ''
+  };
+
+  function showScreen(id) {
+    if (typeof showOnlyScreen === 'function') showOnlyScreen(id);
+  }
+
+  function skuValue(s) { return (Number(s.stock) || 0) * (Number(s.cost) || 0); }
+  function isLow(s) { return (Number(s.stock) || 0) > 0 && (Number(s.stock) || 0) <= window.StockStore.lowThreshold; }
+
+  function hubStats() {
+    var skus = window.StockStore.skus || [];
+    var total = 0, low = 0;
+    skus.forEach(function (s) {
+      total += skuValue(s);
+      if (isLow(s) || (Number(s.stock) || 0) === 0) low += 1;
+    });
+    return { total: total, count: skus.length, low: low };
+  }
+
+  function renderHub() {
+    var st = hubStats();
+    if ($('stkHubValue')) $('stkHubValue').textContent = money(st.total);
+    if ($('stkHubSkuCount')) $('stkHubSkuCount').textContent = st.count + ' 个规格';
+    var lowEl = $('stkHubLow');
+    if (lowEl) {
+      if (st.low > 0) { lowEl.hidden = false; lowEl.textContent = st.low + ' 低库存/售罄'; }
+      else lowEl.hidden = true;
+    }
+    if ($('stkHubShop')) $('stkHubShop').textContent = window.StockStore.shopName || '门店';
+    document.querySelectorAll('#stkHubTabs .stk-tabs__btn').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-stk-tab') === state.hubTab);
+    });
+    var root = $('stkHubList');
+    if (!root) return;
+    var q = (state.hubQuery || '').trim().toLowerCase();
+    if (state.hubTab === 'sku') {
+      var list = (window.StockStore.skus || []).filter(function (s) {
+        if (!q) return true;
+        return (s.product + s.name + (s.barcode || '')).toLowerCase().indexOf(q) >= 0;
+      });
+      if (!list.length) {
+        root.innerHTML = '<div class="stk-empty">暂无在库规格<div><button type="button" class="btn-main" id="stkHubEmptyIn">去入库</button></div></div>';
+        $('stkHubEmptyIn')?.addEventListener('click', openIn);
+        return;
+      }
+      root.innerHTML = list.map(function (s) {
+        var low = isLow(s) || (Number(s.stock) || 0) === 0;
+        return '<button type="button" class="stk-sku-card' + (low ? ' is-low' : '') + '" data-stk-sku="' + esc(s.id) + '">' +
+          '<div class="stk-sku-card__top"><div class="stk-sku-card__name">' + esc(s.product) +
+          ' <span class="stk-sku-card__spec">· ' + esc(s.name) + '</span>' +
+          (low ? ' <span class="stk-badge">' + ((Number(s.stock)||0)===0?'售罄':'低') + '</span>' : '') +
+          '</div><div class="stk-sku-card__qty' + (low ? ' is-low' : '') + '">' + (Number(s.stock)||0) + '</div></div>' +
+          '<div class="stk-sku-card__meta"><span>成本 ' + money(s.cost) + ' / ' + esc(s.unit||'') + '</span>' +
+          '<span>货值 ' + money(skuValue(s)) + '</span></div></button>';
+      }).join('');
+      return;
+    }
+    if (state.hubTab === 'in' || state.hubTab === 'out') {
+      var docs = state.hubTab === 'in' ? window.StockStore.inDocs : window.StockStore.outDocs;
+      if (!docs.length) {
+        root.innerHTML = '<div class="stk-empty">暂无' + (state.hubTab === 'in' ? '入库' : '出库') + '单据</div>';
+        return;
+      }
+      root.innerHTML = docs.map(function (d) {
+        return '<div class="stk-doc-card"><div class="stk-doc-card__top"><div class="stk-doc-card__title">' + esc(d.type) +
+          '</div><div style="font-family:var(--font-data);font-weight:600">' + (d.qty||0) + ' 件</div></div>' +
+          '<div class="stk-doc-card__meta">' + esc(d.date || todayStr()) + ' · ' + (d.lines||0) + ' 种规格' +
+          (d.remark ? ' · ' + esc(d.remark) : '') + '</div></div>';
+      }).join('');
+      return;
+    }
+    var tfs = window.StockStore.transfers || [];
+    if (!tfs.length) {
+      root.innerHTML = '<div class="stk-empty">暂无调拨单<button type="button" class="btn-main" id="stkHubEmptyTf">新建调拨</button></div>';
+      $('stkHubEmptyTf')?.addEventListener('click', openTfAdd);
+      return;
+    }
+    root.innerHTML = tfs.map(function (t) {
+      var stMap = { pending: ['待审批','pending'], shipping: ['出库中','shipping'], done: ['已完成','done'], reject: ['拒收退回','reject'], withdraw: ['已撤回','withdraw'] };
+      var sm = stMap[t.status] || ['处理中','pending'];
+      return '<div class="stk-doc-card"><div class="stk-doc-card__top"><div class="stk-doc-card__title">' + esc(t.from) + ' → ' + esc(t.to) +
+        '</div><span class="stk-status stk-status--' + sm[1] + '">' + sm[0] + '</span></div>' +
+        '<div class="stk-doc-card__meta">' + esc(t.date || todayStr()) + ' · ' + (t.qty||0) + ' 件</div></div>';
+    }).join('');
+  }
+
+  function openHub() {
+    window.__wbEntry = 'stock';
+    window.StockStore.shopName = window.StockStore.shopName ||
+      ((window.EmployeeStore && window.EmployeeStore.shopName) || '旗舰体验店');
+    (window.StockStore.inDocs || []).forEach(function (d) { if (!d.date) d.date = todayStr(); });
+    (window.StockStore.outDocs || []).forEach(function (d) { if (!d.date) d.date = todayStr(); });
+    (window.StockStore.transfers || []).forEach(function (d) { if (!d.date) d.date = todayStr(); });
+    showScreen('screen-stock-hub');
+    nav('stock-hub');
+    renderHub();
+  }
+
+  function openIn() {
+    state.draftIn = { type: state.draftIn.type || '正常入库', remark: '', lines: state.draftIn.lines || [] };
+    if ($('stkInShop')) $('stkInShop').textContent = window.StockStore.shopName;
+    if ($('stkInType')) $('stkInType').textContent = state.draftIn.type;
+    if ($('stkInDate')) $('stkInDate').textContent = todayStr();
+    if ($('stkInRemark')) $('stkInRemark').value = state.draftIn.remark || '';
+    renderLines('in');
+    showScreen('screen-stock-in');
+    nav('stock-in');
+  }
+  function openOut() {
+    state.draftOut = { type: state.draftOut.type || '销售出库', remark: '', lines: state.draftOut.lines || [] };
+    if ($('stkOutShop')) $('stkOutShop').textContent = window.StockStore.shopName;
+    if ($('stkOutType')) $('stkOutType').textContent = state.draftOut.type;
+    if ($('stkOutDate')) $('stkOutDate').textContent = todayStr();
+    if ($('stkOutRemark')) $('stkOutRemark').value = state.draftOut.remark || '';
+    renderLines('out');
+    showScreen('screen-stock-out');
+    nav('stock-out');
+  }
+
+  function renderLines(mode) {
+    var draft = mode === 'in' ? state.draftIn : state.draftOut;
+    var root = $(mode === 'in' ? 'stkInLines' : 'stkOutLines');
+    if (!root) return;
+    if (!draft.lines.length) {
+      root.innerHTML = '<div class="stk-empty" style="padding:24px">尚未添加规格</div>';
+      return;
+    }
+    root.innerHTML = draft.lines.map(function (ln, idx) {
+      return '<div class="stk-line" data-stk-line="' + idx + '">' +
+        '<div><div class="stk-line__name">' + esc(ln.product) + ' · ' + esc(ln.name) + '</div>' +
+        '<div class="stk-line__sub">库存 ' + (ln.stockCap != null ? ln.stockCap : '—') + ' · ' + esc(ln.unit||'') + '</div></div>' +
+        '<div class="stk-stepper">' +
+        '<button type="button" data-stk-step="-1" aria-label="减">−</button>' +
+        '<span>' + (ln.qty||1) + '</span>' +
+        '<button type="button" data-stk-step="1" aria-label="加">+</button></div></div>';
+    }).join('');
+  }
+
+  function renderPickList() {
+    var root = $('stkPickList');
+    if (!root) return;
+    var skus = window.StockStore.skus || [];
+    if (!skus.length) {
+      root.innerHTML = '<div class="stk-empty">暂无规格，请先在商品管理中新增</div>';
+      syncPickOk();
+      return;
+    }
+    var checkSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>';
+    root.innerHTML = skus.map(function (s) {
+      var on = !!state.pickSelected[s.id];
+      return '<button type="button" class="stk-sku-card' + (on ? ' is-on' : '') + '" data-stk-pick="' + esc(s.id) + '">' +
+        '<div class="stk-pick-row">' +
+        '<span class="stk-sku-card__check" aria-hidden="true">' + checkSvg + '</span>' +
+        '<div class="stk-sku-card__main">' +
+        '<div class="stk-sku-card__top"><div class="stk-sku-card__name">' + esc(s.product) +
+        ' <span class="stk-sku-card__spec">· ' + esc(s.name) + '</span></div>' +
+        '<div class="stk-sku-card__qty">' + (Number(s.stock)||0) + '</div></div>' +
+        '<div class="stk-sku-card__meta"><span>' + esc(s.unit||'') + ' · 库存</span>' +
+        '<span>' + (on ? '已选' : '点选加入') + '</span></div>' +
+        '</div></div></button>';
+    }).join('');
+    syncPickOk();
+  }
+
+  function syncPickOk() {
+    var n = Object.keys(state.pickSelected).filter(function (k) { return state.pickSelected[k]; }).length;
+    var btn = $('stkPickOk');
+    if (btn) btn.textContent = n > 0 ? ('确定（' + n + '）') : '确定';
+  }
+
+  function openPick(mode) {
+    state.pickMode = mode;
+    state.pickSelected = {};
+    showScreen('screen-stock-pick');
+    nav('stock-pick');
+    renderPickList();
+  }
+
+  function applyPick() {
+    var ids = Object.keys(state.pickSelected).filter(function (k) { return state.pickSelected[k]; });
+    if (!ids.length) { toast('请选择规格', true); return; }
+    var draft = state.pickMode === 'in' ? state.draftIn : (state.pickMode === 'out' ? state.draftOut : state.draftTf);
+    ids.forEach(function (id) {
+      if (draft.lines.some(function (l) { return l.id === id; })) return;
+      var s = (window.StockStore.skus || []).find(function (x) { return x.id === id; });
+      if (!s) return;
+      draft.lines.push({
+        id: s.id, product: s.product, name: s.name, unit: s.unit,
+        qty: 1, stockCap: Number(s.stock) || 0, cost: s.cost
+      });
+    });
+    if (state.pickMode === 'in') openIn();
+    else if (state.pickMode === 'out') openOut();
+    else openTfAdd();
+  }
+
+  function saveDoc(mode) {
+    var draft = mode === 'in' ? state.draftIn : state.draftOut;
+    if ($('stkInRemark') && mode === 'in') draft.remark = $('stkInRemark').value.trim();
+    if ($('stkOutRemark') && mode === 'out') draft.remark = $('stkOutRemark').value.trim();
+    if (!draft.lines.length) { toast('请先添加规格', true); return; }
+    for (var i = 0; i < draft.lines.length; i++) {
+      var ln = draft.lines[i];
+      var sku = (window.StockStore.skus || []).find(function (s) { return s.id === ln.id; });
+      if (!sku) continue;
+      var q = Math.max(1, Number(ln.qty) || 1);
+      if (mode === 'out') {
+        var cap = Number(sku.stock) || 0;
+        if (q > cap) { toast('库存不足，最多 ' + cap + ' 件', true); return; }
+        sku.stock = Math.max(0, cap - q);
+      } else {
+        sku.stock = (Number(sku.stock) || 0) + q;
+      }
+      sku.moved = true;
+    }
+    var totalQty = draft.lines.reduce(function (a, l) { return a + (Number(l.qty) || 0); }, 0);
+    var doc = {
+      id: (mode === 'in' ? 'in' : 'out') + Date.now(),
+      type: draft.type,
+      date: todayStr(),
+      lines: draft.lines.length,
+      qty: totalQty,
+      remark: draft.remark || ''
+    };
+    if (mode === 'in') window.StockStore.inDocs.unshift(doc);
+    else window.StockStore.outDocs.unshift(doc);
+    draft.lines = [];
+    toast(mode === 'in' ? '入库已保存' : '出库已保存');
+    state.hubTab = mode;
+    openHub();
+  }
+
+  function openGoods() {
+    renderGoods();
+    showScreen('screen-stock-goods');
+    nav('stock-goods');
+  }
+  function renderGoods() {
+    var q = (($('stkGoodsSearch') && $('stkGoodsSearch').value) || '').trim().toLowerCase();
+    var root = $('stkGoodsList');
+    var list = (window.StockStore.skus || []).filter(function (s) {
+      if (!q) return true;
+      return (s.product + s.name + (s.barcode || '')).toLowerCase().indexOf(q) >= 0;
+    });
+    root.innerHTML = list.map(function (s) {
+      return '<button type="button" class="stk-sku-card" data-stk-edit="' + esc(s.id) + '">' +
+        '<div class="stk-sku-card__top"><div class="stk-sku-card__name">' + esc(s.product) +
+        ' <span class="stk-sku-card__spec">· ' + esc(s.name) + '</span></div>' +
+        '<div class="stk-sku-card__qty">' + (Number(s.stock)||0) + '</div></div>' +
+        '<div class="stk-sku-card__meta"><span>' + (s.moved ? '已出入库' : '未出入库') +
+        (s.catalogStock == null ? ' · 价目未关联' : ' · 价目库存 ' + s.catalogStock) +
+        '</span><span>' + money(skuValue(s)) + '</span></div></button>';
+    }).join('') || '<div class="stk-empty">暂无商品规格</div>';
+  }
+
+  function openSku(id) {
+    state.editingSkuId = id || null;
+    var s = id ? (window.StockStore.skus || []).find(function (x) { return x.id === id; }) : null;
+    if ($('stkSkuTitle')) $('stkSkuTitle').textContent = s ? '规格详情' : '新增规格';
+    var locked = !!(s && s.moved);
+    if ($('stkSkuLockHint')) $('stkSkuLockHint').hidden = !locked;
+    var fields = [
+      ['stkSkuProduct', s ? s.product : ''],
+      ['stkSkuName', s ? s.name : ''],
+      ['stkSkuBarcode', s ? (s.barcode || '') : ''],
+      ['stkSkuCost', s && s.cost != null ? String(s.cost) : ''],
+      ['stkSkuUnit', s ? (s.unit || '瓶') : '瓶']
+    ];
+    fields.forEach(function (pair) {
+      var el = $(pair[0]);
+      if (!el) return;
+      el.value = pair[1];
+      el.readOnly = locked && (pair[0] === 'stkSkuProduct' || pair[0] === 'stkSkuName' || pair[0] === 'stkSkuUnit');
+    });
+    if ($('stkSkuStock')) $('stkSkuStock').textContent = s ? String(Number(s.stock)||0) : '0（新建后入库）';
+    if ($('stkSkuCatalog')) {
+      if (!s || s.catalogStock == null) $('stkSkuCatalog').textContent = '未关联价目表';
+      else $('stkSkuCatalog').textContent = '价目库存 ' + s.catalogStock + '（只读预览）';
+    }
+    showScreen('screen-stock-sku');
+    nav('stock-sku');
+  }
+
+  function saveSku() {
+    var product = ($('stkSkuProduct') && $('stkSkuProduct').value.trim()) || '';
+    var name = ($('stkSkuName') && $('stkSkuName').value.trim()) || '';
+    if (!product) { toast('请填写商品名称', true); return; }
+    if (!name) { toast('请填写规格名称', true); return; }
+    var costRaw = ($('stkSkuCost') && $('stkSkuCost').value.trim()) || '';
+    var cost = costRaw === '' ? 0 : parseFloat(costRaw);
+    if (costRaw !== '' && !Number.isFinite(cost)) { toast('请填写有效成本价', true); return; }
+    if (state.editingSkuId) {
+      var s = (window.StockStore.skus || []).find(function (x) { return x.id === state.editingSkuId; });
+      if (!s) { toast('规格不存在', true); return; }
+      if (!s.moved) {
+        s.product = product;
+        s.name = name;
+        s.unit = ($('stkSkuUnit') && $('stkSkuUnit').value.trim()) || s.unit;
+      }
+      s.barcode = ($('stkSkuBarcode') && $('stkSkuBarcode').value.trim()) || '';
+      s.cost = Number.isFinite(cost) ? cost : s.cost;
+      toast('已保存');
+    } else {
+      window.StockStore.skus.unshift({
+        id: 'sk' + Date.now(),
+        product: product,
+        name: name,
+        barcode: ($('stkSkuBarcode') && $('stkSkuBarcode').value.trim()) || '',
+        cost: Number.isFinite(cost) ? cost : 0,
+        unit: ($('stkSkuUnit') && $('stkSkuUnit').value.trim()) || '瓶',
+        stock: 0,
+        moved: false,
+        catalogStock: null
+      });
+      toast('规格已创建');
+    }
+    openGoods();
+  }
+
+  function openTypes() {
+    state.typeTab = 'in';
+    renderTypes();
+    showScreen('screen-stock-types');
+    nav('stock-types');
+  }
+  function renderTypes() {
+    document.querySelectorAll('#stkTypesTabs .stk-tabs__btn').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-stk-type-tab') === state.typeTab);
+    });
+    var list = state.typeTab === 'in' ? window.StockStore.inTypes : window.StockStore.outTypes;
+    var icon = state.typeTab === 'in' ? 'assets/stock/in.svg' : 'assets/stock/out.svg';
+    $('stkTypesList').innerHTML = list.map(function (name) {
+      return '<div class="stk-type-row"><span class="stk-type-row__icon"><img src="' + icon + '" alt=""></span>' +
+        '<div class="stk-type-row__body"><div class="stk-type-row__name">' + esc(name) + '</div>' +
+        '<div class="stk-type-row__sub">' + (state.typeTab === 'in' ? '入库' : '出库') + ' · 已启用</div></div></div>';
+    }).join('');
+  }
+
+  function openTransfer() {
+    renderTransfer();
+    showScreen('screen-stock-transfer');
+    nav('stock-transfer');
+  }
+  function renderTransfer() {
+    var root = $('stkTfList');
+    var tfs = window.StockStore.transfers || [];
+    if (!tfs.length) {
+      root.innerHTML = '<div class="stk-empty">暂无调拨</div>';
+      return;
+    }
+    root.innerHTML = tfs.map(function (t) {
+      var stMap = { pending: ['待审批','pending'], done: ['已完成','done'], shipping: ['出库中','shipping'], reject: ['拒收退回','reject'], withdraw: ['已撤回','withdraw'] };
+      var sm = stMap[t.status] || ['处理中','pending'];
+      return '<div class="stk-doc-card"><div class="stk-doc-card__top"><div class="stk-doc-card__title">' + esc(t.from) + ' → ' + esc(t.to) +
+        '</div><span class="stk-status stk-status--' + sm[1] + '">' + sm[0] + '</span></div>' +
+        '<div class="stk-doc-card__meta">' + esc(t.date || todayStr()) + ' · ' + (t.qty||0) + ' 件</div></div>';
+    }).join('');
+  }
+  function openTfAdd() {
+    state.draftTf = state.draftTf.lines ? state.draftTf : { lines: [] };
+    if ($('stkTfFrom')) $('stkTfFrom').textContent = window.StockStore.shopName;
+    if ($('stkTfTo')) $('stkTfTo').textContent = '城西分店';
+    renderTfLines();
+    showScreen('screen-stock-transfer-add');
+    nav('stock-transfer-add');
+  }
+  function renderTfLines() {
+    var root = $('stkTfLines');
+    if (!state.draftTf.lines.length) {
+      root.innerHTML = '<div class="stk-empty" style="padding:24px">暂无商品</div>';
+      return;
+    }
+    root.innerHTML = state.draftTf.lines.map(function (ln, idx) {
+      return '<div class="stk-line" data-stk-tf-line="' + idx + '"><div><div class="stk-line__name">' + esc(ln.product) + ' · ' + esc(ln.name) +
+        '</div><div class="stk-line__sub">调出方库存 ' + (ln.stockCap||0) + '</div></div>' +
+        '<div class="stk-stepper"><button type="button" data-stk-tf-step="-1">−</button><span>' + (ln.qty||1) +
+        '</span><button type="button" data-stk-tf-step="1">+</button></div></div>';
+    }).join('');
+  }
+  function saveTf() {
+    if (!state.draftTf.lines.length) { toast('请添加商品', true); return; }
+    for (var i = 0; i < state.draftTf.lines.length; i++) {
+      var ln = state.draftTf.lines[i];
+      if ((Number(ln.qty)||0) > (Number(ln.stockCap)||0)) {
+        toast('库存不足，最多 ' + (ln.stockCap||0) + ' 件', true); return;
+      }
+    }
+    var qty = state.draftTf.lines.reduce(function (a, l) { return a + (Number(l.qty)||0); }, 0);
+    window.StockStore.transfers.unshift({
+      id: 'tf' + Date.now(),
+      from: window.StockStore.shopName,
+      to: '城西分店',
+      status: 'pending',
+      date: todayStr(),
+      qty: qty
+    });
+    state.draftTf.lines = [];
+    toast('调拨单已提交（待审批）');
+    openTransfer();
+  }
+
+  function openMask(id) { var el = $(id); if (el) el.classList.add('open'); }
+  function closeMask(id) { var el = $(id); if (el) el.classList.remove('open'); }
+
+  function openTypeSheet(mode) {
+    state.typePickMode = mode === 'out' ? 'out' : 'in';
+    var list = state.typePickMode === 'in' ? window.StockStore.inTypes : window.StockStore.outTypes;
+    var cur = state.typePickMode === 'in' ? (state.draftIn.type || '') : (state.draftOut.type || '');
+    if ($('stkTypeMaskTitle')) {
+      $('stkTypeMaskTitle').textContent = state.typePickMode === 'in' ? '选择入库类别' : '选择出库类别';
+    }
+    var root = $('stkTypeList');
+    if (root) {
+      root.innerHTML = (list || []).map(function (name) {
+        var on = name === cur;
+        return '<button type="button" class="emp-picker-opt' + (on ? ' on' : '') + '" data-stk-type="' + esc(name) + '">' +
+          esc(name) + '</button>';
+      }).join('');
+    }
+    openMask('stkTypeMask');
+  }
+
+  function applyTypePick(name) {
+    var mode = state.typePickMode;
+    if (mode === 'in') {
+      state.draftIn.type = name;
+      if ($('stkInType')) $('stkInType').textContent = name;
+    } else if (mode === 'out') {
+      state.draftOut.type = name;
+      if ($('stkOutType')) $('stkOutType').textContent = name;
+    }
+    closeMask('stkTypeMask');
+  }
+
+  function patchFlowNav() {
+    if (typeof FLOW_NAV === 'undefined') return false;
+    Object.assign(FLOW_NAV, {
+      'stock-hub': openHub,
+      'stock-in': openIn,
+      'stock-out': openOut,
+      'stock-goods': openGoods,
+      'stock-sku': function () { openSku((window.StockStore.skus[0] || {}).id); },
+      'stock-types': openTypes,
+      'stock-transfer': openTransfer,
+      'stock-transfer-add': openTfAdd,
+      'stock-pick': function () { openPick('in'); }
+    });
+    if (typeof FLOW_MAP_GROUPS !== 'undefined') {
+      var nodes = [
+        { id: 'stock-hub', label: '库存工作台', screen: 'screen-stock-hub' },
+        { id: 'stock-in', label: '商品入库', screen: 'screen-stock-in' },
+        { id: 'stock-out', label: '商品出库', screen: 'screen-stock-out' },
+        { id: 'stock-goods', label: '商品管理', screen: 'screen-stock-goods' },
+        { id: 'stock-sku', label: '规格详情', screen: 'screen-stock-sku' },
+        { id: 'stock-types', label: '入出类别', screen: 'screen-stock-types' },
+        { id: 'stock-transfer', label: '调拨管理', screen: 'screen-stock-transfer' },
+        { id: 'stock-transfer-add', label: '新建调拨', screen: 'screen-stock-transfer-add' }
+      ];
+      var g = FLOW_MAP_GROUPS.find(function (x) { return x.title === '库存'; });
+      if (!g) {
+        FLOW_MAP_GROUPS.push({ title: '库存', nodes: nodes });
+        if (typeof renderFlowMap === 'function') renderFlowMap();
+      } else {
+        g.nodes = nodes;
+        if (typeof renderFlowMap === 'function') renderFlowMap();
+      }
+    }
+    return true;
+  }
+
+  function wire() {
+    if (state.wired) return;
+    state.wired = true;
+    patchFlowNav();
+
+    $('stkHubBack')?.addEventListener('click', function () {
+      if (typeof openWorkbench === 'function') openWorkbench();
+    });
+    $('stkHubTypes')?.addEventListener('click', openTypes);
+    $('stkHubScan')?.addEventListener('click', function () { toast('演示环境请使用手动添加'); });
+    $('stkHubSearch')?.addEventListener('input', function (e) {
+      state.hubQuery = e.target.value || '';
+      renderHub();
+    });
+    document.querySelector('.stk-actions')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-go]');
+      if (!btn) return;
+      var go = btn.getAttribute('data-stk-go');
+      if (go === 'in') openIn();
+      else if (go === 'out') openOut();
+      else if (go === 'transfer') openTransfer();
+      else if (go === 'goods') openGoods();
+    });
+    $('stkHubTabs')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-tab]');
+      if (!btn) return;
+      state.hubTab = btn.getAttribute('data-stk-tab');
+      renderHub();
+    });
+    $('stkHubList')?.addEventListener('click', function (e) {
+      var sku = e.target.closest('[data-stk-sku]');
+      if (sku) openSku(sku.getAttribute('data-stk-sku'));
+    });
+
+    $('stkInBack')?.addEventListener('click', openHub);
+    $('stkOutBack')?.addEventListener('click', openHub);
+    $('stkInPick')?.addEventListener('click', function () { openPick('in'); });
+    $('stkOutPick')?.addEventListener('click', function () { openPick('out'); });
+    $('stkInScan')?.addEventListener('click', function () { toast('演示环境请使用手动添加'); });
+    $('stkOutScan')?.addEventListener('click', function () { toast('演示环境请使用手动添加'); });
+    $('stkInTypeRow')?.addEventListener('click', function () { openTypeSheet('in'); });
+    $('stkOutTypeRow')?.addEventListener('click', function () { openTypeSheet('out'); });
+    $('stkTypeCancel')?.addEventListener('click', function () { closeMask('stkTypeMask'); });
+    $('stkTypeList')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-type]');
+      if (!btn) return;
+      applyTypePick(btn.getAttribute('data-stk-type'));
+    });
+    $('stkTypeMask')?.addEventListener('click', function (e) {
+      if (e.target.id === 'stkTypeMask') closeMask('stkTypeMask');
+    });
+    $('stkInSave')?.addEventListener('click', function () { saveDoc('in'); });
+    $('stkOutSave')?.addEventListener('click', function () { saveDoc('out'); });
+    $('stkInLines')?.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-stk-step]');
+      var row = e.target.closest('[data-stk-line]');
+      if (!step || !row) return;
+      var idx = Number(row.getAttribute('data-stk-line'));
+      var ln = state.draftIn.lines[idx];
+      if (!ln) return;
+      ln.qty = Math.max(1, (Number(ln.qty)||1) + Number(step.getAttribute('data-stk-step')));
+      renderLines('in');
+    });
+    $('stkOutLines')?.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-stk-step]');
+      var row = e.target.closest('[data-stk-line]');
+      if (!step || !row) return;
+      var idx = Number(row.getAttribute('data-stk-line'));
+      var ln = state.draftOut.lines[idx];
+      if (!ln) return;
+      var next = (Number(ln.qty)||1) + Number(step.getAttribute('data-stk-step'));
+      if (next > (Number(ln.stockCap)||0)) { toast('库存不足，最多 ' + (ln.stockCap||0) + ' 件', true); next = ln.stockCap || 0; }
+      ln.qty = Math.max(1, next || 1);
+      if ((ln.stockCap||0) <= 0) { toast('库存不足'); return; }
+      renderLines('out');
+    });
+
+    $('stkPickBack')?.addEventListener('click', function () {
+      if (state.pickMode === 'in') openIn();
+      else if (state.pickMode === 'out') openOut();
+      else openTfAdd();
+    });
+    $('stkPickList')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-pick]');
+      if (!btn) return;
+      var id = btn.getAttribute('data-stk-pick');
+      state.pickSelected[id] = !state.pickSelected[id];
+      renderPickList();
+    });
+    $('stkPickOk')?.addEventListener('click', applyPick);
+
+    $('stkGoodsBack')?.addEventListener('click', openHub);
+    $('stkGoodsAdd')?.addEventListener('click', function () { openSku(null); });
+    $('stkGoodsCats')?.addEventListener('click', function () { toast('分类管理：洗护 / 造型（演示）'); });
+    $('stkGoodsSearch')?.addEventListener('input', renderGoods);
+    $('stkGoodsList')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-edit]');
+      if (btn) openSku(btn.getAttribute('data-stk-edit'));
+    });
+    $('stkSkuBack')?.addEventListener('click', openGoods);
+    $('stkSkuSave')?.addEventListener('click', saveSku);
+
+    $('stkTypesBack')?.addEventListener('click', openHub);
+    $('stkTypesTabs')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-stk-type-tab]');
+      if (!btn) return;
+      state.typeTab = btn.getAttribute('data-stk-type-tab');
+      renderTypes();
+    });
+
+    $('stkTfBack')?.addEventListener('click', openHub);
+    $('stkTfNew')?.addEventListener('click', openTfAdd);
+    $('stkTfAddBack')?.addEventListener('click', openTransfer);
+    $('stkTfPick')?.addEventListener('click', function () { openPick('tf'); });
+    $('stkTfSave')?.addEventListener('click', saveTf);
+    $('stkTfLines')?.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-stk-tf-step]');
+      var row = e.target.closest('[data-stk-tf-line]');
+      if (!step || !row) return;
+      var idx = Number(row.getAttribute('data-stk-tf-line'));
+      var ln = state.draftTf.lines[idx];
+      if (!ln) return;
+      var next = (Number(ln.qty)||1) + Number(step.getAttribute('data-stk-tf-step'));
+      if (next > (Number(ln.stockCap)||0)) { toast('库存不足，最多 ' + (ln.stockCap||0) + ' 件', true); next = ln.stockCap || 0; }
+      ln.qty = Math.max(1, next || 1);
+      renderTfLines();
+    });
+  }
+
+  window.StockDemo = {
+    openHub: openHub,
+    openIn: openIn,
+    openOut: openOut,
+    openGoods: openGoods,
+    openTransfer: openTransfer,
+    wire: wire
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
+  else wire();
+
+  var t = setInterval(function () { if (patchFlowNav()) clearInterval(t); }, 200);
+  setTimeout(function () { clearInterval(t); }, 10000);
+})();
+/* ==== /STOCK MODULE JS ==== */
+</script>
+
 <script>
 /* ==== BILLING MODULE JS (embedded) ==== */
 
@@ -33259,7 +34699,7 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('cartSheetMask');
     closeMask('guestRecordMask');
     /* 开单页不应残留办卡成功的绿色渐变底 */
-    document.querySelector('.phone-shell')?.classList.remove('phone-shell--success');
+    document.querySelector('.phone-shell')?.classList.remove('phone-shell--success', 'phone-shell--issue-success');
     document.querySelectorAll('.phone .screen').forEach(el => el.classList.toggle('hidden', el.id !== id));
     if (id === 'screen-success' && state.lastIssueFromCardMgmt && typeof renderSuccess === 'function') {
       renderSuccess();
@@ -34349,9 +35789,9 @@ window.__BILLING_EMBEDDED__ = true;
       document.getElementById('billBody').innerHTML = `
       ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
       <div class="bill-sheet bill-sheet--pick">
-        <div class="search-bar search-bar--bill">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-          <input id="billSearch" type="search" placeholder="搜索顾客姓名/手机号" autocomplete="off" value="${escapeHtml(state.searchQuery)}">
+        <div class="search-bar search-bar--bill search-bar--member">
+          <svg width="16" height="16" viewBox="0 0 13 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#666" stroke-linejoin="round"/><path d="M9.5 10.5L12.5 13.5" stroke="#666" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="billSearch" type="search" placeholder="搜索姓名或手机" autocomplete="off" value="${escapeHtml(state.searchQuery)}">
           <button type="button" class="search-go">搜索</button>
         </div>
         <div class="catalog-list" id="catalogList">${renderBillCustomerPickList()}</div>
@@ -37644,7 +39084,7 @@ window.__BILLING_EMBEDDED__ = true;
             <span class="flow-edit-item__edit" aria-hidden="true">${flowIconPencil()}<span>编辑</span></span>
           </button>`;
         }).join('')}
-        <button type="button" class="btn-add-benefit" data-flow-edit-add style="width:100%;margin-top:4px">+ 添加服务项目</button>
+        <button type="button" class="btn-add-benefit btn-add-benefit--block" data-flow-edit-add style="width:100%;margin-top:4px">+ 添加服务项目</button>
       </div>
       <div class="flow-detail-card">
         <div class="flow-detail-card__title">设置员工</div>
@@ -37678,7 +39118,7 @@ window.__BILLING_EMBEDDED__ = true;
               </label>
             </div>
           </div>`).join('') : `<div class="flow-edit-item__meta-line" style="padding:4px 0 12px">暂未设置员工</div>`}
-        <button type="button" class="btn-add-benefit" data-flow-edit-staff-add style="width:100%;margin-top:4px">+ 添加员工</button>
+        <button type="button" class="btn-add-benefit btn-add-benefit--block" data-flow-edit-staff-add style="width:100%;margin-top:4px">+ 添加员工</button>
         ${d.staffs.length ? `<div class="flow-edit-sum"><span>合计</span><span>业绩 <strong>${r2(achSum).toFixed(2)}</strong> · 提成 <strong>${r2(commSum).toFixed(2)}</strong></span></div>` : ''}
       </div>`;
     if (foot) {
@@ -37909,7 +39349,7 @@ window.__BILLING_EMBEDDED__ = true;
     const typeLabel = flowTypeLabel(isProduct ? 'product' : (isCard ? 'card' : 'project'));
     const pool = getStaffPool();
     const replaceBtn = !isCard
-      ? `<button type="button" class="btn-add-benefit" data-flow-edit-item-replace style="width:100%;margin-top:12px">${isProduct ? '更换产品' : '更换项目'}</button>`
+      ? `<button type="button" class="btn-add-benefit btn-add-benefit--block" data-flow-edit-item-replace style="width:100%;margin-top:12px">${isProduct ? '更换产品' : '更换项目'}</button>`
       : '';
     body.innerHTML = `
       <div class="flow-detail-card">
@@ -39195,7 +40635,7 @@ window.__BILLING_EMBEDDED__ = true;
         </div>
         <div class="member-card-item__panel">${sections.join('')}</div>
         <div class="member-card-item__footer">
-          <button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${tpl.id}">+复制建卡</button>
+          <button type="button" class="card-face-act card-face-act--clone-text" data-clone-template="${tpl.id}"><img src="assets/member-card-clone.svg" alt="" width="16" height="16" />复制建卡</button>
         </div>
       </div>`;
     }).join('');
@@ -40916,6 +42356,13 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('flowWeikuanFilter')?.addEventListener('click', () => openFlowWeikuanFilter());
   document.getElementById('flowWeikuanSearch')?.addEventListener('input', (e) => {
     state.flowWeikuanQuery = e.target.value || '';
+    renderFlowWeikuan();
+  });
+  document.getElementById('flowWeikuanSearchGo')?.addEventListener('click', () => {
+    const el = document.getElementById('flowWeikuanSearch');
+    if (!el) return;
+    el.focus();
+    state.flowWeikuanQuery = el.value || '';
     renderFlowWeikuan();
   });
   document.getElementById('flowWeikuanBody')?.addEventListener('click', (e) => {
