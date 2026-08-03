@@ -9856,14 +9856,12 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .detail-staff-entry__val {
   flex-shrink: 0; font-size: 13px; color: var(--text-sec);
-  display: inline-flex; align-items: center; gap: 2px;
 }
 .detail-staff-entry__val.has-staff { color: var(--brand); font-weight: 500; }
-.detail-staff-entry__arrow {
-  font-size: 13px; color: #C0C0C0; line-height: 1; font-weight: 400;
-  margin-left: 2px;
+.detail-staff-entry .chev.ui-icon {
+  color: var(--text-sec); flex-shrink: 0; width: 16px; height: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
 }
-.detail-staff-entry__val.has-staff .detail-staff-entry__arrow { color: var(--brand); }
 .detail-staff-summary {
   display: flex; flex-direction: column; gap: 8px; padding: 0 0 4px;
 }
@@ -35091,7 +35089,8 @@ window.__BILLING_EMBEDDED__ = true;
     return `<div class="detail-staff-block">
       <button type="button" class="detail-staff-entry" data-open-bill-staff="${escapeHtml(it.id)}">
         <span class="detail-staff-entry__lbl">选择员工</span>
-        <span class="detail-staff-entry__val${n ? ' has-staff' : ''}">${escapeHtml(val)}<span class="detail-staff-entry__arrow" aria-hidden="true">＞</span></span>
+        <span class="detail-staff-entry__val${n ? ' has-staff' : ''}">${escapeHtml(val)}</span>
+        <span class="chev ui-icon" aria-hidden="true">${iconSvg('chevron-right', 'ui-icon')}</span>
       </button>
       ${renderDetailStaffSummary(it)}
     </div>`;
