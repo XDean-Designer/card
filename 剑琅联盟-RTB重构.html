@@ -315,15 +315,16 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .page-tabs__item.on .page-tabs__indicator { background: var(--brand); }
 .list-shelf-seg.page-tabs {
   height: auto; min-height: 40px; padding: 6px 0 0; justify-content: center; gap: 40px;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0;
 }
 .list-shelf-seg .page-tabs__item { flex: 0 0 auto; width: auto; padding: 0 12px 10px; }
 .list-shelf-seg .page-tabs__label { font-size: 16px; letter-spacing: 0.32px; }
 .list-shelf-seg .page-tabs__item.on .page-tabs__label { font-weight: 600; color: #1a1a1a; }
 .list-shelf-seg .page-tabs__indicator { width: 27px; height: 3px; border-radius: 4px; bottom: 0; }
 .list-shelf-seg + .list-page-body .list-page { padding-top: 8px; }
-.list-shelf-seg + .list-page-body .card-list-shell { padding-top: 8px; }
-.list-shelf-seg + .list-page-body .card-list-shell .list-page { padding-top: 0; }
+.list-shelf-seg + .list-page-body .card-list-shell { padding-top: 0; }
+.list-shelf-seg + .list-page-body .card-list-shell .list-page { padding-top: 12px; }
+.list-shelf-seg + .list-page-body .card-list-shell:has(#cardGroupBar.hidden) .list-page { padding-top: 8px; }
 .issue-picker-tabs.page-tabs { margin: 0; }
 .issue-picker-tabs--holders-only .page-tabs__item[data-issue-tab="new"] { display: none; }
 .member-card-item--shelved { border-color: var(--border); }
@@ -487,7 +488,12 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   border-radius: 24px; min-height: 28px; padding: 4px 20px; font-size: 14px; font-weight: 600;
 }
 .member-card-item .card-face-act--outline {
-  color: #1a1a1a; border: none; background: transparent; font-weight: 500; font-size: 14px; padding: 4px 8px;
+  background: transparent; color: var(--card-accent); border: 1.5px solid var(--card-accent);
+  border-radius: 24px; min-height: 28px; padding: 4px 16px; font-size: 14px; font-weight: 600;
+  box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;
+}
+.member-card-item .card-face-act--outline:active {
+  background: color-mix(in srgb, var(--card-accent) 12%, transparent);
 }
 .member-card-item .card-face-act--clone-text {
   color: #4a7bf4; font-size: 12px; font-weight: 500;
@@ -497,14 +503,15 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .member-card-compact {
   height: 54px; position: relative; overflow: hidden; background-size: cover; background-position: center;
   box-shadow: inset 0 2px 0 0 var(--card-accent, #C4A394);
+  border-radius: 12px 12px 0 0;
 }
 .member-card-compact::after {
   content: '';
   position: absolute; inset: 0;
-  background: url("assets/member-card-header-deco.png") center / cover no-repeat;
+  background: url("assets/member-card-header-deco.png") right center / cover no-repeat;
   pointer-events: none; z-index: 1;
   mix-blend-mode: plus-lighter;
-  opacity: .45;
+  opacity: .6;
 }
 .member-card-compact__name {
   font-size: 16px; font-weight: 500; color: #1a1a1a;
@@ -880,13 +887,13 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
   line-height: 1.375; width: 100%; margin: 0;
 }
 .issue-member-row__avatar {
-  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-  display: block; object-fit: cover; background: #fff;
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: block; object-fit: cover; background: #f2f2f2;
 }
 .issue-member-row__main { flex: 1; min-width: 0; }
 .issue-member-row__name {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  font-weight: 600; line-height: 1.35; font-size: 14px; color: var(--text);
+  font-weight: 500; line-height: 1.35; font-size: 15px; color: #1a1a1a;
 }
 .issue-member-badge {
   font-size: 10px; font-weight: 600; color: var(--brand);
@@ -897,9 +904,7 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .issue-member-badge--muted {
   color: var(--text-sec); background: var(--bg-page); border-color: #E8E8ED;
 }
-.issue-member-row__phone { font-size: 12px; color: var(--text-sec); margin-top: 2px; display: block; line-height: 1.35; }
-.issue-member-item { align-items: center; cursor: pointer; }
-.issue-member-item input[type="radio"] { width: 18px; height: 18px; accent-color: var(--brand); margin: 0; flex-shrink: 0; cursor: pointer; }
+.issue-member-row__phone { font-size: 13px; color: #929292; margin-top: 2px; display: block; line-height: 1.35; }
 .picker-foot .btn-main:disabled { opacity: .45; cursor: not-allowed; }
 .success-card-face { margin: 0 16px 12px; }
 .success-card-face .member-card-item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
@@ -1184,33 +1189,81 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .picker-head--stack { padding: 12px 16px 10px; }
 .picker-head--stack .picker-head__title { font-size: 15px; font-weight: 600; color: var(--text); }
 .picker-head--stack .picker-head__sub { font-size: 12px; color: var(--text-sec); font-weight: 500; margin-top: 4px; line-height: 1.4; }
-.issue-picker-tabs {
-  flex-shrink: 0;
+.issue-picker-tabs.page-tabs {
+  flex-shrink: 0; height: auto; min-height: 40px; padding: 4px 0 0;
+  justify-content: center; gap: 48px; background: #fff; border-bottom: 1px solid #f0f0f0;
 }
+.issue-picker-tabs .page-tabs__item { flex: 0 0 auto; width: auto; padding: 0 8px 10px; }
+.issue-picker-tabs .page-tabs__label { font-size: 16px; letter-spacing: .32px; color: #6c7279; }
+.issue-picker-tabs .page-tabs__item.on .page-tabs__label { color: #1a1a1a; font-weight: 600; }
+.issue-picker-tabs .page-tabs__indicator { width: 27px; height: 3px; border-radius: 4px; bottom: 0; }
+#issueMemberMask .picker-head--stack {
+  padding: 16px 16px 8px; text-align: center;
+}
+#issueMemberMask .picker-head--stack .picker-head__title { font-size: 17px; font-weight: 600; color: #1a1a1a; }
+#issueMemberMask .picker-head--stack .picker-head__sub { font-size: 13px; color: #929292; margin-top: 4px; }
+#issueMemberMask .picker-search {
+  margin: 8px 16px 4px; padding: 0 12px; height: 36px; border-radius: 8px;
+  background: #f7f7f7; border: none; display: flex; align-items: center;
+}
+#issueMemberMask .picker-search input {
+  background: transparent; border: none; width: 100%; font-size: 14px; color: #1a1a1a;
+}
+#issueMemberMask .picker-search input::placeholder { color: #b2b2b2; }
+#issueMemberMask .picker-list { padding: 0 16px 8px; }
+.issue-picker-tip {
+  margin: 8px 0 4px; padding: 10px 12px; border-radius: 8px;
+  background: #fff8f0; color: #b86a2d; font-size: 12px; line-height: 1.5;
+}
+.issue-member-item {
+  display: flex; align-items: center; gap: 12px; padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0; cursor: pointer;
+}
+.issue-member-item input[type="radio"] {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.issue-member-row__chev {
+  flex-shrink: 0; width: 16px; height: 16px; color: #c2c4cc; margin-left: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.issue-member-row__chev svg { display: block; }
 .issue-member-row--holder {
-  display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--bg-page);
+  display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #f0f0f0;
 }
 .issue-member-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: auto; }
 .issue-member-act {
-  font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border);
-  background: transparent; cursor: pointer; font-family: inherit; color: var(--text-sec); line-height: 1.2;
+  font-size: 13px; padding: 5px 14px; border-radius: 999px; border: 1px solid #f32f41;
+  background: transparent; cursor: pointer; font-family: inherit; color: #f32f41; line-height: 1.2; font-weight: 500;
 }
-.issue-member-act--brand { border-color: var(--brand); color: var(--brand); font-weight: 600; }
-.issue-member-act.is-active { background: transparent; border-color: var(--brand); color: var(--brand); font-weight: 700; }
+.issue-member-act--brand { border-color: #f32f41; color: #f32f41; font-weight: 500; }
+.issue-member-act.is-active { background: rgba(243, 47, 65, 0.08); border-color: #f32f41; color: #f32f41; font-weight: 600; }
 .issue-extend-inline {
-  padding: 12px 16px 14px; border-bottom: 1px solid var(--bg-page); background: var(--card);
+  padding: 12px 12px 14px; margin: 0 0 8px; border: 1px solid #f0f0f0; border-radius: 10px;
+  background: #fafafa;
+}
+.issue-extend-inline .issue-extend-tip {
+  margin: 0 0 12px; font-size: 12px; line-height: 1.5; color: #929292;
 }
 .issue-extend-inline .issue-extend-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
 .issue-extend-inline .issue-extend-row + .issue-extend-row {
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--bg-page);
+  margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e5e6eb;
 }
 .issue-extend-inline .issue-extend-block__label {
-  display: block; margin: 0; flex-shrink: 0; font-size: 13px; font-weight: 500; color: var(--text);
+  display: block; margin: 0; flex-shrink: 0; font-size: 14px; font-weight: 400; color: #1a1a1a;
 }
 .issue-extend-inline .issue-extend-duration { margin-top: 0; flex-shrink: 0; }
-.issue-extend-inline .btn-main { margin-top: 14px; height: 40px; min-height: 40px; line-height: 1.2; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.issue-extend-inline .issue-extend-actions {
+  display: flex; gap: 10px; margin-top: 14px;
+}
+.issue-extend-inline .issue-extend-actions .btn-main {
+  flex: 1; margin-top: 0; height: 40px; min-height: 40px; line-height: 1.2; font-size: 15px;
+  display: flex; align-items: center; justify-content: center; border-radius: 10px;
+}
+.issue-extend-inline .issue-extend-actions .btn-main.secondary {
+  background: #f7f7f7; color: #1a1a1a; border: none;
+}
 .picker-foot--issue-new.hidden { display: none !important; }
 .picker-list { overflow-y: auto; padding: 0 16px; }
 .picker-item { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--bg-page); font-size: 14px; cursor: pointer; }
@@ -1526,30 +1579,32 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .duration-input__num {
   width: 100%; height: 32px; padding: 0 8px; box-sizing: border-box;
-  border: 1px solid var(--border); border-radius: 8px; background: var(--card);
-  font-size: 13px; font-family: inherit; text-align: right; color: var(--text-sec);
+  border: 1px solid #ededed; border-radius: 8px; background: #fff;
+  font-size: 14px; font-family: inherit; text-align: center; color: #929292;
   font-variant-numeric: tabular-nums;
 }
-.duration-input__num:focus { outline: none; border-color: #C2C4CC; color: var(--text); }
-.duration-input__num.is-confirmed { color: var(--text); font-weight: 600; }
+.duration-input__num::placeholder { color: #929292; opacity: 1; }
+.duration-input__num:focus { outline: none; border-color: #ededed; color: #1a1a1a; }
+.duration-input__num.is-confirmed { color: #1a1a1a; font-weight: 500; }
 .duration-input__units {
-  position: relative; flex: 0 0 120px; width: 120px; height: 32px;
-  padding: var(--dur-seg-inset, 2px); box-sizing: border-box;
+  position: relative; flex: 0 0 114px; width: 114px; height: 32px;
+  padding: var(--dur-seg-inset, 3px); box-sizing: border-box;
   display: grid; grid-template-columns: repeat(4, 1fr); align-items: center;
-  background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px;
-  --dur-seg-inset: 2px;
+  background: #fff; border: 1px solid #ededed; border-radius: 8px;
+  --dur-seg-inset: 3px;
 }
 .duration-seg-indicator {
-  position: absolute; top: var(--dur-seg-inset, 2px); bottom: var(--dur-seg-inset, 2px); left: var(--dur-seg-inset, 2px);
-  width: calc((100% - 2 * var(--dur-seg-inset, 2px)) / 4); border-radius: 6px; background: var(--brand);
+  position: absolute; top: var(--dur-seg-inset, 3px); bottom: var(--dur-seg-inset, 3px); left: var(--dur-seg-inset, 3px);
+  width: calc((100% - 2 * var(--dur-seg-inset, 3px)) / 4); border-radius: 6px;
+  background: rgba(74, 123, 244, 0.1);
   transition: transform .2s ease; pointer-events: none; z-index: 0;
 }
 .duration-input__unit {
-  position: relative; z-index: 1; height: 28px; margin: 0; padding: 0; border: none;
-  border-radius: 6px; background: transparent; font-size: 12px; font-weight: 500;
-  color: var(--text-sec); cursor: pointer; font-family: inherit; line-height: 28px; text-align: center;
+  position: relative; z-index: 1; height: 26px; margin: 0; padding: 0 8px; border: none;
+  border-radius: 6px; background: transparent; font-size: 14px; font-weight: 500;
+  color: #929292; cursor: pointer; font-family: inherit; line-height: 26px; text-align: center;
 }
-.duration-input__unit.is-active { color: #fff; font-weight: 600; }
+.duration-input__unit.is-active { color: #4a7bf4; font-weight: 500; }
 .unlimited-validity-dialog__dur { display: flex; justify-content: center; margin: 16px 0 4px; }
 .unlimited-validity-dialog__dur .duration-input { margin-left: 0; width: 166px; }
 .unlimited-validity-dialog__dur .duration-input__units {
@@ -9096,14 +9151,15 @@ button.exp-flow-row:active { opacity: .92; }
   height: 54px; position: relative; overflow: hidden;
   background-size: cover; background-position: center;
   box-shadow: inset 0 2px 0 0 var(--card-accent, #C4A394);
+  border-radius: 12px 12px 0 0;
 }
 .member-card-compact::after {
   content: '';
   position: absolute; inset: 0;
-  background: url("assets/member-card-header-deco.png") center / cover no-repeat;
+  background: url("assets/member-card-header-deco.png") right center / cover no-repeat;
   pointer-events: none; z-index: 1;
   mix-blend-mode: plus-lighter;
-  opacity: .45;
+  opacity: .6;
 }
 .member-card-compact__title {
   position: absolute; left: 16px; right: 108px; top: 50%; transform: translateY(-50%);
@@ -11859,7 +11915,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         </div>
         <div class="dialog-mask" id="unlimitedValidityDialogMask">
           <div class="dialog">
-            <div class="dialog__title">设置有效期限</div>
+            <div class="dialog__title">设置有效期</div>
             <div class="dialog__body">不限次项目不可使用永久有效，请在此设置卡有效期。</div>
             <div class="unlimited-validity-dialog__dur">
               <div class="duration-input" id="unlimitedValidityDuration" data-duration-id="unlimitedValidity" style="width:166px">
@@ -15019,7 +15075,7 @@ const QUICK_TEMPLATES = [
         '蛋白矫正': { tickIndex: 17 },
         '电棒烫': { mode: 'fixed', amount: '368' },
       },
-      cardColor: 'gold',
+      cardColor: 'peach',
       cardDesc: '演示用·均值模式：组合三权益退卡估值；m15 零消耗，m8/m9 已过期可延期复活',
     },
   },
@@ -15035,7 +15091,7 @@ const QUICK_TEMPLATES = [
       giftAmount: '50',
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: true, timesOrValidity: false, projectDiscount: false },
-      cardColor: 'brand_red',
+      cardColor: 'mint',
       cardDesc: '演示用·均值纯面值：m3 接近耗尽，m5 零消耗对照',
     },
   },
@@ -15054,7 +15110,7 @@ const QUICK_TEMPLATES = [
       memberPrices: {
         '洗剪吹': { tickIndex: 16 },
       },
-      cardColor: 'gold',
+      cardColor: 'haze',
       cardDesc: '演示用·含折扣：退卡/延期 Tab 可看参考费用；推荐 m7/m8',
     },
   },
@@ -15089,7 +15145,7 @@ const QUICK_TEMPLATES = [
         '烫发': { tickIndex: 17 },
         '染发': { mode: 'fixed', amount: '299' },
       },
-      cardColor: 'purple',
+      cardColor: 'taro',
       cardDesc: '演示用·均值有期限纯折扣：消耗按已过天数/总天数摊销；可与「减值烫染卡」对照；含参考费用',
     },
   },
@@ -15128,7 +15184,7 @@ const QUICK_TEMPLATES = [
         { id: 'demo_wash', name: '时尚洗吹', purchaseQty: 12, giftQty: 0, unlimited: false },
         { id: 'demo_gift', name: '头皮护理', purchaseQty: 1, giftQty: 1, unlimited: false },
       ],
-      cardColor: 'blue',
+      cardColor: 'milk',
       cardDesc: '演示用·均值次数：m10 含赠送次消耗，m20 零消耗',
     },
   },
@@ -15318,31 +15374,31 @@ const CARD_COLORS = {
   },
   mint: {
     label: '薄荷绿',
-    gradient: 'linear-gradient(90deg, #EAF6F0 0%, #B8E0C8 100%)',
-    accent: '#7EB896',
-    vipBg: '#C5E6D0',
-    vipText: '#3D6B4F',
+    gradient: 'linear-gradient(90deg, #EDF2E9 0%, #B1CD9B 100%)',
+    accent: '#9DAF93',
+    vipBg: '#CFDFC3',
+    vipText: '#617258',
   },
   haze: {
     label: '雾霾蓝',
-    gradient: 'linear-gradient(90deg, #E8F0FC 0%, #A8C8F0 100%)',
-    accent: '#6B94D4',
-    vipBg: '#C5D8F5',
-    vipText: '#2F4F8C',
+    gradient: 'linear-gradient(90deg, #E9F0F3 0%, #C0DCE9 100%)',
+    accent: '#8FA4AF',
+    vipBg: '#CED8DF',
+    vipText: '#405660',
   },
   taro: {
     label: '香芋紫',
-    gradient: 'linear-gradient(90deg, #F5EEF8 0%, #DCC0EC 100%)',
-    accent: '#A88BC4',
-    vipBg: '#E5D4F0',
-    vipText: '#5C3D7A',
+    gradient: 'linear-gradient(90deg, #F0EBF3 0%, #CFBCDA 100%)',
+    accent: '#A89CAF',
+    vipBg: '#DCD3E0',
+    vipText: '#574861',
   },
   milk: {
     label: '奶茶色',
-    gradient: 'linear-gradient(90deg, #F5EFE9 0%, #E0D0C0 100%)',
-    accent: '#B89A7E',
-    vipBg: '#E8DCCF',
-    vipText: '#6B5344',
+    gradient: 'linear-gradient(90deg, #F4EEE3 0%, #DFC9A1 100%)',
+    accent: '#B6A57A',
+    vipBg: '#E0D8C1',
+    vipText: '#5D5435',
   },
 };
 const CARD_COLOR_ALIASES = {
@@ -22543,12 +22599,16 @@ function buildIssueExtendInlineHtml(memberId, tpl) {
       </div>`
     : '';
   return `<div class="issue-extend-inline" data-extend-for="${escapeAttr(memberId)}">
+    <p class="issue-extend-tip">若同时拥有余额和折扣权益，延期将按折扣权益的售价进行收费</p>
     <div class="issue-extend-row">
-      <span class="issue-extend-block__label">延期时长</span>
+      <span class="issue-extend-block__label">有效期</span>
       <div class="issue-extend-duration">${buildDurationInputHtml({ unit, amount, includePermanent: true })}</div>
     </div>
     ${feeBlock}
-    <button type="button" class="btn-main" data-extend-confirm="${escapeAttr(memberId)}">确认延期</button>
+    <div class="issue-extend-actions">
+      <button type="button" class="btn-main secondary" data-extend-cancel="${escapeAttr(memberId)}">取消</button>
+      <button type="button" class="btn-main" data-extend-confirm="${escapeAttr(memberId)}">确认</button>
+    </div>
   </div>`;
 }
 
@@ -22586,6 +22646,13 @@ function wireIssuePickerControls() {
   if (list && !list.dataset.issuePickerWired) {
     list.dataset.issuePickerWired = '1';
     list.addEventListener('click', e => {
+      const cancelExtend = e.target.closest('[data-extend-cancel]');
+      if (cancelExtend) {
+        e.preventDefault();
+        resetIssueExtendDraft();
+        renderIssueMemberList();
+        return;
+      }
       const extendBtn = e.target.closest('[data-issue-extend]');
       if (extendBtn) {
         e.preventDefault();
@@ -22664,6 +22731,7 @@ function renderIssueMemberList() {
   const selectedId = state.issueMemberSelectedId;
 
   if (state.issuePickerTab === 'new') {
+    const chev = '<span class="issue-member-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>';
     const newMembers = list.filter(m => !tid || !memberHoldsTemplate(tid, m.id));
     const itemsHtml = newMembers.length
       ? newMembers.map(m =>
@@ -22674,6 +22742,7 @@ function renderIssueMemberList() {
             <span class="issue-member-row__name">${escapeHtml(m.name)}</span>
             <span class="issue-member-row__phone">${escapeHtml(m.phone)}</span>
           </span>
+          ${chev}
         </label>`
       ).join('')
       : '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">所有会员均已持有该卡</p>';
@@ -22692,8 +22761,9 @@ function renderIssueMemberList() {
 
   const tpl = getTemplateForHolderOps(tid);
   const holders = list.filter(m => tid && memberHoldsTemplate(tid, m.id));
+  const tip = '<p class="issue-picker-tip">持卡会员可退卡；延期会延长卡有效期</p>';
   const itemsHtml = holders.length
-    ? holders.map(m => {
+    ? tip + holders.map(m => {
       const extendOpen = state.issueExtendMemberId === m.id;
       const invalid = memberHoldsInvalid(tid, m.id);
       const badge = invalid ? '已失效' : '已持卡';
@@ -22716,7 +22786,7 @@ function renderIssueMemberList() {
         </span>
       </div>${extendOpen && showExtend && !extendBlocked ? buildIssueExtendInlineHtml(m.id, tpl) : ''}`;
     }).join('')
-    : '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">暂无会员持有该卡</p>';
+    : tip + '<p style="padding:24px 0;text-align:center;font-size:13px;color:var(--text-sec)">暂无会员持有该卡</p>';
   container.innerHTML = itemsHtml;
   container.querySelectorAll('.issue-extend-inline .duration-input').forEach(root => {
     wireDurationInput(root, {
@@ -32500,29 +32570,29 @@ window.__BILLING_EMBEDDED__ = true;
   /* 与会员卡管理2浅色卡面视觉对齐（开单侧仍用旧 key） */
   const CARD_COLORS = {
     brand_red: 'linear-gradient(90deg, #F4EAE5 0%, #EED1C3 100%)',
-    gold: 'linear-gradient(90deg, #F5EFE9 0%, #E0D0C0 100%)',
-    blue: 'linear-gradient(90deg, #E8F0FC 0%, #A8C8F0 100%)',
-    purple: 'linear-gradient(90deg, #F5EEF8 0%, #DCC0EC 100%)',
-    teal: 'linear-gradient(90deg, #EAF6F0 0%, #B8E0C8 100%)',
+    gold: 'linear-gradient(90deg, #F4EEE3 0%, #DFC9A1 100%)',
+    blue: 'linear-gradient(90deg, #E9F0F3 0%, #C0DCE9 100%)',
+    purple: 'linear-gradient(90deg, #F0EBF3 0%, #CFBCDA 100%)',
+    teal: 'linear-gradient(90deg, #EDF2E9 0%, #B1CD9B 100%)',
   };
   /** 同步自 card/demo QUICK_TEMPLATES · 在售（排除已下架儿童10次） */
   const CARD_TEMPLATES = [
     {
       id: 'demo_vip_combo', name: '尊享组合卡', price: 2000, giftAmount: 500, face: 2500,
-      cardColor: 'gold', validity: '1年',
+      cardColor: 'brand_red', validity: '1年',
       benefits: { balance: true, timesOrValidity: true, projectDiscount: true },
       projects: ['洗剪吹×10', '头皮护理×3', '时尚造型×2', '精致剪发×5+赠1', '时尚洗吹×8', '深层滋养×4', '摩根烫×2', '女士造型×3', '儿童剪发×5', '头疗×2+赠1'],
       discounts: ['烫发 会员价', '染发 ¥299', '洗剪吹 会员价', '精致剪发 会员价'],
     },
     {
       id: 'demo_new_first', name: '新客首开卡', price: 300, giftAmount: 50, face: 350,
-      cardColor: 'brand_red', validity: '永久有效',
+      cardColor: 'teal', validity: '永久有效',
       benefits: { balance: true, timesOrValidity: false, projectDiscount: false },
       projects: [], discounts: [],
     },
     {
       id: 'demo_old_renew', name: '老客续充卡', price: 1000, giftAmount: 200, face: 1200,
-      cardColor: 'gold', validity: '1年',
+      cardColor: 'blue', validity: '1年',
       benefits: { balance: true, timesOrValidity: false, projectDiscount: true },
       projects: [], discounts: ['洗剪吹 会员价'],
     },
@@ -32540,7 +32610,7 @@ window.__BILLING_EMBEDDED__ = true;
     },
     {
       id: 'demo_year_wash', name: '全年洗吹卡', price: 888, giftAmount: 0, face: 0,
-      cardColor: 'blue', validity: '1年',
+      cardColor: 'gold', validity: '1年',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
       projects: ['时尚洗吹×12', '头皮护理×1+赠1'], discounts: [],
     },
