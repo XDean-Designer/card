@@ -6951,6 +6951,9 @@ button.exp-flow-row:active { opacity: .92; }
 .catalog-item__info { flex: 1; min-width: 0; }
 .catalog-item__name { font-size: 15px; font-weight: 500; line-height: 1.4; }
 .catalog-item__cat { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+.catalog-item__stock { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+.catalog-item__stock.is-zero { color: var(--text-sec); opacity: .85; }
+.catalog-item.is-stock-out .catalog-item__name { color: var(--text-sec); }
 .catalog-item__price { font-size: 18px; font-weight: 400; color: var(--text); white-space: nowrap; }
 .catalog-item__price .yen { font-size: 13px; }
 .catalog-item__price .dec { font-size: 12px; }
@@ -13198,6 +13201,9 @@ window.CardCatalogBridge = {
       spec: p.spec || '',
       category: p.category || '产品',
       price: p.price,
+      stock: catalogStockLimit(p),
+      type: 'product',
+      kind: 'product',
     }));
   },
 };
@@ -18099,20 +18105,31 @@ function projPickNextDemoImage(images) {
   return PROJ_DEMO_IMG_POOL[(images || []).length % PROJ_DEMO_IMG_POOL.length];
 }
 
-/** 库存选填：空串/null/undefined → 无库存；0 为有效值 */
+/** 价目产品库存上限（与表单 maxlength=6 对齐） */
+const CATALOG_STOCK_MAX = 999999;
+
+/** 库存选填：空串/null/undefined → 未管理（开单不限购）；0 为有效值且不可购 */
 function parseOptionalStock(raw) {
   if (raw == null) return null;
   const s = String(raw).trim();
   if (s === '') return null;
   if (!/^\d+$/.test(s)) return NaN;
-  return Math.max(0, parseInt(s, 10));
+  const n = parseInt(s, 10);
+  if (n > CATALOG_STOCK_MAX) return NaN;
+  return Math.max(0, n);
 }
 
+/** 列表展示：null → —；含 0 */
 function catalogStockDisplay(p) {
   if (!p || p.stock == null || p.stock === '') return null;
   const n = Number(p.stock);
   if (!Number.isFinite(n)) return null;
-  return Math.max(0, Math.round(n));
+  return Math.max(0, Math.min(CATALOG_STOCK_MAX, Math.round(n)));
+}
+
+/** 开单限购上限：null = 不限购；数字（含 0）= 可购上限 */
+function catalogStockLimit(p) {
+  return catalogStockDisplay(p);
 }
 
 function projDefaultForm(kind = 'project') {
@@ -18394,8 +18411,13 @@ function projValidateForm() {
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
   if (isProduct) {
+    const stockRaw = String(state.projFormState.stock ?? '').trim();
+    if (stockRaw !== '' && /^\d+$/.test(stockRaw) && parseInt(stockRaw, 10) > CATALOG_STOCK_MAX) {
+      showToast(`库存不能超过 ${CATALOG_STOCK_MAX}`, true);
+      return false;
+    }
     const stockParsed = parseOptionalStock(state.projFormState.stock);
-    if (Number.isNaN(stockParsed)) { showToast('请填写有效库存', true); return false; }
+    if (Number.isNaN(stockParsed)) { showToast('请填写有效库存（0～' + CATALOG_STOCK_MAX + ' 的整数）', true); return false; }
     state.projFormState._stockParsed = stockParsed;
   }
   if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
@@ -33480,6 +33502,11 @@ window.__BILLING_EMBEDDED__ = true;
 
   /** 开单分账：价目变更拦截；办卡/充值/续卡等走原 openMask('payMask') */
   function openBillPayMask() {
+    clampCartToProductStock({ toast: true });
+    if (!state.cart.length && !state.billAssetPay && !state.cardIssuePending && !state.cardExtendPending) {
+      showToast('购物车为空');
+      return false;
+    }
     if (state.payDueSnapshot == null) snapshotBillPayDue();
     if (hasBillPayAmountDrift()) {
       showPayAmountChangedDialog();
@@ -33653,9 +33680,94 @@ window.__BILLING_EMBEDDED__ = true;
   function cartCount() { return state.cart.reduce((s, i) => s + i.qty, 0); }
   function cartListTotal() { return round2(state.cart.reduce((s, i) => s + lineUnit(i) * i.qty, 0)); }
   function getCartQty(id) { return state.cart.find(x => x.id === id)?.qty || 0; }
+
+  function isBillProductItem(item) {
+    if (!item) return false;
+    if (item.category === '产品' || item.type === 'product' || item.kind === 'product') return true;
+    if (typeof getCatalogProducts === 'function' && getCatalogProducts().some(p => p.id === item.id)) return true;
+    return false;
+  }
+
+  /** null = 不限购；数字含 0 = 可购上限 */
+  function productStockCap(itemOrId) {
+    const id = typeof itemOrId === 'string' ? itemOrId : itemOrId && itemOrId.id;
+    if (typeof findCatalogItemById === 'function' && id) {
+      const cat = findCatalogItemById(id);
+      if (cat && typeof getCatalogProducts === 'function' && getCatalogProducts().some(p => p.id === cat.id)) {
+        return typeof catalogStockLimit === 'function' ? catalogStockLimit(cat) : null;
+      }
+    }
+    const item = typeof itemOrId === 'object' && itemOrId ? itemOrId : null;
+    if (item && item.stock != null && item.stock !== '') {
+      const n = Number(item.stock);
+      if (Number.isFinite(n)) return Math.max(0, Math.round(n));
+    }
+    return null;
+  }
+
+  function clampCartToProductStock(opts) {
+    const toast = !!(opts && opts.toast);
+    let changed = false;
+    const next = [];
+    state.cart.forEach(it => {
+      if (!isBillProductItem(it)) { next.push(it); return; }
+      const cap = productStockCap(it);
+      if (cap == null) { next.push(it); return; }
+      if (cap <= 0) { changed = true; return; }
+      if ((Number(it.qty) || 0) > cap) {
+        it.qty = cap;
+        changed = true;
+      }
+      next.push(it);
+    });
+    state.cart = next;
+    if (changed) {
+      syncCartChrome();
+      if (toast) showToast('库存已变化，已调整购物车数量');
+    }
+    return changed;
+  }
+
+  function deductProductStockAfterPay() {
+    let changed = false;
+    state.cart.forEach(it => {
+      if (!isBillProductItem(it)) return;
+      if (typeof findCatalogItemById !== 'function') return;
+      const cat = findCatalogItemById(it.id);
+      if (!cat || typeof getCatalogProducts !== 'function' || !getCatalogProducts().some(p => p.id === cat.id)) return;
+      const cap = typeof catalogStockLimit === 'function' ? catalogStockLimit(cat) : null;
+      if (cap == null) return;
+      const qty = Math.max(0, Number(it.qty) || 0);
+      cat.stock = Math.max(0, cap - qty);
+      changed = true;
+    });
+    if (changed && typeof isProductCatalogTab === 'function' && isProductCatalogTab() && typeof projRenderList === 'function') {
+      try { projRenderList(); } catch (_) { /* ignore */ }
+    }
+    return changed;
+  }
+
   function setCartQty(item, delta) {
     let row = state.cart.find(x => x.id === item.id);
-    const next = (row?.qty || 0) + delta;
+    let next = (row?.qty || 0) + delta;
+    if (delta > 0 && isBillProductItem(item)) {
+      const cap = productStockCap(item);
+      if (cap != null) {
+        if (cap <= 0) {
+          showToast('库存不足');
+          return;
+        }
+        if (next > cap) {
+          const cur = row?.qty || 0;
+          if (cur >= cap) {
+            showToast(`库存不足，最多 ${cap} 件`);
+            return;
+          }
+          showToast(`库存不足，最多 ${cap} 件`);
+          next = cap;
+        }
+      }
+    }
     if (next <= 0) state.cart = state.cart.filter(x => x.id !== item.id);
     else if (row) row.qty = next;
     else state.cart.push({ ...item, qty: next, unitPrice: item.price, staffIds: [], staffRoles: {}, staffDesignated: {}, expanded: false });
@@ -34141,14 +34253,20 @@ window.__BILLING_EMBEDDED__ = true;
       : '暂无匹配项';
     document.getElementById('catalogList').innerHTML = items.map(it => {
       const qty = getCartQty(it.id);
-      return `<div class="catalog-item">
+      const cap = state.billTab === 'product' ? productStockCap(it) : null;
+      const plusDisabled = cap != null && qty >= cap;
+      const stockHint = cap == null
+        ? ''
+        : `<div class="catalog-item__stock${cap <= 0 ? ' is-zero' : ''}">库存 ${cap}</div>`;
+      return `<div class="catalog-item${plusDisabled && qty <= 0 ? ' is-stock-out' : ''}">
         <div class="catalog-item__info">
           <div class="catalog-item__name">${escapeHtml(it.name)}</div>
           <div class="catalog-item__price num">${formatPriceParts(it.price)}</div>
+          ${stockHint}
         </div>
         <div class="stepper">
           ${qty ? `<button type="button" class="minus" data-step="${it.id}" data-d="-1" aria-label="减少">${iconSvg('minus')}</button><span class="num">${qty}</span>` : ''}
-          <button type="button" class="plus" data-step="${it.id}" data-d="1" aria-label="增加">${iconSvg('plus')}</button>
+          <button type="button" class="plus" data-step="${it.id}" data-d="1" aria-label="增加"${plusDisabled ? ' disabled' : ''}>${iconSvg('plus')}</button>
         </div>
       </div>`;
     }).join('') || `<div class="empty-cart">${emptyLabel}</div>`;
@@ -34157,19 +34275,23 @@ window.__BILLING_EMBEDDED__ = true;
   function renderCartList(targetId) {
     const el = document.getElementById(targetId);
     if (!state.cart.length) { el.innerHTML = '<div class="empty-cart">购物车为空<br>返回开单台添加商品</div>'; return; }
-    el.innerHTML = state.cart.map(it => `
+    el.innerHTML = state.cart.map(it => {
+      const cap = isBillProductItem(it) ? productStockCap(it) : null;
+      const plusDisabled = cap != null && it.qty >= cap;
+      return `
       <div class="catalog-item" style="padding:12px 16px">
         <div class="catalog-item__info">
           <div class="catalog-item__name">${escapeHtml(it.name)}</div>
-          <div class="catalog-item__cat num">${formatYen(lineUnit(it))} × ${it.qty}</div>
+          <div class="catalog-item__cat num">${formatYen(lineUnit(it))} × ${it.qty}${cap != null ? ` · 库存 ${cap}` : ''}</div>
         </div>
         <div class="catalog-item__price num">${formatYen(lineUnit(it) * it.qty)}</div>
         <div class="stepper">
           <button type="button" data-cart-step="${it.id}" data-d="-1" aria-label="减少">${iconSvg('minus')}</button>
           <span class="num">${it.qty}</span>
-          <button type="button" data-cart-step="${it.id}" data-d="1" aria-label="增加">${iconSvg('plus')}</button>
+          <button type="button" data-cart-step="${it.id}" data-d="1" aria-label="增加"${plusDisabled ? ' disabled' : ''}>${iconSvg('plus')}</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function staffChipLabel(st) {
@@ -38950,6 +39072,8 @@ window.__BILLING_EMBEDDED__ = true;
     },
     checkout() {
       if (!state.cart.length) { showToast('请先添加商品'); return; }
+      clampCartToProductStock({ toast: true });
+      if (!state.cart.length) { showToast('购物车为空'); return; }
       renderDetail(); showOnlyScreen('screen-detail');
       if (cartHasUnsetStaffRoles()) {
         showToast('请为已选员工设置工位（' + stationRoleLabelsJoined() + '）', true);
@@ -39562,6 +39686,11 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('请为已选员工设置工位（' + stationRoleLabelsJoined() + '）', true);
       return;
     }
+    clampCartToProductStock({ toast: true });
+    if (!state.cart.length) {
+      showToast('购物车为空');
+      return;
+    }
     snapshotBillPayDue();
     openMask('checkoutMask');
     setFlowNavHighlight('checkout');
@@ -40093,6 +40222,23 @@ window.__BILLING_EMBEDDED__ = true;
       finalizeBillAssetPay();
       return;
     }
+    const shouldDeductStock = !state.cardIssuePending && !state.cardExtendPending;
+    if (shouldDeductStock) {
+      clampCartToProductStock({ toast: true });
+      if (!state.cart.length && !state.orderIsFree) {
+        showToast('购物车为空');
+        return;
+      }
+      const over = state.cart.some(it => {
+        if (!isBillProductItem(it)) return false;
+        const cap = productStockCap(it);
+        return cap != null && (Number(it.qty) || 0) > cap;
+      });
+      if (over) {
+        showToast('库存不足，请返回调整数量');
+        return;
+      }
+    }
     if (state.orderIsFree) {
       showToast('免单成功 · ' + freeOrderRuleText());
     }
@@ -40102,6 +40248,7 @@ window.__BILLING_EMBEDDED__ = true;
     s.manualOrderNo = state.manualOrderNo || '';
     s.orderIsFree = !!state.orderIsFree;
     state.lastSettlement = s;
+    if (shouldDeductStock) deductProductStockAfterPay();
     if (state.cardIssuePending) {
       const pending = state.cardIssuePending;
       if (!state.successIssueTemplateId) state.successIssueTemplateId = pending.templateId;
