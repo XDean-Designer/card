@@ -1275,11 +1275,24 @@ html.prd-capture .step2-benefit-card__notch { display: block; }
 .price-catalog-tabs .page-tabs__item.on::after { z-index: 1; }
 .table-card.is-product-tab .table-head__cell[data-col-duration],
 .table-card.is-product-tab .table-row .dur { display: none; }
-/* 产品 Tab：名称（含规格）/ 价格 */
+.table-card:not(.is-product-tab) .table-head__cell[data-col-stock],
+.table-card:not(.is-product-tab) .table-row .stock { display: none; }
+/* 产品 Tab：名称尽量单行；库存收窄并靠右贴近价格 */
 #screen-p-list .table-card.is-product-tab .table-head,
 #screen-p-list .table-card.is-product-tab .table-row {
-  grid-template-columns: minmax(0, 1fr) 90px;
-  column-gap: 0;
+  grid-template-columns: minmax(0, 1fr) 48px 80px;
+  column-gap: 6px;
+}
+#screen-p-list .table-card.is-product-tab .table-row .name-text,
+#screen-p-list .table-card.is-product-tab .table-row .name-text.is-long {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 .audience-picker-hint { font-size: 12px; color: var(--text-sec); padding: 8px 0 4px; line-height: 1.55; border-bottom: 1px solid var(--bg-page); margin-bottom: 2px; }
 .audience-option-row { display: flex; align-items: center; gap: 6px; position: relative; }
@@ -2717,21 +2730,27 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 }
 /*
  * 表头/行列位：项目名称 | 时长 | 价格（已去掉状态列）
- * 产品 Tab：产品名称（规格）| 价格
+ * 产品 Tab：产品名称（规格）| 库存 | 价格
+ * 右列标题与数值同列居中，避免「库存」等表头相对数字偏左
  */
 #screen-p-list .table-head {
   padding: 0 16px 16px 13px; min-height: 20px;
   font-size: 14px; color: #666; font-weight: 400;
   border-bottom: none; align-items: center;
   box-sizing: content-box;
-  grid-template-columns: minmax(0, 1fr) 109px 90px;
-  column-gap: 0;
+  grid-template-columns: minmax(0, 1fr) 100px 88px;
+  column-gap: 8px;
 }
 #screen-p-list .table-row {
-  grid-template-columns: minmax(0, 1fr) 109px 90px;
-  column-gap: 0;
+  grid-template-columns: minmax(0, 1fr) 100px 88px;
+  column-gap: 8px;
   padding-left: 13px;
   padding-right: 16px;
+}
+#screen-p-list .table-card.is-product-tab .table-head,
+#screen-p-list .table-card.is-product-tab .table-row {
+  grid-template-columns: minmax(0, 1fr) 48px 80px;
+  column-gap: 6px;
 }
 #screen-p-list .table-head__cell[data-col-sort="name"] {
   justify-content: flex-start;
@@ -2740,26 +2759,34 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 #screen-p-list .table-head__cell[data-col-sort="name"] .table-head__inner {
   padding-left: 0;
 }
-#screen-p-list .table-head__cell[data-col-sort="duration"] {
-  justify-content: flex-start;
-  width: 84px;
-  max-width: 84px;
-}
+#screen-p-list .table-head__cell[data-col-sort="duration"],
+#screen-p-list .table-head__cell[data-col-stock],
 #screen-p-list .table-head__cell[data-col-sort="price"] {
-  justify-content: flex-start;
-  width: 65px;
-  max-width: 65px;
+  width: 100%;
+  max-width: none;
+  justify-content: center;
 }
 #screen-p-list .table-head__cell.is-center { justify-content: center; }
-#screen-p-list .table-head__cell[data-col-sort="duration"].is-center,
-#screen-p-list .table-head__cell[data-col-sort="price"].is-center {
-  justify-content: flex-start;
-}
-#screen-p-list .table-row .dur {
-  width: 84px; max-width: 84px; justify-self: start; text-align: center;
-}
+#screen-p-list .table-row .dur,
+#screen-p-list .table-row .stock,
 #screen-p-list .table-row .price {
-  width: 65px; max-width: 65px; justify-self: start; text-align: center;
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  text-align: center;
+}
+#screen-p-list .table-row .stock {
+  font-size: 14px; color: var(--text); font-variant-numeric: tabular-nums; line-height: 20px;
+}
+#screen-p-list .table-row .stock.is-zero { color: var(--text-sec); }
+#screen-p-list .table-row-swipe.is-off-sale .stock { color: var(--text-sec); }
+#screen-p-list .table-row .dur-cell {
+  width: 100%;
+  justify-content: center;
+}
+#screen-p-list .table-row .price-num {
+  display: inline-block;
+  text-align: center;
 }
 .table-card { margin: 8px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; isolation: isolate; position: relative; }
 .table-row-actions .act-group { background: #64748B; }
@@ -7365,13 +7392,19 @@ button.exp-flow-row:active { opacity: .92; }
 /* ==== 流水订单 · 产品级精修 · 对齐剑琅设计规范 v1.6 ==== */
 #screen-flow-hub,
 #screen-flow-balance,
+#screen-biz-hub,
+#screen-biz-balance,
 #screen-flow-list,
 #screen-flow-detail,
 #screen-flow-self { background: var(--bg-page); }
-#screen-flow-hub { display: flex; flex-direction: column; }
-#screen-flow-hub.hidden { display: none; }
-#screen-flow-hub:not(.hidden) { display: flex; }
-#screen-flow-hub .flow-hub-body { flex: 1; }
+#screen-flow-hub,
+#screen-biz-hub { display: flex; flex-direction: column; }
+#screen-flow-hub.hidden,
+#screen-biz-hub.hidden { display: none; }
+#screen-flow-hub:not(.hidden),
+#screen-biz-hub:not(.hidden) { display: flex; }
+#screen-flow-hub .flow-hub-body,
+#screen-biz-hub .flow-hub-body { flex: 1; }
 .flow-hub-body {
   padding: 12px 16px 16px;
   background: var(--bg-page);
@@ -7665,10 +7698,14 @@ button.exp-flow-row:active { opacity: .92; }
   pointer-events: none;
 }
 .flow-hub-ring__info:active { opacity: .72; }
-#screen-flow-balance { background: var(--bg-page); display: flex; flex-direction: column; }
-#screen-flow-balance.hidden { display: none; }
-#screen-flow-balance:not(.hidden) { display: flex; }
-#screen-flow-balance .flow-balance-body {
+#screen-flow-balance,
+#screen-biz-balance { background: var(--bg-page); display: flex; flex-direction: column; }
+#screen-flow-balance.hidden,
+#screen-biz-balance.hidden { display: none; }
+#screen-flow-balance:not(.hidden),
+#screen-biz-balance:not(.hidden) { display: flex; }
+#screen-flow-balance .flow-balance-body,
+#screen-biz-balance .flow-balance-body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -11648,6 +11685,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="table-head" id="projTableHead">
                   <button type="button" class="table-head__cell" data-col-sort="name"><span class="table-head__inner">项目名称</span></button>
                   <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长（分钟）</span></button>
+                  <div class="table-head__cell is-center" data-col-stock><span class="table-head__inner">库存</span></div>
                   <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格（¥）</span></button>
                 </div>
                 <div id="projProjectTable"></div>
@@ -12187,6 +12225,29 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
             <div class="flow-balance-tabs" id="flowBalanceTabs" role="tablist"></div>
             <div class="page-body flow-balance-body" id="flowBalanceBody"></div>
+          </div>
+
+          <!-- 经营分析 · 入口（复制自流水入口） -->
+          <div id="screen-biz-hub" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="bizHubBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">经营分析</div>
+            </div>
+            <div class="page-body flow-hub-body" id="bizHubBody"></div>
+          </div>
+
+          <!-- 经营分析 · 收支结余（复制自流水收支结余） -->
+          <div id="screen-biz-balance" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="bizBalanceBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">收支结余</div>
+            </div>
+            <div class="flow-balance-tabs" id="bizBalanceTabs" role="tablist"></div>
+            <div class="page-body flow-balance-body" id="bizBalanceBody"></div>
           </div>
 
           <div class="dialog-mask" id="flowBalanceHelpMask">
@@ -12771,6 +12832,16 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
 
+          <div class="dialog-mask" id="payAmountChangedMask">
+            <div class="dialog" role="dialog" aria-labelledby="payAmountChangedTitle" aria-modal="true">
+              <div class="dialog__title" id="payAmountChangedTitle">支付金额已变化</div>
+              <div class="dialog__body">价目表已更新，当前应付与开单时不一致，请返回核对后再支付。</div>
+              <div class="dialog__actions dialog__actions--single">
+                <button type="button" class="btn-main" id="btnPayAmountChangedOk">知道了</button>
+              </div>
+            </div>
+          </div>
+
           <div id="billToastMsg" class="toast hidden"></div>
           
           <!-- ==== /BILLING MODULE SCREENS ==== -->
@@ -12925,30 +12996,30 @@ function seedProjectCatalog() {
 
 function seedProductCatalog() {
   const list = [
-    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, onSale: true, category: '洗护' },
-    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, onSale: true, category: '洗护' },
-    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, onSale: true, category: '护理' },
-    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, onSale: true, category: '造型' },
-    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, onSale: true, category: '烫染' },
-    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, onSale: true, category: '护理' },
-    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, onSale: false, category: '洗护' },
-    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, onSale: true, category: '洗护' },
-    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, onSale: true, category: '护理' },
-    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, onSale: true, category: '护理' },
-    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, onSale: true, category: '造型' },
-    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, onSale: true, category: '造型' },
-    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, onSale: true, category: '烫染' },
-    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, onSale: true, category: '烫染' },
-    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, onSale: true, category: '洗护' },
-    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, onSale: true, category: '护理' },
-    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, onSale: true, category: '洗护' },
-    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, onSale: false, category: '烫染' },
-    { id: 'pd19', name: '剑琅玻尿酸精华液', spec: '30ml', price: 198, onSale: true, category: '美容' },
-    { id: 'pd20', name: '剑琅补水面膜', spec: '5片', price: 88, onSale: true, category: '美容' },
-    { id: 'pd21', name: '剑琅甲油胶套装', spec: '12色', price: 168, onSale: true, category: '美甲' },
-    { id: 'pd22', name: '剑琅指缘护理油', spec: '15ml', price: 58, onSale: true, category: '美甲' },
-    { id: 'pd23', name: '剑琅睫毛胶水', spec: '5ml', price: 78, onSale: true, category: '美睫' },
-    { id: 'pd24', name: '剑琅美睫卸除液', spec: '50ml', price: 48, onSale: true, category: '美睫' },
+    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, stock: 36, onSale: true, category: '洗护' },
+    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, stock: 28, onSale: true, category: '洗护' },
+    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, stock: 12, onSale: true, category: '护理' },
+    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, stock: 45, onSale: true, category: '造型' },
+    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, stock: 8, onSale: true, category: '烫染' },
+    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, stock: 22, onSale: true, category: '护理' },
+    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, stock: 0, onSale: false, category: '洗护' },
+    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, stock: 19, onSale: true, category: '洗护' },
+    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, stock: 15, onSale: true, category: '护理' },
+    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, stock: 6, onSale: true, category: '护理' },
+    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, stock: 31, onSale: true, category: '造型' },
+    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, stock: 24, onSale: true, category: '造型' },
+    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, stock: 9, onSale: true, category: '烫染' },
+    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, stock: 17, onSale: true, category: '烫染' },
+    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, stock: 11, onSale: true, category: '洗护' },
+    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, stock: 3, onSale: true, category: '护理' },
+    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, stock: 40, onSale: true, category: '洗护' },
+    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, stock: 0, onSale: false, category: '烫染' },
+    { id: 'pd19', name: '剑琅玻尿酸精华液', spec: '30ml', price: 198, stock: 7, onSale: true, category: '美容' },
+    { id: 'pd20', name: '剑琅补水面膜', spec: '5片', price: 88, stock: 52, onSale: true, category: '美容' },
+    { id: 'pd21', name: '剑琅甲油胶套装', spec: '12色', price: 168, stock: 14, onSale: true, category: '美甲' },
+    { id: 'pd22', name: '剑琅指缘护理油', spec: '15ml', price: 58, stock: 26, onSale: true, category: '美甲' },
+    { id: 'pd23', name: '剑琅睫毛胶水', spec: '5ml', price: 78, stock: 2, onSale: true, category: '美睫' },
+    { id: 'pd24', name: '剑琅美睫卸除液', spec: '50ml', price: 48, stock: 18, onSale: true, category: '美睫' },
   ].map(p => ({
     ...p,
     boundToCard: false,
@@ -17410,6 +17481,10 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
   actions.push(`<button type="button" class="act-sale" data-swipe-act="sale">${saleLabel}</button>`);
   actions.push(`<button type="button" class="act-hide" data-swipe-act="hide">${hideLabel}</button>`);
   actions.push(catalogDeleteBtnHtml(delLocked));
+  const stockVal = isProduct ? catalogStockDisplay(p) : null;
+  const stockHtml = isProduct
+    ? `<div class="stock${stockVal === 0 ? ' is-zero' : ''}">${stockVal == null ? '—' : stockVal}</div>`
+    : '<div class="stock"></div>';
   wrap.innerHTML = `
       <div class="table-row-actions">${actions.join('')}</div>
       <div class="table-row">
@@ -17420,6 +17495,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
+        ${stockHtml}
         <div class="price">${projFormatPriceHtml(p.price)}</div>
       </div>`;
   const row = wrap.querySelector('.table-row');
@@ -18023,9 +18099,25 @@ function projPickNextDemoImage(images) {
   return PROJ_DEMO_IMG_POOL[(images || []).length % PROJ_DEMO_IMG_POOL.length];
 }
 
+/** 库存选填：空串/null/undefined → 无库存；0 为有效值 */
+function parseOptionalStock(raw) {
+  if (raw == null) return null;
+  const s = String(raw).trim();
+  if (s === '') return null;
+  if (!/^\d+$/.test(s)) return NaN;
+  return Math.max(0, parseInt(s, 10));
+}
+
+function catalogStockDisplay(p) {
+  if (!p || p.stock == null || p.stock === '') return null;
+  const n = Number(p.stock);
+  if (!Number.isFinite(n)) return null;
+  return Math.max(0, Math.round(n));
+}
+
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
+    return { kind: 'product', name: '', spec: '', price: '', stock: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
   return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
@@ -18034,7 +18126,12 @@ function projProjectToForm(p) {
   const images = projNormalizeImages(p.images, p.hasImage);
   const imageExpanded = images.length > 0;
   if (getCatalogProducts().some(x => x.id === p.id)) {
-    return { kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price), onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded };
+    const stockVal = catalogStockDisplay(p);
+    return {
+      kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price),
+      stock: stockVal == null ? '' : String(stockVal),
+      onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded,
+    };
   }
   return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, images, hasImage: images.length > 0, imageExpanded, _durUnit: null, _durAmount: null };
 }
@@ -18117,8 +18214,9 @@ function projRenderForm(container, mode) {
         <div class="proj-section-label">基本信息</div>
         <div class="proj-form-section">
           <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
-          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="请输入" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
+          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="选填" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
           <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
+          ${isProduct ? `<div class="proj-form-row"><span class="label">库存</span><div class="field"><input type="text" id="fProjStock" inputmode="numeric" pattern="[0-9]*" placeholder="选填" value="${escapeAttr(s.stock == null ? '' : String(s.stock))}" maxlength="6"></div></div>` : ''}
           ${isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
@@ -18167,6 +18265,14 @@ function projBindFormEvents(container, lockCtx) {
   if (!isProduct) projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   container.querySelector('#fProjSpec')?.addEventListener('input', e => { state.projFormState.spec = e.target.value; });
+  const stockEl = container.querySelector('#fProjStock');
+  if (stockEl) {
+    stockEl.addEventListener('input', e => {
+      const v = String(e.target.value || '').replace(/\D/g, '').slice(0, 6);
+      e.target.value = v;
+      state.projFormState.stock = v;
+    });
+  }
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
     priceEl.setAttribute('readonly', 'readonly');
@@ -18287,6 +18393,11 @@ function projValidateForm() {
   const dup = catalog.some(p => p.id !== state.projEditingId && String(p.name || '').trim() === nameNorm);
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
+  if (isProduct) {
+    const stockParsed = parseOptionalStock(state.projFormState.stock);
+    if (Number.isNaN(stockParsed)) { showToast('请填写有效库存', true); return false; }
+    state.projFormState._stockParsed = stockParsed;
+  }
   if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
   if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
@@ -18297,10 +18408,16 @@ function projSaveForm() {
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
   const images = projNormalizeImages(state.projFormState.images, false);
+  const stockParsed = isProduct
+    ? (state.projFormState._stockParsed !== undefined
+      ? state.projFormState._stockParsed
+      : parseOptionalStock(state.projFormState.stock))
+    : null;
   const payload = isProduct ? {
     name: state.projFormState.name.trim(),
     spec: (state.projFormState.spec || '').trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
+    stock: stockParsed,
     onSale: state.projFormState.onSale,
     category: state.projFormState.category || '产品',
     images,
@@ -18571,6 +18688,7 @@ function closeAllFlowOverlays() {
   document.getElementById('cardGroupDeleteMask')?.classList.remove('show');
   document.getElementById('flowEditLogMask')?.classList.remove('show');
   document.getElementById('flowBalanceHelpMask')?.classList.remove('show');
+  document.getElementById('payAmountChangedMask')?.classList.remove('show');
   closeCatalogGroupRowMenu();
   if (typeof closeCardGroupRowMenu === 'function') closeCardGroupRowMenu();
   closeCatalogRowActions();
@@ -18669,6 +18787,10 @@ function launchWorkbenchTile(key) {
     case 'flow':
       window.__wbEntry = 'flow';
       goFlow('flow-hub');
+      break;
+    case 'analysis':
+      window.__wbEntry = 'analysis';
+      goFlow('biz-hub');
       break;
     case 'hold':
       window.__wbEntry = 'hold';
@@ -25718,6 +25840,7 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-scan-me': 'bill-scan-me', 'screen-scan-cust': 'bill-scan-cust',
       'screen-coupon': 'bill-detail', 'screen-add-card': 'bill-add-card',
       'screen-flow-hub': 'flow-hub', 'screen-flow-balance': 'flow-balance', 'screen-flow-list': 'flow-list',
+      'screen-biz-hub': 'biz-hub', 'screen-biz-balance': 'biz-balance',
       'screen-flow-detail': 'flow-detail', 'screen-flow-refund': 'flow-refund', 'screen-flow-edit': 'flow-edit',
       'screen-flow-edit-add': 'flow-edit-add', 'screen-flow-edit-item': 'flow-edit-item',
       'screen-flow-weikuan': 'flow-weikuan', 'screen-flow-weikuan-repay': 'flow-weikuan-repay',
@@ -25758,6 +25881,7 @@ function billingNav(fn) {
       { id: 'bill-detail', label: '详情', screen: 'screen-detail' },
       { id: 'bill-checkout', label: '结账方式', screen: 'checkoutMask' },
       { id: 'bill-pay', label: '开单分账', screen: 'payMask' },
+      { id: 'bill-pay-price-changed', label: '价目变更拦截 Dialog', screen: 'payAmountChangedMask' },
       { id: 'bill-success', label: '成功', screen: 'screen-success' },
       { id: 'bill-scan-me', label: '客户扫我', screen: 'screen-scan-me' },
       { id: 'bill-scan-cust', label: '我扫客户', screen: 'screen-scan-cust' },
@@ -25791,12 +25915,21 @@ function billingNav(fn) {
       { id: 'flow-self-detail', label: '自助详情', screen: 'screen-flow-self-detail' },
     ],
   };
+  const bizGroup = {
+    title: '经营分析',
+    nodes: [
+      { id: 'biz-hub', label: '经营分析入口', screen: 'screen-biz-hub' },
+      { id: 'biz-balance', label: '收支结余', screen: 'screen-biz-balance' },
+    ],
+  };
   function flowNav(fn) {
     return function () {
       if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
       if (!window.BillingDemo) return;
       if (fn === 'hub' && window.BillingDemo.openFlowHub) window.BillingDemo.openFlowHub();
       else if (fn === 'balance' && window.BillingDemo.openFlowBalance) window.BillingDemo.openFlowBalance();
+      else if (fn === 'biz-hub' && window.BillingDemo.openBizHub) window.BillingDemo.openBizHub();
+      else if (fn === 'biz-balance' && window.BillingDemo.openBizBalance) window.BillingDemo.openBizBalance();
       else if (fn === 'list' && window.BillingDemo.openFlowList) window.BillingDemo.openFlowList();
       else if (fn === 'detail' && window.BillingDemo.openFlowDetail) {
         window.BillingDemo.openFlowDetail(null, { fromSuccess: false });
@@ -25820,42 +25953,54 @@ function billingNav(fn) {
     if (typeof FLOW_MAP_GROUPS === 'undefined' || typeof FLOW_NAV === 'undefined') return false;
     if (!FLOW_MAP_GROUPS.some(g => g.title === '开单记账')) {
       FLOW_MAP_GROUPS.push(group);
-      Object.assign(FLOW_NAV, {
-        'bill-bill': billingNav('bill'),
-        'bill-pick': billingNav('pick'),
-        'bill-cart': billingNav('cart'),
-        'bill-detail': billingNav('detail'),
-        'bill-checkout': billingNav('checkout'),
-        'bill-pay': billingNav('pay'),
-        'bill-success': billingNav('success'),
-        'bill-scan-me': billingNav('scan-me'),
-        'bill-scan-cust': billingNav('scan-cust'),
-        'bill-expand': billingNav('expand'),
-        'bill-add-card': billingNav('add-card'),
-        'bill-add-card-group'() {
-          if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
-          if (typeof setActiveCardGroupId === 'function') {
-            var g = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []).find(function (x) {
-              return (x.itemIds || []).length;
-            }) || (typeof ensureCardGroups === 'function' ? ensureCardGroups()[0] : null);
-            setActiveCardGroupId('billing', g ? g.id : 'all');
-          }
-          return billingNav('add-card')();
-        },
-        'bill-benefit': billingNav('benefit'),
-        'bill-discount': billingNav('discount'),
-        'bill-hold': billingNav('hold'),
-      });
+    } else {
+      const g = FLOW_MAP_GROUPS.find(x => x.title === '开单记账');
+      if (g) g.nodes = group.nodes;
     }
+    Object.assign(FLOW_NAV, {
+      'bill-bill': billingNav('bill'),
+      'bill-pick': billingNav('pick'),
+      'bill-cart': billingNav('cart'),
+      'bill-detail': billingNav('detail'),
+      'bill-checkout': billingNav('checkout'),
+      'bill-pay': billingNav('pay'),
+      'bill-pay-price-changed': billingNav('pay-price-changed'),
+      'bill-success': billingNav('success'),
+      'bill-scan-me': billingNav('scan-me'),
+      'bill-scan-cust': billingNav('scan-cust'),
+      'bill-expand': billingNav('expand'),
+      'bill-add-card': billingNav('add-card'),
+      'bill-add-card-group'() {
+        if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+        if (typeof setActiveCardGroupId === 'function') {
+          var g = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []).find(function (x) {
+            return (x.itemIds || []).length;
+          }) || (typeof ensureCardGroups === 'function' ? ensureCardGroups()[0] : null);
+          setActiveCardGroupId('billing', g ? g.id : 'all');
+        }
+        return billingNav('add-card')();
+      },
+      'bill-benefit': billingNav('benefit'),
+      'bill-discount': billingNav('discount'),
+      'bill-hold': billingNav('hold'),
+    });
     if (!FLOW_MAP_GROUPS.some(g => g.title === '流水订单')) {
       FLOW_MAP_GROUPS.push(flowGroup);
     } else {
       const g = FLOW_MAP_GROUPS.find(x => x.title === '流水订单');
       if (g) g.nodes = flowGroup.nodes;
     }
+    if (!FLOW_MAP_GROUPS.some(g => g.title === '经营分析')) {
+      FLOW_MAP_GROUPS.push(bizGroup);
+    } else {
+      const g = FLOW_MAP_GROUPS.find(x => x.title === '经营分析');
+      if (g) g.nodes = bizGroup.nodes;
+    }
     Object.assign(FLOW_NAV, {
       'flow-hub': flowNav('hub'),
       'flow-balance': flowNav('balance'),
+      'biz-hub': flowNav('biz-hub'),
+      'biz-balance': flowNav('biz-balance'),
       'flow-list': flowNav('list'),
       'flow-detail': flowNav('detail'),
       'flow-refund': flowNav('refund'),
@@ -32757,6 +32902,7 @@ window.__BILLING_EMBEDDED__ = true;
     flowSelfStatus: 'all',
     flowSelfDd: null,
     flowBalancePeriod: 'today',
+    flowHubReturn: null,
     flowBalanceCustomStart: '2026-07-01',
     flowBalanceCustomEnd: '',
     flowBalanceDateDraftStart: null,
@@ -32784,6 +32930,7 @@ window.__BILLING_EMBEDDED__ = true;
     heldOrders: [],
     billFromHold: false,
     billDueEdited: false,
+    payDueSnapshot: null,
     guestGender: null,
     guestGenderPickerOpen: false,
     billCustomerPickOpen: false,
@@ -33272,6 +33419,127 @@ window.__BILLING_EMBEDDED__ = true;
     return round2(calcSettlement().dueCash);
   }
 
+  function catalogUnitForCartItem(it) {
+    if (!it || isQuickCartItem(it)) return null;
+    const cat = typeof findCatalogItemById === 'function' ? findCatalogItemById(it.id) : null;
+    if (!cat || cat.price == null || cat.price === '') return null;
+    const n = Number(cat.price);
+    return Number.isFinite(n) ? round2(n) : null;
+  }
+
+  function shouldGuardBillPayCatalog() {
+    if (state.billAssetPay || state.cardIssuePending || state.cardExtendPending) return false;
+    if (state.orderIsFree || state.billDueEdited) return false;
+    return (state.cart || []).some(it => catalogUnitForCartItem(it) != null);
+  }
+
+  function withCatalogPricedCart(fn) {
+    const bak = state.cart;
+    state.cart = (bak || []).map(it => {
+      const catP = catalogUnitForCartItem(it);
+      if (catP == null) return it;
+      return Object.assign({}, it, { unitPrice: catP, price: catP });
+    });
+    try { return fn(); }
+    finally { state.cart = bak; }
+  }
+
+  function catalogAlignedDueCash() {
+    return withCatalogPricedCart(() => round2(calcSettlement().dueCash));
+  }
+
+  function snapshotBillPayDue() {
+    if (!shouldGuardBillPayCatalog()) {
+      state.payDueSnapshot = null;
+      return;
+    }
+    state.payDueSnapshot = getActivePayDue();
+  }
+
+  function hasBillPayAmountDrift() {
+    if (!shouldGuardBillPayCatalog()) return false;
+    const catalogDue = catalogAlignedDueCash();
+    const shown = getActivePayDue();
+    if (Math.abs(catalogDue - shown) > 0.009) return true;
+    if (state.payDueSnapshot != null && Math.abs(catalogDue - state.payDueSnapshot) > 0.009) return true;
+    return false;
+  }
+
+  function showPayAmountChangedDialog() {
+    document.getElementById('payAmountChangedMask')?.classList.add('show');
+  }
+
+  function hidePayAmountChangedDialog() {
+    document.getElementById('payAmountChangedMask')?.classList.remove('show');
+  }
+
+  function dismissPayAmountChanged() {
+    hidePayAmountChangedDialog();
+    closeMask('payMask');
+  }
+
+  /** 开单分账：价目变更拦截；办卡/充值/续卡等走原 openMask('payMask') */
+  function openBillPayMask() {
+    if (state.payDueSnapshot == null) snapshotBillPayDue();
+    if (hasBillPayAmountDrift()) {
+      showPayAmountChangedDialog();
+      return false;
+    }
+    openMask('payMask');
+    return true;
+  }
+
+  function guardBillPayConfirmOrBlock() {
+    if (!hasBillPayAmountDrift()) return true;
+    showPayAmountChangedDialog();
+    return false;
+  }
+
+  /** FLOW：造「价目已变、购物车未跟」场景并弹出拦截 Dialog */
+  function openBillPayPriceChangedDemo() {
+    hidePayAmountChangedDialog();
+    closeMask('payMask');
+    closeMask('checkoutMask');
+    if (typeof ensureDemoFilled === 'function') ensureDemoFilled();
+    if (!state.customer) enterBill(CUSTOMERS[0]);
+    let target = (state.cart || []).find(it => catalogUnitForCartItem(it) != null);
+    if (!target) {
+      const catalog = typeof getCatalogProjects === 'function' ? getCatalogProjects() : [];
+      const p = catalog.find(x => x && x.onSale !== false && x.price != null)
+        || catalog.find(x => x && x.price != null)
+        || (typeof PROJECTS !== 'undefined' ? PROJECTS[0] : null);
+      if (!p) { showToast('无价目数据'); return; }
+      state.cart = [];
+      setCartQty({
+        id: p.id,
+        name: p.name,
+        price: Number(p.price) || 0,
+        category: p.category || '项目',
+        benefitKey: p.benefitKey || p.name,
+      }, 1);
+      target = state.cart[0];
+    }
+    state.billDueEdited = false;
+    state.billAssetPay = null;
+    state.cardIssuePending = null;
+    state.cardExtendPending = null;
+    state.orderIsFree = false;
+    const cat = typeof findCatalogItemById === 'function' ? findCatalogItemById(target.id) : null;
+    if (cat) {
+      const cartU = lineUnit(target);
+      target.unitPrice = cartU;
+      target.price = cartU;
+      cat.price = round2(cartU + 88);
+    }
+    state.payDueSnapshot = getActivePayDue();
+    renderDetail();
+    showOnlyScreen('screen-detail');
+    state.payAmounts = {};
+    renderPayChannels();
+    openBillPayMask();
+    if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('bill-pay-price-changed');
+  }
+
   function freeOrderRuleText() {
     if (typeof window.EmployeeDemo !== 'undefined' && typeof window.EmployeeDemo.getFreeOrderRule === 'function') {
       return window.EmployeeDemo.getFreeOrderRule();
@@ -33397,6 +33665,7 @@ window.__BILLING_EMBEDDED__ = true;
   function clearCart() {
     state.cart = [];
     state.billDueEdited = false;
+    state.payDueSnapshot = null;
     syncCartChrome();
     if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
   }
@@ -36251,6 +36520,7 @@ window.__BILLING_EMBEDDED__ = true;
 
   function openFlowHub() {
     state.flowFromSuccess = false;
+    state.flowHubReturn = null;
     renderFlowHub();
     showOnlyScreen('screen-flow-hub');
   }
@@ -36499,6 +36769,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.flowBalancePeriod = 'custom';
     closeFlowBalanceDateSheet();
     renderFlowBalance();
+    renderBizBalance();
     showToast(`${flowBalanceFmtChip(start).slice(5)} – ${flowBalanceFmtChip(end).slice(5)}`);
   }
 
@@ -36572,6 +36843,145 @@ window.__BILLING_EMBEDDED__ = true;
     closeFlowBalanceDateSheet();
     renderFlowBalance();
     showOnlyScreen('screen-flow-balance');
+  }
+
+  function renderBizHub() {
+    const storeCount = FLOW_ORDERS.filter(o => o.status !== 'void').length;
+    const selfCount = FLOW_SELF_ORDERS.length;
+    const stats = getFlowHubDemoStats();
+    const incomeShare = Math.round((stats.incomeSide / Math.max(1, stats.incomeSide + stats.expenseSide)) * 100);
+    const body = document.getElementById('bizHubBody');
+    if (!body) return;
+    const infoSvg = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.25" fill="currentColor"/></svg>`;
+    body.innerHTML = `
+      <div class="flow-hub-dash">
+        <div class="flow-hub-panel is-tappable" data-biz-balance-open role="button" tabindex="0" aria-label="查看收支结余详情">
+          ${flowHubPanelDecoHtml('bizHub')}
+          <div class="flow-hub-ring-stage">
+            ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
+            ${flowHubMetricHtml('tr', '会员卡消费', stats.memberSpend, true)}
+            <div class="flow-hub-ring" role="img" aria-label="今日收支结余 ${stats.balance} 元">
+              ${flowHubRingSvg(stats, 'bizHubGradIncome')}
+              <div class="flow-hub-ring__core">
+                <div class="flow-hub-ring__core-label-anchor">
+                  <div class="flow-hub-ring__core-label">收支结余</div>
+                  <button type="button" class="flow-hub-ring__info" data-flow-balance-help aria-label="收支结余说明">${infoSvg}</button>
+                </div>
+                <div class="flow-hub-ring__core-val">${flowHubFormatYen(stats.balance)}</div>
+                <div class="flow-hub-ring__core-divider" aria-hidden="true"></div>
+                <div class="flow-hub-ring__core-sub">收入占比 ${incomeShare}%</div>
+              </div>
+            </div>
+            ${flowHubMetricHtml('bl', '支出', stats.expense, true)}
+            ${flowHubMetricHtml('br', '开卡/充卡', stats.recharge, false)}
+          </div>
+        </div>
+        <div class="flow-hub-entries">
+          <button type="button" class="flow-hub-card" data-biz-hub="store" aria-label="进入门店流水">
+            <span class="flow-hub-card__icon" aria-hidden="true">${flowIconStore()}</span>
+            <span class="flow-hub-card__body">
+              <span class="flow-hub-card__title-row">
+                <span class="flow-hub-card__title">门店流水</span>
+                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
+              </span>
+              <span class="flow-hub-card__metric">
+                <span class="flow-hub-card__val">${storeCount}</span>
+                <span class="flow-hub-card__unit">笔</span>
+              </span>
+            </span>
+          </button>
+          <button type="button" class="flow-hub-card" data-biz-hub="self" aria-label="进入自助收银">
+            <span class="flow-hub-card__icon flow-hub-card__icon--soft" aria-hidden="true">${flowIconSelf()}</span>
+            <span class="flow-hub-card__body">
+              <span class="flow-hub-card__title-row">
+                <span class="flow-hub-card__title">自助收银</span>
+                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
+              </span>
+              <span class="flow-hub-card__metric">
+                <span class="flow-hub-card__val">${selfCount}</span>
+                <span class="flow-hub-card__unit">笔</span>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>`;
+    queueFlowHubRingEnter(body, stats);
+  }
+
+  function renderBizBalance() {
+    const period = state.flowBalancePeriod || 'today';
+    const tabsEl = document.getElementById('bizBalanceTabs');
+    if (tabsEl) {
+      tabsEl.innerHTML = FLOW_BALANCE_PERIOD_TABS.map(t =>
+        `<button type="button" class="flow-balance-tab${period === t.id ? ' is-active' : ''}" data-biz-balance-tab="${t.id}" role="tab" aria-selected="${period === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}</button>`
+      ).join('');
+    }
+    const stats = getFlowBalanceDemoBundle(period);
+    const incomeShare = Math.round((stats.incomeSide / Math.max(1, stats.incomeSide + stats.expenseSide)) * 100);
+    const body = document.getElementById('bizBalanceBody');
+    if (!body) return;
+    const payRows = (stats.payMethods || []).map(p => {
+      const width = Math.max(4, Math.min(100, p.pct));
+      return `<div class="flow-balance-pay__row">
+        <div class="flow-balance-pay__left">
+          <span class="flow-balance-pay__dot" style="background:${escapeHtml(p.color)}" aria-hidden="true"></span>
+          <span class="flow-balance-pay__name">${escapeHtml(p.name)}</span>
+        </div>
+        <div class="flow-balance-pay__bar-wrap" aria-hidden="true">
+          <div class="flow-balance-pay__bar" style="width:${width}%;background:${escapeHtml(p.color)}"></div>
+        </div>
+        <div class="flow-balance-pay__right">
+          <div class="flow-balance-pay__meta">${p.count}笔 · ${p.pct}%</div>
+          <div class="flow-balance-pay__amt">${flowHubFormatYen(p.amount)}</div>
+        </div>
+      </div>`;
+    }).join('');
+    body.innerHTML = `
+      <div class="flow-hub-panel flow-balance-panel">
+        ${flowHubPanelDecoHtml('bizBalance')}
+        <div class="flow-hub-ring-stage flow-balance-ring-stage">
+          ${flowHubMetricHtml('tl', '营业额', stats.revenue, false)}
+          ${flowHubMetricHtml('tr', '会员卡消费', stats.memberSpend, true)}
+          ${flowHubMetricHtml('ml', '开卡/充卡', stats.recharge, false)}
+          ${flowHubMetricHtml('mr', '支出', stats.expense, true)}
+          <div class="flow-hub-ring" role="img" aria-label="收支结余 ${stats.balance} 元">
+            ${flowHubRingSvg(stats, 'bizBalanceGradIncome')}
+            <div class="flow-hub-ring__core">
+              <div class="flow-hub-ring__core-label-anchor">
+                <div class="flow-hub-ring__core-label">收支结余</div>
+                <button type="button" class="flow-hub-ring__info" data-flow-balance-help aria-label="收支结余说明">${flowBalanceInfoSvg()}</button>
+              </div>
+              <div class="flow-hub-ring__core-val">${flowHubFormatYen(stats.balance)}</div>
+              <div class="flow-hub-ring__core-divider" aria-hidden="true"></div>
+              <div class="flow-hub-ring__core-sub">收入占比 ${incomeShare}%</div>
+            </div>
+          </div>
+          ${flowHubMetricHtml('bl', '还款', stats.repay, false)}
+          ${flowHubMetricHtml('br', '欠款', stats.debt, true)}
+        </div>
+      </div>
+      <div class="flow-balance-pay">
+        <div class="flow-balance-pay__title">支付方式</div>
+        ${payRows}
+      </div>`;
+    const balanceStage = body.querySelector('.flow-hub-ring-stage');
+    if (balanceStage) {
+      balanceStage.classList.remove('is-anim-pending');
+      balanceStage.classList.add('is-entered');
+    }
+  }
+
+  function openBizHub() {
+    renderBizHub();
+    showOnlyScreen('screen-biz-hub');
+  }
+
+  function openBizBalance() {
+    if (!state.flowBalancePeriod) state.flowBalancePeriod = 'today';
+    closeFlowBalanceHelp();
+    closeFlowBalanceDateSheet();
+    renderBizBalance();
+    showOnlyScreen('screen-biz-balance');
   }
 
   function openFlowList() {
@@ -38162,6 +38572,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.searchQuery = '';
     state.cardsExpanded = false;
     state.billDueEdited = false;
+    state.payDueSnapshot = null;
     renderBillHeader();
     syncCartChrome();
     syncPickHoldsEntry();
@@ -38544,6 +38955,7 @@ window.__BILLING_EMBEDDED__ = true;
         showToast('请为已选员工设置工位（' + stationRoleLabelsJoined() + '）', true);
         return;
       }
+      snapshotBillPayDue();
       openMask('checkoutMask'); setFlowNavHighlight('checkout');
     },
     pay() {
@@ -38552,8 +38964,10 @@ window.__BILLING_EMBEDDED__ = true;
       renderDetail();
       state.payAmounts = {};
       renderPayChannels();
-      openMask('payMask');
-      setFlowNavHighlight('pay');
+      if (openBillPayMask()) setFlowNavHighlight('pay');
+    },
+    'pay-price-changed'() {
+      openBillPayPriceChangedDemo();
     },
     success() {
       if (!state.lastSettlement) state.lastSettlement = calcSettlement();
@@ -39148,6 +39562,7 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('请为已选员工设置工位（' + stationRoleLabelsJoined() + '）', true);
       return;
     }
+    snapshotBillPayDue();
     openMask('checkoutMask');
     setFlowNavHighlight('checkout');
   });
@@ -39165,7 +39580,10 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('checkoutMask', { keepCardIssueDraft: true });
     state.payAmounts = {};
     renderPayChannels();
-    openMask('payMask');
+    openBillPayMask();
+  });
+  document.getElementById('btnPayAmountChangedOk')?.addEventListener('click', () => {
+    dismissPayAmountChanged();
   });
   document.getElementById('scanMeBack')?.addEventListener('click', () => showOnlyScreen('screen-detail'));
   document.getElementById('scanCustBack')?.addEventListener('click', () => showOnlyScreen('screen-detail'));
@@ -39634,6 +40052,10 @@ window.__BILLING_EMBEDDED__ = true;
     const focusedPay = ae && ae.closest ? ae.closest('[data-pay-amt]') : null;
     if (focusedPay) commitPayInputEl(focusedPay);
     paySkipBlurClear = false;
+    if (!state.billAssetPay && !guardBillPayConfirmOrBlock()) {
+      closeMask('payMask');
+      return;
+    }
     const dueCash = getActivePayDue();
     const cashFilled = payCashFilledTotal();
     if (dueCash > 0 && cashFilled + 0.001 < dueCash) {
@@ -39741,12 +40163,24 @@ window.__BILLING_EMBEDDED__ = true;
     if (typeof openWorkbench === 'function') openWorkbench();
     else resetOrder();
   });
-  document.getElementById('flowListBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('flowListBack')?.addEventListener('click', () => {
+    if (state.flowHubReturn === 'biz') {
+      state.flowHubReturn = null;
+      openBizHub();
+      return;
+    }
+    openFlowHub();
+  });
   document.getElementById('flowSelfBack')?.addEventListener('click', () => {
     closeFlowSelfDd();
     if (window.__wbEntry === 'self' && typeof openWorkbench === 'function') {
       window.__wbEntry = null;
       openWorkbench();
+      return;
+    }
+    if (state.flowHubReturn === 'biz') {
+      state.flowHubReturn = null;
+      openBizHub();
       return;
     }
     openFlowHub();
@@ -39792,10 +40226,37 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const btn = e.target.closest('[data-flow-hub]');
     if (!btn) return;
+    state.flowHubReturn = null;
     if (btn.dataset.flowHub === 'store') openFlowList();
     else if (btn.dataset.flowHub === 'self') openFlowSelf();
   });
+  document.getElementById('bizHubBack')?.addEventListener('click', () => {
+    if (typeof openWorkbench === 'function') openWorkbench();
+    else resetOrder();
+  });
+  document.getElementById('bizHubBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-balance-help]')) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFlowBalanceHelp();
+      return;
+    }
+    if (e.target.closest('[data-biz-balance-open]')) {
+      openBizBalance();
+      return;
+    }
+    const btn = e.target.closest('[data-biz-hub]');
+    if (!btn) return;
+    if (btn.dataset.bizHub === 'store') {
+      state.flowHubReturn = 'biz';
+      openFlowList();
+    } else if (btn.dataset.bizHub === 'self') {
+      state.flowHubReturn = 'biz';
+      openFlowSelf();
+    }
+  });
   document.getElementById('flowBalanceBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('bizBalanceBack')?.addEventListener('click', () => openBizHub());
   document.getElementById('flowBalanceTabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('[data-flow-balance-tab]');
     if (!tab) return;
@@ -39807,7 +40268,24 @@ window.__BILLING_EMBEDDED__ = true;
     state.flowBalancePeriod = id;
     renderFlowBalance();
   });
+  document.getElementById('bizBalanceTabs')?.addEventListener('click', (e) => {
+    const tab = e.target.closest('[data-biz-balance-tab]');
+    if (!tab) return;
+    const id = tab.dataset.bizBalanceTab;
+    if (id === 'custom') {
+      openFlowBalanceDateSheet();
+      return;
+    }
+    state.flowBalancePeriod = id;
+    renderBizBalance();
+  });
   document.getElementById('flowBalanceBody')?.addEventListener('click', (e) => {
+    if (e.target.closest('[data-flow-balance-help]')) {
+      e.preventDefault();
+      openFlowBalanceHelp();
+    }
+  });
+  document.getElementById('bizBalanceBody')?.addEventListener('click', (e) => {
     if (e.target.closest('[data-flow-balance-help]')) {
       e.preventDefault();
       openFlowBalanceHelp();
@@ -40258,6 +40736,9 @@ window.__BILLING_EMBEDDED__ = true;
     show(id) { showOnlyScreen(id); },
     openFlowHub,
     openFlowBalance,
+    openBizHub,
+    openBizBalance,
+    openBillPayPriceChangedDemo,
     openFlowList,
     openFlowDetail,
     openFlowSelf,
