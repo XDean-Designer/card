@@ -138,7 +138,13 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>项目可被会员卡权益 <strong>按名称绑定</strong>（同桶 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>；<strong>在售/下架仍可改</strong>（细则见完整稿）。<code>boundToCard</code> <strong>自动派生刷新</strong>。删除锁定以锁标呈现。  </li>
 <li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面、<strong>产品库存</strong>等变更需 <strong>同步客户端展示</strong>（开单为 <strong>实时目录/价格/库存</strong>；细节【待联调】）；顾客端具体 UI <strong>不在本文展开</strong>。封面正式 OSS <strong>本期不做</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进价目再返回时 <strong>刷新分组 Tab（重置为「全部」）</strong>；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
-<li><strong>可见性</strong>：顾客端 / <strong>开单选品</strong> / <strong>建卡权益选品</strong> 均为 <code>onSale &amp;&amp; !hidden</code>；产品库存空=不限购、<code>0</code> 不可购（细则见完整稿）。开单中价目改价 → 支付 Dialog「支付金额已变化」。  </li>
+<li><strong>产品库存规则</strong>（仅产品；完整稿 <strong>8.1</strong>）：<br />
+   - <strong>选填</strong>：空/<code>null</code> = <strong>不限购</strong>；<code>0</code> = 不可加购；<code>1</code>～<code>999999</code> = 加购上限；非法输入 toast 拦截。<br />
+   - <strong>价目列表</strong>：空显示「—」，有值（含 0）显示数字；列头「库存」。<br />
+   - <strong>开单</strong>：有上限时展示「库存 N」，达上限「+」禁用；<code>0</code> → Toast「库存不足」；超限 →「库存不足，最多 N 件」并钳制。<br />
+   - <strong>支付</strong>：打开/确认前钳制购物车（钳空 →「购物车为空」；仍超 →「库存不足，请返回调整数量」）；支付成功按数量扣减；<strong>办卡 / 续卡不扣</strong>。<br />
+   - 独立「库存管理」模块 <strong>本期不做</strong>。  </li>
+<li><strong>可见性</strong>：顾客端 / <strong>开单选品</strong> / <strong>建卡权益选品</strong> 均为 <code>onSale &amp;&amp; !hidden</code>。开单中价目改价 → 支付 Dialog「支付金额已变化」。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式文档 <strong>暂无交付时间</strong>。  </li>
 <li><strong>本期仅单店</strong>；<strong>店主可编辑价目，店员不可编辑</strong>。</li>
 </ol>
@@ -197,7 +203,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无悬浮球</strong>）、列头排序、空态（<strong>无搜索</strong>）  </li>
 <li>列表分区：<strong>在售区</strong> → <strong>「已下架」分区</strong> →（「全部」）<strong>「已隐藏」折叠</strong>（无数量）  </li>
 <li>新增 / 编辑 / 删除项目与产品（表单：基本信息 / 售卖设置 / 高级设置；产品含 <strong>规格/库存选填</strong>；<strong>上传封面图（选填）</strong>最多 1 张）  </li>
-<li><strong>产品库存</strong>（列表列展示；开单加购/支付扣减见完整稿）  </li>
+<li><strong>产品库存规则</strong>（选填；列表列；开单限购与支付扣减要点见先读第 6 条；完整稿 <strong>8.1</strong>）  </li>
 <li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
 <li>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
 <li>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内）  </li>
@@ -324,7 +330,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>产品库存</td>
 <td>选填库存限制开单加购</td>
-<td>空=不限购；<code>0</code> 不可加购；超限 toast；支付成功扣减（见完整稿）</td>
+<td>空=不限购；<code>0</code>→「库存不足」；超限→「最多 N 件」；支付前钳制；支付成功扣减（办卡/续卡不扣）</td>
 </tr>
 <tr>
 <td>分组运营</td>

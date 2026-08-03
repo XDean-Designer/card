@@ -159,7 +159,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td style="text-align: center;">✓</td>
 <td style="text-align: center;"><strong>必看</strong></td>
 <td style="text-align: center;">✓</td>
-<td>排序桶、多分组、可见性、库存、改价支付拦截</td>
+<td>排序桶、多分组、可见性、<strong>8.1 产品库存</strong>、改价支付拦截</td>
 </tr>
 <tr>
 <td>9</td>
@@ -202,7 +202,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>项目可被会员卡权益 <strong>按名称绑定</strong>（项目桶、产品桶内 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。<code>boundToCard</code> 随模板引用 <strong>自动派生并刷新</strong>。  </li>
 <li>B 端改价、上下架、时长、隐藏、封面、<strong>产品库存</strong>等变更需 <strong>同步客户端展示</strong>（开单侧为 <strong>实时目录/价格/库存</strong>；推送细节【待联调确认】）；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进入价目再返回时 <strong>刷新权益选品分组 Tab</strong>（重置为「全部」并重绘）；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
-<li><strong>开单选品</strong> 与权益选品同口径：仅 <code>onSale &amp;&amp; !hidden</code>；<strong>产品库存</strong>参与加购上限（空库存=不限购，见模块 8）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
+<li><strong>开单选品</strong> 与权益选品同口径：仅 <code>onSale &amp;&amp; !hidden</code>；<strong>产品库存</strong>参与加购上限（空库存=不限购，见 <strong>8.1</strong>）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式接口文档 <strong>暂无交付时间</strong>；不臆造现网 URL。  </li>
 <li><strong>本期仅单店</strong>；价目管理权限：<strong>店主可编辑</strong>，<strong>店员不可编辑</strong>。</li>
 </ol>
@@ -261,7 +261,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红填充「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无右下悬浮球</strong>）、列头排序、空态（<strong>无搜索</strong>）  </li>
 <li>列表分区：<strong>在售区</strong> → <strong>「已下架」分区</strong> →（「全部」Tab）底部 <strong>「已隐藏」折叠</strong>  </li>
 <li>新增 / 编辑 / 删除项目与产品（表单三段：基本信息 / 售卖设置 / 高级设置）  </li>
-<li><strong>产品库存</strong>（选填；列表列展示；开单加购/支付扣减规则见模块 8）  </li>
+<li><strong>产品库存</strong>（选填；列表列展示；开单加购/支付扣减规则见 <strong>8.1</strong>）  </li>
 <li>上传封面图（选填，演示最多 1 张）  </li>
 <li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
 <li>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
@@ -389,7 +389,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>产品库存</td>
 <td>选填库存以限制开单加购</td>
-<td>空=不限购；<code>0</code> 不可加购；数量不超过库存；支付成功扣减（非办卡/充值）</td>
+<td>见 <strong>8.1</strong>：空=不限购；<code>0</code> 不可加购；数量不超过库存；支付成功扣减（办卡/续卡不扣）</td>
 </tr>
 <tr>
 <td>分组运营</td>
@@ -664,7 +664,7 @@ flowchart LR
 </tbody>
 </table>
 <p><strong>顾客端可见</strong>（项目/产品）：<code>onSale &amp;&amp; !hidden</code>。<br />
-<strong>开单选品</strong>（项目/产品）：与权益同口径 <code>onSale &amp;&amp; !hidden</code>（产品加购另见模块 8 库存规则）。<br />
+<strong>开单选品</strong>（项目/产品）：与权益同口径 <code>onSale &amp;&amp; !hidden</code>（产品加购另见 <strong>8.1</strong> 库存规则）。<br />
 <strong>顾客端可预约</strong>（仅项目）：<code>onSale &amp;&amp; !hidden &amp;&amp; bookable</code>。</p>
 <h2>4.7 列表排序相关状态</h2>
 <ul>
@@ -1086,7 +1086,7 @@ flowchart LR
 </tr>
 <tr>
 <td><strong>开单选品</strong></td>
-<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；产品行可展示「库存 N」；加购受库存上限（见模块 8）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
+<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；产品行可展示「库存 N」；加购受库存上限（见 <strong>8.1</strong>）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
 </tr>
 <tr>
 <td><strong>开单支付·价目改价</strong></td>
@@ -1363,11 +1363,7 @@ flowchart LR
 <li><strong>权益选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true &amp;&amp; hidden=false</code>。  </li>
 <li><strong>开单选品范围</strong>：与权益同口径，仅 <code>onSale=true &amp;&amp; hidden=false</code>（下架/隐藏不可选）。  </li>
 <li><strong>顾客端可见</strong>：<code>onSale &amp;&amp; !hidden</code>；项目预约另需 <code>bookable</code>。  </li>
-<li><strong>产品库存（选填）</strong>：<br />
-   - <code>stock=null</code>（未填）→ <strong>不限购</strong>；<br />
-   - <code>stock=0</code> → 不可加购；「+」禁用；Toast「库存不足」；<br />
-   - <code>stock&gt;0</code> → 购物车数量 ≤ 库存；超限 Toast「库存不足，最多 N 件」并钳制；列表/选品可展示库存；<br />
-   - 打开支付 / 确认前 <code>clampCartToProductStock</code>；支付成功（非办卡/充值）<code>deductProductStockAfterPay</code> 扣减库存。  </li>
+<li><strong>产品库存</strong>：仅产品具备；选填与开单限购、支付扣减规则见 <strong>8.1</strong>。  </li>
 <li><strong>开单支付·价目改价</strong>：结账快照应付；打开/确认支付前重算；不一致则 Dialog「支付金额已变化」→「知道了」关支付层，留在开单详情（见 6.8）。  </li>
 <li><strong>绑卡匹配</strong>：以 <strong>名称</strong> 与模板权益引用对齐；<strong>同桶名称唯一</strong>；改名锁定避免孤儿引用；解除引用后 <code>boundToCard</code> <strong>自动刷新</strong>。  </li>
 <li><strong>绑卡上下架</strong>：绑卡 <strong>不</strong> 阻止改 <code>onSale</code>。  </li>
@@ -1383,6 +1379,60 @@ flowchart LR
 <li><strong>权限</strong>：店主可编辑价目；店员不可编辑。  </li>
 <li><strong>门店范围</strong>：<strong>本期仅单店</strong>。</li>
 </ol>
+<h2>8.1 产品库存规则</h2>
+<p>适用范围：<strong>仅产品</strong>（项目无库存字段）。独立「库存管理」工作台模块 <strong>本期不做</strong>。</p>
+<h3>字段与校验</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否必填</td>
+<td><strong>选填</strong>；表单 placeholder「选填」</td>
+</tr>
+<tr>
+<td>取值</td>
+<td>空串 / 未填 → <code>stock=null</code>；否则为 <code>0</code>～<code>999999</code> 整数</td>
+</tr>
+<tr>
+<td>语义</td>
+<td><code>null</code> = <strong>不限购</strong>（未管理库存）；<code>0</code> = 可售上限为 0（不可加购）；<code>N&gt;0</code> = 可购上限为 N</td>
+</tr>
+<tr>
+<td>非法输入</td>
+<td>Toast「请填写有效库存（0～999999 的整数）」或「库存不能超过 999999」</td>
+</tr>
+</tbody>
+</table>
+<h3>价目表展示</h3>
+<ul>
+<li>产品列表增加「库存」列（约 48px 居中）。  </li>
+<li><code>stock=null</code> → 显示 <strong>「—」</strong>；有值（含 <code>0</code>）→ 显示数字。  </li>
+<li>项目 Tab 不展示库存列。</li>
+</ul>
+<h3>开单加购</h3>
+<ul>
+<li>选品范围仍为 <code>onSale &amp;&amp; !hidden</code>（与权益同口径）；库存只约束 <strong>数量上限</strong>，不单独决定是否出现在目录。  </li>
+<li><code>stock=null</code>：不加购上限。  </li>
+<li><code>stock=0</code>：不可加购；「+」禁用；Toast「库存不足」。  </li>
+<li><code>stock=N</code>（N&gt;0）：购物车数量 ≤ N；达上限「+」禁用；选品行可展示「库存 N」。  </li>
+<li>试图超过上限：Toast「库存不足，最多 N 件」，数量钳制为 N。</li>
+</ul>
+<h3>支付前钳制与支付扣减</h3>
+<ul>
+<li>打开支付层 / 确认支付前，对购物车执行库存钳制（原型 <code>clampCartToProductStock</code>）：  </li>
+<li>上限为 <code>0</code> 的产品行从购物车移除；  </li>
+<li>数量大于上限的行钳制到上限；  </li>
+<li>钳制后购物车为空（且非资产/办卡等特殊路径）→ Toast「购物车为空」，中止支付；  </li>
+<li>仍存在超库存 → Toast「库存不足，请返回调整数量」，中止支付。  </li>
+<li><strong>支付成功后扣减</strong>：按购物车数量减少对应产品 <code>stock</code>（不低于 0）。  </li>
+<li><strong>不扣减</strong>：办卡、续卡（及同路径不走普通账单扣库存的支付）。充值等非「产品购物车扣库存」路径亦不扣。  </li>
+</ul>
+<p>交互与文案以原型为准；接口落库与并发扣减细节【待联调确认】。</p>
 <hr />
 <h1>模块 9　文案清单与权限</h1>
 <blockquote>
@@ -1461,7 +1511,8 @@ flowchart LR
 <li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目，<strong>分组 Tab 刷新为「全部」</strong>。  </li>
 <li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 列表中不出现该产品。  </li>
 <li><strong>Given</strong> 开单已选品并进入支付前，<strong>When</strong> 价目表改价导致应付与快照不一致，<strong>Then</strong> Dialog「支付金额已变化」；点「知道了」关闭支付层并留在开单详情。  </li>
-<li><strong>Given</strong> 开单含有库存产品且支付成功（非办卡/充值），<strong>When</strong> 支付完成，<strong>Then</strong> 对应产品库存按数量扣减。  </li>
+<li><strong>Given</strong> 开单含有库存产品且支付成功（非办卡/续卡），<strong>When</strong> 支付完成，<strong>Then</strong> 对应产品库存按数量扣减。  </li>
+<li><strong>Given</strong> 办卡或续卡支付成功，<strong>When</strong> 支付完成，<strong>Then</strong> <strong>不</strong>扣减产品库存。  </li>
 <li><strong>Given</strong> 项目详情高级设置，<strong>When</strong> 添加第 2 张封面，<strong>Then</strong> toast「仅可上传 1 张封面」。  </li>
 <li><strong>Given</strong> 「全部」列表有下架与隐藏条目，<strong>When</strong> 浏览，<strong>Then</strong> 无状态列；可见居中「已下架」分隔行（下沿线）与「已隐藏」折叠（无数量）。  </li>
 <li><strong>Given</strong> 当前为项目 Tab 且列表有数据，<strong>When</strong> 点标题栏「+添加」，<strong>Then</strong> <strong>不弹窗</strong>，直接进入「新增项目」。  </li>
