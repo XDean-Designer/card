@@ -1330,6 +1330,8 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .picker-mask { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 30; display: none; align-items: center; justify-content: center; padding: 0 32px; }
 .picker-mask.open { display: flex; }
 #amountKeypadMask.open { z-index: 50; }
+/* 流水自定义时间：叠在筛选 Sheet 之上，避免被遮挡 */
+#flowRangeMask.open { z-index: 40; }
 .picker-mask--bottom {
   padding: 0; flex-direction: column; justify-content: flex-end; align-items: stretch;
 }
@@ -1609,14 +1611,32 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .price-catalog-tabs .page-tabs__item.on::after { z-index: 1; }
 .table-card.is-product-tab .table-head__cell[data-col-duration],
 .table-card.is-product-tab .table-row .dur { display: none; }
-.table-card:not(.is-product-tab) .table-head__cell[data-col-stock],
-.table-card:not(.is-product-tab) .table-row .stock { display: none; }
-/* 产品 Tab：名称尽量单行；库存收窄并靠右贴近价格 */
+/* 产品 Tab：名称 | 价格（与下方 #screen-p-list 规则一致，用 max-content 保证表头/金额同宽右齐） */
 #screen-p-list .table-card.is-product-tab .table-head,
 #screen-p-list .table-card.is-product-tab .table-row {
-  grid-template-columns: minmax(0, 1fr) 48px 80px;
-  column-gap: 6px;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  column-gap: 12px;
 }
+.catalog-list-add-row {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; min-height: 52px; margin: 0; padding: 0 16px;
+  border: none; border-top: 1px solid #EBEBEB; background: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 500; color: var(--brand);
+  cursor: pointer; -webkit-tap-highlight-color: transparent; box-sizing: border-box;
+}
+.catalog-list-add-row:active { background: #FAFAFA; }
+.catalog-list-add-row--dash {
+  width: calc(100% - 32px); max-width: none; margin: 12px 16px 16px;
+  min-height: 44px; padding: 0 16px;
+  border: 1px dashed var(--brand); border-radius: 12px; border-top: 1px dashed var(--brand);
+  background: transparent; color: var(--brand);
+}
+.catalog-list-add-row--dash:active { background: var(--brand-soft); }
+.catalog-list-add-row__plus {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; font-size: 18px; font-weight: 500; line-height: 1;
+}
+.catalog-list-add-row.hidden { display: none; }
 #screen-p-list .table-card.is-product-tab .table-row .name-text,
 #screen-p-list .table-card.is-product-tab .table-row .name-text.is-long {
   flex: 1 1 auto;
@@ -3098,28 +3118,29 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   margin: 0; border-radius: 0; background: transparent;
 }
 /*
- * 表头/行列位：项目名称 | 时长 | 价格（已去掉状态列）
- * 产品 Tab：产品名称（规格）| 库存 | 价格
- * 右列标题与数值同列居中，避免「库存」等表头相对数字偏左
+ * 表头/行列位：项目名称 | 时长 | 价格
+ * 产品 Tab：产品名称（规格）| 价格
+ * 价格列：表头与金额中轴居中对齐
  */
 #screen-p-list .table-head {
   padding: 0 16px 16px 13px; min-height: 20px;
   font-size: 14px; color: #666; font-weight: 400;
   border-bottom: none; align-items: center;
-  box-sizing: content-box;
-  grid-template-columns: minmax(0, 1fr) 100px 88px;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr) 100px max-content;
   column-gap: 8px;
 }
 #screen-p-list .table-row {
-  grid-template-columns: minmax(0, 1fr) 100px 88px;
+  grid-template-columns: minmax(0, 1fr) 100px max-content;
   column-gap: 8px;
   padding-left: 13px;
   padding-right: 16px;
+  box-sizing: border-box;
 }
 #screen-p-list .table-card.is-product-tab .table-head,
 #screen-p-list .table-card.is-product-tab .table-row {
-  grid-template-columns: minmax(0, 1fr) 48px 80px;
-  column-gap: 6px;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  column-gap: 12px;
 }
 #screen-p-list .table-head__cell[data-col-sort="name"] {
   justify-content: flex-start;
@@ -3128,34 +3149,68 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 #screen-p-list .table-head__cell[data-col-sort="name"] .table-head__inner {
   padding-left: 0;
 }
-#screen-p-list .table-head__cell[data-col-sort="duration"],
-#screen-p-list .table-head__cell[data-col-stock],
-#screen-p-list .table-head__cell[data-col-sort="price"] {
+#screen-p-list .table-head__cell[data-col-sort="duration"] {
   width: 100%;
   max-width: none;
   justify-content: center;
 }
+#screen-p-list .table-head__cell[data-col-sort="price"],
+#screen-p-list .table-head__cell[data-col-sort="price"].is-end,
+#screen-p-list .table-head__cell[data-col-sort="price"].is-center {
+  display: flex !important;
+  grid-column: -2 / -1;
+  width: auto;
+  min-width: 4.75em; /* 容纳「价格（¥）」 */
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center !important;
+  text-align: center;
+  box-sizing: border-box;
+}
+#screen-p-list .table-head__cell[data-col-sort="price"] .table-head__inner {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
 #screen-p-list .table-head__cell.is-center { justify-content: center; }
-#screen-p-list .table-row .dur,
-#screen-p-list .table-row .stock,
-#screen-p-list .table-row .price {
+#screen-p-list .table-head__cell.is-end { justify-content: flex-end; }
+/* 价格列排序箭头放右侧外侧，不挤占中轴 */
+#screen-p-list .table-head__cell[data-col-sort="price"].is-sorted .table-head__inner::after {
+  left: calc(100% + 2px);
+  right: auto;
+}
+#screen-p-list .table-row .dur {
   width: 100%;
   max-width: none;
   justify-self: stretch;
   text-align: center;
 }
-#screen-p-list .table-row .stock {
-  font-size: 14px; color: var(--text); font-variant-numeric: tabular-nums; line-height: 20px;
+#screen-p-list .table-row .price {
+  display: flex;
+  grid-column: -2 / -1;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 4.75em; /* 与表头同宽下限，中轴对齐 */
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
 }
-#screen-p-list .table-row .stock.is-zero { color: var(--text-sec); }
-#screen-p-list .table-row-swipe.is-off-sale .stock { color: var(--text-sec); }
 #screen-p-list .table-row .dur-cell {
   width: 100%;
   justify-content: center;
 }
 #screen-p-list .table-row .price-num {
-  display: inline-block;
+  display: block;
+  width: 100%;
   text-align: center;
+  box-sizing: border-box;
 }
 .table-card { margin: 8px 16px 16px; background: var(--card); border-radius: 12px; overflow: hidden; isolation: isolate; position: relative; }
 .table-row-actions .act-group { background: #64748B; }
@@ -3360,6 +3415,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   overflow: visible;
 }
 .table-head__cell.is-center { justify-content: center; }
+.table-head__cell.is-end { justify-content: flex-end; }
 .table-head__cell.is-sorted { color: var(--text); font-weight: 600; }
 .table-head__inner {
   position: relative; display: inline-block; line-height: 1.2;
@@ -3445,6 +3501,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   /* Figma 305:155 TCloudNumber Regular 14 / 主红 #F32F41 */
   font-family: var(--font-data); font-weight: 400; font-size: 14px; line-height: 19px;
   color: #F32F41; letter-spacing: 0;
+  display: block; width: 100%; text-align: center;
 }
 #screen-p-list .table-row .price-num .yen {
   font-family: inherit; font-weight: 400; font-size: 14px; line-height: 19px;
@@ -3605,6 +3662,12 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   background: #fff; color: #666; font-size: 13px; font-weight: 600;
   font-family: inherit; cursor: pointer; line-height: 1;
 }
+.btn-proj-empty-add--dash {
+  width: 168px; height: 36px;
+  border: 1px dashed var(--brand); border-radius: 12px;
+  background: transparent; color: var(--brand); font-weight: 500;
+}
+.btn-proj-empty-add--dash:active { background: var(--brand-soft); }
 .btn-proj-empty-add + .btn-proj-empty-add { margin-top: 12px; }
 .btn-proj-empty-add:active { background: #FAFAFA; }
 .btn-proj-empty-add.hidden { display: none; }
@@ -7687,6 +7750,82 @@ button.exp-flow-row:active { opacity: .92; }
   width: 18px; height: 18px; flex-shrink: 0; display: block;
   color: var(--brand);
 }
+.bill-stock-entry {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: calc(100% - 32px); margin: 0 16px 10px; height: 40px;
+  border: 1px dashed #E0E0E0; border-radius: 10px;
+  background: #FAFAFA; color: var(--text); font-size: 14px; font-weight: 500;
+  font-family: inherit; cursor: pointer; box-sizing: border-box;
+}
+.bill-stock-entry:active { background: #F2F2F2; }
+.bill-stock-entry__icon {
+  width: 18px; height: 18px; flex-shrink: 0; display: block;
+  color: #B2B2B2;
+}
+.bill-stock-pick-list {
+  flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 8px 8px 12px; display: flex; flex-direction: column; gap: 8px;
+  box-sizing: border-box;
+}
+.bill-stock-pick-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-height: 60px; padding: 10px 12px; margin: 0;
+  background: #fff; border-radius: 8px; border: none;
+  text-align: left; font-family: inherit; cursor: pointer; color: inherit;
+  box-sizing: border-box;
+}
+.bill-stock-pick-row:disabled { opacity: .45; cursor: default; }
+.bill-stock-pick-row__check {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #D0D0D0;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  box-sizing: border-box;
+}
+.bill-stock-pick-row.is-on .bill-stock-pick-row__check {
+  border-color: var(--brand); background: var(--brand); color: #fff;
+}
+.bill-stock-pick-row__main { flex: 1; min-width: 0; }
+.bill-stock-pick-row__name { font-size: 14px; font-weight: 500; color: #1A1A1A; line-height: 20px; }
+.bill-stock-pick-row__spec { margin-top: 2px; font-size: 12px; color: #929292; line-height: 17px; }
+.bill-stock-pick-row__meta { margin-top: 2px; font-size: 12px; color: #929292; line-height: 17px; }
+.bill-stock-pick-row__price {
+  flex-shrink: 0; text-align: right; font-family: var(--font-data);
+  font-size: 15px; font-weight: 600; color: #1A1A1A;
+}
+.bill-stock-pick-row__price-lab {
+  display: block; font-size: 11px; font-weight: 400; color: #929292;
+  font-family: inherit; margin-bottom: 2px;
+}
+#billStockToCatalogMask.dialog-mask { z-index: 55; }
+/* 从库存添加 · 对齐项目管理「设置分组」 */
+#billStockPickMask .picker-sheet.tall {
+  background: linear-gradient(180deg, #fff 0%, #F7F7F7 30%, #F7F7F7 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+  max-height: 85%;
+  display: flex; flex-direction: column;
+}
+#billStockPickMask .picker-head--stack {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14px 20px 12px; border-bottom: none; background: transparent;
+}
+#billStockPickMask .picker-head__title {
+  font-size: 18px; font-weight: 600; color: #1A1A1A; line-height: 25px; text-align: center;
+}
+#billStockPickMask .picker-head__sub {
+  margin-top: 8px; font-size: 14px; font-weight: 400; color: #929292; line-height: 20px;
+  text-align: center;
+}
+#billStockPickMask .picker-foot--row {
+  padding: 16px 16px calc(16px + var(--safe-bottom, 0px));
+  gap: 16px; background: #fff; box-shadow: none; border-top: none;
+  flex-shrink: 0;
+}
+#billStockPickMask .picker-foot--row .btn-main {
+  height: 48px; border-radius: 12px; font-size: 16px; font-weight: 600; flex: 1;
+}
+#billStockPickMask .picker-foot--row .btn-main.secondary {
+  background: transparent; color: var(--brand); border: 1px solid var(--brand);
+}
 .search-bar { margin: 12px 16px; display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-sizing: border-box; }
 .search-bar input { flex: 1; min-width: 0; border: none; outline: none; font-size: 14px; font-family: inherit; background: transparent; color: var(--text); }
 .search-bar input::placeholder { color: #666; }
@@ -8723,7 +8862,8 @@ button.exp-flow-row:active { opacity: .92; }
 #screen-biz-self-rpt,
 #screen-flow-list,
 #screen-flow-detail,
-#screen-flow-self { background: var(--bg-page); }
+#screen-flow-self,
+#screen-flow-product { background: var(--bg-page); }
 #screen-flow-hub,
 #screen-biz-hub,
 #screen-biz-pie,
@@ -8927,42 +9067,58 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .biz-pie-card__title { font-size: 15px; font-weight: 600; color: var(--text); }
 .biz-pie-card__hint { font-size: 11px; color: var(--text-sec); }
-.biz-pie-stage { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-.biz-pie-svg-wrap { position: relative; width: 212px; height: 212px; }
-.biz-pie-svg-wrap svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.biz-pie-track {
-  fill: none; stroke: #ECECEC; stroke-width: 14; pointer-events: none;
-}
-.biz-pie-arc {
-  fill: none; stroke-width: 14; stroke-linecap: butt;
-  cursor: pointer; transition: stroke-width .2s ease, filter .2s ease, opacity .2s ease;
+.biz-pie-stage { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.biz-pie-svg-wrap { position: relative; width: 100%; max-width: 340px; }
+.biz-pie-svg-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+.biz-pie-slice {
+  cursor: pointer; transition: opacity .2s ease, filter .2s ease;
   -webkit-tap-highlight-color: transparent;
+  stroke: #fff; stroke-width: 1.5;
 }
-.biz-pie-arc:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
-.biz-pie-arc:active { opacity: .9; }
-.biz-pie-arc.is-active {
-  stroke-width: 18;
-  filter: drop-shadow(0 0 5px rgba(243, 47, 65, .22));
+.biz-pie-slice:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.biz-pie-slice:active { opacity: .92; }
+.biz-pie-slice.is-active {
+  filter: brightness(1.04) drop-shadow(0 2px 8px rgba(180, 160, 200, .28));
+  stroke: #fff; stroke-width: 2.5;
 }
-.biz-pie-arc[data-biz-pie="revenue"].is-active {
-  filter: drop-shadow(0 0 5px rgba(196, 163, 90, .35));
+.biz-pie-slice[data-biz-pie="prestore"].is-active {
+  filter: brightness(1.04) drop-shadow(0 2px 8px rgba(255, 183, 197, .45));
 }
-.biz-pie-arc[data-biz-pie="expense"].is-active,
-.biz-pie-arc[data-biz-pie^="exp-"].is-active {
-  filter: drop-shadow(0 0 5px rgba(107, 114, 128, .28));
+.biz-pie-slice[data-biz-pie="revenue"].is-active {
+  filter: brightness(1.04) drop-shadow(0 2px 8px rgba(255, 159, 90, .42));
+}
+.biz-pie-slice[data-biz-pie="expense"].is-active,
+.biz-pie-slice[data-biz-pie^="exp-"].is-active {
+  filter: brightness(1.04) drop-shadow(0 2px 8px rgba(140, 148, 156, .35));
+}
+.biz-pie-leader {
+  fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;
+  pointer-events: none; opacity: .95;
+}
+.biz-pie-leader-dot {
+  stroke: #fff; stroke-width: 1.5; pointer-events: none;
+}
+.biz-pie-label { pointer-events: none; }
+.biz-pie-anno.is-active .biz-pie-label__name { font-weight: 700; }
+.biz-pie-label__name {
+  font-size: 12px; font-weight: 600; fill: var(--text); font-family: inherit;
+}
+.biz-pie-label__amt {
+  font-size: 12px; font-weight: 600; fill: var(--text);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.biz-pie-label__pct {
+  font-size: 11px; font-weight: 500; fill: var(--text-sec);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.biz-pie-enter .biz-pie-slice,
+.biz-pie-enter .biz-pie-anno {
+  opacity: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .biz-pie-arc { transition: none; }
-  .biz-pie-enter .biz-pie-arc { transition: none !important; }
-}
-.biz-pie-core {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  text-align: center; pointer-events: none; width: 108px;
-}
-.biz-pie-core__label { font-size: 12px; color: var(--text-sec); line-height: 16px; letter-spacing: .02em; }
-.biz-pie-core__val {
-  margin-top: 4px; font-size: 22px; font-weight: 600; color: var(--text);
-  font-family: var(--font-data); line-height: 28px; font-variant-numeric: tabular-nums;
+  .biz-pie-slice { transition: none; }
+  .biz-pie-enter .biz-pie-slice,
+  .biz-pie-enter .biz-pie-anno { opacity: 1 !important; transition: none !important; }
 }
 .biz-pie-legend { width: 100%; display: flex; flex-direction: column; gap: 8px; }
 .biz-pie-legend__row {
@@ -9893,7 +10049,85 @@ button.exp-flow-row:active { opacity: .92; }
 #screen-flow-detail.hidden { display: none; }
 #screen-flow-detail:not(.hidden) { display: flex; }
 #screen-flow-list .page-body,
-#screen-flow-self .page-body { background: var(--bg-page); }
+#screen-flow-self .page-body,
+#screen-flow-product .page-body { background: var(--bg-page); }
+#screen-flow-product {
+  display: flex; flex-direction: column;
+}
+#screen-flow-product.hidden { display: none; }
+#screen-flow-product:not(.hidden) { display: flex; }
+.flow-prod-range {
+  display: flex; align-items: stretch; flex-shrink: 0;
+  background: #fff; border-bottom: 0.5px solid #EDEDED;
+  padding: 0 4px; height: 44px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.flow-prod-range::-webkit-scrollbar { display: none; }
+.flow-prod-range__btn {
+  flex: 1; min-width: 52px; border: none; background: transparent; font-family: inherit;
+  font-size: 13px; color: var(--text-sec); position: relative; cursor: pointer; white-space: nowrap; padding: 0 6px;
+}
+.flow-prod-range__btn.on { color: var(--brand); font-weight: 500; }
+.flow-prod-range__btn.on::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 24px; height: 3px; border-radius: 2px; background: var(--brand);
+}
+.flow-prod-sum {
+  position: sticky; top: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 0; padding: 12px 16px 10px;
+  background: #F7F7F7;
+  border-bottom: 0.5px solid #EDEDED;
+  box-sizing: border-box;
+}
+.flow-prod-sum__meta {
+  font-size: 13px; color: var(--text-sec); line-height: 18px;
+}
+.flow-prod-sum__meta strong {
+  color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.flow-prod-sum__sort {
+  display: inline-flex; align-items: center; gap: 2px;
+  border: none; background: #fff; border-radius: 8px;
+  padding: 5px 8px; font-family: inherit; font-size: 12px; color: var(--text-sec);
+  cursor: pointer; flex-shrink: 0; box-shadow: 0 0 0 1px #EBEBEB;
+}
+.flow-prod-sum__sort:active { background: #FAFAFA; }
+.flow-prod-list { padding: 8px 0 24px; }
+.flow-prod-row {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  margin: 0 16px 8px; padding: 14px 14px;
+  background: #fff; border-radius: 12px; border: 1px solid #EBEBEB;
+  box-sizing: border-box;
+}
+.flow-prod-row__main { min-width: 0; flex: 1; }
+.flow-prod-row__name {
+  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.flow-prod-row__spec {
+  margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 17px;
+}
+.flow-prod-row__metrics {
+  text-align: right; flex-shrink: 0; min-width: 88px;
+}
+.flow-prod-row__qty {
+  font-size: 13px; color: var(--text-sec); line-height: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.flow-prod-row__amt {
+  margin-top: 2px; font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.flow-filter-custom {
+  margin-top: 10px; display: flex; align-items: center; gap: 8px;
+}
+.flow-filter-custom__btn {
+  flex: 1; min-height: 40px; border: 1px solid #EBEBEB; border-radius: 10px;
+  background: #FAFAFA; font-family: inherit; font-size: 13px; color: var(--text);
+  cursor: pointer; padding: 8px 10px; text-align: left;
+}
+.flow-filter-custom__btn.is-on { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+.flow-filter-custom__sep { color: var(--text-sec); font-size: 13px; flex-shrink: 0; }
 .flow-self-filters-wrap {
   position: relative; flex-shrink: 0; z-index: 5; background: #fff;
 }
@@ -10426,6 +10660,10 @@ button.exp-flow-row:active { opacity: .92; }
 /* 金额键盘须压过充值/续次/延期等底部 sheet */
 #amountKeypadMask.picker-mask.open {
   z-index: 50 !important;
+}
+/* 流水自定义时间须压过门店流水「筛选」Sheet（同为 bottom.open z-index:40） */
+#flowRangeMask.picker-mask.open {
+  z-index: 52 !important;
 }
 /* 仅开单底部抽屉贴边；勿覆盖会员卡居中弹窗的 padding / max-width */
 #cartSheetMask.picker-mask,
@@ -14029,7 +14267,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="table-head" id="projTableHead">
                   <button type="button" class="table-head__cell" data-col-sort="name"><span class="table-head__inner">项目名称</span></button>
                   <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长（分钟）</span></button>
-                  <div class="table-head__cell is-center" data-col-stock><span class="table-head__inner">库存</span></div>
                   <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格（¥）</span></button>
                 </div>
                 <div id="projProjectTable"></div>
@@ -14721,6 +14958,32 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body" id="flowSelfBody"></div>
           </div>
 
+          <!-- 流水订单 · 产品销量 -->
+          <div id="screen-flow-product" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="flowProductBack" aria-label="返回">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="title">产品销量</div>
+            </div>
+            <div class="flow-prod-range" id="flowProductRange" role="tablist" aria-label="统计时段"></div>
+            <div class="page-body" id="flowProductBody"></div>
+          </div>
+
+          <!-- 流水订单 · 自定义时间范围 -->
+          <div class="picker-mask picker-mask--bottom" id="flowRangeMask" data-mask-close="flowRangeMask">
+            <div class="picker-sheet flow-balance-date-sheet" role="dialog" aria-label="选择时间范围">
+              <div class="picker-head"><span class="picker-head__title-main">选择时间范围</span></div>
+              <div class="flow-balance-cal-range" id="flowRangeCalRange"></div>
+              <div class="flow-balance-cal" id="flowRangeCal"></div>
+              <div class="flow-balance-cal__hint" id="flowRangeCalHint">请选择开始日期</div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="flowRangeCancel">取消</button>
+                <button type="button" class="btn-main" id="flowRangeOk">确定</button>
+              </div>
+            </div>
+          </div>
+
           <!-- 流水订单 · 详情 -->
           <div id="screen-flow-detail" class="screen hidden">
             <div class="page-title-bar">
@@ -15318,6 +15581,33 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
 
+          <!-- 开单 · 从库存添加（对齐项目管理「设置分组」Sheet） -->
+          <div class="picker-mask picker-mask--bottom" id="billStockPickMask" data-mask-close="billStockPickMask">
+            <div class="picker-sheet tall" role="dialog" aria-label="从库存添加">
+              <div class="picker-head picker-head--stack">
+                <div class="picker-head__title">从库存添加</div>
+                <div class="picker-head__sub">按成本价计入本单应付</div>
+              </div>
+              <div class="bill-stock-pick-list" id="billStockPickList"></div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="billStockPickCancel">取消</button>
+                <button type="button" class="btn-main" id="billStockPickOk">加入购物车</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 开单成功 · 库存商品写入价目表 -->
+          <div class="dialog-mask" id="billStockToCatalogMask">
+            <div class="dialog" role="dialog" aria-labelledby="billStockToCatalogTitle">
+              <div class="dialog__title" id="billStockToCatalogTitle">加入价目表？</div>
+              <div class="dialog__body" id="billStockToCatalogBody">将按成本价加入价目表，下次可直接点选。</div>
+              <div class="dialog__actions">
+                <button type="button" class="btn-main secondary" id="billStockToCatalogSkip">暂不</button>
+                <button type="button" class="btn-main" id="billStockToCatalogConfirm">加入价目表</button>
+              </div>
+            </div>
+          </div>
+
           <!-- 结账三选一 · Figma 151:5078 -->
           <div id="checkoutMask" class="picker-mask" data-mask-close="checkoutMask">
             <div class="picker-sheet checkout-sheet" role="dialog" aria-label="收款方式">
@@ -15430,8 +15720,8 @@ const PROJ_EDIT_NOTICE = {
 const PROJ_LOCK_TOAST = {
   name: '该项目已绑定会员卡，项目名称不可修改',
   bookable_bound: '该项目已绑定会员卡，预约设置不可修改',
-  bookable_offSale: '项目已下架，请先开启「在售」后再设置手机端预约',
-  bookable_hidden: '项目已隐藏，取消隐藏后需手动开启手机端可预约',
+  bookable_offSale: '项目已下架，请先开启「在售」后再设置可预约',
+  bookable_hidden: '项目已隐藏，取消隐藏后需手动开启可预约',
   delete: '该项目已绑定会员卡，不可删除',
 };
 const CATALOG_SYS_HIDDEN_GROUP = {
@@ -15532,30 +15822,30 @@ function seedProjectCatalog() {
 
 function seedProductCatalog() {
   const list = [
-    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, stock: 36, onSale: true, category: '洗护' },
-    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, stock: 28, onSale: true, category: '洗护' },
-    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, stock: 12, onSale: true, category: '护理' },
-    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, stock: 45, onSale: true, category: '造型' },
-    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, stock: 8, onSale: true, category: '烫染' },
-    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, stock: 22, onSale: true, category: '护理' },
-    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, stock: 0, onSale: false, category: '洗护' },
-    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, stock: 19, onSale: true, category: '洗护' },
-    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, stock: 15, onSale: true, category: '护理' },
-    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, stock: 6, onSale: true, category: '护理' },
-    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, stock: 31, onSale: true, category: '造型' },
-    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, stock: 24, onSale: true, category: '造型' },
-    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, stock: 9, onSale: true, category: '烫染' },
-    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, stock: 17, onSale: true, category: '烫染' },
-    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, stock: 11, onSale: true, category: '洗护' },
-    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, stock: 3, onSale: true, category: '护理' },
-    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, stock: 40, onSale: true, category: '洗护' },
-    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, stock: 0, onSale: false, category: '烫染' },
-    { id: 'pd19', name: '剑琅玻尿酸精华液', spec: '30ml', price: 198, stock: 7, onSale: true, category: '美容' },
-    { id: 'pd20', name: '剑琅补水面膜', spec: '5片', price: 88, stock: 52, onSale: true, category: '美容' },
-    { id: 'pd21', name: '剑琅甲油胶套装', spec: '12色', price: 168, stock: 14, onSale: true, category: '美甲' },
-    { id: 'pd22', name: '剑琅指缘护理油', spec: '15ml', price: 58, stock: 26, onSale: true, category: '美甲' },
-    { id: 'pd23', name: '剑琅睫毛胶水', spec: '5ml', price: 78, stock: 2, onSale: true, category: '美睫' },
-    { id: 'pd24', name: '剑琅美睫卸除液', spec: '50ml', price: 48, stock: 18, onSale: true, category: '美睫' },
+    { id: 'pd1', name: '剑琅修护洗发水', spec: '500ml', price: 128, onSale: true, category: '洗护' },
+    { id: 'pd2', name: '剑琅滋养护发素', spec: '500ml', price: 98, onSale: true, category: '洗护' },
+    { id: 'pd3', name: '剑琅头皮护理精华', spec: '100ml', price: 168, onSale: true, category: '护理' },
+    { id: 'pd4', name: '剑琅造型发蜡', spec: '80g', price: 88, onSale: true, category: '造型' },
+    { id: 'pd5', name: '剑琅染发护色套装', spec: '', price: 198, onSale: true, category: '烫染' },
+    { id: 'pd6', name: '剑琅免洗喷雾', spec: '150ml', price: 68, onSale: true, category: '护理' },
+    { id: 'pd7', name: '剑琅儿童温和洗发水', spec: '300ml', price: 78, onSale: false, category: '洗护' },
+    { id: 'pd8', name: '剑琅控油洗发水', spec: '400ml', price: 118, onSale: true, category: '洗护' },
+    { id: 'pd9', name: '剑琅柔顺发膜', spec: '200ml', price: 148, onSale: true, category: '护理' },
+    { id: 'pd10', name: '剑琅护发精油', spec: '50ml', price: 158, onSale: true, category: '护理' },
+    { id: 'pd11', name: '剑琅哑光发泥', spec: '100g', price: 78, onSale: true, category: '造型' },
+    { id: 'pd12', name: '剑琅定型喷雾', spec: '300ml', price: 88, onSale: true, category: '造型' },
+    { id: 'pd13', name: '剑琅漂后修护乳', spec: '250ml', price: 138, onSale: true, category: '烫染' },
+    { id: 'pd14', name: '剑琅护色洗发水', spec: '500ml', price: 138, onSale: true, category: '烫染' },
+    { id: 'pd15', name: '剑琅儿童护发素', spec: '250ml', price: 68, onSale: true, category: '洗护' },
+    { id: 'pd16', name: '剑琅头皮清洁泥', spec: '120g', price: 128, onSale: true, category: '护理' },
+    { id: 'pd17', name: '剑琅旅行装洗护套', spec: '', price: 88, onSale: true, category: '洗护' },
+    { id: 'pd18', name: '剑琅烫后还原霜', spec: '200ml', price: 118, onSale: false, category: '烫染' },
+    { id: 'pd19', name: '剑琅玻尿酸精华液', spec: '30ml', price: 198, onSale: true, category: '美容' },
+    { id: 'pd20', name: '剑琅补水面膜', spec: '5片', price: 88, onSale: true, category: '美容' },
+    { id: 'pd21', name: '剑琅甲油胶套装', spec: '12色', price: 168, onSale: true, category: '美甲' },
+    { id: 'pd22', name: '剑琅指缘护理油', spec: '15ml', price: 58, onSale: true, category: '美甲' },
+    { id: 'pd23', name: '剑琅睫毛胶水', spec: '5ml', price: 78, onSale: true, category: '美睫' },
+    { id: 'pd24', name: '剑琅美睫卸除液', spec: '50ml', price: 48, onSale: true, category: '美睫' },
   ].map(p => ({
     ...p,
     boundToCard: false,
@@ -15696,7 +15986,7 @@ function syncItemHiddenFromSystemGroup(g, bucket) {
   });
 }
 
-/** 项目隐藏时强制关闭「手机端可预约」；取消隐藏不自动恢复 */
+/** 项目隐藏时强制关闭「可预约」；取消隐藏不自动恢复 */
 function applyCatalogHiddenClearsBookable(item, hidden) {
   if (!item || !hidden) return;
   if (item.bookable != null) item.bookable = false;
@@ -15743,7 +16033,7 @@ window.CardCatalogBridge = {
       spec: p.spec || '',
       category: p.category || '产品',
       price: p.price,
-      stock: catalogStockLimit(p),
+      stock: null,
       type: 'product',
       kind: 'product',
     }));
@@ -15999,7 +16289,10 @@ function syncPriceCatalogTabs() {
   });
   document.getElementById('projTableCard')?.classList.toggle('is-product-tab', tab === 'product');
   const emptyAdd = document.getElementById('btnProjEmptyAdd');
-  if (emptyAdd) emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
+  if (emptyAdd) {
+    emptyAdd.textContent = tab === 'product' ? '添加产品' : '添加项目';
+    emptyAdd.classList.toggle('btn-proj-empty-add--dash', tab === 'product');
+  }
   const emptyToGroup = document.getElementById('btnProjEmptyAddToGroup');
   if (emptyToGroup) emptyToGroup.textContent = tab === 'product' ? '添加产品到本组' : '添加项目到本组';
   const nameHead = document.querySelector('#projTableHead [data-col-sort="name"] .table-head__inner');
@@ -20059,10 +20352,6 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
   actions.push(`<button type="button" class="act-sale" data-swipe-act="sale">${saleLabel}</button>`);
   actions.push(`<button type="button" class="act-hide" data-swipe-act="hide">${hideLabel}</button>`);
   actions.push(catalogDeleteBtnHtml(delLocked));
-  const stockVal = isProduct ? catalogStockDisplay(p) : null;
-  const stockHtml = isProduct
-    ? `<div class="stock${stockVal === 0 ? ' is-zero' : ''}">${stockVal == null ? '—' : stockVal}</div>`
-    : '<div class="stock"></div>';
   wrap.innerHTML = `
       <div class="table-row-actions">${actions.join('')}</div>
       <div class="table-row">
@@ -20073,7 +20362,6 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
-        ${stockHtml}
         <div class="price">${projFormatPriceHtml(p.price)}</div>
       </div>`;
   const row = wrap.querySelector('.table-row');
@@ -20219,6 +20507,16 @@ function projRenderList() {
     dragBlockedHiddenTab: inHiddenTab,
     colSortActive: isCatalogColSortActive(),
   });
+  /* 有数据时，列表底部添加入口 */
+  if (canCatalogWrite()) {
+    const addRow = document.createElement('button');
+    addRow.type = 'button';
+    addRow.className = 'catalog-list-add-row catalog-list-add-row--dash';
+    addRow.id = 'btnCatalogListAdd';
+    addRow.innerHTML = `<span class="catalog-list-add-row__plus" aria-hidden="true">+</span><span>${isProduct ? '添加产品' : '添加项目'}</span>`;
+    addRow.addEventListener('click', projOpenAdd);
+    tbody.appendChild(addRow);
+  }
 }
 
 /** 展开「已隐藏」后，将其标题滚到价目表滚动区顶部附近 */
@@ -20390,9 +20688,13 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
   if (!tbody) return;
   const dragBlockedHiddenTab = !!opts.dragBlockedHiddenTab || !!opts.filterActive;
   const colSortActive = !!opts.colSortActive;
-  const dragBlockToast = () => {
+  const dragBlockToastFor = (wrapEl) => {
     if (colSortActive) return '请先取消列排序后再手动排序';
     if (dragBlockedHiddenTab) return '「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组';
+    /* 「全部」底部「已隐藏」折叠区：禁止拖拽排序 */
+    if (String(wrapEl?.dataset?.sortBucket || '').startsWith('hidden-')) {
+      return '已隐藏的项目不支持拖拽排序';
+    }
     return null;
   };
   tbody.querySelectorAll('.table-row-swipe').forEach(wrap => {
@@ -20418,6 +20720,7 @@ function wireCatalogRowInteractions(tbody, opts = {}) {
     let swipeBaseX = 0;
     const bucket = wrap.dataset.sortBucket;
     const openWidth = wrap._swipeOpenWidth || 136;
+    const dragBlockToast = () => dragBlockToastFor(wrap);
 
     const clearPress = () => {
       if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
@@ -20701,36 +21004,14 @@ function projPickNextDemoImage(images) {
   return PROJ_DEMO_IMG_POOL[(images || []).length % PROJ_DEMO_IMG_POOL.length];
 }
 
-/** 价目产品库存上限（与表单 maxlength=6 对齐） */
-const CATALOG_STOCK_MAX = 999999;
-
-/** 库存选填：空串/null/undefined → 未管理（开单不限购）；0 为有效值且不可购 */
-function parseOptionalStock(raw) {
-  if (raw == null) return null;
-  const s = String(raw).trim();
-  if (s === '') return null;
-  if (!/^\d+$/.test(s)) return NaN;
-  const n = parseInt(s, 10);
-  if (n > CATALOG_STOCK_MAX) return NaN;
-  return Math.max(0, n);
-}
-
-/** 列表展示：null → —；含 0 */
-function catalogStockDisplay(p) {
-  if (!p || p.stock == null || p.stock === '') return null;
-  const n = Number(p.stock);
-  if (!Number.isFinite(n)) return null;
-  return Math.max(0, Math.min(CATALOG_STOCK_MAX, Math.round(n)));
-}
-
-/** 开单限购上限：null = 不限购；数字（含 0）= 可购上限 */
-function catalogStockLimit(p) {
-  return catalogStockDisplay(p);
+/** 开单限购：价目产品不再管理库存，恒为不限购 */
+function catalogStockLimit(_p) {
+  return null;
 }
 
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', spec: '', price: '', stock: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
+    return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
   return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
@@ -20739,10 +21020,8 @@ function projProjectToForm(p) {
   const images = projNormalizeImages(p.images, p.hasImage);
   const imageExpanded = images.length > 0;
   if (getCatalogProducts().some(x => x.id === p.id)) {
-    const stockVal = catalogStockDisplay(p);
     return {
       kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price),
-      stock: stockVal == null ? '' : String(stockVal),
       onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded,
     };
   }
@@ -20826,7 +21105,7 @@ function projRenderForm(container, mode) {
   if (!container || !s) return;
   const nameLabel = isProduct ? '产品名称' : '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
-  const imageLabel = '上传封面图（选填）';
+  const imageLabel = isProduct ? '产品封面图（可选）' : '项目封面图（可选）';
   container.innerHTML = `
     <div class="proj-form-stack">
       <div>
@@ -20835,7 +21114,6 @@ function projRenderForm(container, mode) {
           <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
           ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="选填" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
           <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
-          ${isProduct ? `<div class="proj-form-row"><span class="label">库存</span><div class="field"><input type="text" id="fProjStock" inputmode="numeric" pattern="[0-9]*" placeholder="选填" value="${escapeAttr(s.stock == null ? '' : String(s.stock))}" maxlength="6"></div></div>` : ''}
           ${isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
@@ -20849,7 +21127,7 @@ function projRenderForm(container, mode) {
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
           <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale"></button></div></div>
-          ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">手机端可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
+          ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
         </div>
       </div>
       <div>
@@ -20886,14 +21164,6 @@ function projBindFormEvents(container, lockCtx) {
   if (!isProduct) projWireLockToasts(container);
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   container.querySelector('#fProjSpec')?.addEventListener('input', e => { state.projFormState.spec = e.target.value; });
-  const stockEl = container.querySelector('#fProjStock');
-  if (stockEl) {
-    stockEl.addEventListener('input', e => {
-      const v = String(e.target.value || '').replace(/\D/g, '').slice(0, 6);
-      e.target.value = v;
-      state.projFormState.stock = v;
-    });
-  }
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
     priceEl.setAttribute('readonly', 'readonly');
@@ -20907,7 +21177,7 @@ function projBindFormEvents(container, lockCtx) {
   const refreshImgSection = () => {
     const section = container.querySelector('#projImgCollapse')?.closest('.proj-form-row');
     if (!section) return;
-    const label = section.querySelector('.title')?.textContent || '上传封面图（选填）';
+    const label = section.querySelector('.title')?.textContent || (state.projFormKind === 'product' ? '产品封面图（可选）' : '项目封面图（可选）');
     section.outerHTML = projImageUploadSectionHtml(state.projFormState, label);
     wireProjImageSection();
   };
@@ -21017,16 +21287,6 @@ function projValidateForm() {
   const dup = catalog.some(p => p.id !== state.projEditingId && String(p.name || '').trim() === nameNorm);
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
-  if (isProduct) {
-    const stockRaw = String(state.projFormState.stock ?? '').trim();
-    if (stockRaw !== '' && /^\d+$/.test(stockRaw) && parseInt(stockRaw, 10) > CATALOG_STOCK_MAX) {
-      showToast(`库存不能超过 ${CATALOG_STOCK_MAX}`, true);
-      return false;
-    }
-    const stockParsed = parseOptionalStock(state.projFormState.stock);
-    if (Number.isNaN(stockParsed)) { showToast('请填写有效库存（0～' + CATALOG_STOCK_MAX + ' 的整数）', true); return false; }
-    state.projFormState._stockParsed = stockParsed;
-  }
   if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
   if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
@@ -21038,16 +21298,10 @@ function projSaveForm() {
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
   const images = projNormalizeImages(state.projFormState.images, false);
-  const stockParsed = isProduct
-    ? (state.projFormState._stockParsed !== undefined
-      ? state.projFormState._stockParsed
-      : parseOptionalStock(state.projFormState.stock))
-    : null;
   const payload = isProduct ? {
     name: state.projFormState.name.trim(),
     spec: (state.projFormState.spec || '').trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
-    stock: stockParsed,
     onSale: state.projFormState.onSale,
     category: state.projFormState.category || '产品',
     images,
@@ -21064,7 +21318,10 @@ function projSaveForm() {
   };
   if (state.projEditingId) {
     const idx = catalog.findIndex(p => p.id === state.projEditingId);
-    if (idx >= 0) catalog[idx] = { ...catalog[idx], ...payload };
+    if (idx >= 0) {
+      catalog[idx] = { ...catalog[idx], ...payload };
+      if (isProduct) delete catalog[idx].stock;
+    }
     showToast('保存成功');
   } else {
     catalog.push({
@@ -28769,6 +29026,7 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-flow-weikuan': 'flow-weikuan', 'screen-flow-weikuan-repay': 'flow-weikuan-repay',
       'screen-flow-weikuan-detail': 'flow-weikuan-detail', 'screen-flow-weikuan-success': 'flow-weikuan-success',
       'screen-flow-self': 'flow-self', 'screen-flow-self-detail': 'flow-self-detail',
+      'screen-flow-product': 'flow-product',
     };
     const hid = document.getElementById('cartSheetMask')?.classList.contains('open');
     const checkout = document.getElementById('checkoutMask')?.classList.contains('open');
@@ -28838,6 +29096,7 @@ function billingNav(fn) {
       { id: 'flow-weikuan-repay', label: '还款明细', screen: 'screen-flow-weikuan-repay' },
       { id: 'flow-self', label: '自助收银', screen: 'screen-flow-self' },
       { id: 'flow-self-detail', label: '自助详情', screen: 'screen-flow-self-detail' },
+      { id: 'flow-product', label: '产品销量', screen: 'screen-flow-product' },
     ],
   };
   const bizGroup = {
@@ -28877,6 +29136,7 @@ function billingNav(fn) {
       else if (fn === 'weikuan-repay' && window.BillingDemo.openFlowWeikuanRepay) window.BillingDemo.openFlowWeikuanRepay();
       else if (fn === 'self' && window.BillingDemo.openFlowSelf) window.BillingDemo.openFlowSelf();
       else if (fn === 'self-detail' && window.BillingDemo.openFlowSelfDetail) window.BillingDemo.openFlowSelfDetail();
+      else if (fn === 'product' && window.BillingDemo.openFlowProductSales) window.BillingDemo.openFlowProductSales();
     };
   }
   function tryPatch() {
@@ -28968,6 +29228,7 @@ function billingNav(fn) {
       'flow-weikuan-repay': flowNav('weikuan-repay'),
       'flow-self': flowNav('self'),
       'flow-self-detail': flowNav('self-detail'),
+      'flow-product': flowNav('product'),
     });
     if (typeof renderFlowMap === 'function') renderFlowMap();
     return true;
@@ -38613,6 +38874,8 @@ window.__BILLING_EMBEDDED__ = true;
     cart: [],
     billTab: 'project',
     billGroupId: { project: 'all', product: 'all' },
+    billStockPickSelected: {},
+    pendingCatalogAdds: [],
     searchQuery: '',
     cardsExpanded: false,
     billCardGateOpen: false,
@@ -38655,8 +38918,20 @@ window.__BILLING_EMBEDDED__ = true;
     flowDetailId: null,
     flowDetailExpanded: false,
     flowFromSuccess: false,
-    flowFilter: { date: 'all', pay: 'all', guest: 'all' },
+    flowFilter: { date: 'all', pay: 'all', guest: 'all', customStart: '', customEnd: '' },
     flowFilterDraft: null,
+    flowProductRange: 'today',
+    flowProductCustomStart: '',
+    flowProductCustomEnd: '',
+    flowProductSort: 'amount',
+    flowSelfCustomStart: '',
+    flowSelfCustomEnd: '',
+    flowRangeContext: null,
+    flowRangeDraftStart: '',
+    flowRangeDraftEnd: '',
+    flowRangeCalFocus: 'start',
+    flowRangeCalYear: null,
+    flowRangeCalMonth: null,
     flowRefundSelected: [],
     flowEditDraft: null,
     flowEditAddTab: 'project',
@@ -40507,6 +40782,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
   function cartItemBadgeMeta(it) {
     if (isQuickCartItem(it)) return { text: '快', cls: ' detail-item__badge--quick' };
+    if (it.fromStock || it.skuId) return { text: '库', cls: ' detail-item__badge--product' };
     if (it.category === '产品' || it.type === 'product' || it.kind === 'product') {
       return { text: '产', cls: ' detail-item__badge--product' };
     }
@@ -40518,6 +40794,7 @@ window.__BILLING_EMBEDDED__ = true;
 
   function isBillProductItem(item) {
     if (!item) return false;
+    if (item.fromStock || item.skuId) return true;
     if (item.category === '产品' || item.type === 'product' || item.kind === 'product') return true;
     if (typeof getCatalogProducts === 'function' && getCatalogProducts().some(p => p.id === item.id)) return true;
     return false;
@@ -40525,17 +40802,21 @@ window.__BILLING_EMBEDDED__ = true;
 
   /** null = 不限购；数字含 0 = 可购上限 */
   function productStockCap(itemOrId) {
-    const id = typeof itemOrId === 'string' ? itemOrId : itemOrId && itemOrId.id;
+    const item = typeof itemOrId === 'object' && itemOrId ? itemOrId : null;
+    const id = typeof itemOrId === 'string' ? itemOrId : item && item.id;
+    if (item && item.skuId && window.StockStore && Array.isArray(window.StockStore.skus)) {
+      const sku = window.StockStore.skus.find(s => s.id === item.skuId);
+      if (sku) return Math.max(0, Math.round(Number(sku.stock) || 0));
+    }
+    if (item && item.stock != null && item.stock !== '') {
+      const n = Number(item.stock);
+      if (Number.isFinite(n)) return Math.max(0, Math.round(n));
+    }
     if (typeof findCatalogItemById === 'function' && id) {
       const cat = findCatalogItemById(id);
       if (cat && typeof getCatalogProducts === 'function' && getCatalogProducts().some(p => p.id === cat.id)) {
         return typeof catalogStockLimit === 'function' ? catalogStockLimit(cat) : null;
       }
-    }
-    const item = typeof itemOrId === 'object' && itemOrId ? itemOrId : null;
-    if (item && item.stock != null && item.stock !== '') {
-      const n = Number(item.stock);
-      if (Number.isFinite(n)) return Math.max(0, Math.round(n));
     }
     return null;
   }
@@ -40563,16 +40844,237 @@ window.__BILLING_EMBEDDED__ = true;
     return changed;
   }
 
+  function findCatalogProductByNameSpec(name, spec) {
+    const n = String(name || '').trim();
+    const s = String(spec || '').trim();
+    if (!n || typeof getCatalogProducts !== 'function') return null;
+    return getCatalogProducts().find(p => {
+      if (!p || String(p.name || '').trim() !== n) return false;
+      return String(p.spec || '').trim() === s;
+    }) || null;
+  }
+
+  function stockSkuCategoryName(sku) {
+    if (!sku || !window.StockStore) return '产品';
+    const cat = (window.StockStore.categories || []).find(c => c.id === sku.categoryId);
+    return (cat && cat.name) || '产品';
+  }
+
+  function stockSkuDefaultPrice(sku) {
+    if (!sku) return 0;
+    /* P2：从库存添加一律按成本价计入应付 / 写入价目 */
+    const cost = Number(sku.cost);
+    return Number.isFinite(cost) ? round2(Math.max(0, cost)) : 0;
+  }
+
+  function topCatalogProductSortOrder(catalog, count) {
+    const list = Array.isArray(catalog) ? catalog : [];
+    const n = Math.max(1, Number(count) || 1);
+    if (typeof ensureCatalogSortOrder === 'function') ensureCatalogSortOrder(list);
+    const min = list.length ? Math.min(...list.map(p => (p.sortOrder != null ? Number(p.sortOrder) : 0))) : 0;
+    return min - n;
+  }
+
+  function listBillStockSkus() {
+    const skus = (window.StockStore && window.StockStore.skus) || [];
+    return skus.slice().sort((a, b) => {
+      const an = String(a.product || '').localeCompare(String(b.product || ''), 'zh');
+      if (an) return an;
+      return String(a.name || '').localeCompare(String(b.name || ''), 'zh');
+    });
+  }
+
+  function renderBillStockPickSheet() {
+    const root = document.getElementById('billStockPickList');
+    const okBtn = document.getElementById('billStockPickOk');
+    if (!root) return;
+    const selected = state.billStockPickSelected || {};
+    const list = listBillStockSkus();
+    if (!list.length) {
+      root.innerHTML = '<div class="empty-cart">暂无库存商品<br>请先在库存管理中新增</div>';
+      if (okBtn) okBtn.disabled = true;
+      return;
+    }
+    root.innerHTML = list.map(sku => {
+      const on = !!selected[sku.id];
+      const price = stockSkuDefaultPrice(sku);
+      const stock = Math.max(0, Number(sku.stock) || 0);
+      const inCat = !!findCatalogProductByNameSpec(sku.product, sku.name);
+      return `<button type="button" class="bill-stock-pick-row${on ? ' is-on' : ''}" data-bill-stock-sku="${escapeHtml(sku.id)}" ${stock <= 0 ? 'disabled' : ''}>
+        <span class="bill-stock-pick-row__check" aria-hidden="true">${on ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+        <span class="bill-stock-pick-row__main">
+          <span class="bill-stock-pick-row__name">${escapeHtml(sku.product || '')}</span>
+          ${sku.name ? `<span class="bill-stock-pick-row__spec">${escapeHtml(sku.name)}</span>` : ''}
+          <span class="bill-stock-pick-row__meta">库存 ${stock}${sku.unit ? sku.unit : ''}${inCat ? ' · 已在价目表' : ''}</span>
+        </span>
+        <span class="bill-stock-pick-row__price"><span class="bill-stock-pick-row__price-lab">成本</span>${formatYen(price)}</span>
+      </button>`;
+    }).join('');
+    const n = Object.keys(selected).filter(k => selected[k]).length;
+    if (okBtn) {
+      okBtn.disabled = n <= 0;
+      okBtn.textContent = n > 0 ? `加入购物车（${n}）` : '加入购物车';
+    }
+  }
+
+  function openBillStockPick() {
+    state.billStockPickSelected = {};
+    renderBillStockPickSheet();
+    openMask('billStockPickMask');
+  }
+
+  function applyBillStockPick() {
+    const selected = state.billStockPickSelected || {};
+    const ids = Object.keys(selected).filter(k => selected[k]);
+    if (!ids.length) { showToast('请选择库存商品'); return; }
+    let added = 0;
+    ids.forEach(id => {
+      const sku = ((window.StockStore && window.StockStore.skus) || []).find(s => s.id === id);
+      if (!sku) return;
+      const stock = Math.max(0, Number(sku.stock) || 0);
+      if (stock <= 0) return;
+      const price = stockSkuDefaultPrice(sku);
+      const item = {
+        id: 'stock-' + sku.id,
+        skuId: sku.id,
+        name: sku.product || '',
+        spec: sku.name || '',
+        price,
+        unitPrice: price,
+        type: 'product',
+        kind: 'product',
+        category: '产品',
+        fromStock: true,
+        stock,
+      };
+      const row = state.cart.find(x => x.id === item.id);
+      if (row) {
+        if ((row.qty || 0) >= stock) return;
+        setCartQty(item, 1);
+      } else {
+        setCartQty(item, 1);
+      }
+      added += 1;
+    });
+    closeMask('billStockPickMask');
+    state.billStockPickSelected = {};
+    if (added) {
+      showToast(`已添加 ${added} 件库存商品`);
+      syncCartChrome();
+      if (document.getElementById('screen-bill') && !document.getElementById('screen-bill').classList.contains('hidden')) {
+        renderBillCatalog();
+      }
+    }
+  }
+
+  function collectPendingCatalogAddsFromCart() {
+    const pending = [];
+    const seen = new Set();
+    (state.cart || []).forEach(it => {
+      if (!it || !(it.fromStock || it.skuId)) return;
+      if (!isBillProductItem(it)) return;
+      const name = String(it.name || '').trim();
+      const spec = String(it.spec || '').trim();
+      if (!name) return;
+      const key = name + '|' + spec;
+      if (seen.has(key)) return;
+      seen.add(key);
+      if (findCatalogProductByNameSpec(name, spec)) return;
+      pending.push({
+        skuId: it.skuId || '',
+        name,
+        spec,
+        price: round2(lineUnit(it)),
+        category: stockSkuCategoryName(
+          ((window.StockStore && window.StockStore.skus) || []).find(s => s.id === it.skuId)
+        ),
+      });
+    });
+    return pending;
+  }
+
+  function openBillStockToCatalogDialog() {
+    const list = state.pendingCatalogAdds || [];
+    if (!list.length) return;
+    const body = document.getElementById('billStockToCatalogBody');
+    if (body) body.textContent = '将按成本价加入价目表，下次可直接点选。';
+    document.getElementById('billStockToCatalogMask')?.classList.add('show');
+  }
+
+  function closeBillStockToCatalogDialog() {
+    document.getElementById('billStockToCatalogMask')?.classList.remove('show');
+  }
+
+  function confirmBillStockToCatalogAdds() {
+    const list = state.pendingCatalogAdds || [];
+    if (!list.length) {
+      closeBillStockToCatalogDialog();
+      return;
+    }
+    const catalog = typeof getCatalogProducts === 'function' ? getCatalogProducts() : null;
+    if (!Array.isArray(catalog)) {
+      closeBillStockToCatalogDialog();
+      showToast('价目表不可用');
+      return;
+    }
+    const toAdd = list.filter(row => !findCatalogProductByNameSpec(row.name, row.spec));
+    let ord = topCatalogProductSortOrder(catalog, toAdd.length);
+    let n = 0;
+    toAdd.forEach((row) => {
+      const id = typeof projUid === 'function' ? projUid() : ('pd' + Date.now() + n);
+      catalog.unshift({
+        id,
+        name: row.name,
+        spec: row.spec || '',
+        price: round2(Number(row.price) || 0),
+        onSale: true,
+        category: row.category || '产品',
+        sortOrder: ord++,
+        boundToCard: false,
+        boundToCoupon: false,
+        boundToMall: false,
+        hidden: false,
+        boundTemplateIds: [],
+        boundTemplateId: null,
+        boundTemplateNames: [],
+      });
+      if (row.skuId && window.StockStore && Array.isArray(window.StockStore.skus)) {
+        const sku = window.StockStore.skus.find(s => s.id === row.skuId);
+        if (sku) {
+          sku.catalogStock = Math.max(0, Number(sku.stock) || 0);
+          sku.moved = true;
+        }
+      }
+      n += 1;
+    });
+    state.pendingCatalogAdds = [];
+    closeBillStockToCatalogDialog();
+    showToast(n > 0 ? `已按成本价加入价目表 ${n} 件` : '价目表已是最新');
+  }
+
+  function skipBillStockToCatalogAdds() {
+    state.pendingCatalogAdds = [];
+    closeBillStockToCatalogDialog();
+  }
+
   function deductProductStockAfterPay() {
     let changed = false;
     state.cart.forEach(it => {
       if (!isBillProductItem(it)) return;
+      const qty = Math.max(0, Number(it.qty) || 0);
+      if (it.skuId && window.StockStore && Array.isArray(window.StockStore.skus)) {
+        const sku = window.StockStore.skus.find(s => s.id === it.skuId);
+        if (sku) {
+          sku.stock = Math.max(0, (Number(sku.stock) || 0) - qty);
+          sku.moved = true;
+          changed = true;
+        }
+      }
       if (typeof findCatalogItemById !== 'function') return;
       const cat = findCatalogItemById(it.id);
       if (!cat || typeof getCatalogProducts !== 'function' || !getCatalogProducts().some(p => p.id === cat.id)) return;
       const cap = typeof catalogStockLimit === 'function' ? catalogStockLimit(cat) : null;
       if (cap == null) return;
-      const qty = Math.max(0, Number(it.qty) || 0);
       cat.stock = Math.max(0, cap - qty);
       changed = true;
     });
@@ -41015,6 +41517,7 @@ window.__BILLING_EMBEDDED__ = true;
           <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
           <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
         </div>
+        ${state.billTab === 'product' ? `<button type="button" class="bill-stock-entry" id="btnBillStockAdd"><svg class="bill-stock-entry__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5v-7Z"/><path d="M3 8.5 12 14l9-5.5"/><path d="M12 14v7"/></svg>从库存添加</button>` : ''}
         <div class="catalog-group-bar pick-group-bar bill-group-bar" id="billGroupBar">
           <div class="catalog-group-segment">
             <div class="catalog-group-scroll" id="billGroupTabs" role="tablist" aria-label="价目分组"></div>
@@ -41138,7 +41641,7 @@ window.__BILLING_EMBEDDED__ = true;
       return `
       <div class="catalog-item" style="padding:12px 16px">
         <div class="catalog-item__info">
-          <div class="catalog-item__name">${escapeHtml(it.name)}</div>
+          <div class="catalog-item__name">${escapeHtml(it.name)}${it.spec ? `<span style="font-weight:400;color:var(--text-sec)">（${escapeHtml(it.spec)}）</span>` : ''}${it.fromStock ? '<span style="margin-left:6px;font-size:11px;color:var(--brand);font-weight:500">库存</span>' : ''}</div>
           <div class="catalog-item__cat num">${formatYen(lineUnit(it))} × ${it.qty}${cap != null ? ` · 库存 ${cap}` : ''}</div>
         </div>
         <div class="catalog-item__price num">${formatYen(lineUnit(it) * it.qty)}</div>
@@ -42998,6 +43501,9 @@ window.__BILLING_EMBEDDED__ = true;
   function flowIconSelf() {
     return '<img class="flow-hub-card__icon-img" src="assets/flow/self.svg" alt="" width="40" height="40" draggable="false" />';
   }
+  function flowIconProduct() {
+    return '<img class="flow-hub-card__icon-img" src="assets/flow/product.svg" alt="" width="40" height="40" draggable="false" />';
+  }
   function flowIconMall() {
     return '<img class="flow-hub-card__icon-img" src="assets/flow/mall.svg" alt="" width="40" height="40" draggable="false" />';
   }
@@ -43080,23 +43586,306 @@ window.__BILLING_EMBEDDED__ = true;
   }
   alignDemoFlowClocks();
 
-  function flowMatchDateFilter(o, dateMode) {
+  function flowMatchDateFilter(o, dateMode, customStart, customEnd) {
     if (!dateMode || dateMode === 'all') return true;
     const day = flowParseDay(o.time);
+    if (!day) return false;
     if (dateMode === 'today') return day === flowTodayKey();
+    if (dateMode === 'yesterday') return day === flowDaysAgoKey(1);
     if (dateMode === '7d') return day >= flowDaysAgoKey(6) && day <= flowTodayKey();
+    if (dateMode === '30d') return day >= flowDaysAgoKey(29) && day <= flowTodayKey();
+    if (dateMode === 'custom' || dateMode === 'other') {
+      const start = customStart || '';
+      const end = customEnd || '';
+      if (!start || !end) return true;
+      return day >= start && day <= end;
+    }
     return true;
   }
 
   function flowApplySheetFilter(list) {
     const f = state.flowFilter || { date: 'all', pay: 'all', guest: 'all' };
     return list.filter(o => {
-      if (!flowMatchDateFilter(o, f.date)) return false;
+      if (!flowMatchDateFilter(o, f.date, f.customStart, f.customEnd)) return false;
       if (f.pay && f.pay !== 'all' && o.payMethod !== f.pay) return false;
       if (f.guest === 'guest' && o.customerId) return false;
       if (f.guest === 'member' && !o.customerId) return false;
       return true;
     });
+  }
+
+  function flowFmtDotFromKey(key) {
+    const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return '';
+    return `${m[1]}.${m[2]}.${m[3]}`;
+  }
+
+  function flowFmtShortRange(start, end) {
+    const a = String(start || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const b = String(end || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!a || !b) return '自定义';
+    const left = `${Number(a[2])}.${Number(a[3])}`;
+    const right = `${Number(b[2])}.${Number(b[3])}`;
+    return left === right ? left : `${left}–${right}`;
+  }
+
+  function flowParseProductLine(it) {
+    if (!it) return null;
+    const isProduct = it.type === 'product' || it.kind === 'product' || it.category === '产品';
+    if (!isProduct) return null;
+    let name = String(it.name || '').trim();
+    let spec = String(it.spec || '').trim();
+    const m = name.match(/^(.+?)\s*[（(]([^）)]+)[）)]\s*$/);
+    if (m) {
+      if (!spec) spec = m[2].trim();
+      name = m[1].trim();
+    }
+    const catalog = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []).find(p => {
+      if (!p) return false;
+      if (it.id && p.id === it.id) return true;
+      if (p.name === name && (!spec || String(p.spec || '') === spec)) return true;
+      return false;
+    });
+    if (catalog) {
+      name = catalog.name || name;
+      if (!spec && catalog.spec) spec = String(catalog.spec).trim();
+    }
+    const qty = Math.max(1, Number(it.qty) || 1);
+    const unit = Number(it.price != null ? it.price : it.unitPrice) || 0;
+    return {
+      key: `${name}|${spec}`,
+      name,
+      spec,
+      qty,
+      amount: round2(unit * qty),
+      catalogId: catalog ? catalog.id : '',
+    };
+  }
+
+  function flowCollectProductSales(opts) {
+    opts = opts || {};
+    const dateMode = opts.dateMode || 'today';
+    const customStart = opts.customStart || '';
+    const customEnd = opts.customEnd || '';
+    const map = new Map();
+    const pushOrder = (o) => {
+      if (!o || !flowIsActiveOrder(o)) return;
+      if (!flowMatchDateFilter(o, dateMode, customStart, customEnd)) return;
+      (o.items || []).forEach((it) => {
+        const line = flowParseProductLine(it);
+        if (!line) return;
+        const prev = map.get(line.key);
+        if (prev) {
+          prev.qty += line.qty;
+          prev.amount = round2(prev.amount + line.amount);
+        } else {
+          map.set(line.key, Object.assign({}, line));
+        }
+      });
+    };
+    (FLOW_ORDERS || []).forEach(pushOrder);
+    (FLOW_SELF_ORDERS || []).forEach(pushOrder);
+    let rows = Array.from(map.values());
+    const sort = opts.sort || 'amount';
+    rows.sort((a, b) => {
+      if (sort === 'qty') return (b.qty - a.qty) || (b.amount - a.amount) || a.name.localeCompare(b.name, 'zh');
+      return (b.amount - a.amount) || (b.qty - a.qty) || a.name.localeCompare(b.name, 'zh');
+    });
+    const totalQty = rows.reduce((s, r) => s + r.qty, 0);
+    const totalAmt = round2(rows.reduce((s, r) => s + r.amount, 0));
+    return { rows, totalQty, totalAmt };
+  }
+
+  function flowProductRangeLabel(id) {
+    if (id === 'other' || id === 'custom') {
+      return flowFmtShortRange(state.flowProductCustomStart, state.flowProductCustomEnd);
+    }
+    const map = { today: '今天', yesterday: '昨天', '7d': '7天', '30d': '30天' };
+    return map[id] || '今天';
+  }
+
+  function openFlowRangeSheet(context) {
+    state.flowRangeContext = context || 'product';
+    let start = '';
+    let end = '';
+    if (context === 'self') {
+      start = state.flowSelfCustomStart || '';
+      end = state.flowSelfCustomEnd || '';
+    } else if (context === 'filter') {
+      const draft = state.flowFilterDraft || state.flowFilter || {};
+      start = draft.customStart || '';
+      end = draft.customEnd || '';
+    } else {
+      start = state.flowProductCustomStart || '';
+      end = state.flowProductCustomEnd || '';
+    }
+    state.flowRangeDraftStart = start;
+    state.flowRangeDraftEnd = end;
+    state.flowRangeCalFocus = start && !end ? 'end' : 'start';
+    const anchor = (end || start || flowTodayKey()).match(/^(\d{4})-(\d{2})/);
+    state.flowRangeCalYear = anchor ? Number(anchor[1]) : new Date().getFullYear();
+    state.flowRangeCalMonth = anchor ? Number(anchor[2]) - 1 : new Date().getMonth();
+    renderFlowRangeChrome();
+    renderFlowRangeCalendar();
+    const rangeMask = document.getElementById('flowRangeMask');
+    /* 提到同级遮罩最后，避免与筛选 Sheet 同层时仍被盖住 */
+    if (rangeMask && rangeMask.parentElement) {
+      rangeMask.parentElement.appendChild(rangeMask);
+    }
+    if (context === 'filter') {
+      const filterMask = document.getElementById('flowFilterMask');
+      if (filterMask) {
+        filterMask.classList.add('is-covered');
+        filterMask.style.pointerEvents = 'none';
+      }
+    }
+    openMask('flowRangeMask');
+  }
+
+  function renderFlowRangeChrome() {
+    const start = state.flowRangeDraftStart;
+    const end = state.flowRangeDraftEnd;
+    const focus = state.flowRangeCalFocus || 'start';
+    const rangeEl = document.getElementById('flowRangeCalRange');
+    if (rangeEl) {
+      const chip = (kind, label, key) => {
+        const on = focus === kind ? ' is-on' : '';
+        const val = key
+          ? `<span class="flow-balance-cal-chip__val">${escapeHtml(flowFmtDotFromKey(key))}</span>`
+          : '<span class="flow-balance-cal-chip__val is-placeholder">请选择</span>';
+        return `<button type="button" class="flow-balance-cal-chip${on}" data-flow-cal-focus="${kind}"><span class="flow-balance-cal-chip__label">${label}</span>${val}</button>`;
+      };
+      rangeEl.innerHTML = chip('start', '开始日期', start) +
+        '<span class="flow-balance-cal-sep">至</span>' +
+        chip('end', '结束日期', end);
+    }
+    const hint = document.getElementById('flowRangeCalHint');
+    if (hint) {
+      if (!start) hint.textContent = '请选择开始日期（今天往前 90 天内）';
+      else if (!end) hint.textContent = '请选择结束日期';
+      else hint.textContent = '可重新点击日期调整范围';
+    }
+    const okBtn = document.getElementById('flowRangeOk');
+    if (okBtn) okBtn.disabled = !(start && end);
+  }
+
+  function renderFlowRangeCalendar() {
+    const cal = document.getElementById('flowRangeCal');
+    if (!cal) return;
+    let y = state.flowRangeCalYear;
+    let m = state.flowRangeCalMonth;
+    if (y == null || m == null) {
+      const today = flowTodayKey().split('-');
+      y = Number(today[0]);
+      m = Number(today[1]) - 1;
+      state.flowRangeCalYear = y;
+      state.flowRangeCalMonth = m;
+    }
+    const minK = flowDaysAgoKey(89);
+    const maxK = flowTodayKey();
+    const minP = minK.split('-').map(Number);
+    const maxP = maxK.split('-').map(Number);
+    const canPrev = !(y === minP[0] && m === minP[1] - 1);
+    const canNext = !(y === maxP[0] && m === maxP[1] - 1);
+    const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+    const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const startK = state.flowRangeDraftStart;
+    const endK = state.flowRangeDraftEnd;
+    const todayK = flowTodayKey();
+    const cells = [];
+    for (let i = 0; i < firstDow; i++) {
+      cells.push('<span class="flow-balance-cal__day is-muted" aria-hidden="true"></span>');
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const disabled = key < minK || key > maxK;
+      const isStart = !!(startK && key === startK);
+      const isEnd = !!(endK && key === endK);
+      const inRange = !!(startK && endK && key >= startK && key <= endK);
+      /* 仅选开始日时也高亮端点（对齐支出 range 日历） */
+      const cls = [
+        'flow-balance-cal__day',
+        disabled ? 'is-disabled' : '',
+        isStart ? 'is-range-start' : '',
+        isEnd ? 'is-range-end' : '',
+        (inRange || (isStart && !endK)) ? 'is-in-range' : '',
+        (isStart && !endK) ? 'is-selected' : '',
+        key === todayK ? 'is-today' : '',
+      ].filter(Boolean).join(' ');
+      cells.push(disabled
+        ? `<span class="${cls}" aria-hidden="true"><span class="flow-balance-cal__day-num">${d}</span></span>`
+        : `<button type="button" class="${cls}" data-flow-cal-day="${key}" aria-label="${key}"><span class="flow-balance-cal__day-num">${d}</span></button>`);
+    }
+    cal.innerHTML = `
+      <div class="flow-balance-cal__nav">
+        <button type="button" class="flow-balance-cal__nav-btn" data-flow-cal-nav="-1" ${canPrev ? '' : 'disabled'} aria-label="上一月">${chevL}</button>
+        <div class="flow-balance-cal__title">${y}年${m + 1}月</div>
+        <button type="button" class="flow-balance-cal__nav-btn" data-flow-cal-nav="1" ${canNext ? '' : 'disabled'} aria-label="下一月">${chevR}</button>
+      </div>
+      <div class="flow-balance-cal__weekdays">${weekdays.map(w => `<div class="flow-balance-cal__wd">${w}</div>`).join('')}</div>
+      <div class="flow-balance-cal__grid">${cells.join('')}</div>`;
+  }
+
+  function pickFlowRangeDay(key) {
+    if (!key) return;
+    const focus = state.flowRangeCalFocus || 'start';
+    if (focus === 'start' || !state.flowRangeDraftStart) {
+      state.flowRangeDraftStart = key;
+      state.flowRangeDraftEnd = '';
+      state.flowRangeCalFocus = 'end';
+    } else if (focus === 'end') {
+      if (key < state.flowRangeDraftStart) {
+        state.flowRangeDraftEnd = state.flowRangeDraftStart;
+        state.flowRangeDraftStart = key;
+      } else {
+        state.flowRangeDraftEnd = key;
+      }
+      state.flowRangeCalFocus = 'end';
+    }
+    renderFlowRangeChrome();
+    renderFlowRangeCalendar();
+  }
+
+  function restoreFlowFilterCover() {
+    const filterMask = document.getElementById('flowFilterMask');
+    if (!filterMask) return;
+    filterMask.classList.remove('is-covered');
+    filterMask.style.pointerEvents = '';
+  }
+
+  function applyFlowRangeSheet() {
+    const start = state.flowRangeDraftStart;
+    const end = state.flowRangeDraftEnd;
+    if (!start || !end) return;
+    const ctx = state.flowRangeContext || 'product';
+    closeMask('flowRangeMask');
+    restoreFlowFilterCover();
+    if (ctx === 'self') {
+      state.flowSelfCustomStart = start;
+      state.flowSelfCustomEnd = end;
+      state.flowSelfDate = 'custom';
+      renderFlowSelf();
+    } else if (ctx === 'filter') {
+      if (!state.flowFilterDraft) state.flowFilterDraft = Object.assign({}, state.flowFilter);
+      state.flowFilterDraft.date = 'custom';
+      state.flowFilterDraft.customStart = start;
+      state.flowFilterDraft.customEnd = end;
+      renderFlowFilterSheet();
+    } else {
+      state.flowProductCustomStart = start;
+      state.flowProductCustomEnd = end;
+      state.flowProductRange = 'other';
+      renderFlowProductSales();
+    }
+  }
+
+  function cancelFlowRangeSheet() {
+    closeMask('flowRangeMask');
+    restoreFlowFilterCover();
+    state.flowRangeContext = null;
   }
 
   function flowIsActiveOrder(o) {
@@ -43477,6 +44266,7 @@ window.__BILLING_EMBEDDED__ = true;
     const selfCount = FLOW_SELF_ORDERS.length;
     const stats = getFlowHubDemoStats();
     const selfAmt = FLOW_SELF_ORDERS.reduce((s, o) => s + (Number(o.amount) || 0), 0);
+    const prodToday = flowCollectProductSales({ dateMode: 'today', sort: 'amount' });
     const body = document.getElementById('flowHubBody');
     if (!body) return;
     body.innerHTML = `
@@ -43510,8 +44300,79 @@ window.__BILLING_EMBEDDED__ = true;
               <span class="flow-hub-card__sub">收款 <span class="flow-hub-card__sub-amt">${flowHubFormatYen(selfAmt)}</span></span>
             </span>
           </button>
+          <button type="button" class="flow-hub-card flow-hub-card--lg" data-flow-hub="product" aria-label="进入产品销量">
+            <span class="flow-hub-card__icon" aria-hidden="true">${flowIconProduct()}</span>
+            <span class="flow-hub-card__body">
+              <span class="flow-hub-card__title-row">
+                <span class="flow-hub-card__title">产品销量</span>
+                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
+              </span>
+              <span class="flow-hub-card__metric">
+                <span class="flow-hub-card__val">${prodToday.totalQty}</span>
+                <span class="flow-hub-card__unit">件</span>
+              </span>
+              <span class="flow-hub-card__sub">销售额 <span class="flow-hub-card__sub-amt">${flowHubFormatYen(prodToday.totalAmt)}</span></span>
+            </span>
+          </button>
         </div>
       </div>`;
+  }
+
+  function renderFlowProductSales() {
+    const rangeEl = document.getElementById('flowProductRange');
+    const range = state.flowProductRange || 'today';
+    const tabs = [
+      { id: 'today', label: '今天' },
+      { id: 'yesterday', label: '昨天' },
+      { id: '7d', label: '7天' },
+      { id: '30d', label: '30天' },
+      { id: 'other', label: range === 'other' ? flowProductRangeLabel('other') : '自定义' },
+    ];
+    if (rangeEl) {
+      rangeEl.innerHTML = tabs.map(t => (
+        `<button type="button" class="flow-prod-range__btn${range === t.id ? ' on' : ''}" data-flow-prod-range="${t.id}" role="tab" aria-selected="${range === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}</button>`
+      )).join('');
+    }
+    const dateMode = range === 'other' ? 'custom' : range;
+    const data = flowCollectProductSales({
+      dateMode,
+      customStart: state.flowProductCustomStart,
+      customEnd: state.flowProductCustomEnd,
+      sort: state.flowProductSort || 'amount',
+    });
+    const body = document.getElementById('flowProductBody');
+    if (!body) return;
+    const sortLabel = (state.flowProductSort || 'amount') === 'qty' ? '按销量' : '按销售额';
+    const rangeHint = range === 'other' && state.flowProductCustomStart && state.flowProductCustomEnd
+      ? `<div class="flow-prod-sum__meta" style="margin:0 16px 8px;padding-top:0">统计：${escapeHtml(flowFmtShortRange(state.flowProductCustomStart, state.flowProductCustomEnd))}</div>`
+      : '';
+    const sum = `
+      <div class="flow-prod-sum">
+        <div class="flow-prod-sum__meta">共 <strong>${data.totalQty}</strong> 件 · 销售额 <strong>${flowHubFormatYen(data.totalAmt)}</strong></div>
+        <button type="button" class="flow-prod-sum__sort" id="flowProductSortBtn" aria-label="切换排序">${escapeHtml(sortLabel)} ↕</button>
+      </div>${rangeHint}`;
+    if (!data.rows.length) {
+      body.innerHTML = sum + flowEmptyHtml('暂无产品销售', '所选时段内没有产品成交记录');
+      return;
+    }
+    body.innerHTML = sum + `<div class="flow-prod-list">${data.rows.map(r => `
+      <div class="flow-prod-row">
+        <div class="flow-prod-row__main">
+          <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
+          ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
+        </div>
+        <div class="flow-prod-row__metrics">
+          <div class="flow-prod-row__qty">${r.qty}件</div>
+          <div class="flow-prod-row__amt">${flowHubFormatYen(r.amount)}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  function openFlowProductSales() {
+    if (!state.flowProductRange) state.flowProductRange = 'today';
+    if (!state.flowProductSort) state.flowProductSort = 'amount';
+    renderFlowProductSales();
+    showOnlyScreen('screen-flow-product');
   }
 
   function renderFlowList() {
@@ -43759,34 +44620,35 @@ window.__BILLING_EMBEDDED__ = true;
     { id: 'month', label: '本月' },
   ];
   const BIZ_PIE_COLORS = {
-    prestore: '#F32F41',
-    revenue: '#C4A35A',
-    expense: '#8A9199',
-    p1: '#F32F41', p2: '#E85D4C', p3: '#F0A070',
-    r1: '#C4A35A', r2: '#A67C2D', r3: '#D4B96A',
-    e1: '#6B7280', e2: '#9CA3AF', e3: '#4B5563', e4: '#B0B6BE', e5: '#7C8491',
+    /* 马卡龙主色：充值粉 / 营收橙 / 支出灰 */
+    prestore: '#F7A8B8',
+    revenue: '#FFB27A',
+    expense: '#A8AEB5',
+    p1: '#F7A8B8', p2: '#FFC4A8', p3: '#FFD6A5',
+    r1: '#FFB27A', r2: '#FFC89A', r3: '#FFD4A8',
+    e1: '#A8AEB5', e2: '#B8BEC4', e3: '#9CA3AB', e4: '#C4C8CE', e5: '#8E959E',
   };
   const BIZ_PIE_GRADS = {
-    prestore: ['#F32F41', '#FF8A3D'],
-    revenue: ['#C4A35A', '#A67C2D'],
-    expense: ['#A8AEB5', '#6B7280'],
-    issue: ['#F32F41', '#FF6B7A'],
-    recharge: ['#E85D4C', '#FF8A3D'],
-    renew: ['#F0A070', '#FFB088'],
-    service: ['#C4A35A', '#D4B96A'],
-    product: ['#A67C2D', '#C4A35A'],
-    consume: ['#B8953E', '#D4B96A'],
-    p1: ['#F32F41', '#FF6B7A'],
-    p2: ['#E85D4C', '#FF8A3D'],
-    p3: ['#F0A070', '#FFB088'],
-    r1: ['#C4A35A', '#D4B96A'],
-    r2: ['#A67C2D', '#C4A35A'],
-    r3: ['#B8953E', '#D4B96A'],
-    e1: ['#8A9199', '#5C636A'],
-    e2: ['#A8AEB5', '#7C8491'],
-    e3: ['#6B7280', '#4B5563'],
-    e4: ['#B0B6BE', '#8A9199'],
-    e5: ['#7C8491', '#5C636A'],
+    prestore: ['#FFB7C5', '#FFE0E8'],
+    revenue: ['#FF9F5A', '#FFD2A8'],
+    expense: ['#9CA3AB', '#D5D8DC'],
+    issue: ['#FFB7C5', '#FFD6E0'],
+    recharge: ['#FFC4A8', '#FFE8DC'],
+    renew: ['#FFD6A5', '#FFF0D6'],
+    service: ['#FF9F5A', '#FFC898'],
+    product: ['#FFB27A', '#FFD8B0'],
+    consume: ['#FFC089', '#FFE4C4'],
+    p1: ['#FFB7C5', '#FFD6E0'],
+    p2: ['#FFC4A8', '#FFE8DC'],
+    p3: ['#FFD6A5', '#FFF0D6'],
+    r1: ['#FF9F5A', '#FFC898'],
+    r2: ['#FFB27A', '#FFD8B0'],
+    r3: ['#FFC089', '#FFE4C4'],
+    e1: ['#9CA3AB', '#D0D4D8'],
+    e2: ['#B0B6BC', '#DCE0E4'],
+    e3: ['#8A9199', '#C5CAD0'],
+    e4: ['#C0C5CA', '#E4E7EA'],
+    e5: ['#7C8491', '#B8BEC6'],
   };
 
   function bizPieGradPair(slice) {
@@ -43796,7 +44658,7 @@ window.__BILLING_EMBEDDED__ = true;
       if (key && BIZ_PIE_GRADS[key]) return BIZ_PIE_GRADS[key];
       return [slice.color, slice.color];
     }
-    return ['#8A9199', '#6B7280'];
+    return ['#A8AEB5', '#D5D8DC'];
   }
 
   function bizPeriodFactor(period) {
@@ -43889,13 +44751,15 @@ window.__BILLING_EMBEDDED__ = true;
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   }
 
-  function bizDonutSlicePath(cx, cy, rOut, rIn, a0, a1) {
-    const large = (a1 - a0) > 180 ? 1 : 0;
-    const p0 = bizPolar(cx, cy, rOut, a0);
-    const p1 = bizPolar(cx, cy, rOut, a1);
-    const p2 = bizPolar(cx, cy, rIn, a1);
-    const p3 = bizPolar(cx, cy, rIn, a0);
-    return `M ${p0.x} ${p0.y} A ${rOut} ${rOut} 0 ${large} 1 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${rIn} ${rIn} 0 ${large} 0 ${p3.x} ${p3.y} Z`;
+  function bizPieSlicePath(cx, cy, r, a0, a1) {
+    const sweep = a1 - a0;
+    if (sweep >= 359.9) {
+      return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx} ${cy + r} A ${r} ${r} 0 1 1 ${cx} ${cy - r} Z`;
+    }
+    const large = sweep > 180 ? 1 : 0;
+    const p0 = bizPolar(cx, cy, r, a0);
+    const p1 = bizPolar(cx, cy, r, a1);
+    return `M ${cx} ${cy} L ${p0.x.toFixed(2)} ${p0.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} Z`;
   }
 
   function bizPiePrefersReducedMotion() {
@@ -43905,7 +44769,10 @@ window.__BILLING_EMBEDDED__ = true;
 
   function setBizPieActive(root, id) {
     if (!root) return;
-    root.querySelectorAll('.biz-pie-arc').forEach((el) => {
+    root.querySelectorAll('.biz-pie-slice').forEach((el) => {
+      el.classList.toggle('is-active', !!id && el.dataset.bizPie === id);
+    });
+    root.querySelectorAll('.biz-pie-anno').forEach((el) => {
       el.classList.toggle('is-active', !!id && el.dataset.bizPie === id);
     });
     root.querySelectorAll('.biz-pie-legend__row').forEach((el) => {
@@ -43915,77 +44782,120 @@ window.__BILLING_EMBEDDED__ = true;
 
   function queueBizPieArcEnter(root) {
     if (!root) return;
-    const arcs = root.querySelectorAll('.biz-pie-arc');
-    if (!arcs.length) return;
+    const nodes = root.querySelectorAll('.biz-pie-slice, .biz-pie-anno');
+    if (!nodes.length) return;
     if (bizPiePrefersReducedMotion()) {
-      arcs.forEach((el) => {
-        const len = Number(el.dataset.arcLen) || 0;
-        const c = Number(el.dataset.arcC) || 1;
-        el.style.strokeDasharray = `${len.toFixed(2)} ${(c - len).toFixed(2)}`;
-      });
+      nodes.forEach((el) => { el.style.opacity = '1'; });
       return;
     }
-    arcs.forEach((el, i) => {
-      const len = Number(el.dataset.arcLen) || 0;
-      const c = Number(el.dataset.arcC) || 1;
-      el.style.strokeDasharray = `0 ${c.toFixed(2)}`;
+    nodes.forEach((el, i) => {
       el.style.opacity = '0';
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          el.style.transition = `stroke-dasharray .55s cubic-bezier(.2,.8,.2,1) ${40 + i * 70}ms, opacity .35s ease ${40 + i * 70}ms`;
-          el.style.strokeDasharray = `${len.toFixed(2)} ${(c - len).toFixed(2)}`;
+          el.style.transition = `opacity .4s ease ${30 + i * 45}ms`;
           el.style.opacity = '1';
         });
       });
     });
   }
 
+  function bizPiePackLabelYs(items, minY, maxY, gap) {
+    if (!items.length) return;
+    items.sort((a, b) => a.idealY - b.idealY);
+    items[0].labelY = Math.max(minY, Math.min(maxY, items[0].idealY));
+    for (let i = 1; i < items.length; i++) {
+      const prev = items[i - 1].labelY;
+      items[i].labelY = Math.max(prev + gap, Math.min(maxY, items[i].idealY));
+    }
+    for (let i = items.length - 2; i >= 0; i--) {
+      const next = items[i + 1].labelY;
+      items[i].labelY = Math.min(items[i].labelY, next - gap);
+      items[i].labelY = Math.max(minY, items[i].labelY);
+    }
+  }
+
   function bizPieSvgHtml(slices, opts) {
-    const total = slices.reduce((s, x) => s + (Number(x.amount) || 0), 0) || 1;
-    const cx = 100;
-    const cy = 100;
-    const r = 76;
-    const c = 2 * Math.PI * r;
-    const gapPx = slices.length > 1 ? 5 : 0;
+    const list = (slices || []).filter((x) => (Number(x.amount) || 0) > 0);
+    const total = list.reduce((s, x) => s + (Number(x.amount) || 0), 0) || 1;
     const clickable = !!(opts && opts.clickable);
     const uid = 'bizPie' + Math.random().toString(36).slice(2, 8);
-    let offset = 0;
+    const vbW = 340;
+    const vbH = 268;
+    const cx = 170;
+    const cy = 134;
+    const r = 68;
+    const elbowR = r + 12;
+    const gapDeg = list.length > 1 ? 1.4 : 0;
+    let ang = 0;
     const grads = [];
-    const arcs = slices.map((sl, idx) => {
+    const sliceMeta = list.map((sl, idx) => {
       const pair = bizPieGradPair(sl);
       const gid = `${uid}-g${idx}`;
       grads.push(`<linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="${escapeHtml(pair[0])}"/>
         <stop offset="100%" stop-color="${escapeHtml(pair[1])}"/>
       </linearGradient>`);
-      const raw = Math.max(0.01, (sl.amount / total) * c - gapPx);
-      const len = Math.max(0.5, raw);
-      const dashOffset = -offset;
-      offset += len + gapPx;
+      const sweep = (sl.amount / total) * 360;
+      const a0 = ang + gapDeg / 2;
+      const a1 = ang + sweep - gapDeg / 2;
+      const mid = (a0 + a1) / 2;
+      ang += sweep;
       const pct = Math.round(sl.amount / total * 100);
-      return `<circle class="biz-pie-arc" data-biz-pie="${escapeHtml(sl.id)}" data-arc-len="${len.toFixed(2)}" data-arc-c="${c.toFixed(2)}"
-        cx="${cx}" cy="${cy}" r="${r}" stroke="url(#${gid})"
-        stroke-dasharray="0 ${c.toFixed(2)}" stroke-dashoffset="${dashOffset.toFixed(2)}"
-        transform="rotate(-90 ${cx} ${cy})"
+      const rim = bizPolar(cx, cy, r, mid);
+      const elbow = bizPolar(cx, cy, elbowR, mid);
+      const side = Math.cos((mid - 90) * Math.PI / 180) >= 0 ? 'right' : 'left';
+      return {
+        sl, gid, pair, a0, a1, mid, pct, rim, elbow, side,
+        idealY: elbow.y,
+        color: pair[0],
+      };
+    });
+
+    const leftItems = sliceMeta.filter((x) => x.side === 'left');
+    const rightItems = sliceMeta.filter((x) => x.side === 'right');
+    bizPiePackLabelYs(leftItems, 28, vbH - 28, 46);
+    bizPiePackLabelYs(rightItems, 28, vbH - 28, 46);
+
+    const paths = sliceMeta.map((m) => {
+      const d = bizPieSlicePath(cx, cy, r, m.a0, m.a1);
+      return `<path class="biz-pie-slice" data-biz-pie="${escapeHtml(m.sl.id)}"
+        d="${d}" fill="url(#${m.gid})"
         tabindex="${clickable ? '0' : '-1'}" role="${clickable ? 'button' : 'img'}"
-        aria-label="${escapeHtml(sl.label)} ${flowHubFormatYen(sl.amount)}，占比 ${pct}%"></circle>`;
+        aria-label="${escapeHtml(m.sl.label)} ${flowHubFormatYen(m.sl.amount)}，占比 ${m.pct}%"></path>`;
     }).join('');
-    const coreLabel = (opts && opts.coreLabel) || '资金合计';
-    const coreVal = flowHubFormatYen((opts && opts.coreAmount != null) ? opts.coreAmount : slices.reduce((s, x) => s + x.amount, 0));
+
+    const annos = sliceMeta.map((m) => {
+      const isRight = m.side === 'right';
+      /* 引线终点：色点贴在文案内侧，颜色与扇区一致，便于对应 */
+      let joinX = isRight
+        ? Math.max(m.elbow.x + 10, cx + r + 10)
+        : Math.min(m.elbow.x - 10, cx - r - 10);
+      joinX = Math.max(22, Math.min(vbW - 22, joinX));
+      const textX = isRight ? joinX + 9 : joinX - 9;
+      const anchor = isRight ? 'start' : 'end';
+      const pts = `${m.rim.x.toFixed(1)},${m.rim.y.toFixed(1)} ${m.elbow.x.toFixed(1)},${m.elbow.y.toFixed(1)} ${joinX.toFixed(1)},${m.labelY.toFixed(1)}`;
+      const nameY = m.labelY - 12;
+      return `<g class="biz-pie-anno" data-biz-pie="${escapeHtml(m.sl.id)}">
+        <polyline class="biz-pie-leader" points="${pts}" stroke="${escapeHtml(m.color)}"></polyline>
+        <circle class="biz-pie-leader-dot" cx="${joinX.toFixed(1)}" cy="${m.labelY.toFixed(1)}" r="3.5" fill="${escapeHtml(m.color)}"></circle>
+        <text class="biz-pie-label" text-anchor="${anchor}">
+          <tspan class="biz-pie-label__name" x="${textX.toFixed(1)}" y="${nameY}">${escapeHtml(m.sl.label)}</tspan>
+          <tspan class="biz-pie-label__amt" x="${textX.toFixed(1)}" dy="15">${flowHubFormatYen(m.sl.amount)}</tspan>
+          <tspan class="biz-pie-label__pct" x="${textX.toFixed(1)}" dy="14">${m.pct}%</tspan>
+        </text>
+      </g>`;
+    }).join('');
+
     return `<div class="biz-pie-svg-wrap biz-pie-enter">
-      <svg viewBox="0 0 200 200" aria-hidden="true">
+      <svg viewBox="0 0 ${vbW} ${vbH}" aria-hidden="true">
         <defs>${grads.join('')}</defs>
-        <circle class="biz-pie-track" cx="${cx}" cy="${cy}" r="${r}"></circle>
-        ${arcs}
+        ${paths}
+        ${annos}
       </svg>
-      <div class="biz-pie-core">
-        <div class="biz-pie-core__label">${escapeHtml(coreLabel)}</div>
-        <div class="biz-pie-core__val">${coreVal}</div>
-      </div>
     </div>`;
   }
 
-  function bizPieLegendHtml(slices, total, clickable) {
+    function bizPieLegendHtml(slices, total, clickable) {
     const t = total || slices.reduce((s, x) => s + x.amount, 0) || 1;
     return `<div class="biz-pie-legend">${slices.map(sl => {
       const pct = Math.round(sl.amount / t * 100);
@@ -44023,11 +44933,10 @@ window.__BILLING_EMBEDDED__ = true;
       <div class="biz-pie-card">
         <div class="biz-pie-card__head">
           <div class="biz-pie-card__title">资金构成</div>
-          <div class="biz-pie-card__hint">点击弧段查看细分</div>
+          <div class="biz-pie-card__hint">点击扇区查看细分</div>
         </div>
         <div class="biz-pie-stage">
-          ${bizPieSvgHtml(model.slices, { clickable: true, coreLabel: '资金合计', coreAmount: total })}
-          ${bizPieLegendHtml(model.slices, total, true)}
+          ${bizPieSvgHtml(model.slices, { clickable: true })}
         </div>
       </div>
       <div class="biz-hub-entries biz-hub-entries--biz">
@@ -44099,8 +45008,7 @@ window.__BILLING_EMBEDDED__ = true;
           <div class="biz-pie-card__hint">演示数据 · 对齐原型口径</div>
         </div>
         <div class="biz-pie-stage">
-          ${bizPieSvgHtml(kids, { clickable: false, coreLabel: '资金合计', coreAmount: total })}
-          ${bizPieLegendHtml(kids, total, false)}
+          ${bizPieSvgHtml(kids, { clickable: false })}
         </div>
       </div>`;
     queueBizPieArcEnter(body);
@@ -44377,7 +45285,9 @@ window.__BILLING_EMBEDDED__ = true;
   const FLOW_SELF_DATE_OPTS = [
     { id: 'all', label: '全部时间' },
     { id: 'today', label: '今日' },
+    { id: 'yesterday', label: '昨天' },
     { id: '7d', label: '近7天' },
+    { id: '30d', label: '近30天' },
     { id: 'custom', label: '自定义时间' },
   ];
   const FLOW_SELF_STATUS_OPTS = [
@@ -44389,6 +45299,12 @@ window.__BILLING_EMBEDDED__ = true;
   ];
 
   function flowSelfDateLabel(id) {
+    if (id === 'custom') {
+      if (state.flowSelfCustomStart && state.flowSelfCustomEnd) {
+        return flowFmtShortRange(state.flowSelfCustomStart, state.flowSelfCustomEnd);
+      }
+      return '自定义时间';
+    }
     return (FLOW_SELF_DATE_OPTS.find(o => o.id === id) || {}).label || '今日';
   }
   function flowSelfStatusFilterLabel(id) {
@@ -44463,8 +45379,12 @@ window.__BILLING_EMBEDDED__ = true;
     const kind = state.flowSelfDd;
     if (!kind || !optId) return;
     if (kind === 'date') {
+      if (optId === 'custom') {
+        closeFlowSelfDd();
+        openFlowRangeSheet('self');
+        return;
+      }
       state.flowSelfDate = optId;
-      if (optId === 'custom') showToast('自定义时间（演示）');
     } else {
       state.flowSelfStatus = optId;
     }
@@ -44476,8 +45396,8 @@ window.__BILLING_EMBEDDED__ = true;
     const body = document.getElementById('flowSelfBody');
     if (!body) return;
     let list = FLOW_SELF_ORDERS.slice();
-    const dateMode = state.flowSelfDate === 'custom' ? 'all' : (state.flowSelfDate || 'today');
-    list = list.filter(o => flowMatchDateFilter(o, dateMode));
+    const dateMode = state.flowSelfDate || 'today';
+    list = list.filter(o => flowMatchDateFilter(o, dateMode, state.flowSelfCustomStart, state.flowSelfCustomEnd));
     list = list.filter(o => flowSelfStatusMatch(o, state.flowSelfStatus || 'all'));
     syncFlowSelfFilterChrome();
     if (!list.length) {
@@ -44544,7 +45464,10 @@ window.__BILLING_EMBEDDED__ = true;
     const dateOpts = [
       { id: 'all', label: '全部日期' },
       { id: 'today', label: '今日' },
+      { id: 'yesterday', label: '昨天' },
       { id: '7d', label: '近7日' },
+      { id: '30d', label: '近30日' },
+      { id: 'custom', label: '自定义' },
     ];
     const payOpts = [
       { id: 'all', label: '全部' },
@@ -44561,10 +45484,18 @@ window.__BILLING_EMBEDDED__ = true;
     const chips = (key, opts) => opts.map(o =>
       `<button type="button" class="flow-chip${draft[key] === o.id ? ' is-on' : ''}" data-flow-filter-key="${key}" data-flow-filter-val="${escapeHtml(o.id)}">${escapeHtml(o.label)}</button>`
     ).join('');
+    const customOn = draft.date === 'custom';
+    const startLab = draft.customStart ? flowFmtDotFromKey(draft.customStart) : '开始日期';
+    const endLab = draft.customEnd ? flowFmtDotFromKey(draft.customEnd) : '结束日期';
     body.innerHTML = `
       <div class="flow-filter-section">
         <div class="flow-filter-section__title">日期</div>
         <div class="flow-chip-row">${chips('date', dateOpts)}</div>
+        ${customOn ? `<div class="flow-filter-custom">
+          <button type="button" class="flow-filter-custom__btn${draft.customStart ? ' is-on' : ''}" data-flow-filter-range="1">${escapeHtml(startLab)}</button>
+          <span class="flow-filter-custom__sep">至</span>
+          <button type="button" class="flow-filter-custom__btn${draft.customEnd ? ' is-on' : ''}" data-flow-filter-range="1">${escapeHtml(endLab)}</button>
+        </div>` : ''}
       </div>
       <div class="flow-filter-section">
         <div class="flow-filter-section__title">支付方式</div>
@@ -44577,7 +45508,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function openFlowFilter() {
-    state.flowFilterDraft = Object.assign({}, state.flowFilter || { date: 'all', pay: 'all', guest: 'all' });
+    state.flowFilterDraft = Object.assign({ customStart: '', customEnd: '' }, state.flowFilter || { date: 'all', pay: 'all', guest: 'all' });
     renderFlowFilterSheet();
     openMask('flowFilterMask');
   }
@@ -46252,6 +47183,8 @@ window.__BILLING_EMBEDDED__ = true;
     state.payAmounts = {};
     state.pendingOpenCard = null;
     state.lastSettlement = null;
+    state.pendingCatalogAdds = [];
+    state.billStockPickSelected = {};
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
     syncCartChrome();
@@ -47216,12 +48149,31 @@ window.__BILLING_EMBEDDED__ = true;
       openQuickConsume();
       return;
     }
+    if (e.target.id === 'btnBillStockAdd' || e.target.closest('#btnBillStockAdd')) {
+      openBillStockPick();
+      return;
+    }
     const step = e.target.closest('[data-step]');
     if (step) {
       const catalog = getBillCatalogItems();
       const item = catalog.find(x => x.id === step.dataset.step);
       if (item) setCartQty(item, Number(step.dataset.d));
     }
+  });
+  document.getElementById('billStockPickCancel')?.addEventListener('click', () => closeMask('billStockPickMask'));
+  document.getElementById('billStockPickOk')?.addEventListener('click', () => applyBillStockPick());
+  document.getElementById('billStockPickList')?.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-bill-stock-sku]');
+    if (!row || row.disabled) return;
+    const id = row.dataset.billStockSku;
+    if (!state.billStockPickSelected) state.billStockPickSelected = {};
+    state.billStockPickSelected[id] = !state.billStockPickSelected[id];
+    renderBillStockPickSheet();
+  });
+  document.getElementById('billStockToCatalogSkip')?.addEventListener('click', () => skipBillStockToCatalogAdds());
+  document.getElementById('billStockToCatalogConfirm')?.addEventListener('click', () => confirmBillStockToCatalogAdds());
+  document.getElementById('billStockToCatalogMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'billStockToCatalogMask') skipBillStockToCatalogAdds();
   });
   document.getElementById('btnBillRechargeCancel')?.addEventListener('click', () => closeMask('billRechargeMask'));
   document.getElementById('btnBillRechargePay')?.addEventListener('click', payBillRecharge);
@@ -47641,11 +48593,13 @@ window.__BILLING_EMBEDDED__ = true;
   [
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
     'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'addCardStaffMask',
+    'billStockPickMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
-    'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask',
+    'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask', 'flowRangeMask',
   ].forEach(function (id) {
     window.__pickerMaskClosers[id] = function () { closeMask(id); };
   });
+  window.__pickerMaskClosers.flowRangeMask = function () { cancelFlowRangeSheet(); };
   window.__pickerMaskClosers.addCardStaffMask = function () { closeAddCardStaffSheet(); };
   document.getElementById('addCardBack').addEventListener('click', () => {
     clearStaffCardEdit();
@@ -48097,9 +49051,13 @@ window.__BILLING_EMBEDDED__ = true;
     if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
       recordFlowOrderFromSettlement(s);
     }
+    state.pendingCatalogAdds = collectPendingCatalogAddsFromCart();
     closeMask('payMask', { keepCardExtendDraft: true });
     renderSuccess();
     showOnlyScreen('screen-success');
+    if ((state.pendingCatalogAdds || []).length) {
+      requestAnimationFrame(() => openBillStockToCatalogDialog());
+    }
   });
   document.getElementById('btnSuccessHome').addEventListener('click', () => {
     if (state.lastIssueFromCardMgmt) returnToCardListFromIssueCheckout();
@@ -48188,6 +49146,52 @@ window.__BILLING_EMBEDDED__ = true;
     state.flowHubReturn = null;
     if (btn.dataset.flowHub === 'store') openFlowList();
     else if (btn.dataset.flowHub === 'self') openFlowSelf();
+    else if (btn.dataset.flowHub === 'product') openFlowProductSales();
+  });
+  document.getElementById('flowProductBack')?.addEventListener('click', () => openFlowHub());
+  document.getElementById('flowProductRange')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-flow-prod-range]');
+    if (!btn) return;
+    const id = btn.dataset.flowProdRange;
+    if (id === 'other') {
+      openFlowRangeSheet('product');
+      return;
+    }
+    state.flowProductRange = id;
+    renderFlowProductSales();
+  });
+  document.getElementById('flowProductBody')?.addEventListener('click', (e) => {
+    if (!e.target.closest('#flowProductSortBtn')) return;
+    state.flowProductSort = (state.flowProductSort || 'amount') === 'amount' ? 'qty' : 'amount';
+    renderFlowProductSales();
+  });
+  document.getElementById('flowRangeCancel')?.addEventListener('click', () => cancelFlowRangeSheet());
+  document.getElementById('flowRangeOk')?.addEventListener('click', () => applyFlowRangeSheet());
+  document.getElementById('flowRangeMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'flowRangeMask') cancelFlowRangeSheet();
+  });
+  document.getElementById('flowRangeCalRange')?.addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-flow-cal-focus]');
+    if (!chip) return;
+    state.flowRangeCalFocus = chip.dataset.flowCalFocus;
+    renderFlowRangeChrome();
+    renderFlowRangeCalendar();
+  });
+  document.getElementById('flowRangeCal')?.addEventListener('click', (e) => {
+    const nav = e.target.closest('[data-flow-cal-nav]');
+    if (nav) {
+      const delta = Number(nav.dataset.flowCalNav) || 0;
+      let y = state.flowRangeCalYear;
+      let m = state.flowRangeCalMonth + delta;
+      if (m < 0) { y -= 1; m = 11; }
+      if (m > 11) { y += 1; m = 0; }
+      state.flowRangeCalYear = y;
+      state.flowRangeCalMonth = m;
+      renderFlowRangeCalendar();
+      return;
+    }
+    const day = e.target.closest('[data-flow-cal-day]');
+    if (day) pickFlowRangeDay(day.dataset.flowCalDay);
   });
   document.getElementById('bizHubBack')?.addEventListener('click', () => {
     if (typeof openWorkbench === 'function') openWorkbench();
@@ -48313,18 +49317,34 @@ window.__BILLING_EMBEDDED__ = true;
     if (e.target.closest('[data-flow-void]')) openFlowVoidDialog();
   });
   document.getElementById('flowFilterBody')?.addEventListener('click', (e) => {
+    const rangeBtn = e.target.closest('[data-flow-filter-range]');
+    if (rangeBtn) {
+      openFlowRangeSheet('filter');
+      return;
+    }
     const chip = e.target.closest('[data-flow-filter-key]');
     if (!chip) return;
-    if (!state.flowFilterDraft) state.flowFilterDraft = Object.assign({}, state.flowFilter);
+    if (!state.flowFilterDraft) state.flowFilterDraft = Object.assign({ customStart: '', customEnd: '' }, state.flowFilter);
     state.flowFilterDraft[chip.dataset.flowFilterKey] = chip.dataset.flowFilterVal;
+    if (chip.dataset.flowFilterKey === 'date' && chip.dataset.flowFilterVal === 'custom') {
+      renderFlowFilterSheet();
+      openFlowRangeSheet('filter');
+      return;
+    }
     renderFlowFilterSheet();
   });
   document.getElementById('flowFilterReset')?.addEventListener('click', () => {
-    state.flowFilterDraft = { date: 'all', pay: 'all', guest: 'all' };
+    state.flowFilterDraft = { date: 'all', pay: 'all', guest: 'all', customStart: '', customEnd: '' };
     renderFlowFilterSheet();
   });
   document.getElementById('flowFilterApply')?.addEventListener('click', () => {
-    state.flowFilter = Object.assign({}, state.flowFilterDraft || state.flowFilter);
+    const draft = state.flowFilterDraft || state.flowFilter;
+    if (draft && draft.date === 'custom' && !(draft.customStart && draft.customEnd)) {
+      showToast('请选择自定义起止日期');
+      openFlowRangeSheet('filter');
+      return;
+    }
+    state.flowFilter = Object.assign({ customStart: '', customEnd: '' }, draft || state.flowFilter);
     closeMask('flowFilterMask');
     renderFlowList();
   });
@@ -48783,6 +49803,7 @@ window.__BILLING_EMBEDDED__ = true;
     openFlowList,
     openFlowDetail,
     openFlowSelf,
+    openFlowProductSales,
     openFlowRefund,
     openFlowEdit,
     openFlowEditLog,

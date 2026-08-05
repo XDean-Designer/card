@@ -33,9 +33,6 @@ th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-
 th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
 tr:nth-child(even) td{background:#fafbfc}
 .foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
-.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
-.article td img{max-width:160px;margin:6px 0}
-.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
 .mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
 .mermaid svg{max-width:100%;height:auto}
 </style>
@@ -402,7 +399,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>拖拽排序</td>
 <td>调整同售卖态桶内顺序</td>
-<td>刷新后顺序保持；自定义分组筛选/「隐藏」Tab/列排序激活时不可拖</td>
+<td>刷新后顺序保持；「隐藏」Tab / 「全部」已隐藏折叠 / 列排序激活时不可拖</td>
 </tr>
 <tr>
 <td>绑卡项目</td>
@@ -447,18 +444,24 @@ tr:nth-child(even) td{background:#fafbfc}
       └─ 金额键盘（价格）
 </code></pre>
 <h3>3.0 页面流（示意）</h3>
-<div class="mermaid">flowchart LR
-  L[价目表列表] --&gt;|标题栏+添加| Add[新增表单]
-  L --&gt;|点行| Edit[详情编辑]
-  L --&gt;|齿轮| G[分组管理]
-  G --&gt;|编辑成员| M[编辑成员]
-  G --&gt;|新建或重命名| D[[分组名称 Dialog]]
-  L --&gt;|长按或左滑| A[[行操作 Sheet]]
-  A --&gt;|设置分组| IG[[多选分组 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+  L[价目表列表] -->|标题栏+添加| Add[新增表单]
+  L -->|点行| Edit[详情编辑]
+  L -->|齿轮| G[分组管理]
+  G -->|编辑成员| M[编辑成员]
+  G -->|新建或重命名| D[[分组名称 Dialog]]
+  L -->|长按或左滑| A[[行操作 Sheet]]
+  A -->|设置分组| IG[[多选分组 Sheet]]
+
+</div>
 <p>从会员卡权益页进入：</p>
-<div class="mermaid">flowchart LR
-  P[权益选品页] --&gt;|管理价目表| L[价目表列表]
-  L --&gt;|返回| P</div>
+<div class="mermaid">
+flowchart LR
+  P[权益选品页] -->|管理价目表| L[价目表列表]
+  L -->|返回| P
+
+</div>
 <table>
 <thead>
 <tr>
@@ -669,7 +672,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li><code>sortOrder</code>：桶内顺序（<strong>在售桶</strong> / <strong>下架桶</strong> 两桶隔离）。  </li>
 <li>列头排序 <code>catalogColSort</code>：临时视图排序；开启时禁止拖拽。  </li>
-<li>当前为自定义分组筛选、或「<strong>隐藏</strong>」Tab、或列排序激活时禁止拖拽（<strong>无搜索</strong>）。</li>
+<li>「<strong>隐藏</strong>」Tab、列排序激活、或「全部」底部「<strong>已隐藏</strong>」折叠区内的条目禁止拖拽（<strong>无搜索</strong>；自定义分组内可拖）。</li>
 </ul>
 <hr />
 <h1>模块 5　交互细则 / 异常流</h1>
@@ -756,8 +759,12 @@ tr:nth-child(even) td{background:#fafbfc}
 </thead>
 <tbody>
 <tr>
-<td>当前非「全部」分组（自定义组）<strong>或</strong> 当前为「隐藏」Tab</td>
-<td>请清空搜索后再排序（原型沿用该 toast 文案）</td>
+<td>当前为「隐藏」Tab</td>
+<td>「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组</td>
+</tr>
+<tr>
+<td>「全部」底部「已隐藏」折叠区内的条目</td>
+<td>已隐藏的项目不支持拖拽排序</td>
 </tr>
 <tr>
 <td>列排序激活</td>
@@ -1065,7 +1072,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<p>不可跨桶；搜索 / 自定义分组 / 「隐藏」Tab / 列排序激活时拦截（文案见模块 5）。</p>
+<p>不可跨桶；「隐藏」Tab / 「全部」已隐藏折叠内条目 / 列排序激活时拦截（文案见模块 5；<strong>无搜索</strong>）。</p>
 <h2>6.8 与会员卡 / 开单联结</h2>
 <table>
 <thead>
@@ -1380,7 +1387,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><strong>下架与预约</strong>：项目下架 ⇒ <code>bookable=false</code> 且不可开，直到重新在售。  </li>
 <li><strong>隐藏与预约</strong>：项目隐藏 ⇒ <code>bookable=false</code> 且隐藏期间不可开；<strong>取消隐藏后仍为关</strong>，须手动再开「手机端可预约」。  </li>
 <li><strong>B→C / 开单同步</strong>：价目变更后客户端与开单侧按 <strong>实时目录/价格/库存</strong> 语义生效；推送与缓存细节【待联调确认】；顾客端页面结构不在范围。  </li>
-<li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序并回到「全部」分组。  </li>
+<li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序；「隐藏」Tab 与「全部」已隐藏折叠内不可拖。  </li>
 <li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。  </li>
 <li><strong>权益选品分组 Tab</strong>：仅自定义组 +「全部」；<strong>不展示</strong> 系统「隐藏」Tab；从「管理价目表」返回后 <strong>刷新分组 Tab（重置为「全部」）</strong>。  </li>
 <li><strong>封面图</strong>：选填；演示最多 <strong>1 张</strong>；正式 OSS <strong>本期不做</strong>。  </li>
@@ -1484,7 +1491,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </blockquote>
 <h2>9.1 文案清单（须与原型一致）</h2>
 <p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、上传封面图（选填）、添加图片、在售、已下架、已隐藏、手机端可预约、规格、库存、时长（分钟）、价格（¥）、全部、知道了。</p>
-<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请填写有效库存（0～999999 的整数）、库存不能超过 999999、库存不足、库存不足，最多 N 件、库存不足，请返回调整数量、请清空搜索后再排序（分组筛选拦截拖拽时）、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启手机端可预约；以及模块 5.5 绑卡/预约/删除拦截句。</p>
+<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请填写有效库存（0～999999 的整数）、库存不能超过 999999、库存不足、库存不足，最多 N 件、库存不足，请返回调整数量、「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组、已隐藏的项目不支持拖拽排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启手机端可预约；以及模块 5.5 绑卡/预约/删除拦截句。</p>
 <p><strong>Dialog（开单支付）</strong>：标题「支付金额已变化」；正文「价目表已更新，当前应付与开单时不一致，请返回核对后再支付。」；按钮「知道了」。</p>
 <p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
 <p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
@@ -1550,7 +1557,8 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示非 hidden 成员。  </li>
 <li><strong>Given</strong> 条目属于两组，<strong>When</strong> 删除其中一组，<strong>Then</strong> 条目仍在，另一组关系保留。  </li>
 <li><strong>Given</strong> 在售区两行，<strong>When</strong> 拖拽换序，<strong>Then</strong> 刷新后顺序保持。  </li>
-<li><strong>Given</strong> 当前「隐藏」Tab 或自定义分组筛选，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请清空搜索后再排序」。  </li>
+<li><strong>Given</strong> 当前「隐藏」Tab，<strong>When</strong> 拖拽，<strong>Then</strong> toast「「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组」。<br />
+16b. <strong>Given</strong> 「全部」Tab 已展开「已隐藏」折叠，<strong>When</strong> 拖拽折叠内条目，<strong>Then</strong> toast「已隐藏的项目不支持拖拽排序」。  </li>
 <li><strong>Given</strong> 列排序激活，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请先取消列排序后再手动排序」。  </li>
 <li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目，<strong>分组 Tab 刷新为「全部」</strong>。  </li>
 <li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 列表中不出现该产品。  </li>

@@ -22,11 +22,21 @@ FLOWS = [
     "create-success",
     "issue-success",
     "pick-projects",
+    "pick-products",
     "pick-discount-list",
     "card-groups",
     "card-group-members",
     "card-group-create",
     "card-item-group",
+    "card-issue-new",
+    "card-quick-issue",
+    "card-issue-holders",
+    "card-extend",
+    "card-refund",
+    "card-shelf",
+    "card-reshelf",
+    "card-stats-help",
+    "card-unlimited-validity",
 ]
 
 

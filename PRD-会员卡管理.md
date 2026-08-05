@@ -2,7 +2,7 @@
 
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v1.7 |
+| 文档版本 | v1.8 |
 | 日期 | 2026-08-05 |
 | 交互原型（唯一可视依据） | 同目录 `demo.html`（中文镜像：`剑琅联盟-RTB重构.html`） |
 | 画布 | 390 × 844 |
@@ -205,6 +205,7 @@ flowchart LR
       ├─ 新建/重命名分组 · 删除分组确认
       ├─ 退卡估值
       ├─ 下架确认 / 重新上架确认（居中 sheet）
+      ├─ 持卡延期（行内面板）
       ├─ 设置有效期限（不限次与永久冲突）
       ├─ 总权益面值计算明细 / 计次模式说明 / 运营数据说明
       └─ 金额键盘
@@ -229,10 +230,13 @@ flowchart LR
 | 设置分组 | 设置分组 | 标题为卡名；副文案「可同时加入多个分组」；无分组时空态引导新建 |
 | 退卡估值 | 退卡估值 | 办卡实付 / 消耗 / 明细 / 建议退款 / 实退 |
 | 下架/上架 | 下架会员卡 / 重新上架 | 居中确认 sheet |
+| 持卡延期 | （行内） | 非永久有期限权益；可含参考费用 |
+| 运营数据说明 | 运营数据说明 | 详情 `?` |
+| 永久转有限 | 设置有效期限 | 不限次与永久冲突 |
 
 ### 3.1 主链路关键页 · 视觉索引（预览可见）
 
-截图来自当前原型（`assets/prd-shots/`）。浏览器打开 **`PRD-会员卡管理.html`** 可直接看到画面；「打开原型」会跳到对应屏（可交互）。Sheet 类从列表/详情进入，不单独占 FLOW_MAP 节点，故无独立截图。
+截图来自当前原型（`assets/prd-shots/`）。浏览器打开 **`PRD-会员卡管理.html`** 可直接看到画面；「打开原型」会跳到对应屏（可交互）。浮层节点亦有独立截图（底图多为详情在售 + Sheet/Dialog）。
 
 | 节点 | 画面 | 打开原型 |
 |------|------|----------|
@@ -247,7 +251,7 @@ flowchart LR
 | 办卡成功 | ![办卡成功](assets/prd-shots/issue-success.png) | [demo.html?flow=issue-success](demo.html?flow=issue-success) |
 | 添加项目权益 | ![项目权益](assets/prd-shots/pick-projects.png) | [demo.html?flow=pick-projects](demo.html?flow=pick-projects) |
 | 选项目 · 分组筛选 | 同上屏 · 选中自定义分组 Tab | [demo.html?flow=pick-projects-group](demo.html?flow=pick-projects-group) |
-| 添加产品权益 | 选产品 + 行内数量 | [demo.html?flow=pick-products](demo.html?flow=pick-products) |
+| 添加产品权益 | ![产品权益](assets/prd-shots/pick-products.png) | [demo.html?flow=pick-products](demo.html?flow=pick-products) |
 | 选产品 · 分组筛选 | 同上屏 · 选中自定义分组 Tab | [demo.html?flow=pick-products-group](demo.html?flow=pick-products-group) |
 | 添加折扣权益 | ![折扣权益](assets/prd-shots/pick-discount-list.png) | [demo.html?flow=pick-discount-list](demo.html?flow=pick-discount-list) |
 | 选折扣 · 分组筛选 | 同上屏 · 选中自定义分组 Tab | [demo.html?flow=pick-discount-group](demo.html?flow=pick-discount-group) |
@@ -255,6 +259,15 @@ flowchart LR
 | 编辑成员 | ![编辑成员](assets/prd-shots/card-group-members.png) | [demo.html?flow=card-group-members](demo.html?flow=card-group-members) |
 | 新建分组 Dialog | ![新建分组](assets/prd-shots/card-group-create.png) | [demo.html?flow=card-group-create](demo.html?flow=card-group-create) |
 | 设置分组 Sheet | ![设置分组](assets/prd-shots/card-item-group.png) | [demo.html?flow=card-item-group](demo.html?flow=card-item-group) |
+| 选择会员 · 办卡 | ![办卡选人](assets/prd-shots/card-issue-new.png) | [demo.html?flow=card-issue-new](demo.html?flow=card-issue-new) |
+| 确认办卡（快捷） | ![确认办卡](assets/prd-shots/card-quick-issue.png) | [demo.html?flow=card-quick-issue](demo.html?flow=card-quick-issue) |
+| 选择会员 · 退卡/延期 | ![持卡管理](assets/prd-shots/card-issue-holders.png) | [demo.html?flow=card-issue-holders](demo.html?flow=card-issue-holders) |
+| 持卡延期 · 行内面板 | ![延期](assets/prd-shots/card-extend.png) | [demo.html?flow=card-extend](demo.html?flow=card-extend) |
+| 退卡估值 Sheet | ![退卡估值](assets/prd-shots/card-refund.png) | [demo.html?flow=card-refund](demo.html?flow=card-refund) |
+| 下架确认 Dialog | ![下架](assets/prd-shots/card-shelf.png) | [demo.html?flow=card-shelf](demo.html?flow=card-shelf) |
+| 重新上架 Dialog | ![上架](assets/prd-shots/card-reshelf.png) | [demo.html?flow=card-reshelf](demo.html?flow=card-reshelf) |
+| 运营数据说明 Dialog | ![运营说明](assets/prd-shots/card-stats-help.png) | [demo.html?flow=card-stats-help](demo.html?flow=card-stats-help) |
+| 永久转有限 Dialog | ![有效期限](assets/prd-shots/card-unlimited-validity.png) | [demo.html?flow=card-unlimited-validity](demo.html?flow=card-unlimited-validity) |
 
 实现路由建议（名称可调整）：`card-list` / `card-groups` / `card-group-members` / `card-step1` / `card-step2` / `card-step3` / `card-create-success` / `card-detail` / `card-project-benefit` / `card-product-benefit` / `card-discount-benefit` / `card-issue-success` / `card-quick-issue` + sheets；办卡支付复用开单结账路由。
 
