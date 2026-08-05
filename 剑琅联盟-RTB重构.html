@@ -1619,8 +1619,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 #screen-p-list .table-card.is-product-tab .table-row .name-text,
 #screen-p-list .table-card.is-product-tab .table-row .name-text.is-long {
-  /* 不 stretch：仓库 icon 紧跟文字，避免被顶到名称列右缘 */
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
   max-width: 100%;
   white-space: nowrap;
@@ -3487,93 +3486,6 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 }
 .bound-tag__icon { display: block; width: 12px; height: 10px; }
 
-/* 价目 · 产品添加模式 Dialog */
-.dialog--product-add-mode { max-width: 326px; }
-.product-add-mode-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  margin: 4px 0 12px;
-}
-.product-add-mode-card {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  padding: 16px 10px 14px; border: 1px solid #EBEBEB; border-radius: 14px;
-  background: #fff; cursor: pointer; font-family: inherit; text-align: center;
-  -webkit-tap-highlight-color: transparent;
-  transition: background .15s ease, border-color .15s ease;
-}
-.product-add-mode-card:active { background: #FAFAFA; border-color: #E0E0E0; }
-.product-add-mode-card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-.product-add-mode-card__icon { width: 48px; height: 48px; display: block; }
-.product-add-mode-card__title { font-size: 15px; font-weight: 600; color: var(--text); line-height: 20px; }
-.product-add-mode-card__desc { font-size: 11px; color: var(--text-sec); line-height: 15px; }
-.dialog__actions--single { justify-content: center; }
-.dialog__actions--single .btn-text-cancel {
-  border: none; background: none; color: var(--text-sec); font-size: 15px;
-  font-family: inherit; padding: 10px 16px; cursor: pointer;
-}
-.dialog__actions--col {
-  flex-direction: column; gap: 8px;
-}
-.dialog__actions--col .btn-main { width: 100%; }
-
-/* 列表 · 关联库存小仓库 icon */
-.stock-link-tag {
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0; width: 14px; height: 14px; margin-left: 2px;
-  color: #4A7BF4; pointer-events: none;
-}
-.stock-link-tag img, .stock-link-tag svg { display: block; width: 14px; height: 14px; }
-.table-row-swipe.is-off-sale .stock-link-tag { opacity: .7; }
-
-/* 关联库存选品页 */
-#screen-p-stock-link { background: var(--bg-page); display: flex; flex-direction: column; }
-#screen-p-stock-link.hidden { display: none; }
-#screen-p-stock-link:not(.hidden) { display: flex; }
-.stock-link-search {
-  display: flex; align-items: center; gap: 8px;
-  margin: 10px 16px 8px; padding: 0 12px; height: 40px;
-  background: #fff; border-radius: 10px; border: 1px solid #EBEBEB; box-sizing: border-box;
-}
-.stock-link-search input {
-  flex: 1; min-width: 0; border: none; outline: none; background: transparent;
-  font-size: 14px; font-family: inherit; color: var(--text);
-}
-.stock-link-list {
-  flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 4px 16px 24px; box-sizing: border-box;
-}
-.stock-link-card {
-  display: flex; align-items: center; gap: 12px; width: 100%;
-  padding: 14px 12px; box-sizing: border-box;
-  background: #fff; border: 1px solid #EBEBEB; border-radius: 12px;
-  margin-bottom: 8px; text-align: left; font-family: inherit; cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.stock-link-card:active { background: #FAFAFA; }
-.stock-link-card.is-on { border-color: var(--brand-border); background: #FFF8F8; }
-.stock-link-card.is-disabled { opacity: .55; cursor: default; }
-.stock-link-card__check {
-  width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #D0D0D0;
-  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  box-sizing: border-box; background: #fff; color: #fff;
-}
-.stock-link-card.is-on .stock-link-card__check {
-  border-color: var(--brand); background: var(--brand);
-}
-.stock-link-card__check svg { display: none; width: 12px; height: 12px; }
-.stock-link-card.is-on .stock-link-card__check svg { display: block; }
-.stock-link-card__main { flex: 1; min-width: 0; }
-.stock-link-card__name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 22px; }
-.stock-link-card__meta { margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 18px; }
-.stock-link-card__badge {
-  flex-shrink: 0; font-size: 11px; color: var(--text-sec); background: #F2F2F2;
-  padding: 2px 8px; border-radius: 4px; line-height: 16px; white-space: nowrap;
-}
-.stock-link-empty {
-  padding: 56px 24px; text-align: center; color: var(--text-sec); font-size: 13px;
-}
-.stock-link-empty__title { font-size: 15px; font-weight: 600; color: var(--text); margin: 0 0 6px; }
-.stock-link-empty__hint { margin: 0 0 16px; line-height: 1.5; }
-
 .price-num { font-family: var(--font-data); font-weight: 500; font-size: 15px; color: var(--text); }
 .price-num .yen { font-family: inherit; font-weight: 400; margin-right: 1px; font-size: 12px; }
 .catalog-action-list { display: flex; flex-direction: column; padding: 0; }
@@ -4337,9 +4249,6 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   font-size: 13px; font-weight: 500; line-height: 18px;
   cursor: pointer; font-family: inherit;
   padding: 0 12px 0 8px; white-space: nowrap;
-}
-.page-title-bar .title-link:disabled {
-  color: #C4C4C4; cursor: default;
 }
 .pick-select-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -14172,24 +14081,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCatalogGroupMembersSave">确定</button></div><div class="bottom-bar__safe"></div></div>
         </div>
 
-        <div class="screen hidden" id="screen-p-stock-link">
-          <header class="page-title-bar">
-            <button type="button" class="back" id="stockLinkBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <span class="title">选择库存商品</span>
-            <button type="button" class="title-link" id="stockLinkConfirm" disabled>确定</button>
-          </header>
-          <div class="stock-link-search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B2B2B2" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-            <input type="search" id="stockLinkSearch" placeholder="搜索规格名称 / 条码" autocomplete="off">
-          </div>
-          <div class="stock-link-list" id="stockLinkList"></div>
-          <div class="bottom-bar">
-            <div class="bottom-bar__action">
-              <button type="button" class="btn-main" id="stockLinkConfirmFoot" disabled>添加为价目</button>
-            </div>
-            <div class="bottom-bar__safe"></div>
-          </div>
-        </div>
         <div class="screen hidden" id="screen-p-add">
           <header class="page-title-bar">
             <button type="button" class="back" id="projBackFromAdd" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -14254,38 +14145,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           </div>
         </div>
 
-        <div class="dialog-mask" id="productAddModeMask">
-          <div class="dialog dialog--product-add-mode" role="dialog" aria-modal="true" aria-labelledby="productAddModeTitle">
-            <div class="dialog__title" id="productAddModeTitle">添加产品</div>
-            <div class="dialog__body">选择创建方式后继续</div>
-            <div class="product-add-mode-grid">
-              <button type="button" class="product-add-mode-card" data-product-add-mode="quick" aria-label="快速添加">
-                <img class="product-add-mode-card__icon" src="assets/catalog/add-mode-quick.svg" alt="" width="48" height="48" draggable="false">
-                <span class="product-add-mode-card__title">快速添加</span>
-                <span class="product-add-mode-card__desc">简单填写，快速上架</span>
-              </button>
-              <button type="button" class="product-add-mode-card" data-product-add-mode="stock" aria-label="关联库存">
-                <img class="product-add-mode-card__icon" src="assets/catalog/add-mode-stock.svg" alt="" width="48" height="48" draggable="false">
-                <span class="product-add-mode-card__title">关联库存</span>
-                <span class="product-add-mode-card__desc">从现有库存上架</span>
-              </button>
-            </div>
-            <div class="dialog__actions dialog__actions--single">
-              <button type="button" class="btn-text-cancel" id="productAddModeCancel">取消</button>
-            </div>
-          </div>
-        </div>
-        <div class="dialog-mask" id="productDupNameMask">
-          <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="productDupNameTitle">
-            <div class="dialog__title" id="productDupNameTitle">产品名称重复</div>
-            <div class="dialog__body" id="productDupNameBody">价目表中已有同名产品，请选择处理方式</div>
-            <div class="dialog__actions dialog__actions--col">
-              <button type="button" class="btn-main" id="productDupUseExisting">使用已有产品</button>
-              <button type="button" class="btn-main secondary" id="productDupRename">仍然新建并改名</button>
-              <button type="button" class="btn-main secondary" id="productDupCancel">取消</button>
-            </div>
-          </div>
-        </div>
         <div class="dialog-mask" id="catalogGroupDeleteMask">
           <div class="dialog">
             <div class="dialog__title">删除分组？</div>
@@ -15699,7 +15558,6 @@ function seedProductCatalog() {
     { id: 'pd24', name: '剑琅美睫卸除液', spec: '50ml', price: 48, stock: 18, onSale: true, category: '美睫' },
   ].map(p => ({
     ...p,
-    stockSkuId: null,
     boundToCard: false,
     boundToCoupon: false,
     boundToMall: false,
@@ -15709,10 +15567,6 @@ function seedProductCatalog() {
     boundTemplateNames: [],
   }));
   const byId = Object.fromEntries(list.map(p => [p.id, p]));
-  if (byId.pd1) byId.pd1.stockSkuId = 'sk1';
-  if (byId.pd2) byId.pd2.stockSkuId = 'sk3';
-  if (byId.pd4) byId.pd4.stockSkuId = 'sk7';
-  if (byId.pd12) byId.pd12.stockSkuId = 'sk8';
   if (byId.pd6) byId.pd6.boundToCoupon = true;
   if (byId.pd11) byId.pd11.boundToMall = true;
   if (byId.pd17) byId.pd17.hidden = true;
@@ -20216,7 +20070,6 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
           <button type="button" class="catalog-row-drag" data-catalog-drag aria-label="拖动排序">${CATALOG_ROW_DRAG_ICON}</button>
           <div class="name-main">
             <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(displayName)}</span>
-            ${isProduct && p.stockSkuId ? '<span class="stock-link-tag" title="已关联库存" aria-label="已关联库存"><img src="assets/catalog/stock-link.svg" width="14" height="14" alt="" draggable="false"></span>' : ''}
           </div>
         </div>
         <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
@@ -20877,7 +20730,7 @@ function catalogStockLimit(p) {
 
 function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
-    return { kind: 'product', name: '', spec: '', price: '', stock: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false, stockSkuId: null };
+    return { kind: 'product', name: '', spec: '', price: '', stock: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
   return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
 }
@@ -20891,7 +20744,6 @@ function projProjectToForm(p) {
       kind: 'product', name: p.name, spec: p.spec || '', price: String(p.price),
       stock: stockVal == null ? '' : String(stockVal),
       onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded,
-      stockSkuId: p.stockSkuId || null,
     };
   }
   return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, images, hasImage: images.length > 0, imageExpanded, _durUnit: null, _durAmount: null };
@@ -21097,236 +20949,16 @@ function projBindFormEvents(container, lockCtx) {
   wireProjImageSection();
 }
 
-const STOCK_LINK_TAG_ICON = '<img src="assets/catalog/stock-link.svg" width="14" height="14" alt="" draggable="false">';
-const STOCK_LINK_CHECK_SVG = '<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2 5 8.7 9.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-let productDupResolve = null;
-let stockLinkSelected = Object.create(null);
-let stockLinkQuery = '';
-
-function closeProductAddModeDialog() {
-  document.getElementById('productAddModeMask')?.classList.remove('show');
-}
-
-function openProductAddModeDialog() {
-  document.getElementById('productAddModeMask')?.classList.add('show');
-}
-
-function closeProductDupNameDialog() {
-  document.getElementById('productDupNameMask')?.classList.remove('show');
-  productDupResolve = null;
-}
-
-function openProductDupNameDialog(name) {
-  const body = document.getElementById('productDupNameBody');
-  if (body) body.textContent = `价目表中已有「${name}」，请选择处理方式`;
-  document.getElementById('productDupNameMask')?.classList.add('show');
-  return new Promise(resolve => {
-    productDupResolve = resolve;
-  });
-}
-
-function finishProductDup(action) {
-  const fn = productDupResolve;
-  productDupResolve = null;
-  document.getElementById('productDupNameMask')?.classList.remove('show');
-  if (fn) fn(action);
-}
-
-function findCatalogProductByName(name, excludeId) {
-  const nameNorm = String(name || '').trim();
-  return (state.productCatalog || []).find(p => p.id !== excludeId && String(p.name || '').trim() === nameNorm) || null;
-}
-
-function suggestUniqueProductName(base) {
-  const catalog = state.productCatalog || [];
-  const taken = new Set(catalog.map(p => String(p.name || '').trim()));
-  const root = String(base || '').trim() || '新产品';
-  if (!taken.has(root)) return root;
-  for (let i = 2; i < 100; i++) {
-    const cand = `${root} ${i}`;
-    if (!taken.has(cand)) return cand;
-  }
-  return `${root} ${Date.now().toString(36).slice(-4)}`;
-}
-
-function getLinkedStockSkuIds() {
-  const set = new Set();
-  (state.productCatalog || []).forEach(p => {
-    if (p.stockSkuId) set.add(String(p.stockSkuId));
-  });
-  return set;
-}
-
-function getStockSkus() {
-  return (window.StockStore && Array.isArray(window.StockStore.skus)) ? window.StockStore.skus : [];
-}
-
-function projOpenAddQuick() {
-  state.projEditingId = null;
-  state.projFormKind = 'product';
-  state.projFormState = projDefaultForm('product');
-  const title = document.querySelector('#screen-p-add .title');
-  if (title) title.textContent = '新增产品';
-  projRenderForm(document.getElementById('projFormAddBody'), 'add');
-  syncCatalogWriteChrome();
-  projShowScreen('screen-p-add');
-}
-
 function projOpenAdd() {
   if (window.RTBPerm && typeof window.RTBPerm.requireCatalogWrite === 'function' && !window.RTBPerm.requireCatalogWrite()) return;
-  if (isProductCatalogTab()) {
-    openProductAddModeDialog();
-    return;
-  }
   state.projEditingId = null;
-  state.projFormKind = 'project';
-  state.projFormState = projDefaultForm('project');
+  state.projFormKind = isProductCatalogTab() ? 'product' : 'project';
+  state.projFormState = projDefaultForm(state.projFormKind);
   const title = document.querySelector('#screen-p-add .title');
-  if (title) title.textContent = '新增项目';
+  if (title) title.textContent = state.projFormKind === 'product' ? '新增产品' : '新增项目';
   projRenderForm(document.getElementById('projFormAddBody'), 'add');
   syncCatalogWriteChrome();
   projShowScreen('screen-p-add');
-}
-
-function syncStockLinkConfirm() {
-  const n = Object.keys(stockLinkSelected).length;
-  const disabled = n === 0;
-  ['stockLinkConfirm', 'stockLinkConfirmFoot'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.disabled = disabled;
-    if (id === 'stockLinkConfirmFoot') el.textContent = n ? `添加为价目（${n}）` : '添加为价目';
-  });
-}
-
-function renderStockLinkList() {
-  const listEl = document.getElementById('stockLinkList');
-  if (!listEl) return;
-  const linked = getLinkedStockSkuIds();
-  const q = String(stockLinkQuery || '').trim().toLowerCase();
-  const skus = getStockSkus().filter(s => {
-    if (!q) return true;
-    const hay = `${s.product || ''} ${s.name || ''} ${s.barcode || ''}`.toLowerCase();
-    return hay.includes(q);
-  });
-  if (!skus.length) {
-    listEl.innerHTML = `<div class="stock-link-empty"><p class="stock-link-empty__title">暂无库存商品</p><p class="stock-link-empty__hint">${q ? '换个关键词试试' : '请先在库存中维护规格'}</p></div>`;
-    syncStockLinkConfirm();
-    return;
-  }
-  listEl.innerHTML = skus.map(s => {
-    const id = String(s.id);
-    const already = linked.has(id);
-    const on = !already && !!stockLinkSelected[id];
-    const stockNum = Number(s.stock);
-    const stockLabel = Number.isFinite(stockNum) ? `库存 ${stockNum}${s.unit ? s.unit : ''}` : '库存 —';
-    const meta = [s.name, s.barcode ? `条码 ${s.barcode}` : '', stockLabel].filter(Boolean).join(' · ');
-    const cls = ['stock-link-card', on ? 'is-on' : '', already ? 'is-disabled' : ''].filter(Boolean).join(' ');
-    return `<button type="button" class="${cls}" data-stock-sku="${escapeAttr(id)}" ${already ? 'disabled' : ''} aria-pressed="${on ? 'true' : 'false'}">
-      <span class="stock-link-card__check">${STOCK_LINK_CHECK_SVG}</span>
-      <span class="stock-link-card__main">
-        <span class="stock-link-card__name">${escapeHtml(s.product || '未命名')}</span>
-        <span class="stock-link-card__meta">${escapeHtml(meta)}</span>
-      </span>
-      ${already ? '<span class="stock-link-card__badge">已关联</span>' : ''}
-    </button>`;
-  }).join('');
-  listEl.querySelectorAll('[data-stock-sku]').forEach(btn => {
-    if (btn.disabled) return;
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.stockSku;
-      if (stockLinkSelected[id]) delete stockLinkSelected[id];
-      else stockLinkSelected[id] = true;
-      renderStockLinkList();
-    });
-  });
-  syncStockLinkConfirm();
-}
-
-function openStockLinkPicker() {
-  stockLinkSelected = Object.create(null);
-  stockLinkQuery = '';
-  const search = document.getElementById('stockLinkSearch');
-  if (search) search.value = '';
-  renderStockLinkList();
-  projShowScreen('screen-p-stock-link');
-}
-
-function createProductFromSku(sku, nameOverride) {
-  const catalog = state.productCatalog;
-  const name = (nameOverride || sku.product || '').trim() || '未命名产品';
-  const stockRaw = Number(sku.stock);
-  const stock = Number.isFinite(stockRaw) ? Math.max(0, Math.round(stockRaw)) : null;
-  const item = {
-    id: projUid(),
-    name,
-    spec: String(sku.name || '').trim(),
-    price: 0,
-    stock,
-    onSale: true,
-    category: '产品',
-    images: [],
-    hasImage: false,
-    stockSkuId: String(sku.id),
-    boundToCard: false,
-    boundToCoupon: false,
-    boundToMall: false,
-    hidden: false,
-    sortOrder: nextCatalogSortOrder(catalog),
-    boundTemplateIds: [],
-    boundTemplateId: null,
-    boundTemplateNames: [],
-  };
-  catalog.push(item);
-  return item;
-}
-
-async function confirmStockLinkPicker() {
-  if (window.RTBPerm && typeof window.RTBPerm.requireCatalogWrite === 'function' && !window.RTBPerm.requireCatalogWrite()) return;
-  const ids = Object.keys(stockLinkSelected);
-  if (!ids.length) { showToast('请先选择库存商品', true); return; }
-  const skus = getStockSkus();
-  const created = [];
-  let openExistingId = null;
-  for (const id of ids) {
-    const sku = skus.find(s => String(s.id) === id);
-    if (!sku) continue;
-    if (getLinkedStockSkuIds().has(String(sku.id))) continue;
-    const baseName = String(sku.product || '').trim() || '未命名产品';
-    const existing = findCatalogProductByName(baseName, null);
-    if (existing) {
-      const action = await openProductDupNameDialog(baseName);
-      if (action === 'cancel') {
-        if (!created.length && !openExistingId) return;
-        break;
-      }
-      if (action === 'use') {
-        openExistingId = openExistingId || existing.id;
-        continue;
-      }
-      if (action === 'rename') {
-        created.push(createProductFromSku(sku, suggestUniqueProductName(baseName)));
-        continue;
-      }
-    }
-    created.push(createProductFromSku(sku, baseName));
-  }
-  stockLinkSelected = Object.create(null);
-  if (created.length) {
-    projRenderList();
-    syncBalanceCanBuyProductsField();
-    const first = created[0];
-    projOpenEdit(first.id);
-    showToast(created.length > 1 ? `已关联 ${created.length} 个产品，请补全售价` : '已关联，请补全售价');
-    return;
-  }
-  if (openExistingId) {
-    projOpenEdit(openExistingId);
-    showToast('已打开已有产品');
-    return;
-  }
-  projShowScreen('screen-p-list');
 }
 
 function projGetEditNoticeKey(p) {
@@ -21368,8 +21000,7 @@ function projOpenEdit(id) {
   projShowScreen('screen-p-edit');
 }
 
-function projValidateForm(opts = {}) {
-  const skipDupCheck = !!opts.skipDupCheck;
+function projValidateForm() {
   const name = (state.projFormState?.name || '').trim();
   const priceRaw = String(state.projFormState?.price || '').replace(/^¥/, '').trim();
   state.projFormState.price = priceRaw;
@@ -21384,14 +21015,7 @@ function projValidateForm(opts = {}) {
   const catalog = isProduct ? (state.productCatalog || []) : (state.projectCatalog || []);
   const nameNorm = name.trim();
   const dup = catalog.some(p => p.id !== state.projEditingId && String(p.name || '').trim() === nameNorm);
-  if (dup && !skipDupCheck) {
-    if (isProduct) {
-      state.projFormState._pendingDupName = nameNorm;
-      return 'dup';
-    }
-    showToast('名称已存在', true);
-    return false;
-  }
+  if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
   if (isProduct) {
     const stockRaw = String(state.projFormState.stock ?? '').trim();
@@ -21408,36 +21032,9 @@ function projValidateForm(opts = {}) {
   return true;
 }
 
-async function projSaveForm() {
+function projSaveForm() {
   if (window.RTBPerm && typeof window.RTBPerm.requireCatalogWrite === 'function' && !window.RTBPerm.requireCatalogWrite()) return;
-  const v = projValidateForm();
-  if (v === 'dup') {
-    const nameNorm = state.projFormState._pendingDupName || (state.projFormState?.name || '').trim();
-    const existing = findCatalogProductByName(nameNorm, state.projEditingId);
-    const action = await openProductDupNameDialog(nameNorm);
-    if (action === 'cancel' || !action) return;
-    if (action === 'use') {
-      if (existing) {
-        projOpenEdit(existing.id);
-        showToast('已打开已有产品');
-      }
-      return;
-    }
-    if (action === 'rename') {
-      const next = suggestUniqueProductName(nameNorm);
-      state.projFormState.name = next;
-      const nameInput = document.querySelector('#projFormAddBody #fProjName, #projFormEditBody #fProjName');
-      if (nameInput) {
-        nameInput.value = next;
-        nameInput.focus();
-        nameInput.select();
-      }
-      showToast('已建议新名称，确认后保存');
-      return;
-    }
-    return;
-  }
-  if (!v) return;
+  if (!projValidateForm()) return;
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
   const images = projNormalizeImages(state.projFormState.images, false);
@@ -21455,7 +21052,6 @@ async function projSaveForm() {
     category: state.projFormState.category || '产品',
     images,
     hasImage: images.length > 0,
-    ...(state.projFormState.stockSkuId ? { stockSkuId: state.projFormState.stockSkuId } : {}),
   } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
@@ -21594,34 +21190,6 @@ function wireProjCatalogModule() {
   });
   document.getElementById('btnProjTitleAdd')?.addEventListener('click', projOpenAdd);
   document.getElementById('btnProjEmptyAdd')?.addEventListener('click', projOpenAdd);
-  document.getElementById('productAddModeCancel')?.addEventListener('click', closeProductAddModeDialog);
-  document.getElementById('productAddModeMask')?.addEventListener('click', e => {
-    if (e.target === document.getElementById('productAddModeMask')) closeProductAddModeDialog();
-  });
-  document.querySelectorAll('[data-product-add-mode]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.dataset.productAddMode;
-      closeProductAddModeDialog();
-      if (mode === 'quick') projOpenAddQuick();
-      else if (mode === 'stock') openStockLinkPicker();
-    });
-  });
-  document.getElementById('productDupUseExisting')?.addEventListener('click', () => finishProductDup('use'));
-  document.getElementById('productDupRename')?.addEventListener('click', () => finishProductDup('rename'));
-  document.getElementById('productDupCancel')?.addEventListener('click', () => finishProductDup('cancel'));
-  document.getElementById('productDupNameMask')?.addEventListener('click', e => {
-    if (e.target === document.getElementById('productDupNameMask')) finishProductDup('cancel');
-  });
-  document.getElementById('stockLinkBack')?.addEventListener('click', () => {
-    stockLinkSelected = Object.create(null);
-    projShowScreen('screen-p-list');
-  });
-  document.getElementById('stockLinkConfirm')?.addEventListener('click', () => { confirmStockLinkPicker(); });
-  document.getElementById('stockLinkConfirmFoot')?.addEventListener('click', () => { confirmStockLinkPicker(); });
-  document.getElementById('stockLinkSearch')?.addEventListener('input', e => {
-    stockLinkQuery = e.target.value || '';
-    renderStockLinkList();
-  });
   document.getElementById('projTableHead')?.addEventListener('click', e => {
     const btn = e.target.closest('[data-col-sort]');
     if (!btn) return;
@@ -21783,9 +21351,6 @@ function showOnlyScreen(id) {
 function closeAllFlowOverlays() {
   document.querySelectorAll('.picker-mask.open').forEach(el => el.classList.remove('open'));
   document.getElementById('projDialogMask')?.classList.remove('show');
-  document.getElementById('productAddModeMask')?.classList.remove('show');
-  document.getElementById('productDupNameMask')?.classList.remove('show');
-  productDupResolve = null;
   document.getElementById('catalogGroupNameMask')?.classList.remove('show');
   document.getElementById('catalogGroupDeleteMask')?.classList.remove('show');
   document.getElementById('cardGroupNameMask')?.classList.remove('show');
@@ -39980,16 +39545,18 @@ window.__BILLING_EMBEDDED__ = true;
     const candidates = [];
     candidates.push({ picks: {}, skip: true });
     candidates.push({ picks: JSON.parse(JSON.stringify(basePicks)), skip: false });
-    cards.forEach(card => {
-      if (!(card.discount && cardBenefits(card).projectDiscount)) return;
-      const withDisc = JSON.parse(JSON.stringify(basePicks));
-      Object.keys(withDisc).forEach(id => { withDisc[id].discountOn = false; });
-      withDisc[card.id].discountOn = true;
-      candidates.push({ picks: withDisc, skip: false });
-      const discOnly = cloneEmptyBenefitPicks(cards);
-      discOnly[card.id].discountOn = true;
-      candidates.push({ picks: discOnly, skip: false });
-    });
+    if (cartHasDiscountableItems()) {
+      cards.forEach(card => {
+        if (!(card.discount && cardBenefits(card).projectDiscount)) return;
+        const withDisc = JSON.parse(JSON.stringify(basePicks));
+        Object.keys(withDisc).forEach(id => { withDisc[id].discountOn = false; });
+        withDisc[card.id].discountOn = true;
+        candidates.push({ picks: withDisc, skip: false });
+        const discOnly = cloneEmptyBenefitPicks(cards);
+        discOnly[card.id].discountOn = true;
+        candidates.push({ picks: discOnly, skip: false });
+      });
+    }
 
     let best = null;
     let bestScore = -1;
@@ -41102,13 +40669,18 @@ window.__BILLING_EMBEDDED__ = true;
     let discountDeduct = 0;
     let discountRate = null;
     if (isMemberBill() && remaining > 0) {
-      for (const card of getCustomer().cards) {
-        const pick = picks[card.id];
-        if (pick?.discountOn && card.discount && cardBenefits(card).projectDiscount) {
-          discountRate = card.discount;
-          discountDeduct = round2(remaining * (1 - card.discount));
-          remaining = round2(remaining - discountDeduct);
-          break;
+      /* 折扣仅作用于服务项目；快速消费 / 产品不参与折扣，只可走储值面值 */
+      let discountBase = Math.max(0, round2(cartDiscountableSubtotal() - projectDeduct));
+      discountBase = Math.min(discountBase, remaining);
+      if (discountBase > 0) {
+        for (const card of getCustomer().cards) {
+          const pick = picks[card.id];
+          if (pick?.discountOn && card.discount && cardBenefits(card).projectDiscount) {
+            discountRate = card.discount;
+            discountDeduct = round2(discountBase * (1 - card.discount));
+            remaining = round2(remaining - discountDeduct);
+            break;
+          }
         }
       }
     }
@@ -41919,12 +41491,23 @@ window.__BILLING_EMBEDDED__ = true;
     return (state.cart || []).some(it => (it.qty || 0) > 0 && cartItemMatchesProjectBenefit(it, p));
   }
 
+  /** 可享会员折扣的服务项目（不含产品、快速消费；快消仅可用储值/面值） */
+  function isDiscountableCartItem(it) {
+    if (!it || !(it.qty > 0)) return false;
+    if (typeof isQuickCartItem === 'function' && isQuickCartItem(it)) return false;
+    if (typeof isBillProductItem === 'function' && isBillProductItem(it)) return false;
+    return true;
+  }
+
   function cartHasDiscountableItems() {
-    return (state.cart || []).some(it => {
-      if (!(it.qty > 0)) return false;
-      if (typeof isBillProductItem === 'function' && isBillProductItem(it)) return false;
-      return true;
-    });
+    return (state.cart || []).some(isDiscountableCartItem);
+  }
+
+  function cartDiscountableSubtotal() {
+    return round2((state.cart || []).reduce((s, it) => {
+      if (!isDiscountableCartItem(it)) return s;
+      return s + lineUnit(it) * it.qty;
+    }, 0));
   }
 
   /** 面值可用于本单：有非产品消费，或可支付的办卡/延期费用 */
@@ -42605,7 +42188,9 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     state.benefitApplied = JSON.parse(JSON.stringify(state.benefitDraft));
+    const allowDisc = cartHasDiscountableItems();
     Object.values(state.benefitApplied).forEach(d => {
+      if (!allowDisc) d.discountOn = false;
       if (d.fixedUse && !(Number(d.balanceUse) > 0)) d.balanceUse = 98;
     });
   }

@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "scope": "membership-card-only",
+    "canvas": {
+      "width": 390,
+      "height": 844,
+      "unit": "pt"
+    },
+    "source": "card/demo.html (extracted, no Figma)",
+    "platforms": [
+      "Android XML",
+      "iOS SwiftUI"
+    ],
+    "conflictRule": [
+      "Visual: capture PNG at ?flow=&capture=1 (390 logical width, scale=1)",
+      "Behavior/copy/state: PRD-会员卡管理.md + demo.html",
+      "Do NOT clone prototype fake iOS status bar; use system safe areas"
+    ]
+  },
+  "color": {
+    "brand": "#F32F41",
+    "brandSoft": "#FFF2F2",
+    "brandBorder": "#FFD5D9",
+    "success": "#2BA471",
+    "successSoft": "#E8F8F2",
+    "successText": "#008858",
+    "bgPage": "#F7F7F7",
+    "surface": "#FFFFFF",
+    "textPrimary": "#333333",
+    "textSecondary": "#929292",
+    "textStrong": "#1A1A1A",
+    "border": "#D7D7D5",
+    "disabled": "#EDEDED",
+    "cardDivider": "rgba(0,0,0,0.04)",
+    "infoBg": "#E7F1FF",
+    "infoText": "#1A70FE",
+    "warnBg": "#FFF8E6",
+    "warnText": "#E37318",
+    "neutralBg": "#EDEDED",
+    "neutralText": "#929292",
+    "switchIncludeOn": "#34C759",
+    "switchQtyOn": "#FF7043",
+    "shellChrome": "#E8EAED"
+  },
+  "typography": {
+    "fontText": {
+      "ios": "PingFang SC",
+      "android": "sans-serif",
+      "note": "Prototype also cites Source Han Sans SC; prefer PingFang on iOS, system sans on Android"
+    },
+    "fontData": {
+      "family": "TCloudNumber",
+      "fallback": [
+        "DIN Alternate",
+        "Helvetica Neue",
+        "monospace"
+      ],
+      "files": "card/assets/fonts/TCloudNumber/*.ttf"
+    },
+    "sizesPt": {
+      "caption2": 10,
+      "caption": 11,
+      "footnote": 12,
+      "subhead": 13,
+      "body": 14,
+      "callout": 15,
+      "headline": 16,
+      "title3": 17,
+      "title2": 18,
+      "title1": 20,
+      "largeTitle": 22,
+      "display": 28,
+      "amountXL": 32
+    },
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  "spacing": {
+    "scalePt": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      20,
+      24,
+      32,
+      40,
+      48
+    ],
+    "common": {
+      "pageH": 16,
+      "sectionGap": 12,
+      "rowV": 14,
+      "rowH": 16,
+      "chipHPad": 12,
+      "bottomBarPad": 16,
+      "sheetTopPad": 20,
+      "listCardGap": 12
+    }
+  },
+  "radius": {
+    "xs": 4,
+    "sm": 6,
+    "md": 8,
+    "lg": 10,
+    "xl": 12,
+    "xxl": 16,
+    "pill": 999,
+    "sheetTop": [
+      16,
+      16,
+      0,
+      0
+    ]
+  },
+  "elevation": {
+    "bottomBarShadow": "0 -0.5 4 rgba(0,0,0,0.08)"
+  },
+  "touch": {
+    "minHeightPt": 44,
+    "navBarHeightPt": 44,
+    "bottomPrimaryButtonHeightPt": 44,
+    "safeBottomHintPt": 34
+  },
+  "cardFaceThemes": {
+    "peach": {
+      "label": "蜜桃色",
+      "gradient": [
+        "#F4EAE5",
+        "#EED1C3"
+      ],
+      "accent": "#C4A394",
+      "vipBg": "#E2D0C6",
+      "vipText": "#694E42"
+    },
+    "mint": {
+      "label": "薄荷绿",
+      "gradient": [
+        "#EDF2E9",
+        "#B1CD9B"
+      ],
+      "accent": "#9DAF93",
+      "vipBg": "#CFDFC3",
+      "vipText": "#617258"
+    },
+    "haze": {
+      "label": "雾霾蓝",
+      "gradient": [
+        "#E9F0F3",
+        "#C0DCE9"
+      ],
+      "accent": "#8FA4AF",
+      "vipBg": "#CED8DF",
+      "vipText": "#405660"
+    },
+    "taro": {
+      "label": "香芋紫",
+      "gradient": [
+        "#F0EBF3",
+        "#CFBCDA"
+      ],
+      "accent": "#A89CAF",
+      "vipBg": "#DCD3E0",
+      "vipText": "#574861"
+    },
+    "milk": {
+      "label": "奶茶色",
+      "gradient": [
+        "#F4EEE3",
+        "#DFC9A1"
+      ],
+      "accent": "#B6A57A",
+      "vipBg": "#E0D8C1",
+      "vipText": "#5D5435"
+    }
+  }
+}

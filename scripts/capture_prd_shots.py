@@ -23,6 +23,10 @@ FLOWS = [
     "issue-success",
     "pick-projects",
     "pick-discount-list",
+    "card-groups",
+    "card-group-members",
+    "card-group-create",
+    "card-item-group",
 ]
 
 

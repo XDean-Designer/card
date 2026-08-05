@@ -61,11 +61,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.6</td>
+<td>v1.7</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-07-28</td>
+<td>2026-08-05</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -204,6 +204,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>创建固定 <strong>三步</strong>：基本信息 → 权益组合 → 用卡策略；Step2 <strong>至少开启并配置一类权益</strong>。  </li>
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
+<li><strong>会员卡分组</strong>：列表可按分组筛选；支持分组管理（新建/重命名/删除/拖排序）、编辑成员、列表「快速分组」；一张卡可同时属于多个分组。  </li>
 <li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
@@ -245,7 +246,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>运营闭环</td>
-<td>列表 / 详情 / 上下架 / 复制 / 办卡 / 延期 / 整卡退卡</td>
+<td>列表 / 分组 / 详情 / 上下架 / 复制 / 办卡 / 延期 / 整卡退卡</td>
 </tr>
 <tr>
 <td>策略可配置</td>
@@ -256,11 +257,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>1.3 本期做（In）</h2>
 <ul>
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
+<li><strong>会员卡分组</strong>：自定义分组（名称 ≤20 字、不可重名）；列表筛选轨（全部 + 分组 + 齿轮进管理）；分组管理（拖排序 / 新建 / 重命名 / 删除）；编辑成员（多选卡入组）；列表「快速分组」Sheet（多选加入，可同时属多组）；删除分组 <strong>不删卡</strong>  </li>
 <li>
 <p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
-<p>卡面主题色（5 色）、卡有效期限（日/月/年/永久，受不限次与「是否含项目/折扣」约束）  </p>
+<p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
 <li>办卡：单选既存会员 → 去结账支付 → 办卡成功  </li>
@@ -302,7 +304,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>期限卡</td>
-<td>Step1 <strong>有效期限</strong>；含不限次项目时不可为「永久」</td>
+<td>Step1 <strong>有效期限</strong>；含不限次项目时不可为「永久」；含项目/产品/折扣时须设妥期限</td>
 </tr>
 <tr>
 <td>组合（储值+项目+折扣等）</td>
@@ -357,6 +359,10 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>面值/项目/产品/折扣按需勾选配置，预览卡面</td>
 </tr>
 <tr>
+<td>分组运营</td>
+<td>新建分组 → 编辑成员或快速分组 → 列表按组筛选；空组可「添加卡到本组」</td>
+</tr>
+<tr>
 <td>有持卡后改规则</td>
 <td>不能直接编辑模板；复制建卡后改新卡</td>
 </tr>
@@ -389,7 +395,8 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
 <li>已下架卡列表无「办卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
 <li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加。  </li>
-<li>退卡确认后该会员不再作为有效持卡；进入退卡成功页，实退金额以确认值为准展示。</li>
+<li>退卡确认后该会员不再作为有效持卡；进入退卡成功页，实退金额以确认值为准展示。  </li>
+<li>有卡时列表展示分组筛选；空组筛选显示「本组暂无会员卡」并可进入编辑成员。</li>
 </ol>
 <hr />
 <h1>模块 3　信息架构与页面清单</h1>
@@ -415,6 +422,9 @@ tr:nth-child(even) td{background:#fafbfc}
 <h3>运营主链</h3>
 <div class="mermaid">flowchart LR
   L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
+  L --&gt;|齿轮| G[分组管理]
+  G --&gt;|点分组行| GM[编辑成员]
+  L --&gt;|快速分组| GS[[设置分组 Sheet]]
   DET --&gt;|编辑·无持卡| S1[Step1…三步]
   DET --&gt;|复制建卡| S1
   DET --&gt;|下架| OFF[[下架确认]]
@@ -422,10 +432,11 @@ tr:nth-child(even) td{background:#fafbfc}
   DET --&gt;|重新上架·已下架| ON[[上架确认]]
   ON --&gt;|确认| L
   L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
-  DET --&gt;|办卡/退卡| M</div>
-<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架等见模块 4。</p>
+  DET --&gt;|已持卡管理| M</div>
+<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见模块 4。</p>
 <pre><code>会员卡管理
- ├─ 列表（在售 / 已下架）
+ ├─ 列表（在售 / 已下架 + 分组筛选轨）
+ ├─ 分组管理 / 编辑成员
  ├─ 添加/编辑/复制 · Step1 基本信息
  ├─ Step2 权益组合
  │    ├─ 添加/编辑项目权益（标题栏「管理价目表」）
@@ -438,6 +449,8 @@ tr:nth-child(even) td{background:#fafbfc}
  └─ Sheets / 弹层
       ├─ 选择会员（办卡 · 单选 · 去结账 | 退卡/延期）
       ├─ 确认办卡（卡已锁定 · 选员工 · 确认办卡）
+      ├─ 设置分组（快速分组 · 可多选多组）
+      ├─ 新建/重命名分组 · 删除分组确认
       ├─ 退卡估值
       ├─ 下架确认 / 重新上架确认（居中 sheet）
       ├─ 设置有效期限（不限次与永久冲突）
@@ -456,7 +469,17 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>列表</td>
 <td>会员卡管理</td>
-<td>Tab：在售 / 已下架；底栏「添加会员卡」；空态可点插图创建</td>
+<td>Tab：在售 / 已下架；有卡时显示分组筛选轨（全部+分组+齿轮）；底栏「添加会员卡」；空态可点插图创建</td>
+</tr>
+<tr>
+<td>分组管理</td>
+<td>分组管理</td>
+<td>分组列表拖排序；新建；行菜单：编辑成员/重命名/删除</td>
+</tr>
+<tr>
+<td>编辑成员</td>
+<td>编辑成员 · {组名}</td>
+<td>多选全部模板卡（含已下架标记）入组；底栏保存</td>
 </tr>
 <tr>
 <td>Step1</td>
@@ -481,12 +504,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>详情</td>
 <td>会员卡详情</td>
-<td>运营数据 + 卡面信息；在售顶栏下架/编辑</td>
+<td>运营数据 + 卡面信息；在售顶栏下架/编辑；已下架顶栏复制建卡</td>
 </tr>
 <tr>
 <td>项目权益页</td>
 <td>添加/编辑项目权益</td>
-<td>适用项目 + 分组筛选 + 权益参数；页内「确定」；「管理价目表」</td>
+<td>适用项目 + <strong>价目</strong>分组筛选 + 权益参数；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>产品权益页</td>
@@ -512,6 +535,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>确认办卡</td>
 <td>确认办卡</td>
 <td>会员卡管理快捷办卡：会员/卡只读 + 服务员工 +「确认办卡」；无选卡/补录</td>
+</tr>
+<tr>
+<td>设置分组</td>
+<td>设置分组</td>
+<td>标题为卡名；副文案「可同时加入多个分组」；无分组时空态引导新建</td>
 </tr>
 <tr>
 <td>退卡估值</td>
@@ -611,9 +639,29 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>同上屏 · 选中自定义分组 Tab</td>
 <td><a href="demo.html?flow=pick-discount-group">demo.html?flow=pick-discount-group</a></td>
 </tr>
+<tr>
+<td>分组管理</td>
+<td><img alt="分组管理" src="assets/prd-shots/card-groups.png" /></td>
+<td><a href="demo.html?flow=card-groups">demo.html?flow=card-groups</a></td>
+</tr>
+<tr>
+<td>编辑成员</td>
+<td><img alt="编辑成员" src="assets/prd-shots/card-group-members.png" /></td>
+<td><a href="demo.html?flow=card-group-members">demo.html?flow=card-group-members</a></td>
+</tr>
+<tr>
+<td>新建分组 Dialog</td>
+<td><img alt="新建分组" src="assets/prd-shots/card-group-create.png" /></td>
+<td><a href="demo.html?flow=card-group-create">demo.html?flow=card-group-create</a></td>
+</tr>
+<tr>
+<td>设置分组 Sheet</td>
+<td><img alt="设置分组" src="assets/prd-shots/card-item-group.png" /></td>
+<td><a href="demo.html?flow=card-item-group">demo.html?flow=card-item-group</a></td>
+</tr>
 </tbody>
 </table>
-<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> + sheets；办卡支付复用开单结账路由。</p>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单结账路由。</p>
 <hr />
 <h1>模块 4　状态机</h1>
 <blockquote>
@@ -691,7 +739,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td><code>duplicate</code></td>
-<td>「+复制建卡」</td>
+<td>「复制建卡」</td>
 <td>新建模板（名称默认「原名（副本）」）；原卡不变 → 创建成功页</td>
 </tr>
 </tbody>
@@ -699,7 +747,42 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>复制模式三步均展示横幅：<code>正在基于「{原卡名}」创建新卡，保存后原卡不受影响</code>。</p>
 <h2>4.4 列表 Tab</h2>
 <p><code>listShelfTab</code>: <code>active</code> | <code>shelved</code>，仅切换列表数据源与空态文案，不改模板状态。</p>
-<h2>4.5 持卡相关（实例层）</h2>
+<h2>4.5 会员卡分组筛选</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>筛选轨</td>
+<td>店内 <strong>至少有一张卡</strong> 时展示：<code>全部</code> + 自定义分组；右侧齿轮 → 分组管理</td>
+</tr>
+<tr>
+<td>当前组</td>
+<td><code>activeCardGroupId</code>（列表表面）；<code>全部</code> 不过滤；指定组仅显示 <code>itemIds</code> 内模板</td>
+</tr>
+<tr>
+<td>空组</td>
+<td>筛选结果为 0 →「本组暂无会员卡」+「添加卡到本组」→ 编辑成员</td>
+</tr>
+<tr>
+<td>多归属</td>
+<td>同一模板可出现在多个分组的 <code>itemIds</code></td>
+</tr>
+<tr>
+<td>删组</td>
+<td>仅移除分组实体；<strong>不删除</strong>模板；若当前筛在该组则回「全部」</td>
+</tr>
+<tr>
+<td>排序</td>
+<td>分组管理页拖拽改序；列表按模板 <code>createdAt</code> 降序（<strong>无</strong>卡列表拖排序）</td>
+</tr>
+</tbody>
+</table>
+<h2>4.6 持卡相关（实例层）</h2>
 <table>
 <thead>
 <tr>
@@ -902,6 +985,16 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>实退为空</td>
 <td>请填写实际退款金额</td>
 </tr>
+<tr>
+<td>新建/重命名分组</td>
+<td>名称为空</td>
+<td>请输入分组名称</td>
+</tr>
+<tr>
+<td>新建/重命名分组</td>
+<td>与其它组重名</td>
+<td>分组名称已存在</td>
+</tr>
 </tbody>
 </table>
 <p><strong>不限次冲突弹窗</strong>：标题「设置有效期限」；正文「不限次项目不可使用永久有效，请在此设置卡有效期。」；时长仅日/月/年（默认 1 年），无「永久」。</p>
@@ -927,6 +1020,14 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>所有会员均已持有该卡</td>
 </tr>
 <tr>
+<td>分组筛选空</td>
+<td>本组暂无会员卡；添加卡到本组</td>
+</tr>
+<tr>
+<td>设置分组无组</td>
+<td>暂无分组；请先创建分组，再把会员卡加入；去新建分组</td>
+</tr>
+<tr>
 <td>卡面预览无权益</td>
 <td>暂无权益信息</td>
 </tr>
@@ -945,13 +1046,14 @@ tr:nth-child(even) td{background:#fafbfc}
 <ul>
 <li>标题：会员卡管理  </li>
 <li>Tab：在售 | 已下架  </li>
-<li>列表项：卡面条（渐变底 + VIP SVG + 卡名 +「价格」标签 + 金额）+ 权益摘要面板 + footer（复制描边 / 办卡实心胶囊）  </li>
-<li>底栏：添加会员卡  </li>
-<li>空态：文案 + 可点击虚线卡面插图进入创建  </li>
+<li><strong>分组筛选轨</strong>（有卡时）：<code>全部</code> + 自定义分组 + 齿轮（分组管理）  </li>
+<li>列表项：紧凑卡头（主题渐变 + VIP 徽标 + 卡名；已下架名旁「已下架」标签；右侧 <strong>购买金额</strong> <code>¥…</code>，无单独「价格」字样）+ 权益摘要面板 + footer  </li>
+<li>底栏：添加会员卡（在售）  </li>
+<li>空态：文案 + 可点击虚线卡面插图进入创建；分组空态见上  </li>
 </ul>
-<p><strong>在售 footer</strong>：<code>+复制建卡</code>、<code>办卡/退卡</code><br />
-<strong>已下架 footer</strong>：仅 <code>+复制建卡</code>  </p>
-<p><strong>卡面摘要面板</strong>（列表与详情「卡面信息」共用同一套规则；合并粒度对齐 Step2 权益 ticket）</p>
+<p><strong>在售 footer</strong>：左「复制建卡」；右「快速分组」+「办卡/退卡」<br />
+<strong>已下架 footer</strong>：左「复制建卡」；右「快速分组」（<strong>无</strong>办卡/退卡）  </p>
+<p><strong>卡面摘要面板</strong>（列表用分区网格；详情「卡面信息」为键值行，合并粒度对齐 Step2 ticket）</p>
 <ul>
 <li>面值：<code>面值 ¥X · 赠送 ¥Y</code>（开启面值时；不展示可否购产品）  </li>
 <li>项目 / 产品 / 折扣：双列网格；超过 4 条折叠，「展开 N 项」/「收起」；<strong>多名合并行通栏</strong>  </li>
@@ -960,7 +1062,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><strong>共计</strong>：同共享池多名合并一行；<code>A、B · 共计N次</code>（卡面文案用「共计」；Step2 票根仍为「共」）  </li>
 <li><strong>折扣</strong>（对齐 Step2 折扣 ticket）：<strong>同折扣规则</strong>的多名合并一行；<code>A、B · 8.5折</code>；全选键 <code>__ALL__</code> 展示为 <code>全部项目 · …</code>  </li>
 <li><strong>产品</strong>：一项一行（不合并）；<code>产品名 ×N</code>（名称与数量之间为空格，不加「·」）  </li>
-<li>期限：有项目/折扣/产品展示卡有效期；纯面值「永久有效」；否则「—」  </li>
+<li><strong>期限</strong>：开启项目/产品/折扣时展示卡有效期文案；纯面值「永久有效」；否则「—」  </li>
 </ul>
 <p><strong>跳转</strong></p>
 <table>
@@ -980,12 +1082,57 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>详情</td>
 </tr>
 <tr>
-<td>+复制建卡</td>
+<td>复制建卡</td>
 <td><code>formMode=duplicate</code>，卡名「原名（副本）」→ Step1</td>
+</tr>
+<tr>
+<td>快速分组</td>
+<td>打开「设置分组」Sheet</td>
 </tr>
 <tr>
 <td>办卡/退卡</td>
 <td>打开选择会员 Sheet（办卡 Tab）</td>
+</tr>
+<tr>
+<td>齿轮 / 空组「添加卡到本组」</td>
+<td>分组管理 / 编辑成员</td>
+</tr>
+</tbody>
+</table>
+<h2>6.1a 会员卡分组</h2>
+<p><strong>原型</strong>：<a href="demo.html?flow=card-groups">分组管理</a> · <a href="demo.html?flow=card-group-members">编辑成员</a> · <a href="demo.html?flow=card-item-group">设置分组</a> · <a href="demo.html?flow=card-group-create">新建分组</a></p>
+<p><img alt="分组管理" src="assets/prd-shots/card-groups.png" /></p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新建 / 重命名</td>
+<td>名称必填，<strong>最多 20 字</strong>，店内不可重名；toast「已新建分组」/「已重命名」</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>确认后 toast「已删除分组」；不删模板</td>
+</tr>
+<tr>
+<td>拖排序</td>
+<td>分组管理列表手柄拖拽，落点即提交顺序</td>
+</tr>
+<tr>
+<td>编辑成员</td>
+<td>多选全部模板（已下架名后附「 · 已下架」）；保存 toast「已更新成员」回分组管理</td>
+</tr>
+<tr>
+<td>快速分组</td>
+<td>Sheet 标题=卡名；副文案「可同时加入多个分组」；勾选多组确认写回各 <code>itemIds</code>；无组时引导「去新建分组」</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>写操作走会员卡写权限（与建卡/上下架同类）</td>
 </tr>
 </tbody>
 </table>
@@ -1014,16 +1161,16 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>有效期限</td>
 <td style="text-align: center;">条件</td>
-<td>日/月/年/永久（默认永久）。开启项目或折扣时须设数量；纯面值可永久</td>
+<td>日/月/年/永久（默认永久）。开启 <strong>项目 / 产品 / 折扣</strong> 时须设妥数量（不可空数量）；含不限次项目时不可为永久；纯面值可永久</td>
 </tr>
 <tr>
 <td>卡面模板</td>
 <td style="text-align: center;">✓</td>
-<td>五色，默认品牌红；实时预览</td>
+<td>五色：蜜桃色 / 薄荷绿 / 雾霾蓝 / 香芋紫 / 奶茶色；新建默认 <strong>蜜桃色</strong>（<code>peach</code>）；实时预览。旧 key <code>brand_red/gold/blue/purple/teal</code> 仅作别名映射</td>
 </tr>
 </tbody>
 </table>
-<p>步骤条：<code>第 1/3 步 · 基本信息</code>。底栏：下一步。无「卡项说明」UI。<code>audience</code> 默认 <code>['all']</code>，无 Step1 UI。</p>
+<p>步骤条：<code>第 1/3 步 · 基本信息</code>。底栏：下一步。无「适用对象」「卡项说明」UI。<code>audience</code> 默认 <code>['all']</code>，无 Step1 UI。</p>
 <h2>6.3 Step2 权益组合</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=create-step2">打开 Step2</a></p>
 <p><img alt="Step2 权益组合" src="assets/prd-shots/create-step2.png" /></p>
@@ -1132,7 +1279,8 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>已下架顶栏：已下架标记、复制建卡  </li>
 <li><strong>仅已下架有底栏</strong>：重新上架 | 已持卡管理  </li>
 <li>运营数据 + <code>?</code> 说明（定义见模块 9）  </li>
-<li>卡面信息含面值金额/赠送（不含可否购产品）；<strong>项目/产品/折扣行规则同 6.1</strong>（含共计合并、折扣同规则合并、<code>名称 · 参数</code>）；超 4 展开；用卡策略各段可 <code>?</code></li>
+<li>卡面信息：面值金额 / 赠送（不含可否购产品）；项目 / 产品 / 折扣摘要；有期限权益时展示 <strong>「项目/折扣有效期」</strong>（含产品开启场景）；用卡策略展示为 <code>均值退卡 · 均值计绩</code> 等形式，退卡/业绩各带 <code>?</code>  </li>
+<li>列表折叠网格规则见 6.1；详情为键值列表（不套用「展开 N 项」）</li>
 </ul>
 <h2>6.10 选择会员 Sheet</h2>
 <ul>
@@ -1222,7 +1370,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td><code>cardColor</code></td>
-<td>brand_red / gold / blue / purple / teal</td>
+<td>peach / mint / haze / taro / milk（别名 brand_red→peach 等）</td>
 </tr>
 <tr>
 <td><code>usagePolicy.refundRule</code></td>
@@ -1247,6 +1395,33 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td><code>source</code> / <code>duplicatedFrom</code> / <code>createdAt</code></td>
 <td>来源与时间</td>
+</tr>
+</tbody>
+</table>
+<h3>会员卡分组（CardGroup）</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>分组 ID</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>名称，≤20，店内唯一</td>
+</tr>
+<tr>
+<td><code>itemIds[]</code></td>
+<td>归属的模板 ID 列表（可多组交叉）</td>
+</tr>
+<tr>
+<td>顺序</td>
+<td>以数组下标 / 管理页拖拽结果为准</td>
 </tr>
 </tbody>
 </table>
@@ -1445,7 +1620,11 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>列表操作</td>
-<td>+复制建卡；办卡/退卡</td>
+<td>复制建卡；快速分组；办卡/退卡</td>
+</tr>
+<tr>
+<td>分组</td>
+<td>分组管理；编辑成员；新建分组；重命名分组；删除分组；设置分组；可同时加入多个分组；本组暂无会员卡；添加卡到本组；暂无分组；已新建分组；已重命名；已删除分组；已更新成员；请输入分组名称；分组名称已存在</td>
 </tr>
 <tr>
 <td>展开</td>
@@ -1532,7 +1711,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>卡有效期</td>
-<td>模板级有效期，仅约束项目与折扣权益；面值永久有效，不受卡级到期影响。</td>
+<td>模板级有效期，约束 <strong>项目 / 产品 / 折扣</strong> 权益；面值永久有效，不受卡级到期影响。</td>
 </tr>
 <tr>
 <td>消费次数（含赠送）</td>
@@ -1724,6 +1903,34 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>确定</td>
 <td>Step2 每种项目各一张 ticket</td>
 </tr>
+<tr>
+<td>21</td>
+<td>新建分组</td>
+<td>有卡</td>
+<td>齿轮→新建合法名</td>
+<td>列表出现该组 Tab</td>
+</tr>
+<tr>
+<td>22</td>
+<td>快速分组多选</td>
+<td>已有两组</td>
+<td>勾选两组确认</td>
+<td>两组成员均含该卡</td>
+</tr>
+<tr>
+<td>23</td>
+<td>空组筛选</td>
+<td>空组</td>
+<td>点该组 Tab</td>
+<td>「本组暂无会员卡」+可添加</td>
+</tr>
+<tr>
+<td>24</td>
+<td>删组不删卡</td>
+<td>组内有卡</td>
+<td>删除分组</td>
+<td>卡仍在「全部」；组 Tab 消失</td>
+</tr>
 </tbody>
 </table>
 <h2>10.2 回归</h2>
@@ -1786,31 +1993,38 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <th>key</th>
 <th>名称</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>brand_red</td>
-<td>品牌红（默认）</td>
+<td>peach</td>
+<td>蜜桃色</td>
+<td><strong>新建默认</strong></td>
 </tr>
 <tr>
-<td>gold</td>
-<td>金棕</td>
+<td>mint</td>
+<td>薄荷绿</td>
+<td></td>
 </tr>
 <tr>
-<td>blue</td>
-<td>深蓝</td>
+<td>haze</td>
+<td>雾霾蓝</td>
+<td></td>
 </tr>
 <tr>
-<td>purple</td>
-<td>紫罗兰</td>
+<td>taro</td>
+<td>香芋紫</td>
+<td></td>
 </tr>
 <tr>
-<td>teal</td>
-<td>青绿</td>
+<td>milk</td>
+<td>奶茶色</td>
+<td></td>
 </tr>
 </tbody>
 </table>
+<p>兼容别名（读旧数据）：<code>brand_red→peach</code>，<code>gold→milk</code>，<code>blue→haze</code>，<code>purple→taro</code>，<code>teal→mint</code>。</p>
 <h2>附录 B · 依赖说明</h2>
 <ul>
 <li>价目：项目/产品勾选依赖价目数据；价目产品本身不在本文交付。面值支付范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>

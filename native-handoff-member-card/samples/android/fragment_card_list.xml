@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SAMPLE ONLY · 会员卡列表在售 · 示范命名与 Token 用法，非完整可运行工程 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_card_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page">
+
+    <LinearLayout
+        android:id="@+id/nav_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/nav_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_pageH"
+        android:paddingEnd="@dimen/space_pageH"
+        android:background="@color/surface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/touch_min"
+            android:layout_height="@dimen/touch_min"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/Text.NavTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="会员卡管理" />
+
+        <View
+            android:layout_width="@dimen/touch_min"
+            android:layout_height="@dimen/touch_min" />
+    </LinearLayout>
+
+    <!-- 在售 | 已下架 -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_shelf"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        app:layout_constraintTop_toBottomOf="@id/nav_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 分组筛选轨 -->
+    <HorizontalScrollView
+        android:id="@+id/group_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="@dimen/space_pageH"
+        android:paddingEnd="@dimen/space_8"
+        app:layout_constraintTop_toBottomOf="@id/tab_shelf"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cards"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="@dimen/space_pageH"
+        app:layout_constraintTop_toBottomOf="@id/group_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_bottomBarPad"
+        android:background="@color/surface"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btn_add_card"
+            style="@style/Btn.Main"
+            android:layout_width="match_parent"
+            android:text="添加会员卡" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

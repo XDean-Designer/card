@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SAMPLE · item_member_card.xml · 对照 COMPONENTS MemberCardRow -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/space_listCardGap"
+    android:background="@color/surface">
+
+    <RelativeLayout
+        android:id="@+id/header_compact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_12">
+        <!-- gradient background set in code from card_*_grad_* -->
+        <TextView android:id="@+id/tv_vip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VIP" />
+        <TextView android:id="@+id/tv_name" style="@style/Text.Body" android:layout_toEndOf="@id/tv_vip" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/tv_price" style="@style/Text.Amount" android:layout_alignParentEnd="true" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/panel_face"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/space_12" />
+
+    <LinearLayout
+        android:id="@+id/footer_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_12">
+        <Button android:id="@+id/btn_clone" style="@style/Btn.CardFace.Outline" android:layout_width="wrap_content" android:text="复制建卡" />
+        <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+        <Button android:id="@+id/btn_group" style="@style/Btn.CardFace.Outline" android:layout_width="wrap_content" android:text="快速分组" />
+        <Button android:id="@+id/btn_issue" style="@style/Btn.CardFace.Solid" android:layout_width="wrap_content" android:text="办卡/退卡" />
+    </LinearLayout>
+</LinearLayout>
