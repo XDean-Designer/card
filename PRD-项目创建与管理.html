@@ -58,11 +58,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.7</td>
+<td>v1.8</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-03</td>
+<td>2026-08-05</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -199,10 +199,10 @@ tr:nth-child(even) td{background:#fafbfc}
 <ol>
 <li>本期是对 <strong>旧价目表 / 旧项目管理</strong> 的 <strong>整体重构并覆盖</strong>，不是长期并行两套。新版强调 B 端 <strong>工具属性</strong>：列表 <strong>纯信息、无列表配图装饰</strong>，一屏信息密度更高，操作更紧凑。  </li>
 <li>价目分 <strong>项目</strong> 与 <strong>产品</strong> 两个 Tab；均可 <strong>分组筛选</strong>、<strong>多分组归属</strong>、行内 <strong>拖拽排序</strong>（在约束内）、左滑/长按快捷操作。  </li>
-<li>项目可被会员卡权益 <strong>按名称绑定</strong>（项目桶、产品桶内 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、手机端可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。<code>boundToCard</code> 随模板引用 <strong>自动派生并刷新</strong>。  </li>
-<li>B 端改价、上下架、时长、隐藏、封面、<strong>产品库存</strong>等变更需 <strong>同步客户端展示</strong>（开单侧为 <strong>实时目录/价格/库存</strong>；推送细节【待联调确认】）；顾客端具体 UI <strong>不在本文展开</strong>。  </li>
+<li>项目可被会员卡权益 <strong>按名称绑定</strong>（项目桶、产品桶内 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。<code>boundToCard</code> 随模板引用 <strong>自动派生并刷新</strong>。  </li>
+<li>B 端改价、上下架、时长、隐藏、封面等变更需 <strong>同步客户端展示</strong>（开单侧为 <strong>实时目录/价格</strong>；推送细节【待联调确认】）；顾客端具体 UI <strong>不在本文展开</strong>。价目产品 <strong>本期不维护库存字段</strong>（见 8.1）。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进入价目再返回时 <strong>刷新权益选品分组 Tab</strong>（重置为「全部」并重绘）；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
-<li><strong>开单选品</strong> 与权益选品同口径：仅 <code>onSale &amp;&amp; !hidden</code>；<strong>产品库存</strong>参与加购上限（空库存=不限购，见 <strong>8.1</strong>；<code>stock</code> <strong>预埋关联</strong>后续「库存管理」）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
+<li><strong>开单选品</strong> 与权益选品同口径：仅 <code>onSale &amp;&amp; !hidden</code>；价目产品 <strong>不限购</strong>（见 <strong>8.1</strong>）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式接口文档 <strong>暂无交付时间</strong>；不臆造现网 URL。  </li>
 <li><strong>本期仅单店</strong>；价目管理权限：<strong>店主可编辑</strong>，<strong>店员不可编辑</strong>。</li>
 </ol>
@@ -216,9 +216,9 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>旧价目表 / 旧项目管理在列表中带有图片与较多装饰元素，<strong>内容不够紧凑</strong>，一屏信息量少，操作分散，不符合 B 端管理软件「找得到、改得快」的诉求。</p>
 <p>本期在整体产品（含会员卡权益组合）对齐前提下重构价目能力：</p>
 <ul>
-<li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格/库存展示、价格），无列表配图堆叠、无行内状态列；  </li>
+<li><strong>工具属性更强</strong>：列表纯信息行（名称、时长/规格、价格），无列表配图堆叠、无行内状态列；  </li>
 <li><strong>操作紧凑</strong>：Tab、分组轨、标题栏品牌红「+添加」按钮、左滑/长按菜单、拖拽排序集中在一屏；下架与隐藏以分区/折叠呈现；  </li>
-<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）、<strong>隐藏</strong> 与系统「隐藏」分组、<strong>产品可选库存</strong>；  </li>
+<li><strong>市场反馈补强</strong>：拖拽排列顺序、更完整的分组管理（新建/重命名/删组不删货、多选成员、条目可多组）、<strong>隐藏</strong> 与系统「隐藏」分组；  </li>
 <li><strong>与会员卡 / 开单联结</strong>：价目为选权益、折扣适用范围及 <strong>开单选品</strong> 的数据源；支持从权益页「管理价目表」往返。</li>
 </ul>
 <h2>1.2 目标</h2>
@@ -244,7 +244,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>售卖可控</td>
-<td>在售/下架/隐藏；项目可配手机端预约；产品可选库存限购</td>
+<td>在售/下架/隐藏；项目可配可预约；价目产品本期不维护库存</td>
 </tr>
 <tr>
 <td>可见性清晰</td>
@@ -258,24 +258,24 @@ tr:nth-child(even) td{background:#fafbfc}
 </table>
 <h2>1.3 本期做（In）</h2>
 <ul>
-<li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红填充「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无右下悬浮球</strong>）、列头排序、空态（<strong>无搜索</strong>）  </li>
+<li>价目表列表：项目 Tab / 产品 Tab、标题栏品牌红填充「+添加」按钮（跟 Tab 直接新建、不弹窗；<strong>无右下悬浮球</strong>）、列表底部虚线添加行、列头排序、空态（<strong>无搜索</strong>）  </li>
 <li>列表分区：<strong>在售区</strong> → <strong>「已下架」分区</strong> →（「全部」Tab）底部 <strong>「已隐藏」折叠</strong>  </li>
-<li>新增 / 编辑 / 删除项目与产品（表单三段：基本信息 / 售卖设置 / 高级设置）  </li>
-<li><strong>产品库存</strong>（选填；列表列展示；开单加购/支付扣减见 <strong>8.1</strong>；<strong>预埋关联后续「库存管理」</strong>）  </li>
-<li>上传封面图（选填，演示最多 1 张）  </li>
+<li>新增 / 编辑 / 删除项目与产品（表单三段：基本信息 / 售卖设置 / 高级设置；产品含 <strong>规格选填</strong>；<strong>无库存字段</strong>）  </li>
+<li><strong>产品库存</strong>：价目侧本期不维护（见 <strong>8.1</strong>）；库存管理另模块  </li>
+<li>封面图选填（演示最多 1 张；标签「项目封面图（可选）」/「产品封面图（可选）」）  </li>
 <li>在售切换、<strong>隐藏 / 取消隐藏</strong>  </li>
 <li>分组：筛选 Tab（全部 / 自定义 / <strong>隐藏</strong>）、分组管理、编辑成员、条目设置多分组、分组拖拽排序  </li>
-<li>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内）  </li>
+<li>列表拖拽排序（<strong>在售桶 / 下架桶</strong> 内；自定义分组 Tab 内可拖）  </li>
 <li>左滑快捷操作与长按操作 Sheet（删除锁定锁标）  </li>
 <li>项目绑卡锁定（部分字段）及提示文案  </li>
 <li>从会员卡权益页「管理价目表」进入并返回  </li>
-<li><strong>开单选品</strong> 联结（仅在售且未隐藏；产品带库存上限；价目改价支付拦截见 6.8）  </li>
+<li><strong>开单选品</strong> 联结（仅在售且未隐藏；价目产品不限购；价目改价支付拦截见 6.8）  </li>
 <li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
 <ul>
-<li>顾客端 / 小程序预约页、开单页的完整 UI 规格（仅约定消费价目结果与库存规则）  </li>
-<li><strong>「库存管理」完整功能</strong>（入库/出库/盘点/流水等）：<strong>后续独立上线</strong>；本期仅在价目产品预埋 <code>stock</code> 字段并约定关联语义（见 <strong>8.1</strong>）。工作台若已有「库存管理」入口，原型可不落地页面。  </li>
+<li>顾客端 / 小程序预约页、开单页的完整 UI 规格（仅约定消费价目结果）  </li>
+<li><strong>「库存管理」完整功能</strong>（入库/出库/盘点/流水等）：<strong>不在本期价目表</strong>；见 <strong>8.1</strong>（工作台可有入口，与价目表单字段解耦）  </li>
 <li>会员卡创建三步、办卡支付、退卡（见 <code>PRD-会员卡管理.md</code>）  </li>
 <li>真实图片上传 / 正式 OSS / 封面 B→C 专项验收（<strong>本期不做</strong>；原型仅为演示图）  </li>
 <li>原型「无数据/有数据」造数开关  </li>
@@ -298,7 +298,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>维护可售卖货品</td>
-<td><strong>产品</strong> Tab：名称、规格、价格、<strong>可选库存</strong>、在售、可选封面图</td>
+<td><strong>产品</strong> Tab：名称、规格、价格、在售、可选封面图（<strong>无库存字段</strong>；见 8.1）</td>
 </tr>
 <tr>
 <td>列表浏览与查找</td>
@@ -368,8 +368,8 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td>新建产品</td>
-<td>填名称/规格（选填）/价格/库存（选填）后出现在产品列表</td>
-<td>列表「名称（规格）」+ 库存列；在售未隐藏时可开单/权益选用</td>
+<td>填名称/规格（选填）/价格后出现在产品列表</td>
+<td>列表「名称（规格）」+ 价格（无库存列）；在售未隐藏时可开单/权益选用</td>
 </tr>
 <tr>
 <td>改价</td>
@@ -384,12 +384,12 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>隐藏</td>
 <td>对顾客端隐藏但 B 端保留</td>
-<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭「手机端可预约」，取消隐藏后仍关，须手动再开</strong></td>
+<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭「可预约」，取消隐藏后仍关，须手动再开</strong></td>
 </tr>
 <tr>
 <td>产品库存</td>
-<td>选填库存以限制开单加购；预埋关联后续库存管理</td>
-<td>见 <strong>8.1</strong>：空=不限购；支付扣减（办卡/续卡不扣）；与「库存管理」共用 <code>stock</code> 数量语义</td>
+<td>价目侧不维护库存</td>
+<td>见 <strong>8.1</strong>：表单/列表无库存；开单对价目产品不限购；库存管理另模块</td>
 </tr>
 <tr>
 <td>分组运营</td>
@@ -399,7 +399,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>拖拽排序</td>
 <td>调整同售卖态桶内顺序</td>
-<td>刷新后顺序保持；「隐藏」Tab / 「全部」已隐藏折叠 / 列排序激活时不可拖</td>
+<td>刷新后顺序保持；自定义分组内可拖；「隐藏」Tab / 「全部」已隐藏折叠 / 列排序激活时不可拖</td>
 </tr>
 <tr>
 <td>绑卡项目</td>
@@ -409,7 +409,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <tr>
 <td>开单选品</td>
 <td>开单只选可售货</td>
-<td>仅 <code>onSale &amp;&amp; !hidden</code>；产品受库存上限</td>
+<td>仅 <code>onSale &amp;&amp; !hidden</code>；价目产品不限购（8.1）</td>
 </tr>
 <tr>
 <td>从建卡管价目</td>
@@ -427,10 +427,10 @@ tr:nth-child(even) td{background:#fafbfc}
  ├─ 列表（项目 Tab / 产品 Tab）
  │    ├─ 标题栏右侧品牌红「+添加」按钮（跟当前 Tab，不弹窗；无悬浮球）
  │    ├─ 分组轨（灰底白胶囊 · 可横滑 · 全部/自定义/隐藏）· 深灰齿轮
- │    ├─ 在售区 →「已下架」分隔行 →（全部）「已隐藏」折叠
- │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作
+ │    ├─ 在售区 →「已下架」分隔行 →（全部）「已隐藏」折叠 → 底部虚线添加行
+ │    ├─ 行：点击进详情 · 拖拽排序 · 左滑/长按操作（产品：名称规格+价格）
  │    └─ 空态（保留空态 CTA）
- ├─ 新增项目 / 新增产品
+ ├─ 新增项目 / 新增产品（基本信息含规格选填 · 售卖设置 · 高级设置·封面；无库存）
  ├─ 项目详情 / 产品详情
  ├─ 分组管理
  │    └─ 编辑成员（含系统「隐藏」组）
@@ -513,7 +513,8 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-list-action</code> / <code>price-list-hidden-open</code> / <code>price-groups</code> / <code>price-group-members</code> / <code>price-group-menu</code> / <code>price-group-create</code> / <code>price-group-rename</code> / <code>price-item-group</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code>。</p>
+<p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-list-action</code> / <code>price-list-swipe</code> / <code>price-list-swipe-locked</code> / <code>price-list-hidden-open</code> / <code>price-groups</code> / <code>price-group-members</code> / <code>price-group-menu</code> / <code>price-group-create</code> / <code>price-group-rename</code> / <code>price-group-delete</code> / <code>price-item-group</code> / <code>price-item-delete</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code> / <code>price-edit-product</code> / <code>price-edit-product-off-sale</code>。</p>
+<p>深链：<code>demo.html?flow=&lt;节点 id&gt;</code>（可选 <code>&amp;capture=1</code>）。开单改价拦截节点 <code>bill-pay-price-changed</code> 归属「开单记账」分组，规格见 §6.8。</p>
 <p>实现路由建议（名称可调整）：<code>price-list</code> / <code>price-add</code> / <code>price-edit</code> / <code>price-groups</code> / <code>price-group-members</code> + sheets。</p>
 <hr />
 <h1>模块 4　状态机</h1>
@@ -546,8 +547,8 @@ flowchart LR
 </code></pre>
 <ul>
 <li>绑卡 <strong>项目/产品</strong>：<strong>允许</strong> 改在售/下架（左滑、行操作 Sheet、详情表单 Switch 均可）。  </li>
-<li>项目下架时：<strong>手机端可预约</strong> 强制关闭并锁定，直至重新在售。  </li>
-<li>项目隐藏时：<strong>手机端可预约</strong> 强制关闭并锁定；<strong>取消隐藏后仍保持关闭</strong>，须商户在详情中 <strong>手动再打开</strong>（不自动恢复）。</li>
+<li>项目下架时：<strong>可预约</strong> 强制关闭并锁定，直至重新在售。  </li>
+<li>项目隐藏时：<strong>可预约</strong> 强制关闭并锁定；<strong>取消隐藏后仍保持关闭</strong>，须商户在详情中 <strong>手动再打开</strong>（不自动恢复）。</li>
 </ul>
 <h2>4.2 隐藏状态 <code>hidden</code></h2>
 <table>
@@ -595,7 +596,7 @@ flowchart LR
 </tr>
 <tr>
 <td>已绑卡</td>
-<td><strong>不可改</strong>：名称、手机端可预约；<strong>不可删除</strong></td>
+<td><strong>不可改</strong>：名称、可预约；<strong>不可删除</strong></td>
 </tr>
 <tr>
 <td>已绑卡仍可改</td>
@@ -603,7 +604,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>产品：绑卡名称样式同项目；<strong>在售/下架不受绑卡限制</strong>；删除若同时关联优惠券/商城则一并锁定（toast 区分来源）。产品详情不展示项目类通知条。</p>
+<p>产品：绑卡名称样式同项目（列表名称 <code>is-bound</code> 样式区分，<strong>无独立卡面图标</strong>）；<strong>在售/下架不受绑卡限制</strong>；删除若同时关联优惠券/商城则 toast「已关联会员卡/优惠券/商城，不可删除」（按实际关联动态拼接）。产品详情不展示项目类通知条。</p>
 <p>删除锁定视觉：左滑删除钮角标小锁；行操作 Sheet 删除项旁锁标。</p>
 <h2>4.4 表单模式</h2>
 <table>
@@ -648,7 +649,7 @@ flowchart LR
 <tr>
 <td>在售且未隐藏</td>
 <td>可见（项目预约另需 <code>bookable</code>）</td>
-<td>可选（产品另受库存上限）</td>
+<td>可选（价目侧不限购；见 8.1）</td>
 <td>可选</td>
 </tr>
 <tr>
@@ -666,7 +667,7 @@ flowchart LR
 </tbody>
 </table>
 <p><strong>顾客端可见</strong>（项目/产品）：<code>onSale &amp;&amp; !hidden</code>。<br />
-<strong>开单选品</strong>（项目/产品）：与权益同口径 <code>onSale &amp;&amp; !hidden</code>（产品加购另见 <strong>8.1</strong> 库存规则）。<br />
+<strong>开单选品</strong>（项目/产品）：与权益同口径 <code>onSale &amp;&amp; !hidden</code>（价目产品 <strong>不限购</strong>，见 <strong>8.1</strong>）。<br />
 <strong>顾客端可预约</strong>（仅项目）：<code>onSale &amp;&amp; !hidden &amp;&amp; bookable</code>。</p>
 <h2>4.7 列表排序相关状态</h2>
 <ul>
@@ -715,17 +716,13 @@ flowchart LR
 <td>请填写项目时长</td>
 </tr>
 <tr>
-<td>产品库存非空但非 0～999999 整数</td>
-<td>请填写有效库存（0～999999 的整数）</td>
-</tr>
-<tr>
-<td>产品库存超过 999999</td>
-<td>库存不能超过 999999</td>
+<td>时长选择器确认时不足 5 分钟</td>
+<td>时长至少5分钟</td>
 </tr>
 </tbody>
 </table>
-<p>时长以 <strong>行内时长输入</strong>（分/时切换）为主路径；上限按最多 <strong>480 分钟（8 小时）</strong> 约束。<br />
-产品库存为 <strong>选填</strong>：空串 / 未填 → <code>stock=null</code>（不限购）；<code>0</code> 为有效值。</p>
+<p>时长以 <strong>行内时长输入</strong>（分/时切换）为主路径；上限按最多 <strong>480 分钟（8 小时）</strong> 约束；选择器步进确认时至少 <strong>5 分钟</strong>。<br />
+<strong>产品库存</strong>：当前原型价目表单 <strong>无库存字段</strong>，不做上表库存校验（见 8.1）。</p>
 <h2>5.3 分组异常</h2>
 <table>
 <thead>
@@ -791,11 +788,11 @@ flowchart LR
 </tr>
 <tr>
 <td>下架时点预约</td>
-<td>项目已下架，请先开启「在售」后再设置手机端预约</td>
+<td>项目已下架，请先开启「在售」后再设置可预约</td>
 </tr>
 <tr>
 <td>隐藏时点预约</td>
-<td>项目已隐藏，取消隐藏后需手动开启手机端可预约</td>
+<td>项目已隐藏，取消隐藏后需手动开启可预约</td>
 </tr>
 <tr>
 <td>删绑卡项</td>
@@ -838,20 +835,21 @@ flowchart LR
 <li><strong>不弹窗 / 不选类型 Sheet</strong>  </li>
 <li>当前 Tab 为 <strong>项目</strong> → 直接进入「新增项目」  </li>
 <li>当前 Tab 为 <strong>产品</strong> → 直接进入「新增产品」  </li>
-<li><strong>无右下悬浮球「+」</strong>（新建入口仅标题栏按钮 + 空态 CTA）  </li>
+<li><strong>无右下悬浮球「+」</strong>（新建入口：标题栏按钮 + 空态 CTA + <strong>列表底部虚线「添加项目/添加产品」行</strong>）  </li>
 <li>Tab：项目 | 产品（独立记住各 Tab 的当前分组筛选）  </li>
 <li><strong>无关键字搜索</strong>（已移除搜索框）  </li>
 <li>空态 CTA 仍为「添加项目」/「添加产品」（跟当前 Tab）  </li>
-<li>可关闭提示条：<code>长按项目可拖动排序，左滑快捷操作；分组可左右滑动</code>（关闭状态以 session 记忆，刷新可再出）  </li>
-<li>分组轨：灰底 <code>#F2F2F2</code> 圆角轨道；<code>全部</code> + 自定义组 + 系统 <strong>隐藏</strong>（隐藏 Tab 带 hide 图标）；<strong>未选</strong> 灰字纯文字；<strong>选中</strong> 白胶囊 + <strong>品牌红</strong>字（无描边按钮感、无下划线）；可左右横滑，右侧渐隐暗示溢出；右侧 <strong>深灰</strong>（<code>#5C5C5C</code>）<strong>18px</strong> 齿轮进「分组管理」  </li>
+<li>可关闭提示条：<code>长按项目可拖动排序，左滑快捷操作；分组可左右滑动</code>（文案固定含「项目」；关闭状态以 session 记忆）  </li>
+<li>分组轨：灰底 <code>#F2F2F2</code> 圆角轨道；<code>全部</code> + 自定义组 + 系统 <strong>隐藏</strong>（隐藏 Tab 带 hide 图标）；<strong>未选</strong> 灰字纯文字；<strong>选中</strong> 白胶囊 + <strong>品牌红</strong>字；可左右横滑，右侧渐隐；右侧 <strong>深灰 18px</strong> 齿轮进「分组管理」  </li>
 <li><strong>「全部」Tab 列表结构</strong>（自上而下）：<br />
   1. 在售且未隐藏条目<br />
-  2. <strong>「已下架」分隔行</strong>（仅当存在未隐藏的下架条目时出现）：高度约为常规行一半（约 26px）、白底；文案「已下架」<strong>13px 次要灰、水平居中</strong>；<strong>下沿</strong>浅灰划线（视觉约 0.5、左右 inset 16）；无数量、不可点<br />
-  3. 底部折叠条「<strong>已隐藏</strong>」（无数量）；展开后可查看/操作隐藏条目  </li>
+  2. <strong>「已下架」分隔行</strong>（仅当存在未隐藏的下架条目时出现）<br />
+  3. 底部折叠条「<strong>已隐藏</strong>」（无数量）；展开后可查看/操作隐藏条目<br />
+  4. （有数据时）底部虚线 <strong>添加项目 / 添加产品</strong> 行  </li>
 <li>表头可点循环排序：升序 → 降序 → 取消  </li>
 <li>项目列：<code>项目名称</code> / <code>时长（分钟）</code> / <code>价格（¥）</code>（<strong>无状态列</strong>）  </li>
-<li>产品列：<code>产品名称（规格）</code> / <code>库存</code> / <code>价格（¥）</code>（规格并入名称展示；库存列约 48px 居中）  </li>
-<li>行：拖拽把手、名称（产品为「名称（规格）」；绑卡名称后跟 <strong>14px 卡面图标</strong>，非文字「绑卡」徽标）、时长（仅项目）、<strong>库存（仅产品：有值显示数字含 0，空显示「—」）</strong>、价格；<strong>无行内状态胶囊</strong>  </li>
+<li>产品列：<code>产品名称（规格）</code> / <code>价格（¥）</code>（规格并入名称；<strong>无库存列</strong>）  </li>
+<li>行：拖拽把手、名称（产品为「名称（规格）」；绑卡时名称 <code>is-bound</code> 样式，<strong>无卡面图标</strong>）、时长（仅项目）、价格；<strong>无行内状态胶囊</strong>  </li>
 <li>默认排序：在售优先 → 桶内 <code>sortOrder</code> → 名称  </li>
 </ul>
 <p><strong>空态</strong></p>
@@ -931,14 +929,14 @@ flowchart LR
 </tr>
 <tr>
 <td>售卖设置</td>
-<td>手机端可预约</td>
+<td>可预约</td>
 <td style="text-align: center;">—</td>
 <td>开</td>
-<td>hint：打开后项目会在小程序-预约中显示；<strong>下架、隐藏或绑卡时锁定</strong>；隐藏解除后仍为关，须手动开</td>
+<td>表单标签为「可预约」；hint：打开后项目会在小程序-预约中显示；<strong>下架、隐藏或绑卡时锁定</strong>；隐藏解除后仍为关，须手动开</td>
 </tr>
 <tr>
 <td>高级设置</td>
-<td>上传封面图（选填）</td>
+<td>项目封面图（可选）</td>
 <td style="text-align: center;">—</td>
 <td>未上传</td>
 <td>折叠轨 +「添加图片」；最多 1 张演示图；「未上传，不影响保存」</td>
@@ -1005,13 +1003,6 @@ flowchart LR
 <td>同价格规则</td>
 </tr>
 <tr>
-<td>基本信息</td>
-<td>库存</td>
-<td style="text-align: center;">—</td>
-<td>空</td>
-<td>placeholder「选填」；0～999999 整数；空=<code>null</code>（开单不限购）；<code>0</code> 表示不可加购；与后续「库存管理」共用数量语义（见 8.1）</td>
-</tr>
-<tr>
 <td>售卖设置</td>
 <td>在售</td>
 <td style="text-align: center;">—</td>
@@ -1020,14 +1011,14 @@ flowchart LR
 </tr>
 <tr>
 <td>高级设置</td>
-<td>上传封面图（选填）</td>
+<td>产品封面图（可选）</td>
 <td style="text-align: center;">—</td>
 <td>未上传</td>
-<td>同项目</td>
+<td>同项目演示图规则</td>
 </tr>
 </tbody>
 </table>
-<p>无时长、无预约开关。分类默认「产品」。详情页不展示项目类通知条。</p>
+<p>无时长、无预约开关、<strong>无库存字段</strong>（见 8.1）。分类默认「产品」。详情页不展示项目类通知条。</p>
 <h2>6.4 分组管理</h2>
 <ul>
 <li>列表行：拖拽把手（系统「隐藏」组为<strong>等宽空白占位</strong>，名称与普通组左对齐）· 组名 · <code>{n} 个项目|个产品</code> · 更多菜单（系统组为等宽空白占位，无「⋯」）  </li>
@@ -1072,7 +1063,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>不可跨桶；「隐藏」Tab / 「全部」已隐藏折叠内条目 / 列排序激活时拦截（文案见模块 5；<strong>无搜索</strong>）。</p>
+<p>不可跨桶；<strong>自定义分组 Tab 内可拖</strong>（仍限同售卖态桶）。「隐藏」Tab / 「全部」已隐藏折叠内条目 / 列排序激活时拦截（文案见模块 5；<strong>无搜索</strong>）。</p>
 <h2>6.8 与会员卡 / 开单联结</h2>
 <table>
 <thead>
@@ -1096,7 +1087,7 @@ flowchart LR
 </tr>
 <tr>
 <td><strong>开单选品</strong></td>
-<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；产品行可展示「库存 N」；加购受库存上限（见 <strong>8.1</strong>）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
+<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；价目产品 <strong>不限购</strong>（<code>catalogStockLimit</code> 恒返回 null，见 <strong>8.1</strong>）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
 </tr>
 <tr>
 <td><strong>开单支付·价目改价</strong></td>
@@ -1153,7 +1144,7 @@ flowchart LR
 <tr>
 <td>bookable</td>
 <td>boolean</td>
-<td>手机端可预约</td>
+<td>可预约</td>
 </tr>
 <tr>
 <td>images</td>
@@ -1225,7 +1216,7 @@ flowchart LR
 <tr>
 <td>stock</td>
 <td>number | null</td>
-<td><strong>选填</strong>；<code>null</code>/未设 = 不限购；<code>0</code>～<code>999999</code> 为上限；列表空显示「—」；<strong>与后续「库存管理」共用同一库存数量语义</strong>（见 8.1）</td>
+<td><strong>本期价目表单不读写</strong>；保存不写入；开单限购忽略（见 8.1）。字段可保留兼容，语义不与本期价目 UI 绑定</td>
 </tr>
 <tr>
 <td>onSale</td>
@@ -1335,11 +1326,11 @@ flowchart LR
 </tr>
 <tr>
 <td>开单价目桥接</td>
-<td>实时目录供开单消费；开单侧再过滤 <code>onSale &amp;&amp; !hidden</code>；产品含 <code>stock</code></td>
+<td>实时目录供开单消费；开单侧再过滤 <code>onSale &amp;&amp; !hidden</code>；价目产品不限购</td>
 </tr>
 <tr>
 <td>库存数量读写</td>
-<td>本期价目表单可写 <code>stock</code>；开单支付可扣减；后续由「库存管理」模块共管【待联调确认】</td>
+<td><strong>不在本期价目表</strong>；由后续「库存管理」模块负责【待联调确认】</td>
 </tr>
 <tr>
 <td>变更后通知顾客端缓存/展示</td>
@@ -1377,7 +1368,7 @@ flowchart LR
 <li><strong>权益选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true &amp;&amp; hidden=false</code>。  </li>
 <li><strong>开单选品范围</strong>：与权益同口径，仅 <code>onSale=true &amp;&amp; hidden=false</code>（下架/隐藏不可选）。  </li>
 <li><strong>顾客端可见</strong>：<code>onSale &amp;&amp; !hidden</code>；项目预约另需 <code>bookable</code>。  </li>
-<li><strong>产品库存</strong>：仅产品具备；选填与开单限购、支付扣减规则见 <strong>8.1</strong>。  </li>
+<li><strong>产品库存</strong>：价目侧本期不维护；开单对价目产品不限购（见 <strong>8.1</strong>）。  </li>
 <li><strong>开单支付·价目改价</strong>：结账快照应付；打开/确认支付前重算；不一致则 Dialog「支付金额已变化」→「知道了」关支付层，留在开单详情（见 6.8）。  </li>
 <li><strong>绑卡匹配</strong>：以 <strong>名称</strong> 与模板权益引用对齐；<strong>同桶名称唯一</strong>；改名锁定避免孤儿引用；解除引用后 <code>boundToCard</code> <strong>自动刷新</strong>。  </li>
 <li><strong>绑卡上下架</strong>：绑卡 <strong>不</strong> 阻止改 <code>onSale</code>。  </li>
@@ -1385,113 +1376,55 @@ flowchart LR
 <li><strong>多分组</strong>：同一条目可出现在多个 <code>itemIds</code> 中；加入系统「隐藏」组即 <code>hidden=true</code>。  </li>
 <li><strong>排序桶</strong>：<strong>在售</strong> / <strong>下架</strong> 两桶隔离；<code>sortOrder</code> 仅在桶内生效。  </li>
 <li><strong>下架与预约</strong>：项目下架 ⇒ <code>bookable=false</code> 且不可开，直到重新在售。  </li>
-<li><strong>隐藏与预约</strong>：项目隐藏 ⇒ <code>bookable=false</code> 且隐藏期间不可开；<strong>取消隐藏后仍为关</strong>，须手动再开「手机端可预约」。  </li>
-<li><strong>B→C / 开单同步</strong>：价目变更后客户端与开单侧按 <strong>实时目录/价格/库存</strong> 语义生效；推送与缓存细节【待联调确认】；顾客端页面结构不在范围。  </li>
+<li><strong>隐藏与预约</strong>：项目隐藏 ⇒ <code>bookable=false</code> 且隐藏期间不可开；<strong>取消隐藏后仍为关</strong>，须手动再开「可预约」。  </li>
+<li><strong>B→C / 开单同步</strong>：价目变更后客户端与开单侧按 <strong>实时目录/价格</strong> 语义生效；推送与缓存细节【待联调确认】；顾客端页面结构不在范围。  </li>
 <li><strong>列排序 vs 手动排序</strong>：列排序为临时视图；手动拖拽前须取消列排序；「隐藏」Tab 与「全部」已隐藏折叠内不可拖。  </li>
-<li><strong>产品无预约字段</strong>；项目才有「手机端可预约」。  </li>
+<li><strong>产品无预约字段</strong>；项目才有「可预约」。  </li>
 <li><strong>权益选品分组 Tab</strong>：仅自定义组 +「全部」；<strong>不展示</strong> 系统「隐藏」Tab；从「管理价目表」返回后 <strong>刷新分组 Tab（重置为「全部」）</strong>。  </li>
 <li><strong>封面图</strong>：选填；演示最多 <strong>1 张</strong>；正式 OSS <strong>本期不做</strong>。  </li>
 <li><strong>权限</strong>：店主可编辑价目；店员不可编辑。  </li>
 <li><strong>门店范围</strong>：<strong>本期仅单店</strong>。</li>
 </ol>
-<h2>8.1 产品库存规则</h2>
-<p>适用范围：<strong>仅产品</strong>（项目无库存字段）。<br />
-本期提供价目侧库存字段与开单限购/扣减；<strong>「库存管理」完整能力后续上线</strong>，与本字段关联（见下节）。</p>
-<h3>与后续「库存管理」的关联</h3>
+<h2>8.1 产品库存规则（以当前原型为准）</h2>
+<p>适用范围说明：<strong>价目表产品侧本期不维护库存字段</strong>。</p>
 <table>
 <thead>
 <tr>
 <th>项</th>
-<th>约定</th>
+<th>当前原型表现</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>关联对象</td>
-<td>价目 <strong>产品</strong> 的 <code>stock</code> 与后续「库存管理」中的 <strong>可售/账面库存数量</strong> 为 <strong>同一业务量</strong>（同一产品实体）。</td>
+<td>产品表单</td>
+<td><strong>无</strong>「库存」输入；保存时不写入价目 <code>stock</code></td>
 </tr>
 <tr>
-<td>关联键</td>
-<td>以产品 <code>id</code>（及门店范围）对齐库存台账；名称/规格仅展示。【待联调确认】</td>
+<td>产品列表</td>
+<td>列仅为 <strong>名称（规格）+ 价格</strong>，<strong>无库存列</strong></td>
 </tr>
 <tr>
-<td>本期（库存管理未上线）</td>
-<td>商户可在价目「新增/编辑产品」中 <strong>手工维护</strong> <code>stock</code>；空=<code>null</code> 表示未纳入库存管理（开单不限购）；开单支付成功可扣减该字段。</td>
+<td>开单限购</td>
+<td><code>catalogStockLimit()</code> <strong>恒返回不限购</strong>；不按价目 <code>stock</code> 封顶</td>
 </tr>
 <tr>
-<td>后续（库存管理上线后）</td>
-<td>入库、出库、盘点、调整等以 <strong>库存管理</strong> 为主入口更新数量；价目列表/表单的「库存」展示与读写须与库存管理 <strong>保持一致</strong>（价目侧是否仍允许直接改数、冲突策略、流水归属等由库存管理 PRD 定义，【待联调确认】）。</td>
-</tr>
-<tr>
-<td>开单消费</td>
-<td>无论库存由价目手工写入还是由库存管理回写，开单加购上限与支付扣减均消费 <strong>当前 <code>stock</code></strong>（规则见本节其余小节）。</td>
-</tr>
-<tr>
-<td>文档边界</td>
-<td>库存管理的页面、权限、流水、预警等 <strong>不在本文展开</strong>；本文只锁定「价目产品字段 ↔ 库存数量」的预埋关联，避免后续上线时字段分裂。</td>
+<td>与「库存管理」</td>
+<td>后续库存能力走独立模块 / <code>StockStore</code> 等路径；<strong>不与本期价目表单字段绑定</strong></td>
 </tr>
 </tbody>
 </table>
-<h3>字段与校验</h3>
-<table>
-<thead>
-<tr>
-<th>项</th>
-<th>规则</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>是否必填</td>
-<td><strong>选填</strong>；表单 placeholder「选填」</td>
-</tr>
-<tr>
-<td>取值</td>
-<td>空串 / 未填 → <code>stock=null</code>；否则为 <code>0</code>～<code>999999</code> 整数</td>
-</tr>
-<tr>
-<td>语义</td>
-<td><code>null</code> = <strong>不限购</strong>（未纳入库存管理 / 未设置数量）；<code>0</code> = 可售上限为 0（不可加购）；<code>N&gt;0</code> = 可购上限为 N</td>
-</tr>
-<tr>
-<td>非法输入</td>
-<td>Toast「请填写有效库存（0～999999 的整数）」或「库存不能超过 999999」</td>
-</tr>
-</tbody>
-</table>
-<h3>价目表展示</h3>
-<ul>
-<li>产品列表增加「库存」列（约 48px 居中）。  </li>
-<li><code>stock=null</code> → 显示 <strong>「—」</strong>；有值（含 <code>0</code>）→ 显示数字。  </li>
-<li>项目 Tab 不展示库存列。</li>
-</ul>
-<h3>开单加购</h3>
-<ul>
-<li>选品范围仍为 <code>onSale &amp;&amp; !hidden</code>（与权益同口径）；库存只约束 <strong>数量上限</strong>，不单独决定是否出现在目录。  </li>
-<li><code>stock=null</code>：不加购上限。  </li>
-<li><code>stock=0</code>：不可加购；「+」禁用；Toast「库存不足」。  </li>
-<li><code>stock=N</code>（N&gt;0）：购物车数量 ≤ N；达上限「+」禁用；选品行可展示「库存 N」。  </li>
-<li>试图超过上限：Toast「库存不足，最多 N 件」，数量钳制为 N。</li>
-</ul>
-<h3>支付前钳制与支付扣减</h3>
-<ul>
-<li>打开支付层 / 确认支付前，对购物车执行库存钳制（原型 <code>clampCartToProductStock</code>）：  </li>
-<li>上限为 <code>0</code> 的产品行从购物车移除；  </li>
-<li>数量大于上限的行钳制到上限；  </li>
-<li>钳制后购物车为空（且非资产/办卡等特殊路径）→ Toast「购物车为空」，中止支付；  </li>
-<li>仍存在超库存 → Toast「库存不足，请返回调整数量」，中止支付。  </li>
-<li><strong>支付成功后扣减</strong>：按购物车数量减少对应产品 <code>stock</code>（不低于 0）；后续库存管理上线后，扣减须同步反映到库存台账【待联调确认】。  </li>
-<li><strong>不扣减</strong>：办卡、续卡（及同路径不走普通账单扣库存的支付）。充值等非「产品购物车扣库存」路径亦不扣。  </li>
-</ul>
-<p>交互与文案以原型为准；接口落库与并发扣减细节【待联调确认】。</p>
+<p>开单选品范围仍为 <code>onSale &amp;&amp; !hidden</code>。支付金额因价目改价不一致时，仍走 Dialog「支付金额已变化」（FLOW：<code>bill-pay-price-changed</code>，归属开单分组）。</p>
+<blockquote>
+<p>若后续产品再次在价目表恢复「选填库存」UI，须同步改本节与 §6.1 / §6.3 / §5.2 / §9.1 / 验收用例。</p>
+</blockquote>
 <hr />
 <h1>模块 9　文案清单与权限</h1>
 <blockquote>
 <p>读者：前端 ✓ · 后端 部分 · 测试 ✓</p>
 </blockquote>
 <h2>9.1 文案清单（须与原型一致）</h2>
-<p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、上传封面图（选填）、添加图片、在售、已下架、已隐藏、手机端可预约、规格、库存、时长（分钟）、价格（¥）、全部、知道了。</p>
-<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、请填写有效库存（0～999999 的整数）、库存不能超过 999999、库存不足、库存不足，最多 N 件、库存不足，请返回调整数量、「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组、已隐藏的项目不支持拖拽排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启手机端可预约；以及模块 5.5 绑卡/预约/删除拦截句。</p>
+<p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、项目封面图（可选）/产品封面图（可选）、添加图片、在售、已下架、已隐藏、可预约、规格、时长（分钟）、价格（¥）、全部、添加项目、添加产品、知道了。</p>
+<p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、时长至少5分钟、「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组、已隐藏的项目不支持拖拽排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启可预约、项目已下架，请先开启「在售」后再设置可预约、系统分组不可重命名或删除；以及模块 5.5 绑卡/预约/删除拦截句（删除可为「已关联会员卡/优惠券/商城，不可删除」动态拼接）。</p>
 <p><strong>Dialog（开单支付）</strong>：标题「支付金额已变化」；正文「价目表已更新，当前应付与开单时不一致，请返回核对后再支付。」；按钮「知道了」。</p>
 <p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
 <p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
@@ -1543,17 +1476,17 @@ flowchart LR
 <h2>10.2 Given → When → Then（P0）</h2>
 <ol>
 <li><strong>Given</strong> 项目 Tab 为空，<strong>When</strong> 保存合法新项目，<strong>Then</strong> 列表在售区出现，可被选项目（未隐藏时）。  </li>
-<li><strong>Given</strong> 产品 Tab，<strong>When</strong> 保存带规格产品，<strong>Then</strong> 列表名称列展示「名称（规格）」。  </li>
-<li><strong>Given</strong> 产品 Tab，<strong>When</strong> 保存库存为空的产品，<strong>Then</strong> 列表库存列显示「—」；开单加购不限购。  </li>
-<li><strong>Given</strong> 产品库存为 0，<strong>When</strong> 开单对该产品点「+」，<strong>Then</strong> Toast「库存不足」且数量不加。  </li>
-<li><strong>Given</strong> 产品库存为 N（N&gt;0），<strong>When</strong> 加购超过 N，<strong>Then</strong> Toast「库存不足，最多 N 件」且数量钳制为 N。  </li>
+<li><strong>Given</strong> 产品 Tab，<strong>When</strong> 保存带规格产品，<strong>Then</strong> 列表名称列展示「名称（规格）」；<strong>无库存列</strong>。  </li>
+<li><strong>Given</strong> 产品表单，<strong>When</strong> 查看基本信息，<strong>Then</strong> 有规格（选填）、无库存输入。  </li>
+<li><strong>Given</strong> 在售未隐藏产品，<strong>When</strong> 开单对该产品加购任意数量，<strong>Then</strong> 不以价目 <code>stock</code> 限购（<code>catalogStockLimit</code> 不限购）。  </li>
+<li><strong>Given</strong> 列表有数据，<strong>When</strong> 滚到底部，<strong>Then</strong> 可见虚线「添加项目」或「添加产品」行（跟当前 Tab）。  </li>
 <li><strong>Given</strong> 未绑卡在售项目，<strong>When</strong> 下架，<strong>Then</strong> 落入「已下架」分区；顾客端不可见；开单与权益选品均不可见。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 尝试删除或改名称/预约，<strong>Then</strong> toast 拦截且数据不变；删除控件可见锁标。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改在售/下架并保存或左滑，<strong>Then</strong> 操作成功。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改价格并保存，<strong>Then</strong> 保存成功。  </li>
 <li><strong>Given</strong> 已下架项目详情，<strong>When</strong> 查看预约开关，<strong>Then</strong> 关闭且不可开，直到重新在售。  </li>
 <li><strong>Given</strong> 在售且可预约的项目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」主列表不显示但底部「已隐藏」折叠可展开；「隐藏」Tab 显示；顾客端与开单均不可见；<strong><code>bookable=false</code></strong>。  </li>
-<li><strong>Given</strong> 隐藏前可预约的项目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」主列表可见（在售时顾客端可见）；<strong>「手机端可预约」仍为关</strong>，须手动再开。  </li>
+<li><strong>Given</strong> 隐藏前可预约的项目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」主列表可见（在售时顾客端可见）；<strong>「可预约」仍为关</strong>，须手动再开。  </li>
 <li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示非 hidden 成员。  </li>
 <li><strong>Given</strong> 条目属于两组，<strong>When</strong> 删除其中一组，<strong>Then</strong> 条目仍在，另一组关系保留。  </li>
 <li><strong>Given</strong> 在售区两行，<strong>When</strong> 拖拽换序，<strong>Then</strong> 刷新后顺序保持。  </li>
@@ -1563,8 +1496,8 @@ flowchart LR
 <li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目，<strong>分组 Tab 刷新为「全部」</strong>。  </li>
 <li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 列表中不出现该产品。  </li>
 <li><strong>Given</strong> 开单已选品并进入支付前，<strong>When</strong> 价目表改价导致应付与快照不一致，<strong>Then</strong> Dialog「支付金额已变化」；点「知道了」关闭支付层并留在开单详情。  </li>
-<li><strong>Given</strong> 开单含有库存产品且支付成功（非办卡/续卡），<strong>When</strong> 支付完成，<strong>Then</strong> 对应产品库存按数量扣减。  </li>
-<li><strong>Given</strong> 办卡或续卡支付成功，<strong>When</strong> 支付完成，<strong>Then</strong> <strong>不</strong>扣减产品库存。  </li>
+<li><strong>Given</strong> 开单已选价目产品且支付成功，<strong>When</strong> 支付完成，<strong>Then</strong> <strong>不</strong>因价目表 <code>stock</code> 扣减（库存管理另模块）。  </li>
+<li><strong>Given</strong> 时长选择器确认，<strong>When</strong> 总时长不足 5 分钟，<strong>Then</strong> toast「时长至少5分钟」。  </li>
 <li><strong>Given</strong> 项目详情高级设置，<strong>When</strong> 添加第 2 张封面，<strong>Then</strong> toast「仅可上传 1 张封面」。  </li>
 <li><strong>Given</strong> 「全部」列表有下架与隐藏条目，<strong>When</strong> 浏览，<strong>Then</strong> 无状态列；可见居中「已下架」分隔行（下沿线）与「已隐藏」折叠（无数量）。  </li>
 <li><strong>Given</strong> 当前为项目 Tab 且列表有数据，<strong>When</strong> 点标题栏「+添加」，<strong>Then</strong> <strong>不弹窗</strong>，直接进入「新增项目」。  </li>
@@ -1572,7 +1505,7 @@ flowchart LR
 <li><strong>Given</strong> 任意价目表列表态，<strong>When</strong> 查看界面，<strong>Then</strong> <strong>无</strong>右下悬浮球「+」；整表无数据时可用空态 CTA 添加，标题栏「+添加」始终可用。  </li>
 <li><strong>Given</strong> 同桶已存在名称「精致剪发」，<strong>When</strong> 再保存同名项目（trim 后相同），<strong>Then</strong> toast「名称已存在」且不写入。  </li>
 <li><strong>Given</strong> 模板已解除对某项目名称的引用，<strong>When</strong> 进入价目列表或触发绑卡同步，<strong>Then</strong> 该条目 <code>boundToCard</code> 自动为 false，无需手动刷新。  </li>
-<li><strong>Given</strong> 产品表单，<strong>When</strong> 查看规格与库存输入框，<strong>Then</strong> placeholder 均为「选填」。</li>
+<li><strong>Given</strong> 产品表单，<strong>When</strong> 查看规格输入框，<strong>Then</strong> placeholder 为「选填」；<strong>无库存输入框</strong>。</li>
 </ol>
 <hr />
 <h1>模块 11　非功能（极简）</h1>

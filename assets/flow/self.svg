@@ -7,4 +7,6 @@
   </defs>
   <rect width="48" height="48" rx="14" fill="url(#bg)"/>
   <path d="M18 11.2h12A2.8 2.8 0 0 1 32.8 14v20a2.8 2.8 0 0 1-2.8 2.8H18A2.8 2.8 0 0 1 15.2 34V14A2.8 2.8 0 0 1 18 11.2Z" fill="#fff" fill-opacity=".95"/>
+  <!-- 全面屏 Home 手势条 -->
+  <rect x="20.5" y="34.6" width="7" height="1.6" rx="0.8" fill="#F0A070" fill-opacity=".55"/>
 </svg>

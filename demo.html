@@ -6658,6 +6658,29 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   margin: 4px 0 12px; text-align: left;
 }
 .dialog--emp-help .dialog__title { margin-bottom: 4px; }
+.emp-perm-help__hint {
+  font-size: 12px; color: #929292; line-height: 1.5; margin: 0 0 8px; text-align: left;
+}
+.emp-perm-help__list {
+  list-style: none; margin: 0 0 4px; padding: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.emp-perm-help__item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; line-height: 18px; color: var(--text); text-align: left;
+}
+.emp-perm-help__mark {
+  flex-shrink: 0; width: 16px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.emp-perm-help__mark svg {
+  display: block; width: 14px; height: 14px;
+}
+.emp-perm-help__item.is-on .emp-perm-help__mark { color: #1B9E5A; }
+.emp-perm-help__item.is-off {
+  color: #A3A3A3;
+}
+.emp-perm-help__item.is-off .emp-perm-help__mark { color: #C4C4C4; }
 
 .emp-name-dialog-input {
   width: 100%; height: 44px; border: 1px solid #EDEDED; border-radius: 8px;
@@ -7752,10 +7775,11 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .bill-stock-entry {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: calc(100% - 32px); margin: 0 16px 10px; height: 40px;
+  width: calc(100% - 32px); margin: 10px 16px 10px; height: 40px;
   border: 1px dashed #E0E0E0; border-radius: 10px;
   background: #FAFAFA; color: var(--text); font-size: 14px; font-weight: 500;
   font-family: inherit; cursor: pointer; box-sizing: border-box;
+  flex-shrink: 0;
 }
 .bill-stock-entry:active { background: #F2F2F2; }
 .bill-stock-entry__icon {
@@ -9045,12 +9069,27 @@ button.exp-flow-row:active { opacity: .92; }
 }
 
 /* —— 经营分析 · Hub / 饼图 / 报表 —— */
+/* 灰色发丝划线：--card-divider + 0.5 高；左右 inset 与内容区对齐 */
+#screen-biz-hub,
+#screen-biz-pie,
+#screen-biz-store,
+#screen-biz-mall,
+#screen-biz-self-rpt {
+  --biz-hair: var(--card-divider);
+  --biz-content-inset: 16px;
+}
+
 .biz-hub-period {
   display: flex; align-items: center; gap: 8px;
   padding: 10px 16px 8px; background: #fff; flex-shrink: 0;
-  border-bottom: 1px solid var(--bg-page);
+  position: relative; border-bottom: none;
 }
-.biz-hub-period--inset { background: var(--bg-page); border-bottom: none; padding-top: 12px; }
+.biz-hub-period::after {
+  content: ''; position: absolute; left: var(--biz-content-inset); right: var(--biz-content-inset); bottom: 0;
+  height: 1px; background: var(--biz-hair); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
+.biz-hub-period--inset { background: var(--bg-page); padding-top: 12px; }
+.biz-hub-period--inset::after { display: none; }
 .biz-hub-period__btn {
   border: none; background: transparent; color: var(--text-sec);
   font-family: inherit; font-size: 13px; line-height: 18px; font-weight: 500;
@@ -9202,8 +9241,12 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .biz-store-tabs, .biz-mall-tabs {
   display: flex; align-items: stretch; height: 44px; background: #fff;
-  border-bottom: 1px solid var(--bg-page); overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
-  padding: 0 8px; gap: 2px;
+  border-bottom: none; overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
+  padding: 0 8px; gap: 2px; position: relative;
+}
+.biz-store-tabs::after, .biz-mall-tabs::after {
+  content: ''; position: absolute; left: var(--biz-content-inset); right: var(--biz-content-inset); bottom: 0;
+  height: 1px; background: var(--biz-hair); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
 }
 .biz-store-tabs::-webkit-scrollbar, .biz-mall-tabs::-webkit-scrollbar { display: none; }
 .biz-store-tab, .biz-mall-tab {
@@ -9214,12 +9257,16 @@ button.exp-flow-row:active { opacity: .92; }
 .biz-store-tab.is-active, .biz-mall-tab.is-active { color: var(--text); font-weight: 500; }
 .biz-store-tab.is-active::after, .biz-mall-tab.is-active::after {
   content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-  width: 20px; height: 3px; background: var(--brand); border-radius: 2px;
+  width: 20px; height: 3px; background: var(--brand); border-radius: 2px; z-index: 1;
 }
 .biz-store-datebar {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--bg-page); flex-shrink: 0;
-  font-size: 13px; color: var(--text);
+  padding: 10px 16px; background: #fff; border-bottom: none; flex-shrink: 0;
+  font-size: 13px; color: var(--text); position: relative;
+}
+.biz-store-datebar::after {
+  content: ''; position: absolute; left: var(--biz-content-inset); right: var(--biz-content-inset); bottom: 0;
+  height: 1px; background: var(--biz-hair); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
 }
 .biz-store-datebar__nav {
   border: none; background: none; color: var(--text-sec); font-family: inherit; font-size: 13px;
@@ -9233,6 +9280,69 @@ button.exp-flow-row:active { opacity: .92; }
   border: none; background: #F2F2F2; border-radius: 6px; padding: 4px 8px;
   font-size: 12px; color: var(--text); font-family: inherit; cursor: pointer;
 }
+.biz-mall-datebar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px; background: #fff; border-bottom: none; flex-shrink: 0; position: relative;
+}
+.biz-mall-datebar::after {
+  content: ''; position: absolute; left: var(--biz-content-inset); right: var(--biz-content-inset); bottom: 0;
+  height: 1px; background: var(--biz-hair); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
+.biz-mall-grain {
+  display: inline-flex; align-items: center; gap: 2px;
+  padding: 3px; background: #F2F2F2; border-radius: 8px;
+}
+.biz-mall-grain__btn {
+  border: none; background: transparent; border-radius: 6px;
+  padding: 5px 14px; font-size: 13px; line-height: 18px; font-weight: 500;
+  color: var(--text-sec); font-family: inherit; cursor: pointer;
+}
+.biz-mall-grain__btn.is-active {
+  background: #fff; color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.biz-mall-datechip {
+  border: none; background: none; display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 0; font-size: 13px; line-height: 18px; font-weight: 500;
+  color: var(--text); font-family: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.biz-mall-datechip__chev {
+  width: 14px; height: 14px; color: #929292; flex-shrink: 0;
+}
+.biz-mall-month-grid {
+  display: block; padding: 4px 16px 16px; box-sizing: border-box;
+}
+.biz-mall-month-grid__cells {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.biz-mall-month-grid__btn {
+  border: 1px solid #E8E8E8; background: #fff; border-radius: 10px;
+  height: 44px; font-size: 14px; color: var(--text); font-family: inherit; cursor: pointer;
+}
+.biz-mall-month-grid__btn.is-selected {
+  border-color: var(--brand); color: var(--brand);
+  background: rgba(243, 47, 65, 0.06); font-weight: 600;
+}
+.biz-mall-month-grid__btn.is-disabled { opacity: .35; cursor: default; }
+#bizMallDateMask .flow-balance-cal { padding-bottom: calc(12px + var(--safe-bottom, 0px)); }
+#bizMallDateFoot[hidden] { display: none !important; }
+button.biz-bar-chart__col {
+  border: none; background: none; margin: 0; font: inherit; color: inherit;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.biz-bar-chart.is-dense .biz-bar-chart__plot { height: 156px; }
+.biz-bar-chart.is-dense .biz-bar-chart__val {
+  font-size: 0; line-height: 0; height: 0; margin: 0; overflow: hidden; opacity: 0;
+}
+.biz-bar-chart.is-dense .biz-bar-chart__col.is-active .biz-bar-chart__val {
+  font-size: 9px; line-height: 12px; height: auto; margin-bottom: 2px; opacity: 1; color: #F32F41;
+}
+.biz-bar-chart.is-dense .biz-bar-chart__lab { font-size: 9px; line-height: 12px; margin-top: 4px; }
+.biz-bar-chart.is-dense .biz-bar-chart__bar { width: 72%; max-width: 10px; border-radius: 3px 3px 0 0; }
+.biz-bar-chart__bar.is-tone-mall { background: #A3B1C4; }
+.biz-bar-chart__bar.is-tone-mall.is-active { background: #F32F41; }
+.biz-bar-chart__lab.is-active { color: #F32F41; font-weight: 600; }
 .biz-kpi-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
 }
@@ -9246,8 +9356,14 @@ button.exp-flow-row:active { opacity: .92; }
   font-family: var(--font-data); line-height: 24px;
 }
 .biz-kpi__val.is-down { color: #2BA471; }
+.biz-kpi__val.is-up { color: var(--brand); }
 .biz-kpi__val.is-neutral { color: var(--text); }
+.biz-kpi__arrow {
+  display: inline-block; margin-left: 2px; font-size: 14px; font-weight: 700;
+  vertical-align: 1px; line-height: 1;
+}
 .biz-section {
+  --biz-hair-inset: 0;
   background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 12px;
 }
 .biz-section__title {
@@ -9256,23 +9372,31 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .biz-matrix { width: 100%; border-collapse: collapse; font-size: 11px; }
 .biz-matrix th, .biz-matrix td {
-  padding: 8px 4px; text-align: right; color: var(--text-sec); border-bottom: 1px solid #F2F2F2;
+  padding: 8px 4px; text-align: right; color: var(--text-sec); border-bottom: none;
   font-family: var(--font-data);
+  box-shadow: inset 0 -0.5px 0 var(--biz-hair, var(--card-divider));
 }
+.biz-matrix tr:last-child th, .biz-matrix tr:last-child td { box-shadow: none; }
 .biz-matrix th:first-child, .biz-matrix td:first-child { text-align: left; color: var(--text); font-family: inherit; }
 .biz-matrix th { font-weight: 500; color: var(--text-sec); font-family: inherit; }
 .biz-pay-row {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 10px 0; border-bottom: 1px solid #F2F2F2; font-size: 13px;
+  padding: 10px 0; border-bottom: none; font-size: 13px; position: relative;
 }
-.biz-pay-row:last-child { border-bottom: none; }
+.biz-pay-row:not(:last-child)::after {
+  content: ''; position: absolute; left: var(--biz-hair-inset, 0); right: var(--biz-hair-inset, 0); bottom: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
 .biz-pay-row__name { color: var(--text); }
 .biz-pay-row__amt { font-family: var(--font-data); color: var(--text); font-weight: 500; }
 .biz-rank-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 0;
-  border-bottom: 1px solid #F2F2F2; font-size: 13px;
+  border-bottom: none; font-size: 13px; position: relative;
 }
-.biz-rank-row:last-child { border-bottom: none; }
+.biz-rank-row:not(:last-child)::after {
+  content: ''; position: absolute; left: var(--biz-hair-inset, 0); right: var(--biz-hair-inset, 0); bottom: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
 .biz-rank-row__i {
   width: 20px; height: 20px; border-radius: 6px; background: #F2F2F2;
   display: inline-flex; align-items: center; justify-content: center;
@@ -9280,16 +9404,363 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .biz-rank-row__name { flex: 1; color: var(--text); }
 .biz-rank-row__val { font-family: var(--font-data); color: var(--text); font-weight: 500; }
-.biz-chart-placeholder {
-  height: 120px; border-radius: 8px; background:
-    linear-gradient(180deg, rgba(243,47,65,.06), transparent 70%),
-    repeating-linear-gradient(90deg, transparent, transparent 23%, #EDEDED 23%, #EDEDED 24%);
-  position: relative; margin: 4px 0 12px;
+.biz-ov-card {
+  --biz-ov-inset: 12px;
+  --biz-hair-inset: var(--biz-ov-inset);
+  background: #FFFFFF; border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+  border: 1px solid #EFEFEF; box-sizing: border-box;
 }
-.biz-chart-placeholder::after {
-  content: ''; position: absolute; left: 8%; right: 8%; bottom: 28%;
-  height: 2px; background: var(--brand); border-radius: 2px; opacity: .55;
-  box-shadow: 40px -18px 0 -0.5px var(--brand), 80px 10px 0 -0.5px var(--brand), 120px -8px 0 -0.5px var(--brand);
+.biz-ov-card__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 16px var(--biz-ov-inset); background: #FFFFFF;
+}
+.biz-ov-card__icon {
+  width: 20px; height: 20px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #B2B2B2; background: none; border-radius: 0;
+}
+.biz-ov-card__icon-svg { width: 20px; height: 20px; display: block; object-fit: contain; }
+.biz-ov-card__title { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; color: #1A1A1A; }
+.biz-ov-card__total {
+  font-family: var(--font-data); font-size: 15px; font-weight: 600; color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+.biz-ov-card__more {
+  border: none; background: none; padding: 0; margin: 0;
+  font-size: 12px; color: var(--brand); font-family: inherit; cursor: pointer; white-space: nowrap;
+}
+.biz-ov-card .biz-kpi-grid { padding: 0 var(--biz-ov-inset) 16px; }
+.biz-ov-card .biz-matrix {
+  margin: 0 var(--biz-ov-inset) 16px;
+  width: calc(100% - 2 * var(--biz-ov-inset));
+  box-sizing: border-box;
+}
+.biz-ov-card .biz-matrix th, .biz-ov-card .biz-matrix td { padding: 10px 4px; }
+.biz-ov-card .biz-matrix th:first-child, .biz-ov-card .biz-matrix td:first-child { padding-left: 0; }
+.biz-ov-card .biz-matrix th:last-child, .biz-ov-card .biz-matrix td:last-child { padding-right: 0; }
+.biz-ov-group {
+  border-top: none; position: relative;
+}
+.biz-ov-group::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none; z-index: 1;
+}
+.biz-ov-group__btn {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 12px var(--biz-ov-inset); border: none; background: #FFFFFF;
+  font-family: inherit; text-align: left; cursor: pointer; box-sizing: border-box;
+}
+.biz-ov-group__btn:active { background: #FAFAFA; }
+.biz-ov-group__name { flex: 1; font-size: 13px; font-weight: 500; color: #1A1A1A; }
+.biz-ov-group__amt {
+  font-family: var(--font-data); font-size: 13px; font-weight: 500; color: #1A1A1A;
+  font-variant-numeric: tabular-nums;
+}
+.biz-ov-group__chev {
+  width: 14px; height: 14px; color: #B2B2B2; flex-shrink: 0;
+  transition: transform .18s ease;
+}
+.biz-ov-group.is-open .biz-ov-group__chev { transform: rotate(180deg); }
+.biz-ov-group__body { display: none; background: #FFFFFF; }
+.biz-ov-group.is-open .biz-ov-group__body { display: block; }
+.biz-ov-line {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px var(--biz-ov-inset) 11px calc(var(--biz-ov-inset) + 16px);
+  border-top: none; position: relative;
+  font-size: 13px;
+}
+.biz-ov-line::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-ov-line__name { flex: 1; min-width: 0; color: #1A1A1A; }
+.biz-ov-line__amt {
+  font-family: var(--font-data); color: #1A1A1A; font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.biz-ov-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.biz-ov-table th, .biz-ov-table td {
+  padding: 11px 8px; text-align: right; border-top: none;
+  color: #1A1A1A; font-family: var(--font-data); font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 0.5px 0 var(--biz-hair, var(--card-divider));
+}
+.biz-ov-table tr:first-child th,
+.biz-ov-table tr:first-child td { box-shadow: none; }
+.biz-ov-table thead tr:first-child th { box-shadow: none; }
+.biz-ov-table tbody tr:first-child td { box-shadow: inset 0 0.5px 0 var(--biz-hair, var(--card-divider)); }
+.biz-ov-table th:first-child, .biz-ov-table td:first-child {
+  text-align: left; font-family: inherit; color: #1A1A1A;
+  padding-left: var(--biz-ov-inset);
+}
+.biz-ov-table th:last-child, .biz-ov-table td:last-child {
+  padding-right: var(--biz-ov-inset);
+}
+.biz-ov-table th {
+  font-weight: 500; color: #929292; font-family: inherit; background: #FFFFFF;
+}
+.biz-ov-table td:nth-child(2) { width: 56px; }
+.biz-ov-hint {
+  margin: 0; padding: 0 var(--biz-ov-inset) 16px; font-size: 11px; color: #929292; line-height: 1.45;
+}
+.biz-ls-stack {
+  display: flex; height: 10px; border-radius: 5px; overflow: hidden;
+  margin: 0 var(--biz-ov-inset) 14px; background: #F2F2F2;
+}
+.biz-ls-stack__seg { height: 100%; min-width: 0; }
+.biz-ls-stack__seg.is-svc { background: #A3B1C4; }
+.biz-ls-stack__seg.is-prod { background: #C9B2A6; }
+.biz-ls-stack__seg.is-card { background: #B7C4B0; }
+.biz-ls-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px var(--biz-ov-inset); border-top: none; position: relative;
+}
+.biz-ls-row::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-ls-row__dot {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; margin-top: 4px;
+}
+.biz-ls-row__dot.is-svc { background: #A3B1C4; }
+.biz-ls-row__dot.is-prod { background: #C9B2A6; }
+.biz-ls-row__dot.is-card { background: #B7C4B0; }
+.biz-ls-row__main { flex: 1; min-width: 0; }
+.biz-ls-row__top {
+  display: flex; align-items: baseline; gap: 8px; font-size: 13px; color: #1A1A1A;
+}
+.biz-ls-row__name { flex: 1; min-width: 0; font-weight: 500; }
+.biz-ls-row__amt {
+  font-family: var(--font-data); font-weight: 500; font-variant-numeric: tabular-nums;
+}
+.biz-ls-row__pct {
+  font-family: var(--font-data); color: #929292; font-variant-numeric: tabular-nums;
+  min-width: 52px; text-align: right;
+}
+.biz-ls-row__sub {
+  margin-top: 4px; font-size: 11px; color: #929292; line-height: 1.4;
+}
+.biz-staff-block {
+  padding: 4px var(--biz-ov-inset) 8px;
+}
+.biz-staff-block__head {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 10px 0 8px; font-size: 14px; font-weight: 600; color: #1A1A1A;
+}
+.biz-staff-block__head-amt {
+  margin-left: auto; font-family: var(--font-data); font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.biz-staff-block + .biz-staff-block {
+  border-top: none; margin-top: 4px; padding-top: 8px; position: relative;
+}
+.biz-staff-block + .biz-staff-block::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-rank-board { padding: 0 0 8px; }
+.biz-rank-board__item {
+  padding: 12px var(--biz-ov-inset); border-top: none; position: relative;
+}
+.biz-rank-board__item::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-rank-board__top {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.biz-rank-board__i {
+  width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; background: #F0F0F0; color: #929292;
+}
+.biz-rank-board__i.is-1 { background: #FFE8A3; color: #9A7A28; }
+.biz-rank-board__i.is-2 { background: #E4E8EE; color: #6B7380; }
+.biz-rank-board__i.is-3 { background: #F0C9A8; color: #8B5E3C; }
+.biz-rank-board__i.is-rest { background: #F0F0F0; color: #929292; }
+.biz-rank-board__more {
+  display: block; width: 100%; margin: 4px 0 0; padding: 14px var(--biz-ov-inset) 12px;
+  border: none; background: none; position: relative;
+  font-family: inherit; font-size: 13px; color: var(--brand); cursor: pointer; text-align: center;
+}
+.biz-rank-board__more::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-rank-board__more:active { background: #FAFAFA; }
+.biz-rank-board__name { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: #1A1A1A; }
+.biz-rank-board__total {
+  font-family: var(--font-data); font-size: 14px; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: #1A1A1A;
+}
+.biz-rank-board__stack {
+  display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #F2F2F2; margin-bottom: 8px;
+}
+.biz-rank-board__seg { height: 100%; min-width: 0; }
+.biz-rank-board__seg.is-labor { background: #A3B1C4; }
+.biz-rank-board__seg.is-sales { background: #C9B2A6; }
+.biz-rank-board__seg.is-card { background: #B7C4B0; }
+.biz-rank-board__meta {
+  display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 11px; color: #929292;
+}
+.biz-rank-board__meta b {
+  font-weight: 500; color: #5A5A5A; font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+.biz-rank-board__dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+  margin-right: 4px; vertical-align: 0;
+}
+.biz-rank-board__dot.is-labor { background: #A3B1C4; }
+.biz-rank-board__dot.is-sales { background: #C9B2A6; }
+.biz-rank-board__dot.is-card { background: #B7C4B0; }
+.biz-staff-trend { padding: 0 var(--biz-ov-inset) 12px; }
+.biz-staff-trend .biz-bar-chart { margin: 0; }
+.biz-ov-card .biz-kpi-grid {
+  padding: 0 var(--biz-ov-inset) 16px;
+  margin-bottom: 0;
+}
+.biz-ov-card .biz-kpi {
+  background: #FAFAFA; border: 1px solid #F2F2F2;
+}
+.biz-ov-card .biz-kpi__val { font-size: 16px; }
+.biz-card-detail { padding-bottom: 4px; }
+.biz-card-detail__row {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(4, minmax(0, 0.85fr));
+  gap: 4px; padding: 11px var(--biz-ov-inset); border-top: none; position: relative;
+  font-size: 11px; align-items: center;
+}
+.biz-card-detail__row::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset); right: var(--biz-hair-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-card-detail__row.is-head {
+  color: #929292; font-weight: 500; background: #FAFAFA;
+}
+.biz-card-detail__row span {
+  font-family: var(--font-data); font-variant-numeric: tabular-nums; text-align: right; color: #1A1A1A;
+}
+.biz-card-detail__row span:first-child {
+  font-family: inherit; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.biz-card-detail__row.is-head span { color: #929292; font-family: inherit; }
+.biz-refund-row {
+  padding: 12px var(--biz-ov-inset); border-top: none; position: relative;
+}
+.biz-refund-row::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset, var(--biz-ov-inset)); right: var(--biz-hair-inset, var(--biz-ov-inset)); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-refund-row__top {
+  display: flex; align-items: baseline; gap: 8px; font-size: 13px;
+}
+.biz-refund-row__name { flex: 1; min-width: 0; font-weight: 500; color: #1A1A1A; }
+.biz-refund-row__amt {
+  font-family: var(--font-data); font-weight: 600; color: #1A1A1A;
+  font-variant-numeric: tabular-nums;
+}
+.biz-refund-row__sub {
+  margin-top: 4px; font-size: 11px; color: #929292; line-height: 1.4;
+}
+.biz-ratio-stack {
+  display: flex; height: 10px; border-radius: 5px; overflow: hidden;
+  margin: 0 var(--biz-ov-inset) 8px; background: #F2F2F2;
+}
+.biz-ratio-stack__seg { height: 100%; min-width: 0; }
+.biz-ratio-stack__seg.is-a { background: #A3B1C4; }
+.biz-ratio-stack__seg.is-b { background: #C9B2A6; }
+.biz-ratio-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px var(--biz-ov-inset); border-top: none; position: relative; font-size: 13px;
+}
+.biz-ratio-row::before {
+  content: ''; position: absolute; left: var(--biz-hair-inset, var(--biz-ov-inset)); right: var(--biz-hair-inset, var(--biz-ov-inset)); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-ratio-row__dot {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+}
+.biz-ratio-row__dot.is-a { background: #A3B1C4; }
+.biz-ratio-row__dot.is-b { background: #C9B2A6; }
+.biz-ratio-row__name { flex: 1; color: #1A1A1A; font-weight: 500; }
+.biz-ratio-row__val {
+  font-family: var(--font-data); font-weight: 500; color: #1A1A1A;
+  font-variant-numeric: tabular-nums;
+}
+.biz-traffic-bar {
+  height: 8px; border-radius: 4px; background: #F2F2F2; overflow: hidden; margin-bottom: 4px;
+}
+.biz-traffic-bar__fill {
+  height: 100%; border-radius: 4px; background: #A3B1C4; min-width: 0;
+}
+.biz-bar-chart {
+  margin: 4px 0 8px;
+  padding: 14px 10px 10px;
+  background: #FAFAFA;
+  border-radius: 12px;
+  border: 1px solid #F0F0F0;
+  box-sizing: border-box;
+}
+.biz-bar-chart__plot {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+  height: 148px;
+}
+.biz-bar-chart__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+.biz-bar-chart__val {
+  flex-shrink: 0;
+  font-size: 10px;
+  line-height: 14px;
+  color: #929292;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-bottom: 4px;
+}
+.biz-bar-chart__bar-track {
+  flex: 1;
+  width: calc(100% + 4px);
+  margin-left: -2px;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: none;
+  box-sizing: border-box;
+  position: relative;
+}
+.biz-bar-chart__bar-track::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
+}
+.biz-bar-chart__bar {
+  width: 58%;
+  max-width: 28px;
+  min-height: 4px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #FF9A3D 0%, #F32F41 100%);
+  box-sizing: border-box;
+}
+.biz-bar-chart__bar.is-muted {
+  background: linear-gradient(180deg, #C8C8C8 0%, #A3A3A3 100%);
+}
+.biz-bar-chart__lab {
+  flex-shrink: 0;
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 14px;
+  color: #929292;
+  white-space: nowrap;
 }
 .biz-link-btn {
   border: none; background: none; color: var(--brand); font-size: 13px; font-weight: 500;
@@ -10083,7 +10554,10 @@ button.exp-flow-row:active { opacity: .92; }
   font-size: 13px; color: var(--text-sec); line-height: 18px;
 }
 .flow-prod-sum__meta strong {
-  color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums;
+  color: #1A1A1A; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.flow-prod-sum__meta .flow-prod-sum__yen {
+  color: var(--brand); font-weight: 600; font-family: var(--font-data);
 }
 .flow-prod-sum__sort {
   display: inline-flex; align-items: center; gap: 2px;
@@ -10094,10 +10568,16 @@ button.exp-flow-row:active { opacity: .92; }
 .flow-prod-sum__sort:active { background: #FAFAFA; }
 .flow-prod-list { padding: 8px 0 24px; }
 .flow-prod-row {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-  margin: 0 16px 8px; padding: 14px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  width: calc(100% - 32px); margin: 0 16px 8px; padding: 14px;
   background: #fff; border-radius: 12px; border: 1px solid #EBEBEB;
-  box-sizing: border-box;
+  box-sizing: border-box; text-align: left; font-family: inherit; color: inherit;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; appearance: none;
+}
+.flow-prod-row:active { background: #FAFAFA; border-color: #E0E0E0; }
+.flow-prod-row__top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  width: 100%;
 }
 .flow-prod-row__main { min-width: 0; flex: 1; }
 .flow-prod-row__name {
@@ -10108,15 +10588,323 @@ button.exp-flow-row:active { opacity: .92; }
   margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 17px;
 }
 .flow-prod-row__metrics {
-  text-align: right; flex-shrink: 0; min-width: 88px;
+  display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0;
 }
+.flow-prod-row__metrics-nums { text-align: right; min-width: 72px; }
 .flow-prod-row__qty {
-  font-size: 13px; color: var(--text-sec); line-height: 18px;
+  font-size: 14px; color: #1A1A1A; line-height: 20px;
   font-variant-numeric: tabular-nums;
 }
+.flow-prod-row__qty-num { font-weight: 700; color: #1A1A1A; }
+.flow-prod-row__qty-unit { font-weight: 400; color: #1A1A1A; margin-left: 1px; }
 .flow-prod-row__amt {
-  margin-top: 2px; font-size: 16px; font-weight: 600; color: var(--text); line-height: 22px;
+  margin-top: 2px; font-size: 16px; font-weight: 600; color: var(--brand); line-height: 22px;
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.flow-prod-row__chev {
+  flex-shrink: 0; width: 16px; height: 16px; margin-bottom: 2px; color: #B2B2B2;
+}
+.flow-prod-row__done-mark {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-bottom: 0;
+  border-radius: 50%;
+  background: #E8F6EE;
+  color: #1B9E5A;
+}
+.flow-prod-row__done-mark svg { width: 14px; height: 14px; display: block; }
+.flow-prod-row__foot {
+  font-size: 12px; line-height: 17px; color: var(--text-sec);
+  padding-top: 8px; border-top: 1px solid #F2F2F2;
+}
+.flow-prod-row__foot.is-linked { color: #5C5C5C; }
+.flow-prod-row__foot.is-closed {
+  color: var(--brand);
+  font-weight: 500;
+}
+.flow-prod-row__foot.is-done {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #5C8F72;
+  border-top-color: #E8EFEA;
+}
+.flow-prod-row__foot-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #1B9E5A; flex-shrink: 0;
+}
+.flow-prod-row.is-done {
+  background: #F7F7F7;
+  border-color: #E8E8E8;
+  cursor: default;
+  pointer-events: none;
+}
+.flow-prod-row.is-done:active { background: #F7F7F7; border-color: #E8E8E8; }
+.flow-prod-row.is-done .flow-prod-row__name { color: #5C5C5C; font-weight: 500; }
+.flow-prod-row.is-done .flow-prod-row__spec { color: #A3A3A3; }
+.flow-prod-row.is-done .flow-prod-row__qty,
+.flow-prod-row.is-done .flow-prod-row__qty-num,
+.flow-prod-row.is-done .flow-prod-row__qty-unit { color: #8A8A8A; }
+.flow-prod-row.is-done .flow-prod-row__amt { color: #A3A3A3; font-weight: 500; }
+.flow-prod-deduct-sheet {
+  background: #F7F7F7;
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+  max-height: min(88vh, 680px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#flowProdDeductMask .flow-prod-deduct-sheet .picker-head--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  padding: 14px 20px 12px;
+  border-bottom: none;
+  background: #fff;
+}
+#flowProdDeductMask .flow-prod-deduct-sheet .picker-head__title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 24px;
+  text-align: center;
+}
+#flowProdDeductMask .flow-prod-deduct-sheet .picker-head__sub { display: none; }
+.flow-prod-deduct-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 12px;
+}
+.flow-prod-deduct-ctx {
+  margin-top: 4px;
+  padding: 14px 14px 12px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #EBEBEB;
+  box-sizing: border-box;
+}
+.flow-prod-deduct-ctx__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #929292;
+  line-height: 17px;
+  letter-spacing: 0.02em;
+}
+.flow-prod-deduct-ctx__name {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 22px;
+}
+.flow-prod-deduct-ctx__spec {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #929292;
+  line-height: 18px;
+}
+.flow-prod-deduct-ctx__stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.flow-prod-deduct-stat {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  background: #F7F7F7;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.flow-prod-deduct-stat__lab {
+  display: block;
+  font-size: 12px;
+  color: #929292;
+  line-height: 16px;
+}
+.flow-prod-deduct-stat__val {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+.flow-prod-deduct-stat__val em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5C5C5C;
+  margin-left: 2px;
+}
+.flow-prod-deduct-stat--pending .flow-prod-deduct-stat__val { color: var(--brand); }
+.flow-prod-deduct-sec {
+  margin-top: 16px;
+}
+.flow-prod-deduct-sec__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  min-height: 22px;
+}
+.flow-prod-deduct-sec__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5C5C5C;
+  line-height: 18px;
+}
+.flow-prod-deduct-change {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand);
+  font-family: inherit;
+  cursor: pointer;
+  line-height: 18px;
+}
+.flow-prod-deduct-change:active { opacity: .72; }
+.flow-prod-deduct-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0 12px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #EBEBEB;
+  box-sizing: border-box;
+}
+.flow-prod-deduct-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1A1A1A;
+}
+.flow-prod-deduct-search input::placeholder { color: #B2B2B2; }
+.flow-prod-deduct-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+.flow-prod-deduct-list.is-picking {
+  max-height: min(42vh, 280px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.flow-prod-deduct-list .bill-stock-pick-row {
+  margin: 0;
+  border-radius: 12px;
+  border: 1px solid #EBEBEB;
+  background: #fff;
+  padding: 12px 14px;
+}
+.flow-prod-deduct-list .bill-stock-pick-row.is-on {
+  border-color: var(--brand);
+  background: #FFF8F8;
+}
+.flow-prod-deduct-list .bill-stock-pick-row:disabled {
+  opacity: .45;
+}
+.flow-prod-deduct-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 20px;
+  color: #929292;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px dashed #E0E0E0;
+}
+.flow-prod-deduct-ops {
+  flex-shrink: 0;
+  background: #fff;
+  border-top: 1px solid #EBEBEB;
+  padding: 12px 16px 0;
+}
+.flow-prod-deduct-qty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 12px;
+  border-top: none;
+}
+.flow-prod-deduct-qty__lab {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 21px;
+}
+.flow-prod-deduct-qty__type {
+  font-size: 12px;
+  color: #929292;
+  margin-top: 2px;
+  line-height: 17px;
+}
+.flow-prod-deduct-qty__val {
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 28px;
+  font-variant-numeric: tabular-nums;
+}
+.flow-prod-deduct-qty__val em {
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5C5C5C;
+  margin-left: 2px;
+}
+#flowProdDeductMask .picker-foot--row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px calc(12px + var(--safe-bottom, 0px));
+  background: #fff;
+  border-top: none;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+#flowProdDeductMask .picker-foot--row .btn-main {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+#flowProdDeductMask .picker-foot--row .btn-main.secondary {
+  background: transparent;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+}
+#flowProdDeductMask .picker-foot--row .btn-main:disabled {
+  opacity: .4;
+  cursor: default;
 }
 .flow-filter-custom {
   margin-top: 10px; display: flex; align-items: center; gap: 8px;
@@ -12985,6 +13773,16 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
 </div>
 
+<div class="dialog-mask" id="empPermHelpMask">
+  <div class="dialog dialog--emp-help" role="dialog" aria-modal="true" aria-labelledby="empPermHelpTitle">
+    <div class="dialog__title" id="empPermHelpTitle">权限说明</div>
+    <div class="dialog__scroll emp-help-body" id="empPermHelpBody"></div>
+    <div class="dialog__actions dialog__actions--single">
+      <button type="button" class="btn-main" id="empPermHelpOk">知道了</button>
+    </div>
+  </div>
+</div>
+
 <div class="picker-mask picker-mask--bottom" id="empAchEditMask">
   <div class="picker-sheet tall">
     <div class="picker-head" id="empAchEditTitle">业绩方案</div>
@@ -14881,6 +15679,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="title">项目销售报表</div>
             </div>
             <div class="biz-mall-tabs" id="bizMallTabs" role="tablist"></div>
+            <div class="biz-mall-datebar" id="bizMallDatebar"></div>
             <div class="page-body biz-report-body" id="bizMallBody"></div>
           </div>
 
@@ -14908,6 +15707,18 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="picker-foot picker-foot--row">
                 <button type="button" class="btn-main secondary" id="btnBillDateCancel">取消</button>
                 <button type="button" class="btn-main" id="btnBillDateOk">确定</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="bizMallDateMask">
+            <div class="picker-sheet flow-balance-date-sheet">
+              <div class="picker-head"><span class="picker-head__title-main" id="bizMallDateSheetTitle">选择日期</span></div>
+              <div class="flow-balance-cal" id="bizMallDateCal"></div>
+              <div class="biz-mall-month-grid" id="bizMallMonthGrid" hidden></div>
+              <div class="picker-foot picker-foot--row" id="bizMallDateFoot">
+                <button type="button" class="btn-main secondary" id="btnBizMallDateCancel">取消</button>
+                <button type="button" class="btn-main" id="btnBizMallDateOk">确定</button>
               </div>
             </div>
           </div>
@@ -14968,6 +15779,43 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
             <div class="flow-prod-range" id="flowProductRange" role="tablist" aria-label="统计时段"></div>
             <div class="page-body" id="flowProductBody"></div>
+          </div>
+
+          <!-- 流水订单 · 产品销量 · 扣减库存 -->
+          <div class="picker-mask picker-mask--bottom" id="flowProdDeductMask" data-mask-close="flowProdDeductMask">
+            <div class="picker-sheet tall flow-prod-deduct-sheet" role="dialog" aria-label="扣减库存">
+              <div class="picker-head picker-head--stack">
+                <div class="picker-head__title">扣减库存</div>
+                <div class="picker-head__sub">从库存商品中选择对应规格出库</div>
+              </div>
+              <div class="flow-prod-deduct-body">
+                <div class="flow-prod-deduct-ctx" id="flowProdDeductHead"></div>
+                <div class="flow-prod-deduct-sec">
+                  <div class="flow-prod-deduct-sec__bar">
+                    <div class="flow-prod-deduct-sec__title" id="flowProdDeductSecTitle">选择库存商品</div>
+                    <button type="button" class="flow-prod-deduct-change hidden" id="flowProdDeductChange">更换</button>
+                  </div>
+                  <div class="flow-prod-deduct-search hidden" id="flowProdDeductSearchWrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B2B2B2" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                    <input type="search" id="flowProdDeductSearch" placeholder="搜索库存商品 / 规格" autocomplete="off">
+                  </div>
+                  <div class="flow-prod-deduct-list" id="flowProdDeductList"></div>
+                </div>
+              </div>
+              <div class="flow-prod-deduct-ops" id="flowProdDeductQtyRow">
+                <div class="flow-prod-deduct-qty">
+                  <div>
+                    <div class="flow-prod-deduct-qty__lab">扣减数量</div>
+                    <div class="flow-prod-deduct-qty__type">出库类别 · 销售出库</div>
+                  </div>
+                  <div class="flow-prod-deduct-qty__val" id="flowProdDeductQtyVal">0<em>件</em></div>
+                </div>
+              </div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="flowProdDeductCancel">取消</button>
+                <button type="button" class="btn-main" id="flowProdDeductOk">确认扣减</button>
+              </div>
+            </div>
           </div>
 
           <!-- 流水订单 · 自定义时间范围 -->
@@ -29097,6 +29945,7 @@ function billingNav(fn) {
       { id: 'flow-self', label: '自助收银', screen: 'screen-flow-self' },
       { id: 'flow-self-detail', label: '自助详情', screen: 'screen-flow-self-detail' },
       { id: 'flow-product', label: '产品销量', screen: 'screen-flow-product' },
+      { id: 'flow-product-empty', label: '产品销量·空库存', screen: 'screen-flow-product' },
     ],
   };
   const bizGroup = {
@@ -29137,6 +29986,7 @@ function billingNav(fn) {
       else if (fn === 'self' && window.BillingDemo.openFlowSelf) window.BillingDemo.openFlowSelf();
       else if (fn === 'self-detail' && window.BillingDemo.openFlowSelfDetail) window.BillingDemo.openFlowSelfDetail();
       else if (fn === 'product' && window.BillingDemo.openFlowProductSales) window.BillingDemo.openFlowProductSales();
+      else if (fn === 'product-empty' && window.BillingDemo.openFlowProductSalesEmptyDemo) window.BillingDemo.openFlowProductSalesEmptyDemo();
     };
   }
   function tryPatch() {
@@ -29229,6 +30079,7 @@ function billingNav(fn) {
       'flow-self': flowNav('self'),
       'flow-self-detail': flowNav('self-detail'),
       'flow-product': flowNav('product'),
+      'flow-product-empty': flowNav('product-empty'),
     });
     if (typeof renderFlowMap === 'function') renderFlowMap();
     return true;
@@ -29383,6 +30234,28 @@ function billingNav(fn) {
   function hasPerm(cap, permName) {
     var def = getPermDef(permName || getSessionPermName());
     return !!(def && def.caps && def.caps[cap]);
+  }
+  function renderPermHelpBody() {
+    var root = $('empPermHelpBody');
+    if (!root) return;
+    var iconOn = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
+    var iconOff = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    root.innerHTML = PERM_DEFS.map(function (d) {
+      var items = PERM_CAP_KEYS.map(function (k) {
+        var on = !!(d.caps && d.caps[k]);
+        var label = (PERM_CAP_META[k] && PERM_CAP_META[k].label) || k;
+        return '<li class="emp-perm-help__item ' + (on ? 'is-on' : 'is-off') + '">' +
+          '<span class="emp-perm-help__mark" aria-hidden="true">' + (on ? iconOn : iconOff) + '</span>' +
+          '<span>' + esc(label) + '</span></li>';
+      }).join('');
+      return '<h4>' + esc(d.name) + '</h4>' +
+        (d.hint ? '<p class="emp-perm-help__hint">' + esc(d.hint) + '</p>' : '') +
+        '<ul class="emp-perm-help__list" role="list">' + items + '</ul>';
+    }).join('');
+  }
+  function openPermHelpDialog() {
+    renderPermHelpBody();
+    openEmpDialog('empPermHelpMask');
   }
   function requirePerm(cap, msg) {
     if (hasPerm(cap)) return true;
@@ -29702,7 +30575,7 @@ function billingNav(fn) {
       'empAchEditMask', 'empRoleMask', 'empPermMask', 'empStatusMask', 'empDetailStatusMask', 'empSchemePickMask',
       'empGenderMask', 'empAgeBandMask', 'empAvatarActionMask', 'empAlbumMask', 'empCropMask',
       'empSwordTitleMask', 'empSwordMask', 'empScopeSelectedMask', 'empItemCommEditMask'].forEach(closeMask);
-    ['empHelpMask', 'empAchHelpMask', 'empNameDialogMask', 'empRoleNameMask', 'empRoleDelConfirmMask', 'empPctDialogMask', 'empLeaveConfirmMask', 'empCalcModeConfirmMask', 'empSchemeTypeMask'].forEach(closeEmpDialog);
+    ['empHelpMask', 'empAchHelpMask', 'empPermHelpMask', 'empNameDialogMask', 'empRoleNameMask', 'empRoleDelConfirmMask', 'empPctDialogMask', 'empLeaveConfirmMask', 'empCalcModeConfirmMask', 'empSchemeTypeMask'].forEach(closeEmpDialog);
   }
   function fmtMoney(n) {
     return Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -34569,10 +35442,11 @@ function billingNav(fn) {
     $('empPermInfo')?.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      var lines = PERM_DEFS.map(function (d) {
-        return d.name + '：' + (d.hint || '');
-      });
-      toast(lines.join('\n') + '\n\n当前登录演示权限：' + getSessionPermName());
+      openPermHelpDialog();
+    });
+    $('empPermHelpOk')?.addEventListener('click', function () { closeEmpDialog('empPermHelpMask'); });
+    $('empPermHelpMask')?.addEventListener('click', function (e) {
+      if (e.target === $('empPermHelpMask')) closeEmpDialog('empPermHelpMask');
     });
     $('empRowPerm')?.addEventListener('click', function () {
       var cur = $('empFPerm').textContent;
@@ -37866,6 +38740,12 @@ function billingNav(fn) {
     patchFlowNav();
 
     $('stkHubBack')?.addEventListener('click', function () {
+      var ret = window.__stockReturnTo;
+      window.__stockReturnTo = null;
+      if (ret === 'flow-product' && window.BillingDemo && typeof window.BillingDemo.openFlowProductSales === 'function') {
+        window.BillingDemo.openFlowProductSales();
+        return;
+      }
       if (typeof openWorkbench === 'function') openWorkbench();
     });
     $('stkHubTypes')?.addEventListener('click', openTypes);
@@ -38924,6 +39804,15 @@ window.__BILLING_EMBEDDED__ = true;
     flowProductCustomStart: '',
     flowProductCustomEnd: '',
     flowProductSort: 'amount',
+    /* 销量品 key → 库存 SKU id（跨时段记忆） */
+    flowProductStockMap: {
+      '剑琅修护洗发水|500ml': 'sk1',
+      '剑琅造型发蜡|80g': 'sk7',
+      '剑琅滋养护发素|500ml': 'sk3',
+    },
+    /* periodKey → { productKey: 已扣件数 } */
+    flowProductDeducted: {},
+    flowProdDeductDraft: null,
     flowSelfCustomStart: '',
     flowSelfCustomEnd: '',
     flowRangeContext: null,
@@ -38947,7 +39836,18 @@ window.__BILLING_EMBEDDED__ = true;
     bizHubPeriod: 'today',
     bizPieKey: null,
     bizStoreTab: 'overview',
+    bizStoreOvExpand: { labor: 'cash', product: 'cash', staffLabor: 'cash', staffSales: 'product' },
+    bizStaffRankExpanded: false,
+    bizCardSalesExpanded: false,
+    bizCardRefundExpanded: false,
+    bizTrafficRankExpanded: false,
     bizMallTab: 'trade',
+    bizMallGrain: 'day',
+    bizMallDayKey: '',
+    bizMallMonthKey: '',
+    bizMallDateDraft: '',
+    bizMallCalYear: null,
+    bizMallCalMonth: null,
     bizSelfRptPeriod: 'today',
     flowWeikuanQuery: '',
     flowWeikuanFilter: { status: 'all', range: null, start: '', end: '', staffIds: [] },
@@ -44349,6 +45249,98 @@ window.__BILLING_EMBEDDED__ = true;
       </div>`;
   }
 
+  function flowProdPeriodKey() {
+    const range = state.flowProductRange || 'today';
+    return `${range}|${state.flowProductCustomStart || ''}|${state.flowProductCustomEnd || ''}`;
+  }
+
+  function flowProdEnsureMaps() {
+    if (!state.flowProductStockMap || typeof state.flowProductStockMap !== 'object') {
+      state.flowProductStockMap = {};
+    }
+    if (!state.flowProductDeducted || typeof state.flowProductDeducted !== 'object') {
+      state.flowProductDeducted = {};
+    }
+  }
+
+  function flowProdGetSku(skuId) {
+    return ((window.StockStore && window.StockStore.skus) || []).find(s => s.id === skuId) || null;
+  }
+
+  function isStockModuleEmpty() {
+    /* D1：未使用库存管理 = 无任何 SKU */
+    return !((window.StockStore && window.StockStore.skus) || []).length;
+  }
+
+  function openStockHubFromFlowProduct() {
+    window.__stockReturnTo = 'flow-product';
+    if (window.StockDemo && typeof window.StockDemo.openHub === 'function') {
+      window.StockDemo.openHub();
+      showToast('请先新增商品并入库，再回来扣减');
+      return;
+    }
+    showToast('库存管理未就绪', true);
+  }
+
+  function flowProdGetDeductedQty(productKey) {
+    flowProdEnsureMaps();
+    const bag = state.flowProductDeducted[flowProdPeriodKey()] || {};
+    return Math.max(0, Number(bag[productKey]) || 0);
+  }
+
+  function flowProdPendingQty(row) {
+    const sold = Math.max(0, Number(row.qty) || 0);
+    return Math.max(0, sold - flowProdGetDeductedQty(row.key));
+  }
+
+  function flowProdFormatYen(n) {
+    return `¥${flowHubFormatYen(n)}`;
+  }
+
+  function flowProdSuggestSkuId(row) {
+    flowProdEnsureMaps();
+    const mapped = state.flowProductStockMap[row.key];
+    if (mapped && flowProdGetSku(mapped)) return mapped;
+    const skus = (window.StockStore && window.StockStore.skus) || [];
+    const name = String(row.name || '').trim();
+    const spec = String(row.spec || '').trim();
+    const exact = skus.find(s => s.product === name && (!spec || s.name === spec));
+    if (exact) return exact.id;
+    const byName = skus.find(s => s.product === name);
+    return byName ? byName.id : '';
+  }
+
+  function flowProdRowFootHtml(row) {
+    flowProdEnsureMaps();
+    const pending = flowProdPendingQty(row);
+    const deducted = flowProdGetDeductedQty(row.key);
+    /* A2：无库存 SKU 时不进扣减 Sheet，引导去开通 */
+    if (isStockModuleEmpty()) {
+      return `<div class="flow-prod-row__foot is-closed">未开通库存 · 去开通</div>`;
+    }
+    const skuId = state.flowProductStockMap[row.key];
+    const sku = skuId ? flowProdGetSku(skuId) : null;
+    if (pending <= 0 && deducted > 0) {
+      const tip = sku
+        ? `已扣减 ${deducted} 件 · ${sku.product}${sku.name ? ' / ' + sku.name : ''}`
+        : `已扣减 ${deducted} 件`;
+      return `<div class="flow-prod-row__foot is-done"><span class="flow-prod-row__foot-dot" aria-hidden="true"></span><span>${escapeHtml(tip)}</span></div>`;
+    }
+    if (sku) {
+      const stock = Math.max(0, Number(sku.stock) || 0);
+      const unit = sku.unit || '';
+      if (stock <= 0 && pending > 0) {
+        return `<div class="flow-prod-row__foot is-linked">已关联 ${escapeHtml(sku.product)}${sku.name ? ' / ' + escapeHtml(sku.name) : ''} · 库存 0 · 请先入库</div>`;
+      }
+      return `<div class="flow-prod-row__foot is-linked">库存：${escapeHtml(sku.product)}${sku.name ? ' / ' + escapeHtml(sku.name) : ''} · 库存 ${stock}${escapeHtml(unit)} · 待扣 ${pending} 件</div>`;
+    }
+    return `<div class="flow-prod-row__foot">点击扣减库存</div>`;
+  }
+
+  function flowProdIsDone(row) {
+    return flowProdPendingQty(row) <= 0 && flowProdGetDeductedQty(row.key) > 0;
+  }
+
   function renderFlowProductSales() {
     const rangeEl = document.getElementById('flowProductRange');
     const range = state.flowProductRange || 'today';
@@ -44379,31 +45371,248 @@ window.__BILLING_EMBEDDED__ = true;
       : '';
     const sum = `
       <div class="flow-prod-sum">
-        <div class="flow-prod-sum__meta">共 <strong>${data.totalQty}</strong> 件 · 销售额 <strong>${flowHubFormatYen(data.totalAmt)}</strong></div>
+        <div class="flow-prod-sum__meta">共 <strong>${data.totalQty}</strong> 件 · 销售额 <span class="flow-prod-sum__yen">${escapeHtml(flowProdFormatYen(data.totalAmt))}</span></div>
         <button type="button" class="flow-prod-sum__sort" id="flowProductSortBtn" aria-label="切换排序">${escapeHtml(sortLabel)} ↕</button>
       </div>${rangeHint}`;
+    const chev = '<svg class="flow-prod-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
+    const doneMark = '<span class="flow-prod-row__done-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>';
     if (!data.rows.length) {
       body.innerHTML = sum + flowEmptyHtml('暂无产品销售', '所选时段内没有产品成交记录');
       return;
     }
-    body.innerHTML = sum + `<div class="flow-prod-list">${data.rows.map(r => `
-      <div class="flow-prod-row">
-        <div class="flow-prod-row__main">
-          <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
-          ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
+    body.innerHTML = sum + `<div class="flow-prod-list">${data.rows.map(r => {
+      const done = flowProdIsDone(r);
+      if (done) {
+        return `<div class="flow-prod-row is-done" aria-label="${escapeHtml(r.name)} 已扣减完成" role="group">
+        <div class="flow-prod-row__top">
+          <div class="flow-prod-row__main">
+            <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
+            ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
+          </div>
+          <div class="flow-prod-row__metrics">
+            <div class="flow-prod-row__metrics-nums">
+              <div class="flow-prod-row__qty"><span class="flow-prod-row__qty-num">${r.qty}</span><span class="flow-prod-row__qty-unit">件</span></div>
+              <div class="flow-prod-row__amt">${escapeHtml(flowProdFormatYen(r.amount))}</div>
+            </div>
+            ${doneMark}
+          </div>
         </div>
-        <div class="flow-prod-row__metrics">
-          <div class="flow-prod-row__qty">${r.qty}件</div>
-          <div class="flow-prod-row__amt">${flowHubFormatYen(r.amount)}</div>
+        ${flowProdRowFootHtml(r)}
+      </div>`;
+      }
+      return `<button type="button" class="flow-prod-row" data-flow-prod-key="${escapeHtml(r.key)}" aria-label="${isStockModuleEmpty() ? '去开通库存' : '扣减库存'} ${escapeHtml(r.name)}">
+        <div class="flow-prod-row__top">
+          <div class="flow-prod-row__main">
+            <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
+            ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
+          </div>
+          <div class="flow-prod-row__metrics">
+            <div class="flow-prod-row__metrics-nums">
+              <div class="flow-prod-row__qty"><span class="flow-prod-row__qty-num">${r.qty}</span><span class="flow-prod-row__qty-unit">件</span></div>
+              <div class="flow-prod-row__amt">${escapeHtml(flowProdFormatYen(r.amount))}</div>
+            </div>
+            ${chev}
+          </div>
         </div>
-      </div>`).join('')}</div>`;
+        ${flowProdRowFootHtml(r)}
+      </button>`;
+    }).join('')}</div>`;
+  }
+
+  function renderFlowProdDeductSheet() {
+    const draft = state.flowProdDeductDraft;
+    if (!draft) return;
+    const head = document.getElementById('flowProdDeductHead');
+    const listEl = document.getElementById('flowProdDeductList');
+    const searchWrap = document.getElementById('flowProdDeductSearchWrap');
+    const changeBtn = document.getElementById('flowProdDeductChange');
+    const secTitle = document.getElementById('flowProdDeductSecTitle');
+    const okBtn = document.getElementById('flowProdDeductOk');
+    const qtyVal = document.getElementById('flowProdDeductQtyVal');
+    if (head) {
+      head.innerHTML = `
+        <div class="flow-prod-deduct-ctx__label">销量商品</div>
+        <div class="flow-prod-deduct-ctx__name">${escapeHtml(draft.name)}</div>
+        ${draft.spec ? `<div class="flow-prod-deduct-ctx__spec">${escapeHtml(draft.spec)}</div>` : ''}
+        <div class="flow-prod-deduct-ctx__stats">
+          <div class="flow-prod-deduct-stat">
+            <span class="flow-prod-deduct-stat__lab">本时段销量</span>
+            <span class="flow-prod-deduct-stat__val">${draft.soldQty}<em>件</em></span>
+          </div>
+          <div class="flow-prod-deduct-stat flow-prod-deduct-stat--pending">
+            <span class="flow-prod-deduct-stat__lab">待扣减</span>
+            <span class="flow-prod-deduct-stat__val">${draft.pendingQty}<em>件</em></span>
+          </div>
+        </div>`;
+    }
+    const picking = !!draft.picking;
+    if (secTitle) secTitle.textContent = picking ? '选择库存商品' : '已选库存商品';
+    if (searchWrap) searchWrap.classList.toggle('hidden', !picking);
+    if (changeBtn) changeBtn.classList.toggle('hidden', picking || !draft.selectedSkuId);
+    if (listEl) listEl.classList.toggle('is-picking', picking);
+    if (!listEl) return;
+    if (!picking && draft.selectedSkuId) {
+      const sku = flowProdGetSku(draft.selectedSkuId);
+      if (sku) {
+        const stock = Math.max(0, Number(sku.stock) || 0);
+        listEl.innerHTML = `<button type="button" class="bill-stock-pick-row is-on" data-flow-prod-sku="${escapeHtml(sku.id)}">
+          <span class="bill-stock-pick-row__check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+          <span class="bill-stock-pick-row__main">
+            <span class="bill-stock-pick-row__name">${escapeHtml(sku.product || '')}</span>
+            ${sku.name ? `<span class="bill-stock-pick-row__spec">${escapeHtml(sku.name)}</span>` : ''}
+            <span class="bill-stock-pick-row__meta">可用库存 ${stock}${sku.unit || ''}</span>
+          </span>
+        </button>`;
+      } else {
+        draft.picking = true;
+        renderFlowProdDeductSheet();
+        return;
+      }
+    } else {
+      const q = String(draft.search || '').trim().toLowerCase();
+      let list = ((window.StockStore && window.StockStore.skus) || []).slice();
+      list.sort((a, b) => {
+        const score = (s) => {
+          let n = 0;
+          if (s.product === draft.name) n += 4;
+          if (draft.spec && s.name === draft.spec) n += 2;
+          if (s.id === draft.selectedSkuId) n += 8;
+          return n;
+        };
+        return score(b) - score(a) || String(a.product || '').localeCompare(String(b.product || ''), 'zh');
+      });
+      if (q) {
+        list = list.filter(s => `${s.product || ''}${s.name || ''}${s.barcode || ''}`.toLowerCase().includes(q));
+      }
+      if (!list.length) {
+        const moduleEmpty = isStockModuleEmpty();
+        listEl.innerHTML = moduleEmpty
+          ? `<div class="flow-prod-deduct-empty">暂无库存商品<br>请先在「库存管理」中新增商品并入库<div style="margin-top:16px"><button type="button" class="btn-main" id="flowProdDeductGoStock" style="max-width:200px">去库存管理</button></div></div>`
+          : `<div class="flow-prod-deduct-empty">暂无匹配的库存商品<br>请先在「库存管理 · 商品」中新增对应规格，入库后再回来扣减<div style="margin-top:16px"><button type="button" class="btn-main secondary" id="flowProdDeductGoStock" style="max-width:200px">去库存管理</button></div></div>`;
+      } else {
+        listEl.innerHTML = list.map(sku => {
+          const on = draft.selectedSkuId === sku.id;
+          const stock = Math.max(0, Number(sku.stock) || 0);
+          return `<button type="button" class="bill-stock-pick-row${on ? ' is-on' : ''}" data-flow-prod-sku="${escapeHtml(sku.id)}" ${stock <= 0 ? 'disabled' : ''}>
+            <span class="bill-stock-pick-row__check" aria-hidden="true">${on ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
+            <span class="bill-stock-pick-row__main">
+              <span class="bill-stock-pick-row__name">${escapeHtml(sku.product || '')}</span>
+              ${sku.name ? `<span class="bill-stock-pick-row__spec">${escapeHtml(sku.name)}</span>` : ''}
+              <span class="bill-stock-pick-row__meta">可用库存 ${stock}${sku.unit || ''}${stock <= 0 ? ' · 请先入库' : ''}</span>
+            </span>
+          </button>`;
+        }).join('');
+        if (list.every(s => (Number(s.stock) || 0) <= 0)) {
+          listEl.innerHTML += `<div class="flow-prod-deduct-empty" style="padding:12px 8px 4px">所选规格库存为 0，请先入库后再扣减<div style="margin-top:12px"><button type="button" class="btn-main secondary" id="flowProdDeductGoStock" style="max-width:200px">去入库</button></div></div>`;
+        }
+      }
+    }
+    const sku = draft.selectedSkuId ? flowProdGetSku(draft.selectedSkuId) : null;
+    const stock = sku ? Math.max(0, Number(sku.stock) || 0) : 0;
+    draft.maxQty = Math.max(0, Math.min(draft.pendingQty, stock));
+    draft.deductQty = draft.maxQty;
+    if (qtyVal) {
+      qtyVal.innerHTML = `${draft.deductQty}<em>件</em>`;
+    }
+    if (okBtn) {
+      const qty = draft.deductQty;
+      const can = !!sku && qty >= 1;
+      okBtn.disabled = !can;
+      if (!sku) okBtn.textContent = '确认扣减';
+      else if (stock <= 0) okBtn.textContent = '请先入库';
+      else okBtn.textContent = can ? `确认扣减 ${qty} 件` : '确认扣减';
+    }
+  }
+
+  function openFlowProdDeductSheet(row) {
+    /* A2 兜底：无 SKU 不打开扣减 Sheet */
+    if (isStockModuleEmpty()) {
+      openStockHubFromFlowProduct();
+      return;
+    }
+    flowProdEnsureMaps();
+    const pending = flowProdPendingQty(row);
+    const suggest = flowProdSuggestSkuId(row);
+    const sku = suggest ? flowProdGetSku(suggest) : null;
+    const stock = sku ? Math.max(0, Number(sku.stock) || 0) : 0;
+    const maxQty = Math.max(0, Math.min(pending, stock));
+    const deductDefault = maxQty > 0 ? maxQty : 0;
+    state.flowProdDeductDraft = {
+      productKey: row.key,
+      name: row.name,
+      spec: row.spec || '',
+      soldQty: row.qty,
+      pendingQty: pending,
+      selectedSkuId: suggest || '',
+      deductQty: deductDefault,
+      maxQty,
+      search: '',
+      picking: !suggest,
+    };
+    const searchInput = document.getElementById('flowProdDeductSearch');
+    if (searchInput) searchInput.value = '';
+    renderFlowProdDeductSheet();
+    openMask('flowProdDeductMask');
+  }
+
+  function confirmFlowProdDeduct() {
+    const draft = state.flowProdDeductDraft;
+    if (!draft) return;
+    const sku = flowProdGetSku(draft.selectedSkuId);
+    if (!sku) { showToast('请选择库存商品', true); return; }
+    if (draft.pendingQty <= 0) { showToast('本时段已全部扣减', true); return; }
+    const stock = Math.max(0, Number(sku.stock) || 0);
+    const qty = Math.max(0, Math.min(draft.pendingQty, stock));
+    if (qty <= 0) { showToast('库存为 0，请先入库后再扣减', true); return; }
+    sku.stock = Math.max(0, stock - qty);
+    sku.moved = true;
+    if (window.StockStore && Array.isArray(window.StockStore.outDocs)) {
+      window.StockStore.outDocs.unshift({
+        id: 'out-flow-' + Date.now(),
+        type: '销售出库',
+        date: new Date().toISOString().slice(0, 10),
+        lines: 1,
+        qty,
+        remark: `产品销量扣减 · ${draft.name}${draft.spec ? ' / ' + draft.spec : ''}`,
+      });
+    }
+    flowProdEnsureMaps();
+    state.flowProductStockMap[draft.productKey] = sku.id;
+    const pk = flowProdPeriodKey();
+    if (!state.flowProductDeducted[pk]) state.flowProductDeducted[pk] = {};
+    state.flowProductDeducted[pk][draft.productKey] = flowProdGetDeductedQty(draft.productKey) + qty;
+    state.flowProdDeductDraft = null;
+    closeMask('flowProdDeductMask');
+    showToast(`已扣减 ${qty} 件`);
+    renderFlowProductSales();
   }
 
   function openFlowProductSales() {
+    /* 从空库存演示返回时恢复种子 SKU */
+    if (window.__stockSkusBackup && window.StockStore && !(window.StockStore.skus || []).length) {
+      window.StockStore.skus = window.__stockSkusBackup.slice();
+    }
     if (!state.flowProductRange) state.flowProductRange = 'today';
     if (!state.flowProductSort) state.flowProductSort = 'amount';
+    flowProdEnsureMaps();
     renderFlowProductSales();
     showOnlyScreen('screen-flow-product');
+  }
+
+  /** FLOW / 验收：模拟未开通库存（D1 skus=[]） */
+  function openFlowProductSalesEmptyDemo() {
+    if (window.StockStore) {
+      if (!window.__stockSkusBackup) {
+        window.__stockSkusBackup = (window.StockStore.skus || []).slice();
+      }
+      window.StockStore.skus = [];
+    }
+    if (!state.flowProductRange) state.flowProductRange = 'today';
+    if (!state.flowProductSort) state.flowProductSort = 'amount';
+    flowProdEnsureMaps();
+    renderFlowProductSales();
+    showOnlyScreen('screen-flow-product');
+    showToast('已模拟空库存：点行脚「去开通」');
   }
 
   function renderFlowList() {
@@ -45069,6 +46278,722 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-biz-self-rpt');
   }
 
+  function bizFmtChartNum(n) {
+    const v = Math.round(Number(n) || 0);
+    const abs = Math.abs(v);
+    if (abs >= 10000) {
+      const s = (v / 10000).toFixed(1).replace(/\.0$/, '');
+      return `${s}万`;
+    }
+    if (abs >= 1000) {
+      const s = (v / 1000).toFixed(1).replace(/\.0$/, '');
+      return `${s}k`;
+    }
+    return String(v);
+  }
+
+  function bizTrendSeedSeries(base, labels, wave) {
+    const b = Math.max(0, Number(base) || 0);
+    const w = Array.isArray(wave) && wave.length ? wave : [0.72, 0.88, 1.05, 0.94, 1.18, 1.08, 0.86];
+    return labels.map((label, i) => {
+      const f = w[i % w.length];
+      const jitter = 1 + ((i % 3) - 1) * 0.03;
+      return { label, value: Math.max(0, Math.round(b * f * jitter)) };
+    });
+  }
+
+  function bizBarChartHtml(points, ariaLabel, opts) {
+    const o = opts || {};
+    const list = Array.isArray(points) ? points.filter(Boolean) : [];
+    if (!list.length) {
+      return '<div class="biz-empty" style="padding:28px 12px">暂无趋势数据</div>';
+    }
+    const max = Math.max(1, ...list.map(p => Number(p.value) || 0));
+    const muted = !!o.muted;
+    const tone = o.tone || '';
+    const selectedIndex = o.selectedIndex != null ? Number(o.selectedIndex) : -1;
+    const interactive = !!o.interactive;
+    const dense = !!o.dense || list.length > 16;
+    const barAttr = o.barDataAttr || 'data-biz-mall-bar';
+    return `<div class="biz-bar-chart${dense ? ' is-dense' : ''}" role="img" aria-label="${escapeHtml(ariaLabel || '趋势柱状图')}">
+      <div class="biz-bar-chart__plot">${list.map((p, i) => {
+        const v = Math.max(0, Number(p.value) || 0);
+        const h = Math.max(4, Math.round((v / max) * 100));
+        const isActive = i === selectedIndex;
+        const barCls = [
+          'biz-bar-chart__bar',
+          muted ? 'is-muted' : '',
+          tone === 'mall' ? 'is-tone-mall' : '',
+          isActive ? 'is-active' : '',
+        ].filter(Boolean).join(' ');
+        const labCls = 'biz-bar-chart__lab' + (isActive ? ' is-active' : '');
+        const inner = `
+          <div class="biz-bar-chart__val">${escapeHtml(bizFmtChartNum(v))}</div>
+          <div class="biz-bar-chart__bar-track">
+            <div class="${barCls}" style="height:${h}%"></div>
+          </div>
+          <div class="${labCls}">${escapeHtml(String(p.label || ''))}</div>`;
+        if (interactive) {
+          const ariaLab = String(p.label || p.key || (i + 1));
+          return `<button type="button" class="biz-bar-chart__col${isActive ? ' is-active' : ''}" ${barAttr}="${i}" aria-pressed="${isActive ? 'true' : 'false'}" aria-label="${escapeHtml(ariaLab + ' ' + bizFmtChartNum(v))}">${inner}</button>`;
+        }
+        return `<div class="biz-bar-chart__col${isActive ? ' is-active' : ''}">${inner}</div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  function ensureBizMallPeriod() {
+    if (state.bizMallGrain !== 'month') state.bizMallGrain = 'day';
+    const today = (typeof flowTodayKey === 'function' ? flowTodayKey() : '') || (typeof billTodayKey === 'function' ? billTodayKey() : '') || '2026-07-27';
+    if (!state.bizMallDayKey || !/^\d{4}-\d{2}-\d{2}$/.test(state.bizMallDayKey)) {
+      state.bizMallDayKey = today;
+    }
+    if (!state.bizMallMonthKey || !/^\d{4}-\d{2}$/.test(state.bizMallMonthKey)) {
+      state.bizMallMonthKey = state.bizMallDayKey.slice(0, 7);
+    }
+  }
+
+  function bizMallPad2(n) {
+    return String(n).padStart(2, '0');
+  }
+
+  function bizMallParseDayKey(key) {
+    const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return { y: +m[1], m: +m[2] - 1, d: +m[3] };
+  }
+
+  function bizMallParseMonthKey(key) {
+    const m = String(key || '').match(/^(\d{4})-(\d{2})$/);
+    if (!m) return null;
+    return { y: +m[1], m: +m[2] - 1 };
+  }
+
+  function bizMallDayLabel(key) {
+    const p = bizMallParseDayKey(key);
+    if (!p) return key || '';
+    return `${p.y}年${p.m + 1}月${p.d}日`;
+  }
+
+  function bizMallMonthLabel(key) {
+    const p = bizMallParseMonthKey(key);
+    if (!p) return key || '';
+    return `${p.y}年${p.m + 1}月`;
+  }
+
+  function bizMallChipLabel() {
+    ensureBizMallPeriod();
+    return state.bizMallGrain === 'month'
+      ? bizMallMonthLabel(state.bizMallMonthKey)
+      : bizMallDayLabel(state.bizMallDayKey);
+  }
+
+  function bizMallWave(n) {
+    const base = [0.72, 0.84, 0.91, 0.78, 1.05, 1.18, 0.96, 0.88, 1.12, 1.28, 1.08, 0.94, 1.02, 1.16, 0.86, 0.98, 1.22, 1.1, 0.9, 1.06, 1.32, 1.14, 0.82, 0.95, 1.2, 1.08, 0.88, 1.0, 1.15, 1.25, 0.92];
+    return Array.from({ length: n }, (_, i) => base[i % base.length]);
+  }
+
+  function bizMallSeriesModel(total) {
+    ensureBizMallPeriod();
+    const grain = state.bizMallGrain;
+    if (grain === 'month') {
+      const p = bizMallParseMonthKey(state.bizMallMonthKey) || { y: 2026, m: 6 };
+      const labels = Array.from({ length: 12 }, (_, i) => `${i + 1}月`);
+      const points = bizTrendSeedSeries(total / 12, labels, bizMallWave(12)).map((pt, i) => ({
+        ...pt,
+        key: `${p.y}-${bizMallPad2(i + 1)}`,
+      }));
+      const selectedIndex = Math.max(0, Math.min(11, p.m));
+      return { grain, points, selectedIndex, dense: false };
+    }
+    const p = bizMallParseDayKey(state.bizMallDayKey) || { y: 2026, m: 6, d: 27 };
+    const days = new Date(p.y, p.m + 1, 0).getDate();
+    const tickDays = new Set([1, 5, 10, 15, 20, 25, days]);
+    const labels = Array.from({ length: days }, (_, i) => {
+      const d = i + 1;
+      return tickDays.has(d) ? String(d) : '';
+    });
+    const points = bizTrendSeedSeries(total / days, labels, bizMallWave(days)).map((pt, i) => ({
+      ...pt,
+      key: `${p.y}-${bizMallPad2(p.m + 1)}-${bizMallPad2(i + 1)}`,
+    }));
+    const selectedIndex = Math.max(0, Math.min(days - 1, p.d - 1));
+    return { grain, points, selectedIndex, dense: true };
+  }
+
+  function bizMallSelectedScale(series) {
+    const pts = series.points || [];
+    if (!pts.length) return 1;
+    const avg = pts.reduce((s, p) => s + (Number(p.value) || 0), 0) / pts.length;
+    const sel = Number(pts[series.selectedIndex] && pts[series.selectedIndex].value) || avg;
+    return avg > 0 ? sel / avg : 1;
+  }
+
+  function bizMallDatebarHtml() {
+    ensureBizMallPeriod();
+    const grain = state.bizMallGrain;
+    const chev = '<svg class="biz-mall-datechip__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    return `
+      <div class="biz-mall-grain" role="tablist" aria-label="统计粒度">
+        <button type="button" class="biz-mall-grain__btn${grain === 'day' ? ' is-active' : ''}" data-biz-mall-grain="day" role="tab" aria-selected="${grain === 'day' ? 'true' : 'false'}">日</button>
+        <button type="button" class="biz-mall-grain__btn${grain === 'month' ? ' is-active' : ''}" data-biz-mall-grain="month" role="tab" aria-selected="${grain === 'month' ? 'true' : 'false'}">月</button>
+      </div>
+      <button type="button" class="biz-mall-datechip" data-biz-mall-date-open aria-label="选择${grain === 'month' ? '月份' : '日期'}">
+        <span>${escapeHtml(bizMallChipLabel())}</span>${chev}
+      </button>`;
+  }
+
+  function renderBizMallDatebar() {
+    const el = document.getElementById('bizMallDatebar');
+    if (!el) return;
+    el.innerHTML = bizMallDatebarHtml();
+  }
+
+  function renderBizMallDateSheet() {
+    ensureBizMallPeriod();
+    const grain = state.bizMallGrain;
+    const title = document.getElementById('bizMallDateSheetTitle');
+    const cal = document.getElementById('bizMallDateCal');
+    const grid = document.getElementById('bizMallMonthGrid');
+    const foot = document.getElementById('bizMallDateFoot');
+    if (title) title.textContent = grain === 'month' ? '选择月份' : '选择日期';
+    if (foot) foot.hidden = grain !== 'month';
+    if (grain === 'month') {
+      if (cal) cal.hidden = true;
+      if (grid) {
+        grid.hidden = false;
+        let y = state.bizMallCalYear;
+        if (y == null) {
+          const p = bizMallParseMonthKey(state.bizMallDateDraft || state.bizMallMonthKey);
+          y = p ? p.y : new Date().getFullYear();
+          state.bizMallCalYear = y;
+        }
+        const selected = state.bizMallDateDraft || state.bizMallMonthKey;
+        const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+        const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+        const cells = Array.from({ length: 12 }, (_, i) => {
+          const key = `${y}-${bizMallPad2(i + 1)}`;
+          const cls = 'biz-mall-month-grid__btn' + (key === selected ? ' is-selected' : '');
+          return `<button type="button" class="${cls}" data-biz-mall-month="${key}">${i + 1}月</button>`;
+        }).join('');
+        grid.innerHTML =
+          '<div class="flow-balance-cal__nav">' +
+          `<button type="button" class="flow-balance-cal__nav-btn" data-biz-mall-year-nav="-1" aria-label="上一年">${chevL}</button>` +
+          `<div class="flow-balance-cal__title">${y}年</div>` +
+          `<button type="button" class="flow-balance-cal__nav-btn" data-biz-mall-year-nav="1" aria-label="下一年">${chevR}</button>` +
+          '</div>' +
+          `<div class="biz-mall-month-grid__cells">${cells}</div>`;
+      }
+      return;
+    }
+    if (grid) grid.hidden = true;
+    if (!cal) return;
+    cal.hidden = false;
+    let y = state.bizMallCalYear;
+    let m = state.bizMallCalMonth;
+    if (y == null || m == null) {
+      const anchor = bizMallParseDayKey(state.bizMallDateDraft || state.bizMallDayKey);
+      y = anchor ? anchor.y : new Date().getFullYear();
+      m = anchor ? anchor.m : new Date().getMonth();
+      state.bizMallCalYear = y;
+      state.bizMallCalMonth = m;
+    }
+    const selected = state.bizMallDateDraft || state.bizMallDayKey;
+    const todayK = (typeof flowTodayKey === 'function' ? flowTodayKey() : '') || (typeof billTodayKey === 'function' ? billTodayKey() : '');
+    const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+    const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < firstDow; i++) cells.push('<span class="flow-balance-cal__day is-muted" aria-hidden="true"></span>');
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${y}-${bizMallPad2(m + 1)}-${bizMallPad2(d)}`;
+      const cls = [
+        'flow-balance-cal__day',
+        key === selected ? 'is-selected' : '',
+        key === todayK ? 'is-today' : '',
+      ].filter(Boolean).join(' ');
+      cells.push(`<button type="button" class="${cls}" data-biz-mall-cal-day="${key}" aria-label="${key}"><span class="flow-balance-cal__day-num">${d}</span></button>`);
+    }
+    cal.innerHTML =
+      '<div class="flow-balance-cal__nav">' +
+      `<button type="button" class="flow-balance-cal__nav-btn" data-biz-mall-cal-nav="-1" aria-label="上一月">${chevL}</button>` +
+      `<div class="flow-balance-cal__title">${y}年${m + 1}月</div>` +
+      `<button type="button" class="flow-balance-cal__nav-btn" data-biz-mall-cal-nav="1" aria-label="下一月">${chevR}</button>` +
+      '</div>' +
+      `<div class="flow-balance-cal__weekdays">${weekdays.map(w => `<div class="flow-balance-cal__wd">${w}</div>`).join('')}</div>` +
+      `<div class="flow-balance-cal__grid">${cells.join('')}</div>`;
+  }
+
+  function openBizMallDateSheet() {
+    ensureBizMallPeriod();
+    if (state.bizMallGrain === 'month') {
+      state.bizMallDateDraft = state.bizMallMonthKey;
+      const p = bizMallParseMonthKey(state.bizMallMonthKey);
+      state.bizMallCalYear = p ? p.y : new Date().getFullYear();
+      state.bizMallCalMonth = null;
+    } else {
+      state.bizMallDateDraft = state.bizMallDayKey;
+      const p = bizMallParseDayKey(state.bizMallDayKey);
+      state.bizMallCalYear = p ? p.y : new Date().getFullYear();
+      state.bizMallCalMonth = p ? p.m : new Date().getMonth();
+    }
+    renderBizMallDateSheet();
+    openMask('bizMallDateMask');
+  }
+
+  function closeBizMallDateSheet() {
+    closeMask('bizMallDateMask');
+  }
+
+  function confirmBizMallDateSheet() {
+    ensureBizMallPeriod();
+    if (state.bizMallGrain === 'month') {
+      if (state.bizMallDateDraft && /^\d{4}-\d{2}$/.test(state.bizMallDateDraft)) {
+        state.bizMallMonthKey = state.bizMallDateDraft;
+        const p = bizMallParseMonthKey(state.bizMallMonthKey);
+        if (p) {
+          const dayP = bizMallParseDayKey(state.bizMallDayKey);
+          const dim = new Date(p.y, p.m + 1, 0).getDate();
+          const d = dayP ? Math.min(dayP.d, dim) : 1;
+          state.bizMallDayKey = `${p.y}-${bizMallPad2(p.m + 1)}-${bizMallPad2(d)}`;
+        }
+      }
+    } else if (state.bizMallDateDraft && /^\d{4}-\d{2}-\d{2}$/.test(state.bizMallDateDraft)) {
+      state.bizMallDayKey = state.bizMallDateDraft;
+      state.bizMallMonthKey = state.bizMallDayKey.slice(0, 7);
+    }
+    closeBizMallDateSheet();
+    renderBizMall();
+  }
+
+  function bizMallTradeTrendChartHtml(amount) {
+    const series = bizMallSeriesModel(amount);
+    return bizBarChartHtml(series.points, series.grain === 'month' ? '商城交易趋势（按月）' : '商城交易趋势（按日）', {
+      tone: 'mall',
+      selectedIndex: series.selectedIndex,
+      interactive: true,
+      dense: series.dense,
+    });
+  }
+
+  function bizMallTrafficTrendChartHtml(visits) {
+    const series = bizMallSeriesModel(visits);
+    return bizBarChartHtml(series.points, series.grain === 'month' ? '流量趋势（按月）' : '流量趋势（按日）', {
+      tone: 'mall',
+      selectedIndex: series.selectedIndex,
+      interactive: true,
+      dense: series.dense,
+    });
+  }
+
+  function bizRecentDayLabels(count) {
+    const n = Math.max(1, Number(count) || 7);
+    const key = (typeof flowTodayKey === 'function' ? flowTodayKey() : '') || '2026-07-27';
+    const parts = key.split('-').map(Number);
+    const base = new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1, 12, 0, 0);
+    const labels = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(base);
+      d.setDate(base.getDate() - i);
+      labels.push(`${d.getMonth() + 1}.${String(d.getDate()).padStart(2, '0')}`);
+    }
+    return labels;
+  }
+
+  function bizKpiDeltaHtml(n) {
+    const v = Number(n) || 0;
+    const cls = v < 0 ? 'is-down' : (v > 0 ? 'is-up' : 'is-neutral');
+    const arrow = v < 0 ? '↓' : (v > 0 ? '↑' : '');
+    const body = v === 0
+      ? '0.00'
+      : (v < 0 ? '-' : '') + Math.abs(v).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `<div class="biz-kpi__val ${cls}">${body}${arrow ? `<span class="biz-kpi__arrow" aria-hidden="true">${arrow}</span>` : ''}</div>`;
+  }
+
+  function bizRevenueTrendChartHtml(cash) {
+    /* 门店经营报表为日报口径：营收趋势按「日」聚合，不用 2 小时刻度 */
+    const period = state.bizHubPeriod || 'today';
+    const dayCount = period === 'month' ? 14 : 7;
+    const labels = bizRecentDayLabels(dayCount);
+    const points = bizTrendSeedSeries(cash / dayCount, labels, period === 'month'
+      ? [0.72, 0.8, 0.9, 0.85, 1.0, 1.15, 0.95, 0.88, 1.05, 1.2, 1.1, 0.92, 1.08, 1.18]
+      : [0.78, 0.92, 1.08, 0.96, 1.22, 1.35, 0.88]);
+    return bizBarChartHtml(points, '营收趋势柱状图（按日）');
+  }
+
+  function bizOvFmt(n) {
+    const v = Number(n) || 0;
+    return v.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function bizOvMoney(n) {
+    return '¥' + bizOvFmt(n);
+  }
+
+  function bizOvIcon(kind) {
+    const files = {
+      overview: 'assets/biz/overview-pie.svg',
+      cash: 'assets/biz/cash-yen.svg',
+      ticket: 'assets/biz/group-ticket.svg',
+      gift: 'assets/biz/other-gift.svg',
+      labor: 'assets/biz/labor-user.svg',
+      product: 'assets/biz/product-bag.svg',
+      card: 'assets/biz/card-sales.svg',
+      top: 'assets/biz/top-star.svg',
+      laborSales: 'assets/biz/labor-sales.svg',
+    };
+    const src = files[kind] || files.cash;
+    return `<img class="biz-ov-card__icon-svg" src="${src}" width="20" height="20" alt="" draggable="false">`;
+  }
+
+  function bizOvChevronSvg() {
+    return '<svg class="biz-ov-group__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  }
+
+  function bizOvCardHeadHtml(opts) {
+    const { icon, title, total, trailing } = opts;
+    const right = trailing != null
+      ? trailing
+      : (total != null ? `<span class="biz-ov-card__total">${bizOvMoney(total)}</span>` : '');
+    return `<div class="biz-ov-card__head">
+      <span class="biz-ov-card__icon" aria-hidden="true">${icon}</span>
+      <span class="biz-ov-card__title">${escapeHtml(title)}</span>
+      ${right}
+    </div>`;
+  }
+
+  function bizOvMatrixRows(channels, cashBase, weights) {
+    return channels.map((name, i) => {
+      const w = weights[i] != null ? weights[i] : Math.max(0.04, 0.42 - i * 0.07);
+      const base = cashBase * w;
+      return {
+        name,
+        service: bizRound2(base * 0.7),
+        product: bizRound2(base * 0.1),
+        card: bizRound2(base * 0.2),
+        refund: 0,
+        amount: bizRound2(base),
+      };
+    });
+  }
+
+  function bizOvMatrixHtml(rows, amountKey) {
+    const key = amountKey || '金额';
+    return `<table class="biz-matrix">
+      <thead><tr><th>渠道</th><th>服务</th><th>产品</th><th>售卡</th><th>退款</th><th>${escapeHtml(key)}</th></tr></thead>
+      <tbody>${rows.map(r =>
+        `<tr><td>${escapeHtml(r.name)}</td><td>${bizOvFmt(r.service)}</td><td>${bizOvFmt(r.product)}</td><td>${bizOvFmt(r.card)}</td><td>${bizOvFmt(r.refund)}</td><td>${bizOvFmt(r.amount)}</td></tr>`
+      ).join('')}</tbody>
+    </table>`;
+  }
+
+  function bizOvMatrixCardHtml(opts) {
+    const { id, icon, title, total, rows, amountKey, foot } = opts;
+    return `<div class="biz-ov-card"${id ? ` id="${escapeHtml(id)}"` : ''}>
+      ${bizOvCardHeadHtml({ icon, title, total })}
+      ${bizOvMatrixHtml(rows, amountKey)}
+      ${foot || ''}
+    </div>`;
+  }
+
+  function bizOvPerfCardHtml(opts) {
+    const { id, title, icon, total, groups, expandKey } = opts;
+    const openId = (state.bizStoreOvExpand && state.bizStoreOvExpand[expandKey]) || '';
+    const groupHtml = groups.map(g => {
+      const open = openId === g.id;
+      return `<div class="biz-ov-group${open ? ' is-open' : ''}" data-biz-ov-group="${escapeHtml(expandKey)}:${escapeHtml(g.id)}">
+        <button type="button" class="biz-ov-group__btn" data-biz-ov-toggle="${escapeHtml(expandKey)}:${escapeHtml(g.id)}">
+          <span class="biz-ov-group__name">${escapeHtml(g.name)}</span>
+          <span class="biz-ov-group__amt">${bizOvFmt(g.amount)}</span>
+          ${bizOvChevronSvg()}
+        </button>
+        <div class="biz-ov-group__body">${(g.lines || []).map(line =>
+          `<div class="biz-ov-line"><span class="biz-ov-line__name">${escapeHtml(line.name)}</span><span class="biz-ov-line__amt">${bizOvFmt(line.amount)}</span></div>`
+        ).join('')}</div>
+      </div>`;
+    }).join('');
+    return `<div class="biz-ov-card" id="${escapeHtml(id)}">
+      ${bizOvCardHeadHtml({ icon, title, total })}
+      ${groupHtml}
+    </div>`;
+  }
+
+  function bizOvGroupsHtml(expandKey, groups) {
+    const openId = (state.bizStoreOvExpand && state.bizStoreOvExpand[expandKey]) || '';
+    return groups.map(g => {
+      const open = openId === g.id;
+      return `<div class="biz-ov-group${open ? ' is-open' : ''}" data-biz-ov-group="${escapeHtml(expandKey)}:${escapeHtml(g.id)}">
+        <button type="button" class="biz-ov-group__btn" data-biz-ov-toggle="${escapeHtml(expandKey)}:${escapeHtml(g.id)}">
+          <span class="biz-ov-group__name">${escapeHtml(g.name)}</span>
+          <span class="biz-ov-group__amt">${bizOvFmt(g.amount)}</span>
+          ${bizOvChevronSvg()}
+        </button>
+        <div class="biz-ov-group__body">${(g.lines || []).map(line =>
+          `<div class="biz-ov-line"><span class="biz-ov-line__name">${escapeHtml(line.name)}</span><span class="biz-ov-line__amt">${bizOvFmt(line.amount)}</span></div>`
+        ).join('')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function bizStaffRankHtml(rows, opts) {
+    const expanded = !!(opts && opts.expanded);
+    const preview = (opts && opts.preview != null) ? opts.preview : 5;
+    const visible = expanded ? rows : rows.slice(0, preview);
+    const hasMore = rows.length > preview;
+    const list = visible.map((r, i) => {
+      const rank = i + 1;
+      const t = Math.max(0.01, r.total);
+      const wLabor = (r.labor / t) * 100;
+      const wSales = (r.sales / t) * 100;
+      const wCard = Math.max(0, 100 - wLabor - wSales);
+      const badgeCls = rank <= 3 ? `is-${rank}` : 'is-rest';
+      return `<div class="biz-rank-board__item">
+        <div class="biz-rank-board__top">
+          <span class="biz-rank-board__i ${badgeCls}" aria-hidden="true">${rank}</span>
+          <span class="biz-rank-board__name">${escapeHtml(r.name)}</span>
+          <span class="biz-rank-board__total">${bizOvFmt(r.total)}</span>
+        </div>
+        <div class="biz-rank-board__stack" aria-hidden="true">
+          <span class="biz-rank-board__seg is-labor" style="width:${wLabor.toFixed(2)}%"></span>
+          <span class="biz-rank-board__seg is-sales" style="width:${wSales.toFixed(2)}%"></span>
+          <span class="biz-rank-board__seg is-card" style="width:${wCard.toFixed(2)}%"></span>
+        </div>
+        <div class="biz-rank-board__meta">
+          <span><i class="biz-rank-board__dot is-labor"></i>劳动 <b>${bizOvFmt(r.labor)}</b></span>
+          <span><i class="biz-rank-board__dot is-sales"></i>销售 <b>${bizOvFmt(r.sales)}</b></span>
+          <span><i class="biz-rank-board__dot is-card"></i>办卡 <b>${bizOvFmt(r.card)}</b></span>
+        </div>
+      </div>`;
+    }).join('');
+    const moreBtn = hasMore
+      ? `<button type="button" class="biz-rank-board__more" data-biz-staff-rank-more>${expanded ? '收起' : '查看更多'}</button>`
+      : '';
+    return `<div class="biz-rank-board">${list}${moreBtn}</div>`;
+  }
+
+  function bizOvBuildCashLines(total) {
+    const names = ['支付宝', '微信', '现金', '银行卡', '信用卡'];
+    const ws = [0.34, 0.28, 0.16, 0.12, 0.1];
+    return names.map((name, i) => ({ name, amount: bizRound2(total * ws[i]) }));
+  }
+
+  function bizOvBuildGroupBuyLines(total) {
+    const names = ['美团', '大众点评', '抖音', '口碑', '其他平台'];
+    const ws = [0.34, 0.22, 0.2, 0.14, 0.1];
+    return names.map((name, i) => ({ name, amount: bizRound2(total * ws[i]) }));
+  }
+
+  function bizOvMemberCardNames() {
+    const preferred = ['尊享组合卡', '永久储值卡', '老客续充卡', '新客首开卡', '全年洗吹卡'];
+    const fromTpl = (typeof CARD_TEMPLATES !== 'undefined' && Array.isArray(CARD_TEMPLATES))
+      ? CARD_TEMPLATES.map(t => t && t.name).filter(Boolean)
+      : [];
+    const names = preferred.filter(n => !fromTpl.length || fromTpl.includes(n));
+    return names.length ? names : preferred;
+  }
+
+  function bizOvBuildCardPayLines(total) {
+    const names = bizOvMemberCardNames();
+    const ws = [0.32, 0.24, 0.18, 0.14, 0.12];
+    let used = 0;
+    return names.map((name, i) => {
+      const isLast = i === names.length - 1;
+      const amount = isLast
+        ? bizRound2(total - used)
+        : bizRound2(total * (ws[i] != null ? ws[i] : Math.max(0.08, 0.3 - i * 0.05)));
+      used = bizRound2(used + amount);
+      return { name, amount: Math.max(0, amount) };
+    });
+  }
+
+  function bizOvBuildFreeLines(amount) {
+    return [{ name: '免单（' + freeOrderRuleText() + '）', amount }];
+  }
+
+  function bizReceiptLaborSalesHtml(opts) {
+    const { service, product, cardSale, groupBuy, cashPart, refund } = opts;
+    const total = Math.max(0.01, service + product + cardSale);
+    const pct = (n) => ((n / total) * 100).toFixed(2) + '%';
+    const w = (n) => Math.max(0, Math.min(100, (n / total) * 100));
+    const segs = [
+      { cls: 'is-svc', w: w(service) },
+      { cls: 'is-prod', w: w(product) },
+      { cls: 'is-card', w: w(cardSale) },
+    ].filter(s => s.w > 0.05);
+    const stack = segs.length
+      ? segs.map(s => `<span class="biz-ls-stack__seg ${s.cls}" style="width:${s.w.toFixed(2)}%"></span>`).join('')
+      : '<span class="biz-ls-stack__seg is-svc" style="width:100%"></span>';
+    return `<div class="biz-ov-card" id="bizReceiptLaborSales">
+      ${bizOvCardHeadHtml({ icon: bizOvIcon('laborSales'), title: '劳动和销售统计' })}
+      <div class="biz-ls-stack" aria-hidden="true">${stack}</div>
+      <div class="biz-ls-row">
+        <span class="biz-ls-row__dot is-svc" aria-hidden="true"></span>
+        <div class="biz-ls-row__main">
+          <div class="biz-ls-row__top">
+            <span class="biz-ls-row__name">服务实收</span>
+            <span class="biz-ls-row__amt">${bizOvFmt(service)}</span>
+            <span class="biz-ls-row__pct">${pct(service)}</span>
+          </div>
+          <div class="biz-ls-row__sub">(团购: ${bizOvFmt(groupBuy)}; 现金类: ${bizOvFmt(cashPart)}; 退单: ${bizOvFmt(refund)}; )</div>
+        </div>
+      </div>
+      <div class="biz-ls-row">
+        <span class="biz-ls-row__dot is-prod" aria-hidden="true"></span>
+        <div class="biz-ls-row__main">
+          <div class="biz-ls-row__top">
+            <span class="biz-ls-row__name">产品实收</span>
+            <span class="biz-ls-row__amt">${bizOvFmt(product)}</span>
+            <span class="biz-ls-row__pct">${pct(product)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="biz-ls-row">
+        <span class="biz-ls-row__dot is-card" aria-hidden="true"></span>
+        <div class="biz-ls-row__main">
+          <div class="biz-ls-row__top">
+            <span class="biz-ls-row__name">售卡实收</span>
+            <span class="biz-ls-row__amt">${bizOvFmt(cardSale)}</span>
+            <span class="biz-ls-row__pct">${pct(cardSale)}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function bizOvCardSalesRows(pie) {
+    /* 与「卡相关 · 售卡数据统计」六项对齐：开卡、充值、续次、延期、余额开卡、退卡 */
+    return bizCardRelatedSaleMetrics(pie);
+  }
+
+  function bizCardRelatedSaleMetrics(pie) {
+    const pre = (pie && pie.slices && pie.slices[0]) || { amount: 0, children: [] };
+    const issue = (pre.children && pre.children[0] && pre.children[0].amount) || bizRound2(pre.amount * 0.45);
+    const recharge = (pre.children && pre.children[1] && pre.children[1].amount) || bizRound2(pre.amount * 0.35);
+    const renewAll = (pre.children && pre.children[2] && pre.children[2].amount) || bizRound2(pre.amount * 0.2);
+    const times = bizRound2(renewAll * 0.62);
+    const extend = bizRound2(issue * 0.05);
+    const balanceIssue = bizRound2(recharge * 0.14);
+    const refund = bizRound2(issue * 0.07);
+    const f = bizPeriodFactor(state.bizHubPeriod || 'today');
+    return [
+      { id: 'issue', name: '开卡', count: Math.max(1, Math.round(2 * f)), amount: issue },
+      { id: 'recharge', name: '充值', count: Math.max(1, Math.round(3 * f)), amount: recharge },
+      { id: 'times', name: '续次', count: Math.max(1, Math.round(2 * f)), amount: times },
+      { id: 'extend', name: '延期', count: Math.max(0, Math.round(1 * f)), amount: extend },
+      { id: 'balanceIssue', name: '余额开卡', count: Math.max(0, Math.round(0.8 * f)), amount: balanceIssue },
+      { id: 'refund', name: '退卡', count: Math.max(0, Math.round(0.5 * f)), amount: refund },
+    ];
+  }
+
+  function bizCardSalesDetailRows(metrics) {
+    const names = bizOvMemberCardNames();
+    const ws = [0.28, 0.22, 0.18, 0.16, 0.16];
+    const issue = (metrics.find(m => m.id === 'issue') || {}).amount || 0;
+    const recharge = (metrics.find(m => m.id === 'recharge') || {}).amount || 0;
+    const times = (metrics.find(m => m.id === 'times') || {}).amount || 0;
+    const extend = (metrics.find(m => m.id === 'extend') || {}).amount || 0;
+    const balanceIssue = (metrics.find(m => m.id === 'balanceIssue') || {}).amount || 0;
+    return names.map((name, i) => {
+      const w = ws[i] != null ? ws[i] : 0.1;
+      const aIssue = bizRound2(issue * w);
+      const aRecharge = bizRound2(recharge * w);
+      const aTimes = bizRound2(times * w);
+      const aExtend = bizRound2(extend * w);
+      const aBal = bizRound2(balanceIssue * w);
+      return {
+        name,
+        issue: aIssue,
+        recharge: aRecharge,
+        times: aTimes,
+        extend: aExtend,
+        balanceIssue: aBal,
+        total: bizRound2(aIssue + aRecharge + aTimes + aExtend + aBal),
+      };
+    });
+  }
+
+  function bizCardRefundDetailRows(refundAmt) {
+    const total = bizRound2(refundAmt || 0);
+    const rows = [
+      { member: '张雨晴', card: '尊享组合卡', rule: '均值退卡', amount: bizRound2(total * 0.42) },
+      { member: '李诗涵', card: '永久储值卡', rule: '均值退卡', amount: bizRound2(total * 0.28) },
+      { member: '王思远', card: '烫染会员价卡', rule: '减值退卡', amount: bizRound2(total * 0.18) },
+      { member: '陈晓月', card: '儿童10次剪发', rule: '均值退卡', amount: 0 },
+    ];
+    const used = bizRound2(rows.slice(0, 3).reduce((s, r) => s + r.amount, 0));
+    rows[3].amount = Math.max(0, bizRound2(total - used));
+    return rows.filter(r => r.amount > 0 || r.card);
+  }
+
+  function bizCardKpiGridHtml(items) {
+    return `<div class="biz-kpi-grid">${items.map(it => {
+      const lab = it.count != null ? `${escapeHtml(it.name)} · ${it.count}笔` : escapeHtml(it.name);
+      const val = it.display != null
+        ? `<div class="biz-kpi__val is-neutral">${escapeHtml(String(it.display))}</div>`
+        : `<div class="biz-kpi__val">${bizOvMoney(it.amount)}</div>`;
+      return `<div class="biz-kpi"><div class="biz-kpi__lab">${lab}</div>${val}</div>`;
+    }).join('')}</div>`;
+  }
+
+  function bizCardSalesDetailHtml(rows, expanded) {
+    const preview = 5;
+    const list = expanded ? rows : rows.slice(0, preview);
+    const head = `<div class="biz-card-detail__row is-head"><span>卡名</span><span>开卡</span><span>充值</span><span>续次</span><span>小计</span></div>`;
+    const body = list.map(r =>
+      `<div class="biz-card-detail__row"><span>${escapeHtml(r.name)}</span><span>${bizOvFmt(r.issue)}</span><span>${bizOvFmt(r.recharge)}</span><span>${bizOvFmt(r.times)}</span><span>${bizOvFmt(r.total)}</span></div>`
+    ).join('');
+    const more = rows.length > preview
+      ? `<button type="button" class="biz-rank-board__more" data-biz-card-sales-more>${expanded ? '收起' : '查看更多'}</button>`
+      : '';
+    return `<div class="biz-card-detail">${head}${body}${more}</div>`;
+  }
+
+  function bizCardRefundDetailHtml(rows, expanded) {
+    const preview = 3;
+    const list = expanded ? rows : rows.slice(0, preview);
+    const body = list.map(r =>
+      `<div class="biz-refund-row">
+        <div class="biz-refund-row__top">
+          <span class="biz-refund-row__name">${escapeHtml(r.member)} · ${escapeHtml(r.card)}</span>
+          <span class="biz-refund-row__amt">${bizOvMoney(r.amount)}</span>
+        </div>
+        <div class="biz-refund-row__sub">${escapeHtml(r.rule)}</div>
+      </div>`
+    ).join('');
+    const more = rows.length > preview
+      ? `<button type="button" class="biz-rank-board__more" data-biz-card-refund-more>${expanded ? '收起' : '查看更多'}</button>`
+      : '';
+    return `${body}${more}`;
+  }
+
+  function bizOvProjectTop5() {
+    const list = (typeof getCatalogProjects === 'function' ? getCatalogProjects() : [])
+      .filter(p => p && p.onSale && !p.hidden)
+      .slice()
+      .sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0))
+      .slice(0, 5);
+    const counts = [3, 2, 2, 1, 1];
+    return list.map((p, i) => {
+      const c = counts[i] || 1;
+      return { name: p.name, count: c, amount: bizRound2((Number(p.price) || 0) * c) };
+    });
+  }
+
+  function bizOvFreeOrderRow(cash) {
+    /* 对齐开单免单：应付被免除，报表记免单金额；业绩/提成口径见 freeOrderRuleText() */
+    const waived = bizRound2(cash * 0.045);
+    return {
+      name: '免单',
+      service: bizRound2(waived * 0.72),
+      product: bizRound2(waived * 0.18),
+      card: bizRound2(waived * 0.1),
+      refund: 0,
+      amount: waived,
+    };
+  }
+
   function renderBizStore() {
     const tabs = [
       { id: 'overview', label: '数据总览' },
@@ -45104,132 +47029,344 @@ window.__BILLING_EMBEDDED__ = true;
     const cash = m.store.cash;
     const labor = m.store.labor;
     if (tab === 'overview') {
+      const groupBuy = bizRound2(cash * 0.18);
+      const productAmt = (pie.slices[1] && pie.slices[1].children && pie.slices[1].children[1])
+        ? pie.slices[1].children[1].amount
+        : bizRound2(cash * 0.22);
+      const cardSalesAmt = bizRound2(pie.slices[0].amount * 0.55);
+      const cashRows = bizOvMatrixRows(
+        ['支付宝', '微信', '现金', '银行卡', '信用卡'],
+        cash,
+        [0.34, 0.28, 0.16, 0.12, 0.1]
+      ).map(r => ({
+        ...r,
+        service: bizRound2(r.amount * 0.55),
+        product: bizRound2(r.amount * 0.15),
+        card: bizRound2(r.amount * 0.25),
+      }));
+      const groupRows = bizOvMatrixRows(
+        ['美团', '大众点评', '抖音', '口碑', '其他平台'],
+        groupBuy,
+        [0.34, 0.22, 0.2, 0.14, 0.1]
+      );
+      const freeRow = bizOvFreeOrderRow(cash);
+      const laborFree = freeRow.service;
+      const laborBase = Math.max(0, bizRound2(labor - laborFree));
+      const laborCash = bizRound2(laborBase * 0.52);
+      const laborCardPay = bizRound2(laborBase * 0.22);
+      const laborGroup = bizRound2(laborBase - laborCash - laborCardPay);
+      const prodFree = freeRow.product;
+      const prodBase = Math.max(0, bizRound2(productAmt - prodFree));
+      const prodCash = bizRound2(prodBase * 0.48);
+      const prodCardPay = bizRound2(prodBase * 0.2);
+      const prodGroup = bizRound2(prodBase - prodCash - prodCardPay);
+      const cardSalesRows = bizOvCardSalesRows(pie);
+      const cardSalesTotal = bizRound2(cardSalesRows.reduce((s, r) => s + r.amount, 0));
+      let top5 = bizOvProjectTop5();
+      if (!top5.length) {
+        top5 = [
+          { name: '经典洗剪吹', count: 3, amount: 297 },
+          { name: '头皮护理套餐', count: 2, amount: 396 },
+          { name: '烫发设计', count: 2, amount: 1196 },
+          { name: '染发设计', count: 1, amount: 480 },
+          { name: '深层护理', count: 1, amount: 268 },
+        ].map(r => ({ ...r, amount: bizRound2(r.amount) }));
+      }
+      const freeRule = freeOrderRuleText();
       body.innerHTML = `
-        <div class="biz-section">
-          <div class="biz-section__title">数据一览</div>
+        <div class="biz-ov-card" id="bizOvKpi">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '数据一览' })}
           <div class="biz-kpi-grid">
             <div class="biz-kpi"><div class="biz-kpi__lab">现金类收款</div><div class="biz-kpi__val">${flowHubFormatYen(cash)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">团购收款</div><div class="biz-kpi__val">${flowHubFormatYen(cash * 0.18)}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">团购收款</div><div class="biz-kpi__val">${flowHubFormatYen(groupBuy)}</div></div>
             <div class="biz-kpi"><div class="biz-kpi__lab">劳动业绩</div><div class="biz-kpi__val">${flowHubFormatYen(labor)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">产品业绩</div><div class="biz-kpi__val">${flowHubFormatYen(pie.slices[1].children[1].amount)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">售卡业绩</div><div class="biz-kpi__val">${flowHubFormatYen(pie.slices[0].amount * 0.55)}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">产品业绩</div><div class="biz-kpi__val">${flowHubFormatYen(productAmt)}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">售卡业绩</div><div class="biz-kpi__val">${flowHubFormatYen(cardSalesAmt)}</div></div>
             <div class="biz-kpi"><div class="biz-kpi__lab">消费人数</div><div class="biz-kpi__val is-neutral">${m.store.guests}</div></div>
           </div>
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">现金类总收款 · ${flowHubFormatYen(cash)}</div>
-          <table class="biz-matrix">
-            <thead><tr><th>渠道</th><th>服务</th><th>产品</th><th>售卡</th><th>退款</th><th>总计</th></tr></thead>
+        ${bizOvMatrixCardHtml({
+          id: 'bizOvCash',
+          icon: bizOvIcon('cash'),
+          title: '现金类总收款',
+          total: cash,
+          rows: cashRows,
+          amountKey: '总计',
+        })}
+        ${bizOvMatrixCardHtml({
+          id: 'bizOvGroupBuy',
+          icon: bizOvIcon('ticket'),
+          title: '团购类总收款',
+          total: groupBuy,
+          rows: groupRows,
+          amountKey: '金额',
+        })}
+        ${bizOvMatrixCardHtml({
+          id: 'bizOvOther',
+          icon: bizOvIcon('gift'),
+          title: '其他',
+          total: freeRow.amount,
+          rows: [freeRow],
+          amountKey: '金额',
+          foot: `<p class="biz-ov-hint">免单规则：${escapeHtml(freeRule)}（与开单免单一致，可在业绩设置 · 基础设置中调整）</p>`,
+        })}
+        ${bizOvPerfCardHtml({
+          id: 'bizOvLabor',
+          title: '劳动业绩',
+          icon: bizOvIcon('labor'),
+          total: labor,
+          expandKey: 'labor',
+          groups: [
+            { id: 'cash', name: '现金类', amount: laborCash, lines: bizOvBuildCashLines(laborCash) },
+            { id: 'card', name: '卡付', amount: laborCardPay, lines: bizOvBuildCardPayLines(laborCardPay) },
+            { id: 'group', name: '团购', amount: laborGroup, lines: bizOvBuildGroupBuyLines(laborGroup) },
+            { id: 'free', name: '免单', amount: laborFree, lines: bizOvBuildFreeLines(laborFree) },
+          ],
+        })}
+        ${bizOvPerfCardHtml({
+          id: 'bizOvProduct',
+          title: '产品业绩',
+          icon: bizOvIcon('product'),
+          total: productAmt,
+          expandKey: 'product',
+          groups: [
+            { id: 'cash', name: '现金类', amount: prodCash, lines: bizOvBuildCashLines(prodCash) },
+            { id: 'card', name: '卡付', amount: prodCardPay, lines: bizOvBuildCardPayLines(prodCardPay) },
+            { id: 'group', name: '团购', amount: prodGroup, lines: bizOvBuildGroupBuyLines(prodGroup) },
+            { id: 'free', name: '免单', amount: prodFree, lines: bizOvBuildFreeLines(prodFree) },
+          ],
+        })}
+        <div class="biz-ov-card" id="bizOvCardSales">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('card'), title: '售卡统计', total: cardSalesTotal })}
+          <table class="biz-ov-table">
+            <thead><tr><th>类型</th><th>笔数</th><th>金额</th></tr></thead>
             <tbody>
-              ${['支付宝','微信','现金','银行卡','信用卡'].map((name, i) => {
-                const base = cash * (0.32 - i * 0.05);
-                return `<tr><td>${name}</td><td>${flowHubFormatYen(base * 0.55)}</td><td>${flowHubFormatYen(base * 0.15)}</td><td>${flowHubFormatYen(base * 0.25)}</td><td>${flowHubFormatYen(0)}</td><td>${flowHubFormatYen(base)}</td></tr>`;
-              }).join('')}
+              ${cardSalesRows.map(r =>
+                `<tr><td>${escapeHtml(r.name)}</td><td>${r.count}</td><td>${bizOvFmt(r.amount)}</td></tr>`
+              ).join('')}
             </tbody>
           </table>
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">团购类总收款 · ${flowHubFormatYen(cash * 0.18)}</div>
-          <table class="biz-matrix">
-            <thead><tr><th>渠道</th><th>服务</th><th>产品</th><th>售卡</th><th>退款</th><th>金额</th></tr></thead>
+        <div class="biz-ov-card" id="bizOvTop5">
+          ${bizOvCardHeadHtml({
+            icon: bizOvIcon('top'),
+            title: '项目TOP5',
+            trailing: '<button type="button" class="biz-ov-card__more" data-biz-ov-top-more>查看更多</button>',
+          })}
+          <table class="biz-ov-table">
+            <thead><tr><th>项目</th><th>次数</th><th>金额</th></tr></thead>
             <tbody>
-              ${['美团','大众点评','抖音'].map((name, i) => {
-                const base = cash * 0.18 * (0.45 - i * 0.1);
-                return `<tr><td>${name}</td><td>${flowHubFormatYen(base * 0.7)}</td><td>${flowHubFormatYen(base * 0.1)}</td><td>${flowHubFormatYen(base * 0.2)}</td><td>${flowHubFormatYen(0)}</td><td>${flowHubFormatYen(base)}</td></tr>`;
-              }).join('')}
+              ${top5.map(r =>
+                `<tr><td>${escapeHtml(r.name)}</td><td>${r.count}</td><td>${bizOvFmt(r.amount)}</td></tr>`
+              ).join('')}
             </tbody>
           </table>
         </div>`;
     } else if (tab === 'receipt') {
+      const groupBuy = bizRound2(cash * 0.18);
+      const productAmt = (pie.slices[1] && pie.slices[1].children && pie.slices[1].children[1])
+        ? pie.slices[1].children[1].amount
+        : bizRound2(cash * 0.22);
+      const cardSalesAmt = bizRound2(pie.slices[0].amount * 0.55);
+      const serviceRecv = bizRound2(labor + groupBuy * 0.35);
+      const cashPart = bizRound2(Math.max(0, serviceRecv - groupBuy));
+      const productRecv = bizRound2(productAmt * 0.72);
+      const cardRecv = bizRound2(cardSalesAmt * 0.4);
       body.innerHTML = `
         <div class="biz-kpi-grid biz-kpi-grid--3">
           <div class="biz-kpi"><div class="biz-kpi__lab">总营收</div><div class="biz-kpi__val">${flowHubFormatYen(cash + labor * 0.2)}</div></div>
           <div class="biz-kpi"><div class="biz-kpi__lab">日均营收</div><div class="biz-kpi__val">${flowHubFormatYen((cash + labor * 0.2) / (state.bizHubPeriod === 'month' ? 30 : state.bizHubPeriod === 'week' ? 7 : 1))}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">环比总营收</div><div class="biz-kpi__val is-down">-2142.00</div></div>
+          <div class="biz-kpi"><div class="biz-kpi__lab">环比总营收</div>${bizKpiDeltaHtml(-2142)}</div>
         </div>
         <div class="biz-section">
           <div class="biz-section__title">营收趋势</div>
-          <div class="biz-chart-placeholder" aria-hidden="true"></div>
+          ${bizRevenueTrendChartHtml(cash + labor * 0.2)}
         </div>
         <div class="biz-section">
           <div class="biz-section__title">支付方式统计</div>
           ${['支付宝','微信','现金','银行卡','信用卡','抖音','大众点评'].map((name, i) =>
             `<div class="biz-pay-row"><span class="biz-pay-row__name">${name}</span><span class="biz-pay-row__amt">${flowHubFormatYen(cash * (0.28 - i * 0.03))}</span></div>`
           ).join('')}
-        </div>`;
+        </div>
+        ${bizReceiptLaborSalesHtml({
+          service: serviceRecv,
+          product: productRecv,
+          cardSale: cardRecv,
+          groupBuy,
+          cashPart,
+          refund: 0,
+        })}`;
     } else if (tab === 'staff') {
+      const productAmt = (pie.slices[1] && pie.slices[1].children && pie.slices[1].children[1])
+        ? pie.slices[1].children[1].amount
+        : bizRound2(cash * 0.22);
+      const freeRow = bizOvFreeOrderRow(cash);
+      const laborFree = freeRow.service;
+      const laborBase = Math.max(0, bizRound2(labor - laborFree));
+      const laborCash = bizRound2(laborBase * 0.52);
+      const laborCardPay = bizRound2(laborBase * 0.22);
+      const laborGroup = bizRound2(laborBase - laborCash - laborCardPay);
+      const pre = pie.slices[0];
+      const saleIssue = (pre.children && pre.children[0] && pre.children[0].amount) || bizRound2(pre.amount * 0.45);
+      const saleRecharge = (pre.children && pre.children[1] && pre.children[1].amount) || bizRound2(pre.amount * 0.35);
+      const saleRenew = bizRound2(((pre.children && pre.children[2] && pre.children[2].amount) || pre.amount * 0.2) * 0.55);
+      const saleProduct = bizRound2(productAmt * 0.85);
+      const saleQuick = bizRound2(cash * 0.08);
+      const salesTotal = bizRound2(saleProduct + saleIssue + saleRecharge + saleRenew + saleQuick);
+      const staffLaborGroups = [
+        { id: 'cash', name: '现金类', amount: laborCash, lines: bizOvBuildCashLines(laborCash) },
+        { id: 'card', name: '卡付', amount: laborCardPay, lines: bizOvBuildCardPayLines(laborCardPay) },
+        { id: 'group', name: '团购', amount: laborGroup, lines: bizOvBuildGroupBuyLines(laborGroup) },
+        { id: 'free', name: '免单', amount: laborFree, lines: bizOvBuildFreeLines(laborFree) },
+      ];
+      const staffSalesGroups = [
+        {
+          id: 'product',
+          name: '产品销售',
+          amount: saleProduct,
+          lines: [
+            ...bizOvBuildCashLines(bizRound2(saleProduct * 0.55)),
+            ...bizOvBuildCardPayLines(bizRound2(saleProduct * 0.25)).map(l => ({ name: '卡付·' + l.name, amount: l.amount })),
+            ...bizOvBuildGroupBuyLines(bizRound2(saleProduct * 0.2)).map(l => ({ name: '团购·' + l.name, amount: l.amount })),
+          ],
+        },
+        { id: 'issue', name: '开新卡', amount: saleIssue, lines: bizOvBuildCardPayLines(saleIssue) },
+        { id: 'recharge', name: '卡充值', amount: saleRecharge, lines: bizOvBuildCardPayLines(saleRecharge) },
+        { id: 'renew', name: '卡续费', amount: saleRenew, lines: bizOvBuildCardPayLines(saleRenew) },
+        { id: 'quick', name: '快速消费', amount: saleQuick, lines: bizOvBuildCashLines(saleQuick) },
+      ];
+      const staffNames = ['林屿森', '何苏叶', '阿Ken', 'Lisa', '刘敏', '何丽', '周悦', '陈晨', '王珊', '赵一诺', '孙悦', '马晓'];
+      const staffShares = [0.14, 0.12, 0.11, 0.1, 0.09, 0.08, 0.07, 0.07, 0.06, 0.06, 0.05, 0.05];
+      const rankRows = staffNames.map((name, i) => {
+        const share = staffShares[i] || 0.04;
+        const laborPart = bizRound2(labor * share);
+        const salesPart = bizRound2(salesTotal * share * (1.05 - i * 0.04));
+        const cardPart = bizRound2((saleIssue + saleRecharge + saleRenew) * share * (0.95 + (i % 3) * 0.03));
+        return {
+          name,
+          labor: laborPart,
+          sales: salesPart,
+          card: cardPart,
+          total: bizRound2(laborPart + salesPart + cardPart),
+        };
+      }).sort((a, b) => b.total - a.total);
       body.innerHTML = `
         <div class="biz-kpi-grid biz-kpi-grid--3">
           <div class="biz-kpi"><div class="biz-kpi__lab">总业绩</div><div class="biz-kpi__val">${flowHubFormatYen(labor)}</div></div>
           <div class="biz-kpi"><div class="biz-kpi__lab">日均业绩</div><div class="biz-kpi__val">${flowHubFormatYen(labor / (state.bizHubPeriod === 'month' ? 30 : state.bizHubPeriod === 'week' ? 7 : 1))}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">环比总业绩</div><div class="biz-kpi__val is-down">-860.00</div></div>
+          <div class="biz-kpi"><div class="biz-kpi__lab">环比总业绩</div>${bizKpiDeltaHtml(-860)}</div>
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">员工业绩明细 · 劳动业绩 ${flowHubFormatYen(labor)}</div>
-          ${['林屿森','何苏叶','阿Ken','Lisa','刘敏'].map((name, i) =>
-            `<div class="biz-rank-row"><span class="biz-rank-row__i">${i + 1}</span><span class="biz-rank-row__name">${name}</span><span class="biz-rank-row__val">${flowHubFormatYen(labor * (0.28 - i * 0.04))}</span></div>`
-          ).join('')}
+        <div class="biz-ov-card">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('laborSales'), title: '业绩趋势' })}
+          <div class="biz-staff-trend">${bizRevenueTrendChartHtml(labor)}</div>
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">现金类 / 含卡付</div>
-          ${['支付宝','微信','现金','银行卡','信用卡','卡付'].map((name, i) =>
-            `<div class="biz-pay-row"><span class="biz-pay-row__name">${name}</span><span class="biz-pay-row__amt">${flowHubFormatYen(labor * (0.22 - i * 0.03))}</span></div>`
-          ).join('')}
+        <div class="biz-ov-card" id="bizStaffDetail">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('labor'), title: '员工业绩明细' })}
+          <div class="biz-staff-block">
+            <div class="biz-staff-block__head">员工劳动业绩<span class="biz-staff-block__head-amt">${bizOvFmt(labor)}</span></div>
+            ${bizOvGroupsHtml('staffLabor', staffLaborGroups)}
+          </div>
+          <div class="biz-staff-block">
+            <div class="biz-staff-block__head">员工销售业绩<span class="biz-staff-block__head-amt">${bizOvFmt(salesTotal)}</span></div>
+            ${bizOvGroupsHtml('staffSales', staffSalesGroups)}
+          </div>
+        </div>
+        <div class="biz-ov-card" id="bizStaffRank">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('top'), title: '员工业绩排行榜' })}
+          ${bizStaffRankHtml(rankRows, { expanded: !!state.bizStaffRankExpanded, preview: 5 })}
         </div>`;
     } else if (tab === 'card') {
       const pre = pie.slices[0];
+      const saleMetrics = bizCardRelatedSaleMetrics(pie);
+      const saleTotal = bizRound2(saleMetrics.reduce((s, m) => s + m.amount, 0));
+      const refundAmt = (saleMetrics.find(m => m.id === 'refund') || {}).amount || 0;
+      const consume = (pie.slices[1] && pie.slices[1].children && pie.slices[1].children[2])
+        ? pie.slices[1].children[2].amount
+        : bizRound2(cash * 0.35);
+      const storeConsume = bizRound2(consume * 0.65);
+      const timesConsume = Math.max(1, Math.round(consume / 80));
+      const consumeKpis = [
+        { name: '储值卡耗卡', amount: storeConsume },
+        { name: '储值卡总余额', display: bizOvMoney(28640) },
+        { name: '储值卡充值金额', amount: (pre.children && pre.children[1] && pre.children[1].amount) || 0 },
+        { name: '储值卡赠送金额', amount: bizRound2(((pre.children && pre.children[1] && pre.children[1].amount) || 0) * 0.2) },
+        { name: '计次卡耗卡', display: `${timesConsume}次` },
+        { name: '计次卡总余额', display: '128次' },
+      ];
+      const consumeTotal = storeConsume;
+      const detailRows = bizCardSalesDetailRows(saleMetrics);
+      const refundRows = bizCardRefundDetailRows(refundAmt);
       body.innerHTML = `
-        <div class="biz-section">
-          <div class="biz-section__title">售卡数据统计</div>
-          <div class="biz-kpi-grid">
-            <div class="biz-kpi"><div class="biz-kpi__lab">开新卡</div><div class="biz-kpi__val is-neutral">${Math.max(1, Math.round(3 * bizPeriodFactor(state.bizHubPeriod)))}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">卡充值</div><div class="biz-kpi__val">${flowHubFormatYen(pre.children[1].amount)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">卡续费</div><div class="biz-kpi__val">${flowHubFormatYen(pre.children[2].amount * 0.6)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">卡变更</div><div class="biz-kpi__val is-neutral">0</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">卡续次</div><div class="biz-kpi__val">${flowHubFormatYen(pre.children[2].amount * 0.4)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">退卡金额</div><div class="biz-kpi__val">${flowHubFormatYen(0)}</div></div>
-          </div>
+        <div class="biz-ov-card" id="bizCardSaleStats">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('card'), title: '售卡数据统计', total: saleTotal })}
+          ${bizCardKpiGridHtml(saleMetrics)}
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">耗卡数据统计</div>
-          <div class="biz-kpi-grid">
-            <div class="biz-kpi"><div class="biz-kpi__lab">储值卡耗卡</div><div class="biz-kpi__val">${flowHubFormatYen(pie.slices[1].children[2].amount * 0.65)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">储值卡总余额(截至今日)</div><div class="biz-kpi__val is-neutral">${flowHubFormatYen(28640)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">储值卡充值金额</div><div class="biz-kpi__val">${flowHubFormatYen(pre.children[1].amount)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">储值卡赠送金额</div><div class="biz-kpi__val">${flowHubFormatYen(pre.children[1].amount * 0.2)}</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">计次卡耗卡</div><div class="biz-kpi__val is-neutral">${Math.round(pie.slices[1].children[2].amount / 80)}次</div></div>
-            <div class="biz-kpi"><div class="biz-kpi__lab">计次卡总余额(截至今日)</div><div class="biz-kpi__val is-neutral">128次</div></div>
-          </div>
+        <div class="biz-ov-card" id="bizCardConsumeStats">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('cash'), title: '耗卡数据统计', total: consumeTotal })}
+          ${bizCardKpiGridHtml(consumeKpis)}
+          <p class="biz-ov-hint">总余额为截至今日的时点存量；耗卡/充值/赠送为本期发生额。</p>
+        </div>
+        <div class="biz-ov-card" id="bizCardSaleDetail">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('ticket'), title: '卡销售明细', total: bizRound2(detailRows.reduce((s, r) => s + r.total, 0)) })}
+          ${bizCardSalesDetailHtml(detailRows, !!state.bizCardSalesExpanded)}
+        </div>
+        <div class="biz-ov-card" id="bizCardRefundDetail">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('gift'), title: '退卡明细', total: refundAmt })}
+          ${bizCardRefundDetailHtml(refundRows, !!state.bizCardRefundExpanded)}
         </div>`;
     } else {
+      const guests = m.store.guests;
+      const visits = Math.round(guests * 1.35);
+      const newCard = Math.max(0, Math.round(guests * 0.12));
+      const newMember = Math.max(0, Math.round(guests * 0.08));
+      const trafficKpis = [
+        { name: '消费人数', display: String(guests) },
+        { name: '消费人次', display: String(visits) },
+        { name: '新持卡会员', display: String(newCard) },
+        { name: '新增会员', display: String(newMember) },
+      ];
+      const staffNames = ['刘敏', '何丽', '林屿森', '何苏叶', '阿Ken', 'Lisa', '周悦', '陈晨', '王珊', '赵一诺'];
+      const visitRows = staffNames.map((name, i) => ({
+        name,
+        visits: Math.max(1, Math.round(guests * (0.32 - i * 0.025))),
+      })).sort((a, b) => b.visits - a.visits);
       body.innerHTML = `
-        <div class="biz-kpi-grid">
-          <div class="biz-kpi"><div class="biz-kpi__lab">消费人数</div><div class="biz-kpi__val is-neutral">${m.store.guests}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">消费人次</div><div class="biz-kpi__val is-neutral">${Math.round(m.store.guests * 1.35)}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">新持卡会员</div><div class="biz-kpi__val is-neutral">${Math.max(0, Math.round(m.store.guests * 0.12))}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">新增会员</div><div class="biz-kpi__val is-neutral">${Math.max(0, Math.round(m.store.guests * 0.08))}</div></div>
+        <div class="biz-ov-card" id="bizTrafficKpi">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '客流一览' })}
+          ${bizCardKpiGridHtml(trafficKpis)}
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">散客 / 会员比例</div>
-          <div class="biz-pay-row"><span class="biz-pay-row__name">会员</span><span class="biz-pay-row__amt">62%</span></div>
-          <div class="biz-pay-row"><span class="biz-pay-row__name">散客</span><span class="biz-pay-row__amt">38%</span></div>
+        <div class="biz-ov-card" id="bizTrafficTrend">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('laborSales'), title: '客流趋势' })}
+          <div class="biz-staff-trend">${bizTrafficTrendChartHtml(guests)}</div>
         </div>
-        <div class="biz-section">
-          <div class="biz-section__title">男客 / 女客比例</div>
-          <div class="biz-pay-row"><span class="biz-pay-row__name">男客</span><span class="biz-pay-row__amt">28%</span></div>
-          <div class="biz-pay-row"><span class="biz-pay-row__name">女客</span><span class="biz-pay-row__amt">72%</span></div>
-        </div>
-        <div class="biz-section">
-          <div class="biz-section__title">员工服务人次排行</div>
-          ${['刘敏','何丽','林屿森','何苏叶','阿Ken'].map((name, i) =>
-            `<div class="biz-rank-row"><span class="biz-rank-row__i">${i + 1}</span><span class="biz-rank-row__name">${name}</span><span class="biz-rank-row__val">${Math.round(m.store.guests * (0.3 - i * 0.04))} 人次</span></div>`
-          ).join('')}
+        ${bizRatioCardHtml({
+          id: 'bizTrafficGuestType',
+          icon: bizOvIcon('labor'),
+          title: '散客 / 会员比例',
+          aName: '会员',
+          aPct: 62,
+          bName: '散客',
+          bPct: 38,
+        })}
+        ${bizRatioCardHtml({
+          id: 'bizTrafficGender',
+          icon: bizOvIcon('product'),
+          title: '男客 / 女客比例',
+          aName: '男客',
+          aPct: 28,
+          bName: '女客',
+          bPct: 72,
+        })}
+        <div class="biz-ov-card" id="bizTrafficRank">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('top'), title: '员工服务人次排行' })}
+          ${bizTrafficVisitRankHtml(visitRows, { expanded: !!state.bizTrafficRankExpanded, preview: 5 })}
         </div>`;
     }
   }
 
   function renderBizMall() {
     const tab = state.bizMallTab || 'trade';
+    ensureBizMallPeriod();
     const tabsEl = document.getElementById('bizMallTabs');
     if (tabsEl) {
       tabsEl.innerHTML = [
@@ -45239,27 +47376,54 @@ window.__BILLING_EMBEDDED__ = true;
         `<button type="button" class="biz-mall-tab${tab === t.id ? ' is-active' : ''}" data-biz-mall-tab="${t.id}" role="tab" aria-selected="${tab === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}</button>`
       ).join('');
     }
+    renderBizMallDatebar();
     const m = getBizHubCardMetrics(state.bizHubPeriod || 'today').mall;
     const body = document.getElementById('bizMallBody');
     if (!body) return;
     if (tab === 'trade') {
+      const series = bizMallSeriesModel(m.amount);
+      const scale = bizMallSelectedScale(series);
+      const amount = bizRound2(m.amount * scale);
+      const refund = bizRound2(amount * 0.04);
+      const orders = Math.max(1, Math.round(m.orders * scale));
+      const people = Math.max(1, Math.round(orders * 0.85));
+      const chartTitle = state.bizMallGrain === 'month' ? '月交易趋势' : '日交易趋势';
       body.innerHTML = `
-        <div class="biz-kpi-grid">
-          <div class="biz-kpi"><div class="biz-kpi__lab">交易金额</div><div class="biz-kpi__val">${flowHubFormatYen(m.amount)}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">退款金额</div><div class="biz-kpi__val">${flowHubFormatYen(m.amount * 0.04)}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">订单数</div><div class="biz-kpi__val is-neutral">${m.orders}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">订单人数</div><div class="biz-kpi__val is-neutral">${Math.max(1, Math.round(m.orders * 0.85))}</div></div>
+        <div class="biz-ov-card">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '交易一览', total: amount })}
+          <div class="biz-kpi-grid">
+            <div class="biz-kpi"><div class="biz-kpi__lab">交易金额</div><div class="biz-kpi__val">${flowHubFormatYen(amount)}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">退款金额</div><div class="biz-kpi__val">${flowHubFormatYen(refund)}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">订单数</div><div class="biz-kpi__val is-neutral">${orders}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">订单人数</div><div class="biz-kpi__val is-neutral">${people}</div></div>
+          </div>
         </div>
-        <div class="biz-section"><div class="biz-section__title">趋势</div><div class="biz-chart-placeholder" aria-hidden="true"></div></div>`;
+        <div class="biz-ov-card">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('cash'), title: chartTitle })}
+          <div style="padding:0 12px 14px">${bizMallTradeTrendChartHtml(m.amount)}</div>
+        </div>`;
     } else {
+      const series = bizMallSeriesModel(m.visits);
+      const scale = bizMallSelectedScale(series);
+      const visits = Math.max(1, Math.round(m.visits * scale));
+      const views = Math.round(visits * 1.6);
+      const orders = Math.max(1, Math.round(m.orders * scale));
+      const conv = Math.round(orders / Math.max(1, visits) * 100);
+      const chartTitle = state.bizMallGrain === 'month' ? '月流量趋势' : '日流量趋势';
       body.innerHTML = `
-        <div class="biz-kpi-grid">
-          <div class="biz-kpi"><div class="biz-kpi__lab">访问人数</div><div class="biz-kpi__val is-neutral">${m.visits}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">访问次数</div><div class="biz-kpi__val is-neutral">${Math.round(m.visits * 1.6)}</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">下单转化</div><div class="biz-kpi__val is-neutral">${Math.round(m.orders / Math.max(1, m.visits) * 100)}%</div></div>
-          <div class="biz-kpi"><div class="biz-kpi__lab">人均停留</div><div class="biz-kpi__val is-neutral">2.4 分</div></div>
+        <div class="biz-ov-card">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '流量一览' })}
+          <div class="biz-kpi-grid">
+            <div class="biz-kpi"><div class="biz-kpi__lab">访问人数</div><div class="biz-kpi__val is-neutral">${visits}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">访问次数</div><div class="biz-kpi__val is-neutral">${views}</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">下单转化</div><div class="biz-kpi__val is-neutral">${conv}%</div></div>
+            <div class="biz-kpi"><div class="biz-kpi__lab">人均停留</div><div class="biz-kpi__val is-neutral">2.4 分</div></div>
+          </div>
         </div>
-        <div class="biz-section"><div class="biz-section__title">流量趋势</div><div class="biz-chart-placeholder" aria-hidden="true"></div></div>`;
+        <div class="biz-ov-card">
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('top'), title: chartTitle })}
+          <div style="padding:0 12px 14px">${bizMallTrafficTrendChartHtml(m.visits)}</div>
+        </div>`;
     }
   }
 
@@ -48629,11 +50793,16 @@ window.__BILLING_EMBEDDED__ = true;
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
     'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'addCardStaffMask',
     'billStockPickMask',
+    'flowProdDeductMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
     'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask', 'flowRangeMask',
   ].forEach(function (id) {
     window.__pickerMaskClosers[id] = function () { closeMask(id); };
   });
+  window.__pickerMaskClosers.flowProdDeductMask = function () {
+    state.flowProdDeductDraft = null;
+    closeMask('flowProdDeductMask');
+  };
   window.__pickerMaskClosers.flowRangeMask = function () { cancelFlowRangeSheet(); };
   window.__pickerMaskClosers.addCardStaffMask = function () { closeAddCardStaffSheet(); };
   document.getElementById('addCardBack').addEventListener('click', () => {
@@ -49196,9 +51365,70 @@ window.__BILLING_EMBEDDED__ = true;
     renderFlowProductSales();
   });
   document.getElementById('flowProductBody')?.addEventListener('click', (e) => {
-    if (!e.target.closest('#flowProductSortBtn')) return;
-    state.flowProductSort = (state.flowProductSort || 'amount') === 'amount' ? 'qty' : 'amount';
-    renderFlowProductSales();
+    if (e.target.closest('#flowProductSortBtn')) {
+      state.flowProductSort = (state.flowProductSort || 'amount') === 'amount' ? 'qty' : 'amount';
+      renderFlowProductSales();
+      return;
+    }
+    const rowBtn = e.target.closest('[data-flow-prod-key]');
+    if (!rowBtn) return;
+    const key = rowBtn.dataset.flowProdKey;
+    const range = state.flowProductRange || 'today';
+    const dateMode = range === 'other' ? 'custom' : range;
+    const data = flowCollectProductSales({
+      dateMode,
+      customStart: state.flowProductCustomStart,
+      customEnd: state.flowProductCustomEnd,
+      sort: state.flowProductSort || 'amount',
+    });
+    const row = data.rows.find(r => r.key === key);
+    if (!row) return;
+    if (isStockModuleEmpty()) {
+      openStockHubFromFlowProduct();
+      return;
+    }
+    openFlowProdDeductSheet(row);
+  });
+  document.getElementById('flowProdDeductCancel')?.addEventListener('click', () => {
+    state.flowProdDeductDraft = null;
+    closeMask('flowProdDeductMask');
+  });
+  document.getElementById('flowProdDeductOk')?.addEventListener('click', () => confirmFlowProdDeduct());
+  document.getElementById('flowProdDeductChange')?.addEventListener('click', () => {
+    if (!state.flowProdDeductDraft) return;
+    state.flowProdDeductDraft.picking = true;
+    renderFlowProdDeductSheet();
+  });
+  document.getElementById('flowProdDeductSearch')?.addEventListener('input', (e) => {
+    if (!state.flowProdDeductDraft) return;
+    state.flowProdDeductDraft.search = e.target.value || '';
+    renderFlowProdDeductSheet();
+  });
+  document.getElementById('flowProdDeductList')?.addEventListener('click', (e) => {
+    if (e.target.closest('#flowProdDeductGoStock')) {
+      const goIn = /入库/.test((e.target.closest('#flowProdDeductGoStock') || e.target).textContent || '');
+      state.flowProdDeductDraft = null;
+      closeMask('flowProdDeductMask');
+      window.__stockReturnTo = 'flow-product';
+      if (goIn && window.StockDemo && typeof window.StockDemo.openIn === 'function') {
+        window.StockDemo.openIn();
+        showToast('请先入库，完成后再回来扣减');
+        return;
+      }
+      openStockHubFromFlowProduct();
+      return;
+    }
+    const btn = e.target.closest('[data-flow-prod-sku]');
+    if (!btn || btn.disabled) return;
+    if (!state.flowProdDeductDraft) return;
+    const sku = flowProdGetSku(btn.dataset.flowProdSku);
+    if (!sku) return;
+    const stock = Math.max(0, Number(sku.stock) || 0);
+    state.flowProdDeductDraft.selectedSkuId = sku.id;
+    state.flowProdDeductDraft.picking = false;
+    state.flowProdDeductDraft.maxQty = Math.max(0, Math.min(state.flowProdDeductDraft.pendingQty, stock));
+    state.flowProdDeductDraft.deductQty = state.flowProdDeductDraft.maxQty;
+    renderFlowProdDeductSheet();
   });
   document.getElementById('flowRangeCancel')?.addEventListener('click', () => cancelFlowRangeSheet());
   document.getElementById('flowRangeOk')?.addEventListener('click', () => applyFlowRangeSheet());
@@ -49284,13 +51514,142 @@ window.__BILLING_EMBEDDED__ = true;
     state.bizStoreTab = tab.dataset.bizStoreTab;
     renderBizStore();
   });
-  document.getElementById('bizStoreBody')?.addEventListener('click', () => {});
+  document.getElementById('bizStoreBody')?.addEventListener('click', (e) => {
+    const toggle = e.target.closest('[data-biz-ov-toggle]');
+    if (toggle) {
+      const key = toggle.dataset.bizOvToggle || '';
+      const sep = key.indexOf(':');
+      if (sep < 0) return;
+      const expandKey = key.slice(0, sep);
+      const id = key.slice(sep + 1);
+      if (!state.bizStoreOvExpand) state.bizStoreOvExpand = { labor: 'cash', product: 'cash', staffLabor: 'cash', staffSales: 'product' };
+      const cur = state.bizStoreOvExpand[expandKey];
+      state.bizStoreOvExpand[expandKey] = cur === id ? '' : id;
+      renderBizStore();
+      return;
+    }
+    if (e.target.closest('[data-biz-staff-rank-more]')) {
+      state.bizStaffRankExpanded = !state.bizStaffRankExpanded;
+      renderBizStore();
+      return;
+    }
+    if (e.target.closest('[data-biz-card-sales-more]')) {
+      state.bizCardSalesExpanded = !state.bizCardSalesExpanded;
+      renderBizStore();
+      return;
+    }
+    if (e.target.closest('[data-biz-card-refund-more]')) {
+      state.bizCardRefundExpanded = !state.bizCardRefundExpanded;
+      renderBizStore();
+      return;
+    }
+    if (e.target.closest('[data-biz-traffic-rank-more]')) {
+      state.bizTrafficRankExpanded = !state.bizTrafficRankExpanded;
+      renderBizStore();
+      return;
+    }
+    if (e.target.closest('[data-biz-ov-top-more]')) {
+      showToast('更多项目排行开发中');
+    }
+  });
   document.getElementById('bizMallTabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('[data-biz-mall-tab]');
     if (!tab) return;
     state.bizMallTab = tab.dataset.bizMallTab;
     renderBizMall();
   });
+  document.getElementById('bizMallDatebar')?.addEventListener('click', (e) => {
+    const grainBtn = e.target.closest('[data-biz-mall-grain]');
+    if (grainBtn) {
+      const g = grainBtn.dataset.bizMallGrain;
+      if (g !== 'day' && g !== 'month') return;
+      if (state.bizMallGrain === g) return;
+      state.bizMallGrain = g;
+      ensureBizMallPeriod();
+      if (g === 'month') {
+        state.bizMallMonthKey = state.bizMallDayKey.slice(0, 7);
+      } else {
+        const p = bizMallParseMonthKey(state.bizMallMonthKey);
+        if (p) {
+          const dayP = bizMallParseDayKey(state.bizMallDayKey);
+          const dim = new Date(p.y, p.m + 1, 0).getDate();
+          const d = dayP && dayP.y === p.y && dayP.m === p.m ? Math.min(dayP.d, dim) : Math.min(dim, dayP ? dayP.d : 1);
+          state.bizMallDayKey = `${p.y}-${bizMallPad2(p.m + 1)}-${bizMallPad2(d)}`;
+        }
+      }
+      renderBizMall();
+      return;
+    }
+    if (e.target.closest('[data-biz-mall-date-open]')) {
+      openBizMallDateSheet();
+    }
+  });
+  document.getElementById('bizMallBody')?.addEventListener('click', (e) => {
+    const bar = e.target.closest('[data-biz-mall-bar]');
+    if (!bar) return;
+    const idx = Number(bar.dataset.bizMallBar);
+    if (!Number.isFinite(idx)) return;
+    ensureBizMallPeriod();
+    const base = state.bizMallTab === 'traffic'
+      ? getBizHubCardMetrics(state.bizHubPeriod || 'today').mall.visits
+      : getBizHubCardMetrics(state.bizHubPeriod || 'today').mall.amount;
+    const series = bizMallSeriesModel(base);
+    const pt = series.points[idx];
+    if (!pt || !pt.key) return;
+    if (state.bizMallGrain === 'month') {
+      state.bizMallMonthKey = pt.key;
+      const p = bizMallParseMonthKey(pt.key);
+      if (p) {
+        const dayP = bizMallParseDayKey(state.bizMallDayKey);
+        const dim = new Date(p.y, p.m + 1, 0).getDate();
+        const d = dayP ? Math.min(dayP.d, dim) : 1;
+        state.bizMallDayKey = `${p.y}-${bizMallPad2(p.m + 1)}-${bizMallPad2(d)}`;
+      }
+    } else {
+      state.bizMallDayKey = pt.key;
+      state.bizMallMonthKey = pt.key.slice(0, 7);
+    }
+    renderBizMall();
+  });
+  document.getElementById('bizMallDateMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'bizMallDateMask') {
+      closeBizMallDateSheet();
+      return;
+    }
+    const yearNav = e.target.closest('[data-biz-mall-year-nav]');
+    if (yearNav) {
+      const delta = Number(yearNav.dataset.bizMallYearNav) || 0;
+      state.bizMallCalYear = (state.bizMallCalYear == null ? new Date().getFullYear() : state.bizMallCalYear) + delta;
+      renderBizMallDateSheet();
+      return;
+    }
+    const monthBtn = e.target.closest('[data-biz-mall-month]');
+    if (monthBtn) {
+      state.bizMallDateDraft = monthBtn.dataset.bizMallMonth;
+      renderBizMallDateSheet();
+      return;
+    }
+    const calNav = e.target.closest('[data-biz-mall-cal-nav]');
+    if (calNav) {
+      const delta = Number(calNav.dataset.bizMallCalNav) || 0;
+      let y = state.bizMallCalYear == null ? new Date().getFullYear() : state.bizMallCalYear;
+      let m = state.bizMallCalMonth == null ? new Date().getMonth() : state.bizMallCalMonth;
+      m += delta;
+      while (m < 0) { m += 12; y -= 1; }
+      while (m > 11) { m -= 12; y += 1; }
+      state.bizMallCalYear = y;
+      state.bizMallCalMonth = m;
+      renderBizMallDateSheet();
+      return;
+    }
+    const dayBtn = e.target.closest('[data-biz-mall-cal-day]');
+    if (dayBtn) {
+      state.bizMallDateDraft = dayBtn.dataset.bizMallCalDay;
+      confirmBizMallDateSheet();
+    }
+  });
+  document.getElementById('btnBizMallDateCancel')?.addEventListener('click', () => closeBizMallDateSheet());
+  document.getElementById('btnBizMallDateOk')?.addEventListener('click', () => confirmBizMallDateSheet());
   document.getElementById('bizSelfRptPeriod')?.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-biz-self-period]');
     if (!btn) return;
@@ -49839,6 +52198,7 @@ window.__BILLING_EMBEDDED__ = true;
     openFlowDetail,
     openFlowSelf,
     openFlowProductSales,
+    openFlowProductSalesEmptyDemo,
     openFlowRefund,
     openFlowEdit,
     openFlowEditLog,
