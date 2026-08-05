@@ -1619,7 +1619,8 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 #screen-p-list .table-card.is-product-tab .table-row .name-text,
 #screen-p-list .table-card.is-product-tab .table-row .name-text.is-long {
-  flex: 1 1 auto;
+  /* 不 stretch：仓库 icon 紧跟文字，避免被顶到名称列右缘 */
+  flex: 0 1 auto;
   min-width: 0;
   max-width: 100%;
   white-space: nowrap;
@@ -3517,7 +3518,7 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 /* 列表 · 关联库存小仓库 icon */
 .stock-link-tag {
   display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0; width: 14px; height: 14px; margin-left: 2px;
+  flex-shrink: 0; width: 14px; height: 14px; margin-left: 0;
   color: #4A7BF4; pointer-events: none;
 }
 .stock-link-tag img, .stock-link-tag svg { display: block; width: 14px; height: 14px; }
@@ -13409,7 +13410,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
 <div class="screen hidden" id="screen-stock-product">
   <div class="page-title-bar">
     <button type="button" class="back" id="stkProdBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <span class="title" id="stkProdTitle">新增商品（总部）</span>
+    <span class="title" id="stkProdTitle">新增商品</span>
   </div>
   <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
     <div class="stk-form-card">
@@ -37626,7 +37627,7 @@ function billingNav(fn) {
       remark: '',
       specs: []
     };
-    if ($('stkProdTitle')) $('stkProdTitle').textContent = '新增商品（总部）';
+    if ($('stkProdTitle')) $('stkProdTitle').textContent = '新增商品';
     if ($('stkProdName')) $('stkProdName').value = '';
     if ($('stkProdRemark')) $('stkProdRemark').value = '';
     if ($('stkProdEnabled')) {
@@ -37729,13 +37730,31 @@ function billingNav(fn) {
     });
     toast('商品已保存');
     state.draftProduct = null;
-    if (state.productReturnTo === 'pick') openPick(state.pickMode || 'in');
-    else openGoods();
+    if (state.productReturnTo === 'pick') {
+      openPick(state.pickMode || 'in');
+    } else if (state.productReturnTo === 'in' || state.productReturnTo === 'out') {
+      var draft = state.productReturnTo === 'in' ? state.draftIn : state.draftOut;
+      skuIds.forEach(function (id) {
+        if (draft.lines.some(function (l) { return l.id === id; })) return;
+        var s = (window.StockStore.skus || []).find(function (x) { return x.id === id; });
+        if (!s) return;
+        draft.lines.push({
+          id: s.id, product: s.product, name: s.name, unit: s.unit,
+          qty: 1, stockCap: Number(s.stock) || 0, cost: s.cost
+        });
+      });
+      if (state.productReturnTo === 'in') openIn();
+      else openOut();
+    } else {
+      openGoods();
+    }
   }
 
   function leaveProduct() {
     state.draftProduct = null;
     if (state.productReturnTo === 'pick') openPick(state.pickMode || 'in');
+    else if (state.productReturnTo === 'in') openIn();
+    else if (state.productReturnTo === 'out') openOut();
     else openGoods();
   }
 
@@ -37997,7 +38016,7 @@ function billingNav(fn) {
         { id: 'stock-in', label: '商品入库', screen: 'screen-stock-in' },
         { id: 'stock-out', label: '商品出库', screen: 'screen-stock-out' },
         { id: 'stock-goods', label: '商品管理', screen: 'screen-stock-goods' },
-        { id: 'stock-product', label: '新增商品（总部）', screen: 'screen-stock-product' },
+        { id: 'stock-product', label: '新增商品', screen: 'screen-stock-product' },
         { id: 'stock-sku', label: '新增规格', screen: 'screen-stock-sku' },
         { id: 'stock-types', label: '入出类别', screen: 'screen-stock-types' },
         { id: 'stock-transfer', label: '调拨管理', screen: 'screen-stock-transfer' },
@@ -38051,8 +38070,8 @@ function billingNav(fn) {
 
     $('stkInBack')?.addEventListener('click', openHub);
     $('stkOutBack')?.addEventListener('click', openHub);
-    $('stkInPick')?.addEventListener('click', function () { openPick('in'); });
-    $('stkOutPick')?.addEventListener('click', function () { openPick('out'); });
+    $('stkInPick')?.addEventListener('click', function () { openProduct({ returnTo: 'in' }); });
+    $('stkOutPick')?.addEventListener('click', function () { openProduct({ returnTo: 'out' }); });
     $('stkInScan')?.addEventListener('click', function () { toast('演示环境请使用手动添加'); });
     $('stkOutScan')?.addEventListener('click', function () { toast('演示环境请使用手动添加'); });
     $('stkInTypeRow')?.addEventListener('click', function () { openTypeSheet('in'); });
