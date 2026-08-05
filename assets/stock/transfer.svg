@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="stTrBg" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8FB0FF"/><stop offset="1" stop-color="#5B7CFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="14" fill="url(#stTrBg)"/>
+  <!-- chassis line -->
+  <path d="M10 29.5h28" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- cargo box (taller closed van) -->
+  <rect x="9" y="13" width="22" height="16.5" rx="2" fill="#fff"/>
+  <!-- cargo door seam -->
+  <path d="M20 15.5v11.5" stroke="#5B7CFF" stroke-width="1.6" stroke-linecap="round" stroke-opacity=".55"/>
+  <!-- cab (lower, stepped) -->
+  <path d="M31.5 21h5.8c1.1 0 2 .7 2.35 1.7l1.1 3.3c.2.55 0 1.15-.5 1.45H31.5V21Z" fill="#fff"/>
+  <!-- windshield -->
+  <path d="M33 22.4h4c.45 0 .85.28 1 .7l.55 1.7H33V22.4Z" fill="#5B7CFF"/>
+  <!-- bumper tip -->
+  <path d="M39.5 29.5h2.2" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- wheels -->
+  <circle cx="15" cy="33.2" r="3.6" fill="#fff"/>
+  <circle cx="34.5" cy="33.2" r="3.6" fill="#fff"/>
+  <circle cx="15" cy="33.2" r="1.5" fill="#5B7CFF"/>
+  <circle cx="34.5" cy="33.2" r="1.5" fill="#5B7CFF"/>
+</svg>
