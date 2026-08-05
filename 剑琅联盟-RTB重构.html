@@ -39799,17 +39799,21 @@ window.__BILLING_EMBEDDED__ = true;
   function autoApplyBestSettleOffers() {
     if (state.settleOffersTouched) return;
     const listTotal = cartListTotal();
-    const eligibleCoupons = COUPONS.filter(cp => listTotal >= (cp.minAmount || 0));
+    /* 演示券均为「项目通用」：仅服务项目可抵，产品/库存/快消不参与 */
+    const couponBase = cartDiscountableSubtotal();
+    const eligibleCoupons = couponBase > 0
+      ? COUPONS.filter(cp => listTotal >= (cp.minAmount || 0))
+      : [];
     const couponOpts = [null].concat(eligibleCoupons);
 
     if (!isMemberBill()) {
       let bestCp = null;
       let bestAmt = -1;
       eligibleCoupons.forEach(cp => {
-        const amt = Math.min(cp.amount, listTotal);
+        const amt = Math.min(cp.amount, couponBase);
         if (amt > bestAmt) { bestAmt = amt; bestCp = cp; }
       });
-      state.selectedCouponId = bestCp ? bestCp.id : null;
+      state.selectedCouponId = bestCp && bestAmt > 0 ? bestCp.id : null;
       state.benefitApplied = {};
       state.benefitSkip = false;
       return;
@@ -41107,7 +41111,20 @@ window.__BILLING_EMBEDDED__ = true;
     }
     if (next <= 0) state.cart = state.cart.filter(x => x.id !== item.id);
     else if (row) row.qty = next;
-    else state.cart.push({ ...item, qty: next, unitPrice: item.price, staffIds: [], staffRoles: {}, staffDesignated: {}, expanded: false });
+    else {
+      const unit = Number.isFinite(Number(item.unitPrice)) ? Number(item.unitPrice)
+        : (Number(item.price) || 0);
+      state.cart.push({
+        ...item,
+        qty: next,
+        price: unit,
+        unitPrice: unit,
+        staffIds: [],
+        staffRoles: {},
+        staffDesignated: {},
+        expanded: false,
+      });
+    }
     syncCartChrome();
     if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
   }
@@ -41190,8 +41207,13 @@ window.__BILLING_EMBEDDED__ = true;
     let couponDeduct = 0;
     let couponLabel = '';
     const coupon = COUPONS.find(c => c.id === state.selectedCouponId);
-    if (coupon && remaining > 0 && listTotal >= (coupon.minAmount || 0)) {
-      couponDeduct = Math.min(coupon.amount, remaining);
+    /* 项目通用券：只抵扣服务项目剩余，不吃产品/库存成本价 */
+    const couponCap = Math.max(0, Math.min(
+      remaining,
+      round2(cartDiscountableSubtotal() - projectDeduct - discountDeduct)
+    ));
+    if (coupon && couponCap > 0 && listTotal >= (coupon.minAmount || 0)) {
+      couponDeduct = Math.min(coupon.amount, couponCap);
       remaining = round2(remaining - couponDeduct);
       couponLabel = coupon.name;
     }
@@ -41905,12 +41927,16 @@ window.__BILLING_EMBEDDED__ = true;
 
   function couponEligibleByOrderTotal(cp) {
     const listTotal = cartListTotal();
+    const couponBase = cartDiscountableSubtotal();
     const min = Number(cp && cp.minAmount) || 0;
+    const ok = couponBase > 0 && listTotal >= min;
     return {
-      ok: listTotal >= min,
+      ok,
       listTotal,
+      couponBase,
       min,
       shortfall: Math.max(0, round2(min - listTotal)),
+      noProject: couponBase <= 0,
     };
   }
 
@@ -41961,12 +41987,17 @@ window.__BILLING_EMBEDDED__ = true;
       selected: false,
       rulesOpen: !!state.couponRulesOpen[cp.id],
       disabled: true,
-      hint: `开单总价还差 ${formatYen(gate.shortfall)}（按整单合计）`,
+      hint: gate.noProject
+        ? '仅适用于服务项目，当前无可抵扣项目'
+        : `开单总价还差 ${formatYen(gate.shortfall)}（按整单合计）`,
     })).join('');
+    const unusableLabel = unusable.some(({ gate }) => gate.noProject)
+      ? '当前不可用'
+      : '未满足开单总价门槛';
     document.getElementById('couponList').innerHTML = `
       <button type="button" class="coupon-none ${noneOn ? 'is-selected' : ''}" data-coupon-none>${offerActionIconHtml('coupon-none')}不使用优惠券</button>
       ${usableHtml}
-      ${unusable.length ? `<div class="coupon-section-label">未满足开单总价门槛</div>${unusableHtml}` : ''}`;
+      ${unusable.length ? `<div class="coupon-section-label">${unusableLabel}</div>${unusableHtml}` : ''}`;
   }
 
   function openCouponScreen() {
@@ -48458,6 +48489,10 @@ window.__BILLING_EMBEDDED__ = true;
     const draft = state.couponDraftId;
     if (draft) {
       const cp = COUPONS.find(c => c.id === draft);
+      if (cp && cartDiscountableSubtotal() <= 0) {
+        showToast('优惠券仅适用于服务项目');
+        return;
+      }
       if (cp && cartListTotal() < (cp.minAmount || 0)) {
         showToast(`未满 ${cp.minAmount} 元门槛，无法使用`);
         return;
