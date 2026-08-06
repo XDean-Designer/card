@@ -60,7 +60,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.9</td>
+<td>v1.10</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -506,7 +506,7 @@ flowchart LR
 <tr>
 <td>设置分组</td>
 <td>条目标题</td>
-<td>可多选（含系统「隐藏」）；可「去新建分组」</td>
+<td>可多选（含系统「隐藏」）；无自定义组时「去新建分组」→ 新建 Dialog</td>
 </tr>
 <tr>
 <td>分组菜单</td>
@@ -515,7 +515,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-list-action</code> / <code>price-list-swipe</code> / <code>price-list-swipe-locked</code> / <code>price-list-hidden-open</code> / <code>price-groups</code> / <code>price-group-members</code> / <code>price-group-menu</code> / <code>price-group-create</code> / <code>price-group-rename</code> / <code>price-group-delete</code> / <code>price-item-group</code> / <code>price-item-delete</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code> / <code>price-edit-product</code> / <code>price-edit-product-off-sale</code>。</p>
+<p>功能链路演示节点（FLOW_MAP「项目创建与管理」）：<code>price-list-empty</code> / <code>price-list-filled</code> / <code>price-list-product</code> / <code>price-list-action</code> / <code>price-list-swipe</code> / <code>price-list-swipe-locked</code> / <code>price-list-hidden-open</code> / <code>price-groups</code> / <code>price-group-members</code> / <code>price-group-menu</code> / <code>price-group-create</code> / <code>price-group-rename</code> / <code>price-group-delete</code> / <code>price-item-group</code> / <code>price-item-group-empty</code> / <code>price-item-delete</code> / <code>price-add</code> / <code>price-add-product</code> / <code>price-edit-normal</code> / <code>price-edit-bound</code> / <code>price-edit-off-sale</code> / <code>price-edit-product</code> / <code>price-edit-product-off-sale</code>。</p>
 <p>深链：<code>demo.html?flow=&lt;节点 id&gt;</code>（可选 <code>&amp;capture=1</code>）。开单改价拦截节点 <code>bill-pay-price-changed</code> 归属「开单记账」分组，规格见 §6.8。</p>
 <p>实现路由建议（名称可调整）：<code>price-list</code> / <code>price-add</code> / <code>price-edit</code> / <code>price-groups</code> / <code>price-group-members</code> + sheets。</p>
 <hr />
@@ -1044,7 +1044,11 @@ flowchart LR
 <ul>
 <li>副标题：可同时加入多个分组  </li>
 <li>多选 <strong>全部</strong> 分组（含系统「隐藏」）；确定 →「已更新分组」并同步 <code>hidden</code>  </li>
-<li>无自定义组：暂无自定义分组 + hint「请先创建分组，再把项目/产品加入」+「去新建分组」  </li>
+<li>无自定义组：「去新建分组」（左侧加号图标）  </li>
+<li>点「去新建分组」→ <strong>不离开本 Sheet</strong>，叠开「新建分组」Dialog  </li>
+<li>确定新建 → toast「已新建分组」→ 回到本 Sheet 勾选列表（含新组与「隐藏」；新组默认勾选，须点 Sheet「确定」才写入）  </li>
+<li>取消 Dialog → 仍停在空态 Sheet  </li>
+<li>演示深链：<code>price-item-group-empty</code>（轨上仅「全部 / 隐藏」）  </li>
 </ul>
 <h2>6.7 拖拽排序（列表）</h2>
 <p>仅在同一 <code>sort-bucket</code> 内重排并写回 <code>sortOrder</code>：</p>
@@ -1429,7 +1433,7 @@ flowchart LR
 <p><strong>导航/按钮</strong>：价目表、项目、产品、分组管理、编辑成员、新增项目、新增产品、项目详情、产品详情、保存、删除、新建分组、确定、取消、全选、反选、设置分组、下架、上架、隐藏、取消隐藏、分组、重命名、编辑成员、去新建分组、+添加、添加项目、添加产品、基本信息、售卖设置、高级设置、项目封面图（可选）/产品封面图（可选）、添加图片、在售、已下架、已隐藏、可预约、规格、时长（分钟）、价格（¥）、全部、添加项目、添加产品、知道了。</p>
 <p><strong>Toast</strong>：请输入分组名称、分组名称已存在、名称已存在、已重命名、已新建分组、已删除分组、已更新成员、已更新分组、已隐藏、已取消隐藏、已上架、已下架、保存成功、项目已创建、产品已创建、已删除、请填写项目名称、请填写产品名称、请填写有效价格、请填写项目时长、时长至少5分钟、「隐藏」分组内不支持拖拽排序，请切换到「全部」或其它分组、已隐藏的项目不支持拖拽排序、请先取消列排序后再手动排序、已添加演示图片、已移除图片、仅可上传 1 张封面、项目已隐藏，取消隐藏后需手动开启可预约、项目已下架，请先开启「在售」后再设置可预约、系统分组不可重命名或删除；以及模块 5.5 绑卡/预约/删除拦截句（删除可为「已关联会员卡/优惠券/商城，不可删除」动态拼接）。</p>
 <p><strong>Dialog（开单支付）</strong>：标题「支付金额已变化」；正文「价目表已更新，当前应付与开单时不一致，请返回核对后再支付。」；按钮「知道了」。</p>
-<p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
+<p><strong>Dialog/Sheet</strong>：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、去新建分组、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。</p>
 <p><strong>空态</strong>：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。</p>
 <h2>9.2 权限</h2>
 <table>

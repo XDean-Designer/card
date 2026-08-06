@@ -2,7 +2,7 @@
 
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v1.9-lite |
+| 文档版本 | v1.10-lite |
 | 日期 | 2026-08-06 |
 | 文档类型 | **精简版**（仅模块 1–3） |
 | 完整规格 | 同目录 `PRD-项目创建与管理.md`（含状态机 / 功能规格 / 接口 / 验收等） |
@@ -189,10 +189,10 @@ flowchart LR
 | 分组管理 | 分组管理 | 底栏「新建分组」 |
 | 编辑成员 | 编辑成员 · {组名} | 底栏「确定」 |
 | 行操作 | 条目标题 | 设置分组/上下架/隐藏或取消隐藏/删除；取消在 foot |
-| 设置分组 | 条目标题 | 可多选（含系统「隐藏」）；可「去新建分组」 |
+| 设置分组 | 条目标题 | 可多选（含系统「隐藏」）；无自定义组时「去新建分组」→ 新建 Dialog |
 | 分组菜单 | 组名 | 编辑成员 / 重命名 / 删除（系统组无菜单） |
 
-功能链路演示节点（FLOW_MAP「项目创建与管理」）：`price-list-empty` / `price-list-filled` / `price-list-product` / `price-list-action` / `price-list-swipe` / `price-list-swipe-locked` / `price-list-hidden-open` / `price-groups` / `price-group-members` / `price-group-menu` / `price-group-create` / `price-group-rename` / `price-group-delete` / `price-item-group` / `price-item-delete` / `price-add` / `price-add-product` / `price-edit-normal` / `price-edit-bound` / `price-edit-off-sale` / `price-edit-product` / `price-edit-product-off-sale`。深链 `demo.html?flow=<id>`。`bill-pay-price-changed` 见完整稿 §6.8。
+功能链路演示节点（FLOW_MAP「项目创建与管理」）：`price-list-empty` / `price-list-filled` / `price-list-product` / `price-list-action` / `price-list-swipe` / `price-list-swipe-locked` / `price-list-hidden-open` / `price-groups` / `price-group-members` / `price-group-menu` / `price-group-create` / `price-group-rename` / `price-group-delete` / `price-item-group` / `price-item-group-empty` / `price-item-delete` / `price-add` / `price-add-product` / `price-edit-normal` / `price-edit-bound` / `price-edit-off-sale` / `price-edit-product` / `price-edit-product-off-sale`。深链 `demo.html?flow=<id>`。`bill-pay-price-changed` 见完整稿 §6.8。
 
 实现路由建议（名称可调整）：`price-list` / `price-add` / `price-edit` / `price-groups` / `price-group-members` + sheets。
 

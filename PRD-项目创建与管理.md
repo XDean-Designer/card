@@ -2,7 +2,7 @@
 
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v1.9 |
+| 文档版本 | v1.10 |
 | 日期 | 2026-08-06 |
 | 交互原型（唯一可视依据） | 同目录 `demo.html`（中文镜像：`剑琅联盟-RTB重构.html`；功能链路「项目创建与管理」） |
 | 画布 | 390 × 844 |
@@ -196,10 +196,10 @@ flowchart LR
 | 分组管理 | 分组管理 | 底栏「新建分组」 |
 | 编辑成员 | 编辑成员 · {组名} | 底栏「确定」；系统「隐藏」组可编辑成员 |
 | 行操作 | 条目标题（无副标题） | 设置分组/上下架/隐藏或取消隐藏/删除；单层贴底，取消在 foot |
-| 设置分组 | 条目标题 | 可多选（含系统「隐藏」）；可「去新建分组」 |
+| 设置分组 | 条目标题 | 可多选（含系统「隐藏」）；无自定义组时「去新建分组」→ 新建 Dialog |
 | 分组菜单 | 组名 | 编辑成员 / 重命名 / 删除（系统组无菜单，点主行进编辑成员） |
 
-功能链路演示节点（FLOW_MAP「项目创建与管理」）：`price-list-empty` / `price-list-filled` / `price-list-product` / `price-list-action` / `price-list-swipe` / `price-list-swipe-locked` / `price-list-hidden-open` / `price-groups` / `price-group-members` / `price-group-menu` / `price-group-create` / `price-group-rename` / `price-group-delete` / `price-item-group` / `price-item-delete` / `price-add` / `price-add-product` / `price-edit-normal` / `price-edit-bound` / `price-edit-off-sale` / `price-edit-product` / `price-edit-product-off-sale`。
+功能链路演示节点（FLOW_MAP「项目创建与管理」）：`price-list-empty` / `price-list-filled` / `price-list-product` / `price-list-action` / `price-list-swipe` / `price-list-swipe-locked` / `price-list-hidden-open` / `price-groups` / `price-group-members` / `price-group-menu` / `price-group-create` / `price-group-rename` / `price-group-delete` / `price-item-group` / `price-item-group-empty` / `price-item-delete` / `price-add` / `price-add-product` / `price-edit-normal` / `price-edit-bound` / `price-edit-off-sale` / `price-edit-product` / `price-edit-product-off-sale`。
 
 深链：`demo.html?flow=<节点 id>`（可选 `&capture=1`）。开单改价拦截节点 `bill-pay-price-changed` 归属「开单记账」分组，规格见 §6.8。
 
@@ -456,7 +456,11 @@ flowchart LR
 
 - 副标题：可同时加入多个分组  
 - 多选 **全部** 分组（含系统「隐藏」）；确定 →「已更新分组」并同步 `hidden`  
-- 无自定义组：暂无自定义分组 + hint「请先创建分组，再把项目/产品加入」+「去新建分组」  
+- 无自定义组：「去新建分组」（左侧加号图标）  
+  - 点「去新建分组」→ **不离开本 Sheet**，叠开「新建分组」Dialog  
+  - 确定新建 → toast「已新建分组」→ 回到本 Sheet 勾选列表（含新组与「隐藏」；新组默认勾选，须点 Sheet「确定」才写入）  
+  - 取消 Dialog → 仍停在空态 Sheet  
+- 演示深链：`price-item-group-empty`（轨上仅「全部 / 隐藏」）  
 
 ## 6.7 拖拽排序（列表）
 
@@ -625,7 +629,7 @@ flowchart LR
 
 **Dialog（开单支付）**：标题「支付金额已变化」；正文「价目表已更新，当前应付与开单时不一致，请返回核对后再支付。」；按钮「知道了」。
 
-**Dialog/Sheet**：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、暂无自定义分组、请先创建分组，再把项目/产品加入、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。
+**Dialog/Sheet**：确认删除？、删除后不可恢复，是否继续？、删除分组？、仅删除分组，不会删除项目/产品。、最多 20 字，不可与已有分组重名、可同时加入多个分组、去新建分组、长按项目可拖动排序，左滑快捷操作；分组可左右滑动、打开后项目会在小程序-预约中显示、未上传，不影响保存；模块 6.2 三条详情通知。
 
 **空态**：暂无项目/产品、暂无隐藏项目/产品、本组暂无项目/产品、暂无分组、创建分组后可快速筛选价目表、暂无可选项目/产品、可将价目表中的条目加入本组、左滑条目可将项目/产品移入隐藏、添加后可在选择项目与办卡中使用、添加后可在开单记账中使用、请在「管理价目表」中将项目/产品加入本组。
 

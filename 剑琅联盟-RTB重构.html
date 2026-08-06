@@ -3050,15 +3050,26 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   max-height: 50vh; overflow: auto; padding: 4px 20px 0;
 }
 .catalog-group-sheet-empty {
-  padding: 32px 24px 8px; text-align: center;
+  padding: 12px 16px 8px; text-align: center;
 }
 .catalog-group-sheet-empty__title {
   margin: 0 0 8px; font-size: 15px; font-weight: 500; color: var(--text);
 }
 .catalog-group-sheet-empty__hint {
-  margin: 0 0 20px; font-size: 13px; color: var(--text-sec); line-height: 1.5;
+  margin: 0 0 16px; font-size: 13px; color: var(--text-sec); line-height: 1.5;
 }
-.catalog-group-sheet-empty .btn-main { width: auto; min-width: 140px; margin: 0 auto; height: 40px; line-height: 40px; font-size: 14px; }
+/* 价目「设置分组」无自定义组：仅 CTA，收紧上下空档 */
+#catalogItemGroupMask.is-assign-empty .catalog-group-sheet-empty {
+  padding: 4px 16px 8px;
+}
+.catalog-group-sheet-empty .btn-main {
+  width: auto; min-width: 140px; margin: 0 auto; height: 40px; line-height: 40px; font-size: 14px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  box-sizing: border-box; padding: 0 16px;
+}
+.catalog-group-sheet-empty .btn-main__plus {
+  width: 14px; height: 14px; flex-shrink: 0; display: block;
+}
 #screen-p-list { background: #F7F7F7; }
 #screen-p-list .page-title-bar { background: #fff; }
 /* 顶栏/提示下留 10px 灰缝，白底内容区含 Tab + 分组 + 列表 */
@@ -4190,6 +4201,17 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
   flex: 1; min-height: 0; overflow-y: auto;
   padding: 8px 8px 12px; display: flex; flex-direction: column; gap: 8px;
 }
+/* 无自定义组：内容区不撑高，Sheet 贴合内容 */
+#catalogItemGroupMask.is-assign-empty .picker-sheet.tall,
+#cardItemGroupMask.is-assign-empty .picker-sheet.tall {
+  max-height: none;
+}
+#catalogItemGroupMask.is-assign-empty .catalog-group-sheet-list,
+#cardItemGroupMask.is-assign-empty .catalog-group-sheet-list {
+  flex: 0 0 auto;
+  padding: 4px 8px 8px;
+  overflow: visible;
+}
 #catalogItemGroupMask .catalog-group-assign-row,
 #cardItemGroupMask .catalog-group-assign-row {
   display: flex; align-items: center; justify-content: space-between;
@@ -4223,8 +4245,10 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 #cardItemGroupMask .catalog-group-assign-row input { position: absolute; opacity: 0; pointer-events: none; }
 #catalogItemGroupMask .picker-foot--row,
 #cardItemGroupMask .picker-foot--row {
-  padding: 16px; gap: 16px; background: #fff;
+  padding: 12px 16px calc(12px + var(--safe-bottom));
+  gap: 16px; background: #fff;
   box-shadow: none; border-top: none;
+  flex-shrink: 0;
 }
 #catalogItemGroupMask .picker-foot--row .btn-main,
 #cardItemGroupMask .picker-foot--row .btn-main {
@@ -7044,10 +7068,24 @@ button.exp-card:active { opacity: .92; }
   box-sizing: border-box;
 }
 .exp-foot-bar__sum {
-  flex: 1; min-width: 0; font-size: 13px; color: var(--text); line-height: 18px;
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 2px;
+  line-height: 1.2;
 }
-.exp-foot-bar__sum .exp-sum-num {
-  color: var(--brand); font-family: var(--font-data); font-variant-numeric: tabular-nums;
+.exp-foot-bar__count {
+  font-size: 12px; font-weight: 500; color: var(--text-sec);
+}
+.exp-foot-bar__count .exp-sum-num {
+  font-size: 12px; font-weight: 600; color: var(--text);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.exp-foot-bar__total {
+  font-size: 12px; font-weight: 500; color: var(--text-sec);
+  display: flex; align-items: baseline; gap: 2px;
+}
+.exp-foot-bar__total .exp-sum-num {
+  font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--brand);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
 }
 .exp-foot-bar .btn-main {
   flex: 0 0 auto; width: auto; min-width: 120px; padding: 0 18px;
@@ -9740,6 +9778,47 @@ button.biz-bar-chart__col {
 .biz-ratio-row__name { flex: 1; color: #1A1A1A; font-weight: 500; }
 .biz-ratio-row__val {
   font-family: var(--font-data); font-weight: 500; color: #1A1A1A;
+  font-variant-numeric: tabular-nums;
+}
+.biz-ratio-row__pct {
+  margin-left: 8px; min-width: 36px; text-align: right;
+  font-family: var(--font-data); font-weight: 500; color: #929292;
+  font-variant-numeric: tabular-nums;
+}
+.biz-kpi__lab-row {
+  display: inline-flex; align-items: center; gap: 4px; max-width: 100%;
+}
+.biz-kpi__tip {
+  flex-shrink: 0; width: 15px; height: 15px; padding: 0; border: none;
+  background: none; color: #B2B2B2; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.biz-kpi__tip:active { color: #8A8A8A; }
+.biz-kpi__tip svg { width: 15px; height: 15px; display: block; }
+.biz-traffic-rank { padding: 4px 0 8px; }
+.biz-traffic-rank__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px var(--biz-ov-inset); position: relative; box-sizing: border-box;
+}
+.biz-traffic-rank__item::before {
+  content: ''; position: absolute; left: var(--biz-ov-inset); right: var(--biz-ov-inset); top: 0;
+  height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
+}
+.biz-traffic-rank__item:first-child::before { display: none; }
+.biz-traffic-rank__name {
+  flex: 0 0 auto; width: 56px; font-size: 14px; font-weight: 500; color: #1A1A1A;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.biz-traffic-rank__bar {
+  flex: 1; min-width: 0; height: 8px; border-radius: 4px; background: #F2F2F2; overflow: hidden;
+}
+.biz-traffic-rank__fill {
+  height: 100%; border-radius: 4px; background: #A3B1C4; min-width: 0;
+}
+.biz-traffic-rank__val {
+  flex-shrink: 0; min-width: 28px; text-align: right;
+  font-family: var(--font-data); font-weight: 600; font-size: 14px; color: #1A1A1A;
   font-variant-numeric: tabular-nums;
 }
 .biz-traffic-bar {
@@ -14074,7 +14153,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="exp-list" id="expListRoot"></div>
   </div>
   <div class="exp-foot-bar">
-    <div class="exp-foot-bar__sum" id="expListSum">共<span class="exp-sum-num">0</span>笔，合计¥<span class="exp-sum-num">0</span></div>
+    <div class="exp-foot-bar__sum" id="expListSum">
+      <div class="exp-foot-bar__count">共<span class="exp-sum-num">0</span>笔</div>
+      <div class="exp-foot-bar__total">合计¥<span class="exp-sum-num">0</span></div>
+    </div>
     <button type="button" class="btn-main" id="expBtnAdd">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
       记一笔
@@ -17607,6 +17689,8 @@ function closeCatalogGroupNameDialog() {
   document.getElementById('catalogGroupNameMask')?.classList.remove('show');
   state.catalogGroupNameMode = null;
   state.catalogGroupEditingId = null;
+  /* 从设置分组 Sheet 唤起时取消新建：清 resume，Sheet 仍打开 */
+  state.catalogAssignResumeAfterGroupCreate = false;
 }
 
 function confirmCatalogGroupNameDialog() {
@@ -17627,6 +17711,9 @@ function confirmCatalogGroupNameDialog() {
     showToast('分组名称已存在', true);
     return;
   }
+  const resumeAssign = !!state.catalogAssignResumeAfterGroupCreate;
+  const resumeItemId = resumeAssign ? state.catalogAssignItemId : null;
+  let createdId = null;
   if (mode === 'rename' && editingId) {
     const g = findCatalogGroupById(editingId);
     if (isCatalogSystemGroup(g)) {
@@ -17638,12 +17725,22 @@ function confirmCatalogGroupNameDialog() {
   } else {
     const g = { id: catalogGroupUid(), name, itemIds: [] };
     groups.push(g);
-    setActiveCatalogGroupId(g.id);
+    createdId = g.id;
+    if (!resumeAssign) setActiveCatalogGroupId(g.id);
     showToast('已新建分组');
   }
-  closeCatalogGroupNameDialog();
+  state.catalogAssignResumeAfterGroupCreate = false;
+  document.getElementById('catalogGroupNameMask')?.classList.remove('show');
+  state.catalogGroupNameMode = null;
+  state.catalogGroupEditingId = null;
   renderCatalogGroupManage();
   renderCatalogGroupTabs();
+  if (resumeItemId && createdId) {
+    state.catalogAssignPrefillGroupId = createdId;
+    openCatalogItemGroupSheet(resumeItemId);
+  } else if (typeof projRenderList === 'function') {
+    projRenderList();
+  }
 }
 
 function openCatalogGroupDeleteConfirm(groupId) {
@@ -17762,17 +17859,17 @@ function openCatalogItemGroupSheet(itemId) {
   const custom = getCustomCatalogGroups(bucket);
   if (!custom.length) {
     listEl.innerHTML = `<div class="catalog-group-sheet-empty">
-      <p class="catalog-group-sheet-empty__title">暂无自定义分组</p>
-      <p class="catalog-group-sheet-empty__hint">请先创建分组，再把${bucket === 'product' ? '产品' : '项目'}加入</p>
-      <button type="button" class="btn-main btn-outline-brand" id="btnCatalogItemGroupGoManage">去新建分组</button>
+      <button type="button" class="btn-main btn-outline-brand" id="btnCatalogItemGroupGoManage"><svg class="btn-main__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>去新建分组</span></button>
     </div>`;
     document.getElementById('btnCatalogItemGroupGoManage')?.addEventListener('click', () => {
-      closeCatalogItemGroupSheet();
-      openCatalogGroupManage();
+      state.catalogAssignResumeAfterGroupCreate = true;
+      openCatalogGroupNameDialog('create');
     });
   } else {
+    const prefillId = state.catalogAssignPrefillGroupId;
+    state.catalogAssignPrefillGroupId = null;
     listEl.innerHTML = groups.map(g => {
-      const on = (g.itemIds || []).includes(itemId);
+      const on = (g.itemIds || []).includes(itemId) || (!!prefillId && g.id === prefillId);
       const count = (g.itemIds || []).length;
       const label = g.system ? escapeHtml(g.name) : `${escapeHtml(g.name)}（${count}）`;
       return `<label class="catalog-group-assign-row${on ? ' is-on' : ''}">
@@ -17795,6 +17892,8 @@ function closeCatalogItemGroupSheet() {
   document.getElementById('catalogItemGroupMask')?.classList.remove('open');
   state.catalogAssignItemId = null;
   state.catalogAssignBucket = null;
+  state.catalogAssignResumeAfterGroupCreate = false;
+  state.catalogAssignPrefillGroupId = null;
 }
 
 function confirmCatalogItemGroupSheet() {
@@ -19212,6 +19311,8 @@ const state = {
   catalogMembersGroupId: null,
   catalogAssignItemId: null,
   catalogAssignBucket: null,
+  catalogAssignResumeAfterGroupCreate: false,
+  catalogAssignPrefillGroupId: null,
   catalogGroupMenuId: null,
   priceCatalogTab: 'project',
   projFormKind: 'project',
@@ -22491,7 +22592,10 @@ function wireProjCatalogModule() {
     projRenderList();
     projShowScreen('screen-p-list');
   });
-  document.getElementById('btnCatalogGroupCreate')?.addEventListener('click', () => openCatalogGroupNameDialog('create'));
+  document.getElementById('btnCatalogGroupCreate')?.addEventListener('click', () => {
+    state.catalogAssignResumeAfterGroupCreate = false;
+    openCatalogGroupNameDialog('create');
+  });
   document.getElementById('catalogGroupManageList')?.addEventListener('click', e => {
     if (e.target.closest('[data-group-drag]')) return;
     const menu = e.target.closest('[data-group-menu]');
@@ -22604,6 +22708,8 @@ function closeAllFlowOverlays() {
   closeDurPicker();
   state.catalogAssignItemId = null;
   state.catalogAssignBucket = null;
+  state.catalogAssignResumeAfterGroupCreate = false;
+  state.catalogAssignPrefillGroupId = null;
   state.catalogGroupMenuId = null;
   state.catalogGroupNameMode = null;
   state.catalogGroupEditingId = null;
@@ -22848,6 +22954,7 @@ const FLOW_MAP_GROUPS = [
       { id: 'price-list-swipe-locked', label: '价目表 · 左滑不可删除', screen: 'screen-p-list' },
       { id: 'price-list-hidden-open', label: '价目表 · 已隐藏展开', screen: 'screen-p-list' },
       { id: 'price-item-group', label: '价目表 · 设置分组 Sheet', screen: 'screen-p-list' },
+      { id: 'price-item-group-empty', label: '设置分组 · 无自定义组', screen: 'screen-p-list' },
       { id: 'price-group-menu', label: '分组 · 行菜单 Sheet', screen: 'screen-p-groups' },
       { id: 'price-group-create', label: '分组 · 新建 Dialog', screen: 'screen-p-groups' },
       { id: 'price-group-rename', label: '分组 · 重命名 Dialog', screen: 'screen-p-groups' },
@@ -23214,6 +23321,24 @@ const FLOW_NAV = {
   'price-item-group'() {
     ensureDemoFilled();
     state.priceCatalogTab = 'project';
+    syncPriceCatalogTabs();
+    projRenderList();
+    projShowScreen('screen-p-list');
+    const first = getCatalogProjects().find(p => p.onSale && !p.hidden) || getCatalogProjects()[0];
+    if (first) openCatalogItemGroupSheet(first.id);
+  },
+  'price-item-group-empty'() {
+    ensureDemoFilled();
+    state.priceCatalogTab = 'project';
+    /* 仅保留系统「隐藏」，模拟轨上只有「全部 / 隐藏」 */
+    ['project', 'product'].forEach(bucket => {
+      const groups = getCatalogGroupsForBucket(bucket);
+      const kept = groups.filter(g => g && g.system);
+      groups.length = 0;
+      groups.push(...kept);
+    });
+    ensureSystemHiddenGroups();
+    setActiveCatalogGroupId('all');
     syncPriceCatalogTabs();
     projRenderList();
     projShowScreen('screen-p-list');
@@ -29686,6 +29811,8 @@ function applyDemoListState(mode) {
   state.catalogMembersGroupId = null;
   state.catalogAssignItemId = null;
   state.catalogAssignBucket = null;
+  state.catalogAssignResumeAfterGroupCreate = false;
+  state.catalogAssignPrefillGroupId = null;
   projRenderList();
   state.memberHoldings = {};
   state.memberHoldingsInvalid = {};
@@ -37229,9 +37356,10 @@ function billingNav(fn) {
     var rows = recordsInRange(state.range);
     var total = rows.reduce(function (s, r) { return s + (Number(r.amount) || 0); }, 0);
     if (sumEl) {
-      sumEl.innerHTML = '共<span class="exp-sum-num">' + rows.length + '</span>笔，合计¥<span class="exp-sum-num">' +
-        (Math.round((Number(total) || 0) * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) +
-        '</span>';
+      var amtTxt = (Math.round((Number(total) || 0) * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+      sumEl.innerHTML =
+        '<div class="exp-foot-bar__count">共<span class="exp-sum-num">' + rows.length + '</span>笔</div>' +
+        '<div class="exp-foot-bar__total">合计¥<span class="exp-sum-num">' + amtTxt + '</span></div>';
     }
     if (!rows.length) {
       root.innerHTML = '<div class="exp-empty">暂无支出记录</div>';
@@ -47527,12 +47655,95 @@ window.__BILLING_EMBEDDED__ = true;
 
   function bizCardKpiGridHtml(items) {
     return `<div class="biz-kpi-grid">${items.map(it => {
-      const lab = it.count != null ? `${escapeHtml(it.name)} · ${it.count}笔` : escapeHtml(it.name);
+      const tip = it.tipKey
+        ? `<button type="button" class="biz-kpi__tip" data-biz-traffic-tip="${escapeHtml(it.tipKey)}" aria-label="${escapeHtml(it.name)}说明">${bizKpiTipIconSvg()}</button>`
+        : '';
+      const labInner = tip
+        ? `<span class="biz-kpi__lab-row"><span>${escapeHtml(it.name)}</span>${tip}</span>`
+        : (it.count != null ? `${escapeHtml(it.name)} · ${it.count}笔` : escapeHtml(it.name));
       const val = it.display != null
         ? `<div class="biz-kpi__val is-neutral">${escapeHtml(String(it.display))}</div>`
         : `<div class="biz-kpi__val">${bizOvMoney(it.amount)}</div>`;
-      return `<div class="biz-kpi"><div class="biz-kpi__lab">${lab}</div>${val}</div>`;
+      return `<div class="biz-kpi"><div class="biz-kpi__lab">${labInner}</div>${val}</div>`;
     }).join('')}</div>`;
+  }
+
+  function bizKpiTipIconSvg() {
+    return '<svg viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  function bizTrafficTipText(key) {
+    const map = {
+      guests: '消费人数：本期到店并产生消费的去重顾客数。',
+      newCard: '新持卡会员：本期新开卡或新持卡的会员人数。',
+      visits: '消费人次：本期到店消费次数，同一顾客多次到店分别计入。',
+      newMember: '新增会员：本期新注册成为会员的人数。',
+    };
+    return map[key] || '';
+  }
+
+  function bizRatioCardHtml(opts) {
+    const {
+      id, icon, title,
+      aName, aCount, aPct,
+      bName, bCount, bPct,
+    } = opts;
+    const pa = Math.max(0, Math.min(100, Number(aPct) || 0));
+    const pb = Math.max(0, Math.min(100, Number(bPct) || 0));
+    const aShow = aCount != null ? aCount : Math.round(pa);
+    const bShow = bCount != null ? bCount : Math.round(pb);
+    return `<div class="biz-ov-card"${id ? ` id="${escapeHtml(id)}"` : ''}>
+      ${bizOvCardHeadHtml({ icon, title })}
+      <div class="biz-ratio-stack" aria-hidden="true">
+        <span class="biz-ratio-stack__seg is-a" style="width:${pa.toFixed(2)}%"></span>
+        <span class="biz-ratio-stack__seg is-b" style="width:${pb.toFixed(2)}%"></span>
+      </div>
+      <div class="biz-ratio-row">
+        <span class="biz-ratio-row__dot is-a" aria-hidden="true"></span>
+        <span class="biz-ratio-row__name">${escapeHtml(aName)}</span>
+        <span class="biz-ratio-row__val">${escapeHtml(String(aShow))}</span>
+        <span class="biz-ratio-row__pct">${Math.round(pa)}%</span>
+      </div>
+      <div class="biz-ratio-row">
+        <span class="biz-ratio-row__dot is-b" aria-hidden="true"></span>
+        <span class="biz-ratio-row__name">${escapeHtml(bName)}</span>
+        <span class="biz-ratio-row__val">${escapeHtml(String(bShow))}</span>
+        <span class="biz-ratio-row__pct">${Math.round(pb)}%</span>
+      </div>
+    </div>`;
+  }
+
+  function bizTrafficVisitRankHtml(rows, opts) {
+    const expanded = !!(opts && opts.expanded);
+    const preview = (opts && opts.preview != null) ? opts.preview : 5;
+    const list = Array.isArray(rows) ? rows : [];
+    const visible = expanded ? list : list.slice(0, preview);
+    const hasMore = list.length > preview;
+    const maxV = Math.max(1, ...list.map(r => Number(r.visits) || 0));
+    const body = visible.map((r, i) => {
+      const rank = i + 1;
+      const v = Math.max(0, Number(r.visits) || 0);
+      const w = v <= 0 ? 0 : Math.max(4, Math.round((v / maxV) * 100));
+      const badgeCls = rank <= 3 ? `is-${rank}` : 'is-rest';
+      return `<div class="biz-traffic-rank__item">
+        <span class="biz-rank-board__i ${badgeCls}" aria-hidden="true">${rank}</span>
+        <span class="biz-traffic-rank__name">${escapeHtml(r.name)}</span>
+        <div class="biz-traffic-rank__bar" aria-hidden="true"><div class="biz-traffic-rank__fill" style="width:${w}%"></div></div>
+        <span class="biz-traffic-rank__val">${v}</span>
+      </div>`;
+    }).join('');
+    const more = hasMore
+      ? `<button type="button" class="biz-rank-board__more" data-biz-traffic-rank-more>${expanded ? '收起' : '查看更多'}</button>`
+      : '';
+    return `<div class="biz-traffic-rank">${body}${more}</div>`;
+  }
+
+  function bizTrafficStaffNames() {
+    const fromStore = (window.EmployeeStore && Array.isArray(window.EmployeeStore.staff))
+      ? window.EmployeeStore.staff.map(s => s && s.name).filter(Boolean)
+      : [];
+    if (fromStore.length >= 5) return fromStore.slice(0, 10);
+    return ['刘敏', '何丽', '林屿森', '何苏叶', '阿Ken', 'Lisa', '周悦', '陈晨', '王珊', '赵一诺'];
   }
 
   function bizCardSalesDetailHtml(rows, expanded) {
@@ -47913,47 +48124,54 @@ window.__BILLING_EMBEDDED__ = true;
           ${bizCardRefundDetailHtml(refundRows, !!state.bizCardRefundExpanded)}
         </div>`;
     } else {
-      const guests = m.store.guests;
-      const visits = Math.round(guests * 1.35);
+      const guests = Math.max(0, Number(m.store.guests) || 0);
+      const visits = Math.max(guests, Math.round(guests * 1.35));
       const newCard = Math.max(0, Math.round(guests * 0.12));
       const newMember = Math.max(0, Math.round(guests * 0.08));
+      const memberPct = 62;
+      const walkPct = 38;
+      const memberCount = Math.round(guests * memberPct / 100);
+      const walkCount = Math.max(0, guests - memberCount);
+      const malePct = 28;
+      const femalePct = 72;
+      const maleCount = Math.round(guests * malePct / 100);
+      const femaleCount = Math.max(0, guests - maleCount);
       const trafficKpis = [
-        { name: '消费人数', display: String(guests) },
-        { name: '消费人次', display: String(visits) },
-        { name: '新持卡会员', display: String(newCard) },
-        { name: '新增会员', display: String(newMember) },
+        { name: '消费人数', display: String(guests), tipKey: 'guests' },
+        { name: '新持卡会员', display: String(newCard), tipKey: 'newCard' },
+        { name: '消费人次', display: String(visits), tipKey: 'visits' },
+        { name: '新增会员', display: String(newMember), tipKey: 'newMember' },
       ];
-      const staffNames = ['刘敏', '何丽', '林屿森', '何苏叶', '阿Ken', 'Lisa', '周悦', '陈晨', '王珊', '赵一诺'];
-      const visitRows = staffNames.map((name, i) => ({
+      const visitRows = bizTrafficStaffNames().map((name, i) => ({
         name,
-        visits: Math.max(1, Math.round(guests * (0.32 - i * 0.025))),
+        visits: guests <= 0 ? 0 : Math.max(1, Math.round(visits * (0.28 - i * 0.022))),
       })).sort((a, b) => b.visits - a.visits);
       body.innerHTML = `
         <div class="biz-ov-card" id="bizTrafficKpi">
-          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '客流一览' })}
+          ${bizOvCardHeadHtml({ icon: bizOvIcon('overview'), title: '数据一览' })}
           ${bizCardKpiGridHtml(trafficKpis)}
-        </div>
-        <div class="biz-ov-card" id="bizTrafficTrend">
-          ${bizOvCardHeadHtml({ icon: bizOvIcon('laborSales'), title: '客流趋势' })}
-          <div class="biz-staff-trend">${bizTrafficTrendChartHtml(guests)}</div>
         </div>
         ${bizRatioCardHtml({
           id: 'bizTrafficGuestType',
           icon: bizOvIcon('labor'),
-          title: '散客 / 会员比例',
+          title: '散客会员比例',
           aName: '会员',
-          aPct: 62,
+          aCount: memberCount,
+          aPct: memberPct,
           bName: '散客',
-          bPct: 38,
+          bCount: walkCount,
+          bPct: walkPct,
         })}
         ${bizRatioCardHtml({
           id: 'bizTrafficGender',
-          icon: bizOvIcon('product'),
-          title: '男客 / 女客比例',
+          icon: bizOvIcon('labor'),
+          title: '男客/女客比例',
           aName: '男客',
-          aPct: 28,
+          aCount: maleCount,
+          aPct: malePct,
           bName: '女客',
-          bPct: 72,
+          bCount: femaleCount,
+          bPct: femalePct,
         })}
         <div class="biz-ov-card" id="bizTrafficRank">
           ${bizOvCardHeadHtml({ icon: bizOvIcon('top'), title: '员工服务人次排行' })}
@@ -52377,6 +52595,12 @@ window.__BILLING_EMBEDDED__ = true;
     if (e.target.closest('[data-biz-traffic-rank-more]')) {
       state.bizTrafficRankExpanded = !state.bizTrafficRankExpanded;
       renderBizStore();
+      return;
+    }
+    const tipBtn = e.target.closest('[data-biz-traffic-tip]');
+    if (tipBtn) {
+      const msg = bizTrafficTipText(tipBtn.dataset.bizTrafficTip);
+      if (msg) showToast(msg);
       return;
     }
     if (e.target.closest('[data-biz-ov-top-more]')) {
