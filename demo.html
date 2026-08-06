@@ -13226,6 +13226,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <p>有数据时注入 10 张演示卡 + 18 条价目表项目（绑卡状态由卡权益自动同步），并回到列表首页。</p>
     </div>
     <div class="demo-state-bar">
+      <h3>当前登录员工（演示）</h3>
+      <div class="demo-state-btns demo-state-btns--wrap" id="demoStaffBtns"></div>
+      <p id="demoStaffHint">每权限角色一人（顾/叶/张/森/赵）。切换后作为开单人并同步权限。</p>
+    </div>
+    <div class="demo-state-bar">
       <h3>当前登录权限（演示）</h3>
       <div class="demo-state-btns demo-state-btns--wrap" id="demoPermBtns"></div>
       <p id="demoPermHint">默认店主 · 全开。切换后按矩阵校验工作台与敏感操作；未接入能力会 toast，矩阵仍可供开发调用（window.RTBPerm）。</p>
@@ -30531,6 +30536,7 @@ function billingNav(fn) {
   ];
   var PERMS = PERM_DEFS.map(function (d) { return d.name; });
   var sessionPermName = '店主';
+  var sessionStaffId = 'st0';
 
   function getPermDef(name) {
     return PERM_DEFS.find(function (d) { return d.name === name || d.id === name; }) || PERM_DEFS[0];
@@ -30548,6 +30554,70 @@ function billingNav(fn) {
     if (typeof syncCatalogWriteChrome === 'function') syncCatalogWriteChrome();
     if (typeof syncCardWriteChrome === 'function') syncCardWriteChrome();
     return sessionPermName;
+  }
+  function sessionStaffPool() {
+    var list = (window.EmployeeStore && Array.isArray(window.EmployeeStore.staff))
+      ? window.EmployeeStore.staff.filter(function (s) { return s.status === '在职'; })
+      : [];
+    return list.length ? list : [{ id: 'st0', name: '顾清扬', short: '顾', perm: '店主', role: '店主' }];
+  }
+  /** 演示侧栏：每个权限角色固定留一人 */
+  var DEMO_SESSION_STAFF_BY_PERM = {
+    '店主': 'st0',
+    '店长': 'st2',
+    '合伙人': 'st5',
+    '高级店员': 'st1',
+    '店员': 'st9',
+  };
+  function demoSessionStaffReps() {
+    var all = sessionStaffPool();
+    return PERM_DEFS.map(function (d) {
+      var preferId = DEMO_SESSION_STAFF_BY_PERM[d.name];
+      var hit = preferId ? all.find(function (s) { return s.id === preferId; }) : null;
+      if (!hit) hit = all.find(function (s) { return s.perm === d.name; }) || null;
+      return hit;
+    }).filter(Boolean);
+  }
+  function getSessionStaff() {
+    var pool = sessionStaffPool();
+    var hit = pool.find(function (s) { return s.id === sessionStaffId; });
+    if (hit) return hit;
+    return pool[0] || null;
+  }
+  function getSessionStaffId() {
+    var s = getSessionStaff();
+    if (s && s.id !== sessionStaffId) sessionStaffId = s.id;
+    return s ? s.id : null;
+  }
+  function setSessionStaffId(id, opts) {
+    var pool = sessionStaffPool();
+    var hit = pool.find(function (s) { return s.id === id; }) || pool[0] || null;
+    if (!hit) return null;
+    sessionStaffId = hit.id;
+    var syncPerm = !(opts && opts.syncPerm === false);
+    if (syncPerm && hit.perm) setSessionPermName(hit.perm);
+    else syncDemoPermButtons();
+    syncDemoStaffButtons();
+    return sessionStaffId;
+  }
+  function syncDemoStaffButtons() {
+    var root = document.getElementById('demoStaffBtns');
+    if (!root) return;
+    var cur = getSessionStaffId();
+    var staff = getSessionStaff();
+    root.innerHTML = demoSessionStaffReps().map(function (s) {
+      var label = s.short || s.name;
+      return '<button type="button" data-demo-staff="' + s.id + '"' +
+        (s.id === cur ? ' class="on"' : '') +
+        ' title="' + esc(s.name + (s.perm ? ' · ' + s.perm : '')) + '">' +
+        esc(label) + '</button>';
+    }).join('');
+    var hint = document.getElementById('demoStaffHint');
+    if (hint && staff) {
+      hint.textContent = '每权限角色一人。当前开单人：' + staff.name +
+        (staff.perm ? ' · 「' + staff.perm + '」' : '') +
+        '。切换后同步权限，开单落单写入订单。';
+    }
   }
   function hasPerm(cap, permName) {
     var def = getPermDef(permName || getSessionPermName());
@@ -30609,6 +30679,9 @@ function billingNav(fn) {
     keys: PERM_CAP_KEYS.slice(),
     getSession: getSessionPermName,
     setSession: setSessionPermName,
+    getSessionStaffId: getSessionStaffId,
+    getSessionStaff: getSessionStaff,
+    setSessionStaffId: setSessionStaffId,
     getDef: getPermDef,
     has: hasPerm,
     require: requirePerm,
@@ -37026,7 +37099,16 @@ function billingNav(fn) {
 
     $('empFShop').textContent = window.EmployeeStore.shopName;
     syncAchFromCatalog();
+    setSessionStaffId(sessionStaffId || 'st0');
     syncDemoPermButtons();
+    syncDemoStaffButtons();
+    document.getElementById('demoStaffBtns')?.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-demo-staff]');
+      if (!btn) return;
+      setSessionStaffId(btn.dataset.demoStaff);
+      var s = getSessionStaff();
+      toast('已切换登录员工「' + (s ? s.name : '') + '」· 权限「' + getSessionPermName() + '」');
+    });
     document.getElementById('demoPermBtns')?.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-demo-perm]');
       if (!btn) return;
@@ -37051,6 +37133,9 @@ function billingNav(fn) {
     wire: wire,
     getSessionPerm: getSessionPermName,
     setSessionPerm: setSessionPermName,
+    getSessionStaffId: getSessionStaffId,
+    getSessionStaff: getSessionStaff,
+    setSessionStaffId: setSessionStaffId,
     hasPerm: hasPerm,
     requirePerm: requirePerm,
   };
@@ -40679,6 +40764,13 @@ window.__BILLING_EMBEDDED__ = true;
 
   function ensureCashierId() {
     const pool = getStaffPool();
+    const sessionId = (window.RTBPerm && typeof window.RTBPerm.getSessionStaffId === 'function')
+      ? window.RTBPerm.getSessionStaffId()
+      : null;
+    if (sessionId && pool.some(s => s.id === sessionId)) {
+      state.cashierId = sessionId;
+      return state.cashierId;
+    }
     if (state.cashierId && pool.some(s => s.id === state.cashierId)) return state.cashierId;
     state.cashierId = (pool[0] && pool[0].id) || null;
     return state.cashierId;
@@ -44573,7 +44665,8 @@ window.__BILLING_EMBEDDED__ = true;
       discount: 0,
       benefitLabel: '无卡权益',
       time: '2026.07.29 10:18',
-      cashier: '林屿森',
+      cashier: '顾清扬',
+      cashierId: 'st0',
     },
     {
       id: 'fo-seed-q2',
@@ -44594,7 +44687,8 @@ window.__BILLING_EMBEDDED__ = true;
       discount: 0,
       benefitLabel: '无卡权益',
       time: '2026.07.28 14:36',
-      cashier: '何苏叶',
+      cashier: '赵敏',
+      cashierId: 'st9',
     },
     {
       id: 'fo-seed-q3',
@@ -44618,7 +44712,8 @@ window.__BILLING_EMBEDDED__ = true;
       discount: 0,
       benefitLabel: '无卡权益',
       time: '2026.07.27 18:05',
-      cashier: 'Lisa',
+      cashier: '赵敏',
+      cashierId: 'st9',
     },
     {
       id: 'fo-seed-1',
@@ -44652,7 +44747,8 @@ window.__BILLING_EMBEDDED__ = true;
       discount: 0,
       benefitLabel: '无卡权益',
       time: '2026.07.27 09:22',
-      cashier: '林屿森',
+      cashier: '赵敏',
+      cashierId: 'st9',
     },
     {
       id: 'fo-seed-2',
@@ -44860,6 +44956,18 @@ window.__BILLING_EMBEDDED__ = true;
       cashier: 'Lisa',
     },
   ];
+
+  (function backfillFlowOrderCashierIds() {
+    const nameToId = {};
+    STAFFS.forEach(s => { nameToId[s.name] = s.id; });
+    FLOW_ORDERS.forEach(o => {
+      if (!o.cashierId && o.cashier && nameToId[o.cashier]) o.cashierId = nameToId[o.cashier];
+      if (!o.cashier && o.cashierId) {
+        const st = STAFFS.find(s => s.id === o.cashierId);
+        if (st) o.cashier = st.name;
+      }
+    });
+  })();
 
   const FLOW_WEIKUAN_STAFFS = [
     { id: 'st0', name: '顾清扬' },
@@ -45891,6 +45999,7 @@ window.__BILLING_EMBEDDED__ = true;
       orderRemark: state.orderRemark || '',
       time: formatFlowTimeOnBizDate(),
       cashier: cashierName,
+      cashierId: (cashierStaff && cashierStaff.id) || null,
       manualOrderNo: s.manualOrderNo || state.manualOrderNo || '',
       billBizDate: s.billBizDate || ensureBillBizDate(),
     };
@@ -46469,7 +46578,7 @@ window.__BILLING_EMBEDDED__ = true;
       : '';
     const meta = state.flowDetailExpanded ? `
       <div class="flow-detail-meta">
-        <div class="flow-detail-meta__row"><span>开单人员</span><span class="flow-detail-meta__val">${escapeHtml(o.cashier || o.staff)}</span></div>
+        <div class="flow-detail-meta__row"><span>开单人</span><span class="flow-detail-meta__val">${escapeHtml(o.cashier || o.staff || '—')}</span></div>
         <div class="flow-detail-meta__row"><span>开单时间</span><span class="flow-detail-meta__val">${escapeHtml(o.time)}</span></div>
         <div class="flow-detail-meta__row"><span>流水单号</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${escapeHtml(o.flowNo)}</span></div>
         ${o.manualOrderNo ? `<div class="flow-detail-meta__row"><span>手工单号</span><span class="flow-detail-meta__val flow-detail-meta__val--num">${escapeHtml(o.manualOrderNo)}</span></div>` : ''}
@@ -49331,7 +49440,14 @@ window.__BILLING_EMBEDDED__ = true;
   function appendFlowEditLog(o, summary) {
     if (!o) return;
     const time = formatFlowTime(new Date());
-    const operator = o.cashier || (o.staffs && o.staffs[0] && o.staffs[0].name) || o.staff || '店员';
+    const sessionStaff = (window.RTBPerm && typeof window.RTBPerm.getSessionStaff === 'function')
+      ? window.RTBPerm.getSessionStaff()
+      : null;
+    const operator = (sessionStaff && sessionStaff.name)
+      || o.cashier
+      || (o.staffs && o.staffs[0] && o.staffs[0].name)
+      || o.staff
+      || '店员';
     if (!Array.isArray(o.editLogs)) o.editLogs = [];
     o.editLogs.unshift({
       id: `fel-${Date.now()}`,
