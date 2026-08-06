@@ -13448,8 +13448,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <div class="form-row clickable" id="empRowSwordTitle"><span class="label">剑号</span><span class="form-row__trail"><span class="value" id="empFSwordTitle">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowSword"><span class="label">宝剑</span><span class="form-row__trail"><span class="emp-form-sword-thumb hidden" id="empFSwordThumb"></span><span class="value" id="empFSword">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
-      <div class="form-row"><span class="label">员工姓名<span class="req">*</span></span><input class="value" id="empFName" placeholder="请输入" /></div>
-      <div class="form-row"><span class="label">员工手机号<span class="req">*</span></span><input class="value" id="empFPhone" placeholder="请输入" inputmode="tel" /></div>
+      <div class="form-row"><span class="label">员工姓名<span class="req">*</span></span><input class="value" id="empFName" placeholder="请输入" maxlength="20" /></div>
+      <div class="form-row"><span class="label">员工手机号<span class="req">*</span></span><input class="value" id="empFPhone" placeholder="请输入" inputmode="numeric" maxlength="11" autocomplete="tel" /></div>
       <div class="form-row clickable" id="empRowGender"><span class="label">性别<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFGender">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowAgeBand"><span class="label">年龄段<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFAgeBand">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row"><span class="label">从业年限</span><input class="value" id="empFYears" type="number" min="0" max="50" step="1" placeholder="请输入年数" inputmode="numeric" /></div>
@@ -13457,7 +13457,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="form-row clickable" id="empRowRole"><span class="label">职位<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFRole">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowPerm"><span class="label">权限<span class="req">*</span><button type="button" class="emp-label-info" id="empPermInfo" aria-label="权限说明"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.25v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.2" r="0.85" fill="currentColor"/></svg></button></span><span class="form-row__trail"><span class="value" id="empFPerm">请选择员工权限</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowScheme"><span class="label">提成方案</span><span class="form-row__trail"><span class="value" id="empFScheme">暂未分配</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
-      <div class="form-row emp-form-row--stack"><span class="label">基本工资<span class="req">*</span></span><input class="value input-amount" id="empFBase" type="number" placeholder="请输入员工基本工资" inputmode="decimal" /></div>
+      <div class="form-row emp-form-row--stack"><span class="label">基本工资<span class="req">*</span></span><input class="value input-amount" id="empFBase" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入员工基本工资" inputmode="decimal" /></div>
       <p class="emp-form-note">注：当修改基本工资后，当月的薪资统计以最新的为准。</p>
       <div class="form-row clickable" id="empRowStatus"><span class="label">状态</span><span class="form-row__trail"><span class="value has-val" id="empFStatus">在职</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
     </div>
@@ -14235,7 +14235,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <div class="form-row">
         <span class="label">支出金额<span class="req">*</span></span>
-        <input class="value input-amount" id="expFAmount" type="number" placeholder="请输入金额" inputmode="decimal" />
+        <input class="value input-amount" id="expFAmount" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入金额" inputmode="decimal" />
       </div>
       <div class="form-row clickable" id="expRowPay" role="button" tabindex="0">
         <span class="label">支付方式<span class="req">*</span></span>
@@ -14253,7 +14253,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <div class="form-row">
         <span class="label">备注说明</span>
-        <input class="value" id="expFRemark" type="text" placeholder="请输入补充说明" />
+        <input class="value" id="expFRemark" type="text" placeholder="请输入补充说明" maxlength="200" />
       </div>
     </div>
   </div>
@@ -14321,7 +14321,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <div class="form-row">
         <span class="label">支出金额<span class="req">*</span></span>
-        <input class="value input-amount" id="expDAmount" type="number" placeholder="请输入金额" inputmode="decimal" />
+        <input class="value input-amount" id="expDAmount" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入金额" inputmode="decimal" />
       </div>
       <div class="form-row clickable" id="expDRowPay" role="button" tabindex="0">
         <span class="label">支付方式<span class="req">*</span></span>
@@ -14343,7 +14343,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       </div>
       <div class="form-row">
         <span class="label">备注说明</span>
-        <input class="value" id="expDRemark" type="text" placeholder="请输入补充说明" />
+        <input class="value" id="expDRemark" type="text" placeholder="请输入补充说明" maxlength="200" />
       </div>
     </div>
     <div class="exp-detail-actions">
@@ -14489,7 +14489,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="form-row"><span class="label">入库门店</span><span class="value has-val" id="stkInShop">—</span></div>
       <button type="button" class="form-row clickable" id="stkInTypeRow"><span class="label">入库类别</span><span class="form-row__trail"><span class="value has-val" id="stkInType">正常入库</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></button>
       <div class="form-row"><span class="label">入库日期</span><span class="value has-val" id="stkInDate">—</span></div>
-      <div class="form-row"><span class="label">备注</span><input class="value" id="stkInRemark" type="text" placeholder="选填"></div>
+      <div class="form-row"><span class="label">备注</span><input class="value" id="stkInRemark" type="text" placeholder="选填" maxlength="200"></div>
     </div>
     <div class="stk-add-row">
       <button type="button" class="stk-add-btn" id="stkInScan">扫码添加</button>
@@ -14514,7 +14514,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="form-row"><span class="label">出库门店</span><span class="value has-val" id="stkOutShop">—</span></div>
       <button type="button" class="form-row clickable" id="stkOutTypeRow"><span class="label">出库类别</span><span class="form-row__trail"><span class="value has-val" id="stkOutType">销售出库</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></button>
       <div class="form-row"><span class="label">出库日期</span><span class="value has-val" id="stkOutDate">—</span></div>
-      <div class="form-row"><span class="label">备注</span><input class="value" id="stkOutRemark" type="text" placeholder="选填"></div>
+      <div class="form-row"><span class="label">备注</span><input class="value" id="stkOutRemark" type="text" placeholder="选填" maxlength="200"></div>
     </div>
     <div class="stk-add-row">
       <button type="button" class="stk-add-btn" id="stkOutScan">扫码添加</button>
@@ -14554,7 +14554,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
   <div class="page-body" style="padding:0 0 20px;background:#F7F7F7">
     <div class="stk-form-card">
-      <div class="form-row"><span class="label">商品名称<span class="req">*</span></span><input class="value" id="stkProdName" type="text" placeholder="请输入商品名称"></div>
+      <div class="form-row"><span class="label">商品名称<span class="req">*</span></span><input class="value" id="stkProdName" type="text" placeholder="请输入商品名称" maxlength="30"></div>
       <div class="form-row"><span class="label">是否使用</span><button type="button" class="switch on" id="stkProdEnabled" aria-label="是否使用" aria-pressed="true"></button></div>
       <div class="form-row clickable" id="stkProdCatRow"><span class="label">商品分组<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="stkProdCat">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row"><span class="label">备注</span><input class="value" id="stkProdRemark" type="text" placeholder="请输入备注" maxlength="200"></div>
@@ -14839,8 +14839,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <div class="page-body">
             <div class="form-section">
               <div class="step1-basic-card">
-              <div class="form-row"><span class="label">卡名称<span class="req">*</span></span><input class="value" id="fName" placeholder="请输入" /></div>
-              <div class="form-row" id="rowRecharge"><span class="label">购买金额<span class="req">*</span></span><input class="value input-amount" id="fRecharge" type="number" min="0" step="0.01" placeholder="请输入" /></div>
+              <div class="form-row"><span class="label">卡名称<span class="req">*</span></span><input class="value" id="fName" placeholder="请输入" maxlength="30" /></div>
+              <div class="form-row" id="rowRecharge"><span class="label">购买金额<span class="req">*</span></span><input class="value input-amount" id="fRecharge" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入" /></div>
               <div class="form-row form-row--duration" id="rowCardValidity">
                 <span class="label">有效期限<span class="req" id="cardValidityReq">*</span></span>
                 <div class="form-row__trail form-row__trail--duration">
@@ -14917,7 +14917,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                       <span class="label">面值金额</span>
                       <div class="balance-face-trail">
                         <div class="balance-amount-field">
-                          <input class="value input-amount" id="fFaceValue" type="number" min="0" step="0.01" placeholder="请输入" />
+                          <input class="value input-amount" id="fFaceValue" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入" />
                           <span class="suffix">元</span>
                         </div>
                         <div class="balance-gift-row">
@@ -19609,6 +19609,130 @@ const DURATION_UNITS = ['day', 'month', 'year', 'permanent'];
 const PROJ_SERVICE_DURATION_UNITS = ['minute', 'hour'];
 const PROJ_SERVICE_DURATION_MAX_MIN = PROJ_DUR_HOUR_MAX * 60;
 
+/** 全局输入边界（边界测试 / 防超长） */
+const INPUT_LIMITS = {
+  CARD_NAME: 30,
+  PROJECT_NAME: 30,
+  PRODUCT_NAME: 30,
+  GROUP_NAME: 20,
+  SPEC: 20,
+  PERSON_NAME: 20,
+  SCHEME_NAME: 20,
+  STOCK_NAME: 30,
+  BARCODE: 32,
+  REMARK_LONG: 500,
+  REMARK_SHORT: 200,
+  PHONE: 11,
+  SEARCH: 50,
+  MONEY_MAX: 999999.99,
+  MONEY_INT_DIGITS: 6,
+  VALIDITY_DAY_MAX: 3650,
+  VALIDITY_MONTH_MAX: 120,
+  VALIDITY_YEAR_MAX: 10,
+  QTY_MAX: 999,
+  CART_QTY_MAX: 999,
+  YEARS_EXP_MAX: 50,
+  PCT_MAX: 100,
+};
+
+function formatMoneyLimitLabel() {
+  return '999,999.99';
+}
+
+function isValidCnMobile(phone) {
+  return /^1\d{10}$/.test(String(phone || '').trim());
+}
+
+function clampMoneyNumber(n) {
+  if (!Number.isFinite(n) || n < 0) return 0;
+  const capped = Math.min(INPUT_LIMITS.MONEY_MAX, n);
+  return Math.round(capped * 100) / 100;
+}
+
+function moneyBufferExceedsLimit(buf, mode) {
+  const s = String(buf || '').trim();
+  if (!s || s === '.' || s === '0.') return false;
+  if (mode === 'integer') {
+    const n = parseInt(s, 10);
+    return Number.isFinite(n) && n > INPUT_LIMITS.VALIDITY_DAY_MAX;
+  }
+  const intPart = (s.split('.')[0] || '').replace(/^0+(?=\d)/, '') || '0';
+  if (intPart.length > INPUT_LIMITS.MONEY_INT_DIGITS) return true;
+  const n = parseFloat(s);
+  return Number.isFinite(n) && n > INPUT_LIMITS.MONEY_MAX;
+}
+
+function clampCardValidityAmount(unit, amount) {
+  const n = parseDurationAmount(amount);
+  if (!n) return null;
+  let max = null;
+  if (unit === 'day') max = INPUT_LIMITS.VALIDITY_DAY_MAX;
+  else if (unit === 'month') max = INPUT_LIMITS.VALIDITY_MONTH_MAX;
+  else if (unit === 'year') max = INPUT_LIMITS.VALIDITY_YEAR_MAX;
+  if (max != null && n > max) {
+    const unitLabel = unit === 'day' ? '天' : (unit === 'month' ? '个月' : '年');
+    showToast(`不能超过 ${max}${unitLabel}`, true);
+    return max;
+  }
+  return n;
+}
+
+function applyInputMaxLength(el, max) {
+  if (!el || max == null) return;
+  el.setAttribute('maxlength', String(max));
+}
+
+function applyGlobalInputLimits() {
+  applyInputMaxLength(document.getElementById('fName'), INPUT_LIMITS.CARD_NAME);
+  applyInputMaxLength(document.getElementById('empFName'), INPUT_LIMITS.PERSON_NAME);
+  applyInputMaxLength(document.getElementById('empFPhone'), INPUT_LIMITS.PHONE);
+  applyInputMaxLength(document.getElementById('guestRecordName'), INPUT_LIMITS.PERSON_NAME);
+  applyInputMaxLength(document.getElementById('guestRecordPhone'), INPUT_LIMITS.PHONE);
+  applyInputMaxLength(document.getElementById('expFRemark'), INPUT_LIMITS.REMARK_SHORT);
+  applyInputMaxLength(document.getElementById('expDRemark'), INPUT_LIMITS.REMARK_SHORT);
+  applyInputMaxLength(document.getElementById('stkProdName'), INPUT_LIMITS.STOCK_NAME);
+  applyInputMaxLength(document.getElementById('stkSkuName'), INPUT_LIMITS.STOCK_NAME);
+  applyInputMaxLength(document.getElementById('stkSkuProduct'), INPUT_LIMITS.STOCK_NAME);
+  applyInputMaxLength(document.getElementById('stkSkuBarcode'), INPUT_LIMITS.BARCODE);
+  applyInputMaxLength(document.getElementById('stkProdRemark'), INPUT_LIMITS.REMARK_SHORT);
+  applyInputMaxLength(document.getElementById('stkTfRemark'), INPUT_LIMITS.REMARK_SHORT);
+  applyInputMaxLength(document.getElementById('stkInRemark'), INPUT_LIMITS.REMARK_SHORT);
+  applyInputMaxLength(document.getElementById('stkOutRemark'), INPUT_LIMITS.REMARK_SHORT);
+  [
+    'billSearch', 'issueMemberSearch', 'pickSearch', 'stkHubSearch', 'stkGoodsSearch',
+    'flowWeikuanSearch', 'flowProdDeductSearch',
+  ].forEach(id => applyInputMaxLength(document.getElementById(id), INPUT_LIMITS.SEARCH));
+
+  const phoneEl = document.getElementById('empFPhone');
+  if (phoneEl && !phoneEl.dataset.phoneLimitWired) {
+    phoneEl.dataset.phoneLimitWired = '1';
+    phoneEl.setAttribute('inputmode', 'numeric');
+    phoneEl.setAttribute('autocomplete', 'tel');
+    phoneEl.addEventListener('input', () => {
+      phoneEl.value = phoneEl.value.replace(/\D/g, '').slice(0, INPUT_LIMITS.PHONE);
+    });
+  }
+  const guestPhone = document.getElementById('guestRecordPhone');
+  if (guestPhone && !guestPhone.dataset.phoneLimitWired) {
+    guestPhone.dataset.phoneLimitWired = '1';
+    guestPhone.addEventListener('input', () => {
+      guestPhone.value = guestPhone.value.replace(/\D/g, '').slice(0, INPUT_LIMITS.PHONE);
+    });
+  }
+  const yearsEl = document.getElementById('empFYears');
+  if (yearsEl) {
+    yearsEl.setAttribute('max', String(INPUT_LIMITS.YEARS_EXP_MAX));
+    yearsEl.setAttribute('min', '0');
+  }
+  ['fRecharge', 'fFaceValue', 'empFBase', 'expFAmount', 'expDAmount', 'stkSkuCost'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute('min', '0');
+    el.setAttribute('max', String(INPUT_LIMITS.MONEY_MAX));
+    el.setAttribute('step', '0.01');
+  });
+}
+
 function parseDurationAmount(raw) {
   const n = parseInt(raw, 10);
   return Number.isFinite(n) && n > 0 ? n : null;
@@ -19835,6 +19959,7 @@ function wireCardValidityDuration() {
       state.cardValidityMonths = snap.validityMonths;
       state.cardValidityCustomUnit = snap.validityCustomUnit;
     },
+    clampAmount: clampCardValidityAmount,
   });
   syncDurationInputDom(root, state.cardValidityUnit, state.cardValidityAmount);
 }
@@ -20981,6 +21106,7 @@ function openUnlimitedValidityDialog(onConfirm) {
         unlimitedValidityDialogState.unit = unit;
         unlimitedValidityDialogState.amount = amount;
       },
+      clampAmount: clampCardValidityAmount,
     });
     syncDurationInputDom(root, 'year', 1);
   }
@@ -22427,6 +22553,7 @@ function projValidateForm() {
   const dup = catalog.some(p => p.id !== state.projEditingId && String(p.name || '').trim() === nameNorm);
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
+  if (price > INPUT_LIMITS.MONEY_MAX) { showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true); return false; }
   if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
   if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
@@ -24032,7 +24159,10 @@ function clampNonNegativeAmountInput(el) {
   if (v === '-') { el.value = ''; return; }
   if (v === '') return;
   const n = parseFloat(v);
-  if (Number.isFinite(n) && n < 0) el.value = '';
+  if (Number.isFinite(n) && n < 0) { el.value = ''; return; }
+  if (Number.isFinite(n) && n > INPUT_LIMITS.MONEY_MAX) {
+    el.value = String(INPUT_LIMITS.MONEY_MAX);
+  }
 }
 
 function clampIntegerAmountInput(el) {
@@ -24047,6 +24177,12 @@ function clampIntegerAmountInput(el) {
   const n = parseInt(v, 10);
   if (!Number.isFinite(n) || n < 0) {
     el.value = '';
+    return;
+  }
+  const capped = Math.min(INPUT_LIMITS.VALIDITY_DAY_MAX, n);
+  if (capped !== n) {
+    el.value = String(capped);
+    showToast(`不能超过 ${INPUT_LIMITS.VALIDITY_DAY_MAX}`, true);
     return;
   }
   if (String(n) !== v) el.value = String(n);
@@ -24179,6 +24315,11 @@ function validateBalanceAmounts() {
     showToast('请填写面值金额', true);
     return false;
   }
+  const face = parseAmount(faceRaw);
+  if (face > INPUT_LIMITS.MONEY_MAX) {
+    showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
+    return false;
+  }
   return true;
 }
 function wireNonNegativeAmountInputs(root) {
@@ -24245,19 +24386,29 @@ function appendAmountKeypadKey(key) {
     return;
   }
   let buf = state.amountKeypadBuffer || '';
+  let next = buf;
   if (key === 'delete') {
-    state.amountKeypadBuffer = buf.slice(0, -1);
+    next = buf.slice(0, -1);
   } else if (key === '.') {
     if (state.amountKeypadMode === 'integer' || buf.includes('.')) return;
-    state.amountKeypadBuffer = buf ? `${buf}.` : '0.';
+    next = buf ? `${buf}.` : '0.';
   } else {
     if (state.amountKeypadMode === 'decimal' && buf.includes('.')) {
       const frac = buf.split('.')[1] || '';
       if (frac.length >= 2) return;
     }
-    if (buf === '0' && key !== '.') state.amountKeypadBuffer = key;
-    else state.amountKeypadBuffer = buf + key;
+    if (buf === '0' && key !== '.') next = key;
+    else next = buf + key;
   }
+  if (key !== 'delete' && moneyBufferExceedsLimit(next, state.amountKeypadMode)) {
+    if (state.amountKeypadMode === 'integer') {
+      showToast(`不能超过 ${INPUT_LIMITS.VALIDITY_DAY_MAX}`, true);
+    } else {
+      showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
+    }
+    return;
+  }
+  state.amountKeypadBuffer = next;
   updateAmountKeypadDisplay();
 }
 
@@ -24325,10 +24476,19 @@ window.__pickerMaskClosers.catalogGroupMenuMask = closeCatalogGroupRowMenu;
 function confirmAmountKeypad() {
   const el = state.amountKeypadTarget;
   if (!el) { closeAmountKeypad(); return; }
-  const buf = (state.amountKeypadBuffer || '').trim();
+  let buf = (state.amountKeypadBuffer || '').trim();
   if (!buf) {
     closeAmountKeypad();
     return;
+  }
+  if (moneyBufferExceedsLimit(buf, state.amountKeypadMode)) {
+    if (state.amountKeypadMode === 'integer') {
+      buf = String(INPUT_LIMITS.VALIDITY_DAY_MAX);
+      showToast(`不能超过 ${INPUT_LIMITS.VALIDITY_DAY_MAX}`, true);
+    } else {
+      buf = String(INPUT_LIMITS.MONEY_MAX);
+      showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
+    }
   }
   if (el.id === 'fPrice' && state.projFormState) {
     state.projFormState.price = String(buf).replace(/^¥/, '').trim();
@@ -24792,13 +24952,22 @@ function openDuplicateFlow(id, opts = {}) {
 }
 
 function onStep1Next() {
-  if (!document.getElementById('fName').value.trim()) {
+  const cardName = document.getElementById('fName').value.trim();
+  if (!cardName) {
     showToast('请填写卡名称', true);
+    return;
+  }
+  if (cardName.length > INPUT_LIMITS.CARD_NAME) {
+    showToast(`卡名称最多 ${INPUT_LIMITS.CARD_NAME} 字`, true);
     return;
   }
   const purchase = parseAmount(document.getElementById('fRecharge')?.value);
   if (!String(document.getElementById('fRecharge')?.value ?? '').trim() || purchase <= 0) {
     showToast('请填写购买金额', true);
+    return;
+  }
+  if (purchase > INPUT_LIMITS.MONEY_MAX) {
+    showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
     return;
   }
   if (!validateCardValidityOnSave()) return;
@@ -26324,7 +26493,14 @@ function validateProjectItemsOnSave() {
 }
 
 function basicValidate() {
-  if (!document.getElementById('fName').value.trim()) { showToast('请填写卡名称', true); return false; }
+  const cardName = document.getElementById('fName').value.trim();
+  if (!cardName) { showToast('请填写卡名称', true); return false; }
+  if (cardName.length > INPUT_LIMITS.CARD_NAME) { showToast(`卡名称最多 ${INPUT_LIMITS.CARD_NAME} 字`, true); return false; }
+  const purchase = parseAmount(document.getElementById('fRecharge')?.value);
+  if (purchase > INPUT_LIMITS.MONEY_MAX) {
+    showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
+    return false;
+  }
   const oldB = { ...state.benefits };
   const { benefits: pruned, cleared } = pruneEmptyStep2BenefitSwitches({
     ...state.benefits,
@@ -26942,6 +27118,7 @@ function renderIssueMemberList() {
         state.issueExtendAmount = amount;
         state.issueExtendDays = unit === 'permanent' ? null : durationAmountToDays(unit, amount);
       },
+      clampAmount: clampCardValidityAmount,
       onChange: () => syncInlineExtendUI(),
     });
   });
@@ -27128,6 +27305,10 @@ function confirmIssueExtend(memberId) {
     extendFee = feeRaw === '' ? parseAmount(computeExtendFeeDefault(tpl, extendDays)) : parseAmount(feeRaw);
     if (extendFee < 0) {
       showToast('参考费用不能为负数', true);
+      return;
+    }
+    if (extendFee > INPUT_LIMITS.MONEY_MAX) {
+      showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true);
       return;
     }
   }
@@ -30136,6 +30317,7 @@ document.getElementById('refundCardMask').addEventListener('click', e => {
 });
 wireIssuePickerControls();
 wireCardValidityDuration();
+applyGlobalInputLimits();
 wireProjCatalogModule();
 document.querySelector('.phone')?.addEventListener('click', e => {
   const btn = e.target.closest('.member-card-item__expand');
@@ -32107,8 +32289,11 @@ function billingNav(fn) {
   function saveForm() {
     var name = $('empFName').value.trim();
     if (!name) { toast('请输入员工姓名'); return; }
-    var phone = $('empFPhone').value.trim();
+    if (name.length > INPUT_LIMITS.PERSON_NAME) { toast('员工姓名最多 ' + INPUT_LIMITS.PERSON_NAME + ' 字', true); return; }
+    var phone = $('empFPhone').value.trim().replace(/\D/g, '');
     if (!phone) { toast('请输入员工手机号'); return; }
+    if (!isValidCnMobile(phone)) { toast('请输入正确的手机号', true); return; }
+    $('empFPhone').value = phone;
     var gender = $('empFGender').textContent;
     if (gender === '请选择') { toast('请选择性别'); return; }
     var ageBand = $('empFAgeBand').textContent;
@@ -32147,8 +32332,12 @@ function billingNav(fn) {
     var yearsRaw = $('empFYears').value.trim();
     var yearsExp = yearsRaw === '' ? 0 : parseInt(yearsRaw, 10);
     if (isNaN(yearsExp) || yearsExp < 0) { toast('请输入有效从业年限'); return; }
+    if (yearsExp > INPUT_LIMITS.YEARS_EXP_MAX) { toast('从业年限不能超过 ' + INPUT_LIMITS.YEARS_EXP_MAX + ' 年', true); return; }
     var baseRaw = $('empFBase').value.trim();
     if (baseRaw === '') { toast('请输入员工基本工资'); return; }
+    var baseSalary = parseFloat(baseRaw);
+    if (!Number.isFinite(baseSalary) || baseSalary < 0) { toast('请输入有效基本工资', true); return; }
+    if (baseSalary > INPUT_LIMITS.MONEY_MAX) { toast('金额不能超过 ' + formatMoneyLimitLabel(), true); return; }
     var store = window.EmployeeStore;
     var schemeText = $('empFScheme').textContent;
     var schemeId = state.formSchemeId || null;
@@ -32166,7 +32355,7 @@ function billingNav(fn) {
       phone: phone,
       perm: perm,
       status: $('empFStatus').textContent,
-      baseSalary: parseFloat(baseRaw) || 0,
+      baseSalary: clampMoneyNumber(baseSalary),
       incomplete: false,
       avatar: state.formAvatar || '',
       swordTitle: state.formSwordTitle || '',
@@ -32828,10 +33017,10 @@ function billingNav(fn) {
       '<button type="button" class="emp-reward-radio' + (draft.type === 'deduct' ? ' is-on' : '') + '" data-reward-type="deduct"><span class="emp-reward-radio__dot"></span>扣除</button>' +
       '</div></div></div>' +
       '<div class="emp-reward-form__row"><span class="emp-reward-form__lbl">金额</span><div class="emp-reward-form__field"><div class="emp-reward-form__amt-wrap">' +
-      '<input type="number" id="empRewardAmount" inputmode="decimal" min="0" step="0.01" placeholder="请输入奖惩金额" value="' +
+      '<input type="number" id="empRewardAmount" inputmode="decimal" min="0" max="999999.99" step="0.01" placeholder="请输入奖惩金额" value="' +
       (draft.amount === '' || draft.amount == null ? '' : esc(String(draft.amount))) + '" /><span class="emp-reward-form__unit">元</span></div></div></div>' +
       '<div class="emp-reward-form__row emp-reward-form__row--note"><span class="emp-reward-form__lbl">备注</span><div class="emp-reward-form__field">' +
-      '<textarea class="emp-reward-form__note" id="empRewardNote" placeholder="请输入备注">' + esc(draft.note || '') + '</textarea></div></div>';
+      '<textarea class="emp-reward-form__note" id="empRewardNote" maxlength="200" placeholder="请输入备注">' + esc(draft.note || '') + '</textarea></div></div>';
 
     if (recent) {
       var items = rewardMonthItems(state.salaryMonth).slice(0, 5);
@@ -32862,7 +33051,11 @@ function billingNav(fn) {
     if (!draft.staffId) { toast('请选择员工', true); return false; }
     var amt = Math.abs(parseFloat(draft.amount));
     if (!amt || isNaN(amt)) { toast('请输入奖惩金额', true); return false; }
-    if (!draft.note) { toast('请输入备注', true); return false; }
+    if (amt > INPUT_LIMITS.MONEY_MAX) { toast('金额不能超过 ' + formatMoneyLimitLabel(), true); return false; }
+    var note = String(draft.note || '').trim();
+    if (!note) { toast('请输入备注', true); return false; }
+    if (note.length > INPUT_LIMITS.REMARK_SHORT) { toast('备注最多 ' + INPUT_LIMITS.REMARK_SHORT + ' 字', true); return false; }
+    draft.note = note;
     var signed = draft.type === 'deduct' ? -amt : amt;
     if (!window.EmployeeStore.rewards[state.salaryMonth]) window.EmployeeStore.rewards[state.salaryMonth] = [];
     var list = window.EmployeeStore.rewards[state.salaryMonth];
@@ -34283,6 +34476,14 @@ function billingNav(fn) {
     var mode = normalizeCommMode(el.dataset.commNumMode || el.dataset.ladderPctMode);
     var n = parseCommInputValue(el.value);
     if (!Number.isFinite(n)) { el.value = ''; return; }
+    if (n < 0) n = 0;
+    if (mode === 'pct' && n > INPUT_LIMITS.PCT_MAX) {
+      n = INPUT_LIMITS.PCT_MAX;
+      toast('比例需在 0–100%', true);
+    } else if (mode === 'amount' && n > INPUT_LIMITS.MONEY_MAX) {
+      n = INPUT_LIMITS.MONEY_MAX;
+      toast('金额不能超过 ' + formatMoneyLimitLabel(), true);
+    }
     /* 阶梯凹槽旁已有 %/¥ 后缀，输入框只保留数字 */
     if (el.closest('.emp-ladder-reward') || el.dataset.commNumBare === '1') {
       el.value = rawCommInputDisplay(n);
@@ -38229,6 +38430,10 @@ function billingNav(fn) {
     if (!d.catId) { toast('请重新选择支出项目', true); return; }
     var amt = parseFloat(d.amount);
     if (!Number.isFinite(amt) || amt <= 0) { toast('请输入有效支出金额', true); return; }
+    if (amt > INPUT_LIMITS.MONEY_MAX) { toast('金额不能超过 ' + formatMoneyLimitLabel(), true); return; }
+    if (d.remark && String(d.remark).length > INPUT_LIMITS.REMARK_SHORT) {
+      toast('备注最多 ' + INPUT_LIMITS.REMARK_SHORT + ' 字', true); return;
+    }
     if (!d.payMethod) { toast('请选择支付方式', true); return; }
     if (!d.handlerId) { toast('请选择经办人', true); return; }
     if (!d.date) d.date = todayStr();
@@ -42065,6 +42270,7 @@ window.__BILLING_EMBEDDED__ = true;
           state.billExtendAmount = a;
           state.billExtendDueTouched = false;
         },
+        clampAmount: typeof clampCardValidityAmount === 'function' ? clampCardValidityAmount : undefined,
         onChange: () => renderBillExtendSheet(),
       });
     }
@@ -42762,6 +42968,15 @@ window.__BILLING_EMBEDDED__ = true;
           next = cap;
         }
       }
+    }
+    if (delta > 0 && next > INPUT_LIMITS.CART_QTY_MAX) {
+      const cur = row?.qty || 0;
+      if (cur >= INPUT_LIMITS.CART_QTY_MAX) {
+        showToast(`单品数量不能超过 ${INPUT_LIMITS.CART_QTY_MAX}`, true);
+        return;
+      }
+      showToast(`单品数量不能超过 ${INPUT_LIMITS.CART_QTY_MAX}`, true);
+      next = INPUT_LIMITS.CART_QTY_MAX;
     }
     if (next <= 0) state.cart = state.cart.filter(x => x.id !== item.id);
     else if (row) row.qty = next;
@@ -51420,9 +51635,13 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const rawName = document.getElementById('guestRecordName')?.value.trim() || '';
     if (!rawName) { showToast('请输入姓名'); return; }
+    if (rawName.length > INPUT_LIMITS.PERSON_NAME) {
+      showToast(`姓名最多 ${INPUT_LIMITS.PERSON_NAME} 字`);
+      return;
+    }
     const phoneRaw = document.getElementById('guestRecordPhone')?.value.trim() || '';
     const phone = phoneRaw.replace(/\D/g, '');
-    if (phoneRaw && !/^1\d{10}$/.test(phone)) {
+    if (phoneRaw && !isValidCnMobile(phone)) {
       showToast('请输入正确的手机号');
       return;
     }

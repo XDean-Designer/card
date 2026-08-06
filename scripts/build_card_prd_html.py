@@ -62,7 +62,7 @@ def main():
         path = CARD / job['html_name']
         path.write_text(out, encoding='utf-8')
         assert '修改记录' not in out and '变更记录' not in out
-        assert 'v1.11' in out
+        assert 'v1.12' in out
         print('wrote', path)
 
     for p in [
@@ -72,7 +72,7 @@ def main():
         CARD / 'PRD-会员卡管理-精简版.html',
     ]:
         t = p.read_text(encoding='utf-8')
-        assert 'v1.11' in t, p
+        assert 'v1.12' in t, p
         assert '确认办卡' in t, p
         assert '立即办卡' in t, p
         assert '橙→红' in t, p

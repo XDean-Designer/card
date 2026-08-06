@@ -60,7 +60,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.11</td>
+<td>v1.12</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -892,7 +892,7 @@ flowchart LR
 <li>列表点卡面进详情；footer 按钮不冒泡进详情。  </li>
 <li>创建/编辑/复制均为三步；Step1/2「下一步」、Step3「保存/保存修改」。  </li>
 <li>Step2 必须至少有一类 <strong>已配置有效内容</strong> 的权益；仅打开开关而无 ticket/金额时，进入下一步或保存前会 <strong>自动关闭</strong> 该空开关。  </li>
-<li>金额类输入使用原型金额键盘交互（正式产品对齐现网数字键盘即可）。  </li>
+<li>金额类输入使用原型金额键盘交互（正式产品对齐现网数字键盘即可）；金额上限见 <strong>5.5</strong>。  </li>
 <li>所有拦截以 toast 或对话框给出 <strong>明确中文原因</strong>（见模块 9）。</li>
 </ol>
 <h2>5.2 离开与返回</h2>
@@ -918,8 +918,23 @@ flowchart LR
 </tr>
 <tr>
 <td>Step1 下一步</td>
+<td>卡名称超过 30 字</td>
+<td>卡名称最多 30 字</td>
+</tr>
+<tr>
+<td>Step1 下一步</td>
 <td>购买金额为空或 ≤0</td>
 <td>请填写购买金额</td>
+</tr>
+<tr>
+<td>Step1 下一步 / 金额类</td>
+<td>金额 &gt; 999,999.99</td>
+<td>金额不能超过 999,999.99</td>
+</tr>
+<tr>
+<td>Step1/保存</td>
+<td>有效期日/月/年超上限</td>
+<td>不能超过 3650天 / 120个月 / 10年（按单位）</td>
 </tr>
 <tr>
 <td>Step1/保存</td>
@@ -1099,6 +1114,42 @@ flowchart LR
 </tr>
 </tbody>
 </table>
+<h2>5.5 输入边界（全局 · 以原型 <code>INPUT_LIMITS</code> 为准）</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>卡名称</td>
+<td>≤ <strong>30</strong> 字</td>
+</tr>
+<tr>
+<td>卡/价目分组名</td>
+<td>≤ <strong>20</strong> 字</td>
+</tr>
+<tr>
+<td>购买金额 / 面值 / 固定折扣金额 / 延期费用等金额</td>
+<td><strong>0～999,999.99</strong>（2 位小数；购买金额业务仍须 <strong>&gt;0</strong>）</td>
+</tr>
+<tr>
+<td>卡有效期 / 延期时长</td>
+<td>日 <strong>1～3650</strong>；月 <strong>1～120</strong>；年 <strong>1～10</strong></td>
+</tr>
+<tr>
+<td>项目权益次数 / 产品权益数量</td>
+<td><strong>0～999</strong></td>
+</tr>
+<tr>
+<td>订单备注</td>
+<td>≤ <strong>500</strong> 字</td>
+</tr>
+</tbody>
+</table>
+<p>金额键盘：整数部分超过 6 位或数值超上限时拦截并 toast「金额不能超过 999,999.99」。有效期失焦超限时 toast「不能超过 N天/个月/年」。</p>
 <hr />
 <h1>模块 6　功能规格</h1>
 <blockquote>
@@ -1217,17 +1268,17 @@ flowchart LR
 <tr>
 <td>卡名称</td>
 <td style="text-align: center;">✓</td>
-<td>placeholder「请输入」</td>
+<td>最多 <strong>30</strong> 字；placeholder「请输入」</td>
 </tr>
 <tr>
 <td>购买金额</td>
 <td style="text-align: center;">✓</td>
-<td>须 <strong>&gt; 0</strong></td>
+<td>须 <strong>&gt; 0</strong>；上限 <strong>999,999.99</strong>（金额键盘）</td>
 </tr>
 <tr>
 <td>有效期限</td>
 <td style="text-align: center;">条件</td>
-<td>日/月/年/永久（默认永久）。开启 <strong>项目 / 产品 / 折扣</strong> 时须设妥数量（不可空数量）；含不限次项目时不可为永久；纯面值可永久</td>
+<td>日/月/年/永久（默认永久）。开启 <strong>项目 / 产品 / 折扣</strong> 时须设妥数量（不可空数量）；含不限次项目时不可为永久；纯面值可永久。数量上限：日 3650 / 月 120 / 年 10</td>
 </tr>
 <tr>
 <td>卡面模板</td>

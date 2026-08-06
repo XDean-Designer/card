@@ -60,7 +60,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.10</td>
+<td>v1.11</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -686,7 +686,9 @@ flowchart LR
 <h2>5.1 通用</h2>
 <ul>
 <li>返回：列表返回到来源（会员卡权益页或默认首页）；子页返回上一级。  </li>
-<li>金额：价格走金额键盘；须为 ≥0 的有效数字。  </li>
+<li>金额：价格走金额键盘；须为 ≥0 的有效数字；上限 <strong>999,999.99</strong>（整数部分 ≤6 位）；超限 toast「金额不能超过 999,999.99」。  </li>
+<li>文本：项目/产品名 ≤<strong>30</strong>；规格 ≤<strong>20</strong>；分组名 ≤<strong>20</strong>；搜索框软限制 ≤<strong>50</strong>。  </li>
+<li>开单购物车：单品数量在无库存上限时软封顶 <strong>999</strong>（有库存时仍以库存为准）。  </li>
 <li>封面图：高级设置中点选添加演示图，最多 1 张；文案「未上传，不影响保存」；<strong>非正式上传</strong>。</li>
 </ul>
 <h2>5.2 校验失败（保存）</h2>
@@ -713,6 +715,10 @@ flowchart LR
 <tr>
 <td>价格无效</td>
 <td>请填写有效价格</td>
+</tr>
+<tr>
+<td>价格 &gt; 999,999.99</td>
+<td>金额不能超过 999,999.99</td>
 </tr>
 <tr>
 <td>项目时长无效或不足 1 分钟</td>
@@ -914,7 +920,7 @@ flowchart LR
 <td>项目价格</td>
 <td style="text-align: center;">✓</td>
 <td>空</td>
-<td>元；金额键盘；≥0</td>
+<td>元；金额键盘；≥0；上限 <strong>999,999.99</strong></td>
 </tr>
 <tr>
 <td>基本信息</td>
@@ -989,7 +995,7 @@ flowchart LR
 <td>产品名称</td>
 <td style="text-align: center;">✓</td>
 <td>空</td>
-<td>表单标签「产品名称」；<strong>同桶唯一</strong>（trim 后）；校验空名时 toast「请填写产品名称」；重名 toast「名称已存在」</td>
+<td>最多 30 字；表单标签「产品名称」；<strong>同桶唯一</strong>（trim 后）；校验空名时 toast「请填写产品名称」；重名 toast「名称已存在」</td>
 </tr>
 <tr>
 <td>基本信息</td>
@@ -1003,7 +1009,7 @@ flowchart LR
 <td>产品价格</td>
 <td style="text-align: center;">✓</td>
 <td>空</td>
-<td>同价格规则</td>
+<td>同价格规则（≥0；上限 999,999.99）</td>
 </tr>
 <tr>
 <td>售卖设置</td>
