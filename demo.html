@@ -18750,7 +18750,7 @@ const OPTIMIZATION_LOG = [
   '流水入口图标：门店流水 / 自助收银对齐支出类型美术（圆角渐变底 + 白色面性，assets/flow）',
   '支出列表卡：展示类型 icon + 支付方式 icon；类型图标适度提饱和',
   '支出演示种子：10 条覆盖今日/昨天/7天/30天与多类型支付经办',
-  '支出其它区间可自定义起止日期；查看流水进入流水订单入口',
+  '支出自定义区间可选起止日期；查看流水进入流水订单入口',
   '支出新增类型可选：礼品/培训/保险/保洁/网络 5 个同风格图标',
   '分类管理：预设/自定义均可改名改图标与删除；行点击编辑；删除需确认；流水保留原类型名快照',
   '支出详情：列表/流水可点进编辑表单；卡片下方并排「删除」「保存」；删除需确认后移除流水',
@@ -37603,7 +37603,7 @@ function billingNav(fn) {
     if (state.customStart && state.customEnd) {
       return fmtRangeChip(state.customStart) + '–' + fmtRangeChip(state.customEnd);
     }
-    return '其它';
+    return '自定义';
   }
 
   function draftTypeLabel(d) {
