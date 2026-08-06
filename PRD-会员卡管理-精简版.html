@@ -60,7 +60,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.9-lite</td>
+<td>v1.11-lite</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -136,7 +136,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
 <li><strong>会员卡分组</strong>：列表筛选、分组管理、编辑成员、快速分组；一卡可多组。  </li>
-<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
+<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单记账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
 <li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
@@ -196,13 +196,13 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
-<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单结账支付 → 办卡成功  </li>
+<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单记账支付 → 办卡成功  </li>
 <li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
 <li>上下架及文案提示  </li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
 <ul>
-<li><strong>开单结账</strong>全链路规格 — 不在本文展开；但 <strong>办卡必须依赖开单结账模块完成收款</strong>（未就绪时 toast「开单结账模块未就绪」）  </li>
+<li><strong>开单记账</strong>全链路规格 — 不在本文展开；但 <strong>办卡必须依赖开单记账模块完成收款</strong>（未就绪时 toast「开单记账模块未就绪」）  </li>
 <li><strong>价目表</strong>作为独立产品交付 — 不在本文展开；规格见同目录 <code>PRD-项目创建与管理.md</code>。建卡「选项目/产品」与「管理价目表」依赖价目数据（项目 Tab / 产品 Tab）  </li>
 <li><strong>会员管理</strong>（会员 CRUD；办卡仅从既存会员列表 <strong>单选</strong>）  </li>
 <li>部分退卡、劳动业绩独立运算台、预约联调  </li>
@@ -307,7 +307,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>为会员办卡</td>
-<td>单选未持该卡的会员 → 确认办卡（员工）→ 去结账完成支付 → 办卡成功</td>
+<td>单选未持该卡的会员 → 「去结账」→ 确认办卡（选服务员工）→ 开单记账支付 → 办卡成功</td>
 </tr>
 <tr>
 <td>延期</td>
@@ -335,7 +335,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
 </blockquote>
 <h2>3.0 页面流（示意）</h2>
-<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（细则见完整稿）。</p>
+<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单记账」外模块，不在本图展开（细则见完整稿）。</p>
 <h3>建卡主链</h3>
 <div class="mermaid">
 flowchart LR
@@ -370,7 +370,7 @@ flowchart LR
   DET -->|已持卡管理| M
 
 </div>
-<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见完整稿模块 4。</p>
+<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单记账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见完整稿模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架 + 分组筛选轨）
  ├─ 分组管理 / 编辑成员
@@ -437,7 +437,7 @@ flowchart LR
 <tr>
 <td>创建成功</td>
 <td>—</td>
-<td>返回列表 / 立即为会员办卡</td>
+<td>返回列表 / <strong>立即办卡</strong></td>
 </tr>
 <tr>
 <td>详情</td>
@@ -447,17 +447,17 @@ flowchart LR
 <tr>
 <td>项目权益页</td>
 <td>添加/编辑项目权益</td>
-<td>适用项目 + <strong>价目</strong>分组筛选 + 权益参数；页内「确定」；「管理价目表」</td>
+<td>适用项目 + <strong>价目</strong>分组筛选 + <strong>行右侧打勾圆选</strong> + 权益参数；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>产品权益页</td>
 <td>添加/编辑产品权益</td>
-<td>适用产品 + 分组筛选 + <strong>行内数量步进</strong>；页内「确定」；「管理价目表」</td>
+<td>适用产品 + 分组筛选 + <strong>行内数量步进</strong>（非勾选）；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>折扣权益页</td>
 <td>添加/编辑折扣权益</td>
-<td>同上结构（含分组筛选；仅服务项目）</td>
+<td>适用项目 + 分组筛选 + <strong>行右侧橙色 Switch</strong>；权益参数含打折标尺（填充 <strong>橙→红渐变</strong>）或固定金额；「管理价目表」</td>
 </tr>
 <tr>
 <td>办卡成功</td>
@@ -506,7 +506,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单结账路由。</p>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单记账路由。</p>
 <hr />
 <h1>交付说明（精简版）</h1>
 <table>

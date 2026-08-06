@@ -60,7 +60,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.9</td>
+<td>v1.11</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -204,7 +204,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
 <li><strong>会员卡分组</strong>：列表可按分组筛选；支持分组管理（新建/重命名/删除/拖排序）、编辑成员、列表「快速分组」；一张卡可同时属于多个分组。  </li>
-<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
+<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单记账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
 <li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
@@ -264,13 +264,13 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
-<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单结账支付 → 办卡成功  </li>
+<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单记账支付 → 办卡成功  </li>
 <li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
 <li>上下架及文案提示  </li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
 <ul>
-<li><strong>开单结账</strong>全链路规格 — 不在本文展开；但 <strong>办卡必须依赖开单结账模块完成收款</strong>（未就绪时 toast「开单结账模块未就绪」）  </li>
+<li><strong>开单记账</strong>全链路规格 — 不在本文展开；但 <strong>办卡必须依赖开单记账模块完成收款</strong>（未就绪时 toast「开单记账模块未就绪」）  </li>
 <li><strong>价目表</strong>作为独立产品交付 — 不在本文展开；规格见同目录 <code>PRD-项目创建与管理.md</code>。建卡「选项目/产品」与「管理价目表」依赖价目数据（项目 Tab / 产品 Tab）  </li>
 <li><strong>会员管理</strong>（会员 CRUD；办卡仅从既存会员列表 <strong>单选</strong>）  </li>
 <li>部分退卡、劳动业绩独立运算台、预约联调  </li>
@@ -375,7 +375,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>为会员办卡</td>
-<td>单选未持该卡的会员 → 确认办卡（员工）→ 去结账完成支付 → 办卡成功</td>
+<td>单选未持该卡的会员 → 「去结账」→ 确认办卡（选服务员工）→ 开单记账支付 → 办卡成功</td>
 </tr>
 <tr>
 <td>延期</td>
@@ -403,7 +403,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <p>读者：前端 ✓ · 后端 了解 · 测试 ✓</p>
 </blockquote>
 <h2>3.0 页面流（示意）</h2>
-<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（见模块 6）。</p>
+<p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单记账」外模块，不在本图展开（见模块 6）。</p>
 <h3>建卡主链</h3>
 <div class="mermaid">
 flowchart LR
@@ -438,7 +438,7 @@ flowchart LR
   DET -->|已持卡管理| M
 
 </div>
-<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见模块 4。</p>
+<p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单记账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架 + 分组筛选轨）
  ├─ 分组管理 / 编辑成员
@@ -505,7 +505,7 @@ flowchart LR
 <tr>
 <td>创建成功</td>
 <td>—</td>
-<td>返回列表 / 立即为会员办卡</td>
+<td>返回列表 / <strong>立即办卡</strong></td>
 </tr>
 <tr>
 <td>详情</td>
@@ -515,17 +515,17 @@ flowchart LR
 <tr>
 <td>项目权益页</td>
 <td>添加/编辑项目权益</td>
-<td>适用项目 + <strong>价目</strong>分组筛选 + 权益参数；页内「确定」；「管理价目表」</td>
+<td>适用项目 + <strong>价目</strong>分组筛选 + <strong>行右侧打勾圆选</strong> + 权益参数；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>产品权益页</td>
 <td>添加/编辑产品权益</td>
-<td>适用产品 + 分组筛选 + <strong>行内数量步进</strong>；页内「确定」；「管理价目表」</td>
+<td>适用产品 + 分组筛选 + <strong>行内数量步进</strong>（非勾选）；页内「确定」；「管理价目表」</td>
 </tr>
 <tr>
 <td>折扣权益页</td>
 <td>添加/编辑折扣权益</td>
-<td>同上结构（含分组筛选；仅服务项目）</td>
+<td>适用项目 + 分组筛选 + <strong>行右侧橙色 Switch</strong>；权益参数含打折标尺（填充 <strong>橙→红渐变</strong>）或固定金额；「管理价目表」</td>
 </tr>
 <tr>
 <td>办卡成功</td>
@@ -727,7 +727,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单结账路由。</p>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单记账路由。</p>
 <hr />
 <h1>模块 4　状态机</h1>
 <blockquote>
@@ -923,7 +923,7 @@ flowchart LR
 </tr>
 <tr>
 <td>Step1/保存</td>
-<td>开启了项目或折扣且有效期限数量未设妥</td>
+<td>开启了项目 / 产品 / 折扣且有效期限数量未设妥</td>
 <td>请设置有效期限（纯面值且永久可无数量）</td>
 </tr>
 <tr>
@@ -1024,7 +1024,7 @@ flowchart LR
 <tr>
 <td>办卡去结账</td>
 <td>开单模块缺失</td>
-<td>开单结账模块未就绪</td>
+<td>开单记账模块未就绪</td>
 </tr>
 <tr>
 <td>延期</td>
@@ -1044,7 +1044,7 @@ flowchart LR
 <tr>
 <td>延期</td>
 <td>含折扣且参考费用 &gt; 0，开单模块缺失</td>
-<td>开单结账模块未就绪</td>
+<td>开单记账模块未就绪</td>
 </tr>
 <tr>
 <td>退卡</td>
@@ -1282,15 +1282,16 @@ flowchart LR
 <li>右侧 <strong>管理价目表</strong> → 价目列表（项目/产品 Tab）；分组的新增/编辑/成员管理 <strong>仅在价目表</strong> 完成，本页 <strong>只读筛选</strong>  </li>
 <li>适用项目上方 <strong>分组 Tab</strong>（与价目表「项目」分组共用 <code>catalogGroups.project</code>）：<code>全部</code> + 自定义组；<strong>无在售项目时隐藏</strong> Tab 条  </li>
 <li>选中自定义组且组内无在售项目 → 空态：「本组暂无项目 / 请在「管理价目表」中将项目加入本组」  </li>
-<li>适用项目：仅在售；<strong>反选 | 全选</strong> 仅作用于 <strong>当前 Tab 可见项目</strong>（可跨组多选，切换 Tab 不丢已选）  </li>
+<li>适用项目：仅在售；行右侧为 <strong>打勾圆选（checkbox）</strong>（与 <strong>6.5 产品行内数量步进</strong> 不同，本页 <strong>不用</strong> 步进器选品）；<strong>反选 | 全选</strong> 仅作用于 <strong>当前 Tab 可见项目</strong>（可跨组多选，切换 Tab 不丢已选）  </li>
 <li>计次：每项/共计横向 + <code>?</code>；权益次数/赠送次数 + 不限次；不限次时共计禁用  </li>
 <li>页内「确定」后按 6.3.2 拆/并成 ticket</li>
 </ul>
 <h2>6.5 产品权益页</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=pick-products">打开添加产品权益</a></p>
+<p><img alt="产品权益页" src="assets/prd-shots/pick-products.png" /></p>
 <ul>
 <li>右侧 <strong>管理价目表</strong>；分组只读筛选共用价目表「产品」分组  </li>
-<li>适用产品：仅在售；列表 <strong>每行内嵌数量步进器</strong>（0–999）  </li>
+<li>适用产品：仅在售；列表 <strong>每行内嵌数量步进器</strong>（0–999），<strong>无</strong>打勾圆选  </li>
 <li><strong>qty = 0</strong> 表示未选；<strong>qty ≥ 1</strong> 表示已选该产品及其数量；无单独「数量设置」区块；无「共计」、无「不限量」  </li>
 <li><strong>反选 | 全选</strong> 仅作用于当前分组 Tab：全选将可见且为 0 的行置为 1；反选在 0↔原数量间切换  </li>
 <li>确定后按行生成 <strong>一种产品一张 ticket</strong>（各行 qty 可不同）  </li>
@@ -1301,8 +1302,9 @@ flowchart LR
 <p><strong>原型</strong>：<a href="demo.html?flow=pick-discount-list">打开添加折扣权益</a></p>
 <p><img alt="折扣权益页" src="assets/prd-shots/pick-discount-list.png" /></p>
 <ul>
-<li>同 <strong>6.4</strong> 结构（含只读分组 Tab、空组态、按当前组反选/全选）+ 管理价目表  </li>
-<li>打折标尺或固定金额；全选可合并为 <code>__ALL__</code>（全部项目）；页内「确定」  </li>
+<li>结构同 <strong>6.4</strong>（只读分组 Tab、空组态、按当前组反选/全选、管理价目表），但选品控件为 <strong>行右侧 Switch</strong>（非打勾圆选）；ON 态为原型橙色 <code>#FF7043</code>（与 Step2 权益开关 / 不限次 Switch 同款）  </li>
+<li>打折标尺：轨道填充为 <strong>橙→红水平渐变</strong>（<code>#FF7043</code> → <code>#F32F41</code>），滑块同橙色；或改选固定金额  </li>
+<li>全选可合并为 <code>__ALL__</code>（全部项目）；页内「确定」  </li>
 <li>项目权益页与折扣权益页各自记住当前分组 Tab（<code>activePickGroupId.project</code> / <code>.discount</code>）；产品权益页记住 <code>activePickGroupId.product</code></li>
 </ul>
 <h2>6.7 Step3 用卡策略</h2>
@@ -1336,7 +1338,7 @@ flowchart LR
 <h2>6.8 创建成功</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=create-success">打开创建成功</a></p>
 <p><img alt="创建成功" src="assets/prd-shots/create-success.png" /></p>
-<p>会员卡已创建；已上架，可立即为会员办理。按钮：返回列表 | 立即为会员办卡。</p>
+<p>会员卡已创建；已上架，可立即办理。按钮：返回列表 | <strong>立即办卡</strong>。</p>
 <h2>6.9 会员卡详情</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=detail-active">在售详情</a> · <a href="demo.html?flow=detail-shelved">已下架详情</a></p>
 <p><img alt="详情·在售" src="assets/prd-shots/detail-active.png" /></p>
@@ -1697,7 +1699,7 @@ flowchart LR
 </tr>
 <tr>
 <td>权益页</td>
-<td>管理价目表；分组 Tab（全部 + 自定义组）；本组暂无项目/产品；反选；全选；行内数量；确定</td>
+<td>管理价目表；分组 Tab（全部 + 自定义组）；本组暂无项目/产品；反选；全选；项目行打勾圆选；折扣行橙色 Switch；产品行内数量步进；打折标尺橙→红渐变；确定</td>
 </tr>
 <tr>
 <td>步骤</td>
@@ -1712,8 +1714,12 @@ flowchart LR
 <td>选择会员；办卡；退卡/延期；去结账；搜索姓名或手机</td>
 </tr>
 <tr>
+<td>确认办卡</td>
+<td>确认办卡（页标题与底栏）；服务员工</td>
+</tr>
+<tr>
 <td>办卡校验</td>
-<td>请选择一位会员；该卡已下架，无法新办；该会员已持有此卡；该卡未设置购买金额；开单结账模块未就绪</td>
+<td>请选择一位会员；该卡已下架，无法新办；该会员已持有此卡；该卡未设置购买金额；开单记账模块未就绪</td>
 </tr>
 <tr>
 <td>退卡</td>
@@ -1725,11 +1731,15 @@ flowchart LR
 </tr>
 <tr>
 <td>延期</td>
-<td>该卡永久有效，无需延期；已将 {名} 的本卡改为永久有效；延长…（收费走支付页 / 免费立即生效）；开单结账模块未就绪</td>
+<td>该卡永久有效，无需延期；已将 {名} 的本卡改为永久有效；延长…（收费走支付页 / 免费立即生效）；开单记账模块未就绪</td>
 </tr>
 <tr>
 <td>办卡成功</td>
 <td>办卡成功；返回列表；返回开单；继续办卡</td>
+</tr>
+<tr>
+<td>创建成功</td>
+<td>返回列表；立即办卡</td>
 </tr>
 <tr>
 <td>不限次弹窗</td>
@@ -2174,9 +2184,9 @@ flowchart LR
 <p>兼容别名（读旧数据）：<code>brand_red→peach</code>，<code>gold→milk</code>，<code>blue→haze</code>，<code>purple→taro</code>，<code>teal→mint</code>。</p>
 <h2>附录 B · 依赖说明</h2>
 <ul>
-<li>价目：项目/产品勾选依赖价目数据；价目产品本身不在本文交付。面值支付范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>
+<li>价目：选项目（打勾圆选）/ 选产品（行内数量步进）依赖价目数据；价目产品本身不在本文交付。面值支付范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>
 <li>会员：办卡单选既存会员。  </li>
-<li>开单结账：办卡收款与支付成功回调。  </li>
+<li>开单记账：办卡收款与支付成功回调。  </li>
 <li>支付/退款通道：<code>【待联调确认】</code>。</li>
 </ul>
 <p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>

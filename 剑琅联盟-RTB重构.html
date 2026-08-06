@@ -1557,7 +1557,7 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .proj-item-main[data-proj-row-main] { cursor: pointer; }
 .proj-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0; cursor: pointer; }
 .proj-switch input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
-/* 添加项目/产品权益 · 右侧可多选打勾圆选（对齐办卡列表 radio 视觉） */
+/* 添加项目/折扣权益 · 右侧可多选打勾圆选；产品权益仍用行内数量步进器 */
 .proj-pick-check {
   position: relative; display: inline-flex; align-items: center; justify-content: center;
   width: 20px; height: 20px; flex-shrink: 0; cursor: pointer; margin-left: auto;
@@ -2500,7 +2500,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .ruler--pill .discount-ruler__fill {
   position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px;
-  background: #f32f41; pointer-events: none;
+  background: linear-gradient(90deg, #FF7043 0%, #F32F41 100%);
+  pointer-events: none;
 }
 .ruler--pill .discount-ruler__ticks {
   position: absolute; left: 12px; right: 12px; top: 23px; height: 35px; pointer-events: none;
@@ -2519,10 +2520,14 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .ruler--pill .discount-ruler__thumb {
   position: absolute; top: 50%; width: 20px; height: 20px; margin-top: -10px; margin-left: -10px;
-  border-radius: 50%; background: #f32f41; border: 2px solid #fff;
+  border-radius: 50%; background: #FF7043; border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   cursor: grab; z-index: 2; transition: transform .12s ease;
   box-sizing: border-box;
+}
+/* 添加折扣权益 · 行 Switch ON 与 Step2 / 不限次同款橙色 */
+#screen4 .proj-switch input:checked + .proj-switch__track {
+  background: var(--switch-qty-on);
 }
 .ruler--pill .discount-ruler__thumb:active { cursor: grabbing; transform: scale(1.06); }
 .ruler-block { padding: 0; }
@@ -6807,14 +6812,34 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-role-name-actions .dialog__actions { margin-top: 0; }
 .emp-role-manage-list {
   padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px;
+  touch-action: pan-y;
+}
+.emp-role-manage-list.is-reordering {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.emp-role-manage-list.is-reordering > .emp-role-manage-row:not(.is-dragging) {
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
 }
 .emp-role-manage-row {
-  display: flex; align-items: center; gap: 12px; width: 100%;
-  padding: 14px 16px; border: none; border-radius: 12px; background: #fff;
+  display: flex; align-items: center; gap: 4px; width: 100%;
+  padding: 14px 12px 14px 4px; border: none; border-radius: 12px; background: #fff;
   text-align: left; font-family: inherit; cursor: pointer; box-sizing: border-box; color: inherit;
+  position: relative;
 }
 .emp-role-manage-row:active { opacity: .92; }
-.emp-role-manage-row__main { flex: 1; min-width: 0; }
+.emp-role-manage-row.is-dragging {
+  z-index: 20; pointer-events: none; opacity: 1 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+.emp-role-manage-row.is-drag-placeholder {
+  visibility: hidden; pointer-events: none; min-height: 72px;
+  background: transparent; box-shadow: none;
+}
+.emp-role-manage-row__main { flex: 1; min-width: 0; padding: 0 4px; }
 .emp-role-manage-row__name {
   display: block; font-size: 15px; font-weight: 500; color: var(--text);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -22980,6 +23005,14 @@ const FLOW_NAV = {
     seedCreateFormFromPreset();
     setActivePickGroupId('discount', 'all');
     openAddDiscountBenefit();
+    const names = getProjectNamesForPickerByGroup('discount').slice(0, 3);
+    names.forEach(n => { state.simpleDiscPickOn[n] = true; });
+    if (state.discBenefitDraft) {
+      state.discBenefitDraft.rule = normalizeDiscountRule({ mode: 'discount', tickIndex: 17 });
+    }
+    renderMemberPriceProjectList();
+    renderDiscountPickParams();
+    updateSimplePickCount('discount');
   },
   'pick-discount-group'() {
     closeAllFlowOverlays();
@@ -28191,33 +28224,52 @@ function renderProductList() {
   }
   syncSimpleProdPickOnFromQty();
   const names = getProductNamesForPickerByGroup();
-  const defaultQty = Math.max(1, Math.min(999, parseInt(state.prodBenefitDraft?.qty, 10) || 1));
   container.innerHTML = names.map(p => {
-    const checked = !!state.simpleProdPickOn[p];
+    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty?.[p], 10) || 0));
     return `<div class="proj-pick-card">
       <div class="picker-item picker-item--proj">
         <span class="proj-item-main">
           <span class="proj-item-name">${escapeHtml(p)}</span>
         </span>
-        ${projPickCheckHtml(p, checked)}
+        ${projQtyStepperHtml(p, 'prodrow', qty, 0)}
       </div>
     </div>`;
   }).join('');
-  wireSimpleProductPicker(container, defaultQty);
+  wireSimpleProductPicker(container);
   updateSimplePickCount('product');
 }
 
-function wireSimpleProductPicker(container, defaultQty = 1) {
-  const qtyOn = Math.max(1, Math.min(999, parseInt(defaultQty, 10) || 1));
-  container.querySelectorAll('.proj-pick-check').forEach(wrap => {
+function wireSimpleProductPicker(container) {
+  const applyQty = (name, next, inputEl) => {
+    setSimpleProdPickQty(name, next);
+    const qty = Math.max(0, Math.min(999, parseInt(state.simpleProdPickQty[name], 10) || 0));
+    if (inputEl) inputEl.value = String(qty);
+    updateSimplePickCount('product');
+  };
+  container.querySelectorAll('.qty-stepper').forEach(wrap => {
     wrap.addEventListener('click', e => e.stopPropagation());
   });
-  container.querySelectorAll('.proj-pick-sw').forEach(sw => {
-    sw.addEventListener('change', () => {
-      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[sw.value], 10) || 0);
-      setSimpleProdPickQty(sw.value, sw.checked ? (cur >= 1 ? cur : qtyOn) : 0);
-      updateSimplePickCount('product');
+  container.querySelectorAll('[data-prodrow-minus]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-prodrow-minus');
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
+      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
+      applyQty(name, cur - 1, input);
     });
+  });
+  container.querySelectorAll('[data-prodrow-plus]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-prodrow-plus');
+      const cur = Math.max(0, parseInt(state.simpleProdPickQty?.[name], 10) || 0);
+      const input = btn.closest('.picker-item')?.querySelector('[data-prodrow-input]');
+      applyQty(name, cur + 1, input);
+    });
+  });
+  container.querySelectorAll('[data-prodrow-input]').forEach(input => {
+    const name = input.getAttribute('data-prodrow-input');
+    const commit = () => applyQty(name, input.value, input);
+    input.addEventListener('change', commit);
+    input.addEventListener('blur', commit);
   });
 }
 
@@ -30522,6 +30574,7 @@ function billingNav(fn) {
     swordDraftId: null,
     wired: false,
     staffDragSuppressClick: false,
+    roleDragSuppressClick: false,
     roleEditMode: null,
     roleEditOldName: '',
     roleEditSource: 'picker',
@@ -31114,12 +31167,172 @@ function billingNav(fn) {
     var roles = getRoles();
     root.innerHTML = roles.map(function (name) {
       var n = countStaffWithRole(name);
-      return '<button type="button" class="emp-role-manage-row" data-role-manage="' + esc(name) + '">' +
-        '<span class="emp-role-manage-row__main">' +
+      return '<div class="emp-role-manage-row" data-role-manage="' + esc(name) + '">' +
+        '<button type="button" class="emp-row__drag" data-role-drag="' + esc(name) + '" aria-label="拖动排序">' +
+        empDragHandleIconHtml() + '</button>' +
+        '<div class="emp-role-manage-row__main">' +
         '<span class="emp-role-manage-row__name">' + esc(name) + '</span>' +
-        '<span class="emp-role-manage-row__sub">' + (n ? ('已分配 ' + n + ' 人') : '暂无员工') + '</span></span>' +
-        '<span class="emp-role-manage-row__act"><span>修改名称</span>' + navChevHtml() + '</span></button>';
+        '<span class="emp-role-manage-row__sub">' + (n ? ('已分配 ' + n + ' 人') : '暂无员工') + '</span></div>' +
+        '<span class="emp-role-manage-row__act"><span>修改名称</span>' + navChevHtml() + '</span></div>';
     }).join('') || '<div class="empty-cart" style="padding:32px 16px">暂无职位，请添加</div>';
+  }
+
+  function commitRoleOrderFromDom() {
+    var root = $('empRoleManageList');
+    if (!root) return;
+    var names = Array.prototype.map.call(
+      root.querySelectorAll('.emp-role-manage-row[data-role-manage]:not(.is-drag-placeholder)'),
+      function (r) { return r.dataset.roleManage; }
+    ).filter(Boolean);
+    var roles = ensureRoles();
+    if (!names.length || names.length !== roles.length) return;
+    var ordered = names.filter(function (n) { return roles.indexOf(n) >= 0; });
+    if (ordered.length !== roles.length) return;
+    window.EmployeeStore.roles = ordered;
+    refreshRoleUiAfterChange();
+  }
+
+  var EMP_ROLE_LONG_PRESS_MS = 400;
+  var EMP_ROLE_MOVE_PX = 8;
+
+  function wireRoleManageListDrag() {
+    var root = $('empRoleManageList');
+    if (!root || root.dataset.dragWired === '1') return;
+    root.dataset.dragWired = '1';
+
+    var pressTimer = null;
+    var dragging = false;
+    var activePointerId = null;
+    var startX = 0;
+    var startY = 0;
+    var dragRow = null;
+    var placeholder = null;
+    var grabOffsetY = 0;
+
+    function clearPress() {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    }
+
+    function updatePlaceholder(clientY) {
+      if (!placeholder || !root) return;
+      var slots = Array.prototype.slice.call(root.querySelectorAll('.emp-role-manage-row:not(.is-dragging)'));
+      var insertBefore = null;
+      for (var i = 0; i < slots.length; i++) {
+        var slot = slots[i];
+        if (slot === placeholder) continue;
+        var rect = slot.getBoundingClientRect();
+        if (clientY < rect.top + rect.height / 2) {
+          insertBefore = slot;
+          break;
+        }
+      }
+      if (insertBefore) root.insertBefore(placeholder, insertBefore);
+      else root.appendChild(placeholder);
+    }
+
+    function endDrag(commit) {
+      clearPress();
+      if (!dragging) {
+        activePointerId = null;
+        dragRow = null;
+        return;
+      }
+      root.classList.remove('is-reordering');
+      if (dragRow && placeholder && placeholder.parentNode) {
+        placeholder.parentNode.insertBefore(dragRow, placeholder);
+      }
+      if (placeholder && placeholder.parentNode) placeholder.remove();
+      if (dragRow) {
+        dragRow.classList.remove('is-dragging');
+        dragRow.style.cssText = '';
+        try { dragRow.releasePointerCapture(activePointerId); } catch (_) {}
+      }
+      dragging = false;
+      activePointerId = null;
+      dragRow = null;
+      placeholder = null;
+      if (commit) {
+        commitRoleOrderFromDom();
+        state.roleDragSuppressClick = true;
+        setTimeout(function () { state.roleDragSuppressClick = false; }, 0);
+      }
+    }
+
+    function startDrag(row) {
+      if (dragging || !row || !root.contains(row)) return;
+      dragging = true;
+      clearPress();
+      state.roleDragSuppressClick = true;
+      dragRow = row;
+      var rect = row.getBoundingClientRect();
+      var listRect = root.getBoundingClientRect();
+      placeholder = document.createElement('div');
+      placeholder.className = 'emp-role-manage-row is-drag-placeholder';
+      placeholder.style.height = rect.height + 'px';
+      row.parentNode.insertBefore(placeholder, row);
+      root.classList.add('is-reordering');
+      row.classList.add('is-dragging');
+      row.style.position = 'absolute';
+      row.style.left = '0';
+      row.style.width = rect.width + 'px';
+      row.style.top = (rect.top - listRect.top + root.scrollTop) + 'px';
+      row.style.zIndex = '20';
+      grabOffsetY = startY - rect.top;
+      try { row.setPointerCapture(activePointerId); } catch (_) {}
+      if (navigator.vibrate) {
+        try { navigator.vibrate(12); } catch (_) {}
+      }
+    }
+
+    root.addEventListener('pointerdown', function (e) {
+      if (e.button != null && e.button !== 0) return;
+      var row = e.target.closest('[data-role-manage]');
+      if (!row || !root.contains(row)) return;
+      var fromHandle = !!e.target.closest('[data-role-drag]');
+      activePointerId = e.pointerId;
+      startX = e.clientX;
+      startY = e.clientY;
+      dragging = false;
+      clearPress();
+      if (fromHandle) {
+        e.preventDefault();
+        startDrag(row);
+        return;
+      }
+      pressTimer = setTimeout(function () {
+        pressTimer = null;
+        startDrag(row);
+      }, EMP_ROLE_LONG_PRESS_MS);
+    });
+
+    root.addEventListener('pointermove', function (e) {
+      if (activePointerId == null || e.pointerId !== activePointerId) return;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      if (!dragging && pressTimer && (Math.abs(dx) > EMP_ROLE_MOVE_PX || Math.abs(dy) > EMP_ROLE_MOVE_PX)) {
+        clearPress();
+        return;
+      }
+      if (!dragging || !dragRow) return;
+      e.preventDefault();
+      var listRect = root.getBoundingClientRect();
+      var rowH = dragRow.offsetHeight || 72;
+      var nextTop = e.clientY - listRect.top + root.scrollTop - grabOffsetY;
+      var maxTop = Math.max(0, root.scrollHeight - rowH);
+      if (nextTop < 0) nextTop = 0;
+      if (nextTop > maxTop) nextTop = maxTop;
+      dragRow.style.top = nextTop + 'px';
+      updatePlaceholder(e.clientY);
+    });
+
+    root.addEventListener('pointerup', function (e) {
+      if (activePointerId == null || e.pointerId !== activePointerId) return;
+      endDrag(dragging);
+    });
+    root.addEventListener('pointercancel', function (e) {
+      if (activePointerId == null || e.pointerId !== activePointerId) return;
+      endDrag(false);
+    });
   }
   function openRoleManage() {
     renderRoleManageList();
@@ -35390,6 +35603,7 @@ function billingNav(fn) {
     $('empBtnSaveForm')?.addEventListener('click', saveForm);
 
     wireStaffListDrag();
+    wireRoleManageListDrag();
     $('empListRoot')?.addEventListener('click', function (e) {
       if (state.staffDragSuppressClick) {
         state.staffDragSuppressClick = false;
@@ -35420,6 +35634,11 @@ function billingNav(fn) {
       openRoleNameDialog('add', '', 'picker');
     });
     $('empRoleManageList')?.addEventListener('click', function (e) {
+      if (state.roleDragSuppressClick) {
+        state.roleDragSuppressClick = false;
+        return;
+      }
+      if (e.target.closest('[data-role-drag]')) return;
       var row = e.target.closest('[data-role-manage]');
       if (!row) return;
       openRoleNameDialog('rename', row.dataset.roleManage, 'page');
