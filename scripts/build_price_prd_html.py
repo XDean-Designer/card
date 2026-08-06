@@ -151,18 +151,19 @@ def main():
         CARD / 'PRD-项目创建与管理-精简版.html',
     ]:
         t = p.read_text(encoding='utf-8')
-        assert 'v1.8' in t, p
+        assert 'v1.9' in t, p
         assert '已下架' in t, p
         assert ('上传封面图' in t) or ('封面' in t), p
         assert '修改记录' not in t and '变更记录' not in t and '已知待修' not in t
-        assert '无关键字搜索' in t or '无搜索' in t or 'v1.8-lite' in t or t.count('+添加') >= 1
+        assert '无关键字搜索' in t or '无搜索' in t or 'v1.9-lite' in t or t.count('+添加') >= 1
         assert '悬浮球' not in t or '无悬浮球' in t or '无右下悬浮球' in t, p
         assert '店员' in t and ('不可编辑' in t or '不可编辑/修改' in t), p
         assert '名称唯一' in t or '同桶唯一' in t, p
         assert '本期仅单店' in t or '仅单店' in t, p
         assert '库存' in t, p
-        assert '支付金额已变化' in t or 'v1.8-lite' in t, p
+        assert '支付金额已变化' in t or 'v1.9-lite' in t, p
         assert '本期不维护库存' in t or '无库存字段' in t or '不限购' in t, p
+        assert '开单可选' in t or '含隐藏' in t, p
         print('ok', p.name)
     print('done')
 

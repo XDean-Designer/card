@@ -60,11 +60,11 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.8-lite</td>
+<td>v1.9-lite</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-05</td>
+<td>2026-08-06</td>
 </tr>
 <tr>
 <td>文档类型</td>
@@ -141,7 +141,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>B 端改价、上下架、时长、<strong>隐藏</strong>、封面等变更需 <strong>同步客户端展示</strong>（开单为 <strong>实时目录/价格</strong>；细节【待联调】）；顾客端具体 UI <strong>不在本文展开</strong>。价目产品本期不维护库存。封面正式 OSS <strong>本期不做</strong>。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进价目再返回时 <strong>刷新分组 Tab（重置为「全部」）</strong>；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
 <li><strong>产品库存</strong>（以当前原型为准；完整稿 <strong>8.1</strong>）：价目产品 <strong>无库存字段/列表列</strong>；开单对价目产品 <strong>不限购</strong>；后续库存管理另模块。  </li>
-<li><strong>可见性</strong>：顾客端 / <strong>开单选品</strong> / <strong>建卡权益选品</strong> 均为 <code>onSale &amp;&amp; !hidden</code>。开单中价目改价 → 支付 Dialog「支付金额已变化」（<code>bill-pay-price-changed</code>，见完整稿 §6.8）。  </li>
+<li><strong>可见性</strong>：顾客端 / 建卡权益选品为 <code>onSale &amp;&amp; !hidden</code>；<strong>开单选品</strong> 为 <code>onSale</code>（<strong>含隐藏项</strong>；已下架不可选）。开单中价目改价 → 支付 Dialog「支付金额已变化」（<code>bill-pay-price-changed</code>，见完整稿 §6.8）。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式文档 <strong>暂无交付时间</strong>。  </li>
 <li><strong>本期仅单店</strong>；<strong>店主可编辑价目，店员不可编辑</strong>。</li>
 </ol>
@@ -187,7 +187,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>可见性清晰</td>
-<td>顾客端 / 开单 / 建卡选品均为在售且未隐藏</td>
+<td>顾客端 / 开单 / 建卡选品范围分明（<strong>隐藏项开单可选</strong>；权益仍须未隐藏）</td>
 </tr>
 <tr>
 <td>与卡对齐</td>
@@ -207,7 +207,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>左滑快捷操作与长按操作 Sheet（删除锁定锁标）  </li>
 <li>项目绑卡锁定（部分字段）及提示文案  </li>
 <li>从会员卡权益页「管理价目表」进入并返回  </li>
-<li><strong>开单选品</strong> 联结（仅在售且未隐藏；价目改价支付拦截见完整稿）  </li>
+<li><strong>开单选品</strong> 联结（在售即可，<strong>含隐藏</strong>；价目改价支付拦截见完整稿）  </li>
 <li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
@@ -256,7 +256,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>对 C 端隐藏但 B 端保留</td>
-<td><strong>隐藏</strong>（底部「已隐藏」折叠；开单不可选）；项目隐藏关预约，取消隐藏后仍关须手动开</td>
+<td><strong>隐藏</strong>（底部「已隐藏」折叠；<strong>开单可选</strong>）；项目隐藏关预约，取消隐藏后仍关须手动开</td>
 </tr>
 <tr>
 <td>被卡引用后的保护</td>
@@ -307,7 +307,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tr>
 <td>新建产品</td>
 <td>填名称/规格（选填）/价格后出现在产品列表</td>
-<td>列表「名称（规格）」+ 价格；在售未隐藏时可开单/权益选用</td>
+<td>列表「名称（规格）」+ 价格；在售可开单（含隐藏）；权益须未隐藏</td>
 </tr>
 <tr>
 <td>改价</td>
@@ -322,7 +322,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tr>
 <td>隐藏</td>
 <td>对顾客端隐藏但 B 端保留</td>
-<td>「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭预约，取消隐藏后仍关，须手动再开</strong></td>
+<td>「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；<strong>开单可选</strong>；权益选品不可选；<strong>项目隐藏时关闭预约，取消隐藏后仍关，须手动再开</strong></td>
 </tr>
 <tr>
 <td>产品库存</td>
@@ -346,8 +346,8 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>开单选品</td>
-<td>开单只选可售货</td>
-<td>仅 <code>onSale &amp;&amp; !hidden</code>；价目产品不限购</td>
+<td>开单可选在售货（含对 C 端隐藏项）</td>
+<td><strong>仅排除已下架</strong>：<code>onSale</code>；隐藏项可选；价目产品不限购</td>
 </tr>
 <tr>
 <td>从建卡管价目</td>

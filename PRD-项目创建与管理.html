@@ -60,11 +60,11 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.8</td>
+<td>v1.9</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-05</td>
+<td>2026-08-06</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -204,7 +204,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>项目可被会员卡权益 <strong>按名称绑定</strong>（项目桶、产品桶内 <strong>名称唯一</strong>）；绑卡后 <strong>锁定名称、可预约、删除</strong>（优惠券/商城关联亦会锁定删除）；<strong>在售/下架仍可改</strong>。列表绑卡行以名称样式区分；删除锁定在左滑按钮与行操作 Sheet 以锁标呈现。<code>boundToCard</code> 随模板引用 <strong>自动派生并刷新</strong>。  </li>
 <li>B 端改价、上下架、时长、隐藏、封面等变更需 <strong>同步客户端展示</strong>（开单侧为 <strong>实时目录/价格</strong>；推送细节【待联调确认】）；顾客端具体 UI <strong>不在本文展开</strong>。价目产品 <strong>本期不维护库存字段</strong>（见 8.1）。  </li>
 <li>会员卡建卡时「选项目 / 选产品 / 选折扣适用项目」及标题栏「管理价目表」依赖本价目数据；从权益页进入价目再返回时 <strong>刷新权益选品分组 Tab</strong>（重置为「全部」并重绘）；会员卡三步流程见 <code>PRD-会员卡管理.md</code>，本文只写联结面。  </li>
-<li><strong>开单选品</strong> 与权益选品同口径：仅 <code>onSale &amp;&amp; !hidden</code>；价目产品 <strong>不限购</strong>（见 <strong>8.1</strong>）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
+<li><strong>开单选品</strong>：仅排除已下架（须 <code>onSale</code>）；<strong>隐藏项可选</strong>；建卡权益选品仍为 <code>onSale &amp;&amp; !hidden</code>。价目产品 <strong>不限购</strong>（见 <strong>8.1</strong>）。开单过程中若价目改价导致应付变化，支付链路拦截提示（见 6.8）。  </li>
 <li>原型工具栏「无数据 / 有数据」造数 <strong>仅演示</strong>，不进正式产品。接口路径标 <code>【待联调确认】</code>，正式接口文档 <strong>暂无交付时间</strong>；不臆造现网 URL。  </li>
 <li><strong>本期仅单店</strong>；价目管理权限：<strong>店主可编辑</strong>，<strong>店员不可编辑</strong>。</li>
 </ol>
@@ -250,7 +250,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>可见性清晰</td>
-<td>顾客端 / 开单 / 建卡选品范围分明（见模块 4.6；开单与权益同为在售且未隐藏）</td>
+<td>顾客端 / 开单 / 建卡选品范围分明（见模块 4.6；<strong>隐藏项开单可选</strong>，权益选品仍须未隐藏）</td>
 </tr>
 <tr>
 <td>与卡对齐</td>
@@ -271,7 +271,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>左滑快捷操作与长按操作 Sheet（删除锁定锁标）  </li>
 <li>项目绑卡锁定（部分字段）及提示文案  </li>
 <li>从会员卡权益页「管理价目表」进入并返回  </li>
-<li><strong>开单选品</strong> 联结（仅在售且未隐藏；价目产品不限购；价目改价支付拦截见 6.8）  </li>
+<li><strong>开单选品</strong> 联结（在售即可，<strong>含隐藏</strong>；价目产品不限购；价目改价支付拦截见 6.8）  </li>
 <li>B→C 同步生效的产品语义说明（无 C 端页面规格）</li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
@@ -320,7 +320,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>对 C 端隐藏但 B 端保留</td>
-<td><strong>隐藏</strong>（<code>hidden=true</code> / 系统「隐藏」组；「全部」底部「已隐藏」折叠；开单不可选）</td>
+<td><strong>隐藏</strong>（<code>hidden=true</code> / 系统「隐藏」组；「全部」底部「已隐藏」折叠；<strong>开单可选</strong>）</td>
 </tr>
 <tr>
 <td>被卡引用后的保护</td>
@@ -371,7 +371,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tr>
 <td>新建产品</td>
 <td>填名称/规格（选填）/价格后出现在产品列表</td>
-<td>列表「名称（规格）」+ 价格（无库存列）；在售未隐藏时可开单/权益选用</td>
+<td>列表「名称（规格）」+ 价格（无库存列）；在售时可开单（含隐藏）；权益选用须未隐藏</td>
 </tr>
 <tr>
 <td>改价</td>
@@ -386,7 +386,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tr>
 <td>隐藏</td>
 <td>对顾客端隐藏但 B 端保留</td>
-<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；开单不可选；<strong>项目隐藏时关闭「可预约」，取消隐藏后仍关，须手动再开</strong></td>
+<td><code>hidden=true</code>；「全部」主列表不显示、底部「已隐藏」折叠可展开；「隐藏」Tab 可见；<strong>开单可选</strong>（「全部」与「隐藏」Tab）；权益选品仍不可选；<strong>项目隐藏时关闭「可预约」，取消隐藏后仍关，须手动再开</strong></td>
 </tr>
 <tr>
 <td>产品库存</td>
@@ -410,8 +410,8 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>开单选品</td>
-<td>开单只选可售货</td>
-<td>仅 <code>onSale &amp;&amp; !hidden</code>；价目产品不限购（8.1）</td>
+<td>开单可选在售货（含对 C 端隐藏项）</td>
+<td><strong>仅排除已下架</strong>：<code>onSale</code>；隐藏项可选；价目产品不限购（8.1）</td>
 </tr>
 <tr>
 <td>从建卡管价目</td>
@@ -663,13 +663,14 @@ flowchart LR
 <tr>
 <td>隐藏（<code>hidden=true</code> / 系统「隐藏」组）</td>
 <td>不可见</td>
-<td><strong>不可选</strong></td>
+<td><strong>可选</strong>（须仍在售）</td>
 <td>不可选</td>
 </tr>
 </tbody>
 </table>
 <p><strong>顾客端可见</strong>（项目/产品）：<code>onSale &amp;&amp; !hidden</code>。<br />
-<strong>开单选品</strong>（项目/产品）：与权益同口径 <code>onSale &amp;&amp; !hidden</code>（价目产品 <strong>不限购</strong>，见 <strong>8.1</strong>）。<br />
+<strong>开单选品</strong>（项目/产品）：<code>onSale</code>（<strong>含 hidden</strong>；价目产品 <strong>不限购</strong>，见 <strong>8.1</strong>）；分组轨含「全部 / 自定义 / <strong>隐藏</strong>」。<br />
+<strong>建卡权益选品</strong>：<code>onSale &amp;&amp; !hidden</code>（与开单口径不同）。<br />
 <strong>顾客端可预约</strong>（仅项目）：<code>onSale &amp;&amp; !hidden &amp;&amp; bookable</code>。</p>
 <h2>4.7 列表排序相关状态</h2>
 <ul>
@@ -1089,7 +1090,7 @@ flowchart LR
 </tr>
 <tr>
 <td><strong>开单选品</strong></td>
-<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅</strong> <code>onSale &amp;&amp; !hidden</code>；价目产品 <strong>不限购</strong>（<code>catalogStockLimit</code> 恒返回 null，见 <strong>8.1</strong>）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
+<td>通过 <code>CardCatalogBridge.getBillProjects</code> / <code>getBillProducts</code> 读取价目实时目录，再过滤为 <strong>仅排除已下架</strong>（<code>onSale</code>；<strong>含 hidden</strong>）；分组轨含系统「隐藏」Tab；价目产品 <strong>不限购</strong>（<code>catalogStockLimit</code> 恒返回 null，见 <strong>8.1</strong>）；改价后开单侧可见最新价；缓存/推送实现【待联调确认】</td>
 </tr>
 <tr>
 <td><strong>开单支付·价目改价</strong></td>
@@ -1328,7 +1329,7 @@ flowchart LR
 </tr>
 <tr>
 <td>开单价目桥接</td>
-<td>实时目录供开单消费；开单侧再过滤 <code>onSale &amp;&amp; !hidden</code>；价目产品不限购</td>
+<td>实时目录供开单消费；开单侧过滤仅排除已下架（含 hidden）；价目产品不限购</td>
 </tr>
 <tr>
 <td>库存数量读写</td>
@@ -1359,7 +1360,7 @@ flowchart LR
   → 带 returnContext
   → 编辑保存
   → 返回权益页
-  → 重新拉取 onSale&amp;&amp;!hidden 列表与分组
+  → 重新拉取在售目录（开单含 hidden；顾客端 / 权益仍为 onSale&amp;&amp;!hidden）与分组
 </code></pre>
 <hr />
 <h1>模块 8　业务规则</h1>
@@ -1368,7 +1369,7 @@ flowchart LR
 </blockquote>
 <ol>
 <li><strong>权益选品范围</strong>：会员卡/折扣/产品权益选择器只展示 <code>onSale=true &amp;&amp; hidden=false</code>。  </li>
-<li><strong>开单选品范围</strong>：与权益同口径，仅 <code>onSale=true &amp;&amp; hidden=false</code>（下架/隐藏不可选）。  </li>
+<li><strong>开单选品范围</strong>：仅 <code>onSale=true</code>（<strong>含 hidden</strong>；已下架不可选；与权益口径不同）。  </li>
 <li><strong>顾客端可见</strong>：<code>onSale &amp;&amp; !hidden</code>；项目预约另需 <code>bookable</code>。  </li>
 <li><strong>产品库存</strong>：价目侧本期不维护；开单对价目产品不限购（见 <strong>8.1</strong>）。  </li>
 <li><strong>开单支付·价目改价</strong>：结账快照应付；打开/确认支付前重算；不一致则 Dialog「支付金额已变化」→「知道了」关支付层，留在开单详情（见 6.8）。  </li>
@@ -1415,7 +1416,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>开单选品范围仍为 <code>onSale &amp;&amp; !hidden</code>。支付金额因价目改价不一致时，仍走 Dialog「支付金额已变化」（FLOW：<code>bill-pay-price-changed</code>，归属开单分组）。</p>
+<p>开单选品范围仍为 <code>onSale</code>（含 hidden）。支付金额因价目改价不一致时，仍走 Dialog「支付金额已变化」（FLOW：<code>bill-pay-price-changed</code>，归属开单分组）。</p>
 <blockquote>
 <p>若后续产品再次在价目表恢复「选填库存」UI，须同步改本节与 §6.1 / §6.3 / §5.2 / §9.1 / 验收用例。</p>
 </blockquote>
@@ -1487,7 +1488,7 @@ flowchart LR
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改在售/下架并保存或左滑，<strong>Then</strong> 操作成功。  </li>
 <li><strong>Given</strong> 绑卡项目，<strong>When</strong> 改价格并保存，<strong>Then</strong> 保存成功。  </li>
 <li><strong>Given</strong> 已下架项目详情，<strong>When</strong> 查看预约开关，<strong>Then</strong> 关闭且不可开，直到重新在售。  </li>
-<li><strong>Given</strong> 在售且可预约的项目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」主列表不显示但底部「已隐藏」折叠可展开；「隐藏」Tab 显示；顾客端与开单均不可见；<strong><code>bookable=false</code></strong>。  </li>
+<li><strong>Given</strong> 在售且可预约的项目，<strong>When</strong> 左滑隐藏或加入系统「隐藏」组，<strong>Then</strong> 「全部」主列表不显示但底部「已隐藏」折叠可展开；「隐藏」Tab 显示；顾客端不可见；<strong>开单仍可选</strong>；权益选品不可见；<strong><code>bookable=false</code></strong>。  </li>
 <li><strong>Given</strong> 隐藏前可预约的项目，<strong>When</strong> 取消隐藏，<strong>Then</strong> 回到「全部」主列表可见（在售时顾客端可见）；<strong>「可预约」仍为关</strong>，须手动再开。  </li>
 <li><strong>Given</strong> 新建分组并编辑成员勾选多项，<strong>When</strong> 确定，<strong>Then</strong> 按组筛选只显示非 hidden 成员。  </li>
 <li><strong>Given</strong> 条目属于两组，<strong>When</strong> 删除其中一组，<strong>Then</strong> 条目仍在，另一组关系保留。  </li>
@@ -1496,7 +1497,8 @@ flowchart LR
 16b. <strong>Given</strong> 「全部」Tab 已展开「已隐藏」折叠，<strong>When</strong> 拖拽折叠内条目，<strong>Then</strong> toast「已隐藏的项目不支持拖拽排序」。  </li>
 <li><strong>Given</strong> 列排序激活，<strong>When</strong> 拖拽，<strong>Then</strong> toast「请先取消列排序后再手动排序」。  </li>
 <li><strong>Given</strong> 从添加项目权益进「管理价目表」并新增项目，<strong>When</strong> 返回，<strong>Then</strong> 回到权益页且可选到新在售未隐藏项目，<strong>分组 Tab 刷新为「全部」</strong>。  </li>
-<li><strong>Given</strong> 已下架或已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 列表中不出现该产品。  </li>
+<li><strong>Given</strong> 已下架产品，<strong>When</strong> 开单选品，<strong>Then</strong> 列表中不出现该产品。<br />
+19b. <strong>Given</strong> 在售且已隐藏产品，<strong>When</strong> 开单选品，<strong>Then</strong> 「全部」与「隐藏」Tab 均可见且可加购；权益选品仍不可见。  </li>
 <li><strong>Given</strong> 开单已选品并进入支付前，<strong>When</strong> 价目表改价导致应付与快照不一致，<strong>Then</strong> Dialog「支付金额已变化」；点「知道了」关闭支付层并留在开单详情。  </li>
 <li><strong>Given</strong> 开单已选价目产品且支付成功，<strong>When</strong> 支付完成，<strong>Then</strong> <strong>不</strong>因价目表 <code>stock</code> 扣减（库存管理另模块）。  </li>
 <li><strong>Given</strong> 时长选择器确认，<strong>When</strong> 总时长不足 5 分钟，<strong>Then</strong> toast「时长至少5分钟」。  </li>

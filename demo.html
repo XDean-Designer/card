@@ -42954,7 +42954,14 @@ window.__BILLING_EMBEDDED__ = true;
     const groups = (typeof getCustomCatalogGroups === 'function')
       ? getCustomCatalogGroups(bucket)
       : [];
-    const tabs = [{ id: 'all', name: '全部' }, ...groups.map(g => ({ id: g.id, name: g.name }))];
+    const sysHidden = (typeof getSystemHiddenGroup === 'function')
+      ? getSystemHiddenGroup(bucket)
+      : null;
+    const tabs = [
+      { id: 'all', name: '全部' },
+      ...groups.map(g => ({ id: g.id, name: g.name })),
+      ...(sysHidden ? [{ id: sysHidden.id, name: sysHidden.name || '隐藏' }] : []),
+    ];
     if (!tabs.some(t => t.id === getActiveBillGroupId())) setActiveBillGroupId('all');
     const cur = getActiveBillGroupId();
     el.innerHTML = tabs.map(t => (
@@ -42976,15 +42983,21 @@ window.__BILLING_EMBEDDED__ = true;
       ? (typeof getCatalogProducts === 'function' ? getCatalogProducts() : [])
       : (typeof getCatalogProjects === 'function' ? getCatalogProjects() : []);
     const byId = new Map(catalog.map(p => [p.id, p]));
+    /* 开单：隐藏项可选（仅对顾客端隐藏）；已下架不可选 */
     let items = list.filter(it => {
       const raw = byId.get(it.id);
       if (!raw) return true;
-      if (raw.hidden) return false;
       if (raw.onSale === false) return false;
       return true;
     });
     if (!gid || gid === 'all') return items;
     const g = (typeof findCatalogGroupById === 'function') ? findCatalogGroupById(gid, bucket) : null;
+    if (g?.system) {
+      return items.filter(it => {
+        const raw = byId.get(it.id);
+        return !!raw?.hidden;
+      });
+    }
     const ids = new Set(g?.itemIds || []);
     return items.filter(it => ids.has(it.id));
   }
