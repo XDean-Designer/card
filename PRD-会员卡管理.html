@@ -14,8 +14,8 @@ body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(-
 .topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
 .topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
 .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
-.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none}}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow-x:clip}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none;overflow-x:auto}}
 .article>h1:first-child{margin-top:0}
 h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
 h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
@@ -28,14 +28,13 @@ blockquote p{margin:0}
 code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
 pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
 pre code{background:none;padding:0;color:inherit}
-table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{width:100%;max-width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
 th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
 th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
 tr:nth-child(even) td{background:#fafbfc}
+.article img{max-width:100%;height:auto;display:block}
+table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;border:1px solid var(--border);background:#f5f6f7}
 .foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
-.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
-.article td img{max-width:160px;margin:6px 0}
-.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
 .mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
 .mermaid svg{max-width:100%;height:auto}
 </style>
@@ -61,11 +60,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.8</td>
+<td>v1.9</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-05</td>
+<td>2026-08-06</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -265,7 +264,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
-<li>办卡：单选既存会员 → 去结账支付 → 办卡成功  </li>
+<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单结账支付 → 办卡成功  </li>
 <li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
 <li>上下架及文案提示  </li>
 </ul>
@@ -406,33 +405,39 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>3.0 页面流（示意）</h2>
 <p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（见模块 6）。</p>
 <h3>建卡主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|添加会员卡| S1[Step1 基本信息]
-  S1 --&gt;|下一步| S2[Step2 权益组合]
-  S2 --&gt;|添加项目权益| P[项目权益页]
-  P --&gt;|确定| S2
-  S2 --&gt;|添加产品权益| G[产品权益页]
-  G --&gt;|确定| S2
-  S2 --&gt;|添加折扣权益| D[折扣权益页]
-  D --&gt;|确定| S2
-  S2 --&gt;|下一步| S3[Step3 用卡策略]
-  S3 --&gt;|保存| OK[创建成功]
-  OK --&gt;|返回列表| L
-  OK -.-&gt;|立即办卡| M[[选择会员 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|添加会员卡| S1[Step1 基本信息]
+  S1 -->|下一步| S2[Step2 权益组合]
+  S2 -->|添加项目权益| P[项目权益页]
+  P -->|确定| S2
+  S2 -->|添加产品权益| G[产品权益页]
+  G -->|确定| S2
+  S2 -->|添加折扣权益| D[折扣权益页]
+  D -->|确定| S2
+  S2 -->|下一步| S3[Step3 用卡策略]
+  S3 -->|保存| OK[创建成功]
+  OK -->|返回列表| L
+  OK -.->|立即办卡| M[[选择会员 Sheet]]
+
+</div>
 <h3>运营主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
-  L --&gt;|齿轮| G[分组管理]
-  G --&gt;|点分组行| GM[编辑成员]
-  L --&gt;|快速分组| GS[[设置分组 Sheet]]
-  DET --&gt;|编辑·无持卡| S1[Step1…三步]
-  DET --&gt;|复制建卡| S1
-  DET --&gt;|下架| OFF[[下架确认]]
-  OFF --&gt;|确认| L
-  DET --&gt;|重新上架·已下架| ON[[上架确认]]
-  ON --&gt;|确认| L
-  L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
-  DET --&gt;|已持卡管理| M</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|点卡面| DET[会员卡详情]
+  L -->|齿轮| G[分组管理]
+  G -->|点分组行| GM[编辑成员]
+  L -->|快速分组| GS[[设置分组 Sheet]]
+  DET -->|编辑·无持卡| S1[Step1…三步]
+  DET -->|复制建卡| S1
+  DET -->|下架| OFF[[下架确认]]
+  OFF -->|确认| L
+  DET -->|重新上架·已下架| ON[[上架确认]]
+  ON -->|确认| L
+  L -->|办卡/退卡| M[[选择会员 Sheet]]
+  DET -->|已持卡管理| M
+
+</div>
 <p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架 + 分组筛选轨）
@@ -570,7 +575,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tbody>
 </table>
 <h3>3.1 主链路关键页 · 视觉索引（预览可见）</h3>
-<p>截图来自当前原型（<code>assets/prd-shots/</code>）。浏览器打开 <strong><code>PRD-会员卡管理.html</code></strong> 可直接看到画面；「打开原型」会跳到对应屏（可交互）。浮层节点亦有独立截图（底图多为详情在售 + Sheet/Dialog）。</p>
+<p>截图来自当前原型（<code>assets/prd-shots/</code>，与 <code>demo.html</code> 同步重采）。浏览器打开 <strong><code>PRD-会员卡管理.html</code></strong> 可直接看到画面；「打开原型」会跳到对应屏（可交互）。浮层节点亦有独立截图（底图多为详情在售 + Sheet/Dialog）。UI 变更后须重跑 <code>scripts/capture_prd_shots.py</code>。</p>
 <table>
 <thead>
 <tr>
@@ -1340,7 +1345,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>已下架顶栏：已下架标记、复制建卡  </li>
 <li><strong>仅已下架有底栏</strong>：重新上架 | 已持卡管理  </li>
 <li>运营数据 + <code>?</code> 说明（定义见模块 9）  </li>
-<li>卡面信息：面值金额 / 赠送（不含可否购产品）；项目 / 产品 / 折扣摘要；有期限权益时展示 <strong>「项目/折扣有效期」</strong>（含产品开启场景）；用卡策略展示为 <code>均值退卡 · 均值计绩</code> 等形式，退卡/业绩各带 <code>?</code>  </li>
+<li>卡面信息：面值金额 / 赠送（不含可否购产品）；项目 / 产品 / 折扣摘要；有期限权益时展示 <strong>「项目/产品/折扣有效期」</strong>；用卡策略展示为 <code>均值退卡 · 均值计绩</code> 等形式，退卡/业绩各带 <code>?</code>  </li>
 <li>列表折叠网格规则见 6.1；详情为键值列表（不套用「展开 N 项」）</li>
 </ul>
 <h2>6.10 选择会员 Sheet</h2>
@@ -1451,7 +1456,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 <tr>
 <td><code>audience</code></td>
-<td>默认 ['all']</td>
+<td>默认 <code>['all']</code>；<strong>无 UI</strong>（兼容字段，不暴露适用对象）</td>
 </tr>
 <tr>
 <td><code>source</code> / <code>duplicatedFrom</code> / <code>createdAt</code></td>
@@ -1549,7 +1554,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </table>
 <h2>7.5 时序（示意）</h2>
 <pre><code>创建：Steps → SaveTemplate → CreateSuccess → optional IssuePicker
-办卡：IssuePicker(单选) → 确认办卡(员工) → 去结账 → PaySuccess → FinalizeIssue → IssueSuccess
+办卡：IssuePicker(单选) → 去结账 → 确认办卡(员工) → PaySuccess → FinalizeIssue → IssueSuccess
 延期·免费/永久：IssuePicker → ConfirmExtend → 写有效期
 延期·收费：IssuePicker → PayMask → PaySuccess → FinalizeExtend
 退卡：Holders → RefundQuote → ConfirmRefund → RefundSuccess → 返回列表
@@ -1561,7 +1566,6 @@ tr:nth-child(even) td{background:#fafbfc}
 <li>[ ] 收费延期订单与支付回调（与办卡同支付页；费用 &gt; 0 才生成收款）  </li>
 <li>[ ] 实退退款通道与幂等  </li>
 <li>[ ] 管理价目表路由与权限  </li>
-<li>[ ] audience 是否暴露 UI  </li>
 </ul>
 <hr />
 <h1>模块 8　业务规则与算例</h1>
@@ -1870,7 +1874,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <td>8</td>
 <td>办卡</td>
 <td>在售卡</td>
-<td>单选→去结账→支付成功</td>
+<td>单选→去结账→确认办卡→支付成功</td>
 <td>办卡成功；统计增加</td>
 </tr>
 <tr>
@@ -1997,7 +2001,89 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>10.2 回归</h2>
 <p>编辑无持卡后详情一致；下架再上架可办；退卡取消不变持卡；折扣原价默认未配置不可保存空规则。</p>
 <h2>10.3 造数</h2>
-<p>原型「有数据」注入演示卡 + 价目项目（含产品 Tab）。正式环境自备等价数据；演示开关不进产品。</p>
+<p>原型「有数据」注入演示卡 + 价目项目/产品（含分组）。正式环境自备等价数据；演示开关不进产品。</p>
+<p>演示卡与价目分组对齐（权益项目名 = 价目在售可见项；不含隐藏项）：</p>
+<table>
+<thead>
+<tr>
+<th>演示卡（模板 id）</th>
+<th>价目对齐</th>
+<th>权益形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>尊享组合卡 <code>demo_vip_combo</code></td>
+<td>洗吹 / 剪发造型 / 护理取样 + 烫染全组折 + 可见产品</td>
+<td>面值 + 计次 + 产品 + 折扣</td>
+</tr>
+<tr>
+<td>新客首开卡 <code>demo_new_first</code></td>
+<td>—</td>
+<td>纯面值</td>
+</tr>
+<tr>
+<td>老客续充卡 <code>demo_old_renew</code></td>
+<td>洗吹分组折扣</td>
+<td>面值 + 折扣</td>
+</tr>
+<tr>
+<td>烫染会员价卡 <code>demo_perm_color_discount</code></td>
+<td>烫染分组全部在售项</td>
+<td>均值 · 纯折扣</td>
+</tr>
+<tr>
+<td>减值烫染卡 <code>demo_retail_perm_color</code></td>
+<td>同上</td>
+<td>减值 · 纯折扣（对照）</td>
+</tr>
+<tr>
+<td>洗吹12次卡 <code>demo_year_wash</code></td>
+<td>洗吹</td>
+<td>计次（含赠送洗剪吹）</td>
+</tr>
+<tr>
+<td>洗吹不限次卡 <code>demo_unlimited_wash</code></td>
+<td>洗吹三项</td>
+<td>不限次</td>
+</tr>
+<tr>
+<td>剪发造型共计10次卡 <code>demo_shared_cut_pool</code></td>
+<td>剪发造型可见项</td>
+<td>共计次数池</td>
+</tr>
+<tr>
+<td>护理体验包 <code>demo_care_pack</code></td>
+<td>护理可见项</td>
+<td>计次</td>
+</tr>
+<tr>
+<td>居家洗护包 <code>demo_home_care_pack</code></td>
+<td>洗护 + 头皮护理产品</td>
+<td>纯产品</td>
+</tr>
+<tr>
+<td>永久储值卡 <code>demo_lifetime_balance</code></td>
+<td>—</td>
+<td>永久 · 纯面值</td>
+</tr>
+<tr>
+<td>儿童10次剪发 <code>demo_kids_times</code></td>
+<td>儿童剪发</td>
+<td>已下架 · 计次</td>
+</tr>
+<tr>
+<td>减值策略演示卡 <code>demo_retail_policy</code></td>
+<td>儿童剪发</td>
+<td>减值 · 计次（对照儿童卡）</td>
+</tr>
+<tr>
+<td>可编辑演示卡 <code>demo_editable_demo</code></td>
+<td>—</td>
+<td>无持卡 · 可编辑沙箱</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h1>模块 11　非功能（极简）</h1>
 <table>

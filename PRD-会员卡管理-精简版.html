@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRD-会员卡管理-精简版（预览）</title>
+<title>PRD-会员卡管理 · 精简版（预览）</title>
 <style>
 :root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -14,8 +14,8 @@ body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(-
 .topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
 .topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
 .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
-.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
-@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none}}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow-x:clip}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none;overflow-x:auto}}
 .article>h1:first-child{margin-top:0}
 h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
 h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
@@ -28,21 +28,20 @@ blockquote p{margin:0}
 code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
 pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
 pre code{background:none;padding:0;color:inherit}
-table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{width:100%;max-width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
 th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
 th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
 tr:nth-child(even) td{background:#fafbfc}
+.article img{max-width:100%;height:auto;display:block}
+table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;border:1px solid var(--border);background:#f5f6f7}
 .foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
-.article img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:block;margin:8px 0 14px;background:#fff}
-.article td img{max-width:160px;margin:6px 0}
-.article p>a[href*="?flow="],.article td>a[href*="?flow="]{font-weight:500}
 .mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
 .mermaid svg{max-width:100%;height:auto}
 </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="topbar__title">PRD-会员卡管理-精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
+    <div class="topbar__title">PRD-会员卡管理 · 精简版<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
     <div class="topbar__actions">
       <a class="ghost" href="demo.html">打开交互原型</a>
       <a class="ghost" href="PRD-会员卡管理-精简版.md" download>下载 Markdown</a>
@@ -61,11 +60,11 @@ tr:nth-child(even) td{background:#fafbfc}
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.8-lite</td>
+<td>v1.9-lite</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-05</td>
+<td>2026-08-06</td>
 </tr>
 <tr>
 <td>文档类型</td>
@@ -137,7 +136,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
 <li><strong>会员卡分组</strong>：列表筛选、分组管理、编辑成员、快速分组；一卡可多组。  </li>
-<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
+<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（卡已锁定；选服务员工）→ 开单结账完成支付 → 办卡成功（来自结账时底栏可为「返回开单」）。  </li>
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
 <li>接口路径/字段名以联调为准；本文给 <strong>能力与规则</strong>，标 <code>【待联调确认】</code> 处不臆造现网 URL。</li>
@@ -197,7 +196,7 @@ tr:nth-child(even) td{background:#fafbfc}
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
-<li>办卡：单选既存会员 → 去结账支付 → 办卡成功  </li>
+<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（选服务员工）→ 开单结账支付 → 办卡成功  </li>
 <li>已持卡：延期、整卡退卡（估值 + 实退可改）  </li>
 <li>上下架及文案提示  </li>
 </ul>
@@ -338,33 +337,39 @@ tr:nth-child(even) td{background:#fafbfc}
 <h2>3.0 页面流（示意）</h2>
 <p>方块 = 页面；实线箭头 = 主跳转；虚线 = Sheet / 侧页。办卡收款依赖「开单结账」外模块，不在本图展开（细则见完整稿）。</p>
 <h3>建卡主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|添加会员卡| S1[Step1 基本信息]
-  S1 --&gt;|下一步| S2[Step2 权益组合]
-  S2 --&gt;|添加项目权益| P[项目权益页]
-  P --&gt;|确定| S2
-  S2 --&gt;|添加产品权益| G[产品权益页]
-  G --&gt;|确定| S2
-  S2 --&gt;|添加折扣权益| D[折扣权益页]
-  D --&gt;|确定| S2
-  S2 --&gt;|下一步| S3[Step3 用卡策略]
-  S3 --&gt;|保存| OK[创建成功]
-  OK --&gt;|返回列表| L
-  OK -.-&gt;|立即办卡| M[[选择会员 Sheet]]</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|添加会员卡| S1[Step1 基本信息]
+  S1 -->|下一步| S2[Step2 权益组合]
+  S2 -->|添加项目权益| P[项目权益页]
+  P -->|确定| S2
+  S2 -->|添加产品权益| G[产品权益页]
+  G -->|确定| S2
+  S2 -->|添加折扣权益| D[折扣权益页]
+  D -->|确定| S2
+  S2 -->|下一步| S3[Step3 用卡策略]
+  S3 -->|保存| OK[创建成功]
+  OK -->|返回列表| L
+  OK -.->|立即办卡| M[[选择会员 Sheet]]
+
+</div>
 <h3>运营主链</h3>
-<div class="mermaid">flowchart LR
-  L[会员卡列表] --&gt;|点卡面| DET[会员卡详情]
-  L --&gt;|齿轮| G[分组管理]
-  G --&gt;|点分组行| GM[编辑成员]
-  L --&gt;|快速分组| GS[[设置分组 Sheet]]
-  DET --&gt;|编辑·无持卡| S1[Step1…三步]
-  DET --&gt;|复制建卡| S1
-  DET --&gt;|下架| OFF[[下架确认]]
-  OFF --&gt;|确认| L
-  DET --&gt;|重新上架·已下架| ON[[上架确认]]
-  ON --&gt;|确认| L
-  L --&gt;|办卡/退卡| M[[选择会员 Sheet]]
-  DET --&gt;|已持卡管理| M</div>
+<div class="mermaid">
+flowchart LR
+  L[会员卡列表] -->|点卡面| DET[会员卡详情]
+  L -->|齿轮| G[分组管理]
+  G -->|点分组行| GM[编辑成员]
+  L -->|快速分组| GS[[设置分组 Sheet]]
+  DET -->|编辑·无持卡| S1[Step1…三步]
+  DET -->|复制建卡| S1
+  DET -->|下架| OFF[[下架确认]]
+  OFF -->|确认| L
+  DET -->|重新上架·已下架| ON[[上架确认]]
+  ON -->|确认| L
+  L -->|办卡/退卡| M[[选择会员 Sheet]]
+  DET -->|已持卡管理| M
+
+</div>
 <p>说明：选择会员后「去结账」进入 <strong>确认办卡</strong> 页（不复用开单「添加卡」）；确认后开单结账。退卡走「退卡估值」Sheet。编辑锁定、Tab 在售/已下架、分组筛选见完整稿模块 4。</p>
 <pre><code>会员卡管理
  ├─ 列表（在售 / 已下架 + 分组筛选轨）
@@ -526,7 +531,7 @@ tr:nth-child(even) td{background:#fafbfc}
 </tr>
 </tbody>
 </table>
-<p class="foot-note">给 AI / 研发请使用同目录 <code>PRD-会员卡管理-精简版.md</code>；本页仅作阅读预览。交互以 <code>demo.html</code> 为准。</p>
+<p class="foot-note">精简版仅含模块 1–3；完整规格见 <code>PRD-会员卡管理.md</code>。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
 
 <script src="assets/vendor/mermaid.min.js"></script>

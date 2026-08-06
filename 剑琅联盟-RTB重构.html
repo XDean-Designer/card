@@ -4246,7 +4246,8 @@ html.prd-capture #catalogGroupTabs .catalog-group-scroll__capture-track {
 }
 #screen0 .catalog-group-bar {
   margin: 0; padding: 8px 16px 10px; width: 100%; box-sizing: border-box;
-  flex-shrink: 0; position: sticky; top: 0; z-index: 2;
+  flex-shrink: 0; position: sticky; top: 0; z-index: 20;
+  background: #fff;
 }
 #screen0 .card-list-shell .list-page,
 #screen0 .card-list-shell .card-list {
@@ -8723,6 +8724,15 @@ button.exp-flow-row:active { opacity: .92; }
   cursor: pointer; font-family: inherit; padding: 0;
 }
 .hold-list { padding: 12px 16px 24px; display: flex; flex-direction: column; gap: 10px; }
+#screen-holds {
+  display: flex; flex-direction: column;
+}
+#screen-holds.hidden { display: none; }
+#screen-holds:not(.hidden) { display: flex; }
+#screen-holds #holdList {
+  flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+#holdExpireTip { flex-shrink: 0; }
 .hold-card {
   width: 100%; text-align: left; border: 1px solid var(--border-light); border-radius: 12px;
   background: #fff; padding: 14px 12px 14px 16px; cursor: pointer; font-family: inherit; color: inherit;
@@ -9083,7 +9093,9 @@ button.exp-flow-row:active { opacity: .92; }
   display: flex; align-items: center; gap: 8px;
   padding: 10px 16px 8px; background: #fff; flex-shrink: 0;
   position: relative; border-bottom: none;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
 }
+.biz-hub-period::-webkit-scrollbar { display: none; }
 .biz-hub-period::after {
   content: ''; position: absolute; left: var(--biz-content-inset); right: var(--biz-content-inset); bottom: 0;
   height: 1px; background: var(--biz-hair); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
@@ -9094,6 +9106,7 @@ button.exp-flow-row:active { opacity: .92; }
   border: none; background: transparent; color: var(--text-sec);
   font-family: inherit; font-size: 13px; line-height: 18px; font-weight: 500;
   padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  flex: 0 0 auto; white-space: nowrap;
 }
 .biz-hub-period__btn.is-active { background: #333; color: #fff; }
 .biz-hub-body { overflow-y: auto; -webkit-overflow-scrolling: touch; height: auto; }
@@ -9330,15 +9343,33 @@ button.exp-flow-row:active { opacity: .92; }
 button.biz-bar-chart__col {
   border: none; background: none; margin: 0; font: inherit; color: inherit;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
+  height: 100%; align-self: stretch;
 }
 .biz-bar-chart.is-dense .biz-bar-chart__plot { height: 156px; }
 .biz-bar-chart.is-dense .biz-bar-chart__val {
-  font-size: 0; line-height: 0; height: 0; margin: 0; overflow: hidden; opacity: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 12px;
+  line-height: 12px;
+  font-size: 0;
+  margin: 0 0 2px;
+  overflow: hidden;
+  opacity: 0;
+  color: #F32F41;
 }
 .biz-bar-chart.is-dense .biz-bar-chart__col.is-active .biz-bar-chart__val {
-  font-size: 9px; line-height: 12px; height: auto; margin-bottom: 2px; opacity: 1; color: #F32F41;
+  font-size: 9px;
+  opacity: 1;
 }
-.biz-bar-chart.is-dense .biz-bar-chart__lab { font-size: 9px; line-height: 12px; margin-top: 4px; }
+.biz-bar-chart.is-dense .biz-bar-chart__lab {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-size: 9px;
+  line-height: 12px;
+  min-height: 12px;
+  height: 12px;
+  margin-top: 4px;
+}
 .biz-bar-chart.is-dense .biz-bar-chart__bar { width: 72%; max-width: 10px; border-radius: 3px 3px 0 0; }
 .biz-bar-chart__bar.is-tone-mall { background: #A3B1C4; }
 .biz-bar-chart__bar.is-tone-mall.is-active { background: #F32F41; }
@@ -15453,6 +15484,10 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </button>
               <div class="title">挂单列表</div>
             </div>
+            <div class="alert-banner alert-banner--info" id="holdExpireTip" role="note">
+              <svg class="alert-banner__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M7.5 14.5C9.433 14.5 11.183 13.7165 12.45 12.4497C13.7165 11.183 14.5 9.433 14.5 7.5C14.5 5.567 13.7165 3.817 12.45 2.5503C11.183 1.2835 9.433 0.5 7.5 0.5C5.567 0.5 3.817 1.2835 2.5503 2.5503C1.2835 3.817 0.5 5.567 0.5 7.5C0.5 9.433 1.2835 11.183 2.5503 12.4497C3.817 13.7165 5.567 14.5 7.5 14.5Z" stroke="currentColor" stroke-linejoin="round"/><path d="M7.5 10.55a0.625 0.625 0 1 1 0 1.25 0.625 0.625 0 0 1 0-1.25Z" fill="currentColor" stroke="currentColor" stroke-width="0.5"/><path d="M7.5 3.3v5.6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="alert-banner__text">挂单保存 3 天，超时将自动清除；请尽快取单结账。</div>
+            </div>
             <div class="page-body" id="holdList" style="background:var(--bg-page)"></div>
           </div>
 
@@ -15719,6 +15754,19 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="picker-foot picker-foot--row" id="bizMallDateFoot">
                 <button type="button" class="btn-main secondary" id="btnBizMallDateCancel">取消</button>
                 <button type="button" class="btn-main" id="btnBizMallDateOk">确定</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="bizSelfRangeMask">
+            <div class="picker-sheet flow-balance-date-sheet">
+              <div class="picker-head"><span class="picker-head__title-main">选择时间范围</span></div>
+              <div class="flow-balance-cal-range" id="bizSelfRangeCalRange"></div>
+              <div class="flow-balance-cal" id="bizSelfRangeCal"></div>
+              <div class="flow-balance-cal__hint" id="bizSelfRangeCalHint">请选择开始日期</div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="bizSelfRangeCancel">取消</button>
+                <button type="button" class="btn-main" id="bizSelfRangeOk">确定</button>
               </div>
             </div>
           </div>
@@ -18133,6 +18181,7 @@ const DEMO_TEMPLATE_HOLDERS = {
   demo_retail_policy: ['m3', 'm4', 'm13', 'm14', 'm18'],
   demo_lifetime_balance: ['m2', 'm8', 'm11', 'm16', 'm19'],
   demo_home_care_pack: ['m1', 'm3', 'm7', 'm10', 'm20'],
+  demo_care_pack: ['m5', 'm7', 'm10', 'm17', 'm19'],
   demo_unlimited_wash: ['m2', 'm5', 'm8', 'm12', 'm15'],
   demo_shared_cut_pool: ['m4', 'm6', 'm9', 'm14', 'm18'],
 };
@@ -18148,6 +18197,7 @@ const DEMO_TEMPLATE_HOLDERS_INVALID = {
   demo_retail_policy: ['m19', 'm20'],
   demo_lifetime_balance: ['m13', 'm15'],
   demo_home_care_pack: ['m4', 'm6'],
+  demo_care_pack: ['m2', 'm4'],
   demo_unlimited_wash: ['m9', 'm18'],
   demo_shared_cut_pool: ['m1', 'm3'],
 };
@@ -18166,11 +18216,11 @@ const DEMO_HOLDER_LEDGER = {
     balance: { rechargeRemaining: 1100, giftRemaining: 500, rechargeUsed: 900, giftUsed: 0 },
     projects: {
       '洗剪吹': { purchaseRemaining: 7, giftRemaining: 0, purchaseUsed: 3, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+      '头皮护理': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
     },
     products: {
       '剑琅修护洗发水': { qtyRemaining: 1, qtyUsed: 1 },
-      '剑琅造型发蜡': { qtyRemaining: 1, qtyUsed: 0 },
+      '剑琅哑光发泥': { qtyRemaining: 1, qtyUsed: 0 },
       '剑琅护发精油': { qtyRemaining: 1, qtyUsed: 0 },
     },
     discountUses: { '烫发': 2, '染发': 1 },
@@ -18179,15 +18229,15 @@ const DEMO_HOLDER_LEDGER = {
     balance: { rechargeRemaining: 200, giftRemaining: 100, rechargeUsed: 1800, giftUsed: 400 },
     projects: {
       '洗剪吹': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 8, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 2, giftUsed: 0 },
+      '头皮护理': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
       '时尚造型': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
     },
     products: {
       '剑琅修护洗发水': { qtyRemaining: 0, qtyUsed: 2 },
-      '剑琅造型发蜡': { qtyRemaining: 0, qtyUsed: 1 },
+      '剑琅哑光发泥': { qtyRemaining: 0, qtyUsed: 1 },
       '剑琅护发精油': { qtyRemaining: 0, qtyUsed: 1 },
     },
-    discountUses: { '烫发': 5, '染发': 3 },
+    discountUses: { '烫发': 5, '染发': 3, '挑染': 1 },
   },
   'demo_vip_combo:m14': {
     balance: { rechargeRemaining: 2000, giftRemaining: 0, rechargeUsed: 0, giftUsed: 500 },
@@ -18319,26 +18369,26 @@ const DEMO_HOLDER_LEDGER = {
   },
   // m14 零消费对照
 
-  // —— 全年洗吹卡 · 项目（含赠送） ——
+  // —— 洗吹12次卡 · 项目（含赠送洗剪吹） ——
   'demo_year_wash:m1': {
     projects: { '时尚洗吹': { purchaseRemaining: 11, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 } },
   },
   'demo_year_wash:m5': {
     projects: {
       '时尚洗吹': { purchaseRemaining: 8, giftRemaining: 0, purchaseUsed: 4, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 0, giftRemaining: 1, purchaseUsed: 1, giftUsed: 0 },
+      '洗剪吹': { purchaseRemaining: 0, giftRemaining: 1, purchaseUsed: 0, giftUsed: 1 },
     },
   },
   'demo_year_wash:m10': {
     projects: {
       '时尚洗吹': { purchaseRemaining: 3, giftRemaining: 0, purchaseUsed: 9, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 1, giftUsed: 1 },
+      '洗剪吹': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 2 },
     },
   },
   'demo_year_wash:m15': {
     projects: {
       '时尚洗吹': { purchaseRemaining: 6, giftRemaining: 0, purchaseUsed: 6, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 0, giftRemaining: 1, purchaseUsed: 1, giftUsed: 0 },
+      '洗剪吹': { purchaseRemaining: 0, giftRemaining: 1, purchaseUsed: 0, giftUsed: 1 },
     },
   },
   'demo_year_wash:m6': {
@@ -18347,10 +18397,37 @@ const DEMO_HOLDER_LEDGER = {
   'demo_year_wash:m7': {
     projects: {
       '时尚洗吹': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 10, giftUsed: 0 },
-      '头皮护理': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 1, giftUsed: 1 },
+      '洗剪吹': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 2 },
     },
   },
   // m20 零消费对照
+
+  // —— 护理体验包 · 护理分组计次 ——
+  'demo_care_pack:m5': {
+    projects: {
+      '深层滋养': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+      '头皮护理': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
+    },
+  },
+  'demo_care_pack:m7': {
+    projects: {
+      '深层滋养': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 2, giftUsed: 0 },
+      '头皮护理': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+      '蛋白矫正': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+    },
+  },
+  'demo_care_pack:m10': {
+    projects: {
+      '深层滋养': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 3, giftUsed: 0 },
+      '头皮护理': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 2, giftUsed: 0 },
+    },
+  },
+  'demo_care_pack:m2': {
+    projects: {
+      '深层滋养': { purchaseRemaining: 2, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+    },
+  },
+  // m17 / m19 零消费对照；m4 失效样本可缺省
 
   // —— 原价策略演示 · 纯项目 retail ——
   'demo_retail_policy:m3': {
@@ -18394,7 +18471,7 @@ const DEMO_HOLDER_LEDGER = {
   },
   // m19 零消费对照
 
-  // —— 居家护理包 · 纯产品 ——
+  // —— 居家洗护包 · 纯产品 ——
   'demo_home_care_pack:m1': {
     products: {
       '剑琅修护洗发水': { qtyRemaining: 0, qtyUsed: 1 },
@@ -18433,29 +18510,33 @@ const DEMO_HOLDER_LEDGER = {
   'demo_unlimited_wash:m5': {},
   'demo_unlimited_wash:m9': {},
 
-  // —— 剪发共计10次 · 共享次数池 ——
+  // —— 剪发造型共计10次 · 共享次数池 ——
   'demo_shared_cut_pool:m4': {
     projects: {
       '精致剪发': { purchaseRemaining: 6, giftRemaining: 0, purchaseUsed: 4, giftUsed: 0 },
       '儿童剪发': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
+      '时尚造型': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
     },
   },
   'demo_shared_cut_pool:m6': {
     projects: {
       '精致剪发': { purchaseRemaining: 3, giftRemaining: 0, purchaseUsed: 2, giftUsed: 0 },
       '儿童剪发': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 5, giftUsed: 0 },
+      '时尚造型': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
     },
   },
   'demo_shared_cut_pool:m9': {
     projects: {
-      '精致剪发': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 8, giftUsed: 0 },
+      '精致剪发': { purchaseRemaining: 1, giftRemaining: 0, purchaseUsed: 7, giftUsed: 0 },
       '儿童剪发': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
+      '时尚造型': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 1, giftUsed: 0 },
     },
   },
   'demo_shared_cut_pool:m1': {
     projects: {
       '精致剪发': { purchaseRemaining: 4, giftRemaining: 0, purchaseUsed: 6, giftUsed: 0 },
       '儿童剪发': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
+      '时尚造型': { purchaseRemaining: 0, giftRemaining: 0, purchaseUsed: 0, giftUsed: 0 },
     },
   },
   // m14 / m18 零消费对照
@@ -18623,16 +18704,34 @@ const STATS_HELP_ITEMS = [
   { term: '办卡人数', def: '办过该卡模板的顾客总人数，含补录老卡人数。' },
   { term: '持卡余额', def: '当前所有有效持卡账户余额合计，含赠送余额；仅配置面值权益时展示。' },
   { term: '当前有效', def: '当前仍有效的持卡数量（未退卡且卡级未过期），不含已失效、已退卡。' },
-  { term: '卡有效期', def: '模板级有效期，仅约束项目与折扣权益；面值永久有效，不受卡级到期影响。' },
+  { term: '卡有效期', def: '模板级有效期，约束项目 / 产品 / 折扣权益；面值永久有效，不受卡级到期影响。' },
   { term: '消费次数（含赠送）', def: '按项目统计，该项目已被消费的次数，含赠送次数。' },
   { term: '剩余次数（含赠送）', def: '按项目统计，该项目当前仍可使用的次数，含赠送次数；不限次项目显示「不限次」。' },
 ];
+
+/** 价目「烫染」分组在售项 · 会员价（不含隐藏项） */
+const DEMO_TANG_GROUP_MEMBER_PRICES = {
+  '烫发': { tickIndex: 17 },
+  '染发': { mode: 'fixed', amount: '299' },
+  '漂发': { mode: 'fixed', amount: '238' },
+  '摩根烫': { tickIndex: 16 },
+  '电棒烫': { mode: 'fixed', amount: '368' },
+  '挑染': { tickIndex: 16 },
+  '暖色漂褪': { tickIndex: 16 },
+};
+
+/** 价目「洗吹」分组 · 会员价 */
+const DEMO_WASH_GROUP_MEMBER_PRICES = {
+  '时尚洗吹': { tickIndex: 16 },
+  '洗剪吹': { tickIndex: 16 },
+  '洗头': { tickIndex: 17 },
+};
 
 const QUICK_TEMPLATES = [
   {
     id: 'vip_combo',
     title: '尊享组合',
-    desc: '均值·面值+项目+折扣 · 退卡看 m12/m13',
+    desc: '均值·面值+洗吹/剪发/护理次+烫染折+产品',
     icon: '',
     preset: {
       name: '尊享组合卡',
@@ -18642,36 +18741,21 @@ const QUICK_TEMPLATES = [
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: true, timesOrValidity: true, products: true, projectDiscount: true, balanceCanBuyProducts: false },
       projectItems: [
-        { id: 'demo_vip_wash', name: '洗剪吹', purchaseQty: 10, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_scalp', name: '头皮护理', purchaseQty: 3, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_style', name: '时尚造型', purchaseQty: 2, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_fine_cut', name: '精致剪发', purchaseQty: 5, giftQty: 1, unlimited: false },
         { id: 'demo_vip_wash_blow', name: '时尚洗吹', purchaseQty: 8, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_deep_nourish', name: '深层滋养', purchaseQty: 4, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_morgan', name: '摩根烫', purchaseQty: 2, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_lady_style', name: '女士造型', purchaseQty: 3, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_kids_cut', name: '儿童剪发', purchaseQty: 5, giftQty: 0, unlimited: false },
-        { id: 'demo_vip_head_spa', name: '头疗', purchaseQty: 2, giftQty: 1, unlimited: false },
+        { id: 'demo_vip_wash', name: '洗剪吹', purchaseQty: 10, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_fine_cut', name: '精致剪发', purchaseQty: 5, giftQty: 1, unlimited: false },
+        { id: 'demo_vip_style', name: '时尚造型', purchaseQty: 2, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_deep_nourish', name: '深层滋养', purchaseQty: 3, giftQty: 0, unlimited: false },
+        { id: 'demo_vip_scalp', name: '头皮护理', purchaseQty: 2, giftQty: 0, unlimited: false },
       ],
       productItems: [
         { id: 'demo_vip_pd_shampoo', name: '剑琅修护洗发水', qty: 2 },
-        { id: 'demo_vip_pd_wax', name: '剑琅造型发蜡', qty: 1 },
+        { id: 'demo_vip_pd_mud', name: '剑琅哑光发泥', qty: 1 },
         { id: 'demo_vip_pd_oil', name: '剑琅护发精油', qty: 1 },
       ],
-      memberPrices: {
-        '烫发': { tickIndex: 17 },
-        '染发': { mode: 'fixed', amount: '299' },
-        '洗剪吹': { tickIndex: 16 },
-        '精致剪发': { tickIndex: 15 },
-        '时尚洗吹': { tickIndex: 16 },
-        '漂发': { mode: 'fixed', amount: '238' },
-        '头皮护理': { tickIndex: 14 },
-        '深层滋养': { tickIndex: 16 },
-        '蛋白矫正': { tickIndex: 17 },
-        '电棒烫': { mode: 'fixed', amount: '368' },
-      },
+      memberPrices: { ...DEMO_TANG_GROUP_MEMBER_PRICES },
       cardColor: 'peach',
-      cardDesc: '演示用·均值模式：组合三权益退卡估值；m15 零消耗，m8/m9 已过期可延期复活',
+      cardDesc: '演示用·分组取样：洗吹/剪发造型/护理计次 + 烫染全组折扣 + 可见产品；不含隐藏项',
     },
   },
   {
@@ -18693,7 +18777,7 @@ const QUICK_TEMPLATES = [
   {
     id: 'old_renew',
     title: '老客续充',
-    desc: '均值·面值+折扣 · 含参考费用',
+    desc: '均值·面值+洗吹分组折扣',
     icon: '',
     preset: {
       name: '老客续充卡',
@@ -18702,11 +18786,9 @@ const QUICK_TEMPLATES = [
       giftAmount: '200',
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: true, timesOrValidity: false, projectDiscount: true },
-      memberPrices: {
-        '洗剪吹': { tickIndex: 16 },
-      },
+      memberPrices: { ...DEMO_WASH_GROUP_MEMBER_PRICES },
       cardColor: 'haze',
-      cardDesc: '演示用·含折扣：退卡/延期 Tab 可看参考费用；推荐 m7/m8',
+      cardDesc: '演示用·面值+洗吹分组折扣（时尚洗吹/洗剪吹/洗头）；退卡/延期可看参考费用',
     },
   },
   {
@@ -18728,7 +18810,7 @@ const QUICK_TEMPLATES = [
   {
     id: 'perm_color_discount',
     title: '烫染会员价',
-    desc: '均值·纯折扣 · 对比减值烫染',
+    desc: '均值·烫染分组折扣 · 对照减值',
     icon: '',
     preset: {
       name: '烫染会员价卡',
@@ -18736,18 +18818,15 @@ const QUICK_TEMPLATES = [
       recharge: '599',
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: false, timesOrValidity: false, projectDiscount: true },
-      memberPrices: {
-        '烫发': { tickIndex: 17 },
-        '染发': { mode: 'fixed', amount: '299' },
-      },
+      memberPrices: { ...DEMO_TANG_GROUP_MEMBER_PRICES },
       cardColor: 'taro',
-      cardDesc: '演示用·均值有期限纯折扣：消耗按已过天数/总天数摊销；可与「减值烫染卡」对照；含参考费用',
+      cardDesc: '演示用·烫染分组全部在售项折扣；可与「减值烫染卡」对照；含参考费用',
     },
   },
   {
     id: 'retail_perm_color',
     title: '减值烫染',
-    desc: '减值·纯折扣 · 对照均值烫染',
+    desc: '减值·烫染分组折扣 · 对照均值',
     icon: '',
     preset: {
       name: '减值烫染卡',
@@ -18755,32 +18834,29 @@ const QUICK_TEMPLATES = [
       recharge: '599',
       validityKey: '1y', validityMonths: 12,
       benefits: { balance: false, timesOrValidity: false, projectDiscount: true },
-      memberPrices: {
-        '烫发': { tickIndex: 17 },
-        '染发': { mode: 'fixed', amount: '299' },
-      },
+      memberPrices: { ...DEMO_TANG_GROUP_MEMBER_PRICES },
       cardColor: 'purple',
       usagePolicy: { refundRule: 'retail', performanceRule: 'retail' },
-      cardDesc: '演示用·减值纯折扣：权益与售价同烫染会员价卡，仅用卡策略不同，便于对照退卡',
+      cardDesc: '演示用·权益同烫染会员价卡（烫染全组），仅用卡策略为减值',
     },
   },
   {
     id: 'year_wash',
-    title: '全年洗吹卡',
-    desc: '均值·次数卡 · 含赠送次',
+    title: '洗吹12次',
+    desc: '均值·洗吹分组计次 · 含赠送',
     icon: '',
     preset: {
-      name: '全年洗吹卡',
+      name: '洗吹12次卡',
       audience: ['all'],
       recharge: '888',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
       validityKey: '1y', validityMonths: 12,
       projectItems: [
         { id: 'demo_wash', name: '时尚洗吹', purchaseQty: 12, giftQty: 0, unlimited: false },
-        { id: 'demo_gift', name: '头皮护理', purchaseQty: 1, giftQty: 1, unlimited: false },
+        { id: 'demo_wash_cut_gift', name: '洗剪吹', purchaseQty: 0, giftQty: 2, unlimited: false },
       ],
       cardColor: 'milk',
-      cardDesc: '演示用·均值次数：m10 含赠送次消耗，m20 零消耗',
+      cardDesc: '演示用·洗吹分组：时尚洗吹×12 + 赠洗剪吹×2；不含护理跨组赠送',
     },
   },
   {
@@ -18818,11 +18894,11 @@ const QUICK_TEMPLATES = [
   },
   {
     id: 'home_care_pack',
-    title: '居家护理包',
-    desc: '纯产品权益 · 数量兑换',
+    title: '居家洗护包',
+    desc: '纯产品 · 洗护+头皮护理可见项',
     icon: '',
     preset: {
-      name: '居家护理包',
+      name: '居家洗护包',
       audience: ['all'],
       recharge: '399',
       validityKey: '1y', validityMonths: 12,
@@ -18834,13 +18910,33 @@ const QUICK_TEMPLATES = [
         { id: 'demo_care_mask', name: '剑琅柔顺发膜', qty: 1 },
       ],
       cardColor: 'gold',
-      cardDesc: '演示用·纯产品：列表/详情产品区；选品页与退卡产品数量',
+      cardDesc: '演示用·产品分组取样：洗护+头皮护理；不含隐藏「造型发蜡」',
+    },
+  },
+  {
+    id: 'care_pack',
+    title: '护理体验包',
+    desc: '均值·护理分组计次',
+    icon: '',
+    preset: {
+      name: '护理体验包',
+      audience: ['all'],
+      recharge: '598',
+      validityKey: '1y', validityMonths: 12,
+      benefits: { balance: false, timesOrValidity: true, products: false, projectDiscount: false, balanceCanBuyProducts: false },
+      projectItems: [
+        { id: 'demo_care_nourish', name: '深层滋养', purchaseQty: 3, giftQty: 0, unlimited: false },
+        { id: 'demo_care_scalp', name: '头皮护理', purchaseQty: 2, giftQty: 0, unlimited: false },
+        { id: 'demo_care_protein', name: '蛋白矫正', purchaseQty: 1, giftQty: 0, unlimited: false },
+      ],
+      cardColor: 'mint',
+      cardDesc: '演示用·护理分组可见项计次；不含隐藏「头疗」',
     },
   },
   {
     id: 'unlimited_wash',
     title: '洗吹不限次',
-    desc: '固定期限·不限次 · Step3 专用公式',
+    desc: '洗吹分组·不限次 · Step3 专用公式',
     icon: '',
     preset: {
       name: '洗吹不限次卡',
@@ -18851,18 +18947,19 @@ const QUICK_TEMPLATES = [
       projectItems: [
         { id: 'demo_unlim_blow', name: '时尚洗吹', purchaseQty: 0, giftQty: 0, unlimited: true },
         { id: 'demo_unlim_cut', name: '洗剪吹', purchaseQty: 0, giftQty: 0, unlimited: true },
+        { id: 'demo_unlim_shampoo', name: '洗头', purchaseQty: 0, giftQty: 0, unlimited: true },
       ],
       cardColor: 'blue',
-      cardDesc: '演示用·不限次：Step3/退卡按已过天数摊销；劳动业绩按价目原价',
+      cardDesc: '演示用·洗吹分组三项不限次；Step3/退卡按已过天数摊销',
     },
   },
   {
     id: 'shared_cut_pool',
-    title: '剪发共计',
-    desc: '共计次数池 · 精致剪发+儿童剪发',
+    title: '剪发造型共计',
+    desc: '共计池 · 剪发造型可见项',
     icon: '',
     preset: {
-      name: '剪发共计10次卡',
+      name: '剪发造型共计10次卡',
       audience: ['all'],
       recharge: '698',
       validityKey: '6m', validityMonths: 6,
@@ -18870,9 +18967,10 @@ const QUICK_TEMPLATES = [
       projectItems: [
         { id: 'demo_shared_fine', name: '精致剪发', purchaseQty: 10, giftQty: 0, unlimited: false, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
         { id: 'demo_shared_kids', name: '儿童剪发', purchaseQty: 10, giftQty: 0, unlimited: false, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
+        { id: 'demo_shared_style', name: '时尚造型', purchaseQty: 10, giftQty: 0, unlimited: false, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
       ],
       cardColor: 'brand_red',
-      cardDesc: '演示用·共计：卡面「共计 · 精致剪发、儿童剪发」；退卡共享次数池',
+      cardDesc: '演示用·剪发造型可见项共计池（不含隐藏「女士造型」/未上架「接发」）',
     },
   },
   {
@@ -18897,16 +18995,12 @@ const DEMO_TEMPLATE_STATS = {
   demo_vip_combo: {
     issueTimes: 95, holderCount: 48, purchaseTotal: 124000, totalBalance: 182000, validCardCount: 36,
     projectStats: {
-      '洗剪吹': { consumed: 92, remaining: 18 },
-      '头皮护理': { consumed: 18, remaining: 4 },
-      '时尚造型': { consumed: 8, remaining: 1 },
-      '精致剪发': { consumed: 45, remaining: 12 },
       '时尚洗吹': { consumed: 62, remaining: 20 },
+      '洗剪吹': { consumed: 92, remaining: 18 },
+      '精致剪发': { consumed: 45, remaining: 12 },
+      '时尚造型': { consumed: 8, remaining: 1 },
       '深层滋养': { consumed: 15, remaining: 8 },
-      '摩根烫': { consumed: 6, remaining: 3 },
-      '女士造型': { consumed: 22, remaining: 9 },
-      '儿童剪发': { consumed: 30, remaining: 15 },
-      '头疗': { consumed: 9, remaining: 4 },
+      '头皮护理': { consumed: 18, remaining: 4 },
     },
   },
   demo_new_first: {
@@ -18929,7 +19023,7 @@ const DEMO_TEMPLATE_STATS = {
     issueTimes: 52, holderCount: 33, purchaseTotal: 36408, validCardCount: 28,
     projectStats: {
       '时尚洗吹': { consumed: 338, remaining: 58 },
-      '头皮护理': { consumed: 24, remaining: 4 },
+      '洗剪吹': { consumed: 24, remaining: 12 },
     },
   },
   demo_retail_policy: {
@@ -18942,11 +19036,20 @@ const DEMO_TEMPLATE_STATS = {
   demo_home_care_pack: {
     issueTimes: 28, holderCount: 18, purchaseTotal: 11172, validCardCount: 15,
   },
+  demo_care_pack: {
+    issueTimes: 26, holderCount: 16, purchaseTotal: 15548, validCardCount: 14,
+    projectStats: {
+      '深层滋养': { consumed: 28, remaining: 12 },
+      '头皮护理': { consumed: 18, remaining: 8 },
+      '蛋白矫正': { consumed: 6, remaining: 4 },
+    },
+  },
   demo_unlimited_wash: {
     issueTimes: 36, holderCount: 22, purchaseTotal: 46368, validCardCount: 18,
     projectStats: {
       '时尚洗吹': { consumed: 0, remaining: 0 },
       '洗剪吹': { consumed: 0, remaining: 0 },
+      '洗头': { consumed: 0, remaining: 0 },
     },
   },
   demo_shared_cut_pool: {
@@ -18954,6 +19057,7 @@ const DEMO_TEMPLATE_STATS = {
     projectStats: {
       '精致剪发': { consumed: 48, remaining: 22 },
       '儿童剪发': { consumed: 36, remaining: 18 },
+      '时尚造型': { consumed: 12, remaining: 8 },
     },
   },
 };
@@ -24342,6 +24446,8 @@ function mapTemplateToBillingListItem(t) {
     benefits: { ...(t.benefits || emptyBenefits()) },
     projects,
     discounts,
+    memberPrices: t.memberPrices ? { ...t.memberPrices } : {},
+    projectItems: normalizeProjectItemsFromTpl(t),
   };
 }
 
@@ -24920,7 +25026,7 @@ function buildCardFaceRows(tpl, opts = {}) {
     rows.push(row('折扣', formatMemberPriceFaceSummary(p.memberPrices), { full: true }));
   }
   if (templateHasTimedBenefits(tpl)) {
-    rows.push(row('项目/折扣有效期', formatCardValidity(p), { full: true }));
+    rows.push(row('项目/产品/折扣有效期', formatCardValidity(p), { full: true }));
   }
   rows.push(row('用卡策略', formatUsagePolicyLabel(p.usagePolicy), { full: true }));
   return rows.filter(Boolean);
@@ -24958,8 +25064,9 @@ function syncListShelfSeg() {
 function seedCardGroups() {
   return [
     { id: 'cg_combo', name: '组合储值', itemIds: ['demo_vip_combo', 'demo_old_renew', 'demo_lifetime_balance', 'demo_editable'] },
-    { id: 'cg_times', name: '次卡套餐', itemIds: ['demo_year_wash', 'demo_kids_times'] },
+    { id: 'cg_times', name: '次卡套餐', itemIds: ['demo_year_wash', 'demo_unlimited_wash', 'demo_shared_cut_pool', 'demo_care_pack', 'demo_kids_times'] },
     { id: 'cg_discount', name: '会员价/烫染', itemIds: ['demo_perm_color_discount', 'demo_retail_perm_color', 'demo_retail_policy'] },
+    { id: 'cg_product', name: '产品权益', itemIds: ['demo_home_care_pack'] },
     { id: 'cg_new', name: '新客活动', itemIds: ['demo_new_first'] },
     { id: 'cg_empty', name: '待配置', itemIds: [] },
   ];
@@ -25765,7 +25872,7 @@ function renderDetailFaceList(t) {
   const products = normalizeProductItemsFromTpl(t);
   const discountGroups = groupMemberPricesForDisplay(t.memberPrices);
   const FACE_BALANCE_LABELS = new Set(['面值金额', '赠送']);
-  const FACE_OTHER_LABELS = new Set(['项目/折扣有效期', '用卡策略']);
+  const FACE_OTHER_LABELS = new Set(['项目/产品/折扣有效期', '用卡策略']);
   const cards = [];
   let balanceRows = '';
   let otherRows = '';
@@ -26233,16 +26340,28 @@ function seedDemoMemberHoldings() {
 }
 
 /** 开单侧持卡投影：以 memberHoldings + holderMeta.ledger 为源 */
-function billingDiscountRatioFromTpl(tpl) {
-  if (!tpl?.benefits?.projectDiscount) return undefined;
-  const ticks = Object.values(tpl.memberPrices || {})
+function billingDiscountMetaFromTpl(tpl) {
+  if (!tpl?.benefits?.projectDiscount) return null;
+  const prices = tpl.memberPrices || {};
+  const keys = Object.keys(prices);
+  const scopeAll = keys.includes(MP_BATCH_KEY);
+  const projectNames = scopeAll ? null : keys.filter(k => k !== MP_BATCH_KEY);
+  const ticks = Object.values(prices)
     .map(r => normalizeDiscountRule(r))
     .filter(r => r.mode === 'discount')
     .map(r => r.tickIndex | 0);
-  if (!ticks.length) return 0.85;
-  const tick = Math.min(...ticks);
-  if (tick >= DISCOUNT_TICK_MAX) return undefined;
-  return tick / DISCOUNT_TICK_MAX;
+  let rate;
+  if (!ticks.length) rate = 0.85;
+  else {
+    const tick = Math.min(...ticks);
+    rate = tick >= DISCOUNT_TICK_MAX ? undefined : tick / DISCOUNT_TICK_MAX;
+  }
+  return { rate, scopeAll, projectNames };
+}
+
+function billingDiscountRatioFromTpl(tpl) {
+  const meta = billingDiscountMetaFromTpl(tpl);
+  return meta ? meta.rate : undefined;
 }
 
 function projectBillingProjectsFromLedger(tpl, ledger) {
@@ -26251,7 +26370,13 @@ function projectBillingProjectsFromLedger(tpl, ledger) {
   const seenShared = new Set();
   items.forEach(item => {
     if (item.unlimited) {
-      projects.push({ key: item.name, label: item.name, remain: '不限次', unlimited: true });
+      projects.push({
+        key: item.name,
+        label: item.name,
+        remain: '不限次',
+        unlimited: true,
+        matchKeys: [item.name],
+      });
       return;
     }
     if (item.qtyScope === 'shared' && item.sharedGroupId) {
@@ -26273,14 +26398,20 @@ function projectBillingProjectsFromLedger(tpl, ledger) {
           .reduce((s, pl) => s + (pl.purchaseRemaining || 0) + (pl.giftRemaining || 0), 0);
       }
       const label = names.join('、');
-      projects.push({ key: label, label, remain: rem });
+      projects.push({
+        key: label,
+        label,
+        remain: rem,
+        matchKeys: names.slice(),
+        sharedGroupId: item.sharedGroupId,
+      });
       return;
     }
     const pl = ledger?.projects?.[item.name];
     const remain = pl
       ? (pl.purchaseRemaining || 0) + (pl.giftRemaining || 0)
       : (item.purchaseQty || 0) + (item.giftQty || 0);
-    projects.push({ key: item.name, label: item.name, remain });
+    projects.push({ key: item.name, label: item.name, remain, matchKeys: [item.name] });
   });
   return projects;
 }
@@ -26299,7 +26430,7 @@ function projectHeldCardForBilling(templateId, memberId) {
   } else if (tpl.benefits?.balance) {
     balance = getTemplateFaceTotal(tpl);
   }
-  const discount = billingDiscountRatioFromTpl(tpl);
+  const discMeta = billingDiscountMetaFromTpl(tpl);
   const card = {
     id: `${templateId}_${memberId}`,
     name: tpl.name,
@@ -26308,7 +26439,11 @@ function projectHeldCardForBilling(templateId, memberId) {
     templateId,
     benefits: { ...(tpl.benefits || emptyBenefits()) },
   };
-  if (discount != null) card.discount = discount;
+  if (discMeta?.rate != null) card.discount = discMeta.rate;
+  if (discMeta) {
+    card.discountScopeAll = !!discMeta.scopeAll;
+    card.discountProjects = discMeta.scopeAll ? null : (discMeta.projectNames || []);
+  }
   return card;
 }
 
@@ -39022,18 +39157,32 @@ window.__BILLING_EMBEDDED__ = true;
     purple: 'linear-gradient(90deg, #F0EBF3 0%, #CFBCDA 100%)',
     teal: 'linear-gradient(90deg, #EDF2E9 0%, #B1CD9B 100%)',
   };
-  /** 同步自 card/demo QUICK_TEMPLATES · 在售（排除已下架儿童10次） */
+  /** 同步自 card/demo QUICK_TEMPLATES · 与价目分组对齐 */
   const CARD_TEMPLATES = [
     {
       id: 'demo_vip_combo', name: '尊享组合卡', price: 2000, giftAmount: 500, face: 2500,
       cardColor: 'brand_red', validity: '1年',
-      benefits: { balance: true, timesOrValidity: true, projectDiscount: true },
-      projects: ['洗剪吹×10', '头皮护理×3', '时尚造型×2', '精致剪发×5+赠1', '时尚洗吹×8', '深层滋养×4', '摩根烫×2', '女士造型×3', '儿童剪发×5', '头疗×2+赠1'],
-      discounts: ['烫发 会员价', '染发 ¥299', '洗剪吹 会员价', '精致剪发 会员价'],
+      benefits: { balance: true, timesOrValidity: true, products: true, projectDiscount: true },
+      projects: ['时尚洗吹×8', '洗剪吹×10', '精致剪发×5+赠1', '时尚造型×2', '深层滋养×3', '头皮护理×2'],
+      discounts: ['烫发 会员价', '染发 ¥299', '漂发 ¥238', '摩根烫 会员价', '电棒烫 ¥368', '挑染 会员价', '暖色漂褪 会员价'],
+      memberPrices: typeof DEMO_TANG_GROUP_MEMBER_PRICES !== 'undefined' ? { ...DEMO_TANG_GROUP_MEMBER_PRICES } : {},
+      projectItems: [
+        { name: '时尚洗吹', purchaseQty: 8, giftQty: 0 },
+        { name: '洗剪吹', purchaseQty: 10, giftQty: 0 },
+        { name: '精致剪发', purchaseQty: 5, giftQty: 1 },
+        { name: '时尚造型', purchaseQty: 2, giftQty: 0 },
+        { name: '深层滋养', purchaseQty: 3, giftQty: 0 },
+        { name: '头皮护理', purchaseQty: 2, giftQty: 0 },
+      ],
+      productItems: [
+        { name: '剑琅修护洗发水', qty: 2 },
+        { name: '剑琅哑光发泥', qty: 1 },
+        { name: '剑琅护发精油', qty: 1 },
+      ],
     },
     {
       id: 'demo_new_first', name: '新客首开卡', price: 300, giftAmount: 50, face: 350,
-      cardColor: 'teal', validity: '永久有效',
+      cardColor: 'teal', validity: '1年',
       benefits: { balance: true, timesOrValidity: false, projectDiscount: false },
       projects: [], discounts: [],
     },
@@ -39041,37 +39190,91 @@ window.__BILLING_EMBEDDED__ = true;
       id: 'demo_old_renew', name: '老客续充卡', price: 1000, giftAmount: 200, face: 1200,
       cardColor: 'blue', validity: '1年',
       benefits: { balance: true, timesOrValidity: false, projectDiscount: true },
-      projects: [], discounts: ['洗剪吹 会员价'],
+      projects: [], discounts: ['时尚洗吹 会员价', '洗剪吹 会员价', '洗头 会员价'],
+      memberPrices: typeof DEMO_WASH_GROUP_MEMBER_PRICES !== 'undefined' ? { ...DEMO_WASH_GROUP_MEMBER_PRICES } : {},
     },
     {
       id: 'demo_perm_color_discount', name: '烫染会员价卡', price: 599, giftAmount: 0, face: 0,
       cardColor: 'purple', validity: '1年',
       benefits: { balance: false, timesOrValidity: false, projectDiscount: true },
-      projects: [], discounts: ['烫发 会员价', '染发 ¥299'],
+      projects: [], discounts: ['烫发 会员价', '染发 ¥299', '漂发 ¥238', '摩根烫 会员价', '电棒烫 ¥368', '挑染 会员价', '暖色漂褪 会员价'],
+      memberPrices: typeof DEMO_TANG_GROUP_MEMBER_PRICES !== 'undefined' ? { ...DEMO_TANG_GROUP_MEMBER_PRICES } : {},
     },
     {
       id: 'demo_retail_perm_color', name: '减值烫染卡', price: 599, giftAmount: 0, face: 0,
       cardColor: 'purple', validity: '1年',
       benefits: { balance: false, timesOrValidity: false, projectDiscount: true },
-      projects: [], discounts: ['烫发 会员价', '染发 ¥299'],
+      projects: [], discounts: ['烫发 会员价', '染发 ¥299', '漂发 ¥238', '摩根烫 会员价', '电棒烫 ¥368', '挑染 会员价', '暖色漂褪 会员价'],
+      memberPrices: typeof DEMO_TANG_GROUP_MEMBER_PRICES !== 'undefined' ? { ...DEMO_TANG_GROUP_MEMBER_PRICES } : {},
     },
     {
-      id: 'demo_year_wash', name: '全年洗吹卡', price: 888, giftAmount: 0, face: 0,
+      id: 'demo_year_wash', name: '洗吹12次卡', price: 888, giftAmount: 0, face: 0,
       cardColor: 'gold', validity: '1年',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
-      projects: ['时尚洗吹×12', '头皮护理×1+赠1'], discounts: [],
+      projects: ['时尚洗吹×12', '洗剪吹赠×2'], discounts: [],
+      projectItems: [
+        { name: '时尚洗吹', purchaseQty: 12, giftQty: 0 },
+        { name: '洗剪吹', purchaseQty: 0, giftQty: 2 },
+      ],
+    },
+    {
+      id: 'demo_care_pack', name: '护理体验包', price: 598, giftAmount: 0, face: 0,
+      cardColor: 'teal', validity: '1年',
+      benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
+      projects: ['深层滋养×3', '头皮护理×2', '蛋白矫正×1'], discounts: [],
+      projectItems: [
+        { name: '深层滋养', purchaseQty: 3, giftQty: 0 },
+        { name: '头皮护理', purchaseQty: 2, giftQty: 0 },
+        { name: '蛋白矫正', purchaseQty: 1, giftQty: 0 },
+      ],
+    },
+    {
+      id: 'demo_unlimited_wash', name: '洗吹不限次卡', price: 1288, giftAmount: 0, face: 0,
+      cardColor: 'blue', validity: '1年',
+      benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
+      projects: ['时尚洗吹不限次', '洗剪吹不限次', '洗头不限次'], discounts: [],
+      projectItems: [
+        { name: '时尚洗吹', unlimited: true },
+        { name: '洗剪吹', unlimited: true },
+        { name: '洗头', unlimited: true },
+      ],
+    },
+    {
+      id: 'demo_shared_cut_pool', name: '剪发造型共计10次卡', price: 698, giftAmount: 0, face: 0,
+      cardColor: 'brand_red', validity: '6个月',
+      benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
+      projects: ['共计 · 精致剪发、儿童剪发、时尚造型×10'], discounts: [],
+      projectItems: [
+        { name: '精致剪发', purchaseQty: 10, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
+        { name: '儿童剪发', purchaseQty: 10, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
+        { name: '时尚造型', purchaseQty: 10, qtyScope: 'shared', sharedGroupId: 'demo_shared_cut' },
+      ],
+    },
+    {
+      id: 'demo_home_care_pack', name: '居家洗护包', price: 399, giftAmount: 0, face: 0,
+      cardColor: 'gold', validity: '1年',
+      benefits: { balance: false, timesOrValidity: false, products: true, projectDiscount: false },
+      projects: [], discounts: [],
+      productItems: [
+        { name: '剑琅修护洗发水', qty: 1 },
+        { name: '剑琅滋养护发素', qty: 1 },
+        { name: '剑琅头皮护理精华', qty: 1 },
+        { name: '剑琅柔顺发膜', qty: 1 },
+      ],
     },
     {
       id: 'demo_kids_times', name: '儿童10次剪发', price: 498, giftAmount: 0, face: 0,
-      cardColor: 'brand_red', validity: '1年',
+      cardColor: 'brand_red', validity: '6个月',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
       projects: ['儿童剪发×10'], discounts: [],
+      projectItems: [{ name: '儿童剪发', purchaseQty: 10, giftQty: 0 }],
     },
     {
       id: 'demo_retail_policy', name: '减值策略演示卡', price: 498, giftAmount: 0, face: 0,
       cardColor: 'brand_red', validity: '6个月',
       benefits: { balance: false, timesOrValidity: true, projectDiscount: false },
       projects: ['儿童剪发×10'], discounts: [],
+      projectItems: [{ name: '儿童剪发', purchaseQty: 10, giftQty: 0 }],
     },
     {
       id: 'demo_lifetime_balance', name: '永久储值卡', price: 1000, giftAmount: 100, face: 1100,
@@ -39092,7 +39295,7 @@ window.__BILLING_EMBEDDED__ = true;
       id: 'm1', name: '张雨晴', phone: '138****8821', isMember: true, vip: true, totalSpend: 4680,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m1', name: '新客首开卡', balance: 300, projects: [] },
-        { id: 'demo_year_wash_m1', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 11 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
+        { id: 'demo_year_wash_m1', name: '洗吹12次卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 11 }, { key: '洗剪吹', label: '洗剪吹', remain: 2 }] },
       ],
     },
     {
@@ -39121,7 +39324,7 @@ window.__BILLING_EMBEDDED__ = true;
       id: 'm5', name: '赵欣怡', phone: '135****7788', isMember: true, vip: true, totalSpend: 5340,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_new_first_m5', name: '新客首开卡', balance: 350, projects: [] },
-        { id: 'demo_year_wash_m5', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '头皮护理', label: '头皮护理', remain: 1 }] },
+        { id: 'demo_year_wash_m5', name: '洗吹12次卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 1 }] },
       ],
     },
     {
@@ -39154,13 +39357,13 @@ window.__BILLING_EMBEDDED__ = true;
       id: 'm10', name: '孙梦洁', phone: '158****0012', isMember: true, vip: true, totalSpend: 6100,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_old_renew_m10', name: '老客续充卡', balance: 1200, discount: 0.85, projects: [] },
-        { id: 'demo_year_wash_m10', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 3 }] },
+        { id: 'demo_year_wash_m10', name: '洗吹12次卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 3 }] },
       ],
     },
     {
       id: 'm11', name: '钱小姐', phone: '159****2233', isMember: true, vip: true, totalSpend: 28600,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
-        { id: 'demo_vip_combo_m11', name: '尊享组合卡', balance: 2300, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 9 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
+        { id: 'demo_vip_combo_m11', name: '尊享组合卡', balance: 2300, discount: 0.85, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 9 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '深层滋养', label: '深层滋养', remain: 3 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
         { id: 'demo_kids_times_m11', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 9 }] },
         { id: 'demo_lifetime_balance_m11', name: '永久储值卡', balance: 50, projects: [] },
       ],
@@ -39168,7 +39371,7 @@ window.__BILLING_EMBEDDED__ = true;
     {
       id: 'm12', name: '冯启航', phone: '157****4455', isMember: true, vip: true, totalSpend: 22140,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
-        { id: 'demo_vip_combo_m12', name: '尊享组合卡', balance: 1600, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 7 }, { key: '头皮护理', label: '头皮护理', remain: 2 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
+        { id: 'demo_vip_combo_m12', name: '尊享组合卡', balance: 1600, discount: 0.85, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 7 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '深层滋养', label: '深层滋养', remain: 3 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
         { id: 'demo_kids_times_m12', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 6 }] },
         { id: 'demo_retail_perm_color_m12', name: '减值烫染卡', balance: 0, discount: 0.85, projects: [] },
       ],
@@ -39176,7 +39379,7 @@ window.__BILLING_EMBEDDED__ = true;
     {
       id: 'm13', name: '陈小姐', phone: '156****6677', isMember: true, vip: true, totalSpend: 19880,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
-        { id: 'demo_vip_combo_m13', name: '尊享组合卡', balance: 300, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 2 }, { key: '头皮护理', label: '头皮护理', remain: 1 }, { key: '时尚造型', label: '时尚造型', remain: 1 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
+        { id: 'demo_vip_combo_m13', name: '尊享组合卡', balance: 300, discount: 0.85, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚造型', label: '时尚造型', remain: 1 }, { key: '深层滋养', label: '深层滋养', remain: 3 }, { key: '头皮护理', label: '头皮护理', remain: 1 }] },
         { id: 'demo_kids_times_m13', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 2 }] },
         { id: 'demo_retail_perm_color_m13', name: '减值烫染卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_retail_policy_m13', name: '减值策略演示卡', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 2 }] },
@@ -39185,7 +39388,7 @@ window.__BILLING_EMBEDDED__ = true;
     {
       id: 'm14', name: '褚女士', phone: '155****8899', isMember: true, vip: true, totalSpend: 25420,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
-        { id: 'demo_vip_combo_m14', name: '尊享组合卡', balance: 2000, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
+        { id: 'demo_vip_combo_m14', name: '尊享组合卡', balance: 2000, discount: 0.85, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '深层滋养', label: '深层滋养', remain: 3 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
         { id: 'demo_kids_times_m14', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 1 }] },
         { id: 'demo_retail_perm_color_m14', name: '减值烫染卡', balance: 0, discount: 0.85, projects: [] },
         { id: 'demo_retail_policy_m14', name: '减值策略演示卡', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 1 }] },
@@ -39194,9 +39397,9 @@ window.__BILLING_EMBEDDED__ = true;
     {
       id: 'm15', name: '卫文博', phone: '153****1122', isMember: true, vip: true, totalSpend: 3120,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-male.png', cards: [
-        { id: 'demo_vip_combo_m15', name: '尊享组合卡', balance: 2500, discount: 0.85, projects: [{ key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '头皮护理', label: '头皮护理', remain: 3 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '深层滋养', label: '深层滋养', remain: 4 }, { key: '摩根烫', label: '摩根烫', remain: 2 }, { key: '女士造型', label: '女士造型', remain: 3 }, { key: '儿童剪发', label: '儿童剪发', remain: 5 }, { key: '头疗', label: '头疗', remain: 3 }] },
+        { id: 'demo_vip_combo_m15', name: '尊享组合卡', balance: 2500, discount: 0.85, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 8 }, { key: '洗剪吹', label: '洗剪吹', remain: 10 }, { key: '精致剪发', label: '精致剪发', remain: 6 }, { key: '时尚造型', label: '时尚造型', remain: 2 }, { key: '深层滋养', label: '深层滋养', remain: 3 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
         { id: 'demo_kids_times_m15', name: '儿童10次剪发', balance: 0, projects: [{ key: '儿童剪发', label: '儿童剪发', remain: 10 }] },
-        { id: 'demo_year_wash_m15', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 6 }, { key: '头皮护理', label: '头皮护理', remain: 1 }] },
+        { id: 'demo_year_wash_m15', name: '洗吹12次卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 6 }, { key: '洗剪吹', label: '洗剪吹', remain: 1 }] },
       ],
     },
     {
@@ -39230,7 +39433,7 @@ window.__BILLING_EMBEDDED__ = true;
       id: 'm20', name: '朱女士', phone: '187****2211', isMember: true, vip: true, totalSpend: 4320,
       lastVisit: '2026.6.8', avatar: 'assets/billing/avatar-female.png', cards: [
         { id: 'demo_perm_color_discount_m20', name: '烫染会员价卡', balance: 0, discount: 0.85, projects: [] },
-        { id: 'demo_year_wash_m20', name: '全年洗吹卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 12 }, { key: '头皮护理', label: '头皮护理', remain: 2 }] },
+        { id: 'demo_year_wash_m20', name: '洗吹12次卡', balance: 0, projects: [{ key: '时尚洗吹', label: '时尚洗吹', remain: 12 }, { key: '洗剪吹', label: '洗剪吹', remain: 2 }] },
       ],
     },
   ];
@@ -39270,6 +39473,29 @@ window.__BILLING_EMBEDDED__ = true;
       next.giftBalance = Math.max(0, Number(next.giftBalance) || 0);
     }
     next.balance = Math.round(((Number(next.rechargeBalance) || 0) + (Number(next.giftBalance) || 0)) * 100) / 100;
+    if (Array.isArray(next.projects)) {
+      next.projects = next.projects.map(p => {
+        if (!p || (Array.isArray(p.matchKeys) && p.matchKeys.length)) return p;
+        const keys = projectBenefitMatchKeys(p);
+        return keys.length ? { ...p, matchKeys: keys } : p;
+      });
+    }
+    if (benefits.projectDiscount && typeof billingDiscountMetaFromTpl === 'function') {
+      const fullTpl = (typeof getTemplateById === 'function' && templateId)
+        ? getTemplateById(templateId)
+        : null;
+      const discSrc = (fullTpl && fullTpl.memberPrices && Object.keys(fullTpl.memberPrices).length)
+        ? fullTpl
+        : tpl;
+      const discMeta = discSrc ? billingDiscountMetaFromTpl(discSrc) : null;
+      if (discMeta) {
+        if (next.discount == null && discMeta.rate != null) next.discount = discMeta.rate;
+        if (next.discountScopeAll == null) next.discountScopeAll = !!discMeta.scopeAll;
+        if (next.discountProjects == null && !discMeta.scopeAll) {
+          next.discountProjects = discMeta.projectNames || [];
+        }
+      }
+    }
     return next;
   }
   CUSTOMERS.forEach(c => {
@@ -39849,6 +40075,14 @@ window.__BILLING_EMBEDDED__ = true;
     bizMallCalYear: null,
     bizMallCalMonth: null,
     bizSelfRptPeriod: 'today',
+    bizSelfRptCustomStart: '',
+    bizSelfRptCustomEnd: '',
+    bizSelfRptPrevPeriod: 'today',
+    bizSelfRangeDraftStart: '',
+    bizSelfRangeDraftEnd: '',
+    bizSelfRangeCalFocus: 'start',
+    bizSelfRangeCalYear: null,
+    bizSelfRangeCalMonth: null,
     flowWeikuanQuery: '',
     flowWeikuanFilter: { status: 'all', range: null, start: '', end: '', staffIds: [] },
     flowWeikuanFilterDraft: null,
@@ -39874,6 +40108,7 @@ window.__BILLING_EMBEDDED__ = true;
     manualOrderNo: '',
     heldOrders: [],
     billFromHold: false,
+    activeHoldId: null,
     billDueEdited: false,
     payDueSnapshot: null,
     guestGender: null,
@@ -40080,6 +40315,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
     state.billFromHold = false;
+    state.activeHoldId = null;
     resetBillBizDate();
     openBillCustomer({ reset: true });
   }
@@ -40154,6 +40390,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
     state.billFromHold = false;
+    state.activeHoldId = null;
     if (isAnonymousGuest(customer)) {
       if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
       state.customer = currentGuest();
@@ -40252,11 +40489,14 @@ window.__BILLING_EMBEDDED__ = true;
     const namesProd = new Set();
     const idsProj = new Set();
     const idsProd = new Set();
+    const b = cardBenefits(card);
     (card.projects || []).forEach(p => {
-      if (p && p.key) namesProj.add(String(p.key));
-      if (p && p.label) namesProj.add(String(p.label));
+      projectBenefitMatchKeys(p).forEach(k => namesProj.add(k));
     });
-    const tpl = CARD_TPL_BY_ID[heldTemplateId(card)];
+    const tid = heldTemplateId(card);
+    const billTpl = CARD_TPL_BY_ID[tid];
+    const fullTpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : null;
+    const tpl = fullTpl || billTpl;
     (tpl && tpl.projectItems || []).forEach(i => {
       if (i && i.name) namesProj.add(String(i.name));
       if (i && i.id) idsProj.add(String(i.id));
@@ -40265,6 +40505,16 @@ window.__BILLING_EMBEDDED__ = true;
       if (i && i.name) namesProd.add(String(i.name));
       if (i && i.id) idsProd.add(String(i.id));
     });
+    /* 纯折扣卡：目录仅显示权益覆盖的项目；有储值面值时仍可浏览全部 */
+    if (b.projectDiscount && !b.balance) {
+      if (card.discountScopeAll || (tpl && tpl.memberPrices && tpl.memberPrices[MP_BATCH_KEY])) {
+        return { mode: 'all', universal: true };
+      }
+      const discNames = Array.isArray(card.discountProjects)
+        ? card.discountProjects
+        : Object.keys((tpl && tpl.memberPrices) || {}).filter(k => k !== MP_BATCH_KEY);
+      discNames.forEach(n => { if (n) namesProj.add(String(n)); });
+    }
     if (namesProj.size || namesProd.size || idsProj.size || idsProd.size) {
       return { mode: 'filter', namesProj, namesProd, idsProj, idsProd };
     }
@@ -40631,7 +40881,13 @@ window.__BILLING_EMBEDDED__ = true;
       balanceUse: 0,
       discountOn: false,
       fixedUse: 0,
-      projects: (card.projects || []).map(p => ({ key: p.key, label: p.label, qty: 0, max: p.remain })),
+      projects: (card.projects || []).map(p => ({
+        key: p.key,
+        label: p.label,
+        qty: 0,
+        max: p.remain,
+        matchKeys: projectBenefitMatchKeys(p),
+      })),
     };
   }
 
@@ -40675,8 +40931,7 @@ window.__BILLING_EMBEDDED__ = true;
         let avail = pr.max;
         state.cart.forEach(it => {
           if (avail <= 0 || leftById[it.id] <= 0) return;
-          const match = it.benefitKey ? it.benefitKey === pr.key : (it.name.includes(pr.key) || it.name.includes(pr.label));
-          if (!match) return;
+          if (!cartItemMatchesProjectBenefit(it, pr)) return;
           const use = Math.min(avail, leftById[it.id]);
           pr.qty += use;
           leftById[it.id] -= use;
@@ -40727,6 +40982,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (cartHasDiscountableItems()) {
       cards.forEach(card => {
         if (!(card.discount && cardBenefits(card).projectDiscount)) return;
+        if (!cartHasDiscountableItemsForCard(card)) return;
         const withDisc = JSON.parse(JSON.stringify(basePicks));
         Object.keys(withDisc).forEach(id => { withDisc[id].discountOn = false; });
         withDisc[card.id].discountOn = true;
@@ -40790,7 +41046,8 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function openBillSettle() {
-    state.detailExpandedId = null;
+    /* 进入结算确认：默认展开购物车第一项；从权益/券返回不经此函数，保留用户展开态 */
+    state.detailExpandedId = state.cart[0]?.id || null;
     if (!state.manualOrderNo) state.manualOrderNo = genDemoManualOrderNo();
     syncBillDateLabels();
     autoApplyBestSettleOffers();
@@ -42036,6 +42293,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
   }
   function syncPickHoldsEntry() {
+    purgeExpiredHolds({ quiet: true });
     const el = document.getElementById('pickHoldsEntry');
     const btn = document.getElementById('btnOpenHolds');
     if (!el || !btn) return;
@@ -42057,6 +42315,7 @@ window.__BILLING_EMBEDDED__ = true;
     const listTotal = cartListTotal();
     let remaining = listTotal;
     let projectDeduct = 0;
+    const projectDeductByItemId = {};
     const projectLines = [];
     const picks = state.benefitApplied;
 
@@ -42066,16 +42325,14 @@ window.__BILLING_EMBEDDED__ = true;
         if (!pick) return;
         (pick.projects || []).forEach(pr => {
           if (!pr.qty) return;
-          const targets = state.cart.filter(it => {
-            if (it.benefitKey) return it.benefitKey === pr.key;
-            return it.name.includes(pr.key);
-          });
+          const targets = state.cart.filter(it => cartItemMatchesProjectBenefit(it, pr));
           let left = pr.qty;
           targets.forEach(it => {
             if (left <= 0) return;
             const use = Math.min(left, it.qty);
             const amt = round2(lineUnit(it) * use);
             projectDeduct += amt;
+            projectDeductByItemId[it.id] = round2((projectDeductByItemId[it.id] || 0) + amt);
             remaining = round2(remaining - amt);
             projectLines.push({ card: card.name, label: pr.label, qty: use, amount: amt });
             left -= use;
@@ -42088,19 +42345,24 @@ window.__BILLING_EMBEDDED__ = true;
     let discountDeduct = 0;
     let discountRate = null;
     if (isMemberBill() && remaining > 0) {
-      /* 折扣仅作用于服务项目；快速消费 / 产品不参与折扣，只可走储值面值 */
-      let discountBase = Math.max(0, round2(cartDiscountableSubtotal() - projectDeduct));
-      discountBase = Math.min(discountBase, remaining);
-      if (discountBase > 0) {
-        for (const card of getCustomer().cards) {
-          const pick = picks[card.id];
-          if (pick?.discountOn && card.discount && cardBenefits(card).projectDiscount) {
-            discountRate = card.discount;
-            discountDeduct = round2(discountBase * (1 - card.discount));
-            remaining = round2(remaining - discountDeduct);
-            break;
-          }
+      /* 折扣仅作用于权益范围内的服务项目；快速消费 / 产品不参与 */
+      for (const card of getCustomer().cards) {
+        const pick = picks[card.id];
+        if (!(pick?.discountOn && card.discount && cardBenefits(card).projectDiscount)) continue;
+        let scopedSub = 0;
+        state.cart.forEach(it => {
+          if (!cartItemEligibleForCardDiscount(it, card)) return;
+          const line = round2(lineUnit(it) * it.qty);
+          const already = projectDeductByItemId[it.id] || 0;
+          scopedSub = round2(scopedSub + Math.max(0, line - already));
+        });
+        const discountBase = Math.min(Math.max(0, scopedSub), remaining);
+        if (discountBase > 0) {
+          discountRate = card.discount;
+          discountDeduct = round2(discountBase * (1 - card.discount));
+          remaining = round2(remaining - discountDeduct);
         }
+        break;
       }
     }
 
@@ -42912,12 +43174,37 @@ window.__BILLING_EMBEDDED__ = true;
     showOnlyScreen('screen-coupon');
   }
 
+  /** 计次/共计权益可匹配的项目名（精确匹配，不按 includes 误伤） */
+  function projectBenefitMatchKeys(p) {
+    if (!p) return [];
+    if (Array.isArray(p.matchKeys) && p.matchKeys.length) {
+      return [...new Set(p.matchKeys.map(k => String(k || '').trim()).filter(Boolean))];
+    }
+    const out = new Set();
+    [p.key, p.label].forEach(raw => {
+      let s = String(raw || '').trim();
+      if (!s) return;
+      s = s.replace(/^共计\s*·\s*/, '');
+      if (s.includes('、')) {
+        s.split('、').forEach(part => {
+          const t = part.trim();
+          if (t) out.add(t);
+        });
+      } else {
+        out.add(s);
+      }
+    });
+    return [...out];
+  }
+
   function cartItemMatchesProjectBenefit(it, p) {
     if (!it || !p) return false;
-    if (it.benefitKey) return it.benefitKey === p.key;
-    const key = String(p.key || '');
-    const label = String(p.label || '');
-    return (!!key && it.name.includes(key)) || (!!label && it.name.includes(label));
+    const matchKeys = projectBenefitMatchKeys(p);
+    if (!matchKeys.length) return false;
+    const itemKeys = [it.benefitKey, it.name]
+      .map(x => String(x || '').trim())
+      .filter(Boolean);
+    return itemKeys.some(ik => matchKeys.includes(ik));
   }
 
   function projectBenefitUsableOnCart(p) {
@@ -42933,8 +43220,27 @@ window.__BILLING_EMBEDDED__ = true;
     return true;
   }
 
+  /** 折扣是否覆盖该购物车行（按卡模板 memberPrices / 分组项目快照） */
+  function cartItemEligibleForCardDiscount(it, card) {
+    if (!isDiscountableCartItem(it) || !card) return false;
+    if (card.discountScopeAll) return true;
+    if (Array.isArray(card.discountProjects)) {
+      if (!card.discountProjects.length) return false;
+      const itemKeys = [it.benefitKey, it.name]
+        .map(x => String(x || '').trim())
+        .filter(Boolean);
+      return itemKeys.some(ik => card.discountProjects.includes(ik));
+    }
+    /* 旧数据未带范围字段时，不收窄（兼容） */
+    return true;
+  }
+
   function cartHasDiscountableItems() {
     return (state.cart || []).some(isDiscountableCartItem);
+  }
+
+  function cartHasDiscountableItemsForCard(card) {
+    return (state.cart || []).some(it => cartItemEligibleForCardDiscount(it, card));
   }
 
   function cartDiscountableSubtotal() {
@@ -42979,10 +43285,14 @@ window.__BILLING_EMBEDDED__ = true;
     const faceOk = cartFaceBenefitApplicable();
     const cards = allCards.map(card => {
       if (!draft[card.id]) {
-        draft[card.id] = { balanceUse: 0, discountOn: false, fixedUse: 0, projects: (card.projects || []).map(p => ({ key: p.key, label: p.label, qty: 0, max: p.remain })) };
+        draft[card.id] = emptyBenefitPickForCard(card);
       }
       const d = draft[card.id];
-      const showDiscount = !!(card.discount && cardBenefits(card).projectDiscount && discountable);
+      (d.projects || []).forEach((pr, idx) => {
+        const src = (card.projects || [])[idx];
+        if (src && (!pr.matchKeys || !pr.matchKeys.length)) pr.matchKeys = projectBenefitMatchKeys(src);
+      });
+      const showDiscount = !!(card.discount && cardBenefits(card).projectDiscount && discountable && cartHasDiscountableItemsForCard(card));
       const showFace = !!(cardHasFaceBenefit(card) && Number(card.balance) > 0 && faceOk);
       if (!showDiscount && d.discountOn) d.discountOn = false;
       if (!showFace) {
@@ -43354,6 +43664,18 @@ window.__BILLING_EMBEDDED__ = true;
       + `<div style="padding:10px 16px 16px;font-size:12px;color:var(--text-sec)">${tipHtml}</div>`;
   }
 
+  function consumeActiveHold() {
+    const id = state.activeHoldId;
+    if (!id) {
+      state.billFromHold = false;
+      return;
+    }
+    state.heldOrders = state.heldOrders.filter(h => h.id !== id);
+    state.activeHoldId = null;
+    state.billFromHold = false;
+    syncPickHoldsEntry();
+  }
+
   function createHoldOrder() {
     if (!state.cart.length) { showToast('请先选择商品'); return; }
     const c = getCustomer();
@@ -43374,7 +43696,13 @@ window.__BILLING_EMBEDDED__ = true;
       listTotal: cartListTotal(),
       priceEdited: !!state.billDueEdited,
     };
+    /* 取单后再次挂单：替换原挂单，避免列表残留旧快照 */
+    if (state.activeHoldId) {
+      state.heldOrders = state.heldOrders.filter(h => h.id !== state.activeHoldId);
+      state.activeHoldId = null;
+    }
     state.heldOrders.unshift(snap);
+    state.billFromHold = false;
     state.cart = [];
     state.billDueEdited = false;
     state.benefitDraft = {};
@@ -43551,8 +43879,41 @@ window.__BILLING_EMBEDDED__ = true;
     else showToast('金额键盘未就绪');
   }
 
+  const HOLD_KEEP_DAYS = 3;
+
+  function holdCreatedDayStart(createdAt) {
+    const d = new Date(createdAt);
+    if (Number.isNaN(d.getTime())) return null;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  function isHoldExpired(h, now) {
+    if (!h) return false;
+    if (state.activeHoldId && h.id === state.activeHoldId) return false;
+    const start = holdCreatedDayStart(h.createdAt);
+    if (!start) return false;
+    const expire = new Date(start);
+    expire.setDate(expire.getDate() + HOLD_KEEP_DAYS);
+    const t = now instanceof Date ? now : new Date();
+    return t >= expire;
+  }
+
+  function purgeExpiredHolds(opts) {
+    const quiet = !!(opts && opts.quiet);
+    const before = (state.heldOrders || []).length;
+    const now = new Date();
+    const next = (state.heldOrders || []).filter(h => !isHoldExpired(h, now));
+    if (next.length === before) return 0;
+    state.heldOrders = next;
+    const removed = before - next.length;
+    if (!quiet && removed > 0) showToast(`已自动清除 ${removed} 笔过期挂单`);
+    return removed;
+  }
+
   function renderHoldList() {
+    purgeExpiredHolds({ quiet: true });
     const el = document.getElementById('holdList');
+    if (!el) return;
     if (!state.heldOrders.length) {
       el.innerHTML = '<div class="empty-cart">暂无挂单<br>开单台点击「挂单」保存</div>';
       return;
@@ -43578,16 +43939,18 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function openHoldList() {
+    const removed = purgeExpiredHolds({ quiet: true });
     renderHoldList();
     showOnlyScreen('screen-holds');
     setFlowNavHighlight('hold');
+    if (removed > 0) showToast(`已自动清除 ${removed} 笔过期挂单`);
   }
 
   function resumeHold(id) {
     const idx = state.heldOrders.findIndex(h => h.id === id);
     if (idx < 0) return;
     const h = state.heldOrders[idx];
-    state.heldOrders.splice(idx, 1);
+    /* 取单不移出列表：未结账/未删除时返回挂单列表仍可见 */
     const customer = (h.customerId === 'guest' || h.customerId === 'guest_m' || h.customerId === 'guest_f')
       ? currentGuest()
       : (CUSTOMERS.find(c => c.id === h.customerId) || currentGuest());
@@ -43608,6 +43971,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.billCardGateOpen = false;
     state.cardsExpanded = false;
     state.payAmounts = {};
+    state.activeHoldId = h.id;
     state.billFromHold = true;
     state.billDueEdited = !!h.priceEdited;
     syncCartChrome();
@@ -43622,9 +43986,11 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     state.benefitApplied = JSON.parse(JSON.stringify(state.benefitDraft));
-    const allowDisc = cartHasDiscountableItems();
-    Object.values(state.benefitApplied).forEach(d => {
-      if (!allowDisc) d.discountOn = false;
+    const cardsById = Object.fromEntries((getCustomer().cards || []).map(c => [c.id, c]));
+    Object.entries(state.benefitApplied).forEach(([cardId, d]) => {
+      if (!d) return;
+      const card = cardsById[cardId];
+      if (!cartHasDiscountableItems() || !cartHasDiscountableItemsForCard(card)) d.discountOn = false;
       if (d.fixedUse && !(Number(d.balanceUse) > 0)) d.balanceUse = 98;
     });
   }
@@ -43986,14 +44352,14 @@ window.__BILLING_EMBEDDED__ = true;
       achievement: 58,
       commission: 0,
       discount: 58,
-      benefitLabel: '全年洗吹卡 · 项目抵扣',
+      benefitLabel: '洗吹12次卡 · 项目抵扣',
       offerSnapshot: {
         discountTotal: 58,
         projectDeduct: 58,
         discountDeduct: 0,
         couponDeduct: 0,
         balanceDeduct: 0,
-        lines: [{ label: '全年洗吹卡 · 时尚洗吹', amount: 0, meta: '抵扣 ×1' }],
+        lines: [{ label: '洗吹12次卡 · 时尚洗吹', amount: 0, meta: '抵扣 ×1' }],
       },
       cardMutations: {
         projects: [{ cardId: 'seed-card-wash', key: 'fashion-blow', qty: 1, label: '时尚洗吹' }],
@@ -46786,7 +47152,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function bizOvMemberCardNames() {
-    const preferred = ['尊享组合卡', '永久储值卡', '老客续充卡', '新客首开卡', '全年洗吹卡'];
+    const preferred = ['尊享组合卡', '永久储值卡', '老客续充卡', '新客首开卡', '洗吹12次卡'];
     const fromTpl = (typeof CARD_TEMPLATES !== 'undefined' && Array.isArray(CARD_TEMPLATES))
       ? CARD_TEMPLATES.map(t => t && t.name).filter(Boolean)
       : [];
@@ -47427,6 +47793,211 @@ window.__BILLING_EMBEDDED__ = true;
     }
   }
 
+  function bizSelfTodayKey() {
+    return (typeof flowTodayKey === 'function' ? flowTodayKey() : '')
+      || (typeof billTodayKey === 'function' ? billTodayKey() : '')
+      || '2026-07-27';
+  }
+
+  function bizSelfParseDayKey(key) {
+    const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return { y: +m[1], m: +m[2] - 1, d: +m[3] };
+  }
+
+  function bizSelfFmtKey(y, m, d) {
+    return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
+  function bizSelfFmtChip(key) {
+    const p = bizSelfParseDayKey(key);
+    if (!p) return '';
+    return `${p.m + 1}.${p.d}`;
+  }
+
+  function bizSelfCustomTabLabel() {
+    if (state.bizSelfRptCustomStart && state.bizSelfRptCustomEnd) {
+      return `${bizSelfFmtChip(state.bizSelfRptCustomStart)}-${bizSelfFmtChip(state.bizSelfRptCustomEnd)}`;
+    }
+    return '自定义';
+  }
+
+  function bizSelfRangeDayCount() {
+    const a = bizSelfParseDayKey(state.bizSelfRptCustomStart);
+    const b = bizSelfParseDayKey(state.bizSelfRptCustomEnd);
+    if (!a || !b) return 1;
+    const t0 = Date.UTC(a.y, a.m, a.d);
+    const t1 = Date.UTC(b.y, b.m, b.d);
+    return Math.max(1, Math.round((t1 - t0) / 86400000) + 1);
+  }
+
+  function renderBizSelfRangeChrome() {
+    const start = state.bizSelfRangeDraftStart;
+    const end = state.bizSelfRangeDraftEnd;
+    const focus = state.bizSelfRangeCalFocus || 'start';
+    const rangeEl = document.getElementById('bizSelfRangeCalRange');
+    if (rangeEl) {
+      const chip = (kind, label, key) => {
+        const on = focus === kind ? ' is-on' : '';
+        let valHtml = '<span class="flow-balance-cal-chip__val is-placeholder">请选择</span>';
+        if (key) {
+          const p = bizSelfParseDayKey(key);
+          const text = p ? `${p.y}.${p.m + 1}.${p.d}` : key;
+          valHtml = `<span class="flow-balance-cal-chip__val">${escapeHtml(text)}</span>`;
+        }
+        return `<button type="button" class="flow-balance-cal-chip${on}" data-biz-self-cal-focus="${kind}"><span class="flow-balance-cal-chip__label">${label}</span>${valHtml}</button>`;
+      };
+      rangeEl.innerHTML =
+        chip('start', '开始日期', start) +
+        '<span class="flow-balance-cal-sep">至</span>' +
+        chip('end', '结束日期', end);
+    }
+    const hint = document.getElementById('bizSelfRangeCalHint');
+    if (hint) {
+      if (!start) hint.textContent = '请选择开始日期';
+      else if (!end) hint.textContent = '请选择结束日期';
+      else hint.textContent = '可重新点击日期调整范围';
+    }
+    const okBtn = document.getElementById('bizSelfRangeOk');
+    if (okBtn) okBtn.disabled = !(start && end);
+  }
+
+  function renderBizSelfRangeCalendar() {
+    const cal = document.getElementById('bizSelfRangeCal');
+    if (!cal) return;
+    let y = state.bizSelfRangeCalYear;
+    let m = state.bizSelfRangeCalMonth;
+    if (y == null || m == null) {
+      const anchor = bizSelfParseDayKey(state.bizSelfRangeDraftEnd || state.bizSelfRangeDraftStart || bizSelfTodayKey());
+      y = anchor ? anchor.y : new Date().getFullYear();
+      m = anchor ? anchor.m : new Date().getMonth();
+      state.bizSelfRangeCalYear = y;
+      state.bizSelfRangeCalMonth = m;
+    }
+    const minK = '2020-01-01';
+    const maxK = bizSelfTodayKey();
+    const minP = bizSelfParseDayKey(minK);
+    const maxP = bizSelfParseDayKey(maxK);
+    const canPrev = !(y === minP.y && m === minP.m);
+    const canNext = !(y === maxP.y && m === maxP.m);
+    const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+    const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+    const firstDow = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const startK = state.bizSelfRangeDraftStart;
+    const endK = state.bizSelfRangeDraftEnd;
+    const todayK = maxK;
+    const cells = [];
+    for (let i = 0; i < firstDow; i++) {
+      cells.push('<span class="flow-balance-cal__day is-muted" aria-hidden="true"></span>');
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = bizSelfFmtKey(y, m, d);
+      const disabled = key < minK || key > maxK;
+      const isStart = startK && key === startK;
+      const isEnd = endK && key === endK;
+      const inRange = startK && endK && key >= startK && key <= endK;
+      const cls = [
+        'flow-balance-cal__day',
+        disabled ? 'is-disabled' : '',
+        isStart ? 'is-range-start' : '',
+        isEnd ? 'is-range-end' : '',
+        inRange ? 'is-in-range' : '',
+        key === todayK ? 'is-today' : '',
+      ].filter(Boolean).join(' ');
+      cells.push(`<button type="button" class="${cls}" data-biz-self-cal-day="${key}"${disabled ? ' disabled' : ''} aria-label="${key}"><span class="flow-balance-cal__day-num">${d}</span></button>`);
+    }
+    cal.innerHTML =
+      '<div class="flow-balance-cal__nav">' +
+      `<button type="button" class="flow-balance-cal__nav-btn" data-biz-self-cal-nav="-1" aria-label="上一月"${canPrev ? '' : ' disabled'}>${chevL}</button>` +
+      `<div class="flow-balance-cal__title">${y}年${m + 1}月</div>` +
+      `<button type="button" class="flow-balance-cal__nav-btn" data-biz-self-cal-nav="1" aria-label="下一月"${canNext ? '' : ' disabled'}>${chevR}</button>` +
+      '</div>' +
+      `<div class="flow-balance-cal__weekdays">${weekdays.map(w => `<div class="flow-balance-cal__wd">${w}</div>`).join('')}</div>` +
+      `<div class="flow-balance-cal__grid">${cells.join('')}</div>`;
+    renderBizSelfRangeChrome();
+  }
+
+  function openBizSelfRangeSheet() {
+    state.bizSelfRangeDraftStart = state.bizSelfRptCustomStart || '';
+    state.bizSelfRangeDraftEnd = state.bizSelfRptCustomEnd || '';
+    state.bizSelfRangeCalFocus = state.bizSelfRangeDraftStart && !state.bizSelfRangeDraftEnd ? 'end' : 'start';
+    const anchor = bizSelfParseDayKey(state.bizSelfRangeDraftEnd || state.bizSelfRangeDraftStart || bizSelfTodayKey());
+    state.bizSelfRangeCalYear = anchor ? anchor.y : new Date().getFullYear();
+    state.bizSelfRangeCalMonth = anchor ? anchor.m : new Date().getMonth();
+    renderBizSelfRangeCalendar();
+    openMask('bizSelfRangeMask');
+  }
+
+  function closeBizSelfRangeSheet() {
+    closeMask('bizSelfRangeMask');
+  }
+
+  function shiftBizSelfRangeMonth(delta) {
+    let y = state.bizSelfRangeCalYear == null ? new Date().getFullYear() : state.bizSelfRangeCalYear;
+    let m = (state.bizSelfRangeCalMonth == null ? new Date().getMonth() : state.bizSelfRangeCalMonth) + delta;
+    while (m < 0) { m += 12; y -= 1; }
+    while (m > 11) { m -= 12; y += 1; }
+    const minP = bizSelfParseDayKey('2020-01-01');
+    const maxP = bizSelfParseDayKey(bizSelfTodayKey());
+    if (y < minP.y || (y === minP.y && m < minP.m)) { y = minP.y; m = minP.m; }
+    if (y > maxP.y || (y === maxP.y && m > maxP.m)) { y = maxP.y; m = maxP.m; }
+    state.bizSelfRangeCalYear = y;
+    state.bizSelfRangeCalMonth = m;
+    renderBizSelfRangeCalendar();
+  }
+
+  function pickBizSelfRangeDay(key) {
+    if (!key) return;
+    const focus = state.bizSelfRangeCalFocus || 'start';
+    if (focus === 'start' || !state.bizSelfRangeDraftStart) {
+      state.bizSelfRangeDraftStart = key;
+      state.bizSelfRangeDraftEnd = '';
+      state.bizSelfRangeCalFocus = 'end';
+    } else if (focus === 'end') {
+      if (key < state.bizSelfRangeDraftStart) {
+        state.bizSelfRangeDraftEnd = state.bizSelfRangeDraftStart;
+        state.bizSelfRangeDraftStart = key;
+      } else {
+        state.bizSelfRangeDraftEnd = key;
+      }
+      state.bizSelfRangeCalFocus = 'start';
+    } else {
+      state.bizSelfRangeDraftStart = key;
+      state.bizSelfRangeDraftEnd = '';
+      state.bizSelfRangeCalFocus = 'end';
+    }
+    renderBizSelfRangeCalendar();
+  }
+
+  function applyBizSelfRangeSheet() {
+    let start = state.bizSelfRangeDraftStart;
+    let end = state.bizSelfRangeDraftEnd;
+    if (!start || !end) {
+      showToast('请选择起止日期');
+      return;
+    }
+    if (start > end) {
+      const t = start; start = end; end = t;
+    }
+    state.bizSelfRptCustomStart = start;
+    state.bizSelfRptCustomEnd = end;
+    state.bizSelfRptPeriod = 'custom';
+    closeBizSelfRangeSheet();
+    renderBizSelfReport();
+  }
+
+  function cancelBizSelfRangeSheet() {
+    closeBizSelfRangeSheet();
+    if (state.bizSelfRptPeriod === 'custom' && (!state.bizSelfRptCustomStart || !state.bizSelfRptCustomEnd)) {
+      state.bizSelfRptPeriod = state.bizSelfRptPrevPeriod || 'today';
+      renderBizSelfReport();
+    } else {
+      renderBizSelfReport();
+    }
+  }
+
   function renderBizSelfReport() {
     const periodEl = document.getElementById('bizSelfRptPeriod');
     const cur = state.bizSelfRptPeriod || 'today';
@@ -47435,20 +48006,38 @@ window.__BILLING_EMBEDDED__ = true;
       { id: 'yesterday', label: '昨日' },
       { id: 'week', label: '本周' },
       { id: 'month', label: '本月' },
+      { id: 'custom', label: bizSelfCustomTabLabel() },
     ];
     if (periodEl) {
       periodEl.innerHTML = periods.map(p =>
         `<button type="button" class="biz-hub-period__btn${cur === p.id ? ' is-active' : ''}" data-biz-self-period="${p.id}" role="tab" aria-selected="${cur === p.id ? 'true' : 'false'}">${escapeHtml(p.label)}</button>`
       ).join('');
     }
-    const mapPeriod = cur === 'yesterday' ? 'today' : (cur === 'week' || cur === 'month' ? cur : 'today');
+    let mapPeriod = 'today';
+    if (cur === 'week' || cur === 'month') mapPeriod = cur;
+    else if (cur === 'custom') {
+      const days = bizSelfRangeDayCount();
+      mapPeriod = days >= 20 ? 'month' : (days >= 5 ? 'week' : 'today');
+    }
     const m = getBizHubCardMetrics(mapPeriod).self;
-    const pay = cur === 'yesterday' ? bizRound2(m.pay * 0.7) : m.pay;
-    const refund = cur === 'yesterday' ? bizRound2(m.refund + 36) : m.refund;
-    const count = cur === 'yesterday' ? Math.max(0, m.count - 1) : m.count;
+    let pay = m.pay;
+    let refund = m.refund;
+    let count = m.count;
+    if (cur === 'yesterday') {
+      pay = bizRound2(m.pay * 0.7);
+      refund = bizRound2(m.refund + 36);
+      count = Math.max(0, m.count - 1);
+    } else if (cur === 'custom') {
+      const days = bizSelfRangeDayCount();
+      const scale = Math.max(0.35, Math.min(2.4, days / 7));
+      pay = bizRound2(m.pay * scale);
+      refund = bizRound2(m.refund * scale);
+      count = Math.max(0, Math.round(m.count * scale));
+    }
     const body = document.getElementById('bizSelfRptBody');
     if (!body) return;
-    const list = (FLOW_SELF_ORDERS || []).slice(0, cur === 'today' ? 5 : 8);
+    const listN = cur === 'today' ? 5 : (cur === 'custom' ? Math.min(8, Math.max(3, bizSelfRangeDayCount())) : 8);
+    const list = (FLOW_SELF_ORDERS || []).slice(0, listN);
     body.innerHTML = `
       <div class="biz-kpi-grid">
         <div class="biz-kpi"><div class="biz-kpi__lab">实际收款</div><div class="biz-kpi__val">${flowHubFormatYen(pay - refund)}</div></div>
@@ -49336,6 +49925,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
     state.billFromHold = false;
+    state.activeHoldId = null;
     if (isAnonymousGuest(customer)) {
       if (customer && (customer.gender === 'male' || customer.gender === 'female')) state.guestGender = customer.gender;
       state.customer = currentGuest();
@@ -49962,6 +50552,9 @@ window.__BILLING_EMBEDDED__ = true;
 
   document.getElementById('billBack').addEventListener('click', () => {
     if (state.billFromHold) {
+      /* 未结账返回：挂单仍留在列表，仅结束本次取单会话 */
+      state.billFromHold = false;
+      state.activeHoldId = null;
       openHoldList();
       return;
     }
@@ -50004,7 +50597,12 @@ window.__BILLING_EMBEDDED__ = true;
     const del = e.target.closest('[data-del-hold]');
     if (del) {
       e.stopPropagation();
-      state.heldOrders = state.heldOrders.filter(h => h.id !== del.dataset.delHold);
+      const delId = del.dataset.delHold;
+      state.heldOrders = state.heldOrders.filter(h => h.id !== delId);
+      if (state.activeHoldId === delId) {
+        state.activeHoldId = null;
+        state.billFromHold = false;
+      }
       syncPickHoldsEntry();
       renderHoldList();
       showToast('已删除挂单');
@@ -51255,6 +51853,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
       recordFlowOrderFromSettlement(s);
     }
+    consumeActiveHold();
     state.pendingCatalogAdds = collectPendingCatalogAddsFromCart();
     closeMask('payMask', { keepCardExtendDraft: true });
     renderSuccess();
@@ -51653,9 +52252,40 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('bizSelfRptPeriod')?.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-biz-self-period]');
     if (!btn) return;
-    state.bizSelfRptPeriod = btn.dataset.bizSelfPeriod;
+    const id = btn.dataset.bizSelfPeriod;
+    if (id === 'custom') {
+      if (state.bizSelfRptPeriod !== 'custom') {
+        state.bizSelfRptPrevPeriod = state.bizSelfRptPeriod || 'today';
+      }
+      openBizSelfRangeSheet();
+      return;
+    }
+    state.bizSelfRptPeriod = id;
     renderBizSelfReport();
   });
+  document.getElementById('bizSelfRangeMask')?.addEventListener('click', (e) => {
+    if (e.target.id === 'bizSelfRangeMask') {
+      cancelBizSelfRangeSheet();
+      return;
+    }
+    const focusBtn = e.target.closest('[data-biz-self-cal-focus]');
+    if (focusBtn) {
+      state.bizSelfRangeCalFocus = focusBtn.dataset.bizSelfCalFocus;
+      renderBizSelfRangeChrome();
+      return;
+    }
+    const nav = e.target.closest('[data-biz-self-cal-nav]');
+    if (nav) {
+      shiftBizSelfRangeMonth(Number(nav.dataset.bizSelfCalNav) || 0);
+      return;
+    }
+    const day = e.target.closest('[data-biz-self-cal-day]');
+    if (day && !day.disabled) {
+      pickBizSelfRangeDay(day.dataset.bizSelfCalDay);
+    }
+  });
+  document.getElementById('bizSelfRangeCancel')?.addEventListener('click', () => cancelBizSelfRangeSheet());
+  document.getElementById('bizSelfRangeOk')?.addEventListener('click', () => applyBizSelfRangeSheet());
   document.getElementById('flowDetailBody')?.addEventListener('click', (e) => {
     if (e.target.closest('[data-flow-expand]')) {
       state.flowDetailExpanded = !state.flowDetailExpanded;
