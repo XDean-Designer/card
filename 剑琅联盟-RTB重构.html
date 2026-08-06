@@ -8953,7 +8953,6 @@ button.exp-flow-row:active { opacity: .92; }
 /* ==== 流水订单 · 产品级精修 · 对齐剑琅设计规范 v1.6 ==== */
 #screen-flow-hub,
 #screen-biz-hub,
-#screen-biz-pie,
 #screen-biz-store,
 #screen-biz-mall,
 #screen-biz-self-rpt,
@@ -8963,19 +8962,16 @@ button.exp-flow-row:active { opacity: .92; }
 #screen-flow-product { background: var(--bg-page); }
 #screen-flow-hub,
 #screen-biz-hub,
-#screen-biz-pie,
 #screen-biz-store,
 #screen-biz-mall,
 #screen-biz-self-rpt { display: flex; flex-direction: column; }
 #screen-flow-hub.hidden,
 #screen-biz-hub.hidden,
-#screen-biz-pie.hidden,
 #screen-biz-store.hidden,
 #screen-biz-mall.hidden,
 #screen-biz-self-rpt.hidden { display: none; }
 #screen-flow-hub:not(.hidden),
 #screen-biz-hub:not(.hidden),
-#screen-biz-pie:not(.hidden),
 #screen-biz-store:not(.hidden),
 #screen-biz-mall:not(.hidden),
 #screen-biz-self-rpt:not(.hidden) { display: flex; }
@@ -9144,7 +9140,6 @@ button.exp-flow-row:active { opacity: .92; }
 /* —— 经营分析 · Hub / 饼图 / 报表 —— */
 /* 灰色发丝划线：--card-divider + 0.5 高；左右 inset 与内容区对齐 */
 #screen-biz-hub,
-#screen-biz-pie,
 #screen-biz-store,
 #screen-biz-mall,
 #screen-biz-self-rpt {
@@ -9182,6 +9177,44 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .biz-pie-card__title { font-size: 15px; font-weight: 600; color: var(--text); }
 .biz-pie-card__hint { font-size: 11px; color: var(--text-sec); }
+.picker-sheet__grabber {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: #D8D8D8;
+  margin: 8px auto 0;
+  flex-shrink: 0;
+}
+.biz-pie-sheet .picker-head--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 12px 20px 4px;
+  text-align: center;
+  border-bottom: none;
+}
+.biz-pie-sheet .picker-head--stack .picker-head__title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+.biz-pie-sheet .picker-head--stack .picker-head__sub {
+  font-size: 12px;
+  color: var(--text-sec);
+  margin-top: 4px;
+}
+.picker-mask--bottom .biz-pie-sheet__body {
+  padding: 4px 16px calc(20px + var(--safe-bottom, 0px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  flex-shrink: 1;
+  min-height: 0;
+}
+.biz-pie-sheet .biz-pie-svg-wrap { max-width: 100%; }
+.biz-pie-sheet .biz-pie-stage { gap: 4px; }
 .biz-pie-stage { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
 .biz-pie-svg-wrap { position: relative; width: 100%; max-width: 340px; }
 .biz-pie-svg-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
@@ -9312,7 +9345,7 @@ button.exp-flow-row:active { opacity: .92; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.biz-pie-body, .biz-report-body {
+.biz-report-body {
   padding: 12px 16px 24px; background: var(--bg-page); box-sizing: border-box;
 }
 .biz-store-tabs, .biz-mall-tabs {
@@ -9481,8 +9514,27 @@ button.biz-bar-chart__col {
   content: ''; position: absolute; left: var(--biz-hair-inset, 0); right: var(--biz-hair-inset, 0); bottom: 0;
   height: 1px; background: var(--biz-hair, var(--card-divider)); transform: scaleY(0.5); transform-origin: center bottom; pointer-events: none;
 }
-.biz-pay-row__name { color: var(--text); }
-.biz-pay-row__amt { font-family: var(--font-data); color: var(--text); font-weight: 500; }
+.biz-pay-row__name { color: var(--text); min-width: 0; flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.biz-pay-row__amt { font-family: var(--font-data); color: var(--text); font-weight: 500; flex-shrink: 0; }
+button.biz-pay-row {
+  width: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  text-align: left;
+  box-sizing: border-box;
+}
+button.biz-pay-row:active { opacity: .72; }
+.biz-pay-row__trail {
+  display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.biz-pay-row__chev {
+  display: inline-flex; color: var(--text-sec); flex-shrink: 0;
+}
+.biz-pay-row__chev svg { display: block; }
 .biz-rank-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 0;
   border-bottom: none; font-size: 13px; position: relative;
@@ -15793,15 +15845,16 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body flow-hub-body biz-hub-body" id="bizHubBody"></div>
           </div>
 
-          <!-- 经营分析 · 二级饼图 -->
-          <div id="screen-biz-pie" class="screen hidden">
-            <div class="page-title-bar">
-              <button type="button" class="back" id="bizPieBack" aria-label="返回">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              <div class="title" id="bizPieTitle">明细构成</div>
+          <!-- 经营分析 · 资金构成二级细分 Sheet（点扇区弹出，非整页） -->
+          <div class="picker-mask picker-mask--bottom" id="bizPieMask" data-mask-close="bizPieMask">
+            <div class="picker-sheet tall biz-pie-sheet" role="dialog" aria-modal="true" aria-labelledby="bizPieSheetTitle">
+              <div class="picker-sheet__grabber" aria-hidden="true"></div>
+              <div class="picker-head picker-head--stack">
+                <div class="picker-head__title" id="bizPieSheetTitle">明细构成</div>
+                <div class="picker-head__sub" id="bizPieSheetHint">演示数据 · 对齐原型口径</div>
+              </div>
+              <div class="picker-body biz-pie-sheet__body" id="bizPieBody"></div>
             </div>
-            <div class="page-body biz-pie-body" id="bizPieBody"></div>
           </div>
 
           <!-- 经营分析 · 门店经营报表 -->
@@ -30190,7 +30243,7 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-quick-issue': 'card-quick-issue',
       'screen-flow-hub': 'flow-hub', 'screen-flow-list': 'flow-list',
       'screen-biz-hub': 'biz-hub',
-      'screen-biz-pie': 'biz-pie', 'screen-biz-store': 'biz-store',
+      'screen-biz-store': 'biz-store',
       'screen-biz-mall': 'biz-mall', 'screen-biz-self-rpt': 'biz-self-rpt',
       'screen-flow-detail': 'flow-detail', 'screen-flow-refund': 'flow-refund', 'screen-flow-edit': 'flow-edit',
       'screen-flow-edit-add': 'flow-edit-add', 'screen-flow-edit-item': 'flow-edit-item',
@@ -30275,7 +30328,7 @@ function billingNav(fn) {
     title: '经营分析',
     nodes: [
       { id: 'biz-hub', label: '经营分析入口', screen: 'screen-biz-hub' },
-      { id: 'biz-pie', label: '资金构成 · 二级', screen: 'screen-biz-pie' },
+      { id: 'biz-pie', label: '资金构成 · 二级', screen: 'screen-biz-hub' },
       { id: 'biz-store', label: '门店经营报表', screen: 'screen-biz-store' },
       { id: 'biz-mall', label: '商城售卖报表', screen: 'screen-biz-mall' },
       { id: 'biz-self-rpt', label: '自助收银报表', screen: 'screen-biz-self-rpt' },
@@ -40491,6 +40544,7 @@ window.__BILLING_EMBEDDED__ = true;
     flowEditStaffPick: [],
     flowEditReplaceItemId: null,
     flowSelfDetailId: null,
+    flowSelfDetailReturn: null,
     flowSelfDate: 'today',
     flowSelfStatus: 'all',
     flowSelfDd: null,
@@ -40498,7 +40552,7 @@ window.__BILLING_EMBEDDED__ = true;
     bizHubPeriod: 'today',
     bizPieKey: null,
     bizStoreTab: 'overview',
-    bizStoreOvExpand: { labor: 'cash', product: 'cash', staffLabor: 'cash', staffSales: 'product' },
+    bizStoreOvExpand: { labor: 'cash', product: 'cash', staffLabor: '', staffSales: '' },
     bizStaffRankExpanded: false,
     bizCardSalesExpanded: false,
     bizCardRefundExpanded: false,
@@ -47067,34 +47121,35 @@ window.__BILLING_EMBEDDED__ = true;
 
   function openBizPieDetail(sliceId) {
     state.bizPieKey = sliceId;
+    const hub = document.getElementById('screen-biz-hub');
+    if (!hub || hub.classList.contains('hidden')) {
+      if (!state.bizHubPeriod) state.bizHubPeriod = 'today';
+      renderBizHub();
+      showOnlyScreen('screen-biz-hub');
+    }
     renderBizPieDetail();
-    showOnlyScreen('screen-biz-pie');
+    openMask('bizPieMask');
+  }
+
+  function closeBizPieDetail() {
+    closeMask('bizPieMask');
   }
 
   function renderBizPieDetail() {
     const model = getBizPieModel(state.bizHubPeriod || 'today');
     const slice = model.slices.find(s => s.id === state.bizPieKey) || model.slices[0];
-    const titleEl = document.getElementById('bizPieTitle');
-    if (titleEl) titleEl.textContent = slice ? slice.label : '明细构成';
+    const titleEl = document.getElementById('bizPieSheetTitle');
+    if (titleEl) titleEl.textContent = slice ? (slice.label + ' · 细分') : '明细构成';
     const body = document.getElementById('bizPieBody');
     if (!body || !slice) return;
     const kids = slice.children || [];
-    const total = kids.reduce((s, x) => s + x.amount, 0);
-    body.innerHTML = `
-      <div class="biz-pie-card">
-        <div class="biz-pie-card__head">
-          <div class="biz-pie-card__title">${escapeHtml(slice.label)} · 细分</div>
-          <div class="biz-pie-card__hint">演示数据 · 对齐原型口径</div>
-        </div>
-        <div class="biz-pie-stage">
-          ${bizPieSvgHtml(kids, { clickable: false })}
-        </div>
-      </div>`;
+    body.innerHTML = `<div class="biz-pie-stage">${bizPieSvgHtml(kids, { clickable: false })}</div>`;
     queueBizPieArcEnter(body);
   }
 
   function openBizHub() {
     if (!state.bizHubPeriod) state.bizHubPeriod = 'today';
+    closeBizPieDetail();
     renderBizHub();
     showOnlyScreen('screen-biz-hub');
   }
@@ -48611,7 +48666,13 @@ window.__BILLING_EMBEDDED__ = true;
       <div class="biz-section">
         <div class="biz-section__title">收款明细</div>
         ${list.length ? list.map(o =>
-          `<div class="biz-pay-row"><span class="biz-pay-row__name">${escapeHtml(o.customerName || '顾客')} · ${escapeHtml((o.items && o.items[0] && o.items[0].name) || '订单')}</span><span class="biz-pay-row__amt">${flowHubFormatYen(o.amount)}</span></div>`
+          `<button type="button" class="biz-pay-row" data-biz-self-order="${escapeHtml(o.id)}" aria-label="查看订单详情">` +
+            `<span class="biz-pay-row__name">${escapeHtml(o.customerName || '顾客')} · ${escapeHtml((o.items && o.items[0] && o.items[0].name) || '订单')}</span>` +
+            `<span class="biz-pay-row__trail">` +
+              `<span class="biz-pay-row__amt">${flowHubFormatYen(o.amount)}</span>` +
+              `<span class="biz-pay-row__chev" aria-hidden="true">${flowIconChevron()}</span>` +
+            `</span>` +
+          `</button>`
         ).join('') : '<div class="biz-empty">暂无数据</div>'}
       </div>`;
   }
@@ -50318,7 +50379,7 @@ window.__BILLING_EMBEDDED__ = true;
       </div>`;
   }
 
-  function openFlowSelfDetail(id) {
+  function openFlowSelfDetail(id, opts) {
     const o = FLOW_SELF_ORDERS.find(x => x.id === id) || FLOW_SELF_ORDERS[0];
     if (!o) {
       showToast('暂无订单');
@@ -50326,8 +50387,16 @@ window.__BILLING_EMBEDDED__ = true;
     }
     state.flowSelfDetailId = o.id;
     state.flowSelfDd = null;
+    state.flowSelfDetailReturn = (opts && opts.returnTo) || null;
     renderFlowSelfDetail();
     showOnlyScreen('screen-flow-self-detail');
+  }
+
+  function backFromFlowSelfDetail() {
+    const ret = state.flowSelfDetailReturn;
+    state.flowSelfDetailReturn = null;
+    if (ret === 'biz-self-rpt') openBizSelfReport();
+    else openFlowSelf();
   }
 
   function returnToCardListFromIssueCheckout() {
@@ -52635,6 +52704,7 @@ window.__BILLING_EMBEDDED__ = true;
     const btn = e.target.closest('[data-biz-period]');
     if (!btn) return;
     state.bizHubPeriod = btn.dataset.bizPeriod;
+    closeBizPieDetail();
     renderBizHub();
   });
   document.getElementById('bizHubBody')?.addEventListener('click', (e) => {
@@ -52673,10 +52743,14 @@ window.__BILLING_EMBEDDED__ = true;
     if (to && body.contains(to) && to.closest('[data-biz-pie]')) return;
     setBizPieActive(body, null);
   });
-  document.getElementById('bizPieBack')?.addEventListener('click', () => openBizHub());
   document.getElementById('bizStoreBack')?.addEventListener('click', () => openBizHub());
   document.getElementById('bizMallBack')?.addEventListener('click', () => openBizHub());
   document.getElementById('bizSelfRptBack')?.addEventListener('click', () => openBizHub());
+  document.getElementById('bizSelfRptBody')?.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-biz-self-order]');
+    if (!row) return;
+    openFlowSelfDetail(row.dataset.bizSelfOrder, { returnTo: 'biz-self-rpt' });
+  });
   document.getElementById('bizStoreTabs')?.addEventListener('click', (e) => {
     const tab = e.target.closest('[data-biz-store-tab]');
     if (!tab) return;
@@ -52691,7 +52765,7 @@ window.__BILLING_EMBEDDED__ = true;
       if (sep < 0) return;
       const expandKey = key.slice(0, sep);
       const id = key.slice(sep + 1);
-      if (!state.bizStoreOvExpand) state.bizStoreOvExpand = { labor: 'cash', product: 'cash', staffLabor: 'cash', staffSales: 'product' };
+      if (!state.bizStoreOvExpand) state.bizStoreOvExpand = { labor: 'cash', product: 'cash', staffLabor: '', staffSales: '' };
       const cur = state.bizStoreOvExpand[expandKey];
       state.bizStoreOvExpand[expandKey] = cur === id ? '' : id;
       renderBizStore();
@@ -53373,7 +53447,7 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('flowWeikuanFilterMask');
     renderFlowWeikuan();
   });
-  document.getElementById('flowSelfDetailBack')?.addEventListener('click', () => openFlowSelf());
+  document.getElementById('flowSelfDetailBack')?.addEventListener('click', () => backFromFlowSelfDetail());
 
   if (!window.__BILLING_EMBEDDED__) renderFlowMap();
   renderCustomerList();
