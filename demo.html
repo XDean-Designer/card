@@ -5791,14 +5791,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-type-chip__val { display: block; font-size: 12px; color: var(--text); line-height: 16px; margin-top: 2px; font-variant-numeric: tabular-nums; }
 .emp-ach-tpl-list {
   display: flex; flex-direction: column; gap: 12px;
-  padding: 0 16px 20px;
+  padding: 0 12px 20px; box-sizing: border-box;
+  min-width: 0; max-width: 100%; overflow-x: hidden;
 }
 .emp-ach-tpl-card {
   background: #fff; border-radius: 12px; overflow: hidden;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+  min-width: 0; max-width: 100%; box-sizing: border-box;
 }
 .emp-ach-tpl-face {
-  padding: 14px 16px 12px; color: #fff;
+  padding: 14px 16px 12px; color: #1a1a1a;
   display: flex; flex-direction: column; gap: 4px;
 }
 .emp-ach-tpl-face__name {
@@ -5806,18 +5808,18 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .emp-ach-tpl-face__price {
-  font-size: 13px; line-height: 18px; opacity: .92;
+  font-size: 13px; line-height: 18px; opacity: .72;
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
 }
-.emp-ach-tpl-rows { background: #fff; }
+.emp-ach-tpl-rows { background: #fff; min-width: 0; }
 .emp-ach-tpl-row {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-  width: 100%; padding: 14px 16px; border: none; background: #fff;
+  width: 100%; padding: 14px 12px; border: none; background: #fff;
   font-family: inherit; text-align: left; box-sizing: border-box; cursor: pointer;
-  position: relative; color: inherit;
+  position: relative; color: inherit; min-width: 0;
 }
 .emp-ach-tpl-row + .emp-ach-tpl-row::before {
-  content: ''; position: absolute; left: 16px; right: 16px; top: 0;
+  content: ''; position: absolute; left: 12px; right: 12px; top: 0;
   height: 1px; background: var(--card-divider);
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
@@ -5828,6 +5830,43 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-ach-tpl-row__trail {
   display: flex; flex-direction: column; align-items: stretch; gap: 4px; min-width: 0; max-width: 68%;
   flex: 1;
+}
+/* 工位模式：标签置顶，双胶囊占满行宽，避免右侧溢出 */
+.emp-ach-tpl-row--stations {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px;
+}
+.emp-ach-tpl-row--stations .emp-ach-tpl-row__label {
+  padding-top: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-sec);
+  line-height: 18px;
+}
+.emp-ach-tpl-row--stations .emp-ach-tpl-row__trail {
+  max-width: none;
+  width: 100%;
+  flex: none;
+}
+.emp-ach-tpl-row--stations .emp-ach-twins--stations {
+  min-width: 0;
+  width: 100%;
+  gap: 8px;
+}
+.emp-ach-tpl-row--stations .emp-ach-twins__pair {
+  min-width: 0;
+  width: 100%;
+  gap: 6px;
+}
+.emp-ach-tpl-row--stations .emp-ach-cap {
+  min-width: 0;
+  padding: 6px 6px 7px;
+}
+.emp-ach-tpl-row--stations .emp-ach-cap__val {
+  font-size: 14px;
+  line-height: 17px;
 }
 .emp-ach-tpl-row__vals {
   display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 0;
@@ -5951,7 +5990,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   transform: scaleY(0.5); transform-origin: center top; pointer-events: none;
 }
 .emp-ach-card-section {
-  margin: 12px 16px 8px; font-size: 12px; font-weight: 500; color: var(--text-sec);
+  margin: 12px 12px 8px; font-size: 12px; font-weight: 500; color: var(--text-sec);
 }
 
 .emp-notice-muted {
@@ -7832,12 +7871,12 @@ button.exp-flow-row:active { opacity: .92; }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  width: auto;
+  width: calc(100% - 32px);
   max-width: none;
   height: 44px;
   min-height: 44px;
   margin: 12px 16px 8px;
-  align-self: stretch;
+  align-self: center;
   border: 1px solid var(--brand);
   border-radius: 12px;
   background: transparent;
@@ -8463,56 +8502,217 @@ button.exp-flow-row:active { opacity: .92; }
   box-sizing: border-box;
 }
 .bottom-bar--bill .btn-main.btn-next {
-  flex: none; width: 96px; min-width: 96px; max-width: 96px; height: 42px; min-height: 42px;
-  background: #F32F41; color: #fff; border-radius: 8px; font-size: 16px; font-weight: 500;
-  margin: 0;
+  flex: none; width: auto; min-width: 96px; max-width: 128px; height: 42px; min-height: 42px;
+  padding: 0 14px; background: #F32F41; color: #fff; border: none; border-radius: 8px;
+  font-size: 16px; font-weight: 500; margin: 0; white-space: nowrap;
+  box-sizing: border-box;
 }
 .bottom-bar--bill .bottom-bar__safe {
   flex: 1; min-height: 0; height: auto; background: #fff;
 }
 
-/* 开单四步 · 横线圆形步骤条 */
-.bill-step-bar {
-  display: flex; align-items: flex-start; flex-shrink: 0;
-  background: #fff; border-bottom: 0.5px solid #EDEDED;
-  padding: 12px 8px 10px;
+/* 开单记账单 · 轻拟物小票（多单贴边，交界虚线撕口） */
+.bill-slip-stack {
+  display: flex; flex-direction: column; gap: 0;
+  margin: 0 16px 12px;
+  border-radius: 10px;
+  overflow: visible;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.05));
 }
-.bill-step-bar__item {
-  flex: 1; position: relative; z-index: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  font-family: inherit; border: none; background: transparent; padding: 0;
-  cursor: default; min-width: 0;
+.bill-slip {
+  position: relative; background: #fff; border-radius: 0; overflow: visible;
+  box-shadow: none;
+  border: 1px solid #EDEDED;
+  border-bottom: none;
 }
-.bill-step-bar__item:not(:last-child)::after {
-  content: ''; position: absolute; z-index: 0;
-  top: 9px; left: calc(50% + 12px); right: calc(-50% + 12px);
-  height: 1.5px; background: #E6E6E6; pointer-events: none;
+.bill-slip:first-child { border-radius: 10px 10px 0 0; }
+.bill-slip:last-child {
+  border-radius: 0 0 10px 10px;
+  border-bottom: 1px solid #EDEDED;
 }
-.bill-step-bar__item.is-done:not(:last-child)::after { background: var(--brand); }
-.bill-step-bar__dot {
-  position: relative; z-index: 1;
-  width: 20px; height: 20px; border-radius: 50%; box-sizing: border-box;
+.bill-slip:only-child {
+  border-radius: 10px;
+  border-bottom: 1px solid #EDEDED;
+}
+/* 交界虚线 + 两侧半圆缺口，仿票据撕线 */
+.bill-slip + .bill-slip {
+  border-top: 1.5px dashed #C8C8C8;
+}
+.bill-slip + .bill-slip::before,
+.bill-slip + .bill-slip::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-page);
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px #EDEDED;
+}
+.bill-slip + .bill-slip::before { left: -6px; }
+.bill-slip + .bill-slip::after { right: -6px; }
+.bill-slip--draft {
+  border-style: solid;
+  background: #FFFCFA;
+  box-shadow: none;
+}
+.bill-slip--draft:only-child {
+  border-style: dashed;
+  border-color: #C8C8C8;
+}
+.bill-slip__perforation {
+  position: absolute; left: 12px; right: 12px; top: 40px; height: 0;
+  border-top: 1px dashed #E8E8E8; pointer-events: none; z-index: 1;
+}
+.bill-slip__fold {
+  position: absolute; top: 0; right: 0; width: 0; height: 0;
+  border-style: solid; border-width: 0 18px 18px 0;
+  border-color: transparent #F0F0F0 transparent transparent;
+  pointer-events: none; z-index: 1;
+}
+.bill-slip:not(:first-child) .bill-slip__fold { display: none; }
+.bill-slip--draft .bill-slip__fold { display: none; }
+.bill-slip__head {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 14px 10px; min-height: 40px; box-sizing: border-box;
+}
+.bill-slip__title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
+}
+.bill-slip__tag {
+  font-size: 11px; font-weight: 500; color: var(--brand); background: var(--brand-soft);
+  padding: 1px 6px; border-radius: 4px; line-height: 16px;
+}
+.bill-slip__cards { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; flex-wrap: wrap; }
+.bill-slip__card-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  max-width: 120px; padding: 2px 8px; border-radius: 999px;
+  background: #F7F7F7; font-size: 11px; color: #555; line-height: 16px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bill-slip__card-dot {
+  width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; background: #C0C0C0;
+}
+.bill-slip__edit {
+  flex-shrink: 0; border: none; background: transparent; color: var(--brand);
+  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; padding: 4px 0 4px 8px;
+}
+.bill-slip__body { padding: 8px 14px 4px; }
+.bill-slip__line {
+  display: flex; align-items: baseline; gap: 8px; padding: 6px 0;
+  border-top: 0.5px solid #F3F3F3; font-size: 13px; line-height: 18px;
+}
+.bill-slip__line:first-child { border-top: none; }
+.bill-slip__line-name { flex: 1; min-width: 0; color: #1a1a1a; font-weight: 500; }
+.bill-slip__line-qty { flex-shrink: 0; color: var(--text-sec); font-size: 12px; }
+.bill-slip__line-amt {
+  flex-shrink: 0; color: #1a1a1a; font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.bill-slip__line--quick .bill-slip__line-name { color: #666; }
+.bill-slip__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 12px; border-top: 1px dashed #EBEBEB;
+}
+.bill-slip__sub { font-size: 12px; color: var(--text-sec); }
+.bill-slip__total {
+  font-size: 15px; font-weight: 600; color: #1a1a1a;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.bill-continue-add {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: calc(100% - 32px); margin: 0 16px 16px; min-height: 48px;
+  border: 1.5px dashed #C8C8C8; border-radius: 12px; background: transparent;
+  color: #666; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
+  box-sizing: border-box;
+}
+.bill-continue-add:active { background: #FAFAFA; border-color: var(--brand); color: var(--brand); }
+.bill-held-cards {
+  position: relative;
+  margin: 0 16px 12px; padding: 12px 14px 36px; background: #fff; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.03);
+}
+.bill-held-cards.is-tools-open { padding-bottom: 34px; }
+.bill-held-cards__title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 0 0 10px;
+}
+.bill-held-cards__list { display: flex; flex-wrap: wrap; gap: 8px; }
+.bill-held-card {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 10px 8px 12px; border-radius: 10px; border: 1.5px solid #E8E8E8;
+  background: #FAFAFA; cursor: pointer; font-family: inherit; text-align: left;
+  max-width: 100%; box-sizing: border-box;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.bill-held-card.is-on {
+  border-color: #FF7043; border-width: 2px;
+  background: #fff;
+  box-shadow: none;
+}
+.bill-held-card__face {
+  width: 36px; height: 24px; border-radius: 4px; flex-shrink: 0;
+  border: 1px solid #E8E8E8; overflow: hidden; display: flex; flex-direction: column;
+  background: #fff;
+}
+.bill-held-card.is-on .bill-held-card__face { border-color: rgba(255, 112, 67, 0.4); }
+.bill-held-card__face-head { flex: 0 0 10px; width: 100%; }
+.bill-held-card__face-body { flex: 1; background: #fff; }
+.bill-held-card__name {
+  font-size: 13px; font-weight: 500; color: #1a1a1a;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;
+}
+.bill-held-card.is-on .bill-held-card__name { font-weight: 700; color: #FF7043; }
+.bill-held-card__check {
+  flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  background: #FF7043; color: #fff;
+}
+.bill-held-card.is-on .bill-held-card__check { display: inline-flex; }
+.bill-held-card__check svg { width: 11px; height: 11px; display: block; }
+.bill-held-cards__empty {
+  margin: 0; font-size: 13px; color: var(--text-sec); line-height: 1.45;
+}
+.bill-held-cards__tools {
+  display: none; gap: 16px; margin-top: 12px; padding-top: 10px;
+  border-top: 0.5px solid #F0F0F0;
+}
+.bill-held-cards.is-tools-open .bill-held-cards__tools { display: flex; }
+.bill-held-cards__tools button {
+  border: none; background: transparent; color: var(--brand);
+  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; padding: 4px 0;
+}
+.bill-held-cards__fold {
+  position: absolute; right: 8px; bottom: 6px;
+  width: 28px; height: 22px; padding: 0; border: none; border-radius: 6px;
+  background: #F5F5F5; color: #999; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; line-height: 1;
-  background: #fff; color: #B2B2B2; border: 1.5px solid #D9D9D9;
+  font-family: inherit; -webkit-tap-highlight-color: transparent;
 }
-.bill-step-bar__item.on .bill-step-bar__dot {
-  background: var(--brand); color: #fff; border-color: var(--brand);
+.bill-held-cards__fold:active { background: #EBEBEB; color: #666; }
+.bill-held-cards.is-tools-open .bill-held-cards__fold {
+  background: var(--brand-soft); color: var(--brand);
 }
-.bill-step-bar__item.is-done .bill-step-bar__dot {
-  background: var(--brand); color: #fff; border-color: var(--brand);
+.bill-held-cards__fold svg {
+  width: 14px; height: 14px; display: block;
+  transition: transform .15s ease;
 }
-.bill-step-bar__dot svg { display: block; width: 11px; height: 11px; }
-.bill-step-bar__label {
-  font-size: 11px; line-height: 14px; color: #B2B2B2;
-  white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+.bill-held-cards.is-tools-open .bill-held-cards__fold svg { transform: rotate(180deg); }
+.detail-item__benefit {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; margin-top: 8px; padding: 8px 10px; border: none; border-radius: 8px;
+  background: #FAFAFA; cursor: pointer; font-family: inherit; text-align: left; box-sizing: border-box;
 }
-.bill-step-bar__item.on .bill-step-bar__label {
-  color: var(--brand); font-weight: 600;
+.detail-item__benefit-lbl { font-size: 12px; color: var(--text-sec); flex-shrink: 0; }
+.detail-item__benefit-val {
+  flex: 1; min-width: 0; font-size: 12px; color: #1a1a1a; text-align: right;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.bill-step-bar__item.is-done .bill-step-bar__label { color: #666; }
+.detail-item__benefit .ui-icon { flex-shrink: 0; color: var(--text-sec); width: 14px; height: 14px; }
+.detail-slip-group { margin: 0; }
+.detail-slip-group__head { display: none; }
 
-/* 开单 · 选卡门闩 + 点单模式条 */
+/* 开单 · 选卡门闩 + 点单模式条（遗留 gate 样式保留兼容） */
 .bill-card-gate {
   padding: 8px 16px 20px;
 }
@@ -12029,6 +12229,26 @@ button.biz-pay-row:active { opacity: .72; }
   display: inline-flex; align-items: center; justify-content: center;
 }
 .quick-issue-pay__edit svg { width: 14px; height: 14px; display: block; }
+.quick-issue-date {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 16px; margin-bottom: 12px;
+  background: #fff; border-radius: 12px; border: none;
+  font-family: inherit; text-align: left; cursor: pointer; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+.quick-issue-date:active { background: #FAFAFA; }
+.quick-issue-date__lbl { font-size: 15px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+.quick-issue-date__trail {
+  display: inline-flex; align-items: center; gap: 4px; min-width: 0; justify-content: flex-end;
+}
+.quick-issue-date__val {
+  font-size: 15px; font-weight: 500; color: var(--text);
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.quick-issue-date__chev {
+  flex-shrink: 0; color: #C0C0C0; display: inline-flex; align-items: center;
+}
+.quick-issue-date__chev svg { display: block; }
 .add-card-decision-scroll .quick-issue-pay { margin: 0 0 12px; }
 .quick-issue-page .add-card-staff-row {
   border-radius: 12px; border-top: none; margin-bottom: 12px;
@@ -12049,12 +12269,15 @@ button.biz-pay-row:active { opacity: .72; }
 .add-card-staff-sheet__body .detail-item__panel-row--staff-head { display: none; }
 .bill-staff-sheet__body .detail-item__panel-row--staff-head { display: none; }
 .detail-staff-block {
-  margin: 0; padding: 0 0 8px; box-sizing: border-box;
+  margin: 0; padding: 0; box-sizing: border-box;
   border-top: 0.5px solid #F0F0F0;
+}
+.detail-item__panel > .detail-staff-block:first-child {
+  border-top: none;
 }
 .detail-staff-entry {
   width: 100%; display: flex; align-items: center; gap: 8px;
-  padding: 10px 0; border: none; background: transparent;
+  padding: 12px 0; border: none; background: transparent;
   font-family: inherit; color: inherit; cursor: pointer; text-align: left;
   box-sizing: border-box;
 }
@@ -12368,6 +12591,15 @@ button.biz-pay-row:active { opacity: .72; }
 .customer-card__guest-actions {
   display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto;
 }
+.customer-card__quick-reg {
+  border: none; background: rgba(255,255,255,.8); color: var(--brand);
+  font-size: 13px; font-weight: 500; height: 32px; padding: 0 14px;
+  border-radius: 999px; cursor: pointer; font-family: inherit; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  white-space: nowrap; box-sizing: border-box; line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.customer-card__quick-reg:active { opacity: .88; }
 .customer-card__record-icon {
   width: 32px; height: 32px; border-radius: 50%; border: none;
   background: rgba(255,255,255,.8); color: var(--brand);
@@ -12569,9 +12801,116 @@ button.biz-pay-row:active { opacity: .72; }
   display: inline-block; margin-left: 6px; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600;
   color: #E8C57A; background: #3A3A3A;
 }
-.detail-page-body { background: var(--bg-page); padding-bottom: 12px; }
+.detail-page-body { background: var(--bg-page); padding: 0 0 20px; }
 .detail-guest-slot { padding: 12px 0 0; }
 .detail-guest-slot .customer-card { margin-top: 0; }
+.detail-settle-stack {
+  display: flex; flex-direction: column; gap: 12px;
+  margin: 12px 16px 0; box-sizing: border-box;
+}
+/* 结算确认 · 记账单小票 */
+.detail-slip {
+  position: relative; background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.9);
+  border: 1px solid #EDEDED;
+}
+.detail-slip__serration {
+  position: absolute; left: 0; right: 0; top: 40px; height: 0;
+  border-top: 1px dashed #E8E8E8; pointer-events: none; z-index: 2;
+}
+.detail-slip__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px 10px; min-height: 40px; box-sizing: border-box;
+}
+.detail-slip__title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
+}
+.detail-slip__meta {
+  margin-left: auto; font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.detail-slip__body { padding: 4px 0 0; overflow: hidden; }
+.detail-slip__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 12px; border-top: 1px dashed #EDEDED;
+}
+.detail-slip__sub { font-size: 12px; color: var(--text-sec); }
+.detail-slip__total {
+  font-size: 15px; font-weight: 600; color: #1a1a1a; font-family: var(--font-data);
+}
+.detail-slip .detail-item {
+  margin-top: 0; background: #fff;
+  border-top: 0.5px solid rgba(0,0,0,.06);
+  overflow: hidden;
+}
+.detail-slip .detail-item:first-child { border-top: none; }
+.detail-slip .detail-item__track,
+.detail-slip .detail-item__main { background: #fff; }
+.detail-slip .detail-item__main { padding: 12px 14px; }
+.detail-slip .empty-cart { padding: 20px 14px; margin: 0; }
+/* 结算确认 · 账单构成 */
+.detail-compose {
+  position: relative; background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.9);
+  border: 1px solid #EDEDED;
+  padding: 4px 0 0;
+}
+.detail-compose__head {
+  padding: 12px 14px 8px; font-size: 13px; font-weight: 600; color: #1a1a1a;
+}
+.detail-compose__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; margin: 0; padding: 11px 14px; box-sizing: border-box;
+  border: none; background: transparent; font-family: inherit; text-align: left;
+  font-size: 14px; color: #1a1a1a; cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+button.detail-compose__row { cursor: pointer; }
+button.detail-compose__row:active { background: #FAFAFA; }
+.detail-compose__lbl { flex-shrink: 0; color: #555; }
+.detail-compose__val {
+  display: inline-flex; align-items: center; gap: 4px; min-width: 0;
+  font-size: 14px; color: #1a1a1a; font-family: var(--font-data);
+  max-width: 62%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.detail-compose__val.is-deduct { color: var(--brand); font-weight: 500; }
+.detail-compose__val.is-muted { color: var(--text-sec); font-family: inherit; font-weight: 400; }
+.detail-compose__val .ui-icon {
+  flex-shrink: 0; width: 14px; height: 14px; color: var(--text-sec);
+}
+.detail-compose__perf {
+  margin: 4px 14px 0; height: 0;
+  border-top: 1px dashed #E0E0E0;
+}
+.detail-compose__due {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 14px 14px 16px;
+}
+.detail-compose__due-lbl {
+  font-size: 15px; font-weight: 600; color: #1a1a1a;
+}
+.detail-compose__due-amt {
+  font-size: 22px; font-weight: 600; color: var(--brand);
+  font-family: var(--font-data); line-height: 1.2;
+}
+/* 结算确认 · 备注轻拟物 */
+.detail-remark {
+  background: #fff; border-radius: 12px; padding: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.9);
+  border: 1px solid #EDEDED; margin: 0;
+}
+.detail-remark__label { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
+.detail-remark__box {
+  position: relative; background: #FAFAFA; border-radius: 8px; padding: 12px;
+  min-height: 88px; border: 1px solid transparent; box-sizing: border-box;
+}
+.detail-remark__box:focus-within {
+  border-color: var(--input-border-focus); background: #fff;
+}
+.detail-remark__box textarea {
+  width: 100%; border: none; background: transparent; resize: none; min-height: 64px;
+  font-size: 14px; font-family: inherit; color: var(--text); outline: none;
+}
+.detail-remark__count { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: var(--text-sec); }
 .detail-manual-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   margin: 12px 0 0; padding: 14px 16px; background: #fff;
@@ -12600,6 +12939,8 @@ button.biz-pay-row:active { opacity: .72; }
 .detail-item__track {
   position: relative; z-index: 1; width: 100%; background: #fff;
   display: flex; transition: transform .2s ease; will-change: transform; touch-action: pan-y;
+  /* 右侧多盖 1px，挡住删除钮边缘渗色 */
+  box-shadow: 1px 0 0 #fff;
 }
 .detail-item__track.is-open { transform: translateX(-60px); }
 .detail-item__main { width: 100%; flex-shrink: 0; padding: 14px 16px; box-sizing: border-box; background: #fff; }
@@ -12611,14 +12952,24 @@ button.biz-pay-row:active { opacity: .72; }
   font-size: 11px; color: #B45309; background: #FEF3C7; vertical-align: middle;
 }
 .detail-item__panel .detail-staff-block {
-  margin: 0; padding: 0; border-top: none;
+  margin: 0; padding: 0;
+  border-top: 0.5px solid #F0F0F0;
+}
+.detail-item__panel > .detail-staff-block:first-child {
+  border-top: none;
 }
 .detail-item__panel .detail-staff-entry { padding: 12px 0; }
-.detail-item__panel .detail-staff-summary { padding-bottom: 8px; }
+.detail-item__panel .detail-staff-summary { padding-bottom: 4px; }
 .detail-item__del {
   position: absolute; top: 0; right: 0; bottom: 0; z-index: 0;
   width: 60px; border: none; background: linear-gradient(180deg,#F32F41,#FF4C15);
   color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+  /* 关闭态彻底隐藏，避免亚像素裁切露出红边 */
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.detail-item:has(.detail-item__track.is-open) .detail-item__del,
+.detail-item.is-swiping .detail-item__del {
+  opacity: 1; visibility: visible; pointer-events: auto;
 }
 .detail-item__top { display: flex; align-items: flex-start; gap: 8px; }
 .detail-item__badge {
@@ -12665,13 +13016,35 @@ button.biz-pay-row:active { opacity: .72; }
 .detail-item__due-row .label { font-size: 14px; }
 .detail-item__due-row .amt { font-size: 18px; font-weight: 500; font-family: var(--font-data); }
 .detail-item__due-row .old { font-size: 12px; color: var(--text-sec); text-decoration: line-through; }
-.detail-item__panel { background: #EFF1F9; margin: 0 -16px -16px; padding: 14px 16px 16px; overflow: visible; }
+.detail-item__panel {
+  background: #fff; margin: 10px 0 0; padding: 0;
+  overflow: visible; border-top: 0.5px solid rgba(0,0,0,.06);
+}
+.detail-slip .detail-item__main { padding-bottom: 12px; }
+.detail-item.is-expanded .detail-item__main { padding-bottom: 4px; }
 .detail-item__panel-row {
-  display: flex; align-items: center; justify-content: space-between; padding: 10px 0;
-  border-bottom: 1px solid rgba(0,0,0,.06); font-size: 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 0 4px; border-bottom: none; font-size: 14px;
 }
 .detail-item__panel-row:last-child { border-bottom: none; }
-.detail-item__staff-block { border-bottom: 1px solid rgba(0,0,0,.06); position: relative; }
+.detail-item__panel-row--subtotal {
+  margin-top: 4px; padding-top: 12px;
+  border-top: 0.5px solid rgba(0,0,0,.06);
+}
+.detail-item__subtotal-edit {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0; padding: 4px 2px 4px 8px; border: none; border-radius: 6px;
+  background: transparent; cursor: pointer; font-family: inherit;
+  color: #1a1a1a; -webkit-tap-highlight-color: transparent;
+}
+.detail-item__subtotal-edit:active { background: #FAFAFA; }
+.detail-item__subtotal-edit .num {
+  font-size: 16px; font-weight: 600; font-family: var(--font-data); color: #1a1a1a;
+}
+.detail-item__subtotal-edit .ui-icon {
+  width: 14px; height: 14px; color: var(--text-sec); flex-shrink: 0;
+}
+.detail-item__staff-block { border-bottom: none; position: relative; }
 .detail-item__panel-row--staff-head { border-bottom: none; padding-bottom: 8px; }
 .staff-card-scrim {
   position: absolute; inset: -8px -4px -12px; z-index: 1;
@@ -12971,20 +13344,6 @@ button.biz-pay-row:active { opacity: .72; }
 .coupon-section-label {
   margin: 4px 0 0; padding: 4px 0 0; font-size: 12px; color: var(--text-sec);
 }
-.detail-remark { background: #fff; margin-top: 12px; padding: 16px; }
-.detail-remark__label { font-size: 14px; margin-bottom: 10px; }
-.detail-remark__box {
-  position: relative; background: var(--input-bg); border-radius: 4px; padding: 12px;
-  min-height: 100px; border: 1px solid transparent;
-}
-.detail-remark__box:focus-within {
-  border-color: var(--input-border-focus); background: #fff;
-}
-.detail-remark__box textarea {
-  width: 100%; border: none; background: transparent; resize: none; min-height: 72px;
-  font-size: 14px; font-family: inherit; color: var(--text); outline: none;
-}
-.detail-remark__count { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: var(--text-sec); }
 .bottom-bar--detail .bottom-bar__action { gap: 10px; }
 .bottom-bar--detail .bottom-bar__btns { display: flex; gap: 10px; margin-left: auto; }
 .bottom-bar--detail .btn-hold-detail {
@@ -14027,8 +14386,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="dialog__title" id="empAchHelpTitle">业绩说明</div>
     <div class="dialog__scroll emp-help-body">
       <p>若设置扣除成本，则根据实收或售价减去成本再计算。</p>
-      <p>按比例设定：业绩=(售价-成本)*百分比。项目/产品「通用规则」仅支持按比例。</p>
-      <p>单项业绩可另设固定金额：业绩=固定金额。</p>
+      <p>按比例设定：业绩=(售价-成本)*百分比。项目/产品/办卡「通用规则」仅支持按比例。</p>
+      <p>单项或单独设置卡时可另设固定金额：业绩=固定金额。</p>
       <p>快速消费默认计入项目业绩。</p>
       <p>计算模式在「通用规则」中切换：平均分配无需选工位；按工位分配需选工位并可分工位配置。</p>
       <p>「基础设置」可配置消耗赠送金额、免单等场景口径，以及工位显示名称。</p>
@@ -15654,7 +16013,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </button>
               <div class="title">选择顾客</div>
             </div>
-            <div class="bill-step-bar" id="billCustomerSteps" aria-hidden="true"></div>
             <div class="page-body pick-page">
               <div class="search-bar">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
@@ -15687,28 +16045,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
               </button>
             </div>
-            <div class="bill-step-bar" id="billCatalogSteps" aria-hidden="true"></div>
             <div class="page-body" id="billBody"></div>
             <div class="bottom-bar bottom-bar--bill">
               <div class="bottom-bar__action">
-                <button type="button" class="cart-icon-btn" id="btnOpenCart" aria-label="已选商品">
-                  <img src="assets/billing/bill-cart.svg" alt="">
-                  <span class="cart-badge hidden" id="cartBadge">0</span>
-                </button>
                 <div class="bottom-bar__summary">
-                  <div class="bottom-bar__label">应付</div>
+                  <div class="bottom-bar__label" id="billDueLabel">应付</div>
                   <div class="bottom-bar__amount num" id="billDuePreview"><span class="yen">¥</span><span class="val">0</span></div>
                 </div>
                 <div class="bottom-bar__btns">
                   <button type="button" class="btn-main secondary" id="btnHold">挂单</button>
-                  <button type="button" class="btn-main btn-next" id="btnBillNext">下一步</button>
+                  <button type="button" class="btn-main btn-next" id="btnBillNext">去结账</button>
                 </div>
-              </div>
-              <div class="bottom-bar__safe"></div>
-            </div>
-            <div class="bottom-bar bottom-bar--gate" id="billGateBar" hidden>
-              <div class="bottom-bar__action">
-                <button type="button" class="btn-main" id="btnBillGateOk" disabled>确定</button>
               </div>
               <div class="bottom-bar__safe"></div>
             </div>
@@ -15737,7 +16084,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               </button>
               <div class="title">选择服务人</div>
             </div>
-            <div class="bill-step-bar" id="billStaffSteps" aria-hidden="true"></div>
             <div class="page-body" id="billStaffBody"></div>
             <div class="bottom-bar bottom-bar--dual">
               <div class="bottom-bar__action">
@@ -15760,7 +16106,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
               </button>
             </div>
-            <div class="bill-step-bar" id="billSettleSteps" aria-hidden="true"></div>
             <div class="page-body detail-page-body" id="detailBody"></div>
             <div class="bottom-bar bottom-bar--detail">
               <div class="bottom-bar__action">
@@ -16525,10 +16870,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <div class="title">确认办卡</div>
-              <button type="button" class="action" id="btnQuickIssueDate" aria-label="办卡日期">
-                <span id="quickIssueDateLabel">2026.7.20</span>
-                <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
-              </button>
             </div>
             <div class="quick-issue-page">
               <div class="quick-issue-page__body">
@@ -16543,6 +16884,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                     <span class="quick-issue-pay__val" id="quickIssuePayVal">¥0</span>
                     <span class="quick-issue-pay__hint">已改</span>
                     <span class="quick-issue-pay__edit" aria-hidden="true"></span>
+                  </span>
+                </button>
+                <button type="button" class="quick-issue-date" id="btnQuickIssueDate" aria-haspopup="dialog" aria-label="选择办卡日期">
+                  <span class="quick-issue-date__lbl">办卡日期</span>
+                  <span class="quick-issue-date__trail">
+                    <span class="quick-issue-date__val" id="quickIssueDateLabel">2026.7.20</span>
+                    <span class="quick-issue-date__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
                   </span>
                 </button>
                 <button type="button" class="add-card-staff-row" id="quickIssueStaffRow" aria-haspopup="dialog">
@@ -18815,6 +19163,7 @@ const DEMO_HOLDER_LEDGER = {
 };
 
 const OPTIMIZATION_LOG = [
+  '联调定稿对齐：办卡/收费延期须支付成功（mock 收据）后 Finalize；服务员工写入办卡业绩日志；退卡仅记账',
   '演示数据：有数据注入 10 卡；补永久储值 + 减值烫染对照；副文案标明演示用途与推荐会员',
   '创建流程：两步（基本信息 → 权益组合）；列表卡面「办卡」快捷入口；创建成功页成就态',
   '文案统一：Step1 购买金额；权益组合面值可编辑、赠送自动计算（面值−购买）',
@@ -27257,11 +27606,22 @@ function startIssueCheckoutFromPicker() {
   resetIssueExtendDraft();
 }
 
-function finalizeTemplateIssueAfterPay({ templateId, memberId }) {
+function finalizeTemplateIssueAfterPay(ctx) {
+  ctx = ctx || {};
+  const templateId = ctx.templateId;
+  const memberId = ctx.memberId;
   const tpl = getTemplate(templateId);
   if (!tpl || !memberId) return;
+  /* 硬规则：须已有支付收据（原型 mock 由确认支付写入 tradeReceiptId） */
+  if (!ctx.tradeReceiptId) {
+    if (typeof showToast === 'function') showToast('未支付，无法办卡入账', true);
+    return;
+  }
   accumulateIssueStats(templateId, tpl, 1);
   addMemberHoldings(templateId, [memberId], tpl);
+  if (typeof recordDemoCardIssueAchievement === 'function') {
+    recordDemoCardIssueAchievement(ctx);
+  }
   if (state.viewingTemplateId === templateId) renderDetailStatsList(tpl);
   state.lastIssuedTemplateId = templateId;
   renderTemplateList();
@@ -27270,6 +27630,34 @@ function finalizeTemplateIssueAfterPay({ templateId, memberId }) {
   } else {
     syncBillingCustomerCardsFromHoldings(memberId);
   }
+}
+
+/** 演示：支付成功后按单据员工写入办卡业绩分摊（持卡不落员工权威字段） */
+function recordDemoCardIssueAchievement(ctx) {
+  ctx = ctx || {};
+  if (!window.EmployeeStore) return;
+  if (!Array.isArray(window.EmployeeStore.cardIssueAchLogs)) {
+    window.EmployeeStore.cardIssueAchLogs = [];
+  }
+  const staffIds = Array.isArray(ctx.staffIds) ? ctx.staffIds.slice() : [];
+  if (!staffIds.length) return;
+  const receiptId = ctx.tradeReceiptId || '';
+  if (receiptId && window.EmployeeStore.cardIssueAchLogs.some(function (x) {
+    return x && x.tradeReceiptId === receiptId;
+  })) {
+    return; /* 同收据幂等 */
+  }
+  window.EmployeeStore.cardIssueAchLogs.push({
+    at: Date.now(),
+    bizType: 'card_issue',
+    tradeReceiptId: receiptId,
+    templateId: ctx.templateId || null,
+    memberId: ctx.memberId || null,
+    amount: Number(ctx.amount) || 0,
+    staffIds: staffIds,
+    staffRoles: Object.assign({}, ctx.staffRoles || {}),
+    staffDesignated: Object.assign({}, ctx.staffDesignated || {}),
+  });
 }
 
 function applyIssueExtendCommit({
@@ -27341,9 +27729,13 @@ function applyIssueExtendCommit({
   renderIssueMemberList();
 }
 
-/** 支付成功后落延期（由 BillingDemo / CardHost 回调） */
+/** 支付成功后落延期（由 BillingDemo / CardHost 回调；须带 tradeReceiptId） */
 function finalizeTemplateExtendAfterPay(pending) {
   if (!pending?.templateId || !pending?.memberId) return;
+  if (!pending.tradeReceiptId) {
+    if (typeof showToast === 'function') showToast('未支付，无法延期入账', true);
+    return;
+  }
   const tid = pending.templateId;
   const memberId = pending.memberId;
   const tpl = getTemplateForHolderOps(tid);
@@ -27495,6 +27887,7 @@ window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
 window.__pickerMaskClosers.refundCardMask = function () { closeRefundConfirm(true); };
 
 function performRefundCard() {
+  /* 本期：仅结束持卡 + 记实退（元）；不走支付原路退 / 退款通道回调 */
   const tid = state.issueTargetTemplateId;
   const memberId = state.issueRefundMemberId;
   const tpl = getTemplateForHolderOps(tid);
@@ -31137,6 +31530,8 @@ function billingNav(fn) {
     payCycle: { mode: 'calendar', settleDay: 25 },
     albumPhotos: ALBUM_DEMO_PHOTOS.slice(),
     swords: SWORD_ICONS,
+    /* 办卡支付成功后写入的演示业绩分摊日志（正式环境由办卡业绩引擎落库） */
+    cardIssueAchLogs: [],
     roles: DEFAULT_ROLES.slice(),
     staff: [
       { id: 'st0', name: '顾清扬', short: '顾', gender: '男', ageBand: '30以上', yearsExp: 12, role: '店主', phone: '18600186000', incomplete: false, status: '在职', baseSalary: 5000, perm: '店主', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw11' },
@@ -33534,7 +33929,10 @@ function billingNav(fn) {
           nonDesignated: prev.defaultNonDesignated,
         };
       }
-      out[def.key] = mergeAchScheme(src[def.key] || legacy, defaultAchScheme());
+      var sch = mergeAchScheme(src[def.key] || legacy, defaultAchScheme());
+      /* 办卡通用规则仅按比例；历史 amount 收敛 */
+      sch.valueMode = 'pct';
+      out[def.key] = sch;
     });
     return out;
   }
@@ -33776,6 +34174,11 @@ function billingNav(fn) {
     return !!(state.achEdit && state.achEdit.kind === 'tabDefault');
   }
 
+  /* 项目/产品/办卡「通用规则」业绩取值仅按比例；单项/单独设卡才可选固定金额 */
+  function isAchPctOnlyEdit() {
+    return !!(state.achEdit && (state.achEdit.kind === 'tabDefault' || state.achEdit.kind === 'cardDefault'));
+  }
+
   function renderAchCalcModeSegHtml(kind) {
     ensureCalcModes();
     var cur = getAchCalcMode(kind);
@@ -33815,7 +34218,8 @@ function billingNav(fn) {
 
   function renderCardAchRulesHtml(card) {
     var chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-    var incomeTypes = card.incomeTypes || ensureCardIncomeTypes(card);
+    var incomeTypes = ensureCardIncomeTypes(card);
+    card.incomeTypes = incomeTypes;
     var html = '<div class="emp-ach-card-rules">' +
       renderAchCalcModeSegHtml('card') +
       '<button type="button" class="emp-ach-rule-row" data-card-ach-base>' +
@@ -33854,7 +34258,7 @@ function billingNav(fn) {
 
   function renderAchEditBody(scheme) {
     scheme = ensureAchStations(scheme);
-    var pctOnly = isAchTabDefaultEdit();
+    var pctOnly = isAchPctOnlyEdit();
     var isAmt = pctOnly
       ? false
       : ((state.achEdit && state.achEdit.valueMode === 'amount') || scheme.valueMode === 'amount');
@@ -34040,14 +34444,14 @@ function billingNav(fn) {
     var scheme = ensureAchStations(mergeAchScheme(opts.scheme));
     var tab = opts.tab || state.achTab;
     var kind = opts.kind || 'item';
-    if (kind === 'tabDefault') scheme.valueMode = 'pct';
+    if (kind === 'tabDefault' || kind === 'cardDefault') scheme.valueMode = 'pct';
     state.achEdit = {
       kind: kind,
       itemId: opts.itemId || null,
       typeKey: opts.typeKey || null,
       catId: opts.catId || state.achCatId,
       tab: tab,
-      valueMode: kind === 'tabDefault' ? 'pct' : scheme.valueMode,
+      valueMode: (kind === 'tabDefault' || kind === 'cardDefault') ? 'pct' : scheme.valueMode,
       costMode: scheme.costMode,
       title: opts.title || '业绩方案',
       stationId: opts.stationId || 'senior',
@@ -34107,6 +34511,7 @@ function billingNav(fn) {
     } else if (edit.kind === 'cardDefault') {
       var card = window.EmployeeStore.ach.card || ensureCardAchDefaults();
       card.incomeTypes = ensureCardIncomeTypes(card);
+      scheme.valueMode = 'pct';
       card.incomeTypes[edit.typeKey] = cloneAchScheme(scheme);
       window.EmployeeStore.ach.card = card;
       if (copyToGroup) {
@@ -34216,9 +34621,13 @@ function billingNav(fn) {
     });
   }
 
-  function cardTplGradient(colorKey) {
-    if (typeof getCardGradient === 'function') return getCardGradient(colorKey);
-    return 'linear-gradient(172.32deg, #F32F41 0%, #FF4A5C 100%)';
+  /* 业绩卡列表卡头：纯色，取卡头渐变最右侧色值 */
+  function cardTplFaceSolid(colorKey) {
+    var theme = typeof getCardTheme === 'function' ? getCardTheme(colorKey) : null;
+    var grad = (theme && theme.gradient) || '';
+    var stops = grad.match(/#(?:[0-9A-Fa-f]{3,8})\b/g);
+    if (stops && stops.length) return stops[stops.length - 1];
+    return (theme && theme.accent) || '#EED1C3';
   }
 
   function renderCardTplListHtml(cardItems) {
@@ -34228,12 +34637,12 @@ function billingNav(fn) {
     }
     return '<div class="emp-ach-card-section">按模板权益设置</div><div class="emp-ach-tpl-list">' + filtered.map(function (it) {
       var keys = it.typeKeys || cardAchApplicableTypes(it.benefits);
-      var grad = cardTplGradient(it.cardColor);
+      var faceBg = cardTplFaceSolid(it.cardColor);
       var stationOnCard = getAchCalcMode('card') === 'station';
       var rows = keys.map(function (k) {
         var sch = (it.types && it.types[k]) || defaultAchScheme();
         var cost = formatAchCostShort(sch);
-        return '<div class="emp-ach-tpl-row" data-ach-card-type="' + k + '" role="button" tabindex="0" aria-label="' + esc(cardTypeLabel(k)) + '">' +
+        return '<div class="emp-ach-tpl-row' + (stationOnCard ? ' emp-ach-tpl-row--stations' : '') + '" data-ach-card-type="' + k + '" role="button" tabindex="0" aria-label="' + esc(cardTypeLabel(k)) + '">' +
           '<span class="emp-ach-tpl-row__label">' + esc(cardTypeLabel(k)) + '</span>' +
           '<div class="emp-ach-tpl-row__trail">' +
           renderAchTwinCapsHtml(sch, { itemId: it.id, typeKey: k, stationMode: stationOnCard }) +
@@ -34241,7 +34650,7 @@ function billingNav(fn) {
           '</div></div>';
       }).join('');
       return '<article class="emp-ach-tpl-card" data-ach-item="' + esc(it.id) + '">' +
-        '<div class="emp-ach-tpl-face" style="background:' + esc(grad) + '">' +
+        '<div class="emp-ach-tpl-face" style="background:' + esc(faceBg) + '">' +
         '<div class="emp-ach-tpl-face__name">' + esc(it.name) + '</div>' +
         '<div class="emp-ach-tpl-face__price">' + fmtAchPrice(it.price) + '</div>' +
         '</div>' +
@@ -36909,7 +37318,7 @@ function billingNav(fn) {
       }
       var vm = e.target.closest('[data-ach-value-mode]');
       if (vm && state.achEdit) {
-        if (isAchTabDefaultEdit()) return;
+        if (isAchPctOnlyEdit()) return;
         var nextMode = vm.dataset.achValueMode;
         if (state.achEdit.valueMode === nextMode) return;
         flushAchEditStationFromDom();
@@ -40948,11 +41357,7 @@ window.__BILLING_EMBEDDED__ = true;
         '</div>';
     }
     syncCardIssuePayUi(tpl);
-
-    const dateSrc = document.getElementById('addCardDateLabel');
-    const dateDst = document.getElementById('quickIssueDateLabel');
-    if (dateSrc && dateDst) dateDst.textContent = dateSrc.textContent;
-
+    syncBillDateLabels();
     renderAddCardStaffOnly();
   }
 
@@ -41096,6 +41501,12 @@ window.__BILLING_EMBEDDED__ = true;
     billCardGateDone: false,
     billPickCardId: null,
     billGateDraftCardId: null,
+    billSlips: [], // [{ id, cardIds: [] }]
+    billDraft: null, // { id, cardIds: [] } | null
+    billComposerMode: 'browse', // browse | drafting | review
+    billPickCardIds: [], // multi-select while composing
+    billHeldCardsToolsOpen: false,
+    benefitFocusLineId: null,
     linkedCardIds: [],
     billRechargeCardId: null,
     billRechargeAmount: '',
@@ -41418,8 +41829,6 @@ window.__BILLING_EMBEDDED__ = true;
     btn.setAttribute('aria-hidden', 'false');
     let label = '返回选择顾客';
     if (state.billFromHold) label = '返回挂单列表';
-    else if (state.billCardGateOpen) label = '返回选择顾客';
-    else if (shouldOfferBillCardGate() && state.billCardGateDone) label = '返回选择会员卡';
     btn.setAttribute('aria-label', label);
   }
 
@@ -41474,10 +41883,6 @@ window.__BILLING_EMBEDDED__ = true;
 
   function syncBillStepBars(activeId) {
     state.billWizardStep = activeId;
-    ['billCustomerSteps', 'billCatalogSteps', 'billSettleSteps'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = renderBillStepBar(activeId);
-    });
     if (typeof setFlowNavHighlight === 'function') {
       const map = { customer: 'bill-pick', catalog: 'bill-bill', settle: 'bill-detail' };
       if (map[activeId]) setFlowNavHighlight(map[activeId]);
@@ -41528,14 +41933,11 @@ window.__BILLING_EMBEDDED__ = true;
     ensureCashierId();
     if (!state.customer) enterBillCustomerOnly(GUEST_UNSET);
     if (opts.resetCardPick) resetBillCardPick();
-    const needGate = !opts.skipGate && shouldOfferBillCardGate() && !state.billCardGateDone;
-    state.billCardGateOpen = !!needGate;
-    if (needGate) {
-      state.billCustomerPickOpen = false;
-      state.billGateDraftCardId = state.billPickCardId || null;
-    } else {
-      state.billGateDraftCardId = null;
-    }
+    if (opts.resetSlips) resetBillSlipState();
+    state.billCardGateOpen = false;
+    state.billCardGateDone = true;
+    state.billGateDraftCardId = null;
+    state.billCustomerPickOpen = false;
     renderBillHeader();
     syncCartChrome();
     syncPickHoldsEntry();
@@ -41551,6 +41953,208 @@ window.__BILLING_EMBEDDED__ = true;
     state.billCardGateDone = false;
     state.billPickCardId = null;
     state.billGateDraftCardId = null;
+    resetBillSlipState();
+  }
+
+  function resetBillSlipState() {
+    state.billSlips = [];
+    state.billDraft = null;
+    state.billPickCardIds = [];
+    state.billComposerMode = 'browse';
+    state.billHeldCardsToolsOpen = false;
+    state.benefitFocusLineId = null;
+  }
+
+  function syncBillComposerMode() {
+    const draft = state.billDraft;
+    const draftLines = draft ? getDraftLines() : [];
+    if (draft && draftLines.length) state.billComposerMode = 'drafting';
+    else if ((state.billSlips || []).length && !draft) state.billComposerMode = 'review';
+    else if (draft) state.billComposerMode = 'drafting';
+    else state.billComposerMode = 'browse';
+    return state.billComposerMode;
+  }
+
+  function ensureBillDraft() {
+    if (state.billDraft) return state.billDraft;
+    state.billDraft = {
+      id: 'slip_' + Date.now(),
+      cardIds: (state.billPickCardIds || []).slice(),
+    };
+    state.billComposerMode = 'drafting';
+    return state.billDraft;
+  }
+
+  function getSlipLines(slipId) {
+    if (!slipId) return [];
+    return (state.cart || []).filter(it => it && it.slipId === slipId);
+  }
+
+  function getDraftLines() {
+    return state.billDraft ? getSlipLines(state.billDraft.id) : [];
+  }
+
+  function slipSubtotal(slipId) {
+    return round2(getSlipLines(slipId).reduce((s, it) => s + lineUnit(it) * it.qty, 0));
+  }
+
+  function sealBillDraft() {
+    const draft = state.billDraft;
+    if (!draft) return false;
+    const lines = getDraftLines();
+    if (!lines.length) {
+      showToast('请先添加商品');
+      return false;
+    }
+    state.billSlips.push({
+      id: draft.id,
+      cardIds: (draft.cardIds || state.billPickCardIds || []).slice(),
+    });
+    state.billDraft = null;
+    state.billPickCardIds = [];
+    state.billComposerMode = 'review';
+    return true;
+  }
+
+  function continueAddBillSlip() {
+    state.billComposerMode = 'browse';
+    state.billDraft = null;
+    state.billPickCardIds = [];
+  }
+
+  function unsealSlipForEdit(slipId) {
+    if (!slipId) return false;
+    const idx = (state.billSlips || []).findIndex(s => s.id === slipId);
+    if (idx < 0) return false;
+    if (state.billDraft && getDraftLines().length) {
+      if (!sealBillDraft()) return false;
+    }
+    const slip = state.billSlips[idx];
+    state.billSlips.splice(idx, 1);
+    state.billDraft = { id: slip.id, cardIds: (slip.cardIds || []).slice() };
+    state.billPickCardIds = (slip.cardIds || []).slice();
+    state.billComposerMode = 'drafting';
+    return true;
+  }
+
+  function getActiveBillPickCardIds() {
+    if (state.billDraft && Array.isArray(state.billDraft.cardIds)) return state.billDraft.cardIds;
+    return state.billPickCardIds || [];
+  }
+
+  function toggleBillPickCard(cardId) {
+    if (!cardId) return;
+    const ids = getActiveBillPickCardIds().slice();
+    const i = ids.indexOf(cardId);
+    if (i >= 0) ids.splice(i, 1);
+    else ids.push(cardId);
+    state.billPickCardIds = ids;
+    if (state.billDraft) state.billDraft.cardIds = ids.slice();
+    renderBillHeader();
+    syncCartChrome();
+  }
+
+  function assignCartItemToDraft(item) {
+    if (!item) return;
+    const draft = ensureBillDraft();
+    item.slipId = draft.id;
+  }
+
+  function slipCardChipHtml(cardId) {
+    const card = findHeldCardById(cardId);
+    if (!card) return '';
+    const tid = heldTemplateId(card);
+    const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
+    const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
+    const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#C0C0C0';
+    return `<span class="bill-slip__card-chip"><span class="bill-slip__card-dot" style="background:${grad}"></span>${escapeHtml(card.name)}</span>`;
+  }
+
+  function renderBillSlipCard(slip, opts) {
+    opts = opts || {};
+    if (!slip) return '';
+    const isDraft = !!opts.draft;
+    const index = opts.index || 1;
+    const lines = getSlipLines(slip.id);
+    const total = slipSubtotal(slip.id);
+    const cardIds = slip.cardIds || [];
+    const chips = cardIds.map(slipCardChipHtml).filter(Boolean).join('')
+      || (isDraft ? '<span class="bill-slip__card-chip">未选卡</span>' : '');
+    const lineHtml = lines.length
+      ? lines.map(it => {
+          const quick = isQuickCartItem(it);
+          return `<div class="bill-slip__line${quick ? ' bill-slip__line--quick' : ''}">
+            <span class="bill-slip__line-name">${escapeHtml(it.name || '')}</span>
+            <span class="bill-slip__line-qty">×${it.qty || 1}</span>
+            <span class="bill-slip__line-amt">${formatYen(lineUnit(it) * it.qty)}</span>
+          </div>`;
+        }).join('')
+      : '<div class="bill-slip__line"><span class="bill-slip__line-name" style="color:var(--text-sec)">暂无项目</span></div>';
+    return `<div class="bill-slip${isDraft ? ' bill-slip--draft' : ''}" data-bill-slip="${escapeHtml(slip.id)}">
+      <div class="bill-slip__fold" aria-hidden="true"></div>
+      <div class="bill-slip__perforation" aria-hidden="true"></div>
+      <div class="bill-slip__head">
+        <span class="bill-slip__title">记账单 ${index}</span>
+        ${isDraft ? '<span class="bill-slip__tag">编辑中</span>' : ''}
+        <div class="bill-slip__cards">${chips}</div>
+        ${isDraft ? '' : `<button type="button" class="bill-slip__edit" data-bill-slip-edit="${escapeHtml(slip.id)}">编辑</button>`}
+      </div>
+      <div class="bill-slip__body">${lineHtml}</div>
+      <div class="bill-slip__foot">
+        <span class="bill-slip__sub">共 ${lines.length} 项</span>
+        <span class="bill-slip__total">${formatYen(total)}</span>
+      </div>
+    </div>`;
+  }
+
+  function renderBillSlipStack() {
+    const parts = [];
+    (state.billSlips || []).forEach((slip, i) => {
+      parts.push(renderBillSlipCard(slip, { draft: false, index: i + 1 }));
+    });
+    if (state.billDraft && getDraftLines().length) {
+      parts.push(renderBillSlipCard(state.billDraft, {
+        draft: true,
+        index: (state.billSlips || []).length + 1,
+      }));
+    }
+    if (!parts.length) return '';
+    return `<div class="bill-slip-stack">${parts.join('')}</div>`;
+  }
+
+  function renderBillHeldCardsPicker() {
+    if (!isMemberBill()) return '';
+    const cards = (getCustomer().cards || []);
+    const active = new Set(getActiveBillPickCardIds());
+    const toolsOpen = !!state.billHeldCardsToolsOpen;
+    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+    const foldSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10l6 6 6-6"/></svg>';
+    let listHtml = '';
+    if (!cards.length) {
+      listHtml = '<p class="bill-held-cards__empty">暂无会员卡，可添加卡后筛选适用项目</p>';
+    } else {
+      listHtml = `<div class="bill-held-cards__list">${cards.map(card => {
+        const on = active.has(card.id);
+        const tid = heldTemplateId(card);
+        const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
+        const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
+        const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#E8E8E8';
+        return `<button type="button" class="bill-held-card${on ? ' is-on' : ''}" data-bill-held-card="${escapeHtml(card.id)}" aria-pressed="${on ? 'true' : 'false'}">
+          <span class="bill-held-card__face" aria-hidden="true"><span class="bill-held-card__face-head" style="background:${grad}"></span><span class="bill-held-card__face-body"></span></span>
+          <span class="bill-held-card__name">${escapeHtml(card.name)}</span>
+          <span class="bill-held-card__check" aria-hidden="true">${checkSvg}</span>
+        </button>`;
+      }).join('')}</div>`;
+    }
+    return `<div class="bill-held-cards${toolsOpen ? ' is-tools-open' : ''}" id="billHeldCards">
+      <div class="bill-held-cards__title">选择会员卡${active.size ? `（已选 ${active.size}）` : '（可多选）'}</div>
+      ${listHtml}
+      <div class="bill-held-cards__tools">
+        <button type="button" id="btnBillCardAsset">充卡/续卡</button>
+        <button type="button" id="btnBillAddCard">添加卡</button>
+      </div>
+      <button type="button" class="bill-held-cards__fold" id="btnBillHeldCardsFold" data-bill-held-tools-toggle aria-expanded="${toolsOpen ? 'true' : 'false'}" aria-label="${toolsOpen ? '收起更多操作' : '展开更多操作'}">${foldSvg}</button>
+    </div>`;
   }
 
   function shouldOfferBillCardGate() {
@@ -41574,14 +42178,9 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function syncBillCardGateChrome() {
-    const on = !!state.billCardGateOpen;
-    document.getElementById('screen-bill')?.classList.toggle('is-card-gate', on);
+    document.getElementById('screen-bill')?.classList.toggle('is-card-gate', false);
     const gateBar = document.getElementById('billGateBar');
-    if (gateBar) {
-      if (on) gateBar.removeAttribute('hidden');
-      else gateBar.setAttribute('hidden', '');
-    }
-    syncBillGateOkBtn();
+    if (gateBar) gateBar.setAttribute('hidden', '');
   }
 
   function openBillCardGate() {
@@ -41707,12 +42306,13 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function filterBillCatalogByCard(list) {
-    const card = getBillPickCard();
-    if (!card) return list;
-    const scope = getCardCatalogScope(card);
-    if (scope.mode === 'all') return list;
+    const ids = getActiveBillPickCardIds();
+    if (!ids || !ids.length) return list;
+    const scopes = ids.map(id => getCardCatalogScope(findHeldCardById(id))).filter(Boolean);
+    if (!scopes.length) return list;
+    if (scopes.some(s => s.mode === 'all')) return list;
     const asProduct = state.billTab === 'product';
-    return list.filter(it => catalogItemMatchesScope(it, scope, asProduct));
+    return list.filter(it => scopes.some(scope => catalogItemMatchesScope(it, scope, asProduct)));
   }
 
   function renderBillCardModeStrip() {
@@ -41992,8 +42592,28 @@ window.__BILLING_EMBEDDED__ = true;
     return formatFlowTime(d);
   }
 
-  function genDemoManualOrderNo() {
-    return String(10000 + Math.floor(Math.random() * 90000));
+  function genDemoManualOrderNo(bizDateKey) {
+    const key = bizDateKey || (typeof ensureBillBizDate === 'function' ? ensureBillBizDate() : '') || billTodayKey();
+    if (!state._manualOrderSeqByDate) state._manualOrderSeqByDate = {};
+    if (state._manualOrderSeqByDate[key] == null) {
+      let max = 0;
+      (typeof FLOW_ORDERS !== 'undefined' ? FLOW_ORDERS : []).forEach(o => {
+        if ((o.billBizDate || '') !== key) return;
+        const raw = String(o.manualOrderNo || '');
+        if (!/^\d{1,4}$/.test(raw)) return;
+        const n = parseInt(raw, 10);
+        if (n > max) max = n;
+      });
+      state._manualOrderSeqByDate[key] = max;
+    }
+    state._manualOrderSeqByDate[key] += 1;
+    const seq = state._manualOrderSeqByDate[key];
+    return seq > 9999 ? String(seq) : String(seq).padStart(4, '0');
+  }
+
+  function ensureManualOrderNo() {
+    if (!state.manualOrderNo) state.manualOrderNo = genDemoManualOrderNo();
+    return state.manualOrderNo;
   }
 
   function emptyBenefitPickForCard(card) {
@@ -42043,8 +42663,23 @@ window.__BILLING_EMBEDDED__ = true;
     const leftById = {};
     state.cart.forEach(it => { leftById[it.id] = it.qty; });
     const ordered = (cards || []).slice();
-    const preferId = state.billPickCardId;
-    if (preferId) ordered.sort((a, b) => (a.id === preferId ? -1 : b.id === preferId ? 1 : 0));
+    const preferIds = [];
+    (state.billSlips || []).forEach(s => (s.cardIds || []).forEach(id => {
+      if (id && !preferIds.includes(id)) preferIds.push(id);
+    }));
+    if (state.billDraft) {
+      (state.billDraft.cardIds || []).forEach(id => {
+        if (id && !preferIds.includes(id)) preferIds.push(id);
+      });
+    }
+    if (!preferIds.length && state.billPickCardId) preferIds.push(state.billPickCardId);
+    if (preferIds.length) {
+      ordered.sort((a, b) => {
+        const ai = preferIds.indexOf(a.id);
+        const bi = preferIds.indexOf(b.id);
+        return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+      });
+    }
     ordered.forEach(card => {
       const pick = picks[card.id];
       (pick.projects || []).forEach(pr => {
@@ -42168,7 +42803,6 @@ window.__BILLING_EMBEDDED__ = true;
   function openBillSettle() {
     /* 进入结算确认：默认展开购物车第一项；从权益/券返回不经此函数，保留用户展开态 */
     state.detailExpandedId = state.cart[0]?.id || null;
-    if (!state.manualOrderNo) state.manualOrderNo = genDemoManualOrderNo();
     syncBillDateLabels();
     autoApplyBestSettleOffers();
     closeMask('cartSheetMask');
@@ -43244,7 +43878,7 @@ window.__BILLING_EMBEDDED__ = true;
       showToast(`已添加 ${added} 件库存商品`);
       syncCartChrome();
       if (document.getElementById('screen-bill') && !document.getElementById('screen-bill').classList.contains('hidden')) {
-        renderBillCatalog();
+        renderBillHeader();
       }
     }
   }
@@ -43396,11 +44030,22 @@ window.__BILLING_EMBEDDED__ = true;
       showToast(`单品数量不能超过 ${INPUT_LIMITS.CART_QTY_MAX}`, true);
       next = INPUT_LIMITS.CART_QTY_MAX;
     }
-    if (next <= 0) state.cart = state.cart.filter(x => x.id !== item.id);
-    else if (row) row.qty = next;
-    else {
+    if (next <= 0) {
+      state.cart = state.cart.filter(x => x.id !== item.id);
+      if (state.billDraft && !getDraftLines().length) {
+        state.billDraft = null;
+        syncBillComposerMode();
+      }
+    } else if (row) {
+      row.qty = next;
+      if (next > 0) {
+        const draft = ensureBillDraft();
+        if (!row.slipId) row.slipId = draft.id;
+      }
+    } else {
       const unit = Number.isFinite(Number(item.unitPrice)) ? Number(item.unitPrice)
         : (Number(item.price) || 0);
+      const draft = ensureBillDraft();
       state.cart.push({
         ...item,
         qty: next,
@@ -43410,17 +44055,22 @@ window.__BILLING_EMBEDDED__ = true;
         staffRoles: {},
         staffDesignated: {},
         expanded: false,
+        slipId: draft.id,
       });
     }
+    syncBillComposerMode();
     syncCartChrome();
-    if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
+    const billScreen = document.getElementById('screen-bill');
+    if (billScreen && !billScreen.classList.contains('hidden')) renderBillHeader();
   }
   function clearCart() {
     state.cart = [];
     state.billDueEdited = false;
     state.payDueSnapshot = null;
+    resetBillSlipState();
     syncCartChrome();
-    if (document.getElementById('screen-bill').classList.contains('hidden') === false) renderBillCatalog();
+    const billScreen = document.getElementById('screen-bill');
+    if (billScreen && !billScreen.classList.contains('hidden')) renderBillHeader();
   }
   function syncPickHoldsEntry() {
     purgeExpiredHolds({ quiet: true });
@@ -43436,9 +44086,36 @@ window.__BILLING_EMBEDDED__ = true;
   function syncCartChrome() {
     const n = cartCount();
     const badge = document.getElementById('cartBadge');
-    badge.textContent = n;
-    badge.classList.toggle('hidden', n <= 0);
-    document.getElementById('billDuePreview').innerHTML = formatYenParts(cartListTotal());
+    if (badge) {
+      badge.textContent = n;
+      badge.classList.toggle('hidden', n <= 0);
+    }
+    const preview = document.getElementById('billDuePreview');
+    const label = document.getElementById('billDueLabel');
+    const nextBtn = document.getElementById('btnBillNext');
+    const sealedCount = (state.billSlips || []).length;
+    const draftLines = getDraftLines();
+    const mode = state.billComposerMode;
+    let due = cartListTotal();
+    if (mode === 'drafting' && state.billDraft) {
+      due = slipSubtotal(state.billDraft.id);
+      if (label) label.textContent = '本单小计';
+    } else if (label) {
+      label.textContent = '应付';
+    }
+    if (preview) preview.innerHTML = formatYenParts(due);
+    if (nextBtn) {
+      if (mode === 'drafting' && draftLines.length) {
+        nextBtn.textContent = '添加此单';
+        nextBtn.disabled = false;
+      } else if (sealedCount >= 1) {
+        nextBtn.textContent = '去结账';
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.textContent = '去结账';
+        nextBtn.disabled = true;
+      }
+    }
   }
 
   function calcSettlement() {
@@ -43794,19 +44471,11 @@ window.__BILLING_EMBEDDED__ = true;
 
   function renderBillHeader() {
     const c = getCustomer();
-    const metrics = (c && c.isMember) ? memberAssetMetrics(c) : null;
     syncBillCardGateChrome();
-
-    if (state.billCardGateOpen && !state.billCustomerPickOpen) {
-      document.getElementById('billBody').innerHTML = `
-      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
-      ${renderBillCardGate()}`;
-      return;
-    }
 
     if (state.billCustomerPickOpen) {
       document.getElementById('billBody').innerHTML = `
-      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
+      ${renderCustomerNameCard(c, { withActions: true })}
       <div class="bill-sheet bill-sheet--pick">
         <div class="search-bar search-bar--bill search-bar--member">
           <svg width="16" height="16" viewBox="0 0 13 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5.5" stroke="#666" stroke-linejoin="round"/><path d="M9.5 10.5L12.5 13.5" stroke="#666" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -43818,20 +44487,33 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
 
-    const modeStrip = renderBillCardModeStrip();
+    const mode = state.billComposerMode || 'browse';
+    const slipStack = renderBillSlipStack();
+
+    if (mode === 'review') {
+      document.getElementById('billBody').innerHTML = `
+      ${renderCustomerNameCard(c, { withActions: true })}
+      ${slipStack}
+      <button type="button" class="bill-continue-add" id="btnBillContinueAdd" data-bill-continue-add>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        继续添加
+      </button>`;
+      return;
+    }
+
     document.getElementById('billBody').innerHTML = `
-      ${renderCustomerNameCard(c, { withActions: true, assetMetrics: metrics })}
-      ${modeStrip}
+      ${renderCustomerNameCard(c, { withActions: true })}
+      ${slipStack}
+      <button type="button" class="bill-quick-consume" id="btnQuickConsume">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
+        快速消费
+      </button>
+      ${isMemberBill() ? renderBillHeldCardsPicker() : ''}
       <div class="bill-sheet">
-        <button type="button" class="bill-quick-consume" id="btnQuickConsume">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
-          快速消费
-        </button>
         <div class="page-tabs">
           <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
           <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
         </div>
-        ${state.billTab === 'product' ? `<button type="button" class="bill-stock-entry" id="btnBillStockAdd"><svg class="bill-stock-entry__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5v-7Z"/><path d="M3 8.5 12 14l9-5.5"/><path d="M12 14v7"/></svg>从库存添加</button>` : ''}
         <div class="catalog-group-bar pick-group-bar bill-group-bar" id="billGroupBar">
           <div class="catalog-group-segment">
             <div class="catalog-group-scroll" id="billGroupTabs" role="tablist" aria-label="价目分组"></div>
@@ -43926,18 +44608,17 @@ window.__BILLING_EMBEDDED__ = true;
       ? (bridge?.getBillProjects?.() || PROJECTS)
       : (bridge?.getBillProducts?.() || PRODUCTS);
     const items = filterBillCatalogByCard(filterBillCatalogByGroup(src));
-    const scoped = !!getBillPickCard() && getCardCatalogScope(getBillPickCard()).mode === 'filter';
+    const activeIds = getActiveBillPickCardIds();
+    const scoped = activeIds.length > 0 && !activeIds.some(id => {
+      const card = findHeldCardById(id);
+      return card && getCardCatalogScope(card).mode === 'all';
+    });
     const emptyLabel = !items.length && scoped
-      ? '该卡暂无适用项目/产品'
+      ? '所选卡暂无适用项目/产品'
       : (getActiveBillGroupId() !== 'all'
         ? (state.billTab === 'product' ? '本组暂无产品' : '本组暂无项目')
         : '暂无匹配项');
-    const emptyExtra = !items.length && scoped
-      ? `<div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
-          <button type="button" class="bill-card-mode__act" data-bill-card-change>换卡</button>
-          <button type="button" class="bill-card-mode__act is-muted" data-bill-card-clear>浏览全部</button>
-        </div>`
-      : '';
+    const emptyExtra = '';
     document.getElementById('catalogList').innerHTML = items.map(it => {
       const qty = getCartQty(it.id);
       const cap = state.billTab === 'product' ? productStockCap(it) : null;
@@ -43996,6 +44677,7 @@ window.__BILLING_EMBEDDED__ = true;
       track.classList.remove('is-open');
       track.style.transform = '';
       track.style.transition = '';
+      track.closest('.detail-item')?.classList.remove('is-swiping');
     });
   }
 
@@ -44003,6 +44685,7 @@ window.__BILLING_EMBEDDED__ = true;
     document.querySelectorAll('.detail-item__track').forEach(track => {
       if (track.dataset.swipeWired === '1') return;
       track.dataset.swipeWired = '1';
+      const item = track.closest('.detail-item');
       let activeId = null;
       let startX = 0;
       let startY = 0;
@@ -44022,6 +44705,7 @@ window.__BILLING_EMBEDDED__ = true;
 
       const settle = x => {
         track.style.transition = '';
+        item?.classList.remove('is-swiping');
         const open = x < -DETAIL_SWIPE_WIDTH / 2;
         if (open) {
           closeAllDetailSwipes(track);
@@ -44041,6 +44725,7 @@ window.__BILLING_EMBEDDED__ = true;
           if (Math.abs(dx) < DETAIL_SWIPE_MOVE && Math.abs(dy) < DETAIL_SWIPE_MOVE) return;
           if (Math.abs(dy) > Math.abs(dx)) { activeId = null; detach(); return; }
           swiping = true;
+          item?.classList.add('is-swiping');
           closeAllDetailSwipes(track);
           try { track.setPointerCapture(e.pointerId); } catch (_) {}
           baseX = track.classList.contains('is-open') ? -DETAIL_SWIPE_WIDTH : 0;
@@ -44056,6 +44741,8 @@ window.__BILLING_EMBEDDED__ = true;
           const m = /translateX\((-?\d+(?:\.\d+)?)px\)/.exec(track.style.transform || '');
           settle(m ? parseFloat(m[1]) : 0);
           track.dataset.suppressClick = '1';
+        } else {
+          item?.classList.remove('is-swiping');
         }
         activeId = null;
         swiping = false;
@@ -44155,69 +44842,189 @@ window.__BILLING_EMBEDDED__ = true;
     </div>`;
   }
 
+  function lineBenefitCardNames(it) {
+    if (!it || !isMemberBill()) return '未选';
+    const picks = state.benefitApplied || {};
+    let preferCardIds = [];
+    if (it.slipId) {
+      const slip = (state.billSlips || []).find(s => s.id === it.slipId)
+        || (state.billDraft && state.billDraft.id === it.slipId ? state.billDraft : null);
+      if (slip && Array.isArray(slip.cardIds)) preferCardIds = slip.cardIds.slice();
+    }
+    const held = getCustomer().cards || [];
+    const names = [];
+    const seen = new Set();
+    const pushCard = (card) => {
+      if (!card || seen.has(card.id)) return;
+      seen.add(card.id);
+      names.push(card.name || '会员卡');
+    };
+    held.forEach(card => {
+      if (preferCardIds.length && !preferCardIds.includes(card.id)) return;
+      const pick = picks[card.id];
+      if (!pick) return;
+      let used = false;
+      (pick.projects || []).forEach(pr => {
+        if (!pr.qty) return;
+        if (cartItemMatchesProjectBenefit(it, pr)) used = true;
+      });
+      if (pick.discountOn && typeof cartItemEligibleForCardDiscount === 'function'
+        && cartItemEligibleForCardDiscount(it, card)) used = true;
+      if (used) pushCard(card);
+    });
+    if (!names.length && preferCardIds.length) {
+      preferCardIds.forEach(id => {
+        pushCard(held.find(c => c.id === id) || (typeof findHeldCardById === 'function' ? findHeldCardById(id) : null));
+      });
+    }
+    if (!names.length) {
+      held.forEach(card => {
+        const pick = picks[card.id];
+        if (!pick) return;
+        let used = false;
+        (pick.projects || []).forEach(pr => {
+          if (pr.qty && cartItemMatchesProjectBenefit(it, pr)) used = true;
+        });
+        if (pick.discountOn && typeof cartItemEligibleForCardDiscount === 'function'
+          && cartItemEligibleForCardDiscount(it, card)) used = true;
+        if (used) pushCard(card);
+      });
+    }
+    return names.length ? names.join('、') : '未选';
+  }
+
+  function renderDetailCartLine(it) {
+    if (!it.staffIds) it.staffIds = [];
+    ensureCartStaffState(it);
+    const unit = lineUnit(it);
+    const lineAmt = round2(unit * it.qty);
+    const open = state.detailExpandedId === it.id;
+    const badge = cartItemBadgeMeta(it);
+    const cardNames = lineBenefitCardNames(it);
+    const benefitBlock = isMemberBill()
+      ? `<div class="detail-staff-block">
+          <button type="button" class="detail-staff-entry" data-open-benefit-line="${escapeHtml(it.id)}">
+            <span class="detail-staff-entry__lbl">会员卡</span>
+            <span class="detail-staff-entry__val${cardNames !== '未选' ? ' has-staff' : ''}">${escapeHtml(cardNames)}</span>
+            <span class="chev ui-icon" aria-hidden="true">${iconSvg('chevron-right', 'ui-icon')}</span>
+          </button>
+        </div>`
+      : '';
+    return `<div class="detail-item ${open ? 'is-expanded' : 'is-collapsed'}" data-cart-id="${it.id}">
+      <button type="button" class="detail-item__del" data-del-cart="${it.id}">删除</button>
+      <div class="detail-item__track">
+        <div class="detail-item__main">
+          <div class="detail-item__top">
+            <span class="detail-item__badge${badge.cls}">${badge.text}</span>
+            <div class="detail-item__name">${escapeHtml(it.name)}${it.qty > 1 ? ` ×${it.qty}` : ''}</div>
+            <span class="detail-item__amt num">${formatYen(lineAmt)}</span>
+            <button type="button" class="detail-item__expand" data-expand-item="${it.id}" aria-label="${open ? '收起' : '展开'}">${iconSvg(open ? 'chevron-up' : 'chevron-down')}</button>
+          </div>
+          ${open ? `<div class="detail-item__panel">
+            ${benefitBlock}
+            ${renderDetailStaffSection(it)}
+            <div class="detail-item__panel-row detail-item__panel-row--subtotal">
+              <span>小计</span>
+              <button type="button" class="detail-item__subtotal-edit" data-edit-line-subtotal="${escapeHtml(it.id)}" aria-label="修改小计">
+                <span class="num">${formatYen(lineAmt)}</span>
+                <span class="ui-icon" aria-hidden="true">${iconSvg('edit', 'ui-icon')}</span>
+              </button>
+            </div>
+          </div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderSettleComposeCard(s) {
+    const benefitTotal = round2((s.projectDeduct || 0) + (s.discountDeduct || 0) + (s.balanceDeduct || 0));
+    const chev = iconSvg('chevron-right', 'ui-icon');
+    const benefitRow = isMemberBill()
+      ? `<button type="button" class="detail-compose__row" data-open-benefit>
+          <span class="detail-compose__lbl">会员卡权益</span>
+          <span class="detail-compose__val${benefitTotal > 0 ? ' is-deduct' : ' is-muted'}">${benefitTotal > 0 ? ('-' + formatYen(benefitTotal)) : '未使用'}${chev}</span>
+        </button>`
+      : '';
+    const couponVal = (s.couponDeduct > 0)
+      ? ('-' + formatYen(s.couponDeduct))
+      : couponSummaryText();
+    return `<div class="detail-compose">
+      <div class="detail-compose__head">账单构成</div>
+      <div class="detail-compose__row detail-compose__row--static">
+        <span class="detail-compose__lbl">商品原价</span>
+        <span class="detail-compose__val num">${formatYen(s.listTotal)}</span>
+      </div>
+      ${benefitRow}
+      <button type="button" class="detail-compose__row" data-open-coupon>
+        <span class="detail-compose__lbl">优惠券</span>
+        <span class="detail-compose__val${s.couponDeduct > 0 ? ' is-deduct' : ' is-muted'}">${escapeHtml(couponVal)}${chev}</span>
+      </button>
+      <div class="detail-compose__perf" aria-hidden="true"></div>
+      <div class="detail-compose__due">
+        <span class="detail-compose__due-lbl">应付</span>
+        <span class="detail-compose__due-amt num">${formatYen(s.dueCash)}</span>
+      </div>
+    </div>`;
+  }
+
   function renderDetail() {
     const s = calcSettlement();
     state.lastSettlement = s;
     const c = getCustomer();
-    if (!state.manualOrderNo) state.manualOrderNo = genDemoManualOrderNo();
-    const items = state.cart.map((it) => {
-      if (!it.staffIds) it.staffIds = [];
-      ensureCartStaffState(it);
-      const unit = lineUnit(it);
-      const lineAmt = round2(unit * it.qty);
-      const open = state.detailExpandedId === it.id;
-      const badge = cartItemBadgeMeta(it);
-      return `<div class="detail-item ${open ? 'is-expanded' : 'is-collapsed'}" data-cart-id="${it.id}">
-        <button type="button" class="detail-item__del" data-del-cart="${it.id}">删除</button>
-        <div class="detail-item__track">
-          <div class="detail-item__main">
-            <div class="detail-item__top">
-              <span class="detail-item__badge${badge.cls}">${badge.text}</span>
-              <div class="detail-item__name">${escapeHtml(it.name)}${it.qty > 1 ? ` ×${it.qty}` : ''}</div>
-              <span class="detail-item__amt num">${formatYen(lineAmt)}</span>
-              <button type="button" class="detail-item__expand" data-expand-item="${it.id}" aria-label="${open ? '收起' : '展开'}">${iconSvg(open ? 'chevron-up' : 'chevron-down')}</button>
-            </div>
-            ${open ? `<div class="detail-item__panel">
-              ${renderDetailStaffSection(it)}
-              <div class="detail-item__panel-row">
-                <span>小计</span>
-                <div class="detail-item__price-edit">
-                  <span class="yen">¥</span>
-                  <input class="num" type="number" min="0" step="0.01" data-unit-price="${it.id}" value="${unit}">
-                  <span class="ui-icon" aria-hidden="true">${iconSvg('edit', 'ui-icon')}</span>
-                </div>
-              </div>
-            </div>` : ''}
-          </div>
-        </div>
-      </div>`;
-    }).join('');
 
-    const orderOffers = state.cart.length ? `<div class="detail-order-offers">
-        ${isMemberBill() ? `<div class="detail-order-offers__row" data-open-benefit role="button" tabindex="0">
-          <span>优惠权益</span>
-          <span class="detail-line__right">${escapeHtml(benefitSummaryText())}${iconSvg('chevron-right', 'ui-icon')}</span>
-        </div>` : ''}
-        <div class="detail-order-offers__row" data-open-coupon role="button" tabindex="0">
-          <span>优惠券</span>
-          <span class="detail-line__right">${escapeHtml(couponSummaryText())}${iconSvg('chevron-right', 'ui-icon')}</span>
-        </div>
-      </div>` : '';
+    const used = new Set();
+    const groups = [];
+    (state.billSlips || []).forEach((slip, i) => {
+      const lines = getSlipLines(slip.id);
+      lines.forEach(it => used.add(it.id));
+      groups.push({ title: `记账单 ${i + 1}`, lines });
+    });
+    if (state.billDraft) {
+      const lines = getDraftLines();
+      lines.forEach(it => used.add(it.id));
+      if (lines.length) {
+        groups.push({ title: `记账单 ${(state.billSlips || []).length + 1}`, lines });
+      }
+    }
+    const orphans = (state.cart || []).filter(it => !used.has(it.id));
+    if (orphans.length) {
+      groups.push({
+        title: groups.length ? `记账单 ${groups.length + 1}` : '记账单 1',
+        lines: orphans,
+      });
+    }
+
+    const items = groups.length
+      ? groups.map(g => {
+          const sub = round2(g.lines.reduce((sum, it) => sum + lineUnit(it) * (Number(it.qty) || 1), 0));
+          return `<div class="detail-slip">
+          <div class="detail-slip__serration" aria-hidden="true"></div>
+          <div class="detail-slip__head">
+            <span class="detail-slip__title">${escapeHtml(g.title)}</span>
+            <span class="detail-slip__meta">${g.lines.length} 项</span>
+          </div>
+          <div class="detail-slip__body">
+            ${g.lines.map(renderDetailCartLine).join('') || '<div class="empty-cart">无商品</div>'}
+          </div>
+          <div class="detail-slip__foot">
+            <span class="detail-slip__sub">小计</span>
+            <span class="detail-slip__total">${formatYen(sub)}</span>
+          </div>
+        </div>`;
+        }).join('')
+      : '<div class="detail-slip"><div class="empty-cart">无商品</div></div>';
 
     document.getElementById('detailBody').innerHTML = `
       <div class="detail-guest-slot">${renderCustomerNameCard(c, { withActions: true, genderMode: isAnonymousGuest(c) })}</div>
-      <div class="detail-manual-row">
-        <span>手工单号</span>
-        <input id="manualOrderInput" type="text" maxlength="32" value="${escapeHtml(state.manualOrderNo || '')}" placeholder="请输入手工单号">
-        <span class="chev ui-icon">${iconSvg('chevron-right', 'ui-icon')}</span>
-      </div>
-      ${items || '<div class="empty-cart">无商品</div>'}
-      ${orderOffers}
-      <div class="detail-remark">
-        <div class="detail-remark__label">备注</div>
-        <div class="detail-remark__box">
-          <textarea id="orderRemarkInput" maxlength="500" placeholder="请输入备注">${escapeHtml(state.orderRemark || '')}</textarea>
-          <div class="detail-remark__count">${(state.orderRemark || '').length}/500</div>
+      <div class="detail-settle-stack">
+        ${items}
+        ${state.cart.length ? renderSettleComposeCard(s) : ''}
+        <div class="detail-remark">
+          <div class="detail-remark__label">备注</div>
+          <div class="detail-remark__box">
+            <textarea id="orderRemarkInput" maxlength="500" placeholder="请输入备注">${escapeHtml(state.orderRemark || '')}</textarea>
+            <div class="detail-remark__count">${(state.orderRemark || '').length}/500</div>
+          </div>
         </div>
       </div>`;
     syncDetailDueBar();
@@ -44420,9 +45227,22 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const draft = state.benefitDraft;
     const allCards = getCustomer().cards.slice();
-    const preferId = state.billPickCardId;
-    if (preferId) {
-      allCards.sort((a, b) => (a.id === preferId ? -1 : b.id === preferId ? 1 : 0));
+    let preferIds = [];
+    if (state.benefitFocusLineId) {
+      const line = state.cart.find(x => x.id === state.benefitFocusLineId);
+      if (line && line.slipId) {
+        const slip = (state.billSlips || []).find(s => s.id === line.slipId)
+          || (state.billDraft && state.billDraft.id === line.slipId ? state.billDraft : null);
+        if (slip && Array.isArray(slip.cardIds)) preferIds = slip.cardIds.slice();
+      }
+    }
+    if (!preferIds.length && state.billPickCardId) preferIds = [state.billPickCardId];
+    if (preferIds.length) {
+      allCards.sort((a, b) => {
+        const ai = preferIds.indexOf(a.id);
+        const bi = preferIds.indexOf(b.id);
+        return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+      });
     }
     const discountable = cartHasDiscountableItems();
     const faceOk = cartFaceBenefitApplicable();
@@ -44466,10 +45286,10 @@ window.__BILLING_EMBEDDED__ = true;
         </div></div>`;
       });
       if (!inner) return '';
-      const preferred = card.id === preferId
-        ? '<span class="benefit-picked-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>本单已选</span>'
+      const preferred = preferIds.includes(card.id)
+        ? '<span class="benefit-picked-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>记账单已选</span>'
         : '';
-      return `<div class="benefit-card${card.id === preferId ? ' is-preferred' : ''}"><div class="benefit-card__title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${escapeHtml(card.name)}${preferred}${benefitChipsHtml(card)}</div>${inner}</div>`;
+      return `<div class="benefit-card${preferIds.includes(card.id) ? ' is-preferred' : ''}"><div class="benefit-card__title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${escapeHtml(card.name)}${preferred}${benefitChipsHtml(card)}</div>${inner}</div>`;
     }).filter(Boolean).join('');
     document.getElementById('benefitBody').innerHTML = `
       <button type="button" class="benefit-none-btn" data-benefit-none>${offerActionIconHtml('benefit-none')}不使用权益</button>
@@ -44930,10 +45750,12 @@ window.__BILLING_EMBEDDED__ = true;
           staffRoles: {},
           staffDesignated: {},
           expanded: false,
+          slipId: ensureBillDraft().id,
         });
+        syncBillComposerMode();
         syncCartChrome();
         if (document.getElementById('screen-bill') && !document.getElementById('screen-bill').classList.contains('hidden')) {
-          renderBillCatalog();
+          renderBillHeader();
         }
         showToast('已加入快速消费 ' + formatYen(amt));
       });
@@ -44971,6 +45793,48 @@ window.__BILLING_EMBEDDED__ = true;
       });
     }
     el.value = String(calcSettlement().dueCash ?? 0);
+    if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
+    else showToast('金额键盘未就绪');
+  }
+
+  function applyLineSubtotal(cartId, newTotal) {
+    const row = state.cart.find(x => x.id === cartId);
+    if (!row) return;
+    const qty = Math.max(1, Number(row.qty) || 1);
+    const next = round2(Math.max(0, Number(newTotal) || 0));
+    row.unitPrice = round2(next / qty);
+    row.price = row.unitPrice;
+  }
+
+  function openLineSubtotalEditor(cartId) {
+    if (window.RTBPerm && typeof window.RTBPerm.require === 'function' && !window.RTBPerm.require('billChangePrice')) return;
+    const row = state.cart.find(x => x.id === cartId);
+    if (!row) return;
+    let el = document.getElementById('billLineSubtotalKeypadProxy');
+    if (!el) {
+      el = document.createElement('input');
+      el.type = 'text';
+      el.id = 'billLineSubtotalKeypadProxy';
+      el.className = 'input-amount';
+      el.setAttribute('readonly', 'readonly');
+      el.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px;';
+      document.body.appendChild(el);
+      el.addEventListener('change', () => {
+        const id = el.dataset.cartId;
+        const n = parseFloat(el.value);
+        if (!id || !Number.isFinite(n) || n < 0) {
+          showToast('请输入有效金额');
+          return;
+        }
+        applyLineSubtotal(id, n);
+        renderDetail();
+        syncCartChrome();
+        showToast('已更新小计');
+      });
+    }
+    const qty = Math.max(1, Number(row.qty) || 1);
+    el.dataset.cartId = cartId;
+    el.value = String(round2(lineUnit(row) * qty));
     if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
     else showToast('金额键盘未就绪');
   }
@@ -45117,6 +45981,15 @@ window.__BILLING_EMBEDDED__ = true;
     state.activeHoldId = h.id;
     state.billFromHold = true;
     state.billDueEdited = !!h.priceEdited;
+    resetBillSlipState();
+    if (state.cart.length) {
+      const slipId = 'slip_hold_' + Date.now();
+      const cardIds = [];
+      if (state.billPickCardId) cardIds.push(state.billPickCardId);
+      state.cart.forEach(it => { it.slipId = slipId; });
+      state.billSlips = [{ id: slipId, cardIds }];
+      state.billComposerMode = 'review';
+    }
     syncCartChrome();
     syncPickHoldsEntry();
     openBillCatalog({ skipGate: true });
@@ -45215,6 +46088,7 @@ window.__BILLING_EMBEDDED__ = true;
           return avg ? `${nm}（${des}）` : `${nm}（${des}·${role || '—'}）`;
         });
         rows.push(`<div class="success-card__row"><span>服务员工</span><span>${escapeHtml(names.join('、'))}</span></div>`);
+        rows.push(`<div class="success-card__row"><span>业绩入账</span><span>已记入办卡单据与办卡业绩</span></div>`);
       }
       if (state.orderIsFree && !isExtend) {
         rows.push(`<div class="success-card__row"><span>免单规则</span><span>${escapeHtml(freeOrderRuleText())}</span></div>`);
@@ -46687,7 +47561,7 @@ window.__BILLING_EMBEDDED__ = true;
       time: formatFlowTimeOnBizDate(),
       cashier: cashierName,
       cashierId: (cashierStaff && cashierStaff.id) || null,
-      manualOrderNo: s.manualOrderNo || state.manualOrderNo || '',
+      manualOrderNo: s.manualOrderNo || ensureManualOrderNo(),
       billBizDate: s.billBizDate || ensureBillBizDate(),
     };
     FLOW_ORDERS.unshift(order);
@@ -50858,7 +51732,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('flow-weikuan-pay');
   }
 
-  /** 兼容旧入口：直接打开详情 */
+  /** 尾款支付：打开详情后进支付（非会员卡旧入口） */
   function openFlowWeikuanPay(id) {
     openFlowWeikuanDetail(id);
   }
@@ -51106,6 +51980,7 @@ window.__BILLING_EMBEDDED__ = true;
       amountEdited: skipStaffScreen ? prevEdited : false,
       templateId,
       includesFace,
+      bizType: 'card_issue',
       staffIds: staffSnap ? (staffSnap.staffIds || []).slice() : [],
       staffRoles: staffSnap ? Object.assign({}, staffSnap.staffRoles || {}) : {},
       staffDesignated: staffSnap ? Object.assign({}, staffSnap.staffDesignated || {}) : {},
@@ -51114,7 +51989,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.cardIssuePayAmount = payAmt;
     state.cardIssuePayEdited = skipStaffScreen ? prevEdited : false;
     state.orderIsFree = false;
-    state.cardIssuePending = { templateId, memberId };
+    state.cardIssuePending = { templateId, memberId, bizType: 'card_issue' };
     state.cardExtendPending = null;
     state.successIssueTemplateId = templateId;
     state.successIssueCardHtml = cardHtml
@@ -51172,6 +52047,7 @@ window.__BILLING_EMBEDDED__ = true;
       name: cardName,
       amount: payAmt,
       kind: 'extend',
+      bizType: 'card_extend',
       templateId,
       includesFace: false,
     };
@@ -51179,6 +52055,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.cardExtendPending = {
       templateId,
       memberId,
+      bizType: 'card_extend',
       unit: unit || 'month',
       extendDays,
       fee: payAmt,
@@ -51269,6 +52146,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.billStockPickSelected = {};
     state.guestGenderPickerOpen = false;
     state.billCustomerPickOpen = false;
+    resetBillSlipState();
     syncCartChrome();
     syncPickHoldsEntry();
     enterBillUnselected();
@@ -51344,10 +52222,9 @@ window.__BILLING_EMBEDDED__ = true;
     setFlowNavHighlight('add-card');
   }
 
-  function renderGuestActionBtns(pickBtnLabel) {
+  function renderGuestActionBtns() {
     return `<div class="customer-card__guest-actions">
-            <button type="button" class="customer-card__record-icon" id="btnRecordGuest" aria-label="快速录入">${iconSvg('plus', 'ui-icon')}</button>
-            <button type="button" class="customer-card__change" id="btnChangeCustomer">${pickBtnLabel}</button>
+            <button type="button" class="customer-card__quick-reg" id="btnRecordGuest">+快速注册</button>
           </div>`;
   }
 
@@ -51366,6 +52243,19 @@ window.__BILLING_EMBEDDED__ = true;
         </button>`;
   }
 
+  function renderMemberIdentityHit(c, { visit, vip, avatar }) {
+    return `<button type="button" class="customer-card__guest-hit" data-member-switch aria-label="选择顾客">
+            <img class="customer-card__avatar" src="${avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
+            <span class="customer-card__info">
+              <span class="customer-card__name">
+                <span class="customer-card__name-text">${escapeHtml(c.name)}</span>${vip}
+              </span>
+              <span class="customer-card__visit">${visit}</span>
+            </span>
+            ${GUEST_NAME_CHEV}
+          </button>`;
+  }
+
   function renderCustomerNameCard(c, { withActions = false, genderMode = false, assetMetrics = null } = {}) {
     const useGender = genderMode || isAnonymousGuest(c);
     if (useGender) {
@@ -51375,19 +52265,15 @@ window.__BILLING_EMBEDDED__ = true;
       if (withActions) {
         const label = g === 'male' ? '男散客' : g === 'female' ? '女散客' : '散客';
         const avatar = g === 'male' ? AVATAR_MALE : g === 'female' ? AVATAR_FEMALE : 'assets/billing/avatar-guest-default.png';
-        const pickBtnLabel = (selected || state.billCustomerPickOpen) ? '更换顾客' : '选择顾客';
-        const pickBtn = renderGuestActionBtns(pickBtnLabel);
         return `<div class="customer-card customer-card--guest${selected ? ' is-gender-selected' : ' is-unselected'}${state.billCustomerPickOpen ? ' is-pick-open' : ''}">
         <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
         <div class="customer-card__row">
           ${renderGuestIdentityHit({ label, avatar, ariaLabel: '选择顾客' })}
-          ${pickBtn}
+          ${renderGuestActionBtns()}
         </div>
       </div>`;
       }
       const expanded = !!state.guestGenderPickerOpen || selected;
-      const pickBtnLabel = expanded ? '更换顾客' : '选择顾客';
-      const pickBtn = withActions ? renderGuestActionBtns(pickBtnLabel) : '';
       if (!expanded) {
         return `<div class="customer-card customer-card--guest is-unselected">
         <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
@@ -51397,7 +52283,6 @@ window.__BILLING_EMBEDDED__ = true;
             avatar: 'assets/billing/avatar-guest-default.png',
             ariaLabel: '选择散客性别',
           })}
-          ${pickBtn}
         </div>
       </div>`;
       }
@@ -51418,7 +52303,6 @@ window.__BILLING_EMBEDDED__ = true;
             <button type="button" class="customer-card__gender-btn ${g === 'male' ? 'is-on' : ''}" data-guest-gender="male">男散客</button>
             <button type="button" class="customer-card__gender-btn ${g === 'female' ? 'is-on' : ''}" data-guest-gender="female">女散客</button>
           </div>
-          ${pickBtn}
         </div>
       </div>`;
     }
@@ -51428,11 +52312,6 @@ window.__BILLING_EMBEDDED__ = true;
     const vip = c.vip
       ? '<img class="customer-card__vip" src="assets/billing/customer-vip-union.svg" alt="VIP" width="26" height="10">'
       : '';
-    const actions = withActions ? `
-          <div class="customer-card__actions">
-            <button type="button" class="pill-btn" id="btnIssueCard">办卡</button>
-            <button type="button" class="pill-btn" id="btnChangeCustomer">更换顾客</button>
-          </div>` : '';
     const avatar = c.avatar || 'assets/billing/avatar-female.png';
     const metricsHtml = assetMetrics ? `
         <div class="customer-card__metrics" aria-label="会员资产">
@@ -51453,17 +52332,20 @@ window.__BILLING_EMBEDDED__ = true;
             <div class="customer-card__metric-label">优惠券</div>
           </div>
         </div>` : '';
-    return `<div class="customer-card customer-card--member${assetMetrics ? ' customer-card--assets' : ''}">
-        <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
-        <div class="customer-card__body">
-          <div class="customer-card__row">
-            <img class="customer-card__avatar" src="${avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
+    const identity = withActions
+      ? renderMemberIdentityHit(c, { visit, vip, avatar })
+      : `<img class="customer-card__avatar" src="${avatar}" alt="" onerror="this.onerror=null;this.src='assets/billing/avatar-female.png'">
             <div class="customer-card__info">
               <div class="customer-card__name">
                 <span class="customer-card__name-text">${escapeHtml(c.name)}</span>${vip}
               </div>
               <div class="customer-card__visit">${visit}</div>
-            </div>${actions}
+            </div>`;
+    return `<div class="customer-card customer-card--member${assetMetrics ? ' customer-card--assets' : ''}">
+        <img class="customer-card__bg" src="assets/billing/customer-card-bg.png" alt="" aria-hidden="true">
+        <div class="customer-card__body">
+          <div class="customer-card__row">
+            ${identity}
           </div>
           ${metricsHtml}
         </div>
@@ -51685,7 +52567,6 @@ window.__BILLING_EMBEDDED__ = true;
       if (!state.cart.length) { showToast('请先添加商品'); return; }
       clampCartToProductStock({ toast: true });
       if (!state.cart.length) { showToast('购物车为空'); return; }
-      if (!state.manualOrderNo) state.manualOrderNo = genDemoManualOrderNo();
       autoApplyBestSettleOffers();
       renderDetail(); showOnlyScreen('screen-detail');
       if (cartHasUnsetStaffRoles()) {
@@ -51852,21 +52733,12 @@ window.__BILLING_EMBEDDED__ = true;
   pickIndexEl?.addEventListener('pointercancel', e => onPickIndexPointer(e, { end: true }));
   pickIndexEl?.addEventListener('lostpointercapture', () => onPickIndexPointer({}, { end: true }));
 
-  document.getElementById('billBack').addEventListener('click', () => {
+  document.getElementById('billBack')?.addEventListener('click', () => {
     if (state.billFromHold) {
       /* 未结账返回：挂单仍留在列表，仅结束本次取单会话 */
       state.billFromHold = false;
       state.activeHoldId = null;
       openHoldList();
-      return;
-    }
-    if (state.billCardGateOpen) {
-      resetBillCardPick();
-      openBillCustomer();
-      return;
-    }
-    if (shouldOfferBillCardGate() && state.billCardGateDone) {
-      openBillCardGate();
       return;
     }
     openBillCustomer();
@@ -51921,10 +52793,22 @@ window.__BILLING_EMBEDDED__ = true;
     if (card) resumeHold(card.dataset.resumeHold);
   });
   document.getElementById('btnBillNext').addEventListener('click', () => {
-    if (!state.cart.length) { showToast('请先选择商品'); return; }
     const c = getCustomer();
     if (!c.isMember && !hasGuestGender() && !isNamedWalkIn(c)) {
       showToast('请先选择散客性别或会员');
+      return;
+    }
+    syncBillComposerMode();
+    const draftLines = getDraftLines();
+    if (state.billComposerMode === 'drafting' && draftLines.length) {
+      if (!sealBillDraft()) return;
+      renderBillHeader();
+      syncCartChrome();
+      showToast('已生成记账单');
+      return;
+    }
+    if (!(state.billSlips || []).length) {
+      showToast(state.cart.length ? '请先完成记账单' : '请先添加商品');
       return;
     }
     closeMask('cartSheetMask');
@@ -52023,7 +52907,7 @@ window.__BILLING_EMBEDDED__ = true;
       refreshStaffPickerUi(cartId);
     }
   });
-  document.getElementById('btnOpenCart').addEventListener('click', () => { renderCartList('cartSheetList'); openMask('cartSheetMask'); });
+  document.getElementById('btnOpenCart')?.addEventListener('click', () => { renderCartList('cartSheetList'); openMask('cartSheetMask'); });
   function onClearCart() {
     if (!state.cart.length) { showToast('已选为空'); return; }
     clearCart();
@@ -52142,9 +53026,19 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     if (onDetail) {
-      state.guestGenderPickerOpen = !state.guestGenderPickerOpen;
-      renderDetail();
+      openMemberPicker();
     }
+  }
+  function onMemberSwitchClick() {
+    const onBill = !document.getElementById('screen-bill')?.classList.contains('hidden');
+    if (onBill) {
+      state.guestGenderPickerOpen = false;
+      state.searchQuery = '';
+      state.billCustomerPickOpen = !state.billCustomerPickOpen;
+      renderBillHeader();
+      return;
+    }
+    openMemberPicker();
   }
   function pickBillGuest(gender) {
     state.guestGender = gender;
@@ -52173,11 +53067,45 @@ window.__BILLING_EMBEDDED__ = true;
   }
   document.getElementById('billBody').addEventListener('click', e => {
     if (e.target.closest('[data-guest-switch]')) { onGuestSwitchClick(); return; }
+    if (e.target.closest('[data-member-switch]')) { onMemberSwitchClick(); return; }
     if (e.target.closest('[data-guest-gender]')) { onGuestGenderClick(e); return; }
     const guestPick = e.target.closest('[data-bill-pick-guest]');
     if (guestPick) { pickBillGuest(guestPick.dataset.billPickGuest); return; }
     const memberPick = e.target.closest('[data-bill-pick-member]');
     if (memberPick) { pickBillMember(memberPick.dataset.billPickMember); return; }
+    if (e.target.closest('[data-bill-continue-add]')) {
+      continueAddBillSlip();
+      renderBillHeader();
+      syncCartChrome();
+      return;
+    }
+    if (e.target.closest('[data-bill-held-tools-toggle]')) {
+      e.preventDefault();
+      e.stopPropagation();
+      state.billHeldCardsToolsOpen = !state.billHeldCardsToolsOpen;
+      renderBillHeader();
+      return;
+    }
+    const heldCard = e.target.closest('[data-bill-held-card]');
+    if (heldCard) {
+      toggleBillPickCard(heldCard.getAttribute('data-bill-held-card'));
+      return;
+    }
+    const slipEdit = e.target.closest('[data-bill-slip-edit]');
+    if (slipEdit) {
+      if (unsealSlipForEdit(slipEdit.getAttribute('data-bill-slip-edit'))) {
+        renderBillHeader();
+        syncCartChrome();
+      }
+      return;
+    }
+    if (e.target.closest('[data-bill-clear-cards]')) {
+      state.billPickCardIds = [];
+      if (state.billDraft) state.billDraft.cardIds = [];
+      renderBillHeader();
+      syncCartChrome();
+      return;
+    }
     const gateCard = e.target.closest('[data-bill-gate-card]');
     if (gateCard) {
       state.billGateDraftCardId = gateCard.getAttribute('data-bill-gate-card');
@@ -52198,23 +53126,7 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     if (e.target.closest('#btnRecordGuest')) { openGuestRecordSheet(); return; }
-    if (e.target.id === 'btnChangeCustomer') {
-      if (isAnonymousGuest(getCustomer()) || state.billCustomerPickOpen) {
-        state.billCustomerPickOpen = true;
-        state.searchQuery = '';
-        state.guestGenderPickerOpen = false;
-        renderBillHeader();
-      } else {
-        openMemberPicker();
-      }
-      return;
-    }
-    if (e.target.closest('#btnExpandCardsHit')) {
-      state.cardsExpanded = !state.cardsExpanded;
-      renderBillHeader();
-      return;
-    }
-    if (e.target.id === 'btnBillAddCard' || e.target.id === 'btnIssueCard' || e.target.id === 'btnBillAssetEmptyAdd') {
+    if (e.target.id === 'btnBillAddCard' || e.target.id === 'btnBillAssetEmptyAdd') {
       openAddCardScreen();
       return;
     }
@@ -52324,13 +53236,9 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('detailBody').addEventListener('click', e => {
     if (!e.target.closest('.detail-item__track.is-open') && !e.target.closest('[data-del-cart]')) closeAllDetailSwipes();
     if (e.target.closest('[data-guest-switch]')) { onGuestSwitchClick(); return; }
+    if (e.target.closest('[data-member-switch]')) { onMemberSwitchClick(); return; }
     if (e.target.closest('[data-guest-gender]')) { onGuestGenderClick(e); return; }
     if (e.target.closest('#btnRecordGuest')) { openGuestRecordSheet(); return; }
-    if (e.target.id === 'btnChangeCustomer' || e.target.id === 'btnIssueCard') {
-      if (e.target.id === 'btnIssueCard') openAddCardScreen();
-      else openMemberPicker();
-      return;
-    }
     const openStaff = e.target.closest('[data-open-bill-staff]');
     if (openStaff) {
       openBillStaffSheet(openStaff.getAttribute('data-open-bill-staff'));
@@ -52460,20 +53368,32 @@ window.__BILLING_EMBEDDED__ = true;
       refreshStaffPickerUi(cartId);
       return;
     }
+    const benefitLine = e.target.closest('[data-open-benefit-line]');
+    if (benefitLine) {
+      if (!isMemberBill()) { showToast('散客暂无会员卡权益'); return; }
+      state.benefitFocusLineId = benefitLine.getAttribute('data-open-benefit-line') || null;
+      state.benefitDraft = JSON.parse(JSON.stringify(state.benefitApplied));
+      state.benefitSkip = false;
+      renderBenefitPicker();
+      showOnlyScreen('screen-pick-benefit');
+      return;
+    }
     if (e.target.closest('[data-open-benefit]')) {
       if (!isMemberBill()) { showToast('散客暂无会员卡权益'); return; }
+      state.benefitFocusLineId = null;
       state.benefitDraft = JSON.parse(JSON.stringify(state.benefitApplied));
       state.benefitSkip = false;
       renderBenefitPicker(); showOnlyScreen('screen-pick-benefit');
       return;
     }
     if (e.target.closest('[data-open-coupon]')) openCouponScreen();
-  });
-  document.getElementById('detailBody').addEventListener('input', e => {
-    if (e.target.id === 'manualOrderInput') {
-      state.manualOrderNo = e.target.value.trim();
+    const editSub = e.target.closest('[data-edit-line-subtotal]');
+    if (editSub) {
+      openLineSubtotalEditor(editSub.getAttribute('data-edit-line-subtotal'));
       return;
     }
+  });
+  document.getElementById('detailBody').addEventListener('input', e => {
     if (e.target.id === 'orderRemarkInput') {
       state.orderRemark = e.target.value.slice(0, 500);
       const cnt = e.target.parentElement.querySelector('.detail-remark__count');
@@ -53139,13 +54059,24 @@ window.__BILLING_EMBEDDED__ = true;
     const s = calcSettlement();
     if (splits.length) state.payChannel = splits[0].id;
     s.paySplits = splits;
-    s.manualOrderNo = state.manualOrderNo || '';
+    s.manualOrderNo = ensureManualOrderNo();
     s.billBizDate = ensureBillBizDate();
     s.orderIsFree = !!state.orderIsFree;
     state.lastSettlement = s;
     if (shouldDeductStock) deductProductStockAfterPay();
     if (state.cardIssuePending) {
-      const pending = state.cardIssuePending;
+      /* 支付成功才 FinalizeIssue：mock 收据号 → 写持卡 + 办卡业绩分摊 */
+      const pending = Object.assign({}, state.cardIssuePending, {
+        tradeReceiptId: 'demo_rcpt_' + Date.now(),
+        bizType: 'card_issue',
+        amount: state.pendingOpenCard ? Number(state.pendingOpenCard.amount) || 0 : 0,
+        staffIds: state.pendingOpenCard && Array.isArray(state.pendingOpenCard.staffIds)
+          ? state.pendingOpenCard.staffIds.slice() : [],
+        staffRoles: state.pendingOpenCard
+          ? Object.assign({}, state.pendingOpenCard.staffRoles || {}) : {},
+        staffDesignated: state.pendingOpenCard
+          ? Object.assign({}, state.pendingOpenCard.staffDesignated || {}) : {},
+      });
       if (!state.successIssueTemplateId) state.successIssueTemplateId = pending.templateId;
       if (!state.successIssueCardHtml && window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function') {
         state.successIssueCardHtml = window.CardHost.renderIssueSuccessCardFace(pending.templateId);
@@ -53156,7 +54087,11 @@ window.__BILLING_EMBEDDED__ = true;
       state.cardIssuePending = null;
     }
     if (state.cardExtendPending) {
-      const pending = state.cardExtendPending;
+      /* 支付成功才 FinalizeExtend */
+      const pending = Object.assign({}, state.cardExtendPending, {
+        tradeReceiptId: 'demo_rcpt_ext_' + Date.now(),
+        bizType: 'card_extend',
+      });
       if (!state.successIssueTemplateId) state.successIssueTemplateId = pending.templateId;
       if (!state.successIssueCardHtml && window.CardHost && typeof window.CardHost.renderIssueSuccessCardFace === 'function') {
         state.successIssueCardHtml = window.CardHost.renderIssueSuccessCardFace(pending.templateId);
