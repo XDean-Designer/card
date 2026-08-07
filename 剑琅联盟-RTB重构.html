@@ -7820,7 +7820,7 @@ button.exp-flow-row:active { opacity: .92; }
   display: block; overflow-y: auto; -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
 }
-/* 价目白卡：与顾客卡左右对齐（16px）；含快速消费 + Tab + 列表 */
+/* 价目白卡：与顾客卡左右对齐（16px）；含 Tab + 列表 */
 .bill-sheet {
   display: flex; flex-direction: column;
   box-sizing: border-box;
@@ -7864,37 +7864,236 @@ button.exp-flow-row:active { opacity: .92; }
   background: var(--card);
   border-bottom: none;
 }
-.bill-quick-consume {
+/* 开单 · 选卡/快消 文件夹 Tab 内容卡 */
+.bill-action {
+  width: calc(100% - 32px);
+  max-width: 358px;
+  margin: 12px 16px 4px;
   box-sizing: border-box;
+}
+.bill-action__tabs {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  border: none;
+  box-sizing: border-box;
+  background: transparent;
+}
+.bill-action__tab {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 0;
+  background: #EFEFEF;
+  color: #8A8A8A;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  outline: none;
+  box-shadow: none;
+}
+.bill-action__tab:focus,
+.bill-action__tab:focus-visible { outline: none; box-shadow: none; }
+/* 左侧 Tab：右边斜切；负边距=斜切宽度，与右 Tab 无缝咬合 */
+.bill-action__tab:first-child {
+  z-index: 2;
+  padding-right: 28px;
+  margin-right: -18px;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
+  border-radius: 12px 0 0 0;
+}
+.bill-action__tab:last-child {
+  z-index: 1;
+  margin-left: 0;
+  padding-left: 26px;
+  border-radius: 0 12px 0 0;
+}
+.bill-action__tab.is-on {
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 650;
+  z-index: 3;
+}
+.bill-action__body {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  box-sizing: border-box;
+  /* 与 Tab 白底衔接，避免接缝发丝线 */
+  margin-top: -1px;
+  /* 裁切圆角 + 第 4 张卡溢出；轨道仍可横向滑动 */
+  overflow: hidden;
+  min-height: 88px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+.bill-action__body.is-card-tab { border-radius: 0 0 12px 12px; }
+.bill-action__body.is-quick-tab { border-radius: 0 0 12px 12px; }
+.bill-card-rail {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+}
+.bill-card-rail__scroll {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  /* 加大间距：约 3.75 张卡落入内容宽，第 4 张露出约 3/4、溢出 1/4 */
+  gap: 30px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+  scroll-snap-type: x proximity;
+  padding: 14px 16px 14px 14px;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.bill-card-rail__scroll.is-panning {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.bill-card-rail__scroll::-webkit-scrollbar { display: none; }
+.bill-card-rail__fade {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 56px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.72) 42%, #fff 100%);
+  z-index: 2;
+}
+.bill-held-card {
+  flex: 0 0 auto;
+  width: 68px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 6px;
-  width: calc(100% - 32px);
-  max-width: none;
-  height: 44px;
-  min-height: 44px;
-  margin: 12px 16px 8px;
-  align-self: center;
-  border: 1px solid var(--brand);
-  border-radius: 12px;
+  padding: 0;
+  border: none;
   background: transparent;
-  color: var(--brand);
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1;
   cursor: pointer;
   font-family: inherit;
-  padding: 0 16px;
+  text-align: center;
+  scroll-snap-align: start;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: opacity .18s ease, filter .18s ease;
+}
+.bill-held-card.is-dim {
+  opacity: .38;
+  filter: grayscale(.25);
+}
+.bill-held-card__face {
+  width: 48px; height: 32px; border-radius: 5px; flex-shrink: 0;
+  border: 1px solid #E8E8E8; overflow: hidden; display: flex; flex-direction: column;
+  background: #fff;
+  box-sizing: border-box;
+}
+.bill-held-card.is-on .bill-held-card__face {
+  border-color: rgba(255, 112, 67, 0.55);
+  box-shadow: 0 0 0 2px rgba(255, 112, 67, 0.18);
+}
+.bill-held-card__face-head { flex: 0 0 12px; width: 100%; }
+.bill-held-card__face-body { flex: 1; background: #fff; }
+.bill-held-card__name {
+  font-size: 11px; font-weight: 500; color: #1a1a1a; line-height: 14px;
+  max-width: 68px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  word-break: break-all;
+}
+.bill-held-card.is-on .bill-held-card__name { font-weight: 700; color: #FF7043; }
+.bill-held-card.is-dim .bill-held-card__name { color: #B0B0B0; font-weight: 400; }
+.bill-held-card--add .bill-held-card__face {
+  border: 1.5px dashed #D0D0D0;
+  background: #FAFAFA;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.bill-held-card--add .bill-held-card__plus {
+  width: 18px; height: 18px; color: #B8B8B8; display: block;
+}
+.bill-held-card--add .bill-held-card__name { color: #999; }
+.bill-held-cards__empty {
+  margin: 4px 14px 0; font-size: 12px; color: var(--text-sec); line-height: 1.4;
+}
+.bill-action__scope {
+  border-top: 1px solid #F0F0F0;
+  margin-top: 0;
+}
+.bill-action__scope .page-tabs {
+  background: #fff;
+  border-bottom: none;
+}
+.bill-action__scope .bill-group-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; flex-shrink: 0;
+  border: none; min-height: 0; margin: 0; height: auto;
+  background: #fff; box-sizing: border-box;
+}
+.bill-action__scope .catalog-group-segment {
+  flex: 1; min-width: 0; margin-right: 0;
+}
+.bill-action__scope .catalog-list { padding: 8px 12px 16px; }
+.bill-quick-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  box-sizing: border-box;
+}
+.bill-quick-row__input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  background: #FAFAFA;
+  padding: 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: var(--font-data), inherit;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+.bill-quick-row__input.is-empty { color: #B0B0B0; font-weight: 500; }
+.bill-quick-row__input:focus { outline: none; border-color: var(--brand); background: #fff; }
+.bill-quick-row__add {
   flex-shrink: 0;
-  white-space: nowrap;
+  height: 44px;
+  min-width: 72px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.bill-quick-consume:active { background: var(--brand-soft); }
-.bill-quick-consume svg {
-  width: 18px; height: 18px; flex-shrink: 0; display: block;
-  color: var(--brand);
-}
+.bill-quick-row__add:active { opacity: .88; }
 .bill-stock-entry {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: calc(100% - 32px); margin: 10px 16px 10px; height: 40px;
@@ -8721,93 +8920,6 @@ button.exp-flow-row:active { opacity: .92; }
   box-sizing: border-box;
 }
 .bill-continue-add:active { background: #FAFAFA; border-color: var(--brand); color: var(--brand); }
-.bill-held-cards {
-  position: relative;
-  margin: 0 16px 12px; padding: 12px 14px 36px; background: #fff; border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.03);
-}
-.bill-held-cards.is-tools-open { padding-bottom: 34px; }
-.bill-held-cards__title {
-  font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 0 0 10px;
-}
-.bill-held-cards__list { display: flex; flex-wrap: wrap; gap: 8px; }
-.bill-held-card {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 10px 8px 12px; border-radius: 10px; border: 1.5px solid #E8E8E8;
-  background: #FAFAFA; cursor: pointer; font-family: inherit; text-align: left;
-  max-width: 100%; box-sizing: border-box;
-  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
-}
-.bill-held-card.is-on {
-  border-color: #FF7043; border-width: 2px;
-  background: #fff;
-  box-shadow: none;
-}
-.bill-held-card__face {
-  width: 36px; height: 24px; border-radius: 4px; flex-shrink: 0;
-  border: 1px solid #E8E8E8; overflow: hidden; display: flex; flex-direction: column;
-  background: #fff;
-}
-.bill-held-card.is-on .bill-held-card__face { border-color: rgba(255, 112, 67, 0.4); }
-.bill-held-card__face-head { flex: 0 0 10px; width: 100%; }
-.bill-held-card__face-body { flex: 1; background: #fff; }
-.bill-held-card__name {
-  font-size: 13px; font-weight: 500; color: #1a1a1a;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;
-}
-.bill-held-card.is-on .bill-held-card__name { font-weight: 700; color: #FF7043; }
-.bill-held-card__check {
-  flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
-  display: none; align-items: center; justify-content: center;
-  background: #FF7043; color: #fff;
-}
-.bill-held-card.is-on .bill-held-card__check { display: inline-flex; }
-.bill-held-card__check svg { width: 11px; height: 11px; display: block; }
-.bill-held-cards__empty {
-  margin: 0; font-size: 13px; color: var(--text-sec); line-height: 1.45;
-}
-.bill-held-cards__tools {
-  display: none; align-items: center; justify-content: flex-end; gap: 8px;
-  margin-top: 12px; padding-top: 10px; padding-right: 0;
-  border-top: 0.5px solid #F0F0F0;
-  box-sizing: border-box;
-}
-.bill-held-cards.is-tools-open .bill-held-cards__tools { display: flex; }
-.bill-held-cards__tools .bill-held-cards__btn {
-  height: 32px; min-height: 32px; padding: 0 16px; border-radius: 999px;
-  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  white-space: nowrap; box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-.bill-held-cards__tools .bill-held-cards__btn--secondary {
-  border: 1px solid var(--brand); background: transparent; color: var(--brand);
-}
-.bill-held-cards__tools .bill-held-cards__btn--secondary:active {
-  background: var(--brand-soft);
-}
-.bill-held-cards__tools .bill-held-cards__btn--primary {
-  border: 1px solid var(--brand); background: var(--brand); color: #fff;
-}
-.bill-held-cards__tools .bill-held-cards__btn--primary:active {
-  opacity: .88;
-}
-.bill-held-cards__fold {
-  position: absolute; right: 8px; bottom: 6px;
-  width: 28px; height: 22px; padding: 0; border: none; border-radius: 6px;
-  background: #F5F5F5; color: #999; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: inherit; -webkit-tap-highlight-color: transparent;
-}
-.bill-held-cards__fold:active { background: #EBEBEB; color: #666; }
-.bill-held-cards.is-tools-open .bill-held-cards__fold {
-  background: var(--brand-soft); color: var(--brand);
-}
-.bill-held-cards__fold svg {
-  width: 14px; height: 14px; display: block;
-  transition: transform .15s ease;
-}
-.bill-held-cards.is-tools-open .bill-held-cards__fold svg { transform: rotate(180deg); }
 .detail-item__benefit {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   width: 100%; margin-top: 8px; padding: 8px 10px; border: none; border-radius: 8px;
@@ -12926,7 +13038,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
   55% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
-/* Morph Split · 行内变宽切开（点客/散客 · 工位） */
+/* Morph Split · 行内变宽；展开态无连体壳，仅独立圆角按钮 */
 .staff-card.is-editing .staff-card__panel[data-face="designate"],
 .staff-card.is-editing .staff-card__panel[data-face="role"] {
   position: relative;
@@ -12935,14 +13047,12 @@ button.detail-compose__row:active { background: #FAFAFA; }
   min-height: 96px;
   padding: 0;
   gap: 0;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
   cursor: default;
-  box-shadow:
-    0 10px 28px rgba(26, 26, 26, .14),
-    0 0 0 1px rgba(243, 47, 65, .1);
+  box-shadow: none;
 }
 .staff-card.is-editing .staff-card__panel[data-face="designate"]:active,
 .staff-card.is-editing .staff-card__panel[data-face="role"]:active {
@@ -12950,8 +13060,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
 }
 .staff-card.is-pinching .staff-card__panel[data-face="designate"],
 .staff-card.is-pinching .staff-card__panel[data-face="role"] {
-  border-color: #E8E8E8;
+  /* 收窄过渡仍保留短卡壳，展开后变透明露出独立按钮 */
+  border: 1px solid #E8E8E8;
   border-radius: 12px;
+  background: #fff;
   box-shadow: 0 4px 14px rgba(26, 26, 26, .1);
 }
 .staff-card.is-pinching .staff-card__split {
@@ -12973,51 +13085,51 @@ button.detail-compose__row:active { background: #FAFAFA; }
   .staff-card.is-expanding .staff-card__split { transition: none !important; }
 }
 .staff-card__split {
-  display: flex; align-items: stretch; width: 100%; height: 100%;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+  box-sizing: border-box;
+  background: transparent;
 }
 .staff-card__split-btn {
   position: relative;
   flex: 1 1 0; min-width: 0;
   margin: 0; padding: 0 8px;
-  border: none; background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 10px;
+  background: #fff;
   color: #1a1a1a;
   font-size: 15px; font-weight: 650; letter-spacing: .02em; line-height: 1.15;
   font-family: inherit; cursor: pointer;
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   -webkit-tap-highlight-color: transparent;
-  transition: background .18s ease, color .18s ease, transform .14s ease;
-}
-.staff-card__split-btn + .staff-card__split-btn {
-  border-left: 1px solid rgba(0,0,0,.06);
-}
-.staff-card__split-btn::after {
-  content: ''; position: absolute; inset: 6px; border-radius: 10px;
-  pointer-events: none; opacity: 0;
-  transition: opacity .18s ease;
+  box-shadow: 0 2px 8px rgba(26, 26, 26, .06);
+  transition: background .18s ease, color .18s ease, transform .14s ease, box-shadow .18s ease;
 }
 .staff-card__split-btn:active {
   transform: scale(.97);
+  box-shadow: 0 1px 4px rgba(26, 26, 26, .08);
 }
-.staff-card__split-btn:active::after { opacity: 1; }
 .staff-card__split-btn--des {
   color: #C62828;
   background: linear-gradient(180deg, #FFF9F9 0%, #FFF2F2 100%);
+  border-color: rgba(243, 47, 65, .18);
 }
-.staff-card__split-btn--des::after { background: rgba(243, 47, 65, .08); }
 .staff-card__split-btn--guest {
   color: #4A667A;
   background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F8 100%);
+  border-color: rgba(74, 102, 122, .16);
 }
-.staff-card__split-btn--guest::after { background: rgba(74, 102, 122, .08); }
 .staff-card__split-btn--role {
   color: #1a1a1a;
   background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%);
   font-size: 14px; font-weight: 600;
 }
-.staff-card__split-btn--role:nth-child(1) { color: #6B8F71; }
-.staff-card__split-btn--role:nth-child(2) { color: #6A7F96; }
-.staff-card__split-btn--role:nth-child(3) { color: #C62828; }
-.staff-card__split-btn--role::after { background: rgba(0,0,0,.04); }
+.staff-card__split-btn--role:nth-child(1) { color: #6B8F71; border-color: rgba(107, 143, 113, .22); }
+.staff-card__split-btn--role:nth-child(2) { color: #6A7F96; border-color: rgba(106, 127, 150, .22); }
+.staff-card__split-btn--role:nth-child(3) { color: #C62828; border-color: rgba(198, 40, 40, .18); }
 .staff-card__split-btn__hint {
   font-size: 10px; font-weight: 500; opacity: .55; letter-spacing: 0;
 }
@@ -24589,7 +24701,7 @@ function openAmountKeypad(el) {
     if (el.id === 'fPrice') titleEl.textContent = state.projFormKind === 'product' ? '产品价格' : '项目价格';
     else if (el.id === 'holdPriceKeypadProxy') titleEl.textContent = '挂单金额';
     else if (el.id === 'billDueKeypadProxy' || el.id === 'cardIssuePayKeypadProxy' || el.id === 'billRechargeDue' || el.id === 'billTimesDue' || el.id === 'billExtendDue' || (el.dataset && (el.dataset.billRechargeField === 'due' || el.dataset.billTimesDue != null || el.dataset.billExtendDue != null))) titleEl.textContent = '应付金额';
-    else if (el.id === 'quickConsumeKeypadProxy') titleEl.textContent = '快速消费金额';
+    else if (el.id === 'quickConsumeKeypadProxy' || el.id === 'billQuickAmt') titleEl.textContent = '快速消费金额';
     else if (el.dataset && (el.dataset.flowPerf === 'achievement' || el.dataset.flowEditPerf === 'achievement' || el.dataset.flowEditStaffPerf === 'achievement')) titleEl.textContent = '修改业绩';
     else if (el.dataset && (el.dataset.flowPerf === 'commission' || el.dataset.flowEditPerf === 'commission' || el.dataset.flowEditStaffPerf === 'commission')) titleEl.textContent = '修改提成';
     else if (el.dataset && el.dataset.flowEditItemPrice != null) titleEl.textContent = '修改单价';
@@ -40699,7 +40811,9 @@ window.__BILLING_EMBEDDED__ = true;
     if (gridW <= 0) return;
     const cellW = (gridW - gap * 2) / 3;
     const face = editing.querySelector('[data-face]')?.getAttribute('data-face');
-    const editW = face === 'role' ? gridW : Math.min(gridW, cellW * 2 + gap);
+    /* 展开宽 = 原宽 × 2/3（减少三分之一） */
+    const editWFull = face === 'role' ? gridW : Math.min(gridW, cellW * 2 + gap);
+    const editW = Math.max(cellW, round2(editWFull * (2 / 3)));
     const idx = cards.indexOf(editing);
     if (idx < 0) return;
     const col = idx % 3;
@@ -41348,8 +41462,10 @@ window.__BILLING_EMBEDDED__ = true;
     billSlips: [], // [{ id, cardIds: [] }]
     billDraft: null, // { id, cardIds: [] } | null
     billComposerMode: 'browse', // browse | drafting | review
-    billPickCardIds: [], // multi-select while composing
+    billPickCardIds: [], // single-select (0 or 1 id) while composing
     billHeldCardsToolsOpen: false,
+    billActionTab: null, // 'card' | 'quick' | null(=auto)
+    billQuickAmtDraft: '',
     benefitFocusLineId: null,
     linkedCardIds: [],
     billRechargeCardId: null,
@@ -41795,6 +41911,8 @@ window.__BILLING_EMBEDDED__ = true;
     state.billPickCardIds = [];
     state.billComposerMode = 'browse';
     state.billHeldCardsToolsOpen = false;
+    state.billActionTab = null;
+    state.billQuickAmtDraft = '';
     state.benefitFocusLineId = null;
   }
 
@@ -41874,20 +41992,187 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function getActiveBillPickCardIds() {
-    if (state.billDraft && Array.isArray(state.billDraft.cardIds)) return state.billDraft.cardIds;
-    return state.billPickCardIds || [];
+    let ids = (state.billDraft && Array.isArray(state.billDraft.cardIds))
+      ? state.billDraft.cardIds
+      : (state.billPickCardIds || []);
+    if (!Array.isArray(ids)) ids = [];
+    /* 选卡改为单选：历史多选草稿收敛为首张 */
+    if (ids.length > 1) {
+      ids = [ids[0]];
+      state.billPickCardIds = ids.slice();
+      if (state.billDraft) state.billDraft.cardIds = ids.slice();
+      state.billPickCardId = ids[0];
+    }
+    return ids;
   }
 
   function toggleBillPickCard(cardId) {
     if (!cardId) return;
-    const ids = getActiveBillPickCardIds().slice();
-    const i = ids.indexOf(cardId);
-    if (i >= 0) ids.splice(i, 1);
-    else ids.push(cardId);
-    state.billPickCardIds = ids;
-    if (state.billDraft) state.billDraft.cardIds = ids.slice();
+    const ids = getActiveBillPickCardIds();
+    const selected = ids.length === 1 && ids[0] === cardId;
+    const next = selected ? [] : [cardId];
+    state.billPickCardIds = next;
+    state.billPickCardId = next[0] || null;
+    if (state.billDraft) state.billDraft.cardIds = next.slice();
+    if (next[0]) syncBillTabForSelectedCard(findHeldCardById(next[0]));
+    else state.billTab = 'project';
     renderBillHeader();
     syncCartChrome();
+  }
+
+  function ensureBillActionTab() {
+    if (state.billActionTab === 'card' || state.billActionTab === 'quick') return state.billActionTab;
+    const c = getCustomer();
+    const hasCards = !!(c && c.isMember && (c.cards || []).length);
+    state.billActionTab = hasCards ? 'card' : 'quick';
+    return state.billActionTab;
+  }
+
+  function setBillActionTab(tab) {
+    if (tab !== 'card' && tab !== 'quick') return;
+    state.billActionTab = tab;
+    renderBillHeader();
+  }
+
+  function hasBillCardSelected() {
+    return getActiveBillPickCardIds().length > 0;
+  }
+
+  function renderBillCatalogBlock(opts) {
+    opts = opts || {};
+    const cls = opts.scope ? 'bill-action__scope' : 'bill-sheet';
+    return `<div class="${cls}">
+      <div class="page-tabs">
+        <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
+        <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
+      </div>
+      <div class="catalog-group-bar pick-group-bar bill-group-bar" id="billGroupBar">
+        <div class="catalog-group-segment">
+          <div class="catalog-group-scroll" id="billGroupTabs" role="tablist" aria-label="价目分组"></div>
+          <div class="catalog-group-fade" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="catalog-list" id="catalogList"></div>
+    </div>`;
+  }
+
+  function wireBillCardRailScroll(el) {
+    if (!el || el.dataset.railWired === '1') return;
+    el.dataset.railWired = '1';
+    let pointerId = null;
+    let startX = 0;
+    let startY = 0;
+    let startScroll = 0;
+    let axis = null;
+    let moved = false;
+    const THRESHOLD = 6;
+    el.addEventListener('pointerdown', e => {
+      if (e.button != null && e.button !== 0) return;
+      pointerId = e.pointerId;
+      startX = e.clientX;
+      startY = e.clientY;
+      startScroll = el.scrollLeft;
+      axis = null;
+      moved = false;
+    });
+    el.addEventListener('pointermove', e => {
+      if (pointerId == null || e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!axis) {
+        if (Math.abs(dx) < THRESHOLD && Math.abs(dy) < THRESHOLD) return;
+        axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'x') {
+          el.classList.add('is-panning');
+          try { el.setPointerCapture(pointerId); } catch (_) { /* ignore */ }
+        }
+      }
+      if (axis !== 'x') return;
+      moved = true;
+      el.scrollLeft = startScroll - dx;
+      e.preventDefault();
+    }, { passive: false });
+    const endPan = e => {
+      if (pointerId == null || (e && e.pointerId !== pointerId)) return;
+      if (axis === 'x') {
+        try { el.releasePointerCapture(pointerId); } catch (_) { /* ignore */ }
+        /* 延后清 is-panning，避免同次手势触发 click 选卡 */
+        setTimeout(() => el.classList.remove('is-panning'), 0);
+      }
+      pointerId = null;
+      axis = null;
+    };
+    el.addEventListener('pointerup', endPan);
+    el.addEventListener('pointercancel', endPan);
+    el.addEventListener('click', e => {
+      if (moved || el.classList.contains('is-panning')) {
+        e.preventDefault();
+        e.stopPropagation();
+        moved = false;
+      }
+    }, true);
+  }
+
+  function renderBillCardRail() {
+    const cards = (getCustomer().cards || []);
+    const activeIds = getActiveBillPickCardIds();
+    const hasSel = activeIds.length > 0;
+    const plusSvg = '<svg class="bill-held-card__plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+    const items = cards.map(card => {
+      const on = activeIds[0] === card.id;
+      const dim = hasSel && !on;
+      const tid = heldTemplateId(card);
+      const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
+      const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
+      const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#E8E8E8';
+      return `<button type="button" class="bill-held-card${on ? ' is-on' : ''}${dim ? ' is-dim' : ''}" data-bill-held-card="${escapeHtml(card.id)}" aria-pressed="${on ? 'true' : 'false'}">
+        <span class="bill-held-card__face" aria-hidden="true"><span class="bill-held-card__face-head" style="background:${grad}"></span><span class="bill-held-card__face-body"></span></span>
+        <span class="bill-held-card__name">${escapeHtml(card.name)}</span>
+      </button>`;
+    });
+    items.push(`<button type="button" class="bill-held-card bill-held-card--add" data-bill-add-card aria-label="为客户办卡">
+      <span class="bill-held-card__face" aria-hidden="true">${plusSvg}</span>
+      <span class="bill-held-card__name">办卡</span>
+    </button>`);
+    const empty = !cards.length
+      ? '<p class="bill-held-cards__empty">暂无会员卡，可点右侧「办卡」添加</p>'
+      : '';
+    return `${empty}<div class="bill-card-rail">
+      <div class="bill-card-rail__scroll" id="billCardRailScroll">${items.join('')}</div>
+      <div class="bill-card-rail__fade" aria-hidden="true"></div>
+    </div>`;
+  }
+
+  function renderBillQuickPanel() {
+    const amt = state.billQuickAmtDraft != null ? String(state.billQuickAmtDraft) : '';
+    return `<div class="bill-quick-row">
+      <input type="text" class="bill-quick-row__input input-amount${!amt ? ' is-empty' : ''}" id="billQuickAmt" readonly inputmode="decimal" placeholder="输入消费金额" value="${amt ? escapeHtml(amt) : ''}" aria-label="快速消费金额">
+      <button type="button" class="bill-quick-row__add" id="btnBillQuickAdd">添加</button>
+    </div>`;
+  }
+
+  function renderBillActionPanel() {
+    const tab = ensureBillActionTab();
+    const cardOn = tab === 'card';
+    const selected = hasBillCardSelected();
+    let bodyInner = '';
+    if (cardOn) {
+      bodyInner = renderBillCardRail() + (selected ? renderBillCatalogBlock({ scope: true }) : '');
+    } else {
+      bodyInner = renderBillQuickPanel();
+    }
+    return `<div class="bill-action" id="billActionPanel">
+      <div class="bill-action__tabs" role="tablist" aria-label="开单方式">
+        <button type="button" class="bill-action__tab${cardOn ? ' is-on' : ''}" data-bill-action-tab="card" role="tab" aria-selected="${cardOn ? 'true' : 'false'}">选择会员卡</button>
+        <button type="button" class="bill-action__tab${!cardOn ? ' is-on' : ''}" data-bill-action-tab="quick" role="tab" aria-selected="${!cardOn ? 'true' : 'false'}">快速消费</button>
+      </div>
+      <div class="bill-action__body ${cardOn ? 'is-card-tab' : 'is-quick-tab'}">${bodyInner}</div>
+    </div>`;
+  }
+
+  /** @deprecated kept name for callers — now renders folder action panel */
+  function renderBillHeldCardsPicker() {
+    return renderBillActionPanel();
   }
 
   function assignCartItemToDraft(item) {
@@ -41956,41 +42241,6 @@ window.__BILLING_EMBEDDED__ = true;
     }
     if (!parts.length) return '';
     return `<div class="bill-slip-stack">${parts.join('')}</div>`;
-  }
-
-  function renderBillHeldCardsPicker() {
-    if (!isMemberBill()) return '';
-    const cards = (getCustomer().cards || []);
-    const active = new Set(getActiveBillPickCardIds());
-    const toolsOpen = !!state.billHeldCardsToolsOpen;
-    const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
-    const foldSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10l6 6 6-6"/></svg>';
-    let listHtml = '';
-    if (!cards.length) {
-      listHtml = '<p class="bill-held-cards__empty">暂无会员卡，可添加卡后筛选适用项目</p>';
-    } else {
-      listHtml = `<div class="bill-held-cards__list">${cards.map(card => {
-        const on = active.has(card.id);
-        const tid = heldTemplateId(card);
-        const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
-        const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
-        const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#E8E8E8';
-        return `<button type="button" class="bill-held-card${on ? ' is-on' : ''}" data-bill-held-card="${escapeHtml(card.id)}" aria-pressed="${on ? 'true' : 'false'}">
-          <span class="bill-held-card__face" aria-hidden="true"><span class="bill-held-card__face-head" style="background:${grad}"></span><span class="bill-held-card__face-body"></span></span>
-          <span class="bill-held-card__name">${escapeHtml(card.name)}</span>
-          <span class="bill-held-card__check" aria-hidden="true">${checkSvg}</span>
-        </button>`;
-      }).join('')}</div>`;
-    }
-    return `<div class="bill-held-cards${toolsOpen ? ' is-tools-open' : ''}" id="billHeldCards">
-      <div class="bill-held-cards__title">选择会员卡${active.size ? `（已选 ${active.size}）` : '（可多选）'}</div>
-      ${listHtml}
-      <div class="bill-held-cards__tools">
-        <button type="button" class="bill-held-cards__btn bill-held-cards__btn--secondary" id="btnBillCardAsset">充卡/续卡</button>
-        <button type="button" class="bill-held-cards__btn bill-held-cards__btn--primary" id="btnBillAddCard">办卡</button>
-      </div>
-      <button type="button" class="bill-held-cards__fold" id="btnBillHeldCardsFold" data-bill-held-tools-toggle aria-expanded="${toolsOpen ? 'true' : 'false'}" aria-label="${toolsOpen ? '收起更多操作' : '展开更多操作'}">${foldSvg}</button>
-    </div>`;
   }
 
   function shouldOfferBillCardGate() {
@@ -42084,6 +42334,27 @@ window.__BILLING_EMBEDDED__ = true;
     const id = String(it.id || '');
     if (asProduct) return scope.namesProd.has(name) || scope.idsProd.has(id);
     return scope.namesProj.has(name) || scope.namesProj.has(key) || scope.idsProj.has(id);
+  }
+
+  /** 选中卡仅适用产品、无适用项目时，价目默认切到「产品」 */
+  function syncBillTabForSelectedCard(card) {
+    if (!card) {
+      state.billTab = 'project';
+      return;
+    }
+    const scope = getCardCatalogScope(card);
+    if (!scope || scope.mode === 'all') {
+      state.billTab = 'project';
+      return;
+    }
+    const bridge = window.CardCatalogBridge;
+    const projects = bridge?.getBillProjects?.() || PROJECTS;
+    const products = bridge?.getBillProducts?.() || PRODUCTS;
+    let projN = 0;
+    let prodN = 0;
+    (projects || []).forEach(it => { if (catalogItemMatchesScope(it, scope, false)) projN += 1; });
+    (products || []).forEach(it => { if (catalogItemMatchesScope(it, scope, true)) prodN += 1; });
+    state.billTab = (projN === 0 && prodN > 0) ? 'product' : 'project';
   }
 
   function countCardScopeItems(card) {
@@ -44370,26 +44641,27 @@ window.__BILLING_EMBEDDED__ = true;
     document.getElementById('billBody').innerHTML = `
       ${renderCustomerNameCard(c, { withActions: true })}
       ${slipStack}
-      <button type="button" class="bill-quick-consume" id="btnQuickConsume">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z"/></svg>
-        快速消费
-      </button>
-      ${isMemberBill() ? renderBillHeldCardsPicker() : ''}
-      <div class="bill-sheet">
-        <div class="page-tabs">
-          <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
-          <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
-        </div>
-        <div class="catalog-group-bar pick-group-bar bill-group-bar" id="billGroupBar">
-          <div class="catalog-group-segment">
-            <div class="catalog-group-scroll" id="billGroupTabs" role="tablist" aria-label="价目分组"></div>
-            <div class="catalog-group-fade" aria-hidden="true"></div>
-          </div>
-        </div>
-        <div class="catalog-list" id="catalogList"></div>
-      </div>`;
-    renderBillGroupTabs();
-    renderBillCatalog();
+      ${renderBillActionPanel()}
+      ${!hasBillCardSelected() ? renderBillCatalogBlock({ scope: false }) : ''}`;
+    if (document.getElementById('catalogList')) {
+      renderBillGroupTabs();
+      renderBillCatalog();
+    }
+    const rail = document.getElementById('billCardRailScroll');
+    if (rail && typeof wireBillCardRailScroll === 'function') wireBillCardRailScroll(rail);
+    if (ensureBillActionTab() === 'quick') {
+      const panel = document.getElementById('billActionPanel');
+      const quickInp = document.getElementById('billQuickAmt');
+      if (panel && typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(panel);
+      if (quickInp) {
+        const syncQuickDraft = () => {
+          state.billQuickAmtDraft = String(quickInp.value || '').replace(/^¥/, '').trim();
+          quickInp.classList.toggle('is-empty', !state.billQuickAmtDraft);
+        };
+        quickInp.addEventListener('input', syncQuickDraft);
+        quickInp.addEventListener('change', syncQuickDraft);
+      }
+    }
   }
 
   function getBillGroupBucket() {
@@ -45564,54 +45836,54 @@ window.__BILLING_EMBEDDED__ = true;
     return true;
   }
 
-  function openQuickConsume() {
-    let el = document.getElementById('quickConsumeKeypadProxy');
-    if (!el) {
-      el = document.createElement('input');
-      el.type = 'text';
-      el.id = 'quickConsumeKeypadProxy';
-      el.className = 'input-amount';
-      el.setAttribute('readonly', 'readonly');
-      el.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px;';
-      document.body.appendChild(el);
-      el.addEventListener('change', () => {
-        const n = parseFloat(el.value);
-        if (!Number.isFinite(n) || n <= 0) {
-          showToast('请输入有效金额', true);
-          return;
-        }
-        const amt = round2(n);
-        const item = {
-          id: 'quick-' + Date.now(),
-          name: '快速消费',
-          price: amt,
-          category: '快速消费',
-          type: 'quick',
-          kind: 'quick',
-          isQuick: true,
-        };
-        state.cart.push({
-          ...item,
-          qty: 1,
-          unitPrice: amt,
-          staffIds: [],
-          staffRoles: {},
-          staffDesignated: {},
-          expanded: false,
-          slipId: ensureBillDraft().id,
-        });
-        clearBillDueOverride();
-        syncBillComposerMode();
-        syncCartChrome();
-        if (document.getElementById('screen-bill') && !document.getElementById('screen-bill').classList.contains('hidden')) {
-          renderBillHeader();
-        }
-        showToast('已加入快速消费 ' + formatYen(amt));
-      });
+  function submitBillQuickConsume(rawAmt) {
+    const raw = rawAmt != null ? rawAmt : state.billQuickAmtDraft;
+    const n = typeof parseAmount === 'function' ? parseAmount(raw) : parseFloat(String(raw || '').replace(/^¥/, ''));
+    if (!Number.isFinite(n) || n <= 0) {
+      showToast('请输入有效金额', true);
+      return false;
     }
-    el.value = '';
-    if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
-    else showToast('金额键盘未就绪');
+    if (n > INPUT_LIMITS.MONEY_MAX) {
+      showToast('金额不能超过 ' + formatMoneyLimitLabel(), true);
+      return false;
+    }
+    const amt = round2(n);
+    /* 放弃未封账的草稿记账单，快消直达结算 */
+    if (state.billDraft) {
+      const draftId = state.billDraft.id;
+      state.cart = (state.cart || []).filter(it => it.slipId !== draftId);
+      state.billDraft = null;
+    }
+    state.cart.push({
+      id: 'quick-' + Date.now(),
+      name: '快速消费',
+      price: amt,
+      category: '快速消费',
+      type: 'quick',
+      kind: 'quick',
+      isQuick: true,
+      qty: 1,
+      unitPrice: amt,
+      staffIds: [],
+      staffRoles: {},
+      staffDesignated: {},
+      expanded: false,
+    });
+    state.billQuickAmtDraft = '';
+    clearBillDueOverride();
+    syncBillComposerMode();
+    syncCartChrome();
+    openBillSettle();
+    return true;
+  }
+
+  function openQuickConsume() {
+    setBillActionTab('quick');
+    requestAnimationFrame(() => {
+      const el = document.getElementById('billQuickAmt');
+      if (el && typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
+      else if (!el) showToast('金额键盘未就绪');
+    });
   }
 
   function openBillDueEditor() {
@@ -52475,16 +52747,27 @@ window.__BILLING_EMBEDDED__ = true;
       syncCartChrome();
       return;
     }
-    if (e.target.closest('[data-bill-held-tools-toggle]')) {
-      e.preventDefault();
-      e.stopPropagation();
-      state.billHeldCardsToolsOpen = !state.billHeldCardsToolsOpen;
-      renderBillHeader();
+    const actionTab = e.target.closest('[data-bill-action-tab]');
+    if (actionTab) {
+      setBillActionTab(actionTab.getAttribute('data-bill-action-tab'));
       return;
     }
     const heldCard = e.target.closest('[data-bill-held-card]');
     if (heldCard) {
+      const rail = document.getElementById('billCardRailScroll');
+      if (rail && rail.classList.contains('is-panning')) return;
       toggleBillPickCard(heldCard.getAttribute('data-bill-held-card'));
+      return;
+    }
+    if (e.target.closest('[data-bill-add-card]')) {
+      const rail = document.getElementById('billCardRailScroll');
+      if (rail && rail.classList.contains('is-panning')) return;
+      openAddCardScreen();
+      return;
+    }
+    if (e.target.id === 'btnBillQuickAdd' || e.target.closest('#btnBillQuickAdd')) {
+      const inp = document.getElementById('billQuickAmt');
+      submitBillQuickConsume(inp ? inp.value : state.billQuickAmtDraft);
       return;
     }
     const slipEdit = e.target.closest('[data-bill-slip-edit]');
@@ -52497,6 +52780,7 @@ window.__BILLING_EMBEDDED__ = true;
     }
     if (e.target.closest('[data-bill-clear-cards]')) {
       state.billPickCardIds = [];
+      state.billPickCardId = null;
       if (state.billDraft) state.billDraft.cardIds = [];
       renderBillHeader();
       syncCartChrome();
@@ -52550,10 +52834,6 @@ window.__BILLING_EMBEDDED__ = true;
       setActiveBillGroupId(gid);
       renderBillGroupTabs();
       renderBillCatalog();
-      return;
-    }
-    if (e.target.id === 'btnQuickConsume' || e.target.closest('#btnQuickConsume')) {
-      openQuickConsume();
       return;
     }
     if (e.target.id === 'btnBillStockAdd' || e.target.closest('#btnBillStockAdd')) {
