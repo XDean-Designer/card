@@ -8871,7 +8871,7 @@ button.exp-flow-row:active { opacity: .92; }
   padding: 12px 14px 10px; min-height: 40px; box-sizing: border-box;
 }
 .bill-slip__title {
-  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
+  display: none;
 }
 .bill-slip__tag {
   font-size: 11px; font-weight: 500; color: var(--brand); background: var(--brand-soft);
@@ -8884,13 +8884,22 @@ button.exp-flow-row:active { opacity: .92; }
   background: #F7F7F7; font-size: 11px; color: #555; line-height: 16px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.bill-slip__no-card {
+  font-size: 13px; color: #5C5C5C; line-height: 18px; font-weight: 500;
+}
 .bill-slip__card-dot {
   width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; background: #C0C0C0;
 }
-.bill-slip__edit {
-  flex-shrink: 0; border: none; background: transparent; color: var(--brand);
-  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; padding: 4px 0 4px 8px;
+.bill-slip__del {
+  flex-shrink: 0;
+  width: 32px; height: 32px; padding: 0; margin: 0 0 0 auto;
+  border: none; border-radius: 8px; background: transparent;
+  color: #F32F41; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
+.bill-slip__del:active { background: #FFF2F2; color: #D02030; }
+.bill-slip__del svg { width: 18px; height: 18px; display: block; }
 .bill-slip__body { padding: 8px 14px 4px; }
 .bill-slip__line {
   display: flex; align-items: baseline; gap: 8px; padding: 6px 0;
@@ -8915,11 +8924,15 @@ button.exp-flow-row:active { opacity: .92; }
 .bill-continue-add {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: calc(100% - 32px); margin: 0 16px 16px; min-height: 48px;
-  border: 1.5px dashed #C8C8C8; border-radius: 12px; background: transparent;
-  color: #666; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
+  border: 1.5px dashed #5FA890; border-radius: 12px; background: transparent;
+  color: #5FA890; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer;
   box-sizing: border-box;
 }
-.bill-continue-add:active { background: #FAFAFA; border-color: var(--brand); color: var(--brand); }
+.bill-continue-add:active {
+  background: rgba(95, 168, 144, 0.12);
+  border-color: #4F9A82;
+  color: #4F9A82;
+}
 .detail-item__benefit {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   width: 100%; margin-top: 8px; padding: 8px 10px; border: none; border-radius: 8px;
@@ -11795,7 +11808,14 @@ button.biz-pay-row:active { opacity: .72; }
 }
 .sheet-option:last-child { border-bottom: none; }
 .sheet-option__icon { width: 40px; height: 40px; border-radius: 10px; background: var(--brand-soft); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.toast { position: absolute; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 50; background: rgba(26,26,26,.88); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 13px; max-width: 320px; text-align: center; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.toast {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 50; background: rgba(26,26,26,.88); color: #fff;
+  padding: 10px 16px; border-radius: 8px; font-size: 13px;
+  max-width: min(320px, calc(100% - 80px)); text-align: center;
+  pointer-events: none; opacity: 0; transition: opacity .2s;
+  box-sizing: border-box; white-space: pre-line; word-break: break-word;
+}
 .toast.show { opacity: 1; }
 .toast.hidden { opacity: 0; }
 .empty-cart { text-align: center; padding: 40px 20px; color: var(--text-sec); font-size: 14px; }
@@ -12391,8 +12411,13 @@ button.biz-pay-row:active { opacity: .72; }
   color: #5C5C5C; align-items: center; justify-content: center;
 }
 .offer-btn-icon svg { display: block; width: 18px; height: 18px; }
-.coupon-none.is-selected .offer-btn-icon,
-.benefit-none-btn.is-on .offer-btn-icon { color: #5C5C5C; }
+/* 莫兰迪：不使用=红；人工打折=蓝 */
+.offer-btn-icon--benefit-none,
+.offer-btn-icon--coupon-none { color: #C47B7B; }
+.offer-btn-icon--manual-discount { color: #7A9BB8; }
+.coupon-none.is-selected .offer-btn-icon--coupon-none { color: #C47B7B; }
+.benefit-none-btn.is-on .offer-btn-icon--benefit-none { color: #C47B7B; }
+.benefit-none-btn .offer-btn-icon--manual-discount { color: #7A9BB8; }
 
 /* —— 方案 D：男女散客 / 详情重做 / 结账三选一 / 扫码 / 字母选客 / 折扣权益 —— */
 .customer-card--guest {
@@ -12744,7 +12769,7 @@ button.biz-pay-row:active { opacity: .72; }
   padding: 12px 14px 10px; min-height: 40px; box-sizing: border-box;
 }
 .detail-slip__title {
-  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
+  display: none;
 }
 .detail-slip__meta {
   margin-left: auto; font-size: 12px; color: var(--text-sec); line-height: 18px;
@@ -13520,7 +13545,9 @@ button.detail-compose__row:active { background: #FAFAFA; }
   box-sizing: border-box; color: var(--text);
 }
 .benefit-none-btn.is-on { border-color: var(--brand); color: var(--brand); background: #FFF5F6; }
-.benefit-none-btn .offer-btn-icon { color: #5C5C5C; }
+.benefit-none-btn .offer-btn-icon--benefit-none { color: #C47B7B; }
+.benefit-none-btn .offer-btn-icon--manual-discount { color: #7A9BB8; }
+.benefit-none-btn.is-on .offer-btn-icon--benefit-none { color: #C47B7B; }
 .benefit-skip-hint {
   margin: 8px 16px 0; font-size: 13px; color: var(--text-sec); line-height: 1.4;
 }
@@ -41615,7 +41642,7 @@ window.__BILLING_EMBEDDED__ = true;
     return `<svg${cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>`;
   }
 
-  /** 深灰面性图标：不使用优惠券 / 不使用权益 / 人工打折 */
+  /** 面性图标：不使用优惠券/权益（莫兰迪红）· 人工打折（莫兰迪蓝） */
   function offerActionIconHtml(kind) {
     let inner = '';
     if (kind === 'coupon-none' || kind === 'benefit-none') {
@@ -41627,7 +41654,7 @@ window.__BILLING_EMBEDDED__ = true;
     } else {
       return '';
     }
-    return `<span class="offer-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${inner}</svg></span>`;
+    return `<span class="offer-btn-icon offer-btn-icon--${kind}" aria-hidden="true"><svg viewBox="0 0 24 24">${inner}</svg></span>`;
   }
 
   function iconSvg(kind, className) {
@@ -41991,6 +42018,21 @@ window.__BILLING_EMBEDDED__ = true;
     return true;
   }
 
+  function deleteBillSlip(slipId) {
+    if (!slipId) return false;
+    if (!window.confirm('确定删除该记账单？')) return false;
+    const idx = (state.billSlips || []).findIndex(s => s.id === slipId);
+    if (idx < 0) return false;
+    state.cart = (state.cart || []).filter(it => it.slipId !== slipId);
+    state.billSlips.splice(idx, 1);
+    clearBillDueOverride();
+    syncBillComposerMode();
+    renderBillHeader();
+    syncCartChrome();
+    showToast('已删除记账单');
+    return true;
+  }
+
   function getActiveBillPickCardIds() {
     let ids = (state.billDraft && Array.isArray(state.billDraft.cardIds))
       ? state.billDraft.cardIds
@@ -42041,11 +42083,22 @@ window.__BILLING_EMBEDDED__ = true;
   function renderBillCatalogBlock(opts) {
     opts = opts || {};
     const cls = opts.scope ? 'bill-action__scope' : 'bill-sheet';
-    return `<div class="${cls}">
-      <div class="page-tabs">
+    const kinds = opts.scope
+      ? getSelectedCardCatalogKinds()
+      : { project: true, product: true, hideTabs: false };
+    /* 单品类适用：隐藏 Tab，仅展示适用侧 */
+    if (opts.scope && kinds.hideTabs) {
+      if (kinds.product && !kinds.project) state.billTab = 'product';
+      else if (kinds.project && !kinds.product) state.billTab = 'project';
+    }
+    const tabsHtml = kinds.hideTabs
+      ? ''
+      : `<div class="page-tabs">
         <button type="button" class="page-tabs__item ${state.billTab === 'project' ? 'on' : ''}" data-tab="project">项目</button>
         <button type="button" class="page-tabs__item ${state.billTab === 'product' ? 'on' : ''}" data-tab="product">产品</button>
-      </div>
+      </div>`;
+    return `<div class="${cls}">
+      ${tabsHtml}
       <div class="catalog-group-bar pick-group-bar bill-group-bar" id="billGroupBar">
         <div class="catalog-group-segment">
           <div class="catalog-group-scroll" id="billGroupTabs" role="tablist" aria-label="价目分组"></div>
@@ -42200,7 +42253,7 @@ window.__BILLING_EMBEDDED__ = true;
     const total = slipSubtotal(slip.id);
     const cardIds = slip.cardIds || [];
     const chips = cardIds.map(slipCardChipHtml).filter(Boolean).join('')
-      || (isDraft ? '<span class="bill-slip__card-chip">未选卡</span>' : '');
+      || '<span class="bill-slip__no-card">未选卡</span>';
     const lineHtml = lines.length
       ? lines.map(it => {
           const quick = isQuickCartItem(it);
@@ -42215,10 +42268,9 @@ window.__BILLING_EMBEDDED__ = true;
       <div class="bill-slip__fold" aria-hidden="true"></div>
       <div class="bill-slip__perforation" aria-hidden="true"></div>
       <div class="bill-slip__head">
-        <span class="bill-slip__title">记账单 ${index}</span>
         ${isDraft ? '<span class="bill-slip__tag">编辑中</span>' : ''}
         <div class="bill-slip__cards">${chips}</div>
-        ${isDraft ? '' : `<button type="button" class="bill-slip__edit" data-bill-slip-edit="${escapeHtml(slip.id)}">编辑</button>`}
+        ${isDraft ? '' : `<button type="button" class="bill-slip__del" data-bill-slip-delete="${escapeHtml(slip.id)}" aria-label="删除记账单">${iconSvg('trash')}</button>`}
       </div>
       <div class="bill-slip__body">${lineHtml}</div>
       <div class="bill-slip__foot">
@@ -42336,16 +42388,15 @@ window.__BILLING_EMBEDDED__ = true;
     return scope.namesProj.has(name) || scope.namesProj.has(key) || scope.idsProj.has(id);
   }
 
-  /** 选中卡仅适用产品、无适用项目时，价目默认切到「产品」 */
-  function syncBillTabForSelectedCard(card) {
-    if (!card) {
-      state.billTab = 'project';
-      return;
+  function getSelectedCardCatalogKinds() {
+    if (!hasBillCardSelected()) {
+      return { project: true, product: true, hideTabs: false };
     }
+    const card = findHeldCardById(getActiveBillPickCardIds()[0]);
+    if (!card) return { project: true, product: true, hideTabs: false };
     const scope = getCardCatalogScope(card);
     if (!scope || scope.mode === 'all') {
-      state.billTab = 'project';
-      return;
+      return { project: true, product: true, hideTabs: false };
     }
     const bridge = window.CardCatalogBridge;
     const projects = bridge?.getBillProjects?.() || PROJECTS;
@@ -42354,7 +42405,33 @@ window.__BILLING_EMBEDDED__ = true;
     let prodN = 0;
     (projects || []).forEach(it => { if (catalogItemMatchesScope(it, scope, false)) projN += 1; });
     (products || []).forEach(it => { if (catalogItemMatchesScope(it, scope, true)) prodN += 1; });
-    state.billTab = (projN === 0 && prodN > 0) ? 'product' : 'project';
+    const hasProj = projN > 0;
+    const hasProd = prodN > 0;
+    if (hasProj && !hasProd) return { project: true, product: false, hideTabs: true };
+    if (!hasProj && hasProd) return { project: false, product: true, hideTabs: true };
+    return { project: true, product: true, hideTabs: false };
+  }
+
+  /** 选中卡仅适用产品、无适用项目时，价目默认切到「产品」 */
+  function syncBillTabForSelectedCard(card) {
+    if (!card) {
+      state.billTab = 'project';
+      return;
+    }
+    const kinds = (() => {
+      const scope = getCardCatalogScope(card);
+      if (!scope || scope.mode === 'all') return { project: true, product: true };
+      const bridge = window.CardCatalogBridge;
+      const projects = bridge?.getBillProjects?.() || PROJECTS;
+      const products = bridge?.getBillProducts?.() || PRODUCTS;
+      let projN = 0;
+      let prodN = 0;
+      (projects || []).forEach(it => { if (catalogItemMatchesScope(it, scope, false)) projN += 1; });
+      (products || []).forEach(it => { if (catalogItemMatchesScope(it, scope, true)) prodN += 1; });
+      return { project: projN > 0, product: prodN > 0 };
+    })();
+    if (!kinds.project && kinds.product) state.billTab = 'product';
+    else state.billTab = 'project';
   }
 
   function countCardScopeItems(card) {
@@ -42405,7 +42482,8 @@ window.__BILLING_EMBEDDED__ = true;
     state.billGateDraftCardId = null;
     state.billCardGateDone = true;
     state.billCardGateOpen = false;
-    state.billTab = 'project';
+    if (nextId) syncBillTabForSelectedCard(findHeldCardById(nextId));
+    else state.billTab = 'project';
     renderBillHeader();
     syncCartChrome();
     syncBillCardGateChrome();
@@ -44642,7 +44720,7 @@ window.__BILLING_EMBEDDED__ = true;
       ${renderCustomerNameCard(c, { withActions: true })}
       ${slipStack}
       ${renderBillActionPanel()}
-      ${!hasBillCardSelected() ? renderBillCatalogBlock({ scope: false }) : ''}`;
+      ${(!hasBillCardSelected() && ensureBillActionTab() !== 'quick') ? renderBillCatalogBlock({ scope: false }) : ''}`;
     if (document.getElementById('catalogList')) {
       renderBillGroupTabs();
       renderBillCatalog();
@@ -52768,6 +52846,11 @@ window.__BILLING_EMBEDDED__ = true;
     if (e.target.id === 'btnBillQuickAdd' || e.target.closest('#btnBillQuickAdd')) {
       const inp = document.getElementById('billQuickAmt');
       submitBillQuickConsume(inp ? inp.value : state.billQuickAmtDraft);
+      return;
+    }
+    const slipDel = e.target.closest('[data-bill-slip-delete]');
+    if (slipDel) {
+      deleteBillSlip(slipDel.getAttribute('data-bill-slip-delete'));
       return;
     }
     const slipEdit = e.target.closest('[data-bill-slip-edit]');
