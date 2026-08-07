@@ -4733,6 +4733,15 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-size: 15px; font-weight: 500; color: var(--text);
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
 }
+.emp-row__name-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.emp-row__status {
+  display: inline-flex; align-items: center; height: 18px; padding: 0 6px;
+  border-radius: 9px; font-size: 11px; font-weight: 500; line-height: 1;
+  flex-shrink: 0; box-sizing: border-box;
+}
+.emp-row__status--active { background: #E8F5E9; color: #2E7D32; }
+.emp-row__status--leave { background: #FFF3E0; color: #E65100; }
+.emp-row__status--quit { background: #F0F0F0; color: #8A8A8A; }
 .emp-row .ui-nav-chev { margin-left: 2px; }
 .emp-row__role { font-size: 12px; color: var(--text-sec); font-weight: 400; }
 .emp-row__sub { font-size: 13px; color: var(--text-sec); margin-top: 4px; }
@@ -5114,7 +5123,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   color: var(--text); font-weight: 600;
 }
 .emp-salary-card__row--pay .emp-salary-card__meter {
-  background: #E8E8E8;
+  background: transparent;
 }
 .emp-salary-card__row--ref {
   opacity: 0.72;
@@ -5126,7 +5135,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   color: #B2B2B2; font-weight: 400;
 }
 .emp-salary-card__row--ref .emp-salary-card__meter {
-  background: #F0F0F0;
+  background: transparent;
 }
 .emp-salary-card__row--ref .emp-salary-card__meter-fill {
   opacity: 0.55;
@@ -5150,7 +5159,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-salary-card__meter {
   width: 100%; height: 6px;
-  background: #EEEEEE; border-radius: 3px; overflow: hidden;
+  background: transparent; border-radius: 3px; overflow: hidden;
 }
 .emp-salary-card__meter-fill {
   display: block; height: 100%; border-radius: 3px;
@@ -5483,7 +5492,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-size: 11px; color: var(--text-sec); line-height: 14px; text-align: right;
 }
 
-/* 指定 / 非指定 · 轻拟物双胶囊 */
+/* 点客 / 散客 · 轻拟物双胶囊 */
 .emp-ach-twins { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
 .emp-ach-twins__pair {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px; min-width: 148px;
@@ -7002,11 +7011,13 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .exp-range-tabs {
   display: flex; align-items: stretch; flex-shrink: 0;
   background: #fff; border-bottom: 0.5px solid #EDEDED;
-  padding: 0 8px; height: 44px;
+  padding: 0 16px; height: 44px; gap: 22px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 .exp-range-tabs__btn {
-  flex: 1; border: none; background: transparent; font-family: inherit;
+  flex: 0 0 auto; border: none; background: transparent; font-family: inherit;
   font-size: 14px; color: var(--text-sec); position: relative; cursor: pointer;
+  white-space: nowrap; padding: 0 2px; line-height: 44px;
 }
 .exp-range-tabs__btn.on { color: var(--brand); font-weight: 500; }
 .exp-range-tabs__btn.on::after {
@@ -9579,6 +9590,12 @@ button.biz-pay-row:active { opacity: .72; }
   font-family: var(--font-data); font-size: 15px; font-weight: 600; color: var(--brand);
   font-variant-numeric: tabular-nums;
 }
+.biz-ov-card__total.is-down { color: #2BA471; }
+.biz-ov-table td.is-down {
+  color: #2BA471;
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
 .biz-ov-card__more {
   border: none; background: none; padding: 0; margin: 0;
   font-size: 12px; color: var(--brand); font-family: inherit; cursor: pointer; white-space: nowrap;
@@ -9812,6 +9829,7 @@ button.biz-pay-row:active { opacity: .72; }
   font-family: var(--font-data); font-weight: 600; color: #1A1A1A;
   font-variant-numeric: tabular-nums;
 }
+.biz-refund-row__amt.is-down { color: #2BA471; }
 .biz-refund-row__sub {
   margin-top: 4px; font-size: 11px; color: #929292; line-height: 1.4;
 }
@@ -11945,25 +11963,73 @@ button.biz-pay-row:active { opacity: .72; }
 .quick-issue-card {
   padding: 12px 16px 16px;
 }
-.quick-issue-card .member-card-compact {
-  border-radius: 10px;
-  pointer-events: none;
+.quick-issue-card__info {
+  display: flex; flex-direction: column; align-items: stretch; gap: 10px;
+}
+.quick-issue-card__head {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+}
+.quick-issue-card__head .add-card-slot__face { flex-shrink: 0; }
+.quick-issue-card__name {
+  flex: 1; min-width: 0;
+  font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 21px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.quick-issue-card__price {
+  flex-shrink: 0; margin-left: 8px;
+  font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 21px;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.quick-issue-card__benefits {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 0; padding: 0;
+}
+.quick-issue-card__benefit {
+  display: flex; align-items: baseline; gap: 8px; min-width: 0;
+  font-size: 13px; line-height: 20px;
+}
+.quick-issue-card__benefit-lbl {
+  flex-shrink: 0; width: 28px; color: #929292; font-weight: 500;
+}
+.quick-issue-card__benefit-val {
+  flex: 1; min-width: 0; color: #666;
+  word-break: break-word;
 }
 .quick-issue-card__summary {
-  margin: 10px 0 0; padding: 0;
+  margin: 0; padding: 0;
   font-size: 13px; line-height: 20px; color: #666;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .quick-issue-pay {
-  display: flex; align-items: baseline; justify-content: space-between;
-  padding: 14px 16px; margin-bottom: 12px;
-  background: #fff; border-radius: 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 16px; margin-bottom: 12px;
+  background: #fff; border-radius: 12px; border: none;
+  font-family: inherit; text-align: left; cursor: pointer; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
-.quick-issue-pay__lbl { font-size: 15px; font-weight: 600; color: var(--text); }
+.quick-issue-pay:active { background: #FAFAFA; }
+.quick-issue-pay__lbl { font-size: 15px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+.quick-issue-pay__trail {
+  display: inline-flex; align-items: center; gap: 6px; min-width: 0; justify-content: flex-end;
+}
 .quick-issue-pay__val {
   font-size: 20px; font-weight: 700; color: var(--brand);
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
+  padding: 2px 4px; border: 1px dashed transparent; border-radius: 6px;
 }
+.quick-issue-pay:active .quick-issue-pay__val {
+  background: var(--brand-soft); border-color: var(--brand-border);
+}
+.quick-issue-pay__hint {
+  display: none; flex-shrink: 0; padding: 1px 6px; border-radius: 4px;
+  font-size: 10px; font-weight: 500; line-height: 1.3; color: var(--text-sec); background: #F2F2F2;
+}
+.quick-issue-pay.is-edited .quick-issue-pay__hint { display: inline-flex; }
+.quick-issue-pay__edit {
+  flex-shrink: 0; width: 14px; height: 14px; color: var(--brand); opacity: .85;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.quick-issue-pay__edit svg { width: 14px; height: 14px; display: block; }
+.add-card-decision-scroll .quick-issue-pay { margin: 0 0 12px; }
 .quick-issue-page .add-card-staff-row {
   border-radius: 12px; border-top: none; margin-bottom: 12px;
 }
@@ -13544,7 +13610,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <button type="button" class="page-tabs__item" data-ach-tab="card" role="tab"><span class="page-tabs__label">办卡业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
   </div>
   <div class="emp-ach-station-banner hidden" id="empAchStationBanner">
-    <span class="emp-ach-station-banner__text" id="empAchStationBannerText">按工位分配中 · 点项目可分工位设置指定/非指定</span>
+    <span class="emp-ach-station-banner__text" id="empAchStationBannerText">按工位分配中 · 点项目可分工位设置点客/散客</span>
     <button type="button" class="emp-ach-station-banner__close" id="empAchStationBannerClose" aria-label="关闭提示">×</button>
   </div>
   <div class="page-body" style="padding:0;display:flex;flex-direction:column;min-height:0;flex:1;">
@@ -13833,11 +13899,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="dialog__title" id="empPctDialogTitle">编辑比例</div>
     <div class="emp-pct-dialog-fields" id="empPctDialogFieldsDual">
       <label>
-        <span>指定客比例 (%)</span>
+        <span>点客比例 (%)</span>
         <input type="number" id="empPctDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
       </label>
       <label>
-        <span>非指定客比例 (%)</span>
+        <span>散客比例 (%)</span>
         <input type="number" id="empPctNonDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
       </label>
     </div>
@@ -13940,13 +14006,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="dialog__scroll emp-help-body">
       <p>提成方案用于定义员工项目、产品、办卡、卡耗等业务的提成。填写时可点单位在「%」与「¥」间切换。创建时先配置规则并保存，再到列表点「已分配」给人。</p>
       <h4>按项提成</h4>
-      <p>先设「分类默认」（项目/产品/办卡/卡耗，含指定与非指定）；再按需添加具体项覆盖默认。可开启「区分消费类型」，对会员卡/现金/团购分别配置。支持保存并复制到同组其它已选项。快速消费走项目提成。</p>
+      <p>先设「分类默认」（项目/产品/办卡/卡耗，含点客与散客）；再按需添加具体项覆盖默认。可开启「区分消费类型」，对会员卡/现金/团购分别配置。支持保存并复制到同组其它已选项。快速消费走项目提成。</p>
       <h4>阶梯提成</h4>
       <p>按月度合计业绩（项目+产品+办卡+卡耗）区间设置递增提成；每一档也可单独选择按比例或按固定金额。可为阶梯方案设置使用范围。</p>
       <h4>与业绩的关系</h4>
       <p>提成 = 对应业绩 × 比例，或按固定金额。若业绩已设置「扣除成本」，提成不再重复扣成本。</p>
       <h4>分配与复制</h4>
-      <p>在方案列表点击「已分配」进入选人，支持自由多选；一人仅绑定一个方案，新分配会覆盖旧方案。创建与编辑方案时不要求分配员工。</p>
+      <p>在方案列表点击「已分配」进入选人，支持自由多选；同一员工可同时属于多个方案。若多方案在劳动/产品/办卡/卡耗上重叠，该计算项按提成金额取最高的一条计入，不重复累加；未重叠的计算项可相加。创建与编辑方案时不要求分配员工。</p>
       <h4>免单与基础设置</h4>
       <p>「基础设置」可配置消耗赠送金额、赠送项目（产品）、免单与抵用券等场景口径；工位映射可改工位显示名（最多 3 字）。计算模式（平均分配 / 按工位分配）请在业绩设置 · 通用规则中按项目/产品/办卡分别切换。</p>
     </div>
@@ -16471,10 +16537,14 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div class="quick-issue-label">办理会员卡</div>
                   <div class="quick-issue-card" id="quickIssueCard"></div>
                 </div>
-                <div class="quick-issue-pay">
+                <button type="button" class="quick-issue-pay" id="btnQuickIssuePayEdit" aria-label="修改应付金额">
                   <span class="quick-issue-pay__lbl">应付</span>
-                  <span class="quick-issue-pay__val" id="quickIssuePayVal">¥0</span>
-                </div>
+                  <span class="quick-issue-pay__trail">
+                    <span class="quick-issue-pay__val" id="quickIssuePayVal">¥0</span>
+                    <span class="quick-issue-pay__hint">已改</span>
+                    <span class="quick-issue-pay__edit" aria-hidden="true"></span>
+                  </span>
+                </button>
                 <button type="button" class="add-card-staff-row" id="quickIssueStaffRow" aria-haspopup="dialog">
                   <span class="add-card-staff-row__icon" aria-hidden="true">
                     <svg viewBox="0 0 21.2 21.2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 19.1124C1 15.3369 4.15429 12.2762 10.6 12.2762C17.0457 12.2762 20.2 15.3369 20.2 19.1124C20.2 19.7131 19.7618 20.2 19.2212 20.2H1.97882C1.43823 20.2 1 19.7131 1 19.1124Z" stroke="currentColor" stroke-width="2"/><path d="M14.2 4.6C14.2 6.58822 12.5882 8.2 10.6 8.2C8.61177 8.2 7 6.58822 7 4.6C7 2.61177 8.61177 1 10.6 1C12.5882 1 14.2 2.61177 14.2 4.6Z" stroke="currentColor" stroke-width="2"/></svg>
@@ -16521,6 +16591,14 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div id="addCardPicked" class="add-card-picked is-empty" hidden aria-hidden="true"></div>
                   <div id="addCardSlot"></div>
                 </div>
+                <button type="button" class="quick-issue-pay" id="btnAddCardPayEdit" aria-label="修改应付金额" hidden>
+                  <span class="quick-issue-pay__lbl">应付</span>
+                  <span class="quick-issue-pay__trail">
+                    <span class="quick-issue-pay__val" id="addCardPayVal">¥0</span>
+                    <span class="quick-issue-pay__hint">已改</span>
+                    <span class="quick-issue-pay__edit" aria-hidden="true"></span>
+                  </span>
+                </button>
               </div>
               <div class="add-card-decision-foot">
                 <button type="button" class="add-card-staff-row" id="addCardStaffRow" aria-haspopup="dialog">
@@ -24434,7 +24512,7 @@ function openAmountKeypad(el) {
   if (titleEl) {
     if (el.id === 'fPrice') titleEl.textContent = state.projFormKind === 'product' ? '产品价格' : '项目价格';
     else if (el.id === 'holdPriceKeypadProxy') titleEl.textContent = '挂单金额';
-    else if (el.id === 'billDueKeypadProxy' || el.id === 'billRechargeDue' || el.id === 'billTimesDue' || el.id === 'billExtendDue' || (el.dataset && (el.dataset.billRechargeField === 'due' || el.dataset.billTimesDue != null || el.dataset.billExtendDue != null))) titleEl.textContent = '应付金额';
+    else if (el.id === 'billDueKeypadProxy' || el.id === 'cardIssuePayKeypadProxy' || el.id === 'billRechargeDue' || el.id === 'billTimesDue' || el.id === 'billExtendDue' || (el.dataset && (el.dataset.billRechargeField === 'due' || el.dataset.billTimesDue != null || el.dataset.billExtendDue != null))) titleEl.textContent = '应付金额';
     else if (el.id === 'quickConsumeKeypadProxy') titleEl.textContent = '快速消费金额';
     else if (el.dataset && (el.dataset.flowPerf === 'achievement' || el.dataset.flowEditPerf === 'achievement' || el.dataset.flowEditStaffPerf === 'achievement')) titleEl.textContent = '修改业绩';
     else if (el.dataset && (el.dataset.flowPerf === 'commission' || el.dataset.flowEditPerf === 'commission' || el.dataset.flowEditStaffPerf === 'commission')) titleEl.textContent = '修改提成';
@@ -31062,7 +31140,7 @@ function billingNav(fn) {
     roles: DEFAULT_ROLES.slice(),
     staff: [
       { id: 'st0', name: '顾清扬', short: '顾', gender: '男', ageBand: '30以上', yearsExp: 12, role: '店主', phone: '18600186000', incomplete: false, status: '在职', baseSalary: 5000, perm: '店主', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw11' },
-      { id: 'st1', name: '林屿森', short: '森', gender: '男', ageBand: '24-30岁', yearsExp: 5, role: '美容师', phone: '13800138001', incomplete: false, status: '在职', baseSalary: 4000, perm: '高级店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '青峰寒剑', swordId: 'sw1' },
+      { id: 'st1', name: '林屿森', short: '森', gender: '男', ageBand: '24-30岁', yearsExp: 5, role: '美容师', phone: '13800138001', incomplete: false, status: '在职', baseSalary: 4000, perm: '高级店员', scheme: '标准方案、阶梯激励', schemeId: 'sch1', schemeIds: ['sch1', 'sch2'], avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '青峰寒剑', swordId: 'sw1' },
       { id: 'st2', name: '何苏叶', short: '叶', gender: '女', ageBand: '30以上', yearsExp: 8, role: '店长', phone: '', incomplete: true, status: '在职', baseSalary: 0, perm: '店长', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-a.jpg', swordTitle: '九天玄雷灭世诛魔圣剑', swordId: null },
       { id: 'st3', name: '阿Ken', short: 'Ken', gender: '男', ageBand: '24-30岁', yearsExp: 3, role: '美容师', phone: '13900139003', incomplete: false, status: '在职', baseSalary: 3500, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '踏雪无痕剑', swordId: 'sw3' },
       { id: 'st4', name: 'Lisa', short: 'Lisa', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '美甲师', phone: '13700137004', incomplete: false, status: '在职', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-b.jpg', swordTitle: '', swordId: 'sw7' },
@@ -31070,7 +31148,7 @@ function billingNav(fn) {
       { id: 'st6', name: '李华', short: '李', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13500135006', incomplete: false, status: '在职', baseSalary: 3100, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-d.jpg', swordTitle: '碧落黄泉剑', swordId: 'sw9' },
       { id: 'st7', name: '王芳', short: '王', gender: '女', ageBand: '24-30岁', yearsExp: 3, role: '美甲师', phone: '13400134007', incomplete: false, status: '在职', baseSalary: 3000, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-c.jpg', swordTitle: '霜华断水剑', swordId: 'sw10' },
       { id: 'st8', name: '陈强', short: '陈', gender: '男', ageBand: '30以上', yearsExp: 6, role: '美发师', phone: '13300133008', incomplete: false, status: '在职', baseSalary: 3800, perm: '高级店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw16' },
-      { id: 'st9', name: '赵敏', short: '赵', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '前台', phone: '13200132009', incomplete: false, status: '在职', baseSalary: 2800, perm: '店员', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-d.jpg', swordTitle: '', swordId: 'sw12' },
+      { id: 'st9', name: '赵敏', short: '赵', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '前台', phone: '13200132009', incomplete: false, status: '休假', baseSalary: 2800, perm: '店员', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-d.jpg', swordTitle: '', swordId: 'sw12' },
       { id: 'st10', name: '周杰', short: '周', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13100131010', incomplete: false, status: '在职', baseSalary: 3300, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '赤焰焚空剑', swordId: 'sw13' },
       { id: 'st11', name: '吴婷', short: '吴', gender: '女', ageBand: '24-30岁', yearsExp: 4, role: '美睫师', phone: '13000130011', incomplete: false, status: '在职', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-e.jpg', swordTitle: '一剑开天门', swordId: 'sw14' },
       { id: 'st12', name: '小陈', short: '陈', gender: '男', ageBand: '18-23岁', yearsExp: 0, role: '学徒', phone: '15800158012', incomplete: false, status: '在职', baseSalary: 2200, perm: '店员', scheme: '学徒方案', schemeId: 'sch3', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '', swordId: 'sw15' },
@@ -31160,11 +31238,11 @@ function billingNav(fn) {
           { min: 10000, max: 30000, pct: 12, mode: 'pct' },
           { min: 30000, max: null, pct: 15, mode: 'pct' },
         ],
-        assigned: ['st5', 'st6', 'st8', 'st10'] },
+        assigned: ['st1', 'st5', 'st6', 'st8', 'st10'] },
       { id: 'sch3', name: '学徒方案', type: 'item',
         categoryDefaults: {
-          labor: { valueMode: 'pct', designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
-          sales: { valueMode: 'pct', designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
+          labor: { valueMode: 'pct', designated: 8, nonDesignated: 8, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
+          sales: { valueMode: 'pct', designated: 5, nonDesignated: 5, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
           issue: { valueMode: 'pct', designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
           card: { valueMode: 'pct', designated: 0, nonDesignated: 0, designatedAmt: 0, nonDesignatedAmt: 0, byPayType: false },
         },
@@ -31190,6 +31268,7 @@ function billingNav(fn) {
         assigned: ['st12', 'st13'] },
     ],
   };
+  syncAllStaffSchemeFields();
 
   function $(id) { return document.getElementById(id); }
   function toast(msg, isErr) {
@@ -31934,6 +32013,119 @@ function billingNav(fn) {
   function schemeById(id) {
     return window.EmployeeStore.schemes.find(function (s) { return s.id === id; });
   }
+
+  /** 员工所在全部提成方案（以 schemes[].assigned 为准） */
+  function schemesAssignedToStaff(staffId) {
+    return (window.EmployeeStore.schemes || []).filter(function (sch) {
+      return (sch.assigned || []).indexOf(staffId) >= 0;
+    });
+  }
+
+  function syncStaffSchemeFields(st) {
+    if (!st) return;
+    var list = schemesAssignedToStaff(st.id);
+    st.schemeIds = list.map(function (s) { return s.id; });
+    if (!list.length) {
+      st.scheme = '暂未分配';
+      st.schemeId = null;
+      return;
+    }
+    st.schemeId = list[0].id;
+    st.scheme = list.length === 1
+      ? list[0].name
+      : list.map(function (s) { return s.name; }).join('、');
+  }
+
+  function syncAllStaffSchemeFields() {
+    (window.EmployeeStore.staff || []).forEach(syncStaffSchemeFields);
+  }
+
+  /** 阶梯档：按合计业绩命中区间 */
+  function ladderTierForTotal(sch, totalPerf) {
+    var tiers = sch && sch.ladder ? sch.ladder : [];
+    var n = Number(totalPerf) || 0;
+    for (var i = 0; i < tiers.length; i++) {
+      var t = tiers[i];
+      var min = Number(t.min) || 0;
+      var max = (t.max == null || t.max === '') ? Infinity : Number(t.max);
+      if (n >= min && (max === Infinity ? true : n < max || (i === tiers.length - 1 && n <= max))) {
+        return t;
+      }
+    }
+    return tiers.length ? tiers[tiers.length - 1] : null;
+  }
+
+  function ladderCoversCategory(sch, cat) {
+    if (!sch || sch.type !== 'ladder') return false;
+    if (!sch.scopeMode || sch.scopeMode === 'all') return true;
+    var scope = sch.scope || {};
+    if (cat === 'labor') return !!(scope.projectIds && scope.projectIds.length);
+    if (cat === 'sales') return !!(scope.productIds && scope.productIds.length);
+    if (cat === 'issue' || cat === 'card') return !!(scope.cardIds && scope.cardIds.length);
+    return false;
+  }
+
+  /** 单方案对某一计算项算出的提成金额（元） */
+  function schemeCategoryCommAmount(sch, cat, baseAmt, totalPerf) {
+    if (!sch) return 0;
+    var base = Math.max(0, Number(baseAmt) || 0);
+    if (sch.type === 'ladder') {
+      if (!ladderCoversCategory(sch, cat)) return 0;
+      var tier = ladderTierForTotal(sch, totalPerf);
+      if (!tier) return 0;
+      if (normalizeCommMode(tier.mode) === 'amount') {
+        /* 固定金额阶梯：整笔只记在劳动项，避免四类各算一次 */
+        return cat === 'labor' ? (Number(tier.pct) || 0) : 0;
+      }
+      return Math.round(base * (Number(tier.pct) || 0) / 100 * 100) / 100;
+    }
+    var rule = sch.categoryDefaults && sch.categoryDefaults[cat];
+    if (!rule) return 0;
+    if (rule.valueMode === 'amount') {
+      return Math.max(0, Number(rule.designatedAmt) || 0);
+    }
+    return Math.round(base * (Number(rule.designated) || 0) / 100 * 100) / 100;
+  }
+
+  /**
+   * 多方案重叠：劳动/产品/办卡/卡耗分别取「提成金额最高」的一条，再累加；禁止同项重复计入。
+   * bases: { labor, sales, issue, card|consume }
+   */
+  function calcStaffCommissionFromSchemes(staffId, bases) {
+    var schemes = schemesAssignedToStaff(staffId);
+    if (!schemes.length) return 0;
+    var labor = Number(bases.labor) || 0;
+    var sales = Number(bases.sales) || 0;
+    var issue = Number(bases.issue) || 0;
+    var card = Number(bases.consume != null ? bases.consume : bases.card) || 0;
+    var totalPerf = labor + sales + issue + card;
+    var cats = [
+      { key: 'labor', base: labor },
+      { key: 'sales', base: sales },
+      { key: 'issue', base: issue },
+      { key: 'card', base: card },
+    ];
+    var sum = 0;
+    cats.forEach(function (c) {
+      var best = 0;
+      var has = false;
+      schemes.forEach(function (sch) {
+        var amt = schemeCategoryCommAmount(sch, c.key, c.base, totalPerf);
+        if (!has || amt > best) { best = amt; has = true; }
+      });
+      if (has) sum += best;
+    });
+    return Math.round(sum * 100) / 100;
+  }
+
+  function refreshStaffCommissionRow(staffId, d) {
+    if (!d) return d;
+    d.commission = calcStaffCommissionFromSchemes(staffId, d);
+    var rewardNet = (Number(d.reward) || 0) - (Number(d.deduct) || 0);
+    d.total = calcSalaryTotal(d.base, d.commission, rewardNet);
+    return d;
+  }
+
   function genSalaryIfMissing(monthKey, staffId) {
     var store = window.EmployeeStore;
     ensurePeriodDataBucket('salary', monthKey);
@@ -31942,56 +32134,49 @@ function billingNav(fn) {
     if (store.salary[monthKey][staffId]) {
       var existing = normalizeSalaryRow(store.salary[monthKey][staffId]);
       existing.base = st.baseSalary || 0;
-      return existing;
+      return refreshStaffCommissionRow(staffId, existing);
     }
-    /* 无种子月份：按角色生成合理区间，提成与业绩大致匹配 */
+    /* 无种子月份：按角色生成合理区间，提成按绑定方案计算（重叠取高） */
     var role = st.role || '';
     var seed = (parseInt(String(monthKey).replace(/-/g, ''), 10) || 0) + (staffId.charCodeAt(2) || 0) * 17;
     var labor = 0;
     var sales = 0;
     var issue = 0;
-    var commission = 0;
     if (role === '前台') {
-      labor = 0; sales = 0; issue = 0; commission = 0;
+      labor = 0; sales = 0; issue = 0;
     } else if (role === '学徒') {
       labor = 2200 + (seed % 1400);
       sales = 120 + (seed % 200);
       issue = 0;
-      commission = Math.round(labor * 0.08 + sales * 0.05);
     } else if (role === '美甲师' || role === '美睫师') {
       labor = 6000 + (seed % 4500);
       sales = 600 + (seed % 900);
       issue = 200 + (seed % 500);
-      commission = Math.round(labor * 0.1 + sales * 0.08 + issue * 0.05);
     } else if (role === '店主' || role === '店长') {
       labor = 16000 + (seed % 9000);
       sales = 3000 + (seed % 2500);
       issue = 4000 + (seed % 4000);
-      commission = Math.round(labor * 0.1 + sales * 0.08 + issue * 0.05);
     } else {
       /* 美容师 / 美发师等 */
       labor = 11000 + (seed % 12000);
       sales = 1200 + (seed % 1600);
       issue = 1200 + (seed % 2800);
-      commission = Math.round(labor * 0.1 + sales * 0.08 + issue * 0.05);
     }
     if (!(st.baseSalary > 0) && role !== '前台' && role !== '学徒') {
-      /* 信息未完善：保留少量可演示业绩，提成偏低 */
+      /* 信息未完善：保留少量可演示业绩 */
       labor = Math.round(labor * 0.45);
       sales = Math.round(sales * 0.4);
       issue = Math.round(issue * 0.35);
-      commission = Math.round(labor * 0.1 + sales * 0.08 + issue * 0.05);
     }
     var consume = issue ? Math.round(issue * 0.3) : 0;
     var reward = seed % 7 === 0 ? 100 : 0;
     var deduct = seed % 11 === 0 ? 50 : 0;
     var base = st.baseSalary || 0;
-    var rewardNet = reward - deduct;
-    var total = calcSalaryTotal(base, commission, rewardNet);
-    store.salary[monthKey][staffId] = {
+    var row = {
       base: base, labor: labor, sales: sales, issue: issue, consume: consume, card: issue,
-      commission: commission, reward: reward, deduct: deduct, total: total,
+      commission: 0, reward: reward, deduct: deduct, total: base,
     };
+    store.salary[monthKey][staffId] = refreshStaffCommissionRow(staffId, row);
     return store.salary[monthKey][staffId];
   }
 
@@ -32022,16 +32207,19 @@ function billingNav(fn) {
         ? '<button type="button" class="emp-refine-btn" data-emp-refine="' + s.id + '">去完善</button>'
         : '';
       var subParts = [s.gender, staffRoleLabel(s)].filter(Boolean);
-      if (s.status && s.status !== '在职') subParts.push(s.status);
       var sub = subParts.length
         ? subParts.join(' · ')
         : (s.incomplete ? '信息未完善' : '');
+      var st = s.status || '在职';
+      var statusTag = (st === '在职' || st === '休假' || st === '离职')
+        ? '<span class="emp-row__status emp-row__status--' + empStatusChipMod(st) + '">' + esc(st) + '</span>'
+        : '';
       return '<div class="emp-row" data-staff-id="' + s.id + '">' +
         '<button type="button" class="emp-row__drag" data-emp-drag="' + s.id + '" aria-label="拖动排序">' +
         empDragHandleIconHtml() + '</button>' +
         empAvatarHtml(s) +
         '<div class="emp-row__main">' +
-        '<div class="emp-row__name">' + esc(s.name) + '</div>' +
+        '<div class="emp-row__name"><span class="emp-row__name-text">' + esc(s.name) + '</span>' + statusTag + '</div>' +
         (sub ? '<div class="emp-row__sub">' + esc(sub) + '</div>' : '') +
         '</div>' + refine + navChevHtml() + '</div>';
     }).join('');
@@ -32288,6 +32476,7 @@ function billingNav(fn) {
     $('empFStatus').textContent = s ? s.status : '在职';
     $('empFStatus').classList.add('has-val');
     $('empFBase').value = s && s.baseSalary ? s.baseSalary : '';
+    if (s) syncStaffSchemeFields(s);
     $('empFScheme').textContent = s ? s.scheme : '暂未分配';
     $('empFScheme').classList.toggle('has-val', !!(s && s.scheme && s.scheme !== '暂未分配'));
     state.formSchemeId = s && s.schemeId ? s.schemeId : null;
@@ -32383,12 +32572,15 @@ function billingNav(fn) {
       (window.EmployeeStore.schemes || []).forEach(function (sch) {
         if (!sch.assigned) sch.assigned = [];
         var idx = sch.assigned.indexOf(staffId);
-        if (schemeId && sch.id === schemeId) {
-          if (idx < 0) sch.assigned.push(staffId);
-        } else if (idx >= 0) {
-          sch.assigned.splice(idx, 1);
+        if (!schemeId) {
+          /* 暂未分配：清空该员工在全部方案中的绑定 */
+          if (idx >= 0) sch.assigned.splice(idx, 1);
+        } else if (sch.id === schemeId && idx < 0) {
+          /* 选中某一方案：仅追加，不踢出其它方案 */
+          sch.assigned.push(staffId);
         }
       });
+      syncStaffSchemeFields(staffById(staffId));
     }
     if (state.formMode === 'create') {
       var nid = 'st' + Date.now();
@@ -32462,7 +32654,7 @@ function billingNav(fn) {
     var storeTotal = 0;
     list.innerHTML = storeActiveStaff().map(function (s) {
       var d = genSalaryIfMissing(mk, s.id);
-      var commission = d.commission != null ? Number(d.commission) : (Number(d.labor || 0) * 0.1 + Number(d.sales || 0) * 0.08);
+      var commission = Number(d.commission) || 0;
       var cardAmt = d.issue != null ? d.issue : d.card;
       var rwTot = rewardTotalsForStaff(mk, s.id);
       var rewardNet = rwTot.net;
@@ -33481,7 +33673,7 @@ function billingNav(fn) {
     var isAmt = !!opts.isAmt;
     var val = opts.value;
     var kind = opts.kind === 'non' ? 'non' : 'des';
-    var label = kind === 'non' ? '非指定' : '指定';
+    var label = kind === 'non' ? '散客' : '点客';
     var attrs = '';
     if (opts.itemId) attrs += ' data-ach-cap-item="' + esc(opts.itemId) + '"';
     if (opts.typeKey) attrs += ' data-ach-cap-type="' + esc(opts.typeKey) + '"';
@@ -33528,7 +33720,7 @@ function billingNav(fn) {
     var id = opts.inputId;
     var val = opts.value;
     var kind = opts.kind === 'non' ? 'non' : 'des';
-    var label = kind === 'non' ? '非指定' : '指定';
+    var label = kind === 'non' ? '散客' : '点客';
     var stepField = isAmt ? (kind === 'non' ? 'nonAmt' : 'desAmt') : (kind === 'non' ? 'non' : 'des');
     return '<div class="emp-ach-pad emp-ach-pad--' + kind + '">' +
       '<div class="emp-ach-pad__label">' + label + (isAmt ? ' · ¥' : ' · %') + '</div>' +
@@ -33594,7 +33786,7 @@ function billingNav(fn) {
         '" role="radio" aria-checked="' + (on ? 'true' : 'false') + '">' + esc(m.label) + '</button>';
     }).join('');
     var hint = cur === 'station'
-      ? '按工位分配：开单需选择工位，并可分工位配置指定/非指定。'
+      ? '按工位分配：开单需选择工位，并可分工位配置点客/散客。'
       : '平均分配：开单无需选择工位，多人平分业绩。';
     return '<div class="emp-ach-calc-block">' +
       '<div class="emp-ach-calc-block__title">计算模式</div>' +
@@ -33684,7 +33876,7 @@ function billingNav(fn) {
           esc(label) + '</button>';
       });
       html += '</div>' +
-        '<p class="emp-ach-edit-station-tip">开单选该工位时，按下方指定/非指定计算业绩</p></div>';
+        '<p class="emp-ach-edit-station-tip">开单选该工位时，按下方点客/散客计算业绩</p></div>';
     }
     html += '<div class="emp-ach-edit-section"><div class="emp-ach-edit-section__title">业绩取值</div>';
     if (pctOnly) {
@@ -33760,12 +33952,12 @@ function billingNav(fn) {
       var nonAmtEl = $('empAchEditNonAmt');
       if (desAmtEl) {
         var desAmt = parseFloat(desAmtEl.value);
-        if (strict && (isNaN(desAmt) || desAmt < 0)) return { error: '请输入有效的指定客金额' };
+        if (strict && (isNaN(desAmt) || desAmt < 0)) return { error: '请输入有效的点客金额' };
         if (!isNaN(desAmt)) pair.designatedAmt = desAmt;
       }
       if (nonAmtEl) {
         var nonAmt = parseFloat(nonAmtEl.value);
-        if (strict && (isNaN(nonAmt) || nonAmt < 0)) return { error: '请输入有效的非指定客金额' };
+        if (strict && (isNaN(nonAmt) || nonAmt < 0)) return { error: '请输入有效的散客金额' };
         if (!isNaN(nonAmt)) pair.nonDesignatedAmt = nonAmt;
       }
       if (!stationMode) {
@@ -33777,12 +33969,12 @@ function billingNav(fn) {
       var nonEl = $('empAchEditNon');
       if (desEl) {
         var des = parseFloat(desEl.value);
-        if (strict && (isNaN(des) || des < 0 || des > 100)) return { error: '指定客比例需在 0–100' };
+        if (strict && (isNaN(des) || des < 0 || des > 100)) return { error: '点客比例需在 0–100' };
         if (!isNaN(des)) pair.designated = des;
       }
       if (nonEl) {
         var non = parseFloat(nonEl.value);
-        if (strict && (isNaN(non) || non < 0 || non > 100)) return { error: '非指定客比例需在 0–100' };
+        if (strict && (isNaN(non) || non < 0 || non > 100)) return { error: '散客比例需在 0–100' };
         if (!isNaN(non)) pair.nonDesignated = non;
       }
       if (!stationMode) {
@@ -33881,7 +34073,7 @@ function billingNav(fn) {
     if (!state.achEdit) return;
     var flushed = flushAchEditStationFromDom({ strict: true });
     if (flushed.error) { toast(flushed.error, true); return; }
-    if (!window.confirm('将当前工位的指定/非指定应用到大工、中工、小工全部工位？')) return;
+    if (!window.confirm('将当前工位的点客/散客应用到大工、中工、小工全部工位？')) return;
     var draft = ensureAchStations(state.achEdit.draft);
     var sid = state.achEdit.stationId || 'senior';
     var src = cloneAchStationPair(draft.stations[sid], draft.stations[sid]);
@@ -34089,7 +34281,7 @@ function billingNav(fn) {
       banner.classList.toggle('hidden', !showBanner);
       if (bannerText && showBanner) {
         var names = getStationLabels().map(function (s) { return s.label; }).join('/');
-        bannerText.textContent = '按工位分配中（' + names + '）· 点项目可分别设置指定/非指定';
+        bannerText.textContent = '按工位分配中（' + names + '）· 点项目可分别设置点客/散客';
       }
     }
     catsEl.innerHTML = data.cats.map(function (c) {
@@ -34235,7 +34427,7 @@ function billingNav(fn) {
     if (nextMode === 'station') {
       if (titleEl) titleEl.textContent = '切换为按工位分配？';
       if (bodyEl) {
-        bodyEl.textContent = '「' + label + '」改为按工位分配后，开单需选择工位；可在业绩设置中为各工位分别配置指定/非指定方案。';
+        bodyEl.textContent = '「' + label + '」改为按工位分配后，开单需选择工位；可在业绩设置中为各工位分别配置点客/散客方案。';
       }
       if (okEl) okEl.textContent = '确定';
     } else {
@@ -35086,9 +35278,9 @@ function billingNav(fn) {
     rule = mergeItemCommRule(rule);
     if (rule.byPayType) return '已区分消费类型';
     if (rule.valueMode === 'amount') {
-      return '指定 ¥' + rule.designatedAmt + ' · 非指定 ¥' + rule.nonDesignatedAmt;
+      return '点客 ¥' + rule.designatedAmt + ' · 散客 ¥' + rule.nonDesignatedAmt;
     }
-    return '指定 ' + rule.designated + '% · 非指定 ' + rule.nonDesignated + '%';
+    return '点客 ' + rule.designated + '% · 散客 ' + rule.nonDesignated + '%';
   }
   function resolveItemCommMeta(kind, refId) {
     var items = getScopeCatalogItems(kind === 'product' ? 'product' : (kind === 'card' ? 'card' : 'project'));
@@ -35121,10 +35313,10 @@ function billingNav(fn) {
     var nonVal = isAmt ? ('¥' + non) : (non + '<em>%</em>');
     return '<div class="emp-ach-twins"><div class="emp-ach-twins__pair">' +
       '<span class="emp-ach-cap emp-ach-cap--des emp-ach-cap--static" aria-hidden="true">' +
-      '<span class="emp-ach-cap__label">指定</span>' +
+      '<span class="emp-ach-cap__label">点客</span>' +
       '<span class="emp-ach-cap__val">' + desVal + '</span></span>' +
       '<span class="emp-ach-cap emp-ach-cap--non emp-ach-cap--static" aria-hidden="true">' +
-      '<span class="emp-ach-cap__label">非指定</span>' +
+      '<span class="emp-ach-cap__label">散客</span>' +
       '<span class="emp-ach-cap__val">' + nonVal + '</span></span>' +
       '</div></div>';
   }
@@ -35206,11 +35398,11 @@ function billingNav(fn) {
   function itemCommFieldHtml(prefix, rule, isAmt) {
     rule = mergeItemCommRule(rule);
     if (isAmt) {
-      return '<div class="emp-ach-edit-field"><label><span>指定客金额 (¥)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'designatedAmt" value="' + esc(formatCommInputDisplay(rule.designatedAmt, 'amount')) + '" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label></div>' +
-        '<div class="emp-ach-edit-field"><label><span>非指定客金额 (¥)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'nonDesignatedAmt" value="' + esc(formatCommInputDisplay(rule.nonDesignatedAmt, 'amount')) + '" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label></div>';
+      return '<div class="emp-ach-edit-field"><label><span>点客金额 (¥)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'designatedAmt" value="' + esc(formatCommInputDisplay(rule.designatedAmt, 'amount')) + '" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label></div>' +
+        '<div class="emp-ach-edit-field"><label><span>散客金额 (¥)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'nonDesignatedAmt" value="' + esc(formatCommInputDisplay(rule.nonDesignatedAmt, 'amount')) + '" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label></div>';
     }
-    return '<div class="emp-ach-edit-field"><label><span>指定客比例 (%)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'designated" value="' + esc(formatCommInputDisplay(rule.designated, 'pct')) + '" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label></div>' +
-      '<div class="emp-ach-edit-field"><label><span>非指定客比例 (%)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'nonDesignated" value="' + esc(formatCommInputDisplay(rule.nonDesignated, 'pct')) + '" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label></div>';
+    return '<div class="emp-ach-edit-field"><label><span>点客比例 (%)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'designated" value="' + esc(formatCommInputDisplay(rule.designated, 'pct')) + '" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label></div>' +
+      '<div class="emp-ach-edit-field"><label><span>散客比例 (%)</span><input class="emp-comm-num" type="text" data-item-field="' + prefix + 'nonDesignated" value="' + esc(formatCommInputDisplay(rule.nonDesignated, 'pct')) + '" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label></div>';
   }
   function renderItemCommEditBody() {
     var edit = state.itemCommEdit;
@@ -35233,7 +35425,7 @@ function billingNav(fn) {
         '<div class="emp-ach-edit-fields">' + itemCommFieldHtml('pay.' + def.key + '.', Object.assign({}, rule, block), isAmt) + '</div>';
     });
     html += '</div>';
-    html += '<p class="emp-ach-edit-hint">开启后，会员卡/现金/团购可分别设置指定与非指定参数；取值模式与上方一致。</p>';
+    html += '<p class="emp-ach-edit-hint">开启后，会员卡/现金/团购可分别设置点客与散客参数；取值模式与上方一致。</p>';
     return html;
   }
   function readItemCommEditFromDom() {
@@ -35246,8 +35438,8 @@ function billingNav(fn) {
       var nonEl = document.querySelector('#empItemCommEditBody [data-item-field="' + prefix + (mode === 'amount' ? 'nonDesignatedAmt' : 'nonDesignated') + '"]');
       var des = parseCommInputValue(desEl && desEl.value);
       var non = parseCommInputValue(nonEl && nonEl.value);
-      if (!Number.isFinite(des) || des < 0) return { error: '请输入有效的指定客' + (mode === 'amount' ? '金额' : '比例') };
-      if (!Number.isFinite(non) || non < 0) return { error: '请输入有效的非指定客' + (mode === 'amount' ? '金额' : '比例') };
+      if (!Number.isFinite(des) || des < 0) return { error: '请输入有效的点客' + (mode === 'amount' ? '金额' : '比例') };
+      if (!Number.isFinite(non) || non < 0) return { error: '请输入有效的散客' + (mode === 'amount' ? '金额' : '比例') };
       if (mode === 'pct' && (des > 100 || non > 100)) return { error: '比例需在 0–100%' };
       return { des: des, non: non };
     }
@@ -35595,17 +35787,10 @@ function billingNav(fn) {
     var sch = schemeById(state.assignSchemeId);
     if (!sch) return;
     var ids = Object.keys(state.assignSelected).filter(function (k) { return state.assignSelected[k]; });
+    /* 只改当前方案的 assigned；不把员工从其它方案踢出 */
     sch.assigned = ids;
-    window.EmployeeStore.staff.forEach(function (st) {
-      if (ids.indexOf(st.id) >= 0) {
-        st.scheme = sch.name;
-        st.schemeId = sch.id;
-      } else if (st.schemeId === sch.id) {
-        st.scheme = '暂未分配';
-        st.schemeId = null;
-      }
-    });
-    toast(ids.length ? ('已更新分配 · ' + ids.length + ' 人') : '已清空分配');
+    syncAllStaffSchemeFields();
+    toast(ids.length ? ('已更新分配 · ' + ids.length + ' 人') : '已清空本方案分配');
   }
 
   function getFreeOrderRule() {
@@ -35721,11 +35906,11 @@ function billingNav(fn) {
     var root = $('empSchemePickList');
     if (!root) return;
     var curId = state.formSchemeId || '';
-    var rows = [{ id: '', name: '暂未分配', sub: '不绑定提成方案' }].concat(
+    var rows = [{ id: '', name: '暂未分配', sub: '清空该员工全部方案绑定' }].concat(
       (window.EmployeeStore.schemes || []).map(function (sch) {
         var typeLabel = sch.type === 'ladder' ? '阶梯提成' : '按项提成';
         var n = (sch.assigned || []).length;
-        return { id: sch.id, name: sch.name, sub: typeLabel + ' · 已分配 ' + n + ' 人' };
+        return { id: sch.id, name: sch.name, sub: typeLabel + ' · 已分配 ' + n + ' 人 · 可叠加' };
       })
     );
     root.innerHTML = rows.map(function (r) {
@@ -35748,7 +35933,13 @@ function billingNav(fn) {
     var sch = schemeById(id);
     if (!sch) return;
     state.formSchemeId = sch.id;
-    $('empFScheme').textContent = sch.name;
+    var labels = [sch.name];
+    if (state.currentStaffId && state.formMode !== 'create') {
+      schemesAssignedToStaff(state.currentStaffId).forEach(function (s) {
+        if (s.id !== sch.id) labels.push(s.name);
+      });
+    }
+    $('empFScheme').textContent = labels.join('、');
     $('empFScheme').classList.add('has-val');
   }
 
@@ -36436,15 +36627,15 @@ function billingNav(fn) {
       var returnTo = state.rewardFormReturn;
       var detailId = state.rewardDetailStaffId;
       if (!saveRewardDraft()) return;
+      renderSalaryList();
       if (returnTo === 'detail' && detailId) {
         renderRewardDetail(detailId);
         showScreen('screen-emp-reward-detail');
         nav('staff-reward-detail');
       } else {
-        ensureRewardDraft({});
-        renderRewards();
+        showScreen('screen-emp-salary');
+        nav('staff-salary');
       }
-      renderSalaryList();
     });
 
     $('empRewardForm')?.addEventListener('click', function (e) {
@@ -36912,9 +37103,7 @@ function billingNav(fn) {
       }
       if (act.dataset.schemeAct === 'delete') {
         window.EmployeeStore.schemes = window.EmployeeStore.schemes.filter(function (s) { return s.id !== id; });
-        window.EmployeeStore.staff.forEach(function (st) {
-          if (st.schemeId === id) { st.scheme = '暂未分配'; st.schemeId = null; }
-        });
+        syncAllStaffSchemeFields();
         toast('方案已删除');
         renderCommList();
       }
@@ -37706,9 +37895,10 @@ function billingNav(fn) {
   function renderRangeTabs() {
     var root = $('expRangeTabs');
     if (!root) return;
+    if (state.range === 'yesterday') state.range = 'today';
+    if (state.rangePrev === 'yesterday') state.rangePrev = 'today';
     var tabs = [
       { id: 'today', label: '今天' },
-      { id: 'yesterday', label: '昨天' },
       { id: '7d', label: '7天' },
       { id: '30d', label: '30天' },
       { id: 'other', label: otherTabLabel() },
@@ -40501,9 +40691,214 @@ window.__BILLING_EMBEDDED__ = true;
     });
   }
 
+  function defaultCardIssuePayAmount(tpl) {
+    if (!tpl) return 0;
+    if (typeof resolveCardIssueAmount === 'function') return round2(resolveCardIssueAmount(tpl, null) || 0);
+    if (typeof getTemplatePurchaseAmount === 'function') {
+      const fromRecharge = getTemplatePurchaseAmount(tpl);
+      if (fromRecharge > 0) return round2(fromRecharge);
+    }
+    return round2(Number(tpl.price) || Number(tpl.recharge) || Number(tpl.face) || 0);
+  }
+
+  function resetCardIssuePayState() {
+    state.cardIssuePayAmount = null;
+    state.cardIssuePayTemplateId = null;
+    state.cardIssuePayEdited = false;
+  }
+
+  /** 换卡时重置为模板默认价；同卡保留已改金额（含 ¥0） */
+  function ensureCardIssuePayForTemplate(tpl, opts) {
+    opts = opts || {};
+    if (!tpl) {
+      resetCardIssuePayState();
+      return 0;
+    }
+    const forceDefault = !!opts.forceDefault;
+    if (forceDefault || state.cardIssuePayTemplateId !== tpl.id) {
+      state.cardIssuePayTemplateId = tpl.id;
+      if (!forceDefault
+        && state.pendingOpenCard
+        && state.pendingOpenCard.templateId === tpl.id
+        && state.pendingOpenCard.amountEdited
+        && Number.isFinite(Number(state.pendingOpenCard.amount))) {
+        state.cardIssuePayAmount = round2(Math.max(0, Number(state.pendingOpenCard.amount)));
+        state.cardIssuePayEdited = true;
+      } else if (!forceDefault
+        && state.pendingOpenCard
+        && state.pendingOpenCard.templateId === tpl.id
+        && Number.isFinite(Number(state.pendingOpenCard.amount))
+        && !state.cardIssuePayEdited) {
+        /* 会员卡管理进入时已带默认应付，尚未改价 */
+        state.cardIssuePayAmount = round2(Math.max(0, Number(state.pendingOpenCard.amount)));
+        state.cardIssuePayEdited = false;
+      } else {
+        state.cardIssuePayAmount = defaultCardIssuePayAmount(tpl);
+        state.cardIssuePayEdited = false;
+      }
+    }
+    return round2(Math.max(0, Number(state.cardIssuePayAmount) || 0));
+  }
+
+  function getCardIssuePayAmount(tpl) {
+    return ensureCardIssuePayForTemplate(tpl);
+  }
+
+  function setCardIssuePayAmount(amount, tpl) {
+    const n = round2(Math.max(0, Number(amount) || 0));
+    if (n > INPUT_LIMITS.MONEY_MAX) {
+      showToast('金额不能超过 ' + formatMoneyLimitLabel(), true);
+      return false;
+    }
+    const tid = (tpl && tpl.id) || state.selectedTemplateId || state.cardIssuePayTemplateId;
+    state.cardIssuePayTemplateId = tid;
+    state.cardIssuePayAmount = n;
+    state.cardIssuePayEdited = true;
+    if (state.pendingOpenCard && state.pendingOpenCard.templateId === tid) {
+      state.pendingOpenCard.amount = n;
+      state.pendingOpenCard.amountEdited = true;
+    }
+    return true;
+  }
+
+  function formatCardIssuePayText(amount) {
+    if (typeof formatMoneyDisplay === 'function') return formatMoneyDisplay(amount);
+    return '¥' + round2(Number(amount) || 0);
+  }
+
+  function syncCardIssuePayUi(tpl) {
+    const amount = tpl ? getCardIssuePayAmount(tpl) : 0;
+    const priceText = formatCardIssuePayText(amount);
+    const edited = !!(tpl && state.cardIssuePayEdited && state.cardIssuePayTemplateId === tpl.id);
+    const editIcon = (typeof iconSvg === 'function') ? iconSvg('edit') : '';
+    [
+      { btn: 'btnQuickIssuePayEdit', val: 'quickIssuePayVal', price: null },
+      { btn: 'btnAddCardPayEdit', val: 'addCardPayVal', price: null },
+    ].forEach(function (cfg) {
+      const btn = document.getElementById(cfg.btn);
+      const val = document.getElementById(cfg.val);
+      if (val) val.textContent = priceText;
+      if (btn) {
+        btn.classList.toggle('is-edited', edited);
+        btn.hidden = !tpl;
+        const editEl = btn.querySelector('.quick-issue-pay__edit');
+        if (editEl && editIcon && !editEl.innerHTML) editEl.innerHTML = editIcon;
+      }
+    });
+    const qiPrice = document.querySelector('#quickIssueCard .quick-issue-card__price');
+    if (qiPrice) qiPrice.textContent = priceText;
+    const slotPrice = document.querySelector('#addCardSlot .add-card-slot__price');
+    if (slotPrice) slotPrice.textContent = priceText;
+    return amount;
+  }
+
+  function openCardIssuePayKeypad(tpl) {
+    if (!tpl) {
+      showToast('请先选择会员卡', true);
+      return;
+    }
+    ensureCardIssuePayForTemplate(tpl);
+    let el = document.getElementById('cardIssuePayKeypadProxy');
+    if (!el) {
+      el = document.createElement('input');
+      el.type = 'text';
+      el.id = 'cardIssuePayKeypadProxy';
+      el.className = 'input-amount';
+      el.setAttribute('readonly', 'readonly');
+      el.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px;';
+      document.body.appendChild(el);
+      el.addEventListener('change', function () {
+        const n = parseFloat(el.value);
+        if (!Number.isFinite(n) || n < 0) {
+          showToast('请输入有效金额', true);
+          return;
+        }
+        const curTpl = CARD_TEMPLATES.find(function (t) { return t.id === state.selectedTemplateId; })
+          || (typeof getTemplate === 'function' ? getTemplate(state.selectedTemplateId) : null)
+          || (typeof getTemplateById === 'function' ? getTemplateById(state.cardIssuePayTemplateId) : null);
+        if (!setCardIssuePayAmount(n, curTpl)) return;
+        syncCardIssuePayUi(curTpl);
+        showToast('已更新应付金额');
+      });
+    }
+    el.value = String(getCardIssuePayAmount(tpl));
+    if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
+    else showToast('金额键盘未就绪', true);
+  }
+
   function formatQuickIssueBenefitLineLocal(tpl) {
     if (typeof formatQuickIssueBenefitLine === 'function') return formatQuickIssueBenefitLine(tpl);
     return '—';
+  }
+
+  /** 确认办卡：权益按类型分行（面值/项目/产品/折扣/期限） */
+  function buildQuickIssueBenefitRows(tpl) {
+    if (!tpl) return [];
+    const rows = [];
+    const b = tpl.benefits || {};
+    if (b.balance) {
+      const face = (typeof getTemplateFaceTotal === 'function')
+        ? getTemplateFaceTotal(tpl)
+        : (tpl.face != null ? Number(tpl.face) : 0);
+      const faceText = (typeof formatMoneyDisplay === 'function')
+        ? formatMoneyDisplay(face > 0 ? face : 0)
+        : (`¥${face || 0}`);
+      const gift = typeof parseAmount === 'function' ? parseAmount(tpl.giftAmount) : Number(tpl.giftAmount) || 0;
+      let text = faceText;
+      if (gift > 0) text += ' · 赠送 ¥' + tpl.giftAmount;
+      rows.push({ label: '面值', text: text });
+    }
+    const projs = (tpl.projects && tpl.projects.length)
+      ? tpl.projects.map(function (x) { return typeof x === 'string' ? x : (x && x.name); }).filter(Boolean)
+      : ((typeof normalizeProjectItemsFromTpl === 'function')
+        ? normalizeProjectItemsFromTpl(tpl).map(function (i) {
+          return (typeof formatProjectItemFaceLine === 'function')
+            ? formatProjectItemFaceLine(i)
+            : (i && i.name);
+        }).filter(Boolean)
+        : []);
+    if (b.timesOrValidity || projs.length) {
+      const line = projs.length
+        ? ((typeof formatProjectItemsLine === 'function' && !(tpl.projects && tpl.projects.length))
+          ? (formatProjectItemsLine(normalizeProjectItemsFromTpl(tpl)) || projs.join('、'))
+          : projs.join('、'))
+        : '';
+      if (line) rows.push({ label: '项目', text: line });
+    }
+    const prods = (typeof normalizeProductItemsFromTpl === 'function')
+      ? normalizeProductItemsFromTpl(tpl)
+      : (tpl.productItems || tpl.products || []);
+    const prodLine = (typeof formatProductItemsLine === 'function')
+      ? formatProductItemsLine(prods)
+      : (Array.isArray(prods) ? prods.map(function (p) {
+        return typeof p === 'string' ? p : (p && p.name);
+      }).filter(Boolean).join('、') : '');
+    if ((b.products || prodLine) && prodLine) rows.push({ label: '产品', text: prodLine });
+    const discs = tpl.discounts || [];
+    if (b.projectDiscount || discs.length) {
+      let discLine = '';
+      if (tpl.memberPrices && typeof formatMemberPriceFaceSummary === 'function') {
+        discLine = formatMemberPriceFaceSummary(tpl.memberPrices) || '';
+      }
+      if (!discLine && discs.length) discLine = discs.join('、');
+      if (discLine) rows.push({ label: '折扣', text: discLine });
+    }
+    const validity = (typeof formatListCardValidity === 'function')
+      ? formatListCardValidity(tpl)
+      : ((typeof formatCardValidity === 'function') ? formatCardValidity(tpl) : '');
+    if (validity && validity !== '—') rows.push({ label: '期限', text: validity });
+    return rows;
+  }
+
+  function renderQuickIssueBenefitRowsHtml(rows) {
+    if (!rows || !rows.length) {
+      return '<p class="quick-issue-card__summary">—</p>';
+    }
+    return '<div class="quick-issue-card__benefits">' + rows.map(function (r) {
+      return '<div class="quick-issue-card__benefit">' +
+        '<span class="quick-issue-card__benefit-lbl">' + escapeHtml(r.label) + '</span>' +
+        '<span class="quick-issue-card__benefit-val">' + escapeHtml(r.text) + '</span></div>';
+    }).join('') + '</div>';
   }
 
   function renderQuickIssuePage() {
@@ -40521,10 +40916,9 @@ window.__BILLING_EMBEDDED__ = true;
       || (typeof CARD_TPL_BY_ID !== 'undefined' ? CARD_TPL_BY_ID[templateId] : null);
     const tpl = cardTpl || billTpl;
     const cardEl = document.getElementById('quickIssueCard');
-    const payEl = document.getElementById('quickIssuePayVal');
     if (!tpl) {
       if (cardEl) cardEl.innerHTML = '<p class="quick-issue-card__summary">未找到会员卡模板</p>';
-      if (payEl) payEl.textContent = '¥0';
+      syncCardIssuePayUi(null);
       renderAddCardStaffOnly();
       return;
     }
@@ -40532,29 +40926,28 @@ window.__BILLING_EMBEDDED__ = true;
     const theme = (typeof getCardTheme === 'function')
       ? getCardTheme(tpl.cardColor)
       : { gradient: (CARD_COLORS && CARD_COLORS[tpl.cardColor]) || '#F32F41' };
-    const amountNum = (typeof resolveCardIssueAmount === 'function')
-      ? resolveCardIssueAmount(tpl, state.pendingOpenCard?.amount)
-      : round2(Number(state.pendingOpenCard?.amount) || Number(tpl.price) || Number(tpl.recharge) || 0);
-    const priceText = (typeof formatMoneyDisplay === 'function')
-      ? formatMoneyDisplay(amountNum)
-      : (`¥${amountNum}`);
+    const amountNum = getCardIssuePayAmount(tpl);
+    const priceText = formatCardIssuePayText(amountNum);
     /* 摘要优先用开单侧已格式化的 projects/discounts 文案 */
     const summaryTpl = billTpl && (billTpl.projects?.length || billTpl.discounts?.length)
       ? { ...tpl, projects: billTpl.projects || tpl.projects, discounts: billTpl.discounts || tpl.discounts, benefits: billTpl.benefits || tpl.benefits }
       : tpl;
-    const summary = formatQuickIssueBenefitLineLocal(summaryTpl);
-    const nameBlock = (typeof renderCardCompactTitleHtml === 'function')
-      ? renderCardCompactTitleHtml(tpl.name, { cardColor: tpl.cardColor })
-      : `<div class="member-card-compact__title"><span class="member-card-compact__name">${escapeHtml(tpl.name)}</span></div>`;
+    const benefitRows = buildQuickIssueBenefitRows(summaryTpl);
+    const grad = theme.gradient;
     if (cardEl) {
       cardEl.innerHTML =
-        `<div class="member-card-compact" style="background:${theme.gradient}">` +
-        `${nameBlock}` +
-        `<span class="member-card-compact__price"><span class="member-card-compact__price-val is-data">${escapeHtml(priceText)}</span></span>` +
-        `</div>` +
-        `<p class="quick-issue-card__summary">${escapeHtml(summary)}</p>`;
+        '<div class="quick-issue-card__info">' +
+        '<div class="quick-issue-card__head">' +
+        '<span class="add-card-slot__face" aria-hidden="true">' +
+        '<span class="add-card-slot__face-head" style="background:' + grad + '"></span>' +
+        '<span class="add-card-slot__face-body"></span></span>' +
+        '<span class="quick-issue-card__name">' + escapeHtml(tpl.name) + '</span>' +
+        '<span class="quick-issue-card__price is-data">' + escapeHtml(priceText) + '</span>' +
+        '</div>' +
+        renderQuickIssueBenefitRowsHtml(benefitRows) +
+        '</div>';
     }
-    if (payEl) payEl.textContent = priceText;
+    syncCardIssuePayUi(tpl);
 
     const dateSrc = document.getElementById('addCardDateLabel');
     const dateDst = document.getElementById('quickIssueDateLabel');
@@ -40586,15 +40979,7 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('请先选择会员顾客再办卡', true);
       return;
     }
-    const amount = round2(
-      (typeof resolveCardIssueAmount === 'function')
-        ? resolveCardIssueAmount(tpl, state.pendingOpenCard?.amount)
-        : (Number(state.pendingOpenCard?.amount) || Number(tpl.price) || Number(tpl.recharge) || 0)
-    );
-    if (!(amount > 0)) {
-      showToast('该卡未设置购买金额', true);
-      return;
-    }
+    const amount = getCardIssuePayAmount(tpl);
     const staff = snapshotIssueStaff();
     startCardIssueCheckout({
       templateId: tpl.id,
@@ -40612,6 +40997,7 @@ window.__BILLING_EMBEDDED__ = true;
   function leaveQuickIssueToCardList() {
     clearStaffCardEdit();
     closeMask('addCardStaffMask');
+    resetCardIssuePayState();
     state.pendingOpenCard = null;
     state.cardIssuePending = null;
     state.successIssueTemplateId = null;
@@ -40819,6 +41205,9 @@ window.__BILLING_EMBEDDED__ = true;
     flowNavHighlight: null,
     addCardMode: 'new',
     selectedTemplateId: null,
+    cardIssuePayAmount: null,
+    cardIssuePayTemplateId: null,
+    cardIssuePayEdited: false,
     selectedCouponId: null,
     couponDraftId: null,
     couponRulesOpen: {},
@@ -40965,6 +41354,7 @@ window.__BILLING_EMBEDDED__ = true;
     if (id === 'checkoutMask' && state.cardIssuePending && !keepCardIssueDraft) {
       state.cardIssuePending = null;
       state.pendingOpenCard = null;
+      resetCardIssuePayState();
       state.orderIsFree = false;
       state.successIssueTemplateId = null;
       state.successIssueCardHtml = '';
@@ -47769,6 +48159,11 @@ window.__BILLING_EMBEDDED__ = true;
     return '¥' + bizOvFmt(n);
   }
 
+  /** 减少项（退卡等）：前缀「-¥」 */
+  function bizOvMoneyDown(n) {
+    return '-¥' + bizOvFmt(Math.abs(Number(n) || 0));
+  }
+
   function bizOvIcon(kind) {
     const files = {
       overview: 'assets/biz/overview-pie.svg',
@@ -48020,7 +48415,8 @@ window.__BILLING_EMBEDDED__ = true;
       { id: 'times', name: '续次', count: Math.max(1, Math.round(2 * f)), amount: times },
       { id: 'extend', name: '延期', count: Math.max(0, Math.round(1 * f)), amount: extend },
       { id: 'balanceIssue', name: '余额开卡', count: Math.max(0, Math.round(0.8 * f)), amount: balanceIssue },
-      { id: 'refund', name: '退卡', count: Math.max(0, Math.round(0.5 * f)), amount: refund },
+      /* 退卡扣减售卡金额：负值参与合计 */
+      { id: 'refund', name: '退卡', count: Math.max(0, Math.round(0.5 * f)), amount: -refund, tone: 'down' },
     ];
   }
 
@@ -48072,9 +48468,13 @@ window.__BILLING_EMBEDDED__ = true;
       const labInner = tip
         ? `<span class="biz-kpi__lab-row"><span>${escapeHtml(it.name)}</span>${tip}</span>`
         : (it.count != null ? `${escapeHtml(it.name)} · ${it.count}笔` : escapeHtml(it.name));
+      const amt = Number(it.amount) || 0;
+      const isDown = it.tone === 'down' || amt < 0 || it.id === 'refund';
       const val = it.display != null
         ? `<div class="biz-kpi__val is-neutral">${escapeHtml(String(it.display))}</div>`
-        : `<div class="biz-kpi__val">${bizOvMoney(it.amount)}</div>`;
+        : (isDown
+          ? `<div class="biz-kpi__val is-down">${bizOvMoneyDown(amt)}</div>`
+          : `<div class="biz-kpi__val">${bizOvMoney(amt)}</div>`);
       return `<div class="biz-kpi"><div class="biz-kpi__lab">${labInner}</div>${val}</div>`;
     }).join('')}</div>`;
   }
@@ -48177,7 +48577,7 @@ window.__BILLING_EMBEDDED__ = true;
       `<div class="biz-refund-row">
         <div class="biz-refund-row__top">
           <span class="biz-refund-row__name">${escapeHtml(r.member)} · ${escapeHtml(r.card)}</span>
-          <span class="biz-refund-row__amt">${bizOvMoney(r.amount)}</span>
+          <span class="biz-refund-row__amt is-down">${bizOvMoneyDown(r.amount)}</span>
         </div>
         <div class="biz-refund-row__sub">${escapeHtml(r.rule)}</div>
       </div>`
@@ -48361,9 +48761,13 @@ window.__BILLING_EMBEDDED__ = true;
           <table class="biz-ov-table">
             <thead><tr><th>类型</th><th>笔数</th><th>金额</th></tr></thead>
             <tbody>
-              ${cardSalesRows.map(r =>
-                `<tr><td>${escapeHtml(r.name)}</td><td>${r.count}</td><td>${bizOvFmt(r.amount)}</td></tr>`
-              ).join('')}
+              ${cardSalesRows.map(r => {
+                const isDown = r.tone === 'down' || r.id === 'refund' || Number(r.amount) < 0;
+                const amt = isDown
+                  ? `<td class="is-down">${bizOvMoneyDown(r.amount)}</td>`
+                  : `<td>${bizOvFmt(r.amount)}</td>`;
+                return `<tr><td>${escapeHtml(r.name)}</td><td>${r.count}</td>${amt}</tr>`;
+              }).join('')}
             </tbody>
           </table>
         </div>
@@ -48498,8 +48902,8 @@ window.__BILLING_EMBEDDED__ = true;
     } else if (tab === 'card') {
       const pre = pie.slices[0];
       const saleMetrics = bizCardRelatedSaleMetrics(pie);
-      const saleTotal = bizRound2(saleMetrics.reduce((s, m) => s + m.amount, 0));
-      const refundAmt = (saleMetrics.find(m => m.id === 'refund') || {}).amount || 0;
+      const saleTotal = bizRound2(saleMetrics.reduce((s, m) => s + (Number(m.amount) || 0), 0));
+      const refundAmt = Math.abs((saleMetrics.find(m => m.id === 'refund') || {}).amount || 0);
       const consume = (pie.slices[1] && pie.slices[1].children && pie.slices[1].children[2])
         ? pie.slices[1].children[2].amount
         : bizRound2(cash * 0.35);
@@ -48531,7 +48935,11 @@ window.__BILLING_EMBEDDED__ = true;
           ${bizCardSalesDetailHtml(detailRows, !!state.bizCardSalesExpanded)}
         </div>
         <div class="biz-ov-card" id="bizCardRefundDetail">
-          ${bizOvCardHeadHtml({ icon: bizOvIcon('gift'), title: '退卡明细', total: refundAmt })}
+          ${bizOvCardHeadHtml({
+            icon: bizOvIcon('gift'),
+            title: '退卡明细',
+            trailing: `<span class="biz-ov-card__total is-down">${bizOvMoneyDown(refundAmt)}</span>`,
+          })}
           ${bizCardRefundDetailHtml(refundRows, !!state.bizCardRefundExpanded)}
         </div>`;
     } else {
@@ -50650,6 +51058,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.cardIssuePending = null;
     state.cardExtendPending = null;
     state.pendingOpenCard = null;
+    resetCardIssuePayState();
     state.payAmounts = {};
     state.payMembercardCardId = null;
     state.lastSettlement = null;
@@ -50689,15 +51098,21 @@ window.__BILLING_EMBEDDED__ = true;
     const issueTpl = CARD_TEMPLATES.find(t => t.id === templateId) || CARD_TPL_BY_ID[templateId];
     const includesFace = !!(issueTpl?.benefits?.balance);
     const staffSnap = staff || null;
+    const payAmt = round2(Math.max(0, Number(amount) || 0));
+    const prevEdited = !!state.cardIssuePayEdited && state.cardIssuePayTemplateId === templateId;
     state.pendingOpenCard = {
       name: cardName,
-      amount: round2(Number(amount) || 0),
+      amount: payAmt,
+      amountEdited: skipStaffScreen ? prevEdited : false,
       templateId,
       includesFace,
       staffIds: staffSnap ? (staffSnap.staffIds || []).slice() : [],
       staffRoles: staffSnap ? Object.assign({}, staffSnap.staffRoles || {}) : {},
       staffDesignated: staffSnap ? Object.assign({}, staffSnap.staffDesignated || {}) : {},
     };
+    state.cardIssuePayTemplateId = templateId;
+    state.cardIssuePayAmount = payAmt;
+    state.cardIssuePayEdited = skipStaffScreen ? prevEdited : false;
     state.orderIsFree = false;
     state.cardIssuePending = { templateId, memberId };
     state.cardExtendPending = null;
@@ -50907,6 +51322,7 @@ window.__BILLING_EMBEDDED__ = true;
     }
     state.addCardMode = 'new';
     state.selectedTemplateId = CARD_TEMPLATES[0]?.id || null;
+    resetCardIssuePayState();
     resetIssueStaffDraft();
     renderAddCardPage();
     showOnlyScreen('screen-add-card');
@@ -51068,6 +51484,9 @@ window.__BILLING_EMBEDDED__ = true;
       btn.classList.toggle('is-on', btn.dataset.addMode === state.addCardMode);
     });
     renderAddCardSlot();
+    const tpl = CARD_TEMPLATES.find(t => t.id === state.selectedTemplateId)
+      || (typeof getTemplate === 'function' ? getTemplate(state.selectedTemplateId) : null);
+    syncCardIssuePayUi(tpl || null);
     renderAddCardStaffOnly();
   }
 
@@ -51190,6 +51609,7 @@ window.__BILLING_EMBEDDED__ = true;
       ? getCardTheme(tpl.cardColor)
       : { gradient: 'linear-gradient(90deg, #F4EAE5 0%, #EED1C3 100%)' };
     const grad = theme.gradient;
+    const priceText = formatCardIssuePayText(getCardIssuePayAmount(tpl));
     slot.innerHTML =
       `<button type="button" class="add-card-slot" data-add-card-pick aria-label="更换会员卡">` +
       `<span class="add-card-slot__face" aria-hidden="true">` +
@@ -51197,7 +51617,7 @@ window.__BILLING_EMBEDDED__ = true;
       `<span class="add-card-slot__face-body"></span></span>` +
       `<span class="add-card-slot__meta">` +
       `<span class="add-card-slot__name">${escapeHtml(tpl.name)}</span>` +
-      `<span class="add-card-slot__price">¥${tpl.price}</span>` +
+      `<span class="add-card-slot__price">${escapeHtml(priceText)}</span>` +
       `</span>` +
       `<span class="add-card-slot__action">更换</span>` +
       `</button>`;
@@ -52400,8 +52820,26 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const card = e.target.closest('[data-template-id]');
     if (!card) return;
-    state.selectedTemplateId = card.dataset.templateId;
+    const nextId = card.dataset.templateId;
+    if (nextId !== state.selectedTemplateId) {
+      state.selectedTemplateId = nextId;
+      const nextTpl = CARD_TEMPLATES.find(t => t.id === nextId)
+        || (typeof getTemplate === 'function' ? getTemplate(nextId) : null);
+      ensureCardIssuePayForTemplate(nextTpl, { forceDefault: true });
+    }
     closeAddCardPickScreen();
+  });
+  document.getElementById('btnQuickIssuePayEdit')?.addEventListener('click', () => {
+    const tid = state.cardIssuePending?.templateId || state.selectedTemplateId;
+    const tpl = (typeof getTemplate === 'function' ? getTemplate(tid) : null)
+      || (typeof getTemplateById === 'function' ? getTemplateById(tid) : null)
+      || CARD_TEMPLATES.find(t => t.id === tid);
+    openCardIssuePayKeypad(tpl);
+  });
+  document.getElementById('btnAddCardPayEdit')?.addEventListener('click', () => {
+    const tpl = CARD_TEMPLATES.find(t => t.id === state.selectedTemplateId)
+      || (typeof getTemplate === 'function' ? getTemplate(state.selectedTemplateId) : null);
+    openCardIssuePayKeypad(tpl);
   });
   document.getElementById('addCardStaffRow')?.addEventListener('click', () => {
     openAddCardStaffSheet();
@@ -52518,14 +52956,7 @@ window.__BILLING_EMBEDDED__ = true;
       showToast('请先选择会员顾客再办卡', true);
       return;
     }
-    const amount = round2(
-      Number(tpl.price != null ? tpl.price : (tpl.face != null ? tpl.face : 0)) || 0
-      || (typeof getTemplatePurchaseAmount === 'function' ? getTemplatePurchaseAmount(tpl) : 0)
-    );
-    if (!(amount > 0)) {
-      showToast('该卡未设置购买金额', true);
-      return;
-    }
+    const amount = getCardIssuePayAmount(tpl);
     const staff = snapshotIssueStaff();
     startCardIssueCheckout({
       templateId: tpl.id,
