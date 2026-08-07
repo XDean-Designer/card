@@ -8302,50 +8302,109 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .bill-asset-page__scroll {
   flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 12px 16px 24px; box-sizing: border-box;
+  padding: 12px 16px 28px; box-sizing: border-box;
 }
 .bill-asset-empty {
-  margin-top: 48px; text-align: center; color: var(--text-sec); font-size: 14px; line-height: 22px;
+  margin: 56px 24px 0; text-align: center; color: var(--text-sec); font-size: 14px; line-height: 22px;
 }
+.bill-asset-empty__illus {
+  width: 72px; height: 48px; margin: 0 auto 16px; border-radius: 10px;
+  border: 1.5px dashed #D8D8D8; background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+  display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box;
+}
+.bill-asset-empty__illus-h { flex: 0 0 16px; background: linear-gradient(90deg, #F0E6E2, #E8D5CC); }
+.bill-asset-empty__illus-b { flex: 1; background: #FAFAFA; }
 .bill-asset-empty__cta {
-  margin-top: 16px; height: 44px; padding: 0 20px; border: none; border-radius: 22px;
+  margin-top: 18px; height: 44px; padding: 0 22px; border: none; border-radius: 22px;
   background: var(--brand); color: #fff; font-size: 15px; font-weight: 600;
   font-family: inherit; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(243, 47, 65, .22);
 }
+.bill-asset-empty__cta:active { opacity: .9; }
+/* Soft Pass · 持卡凭证 */
 .bill-asset-card {
-  background: #fff; border-radius: 12px; padding: 14px 14px 12px; margin-bottom: 12px;
-  box-sizing: border-box;
+  position: relative;
+  background: #fff; border-radius: 14px; margin-bottom: 12px; padding: 0;
+  border: 1px solid #EDEDED; overflow: hidden; box-sizing: border-box;
+  box-shadow: 0 4px 14px rgba(0,0,0,.045), inset 0 1px 0 rgba(255,255,255,.95);
+  animation: billAssetCardIn .28s cubic-bezier(.22,.82,.24,1) both;
 }
+@keyframes billAssetCardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bill-asset-card__band {
+  height: 6px; width: 100%;
+  background: var(--asset-band, linear-gradient(90deg, #F4EAE5, #EED1C3));
+}
+.bill-asset-card__body { padding: 14px 14px 4px; }
 .bill-asset-card__head {
-  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px;
+  display: flex; align-items: flex-start; gap: 12px;
 }
 .bill-asset-card__face {
-  width: 52px; height: 36px; border-radius: 6px; flex-shrink: 0; overflow: hidden;
+  width: 56px; height: 38px; border-radius: 7px; flex-shrink: 0; overflow: hidden;
   display: flex; flex-direction: column;
-  border: 1px solid #E8E8E8; box-sizing: border-box;
+  border: 1px solid rgba(0,0,0,.06); box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
 }
 .bill-asset-card__face-h { flex: 0 0 16px; width: 100%; }
 .bill-asset-card__face-b { flex: 1; background: #fff; }
 .bill-asset-card__meta { flex: 1; min-width: 0; }
 .bill-asset-card__name {
-  font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 21px;
+  font-size: 16px; font-weight: 650; color: #1a1a1a; line-height: 22px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .bill-asset-card__sub {
-  margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 17px;
+  margin-top: 4px; font-size: 13px; color: #666; line-height: 18px;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
 }
-.bill-asset-card__chips { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+.bill-asset-card__chips { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.bill-asset-card__tear {
+  height: 0; margin: 12px 0 0; border-top: 1px dashed #E8E8E8;
+  position: relative;
+}
 .bill-asset-card__acts {
-  display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px 14px 14px;
 }
 .bill-asset-card__act {
-  height: 32px; padding: 0 14px; border-radius: 16px; border: 1px solid var(--brand);
-  background: transparent; color: var(--brand); font-size: 13px; font-weight: 600;
+  height: 34px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid #E8E8E8;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%);
+  color: #1a1a1a; font-size: 13px; font-weight: 600;
   font-family: inherit; cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 1px 2px rgba(0,0,0,.04);
+  -webkit-tap-highlight-color: transparent;
 }
-.bill-asset-card__act:active { background: var(--brand-soft); }
-.bill-asset-card__act.is-muted {
-  border-color: #E5E5E5; background: transparent; color: #929292; font-weight: 500;
+.bill-asset-card__act:active {
+  background: linear-gradient(180deg, #F3F3F3 0%, #EEEEEE 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.06);
+}
+.bill-asset-card__act--primary {
+  border-color: #FFD5D9;
+  background: linear-gradient(180deg, #FFF9F9 0%, #FFF2F2 100%);
+  color: var(--brand);
+}
+.bill-asset-card__act--primary:active {
+  background: var(--brand-soft);
+}
+.bill-asset-card__act-empty {
+  font-size: 12px; color: var(--text-sec); line-height: 34px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bill-asset-card { animation: none !important; }
+}
+.bill-asset-title-add {
+  color: var(--brand) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  height: 30px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+  background: #FFF2F2 !important;
+  border: 1px solid #FFD5D9 !important;
+  box-sizing: border-box;
 }
 .bill-extend-presets {
   display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px;
@@ -8511,7 +8570,7 @@ button.exp-flow-row:active { opacity: .92; }
   flex: 1; min-height: 0; height: auto; background: #fff;
 }
 
-/* 开单记账单 · 轻拟物小票（多单贴边，交界虚线撕口） */
+/* 开单记账单 · 轻拟物小票（多单贴边，mask 挖空撕口缺口） */
 .bill-slip-stack {
   display: flex; flex-direction: column; gap: 0;
   margin: 0 16px 12px;
@@ -8520,7 +8579,7 @@ button.exp-flow-row:active { opacity: .92; }
   filter: drop-shadow(0 3px 8px rgba(0,0,0,.05));
 }
 .bill-slip {
-  position: relative; background: #fff; border-radius: 0; overflow: visible;
+  position: relative; background: #fff; border-radius: 0; overflow: hidden;
   box-shadow: none;
   border: 1px solid #EDEDED;
   border-bottom: none;
@@ -8534,25 +8593,59 @@ button.exp-flow-row:active { opacity: .92; }
   border-radius: 10px;
   border-bottom: 1px solid #EDEDED;
 }
-/* 交界虚线 + 两侧半圆缺口，仿票据撕线 */
+/* 交界虚线 */
 .bill-slip + .bill-slip {
-  border-top: 1.5px dashed #C8C8C8;
+  border-top: 1.5px dashed #E0E0E0;
 }
-.bill-slip + .bill-slip::before,
-.bill-slip + .bill-slip::after {
-  content: '';
-  position: absolute;
-  top: -6px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--bg-page);
-  z-index: 3;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 1px #EDEDED;
+/* mask 挖空：仅底边缺口（多单的第一张） */
+.bill-slip:first-child:has(+ .bill-slip) {
+  -webkit-mask-image:
+    radial-gradient(circle 6px at 0 100%, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 100%, transparent 6px, #000 6.5px);
+  -webkit-mask-size: 50.2% 100%, 50.2% 100%;
+  -webkit-mask-position: left top, right top;
+  -webkit-mask-repeat: no-repeat;
+  mask-image:
+    radial-gradient(circle 6px at 0 100%, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 100%, transparent 6px, #000 6.5px);
+  mask-size: 50.2% 100%, 50.2% 100%;
+  mask-position: left top, right top;
+  mask-repeat: no-repeat;
 }
-.bill-slip + .bill-slip::before { left: -6px; }
-.bill-slip + .bill-slip::after { right: -6px; }
+/* mask 挖空：仅顶边缺口（多单的最后一张） */
+.bill-slip + .bill-slip:last-child {
+  -webkit-mask-image:
+    radial-gradient(circle 6px at 0 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 0, transparent 6px, #000 6.5px);
+  -webkit-mask-size: 50.2% 100%, 50.2% 100%;
+  -webkit-mask-position: left top, right top;
+  -webkit-mask-repeat: no-repeat;
+  mask-image:
+    radial-gradient(circle 6px at 0 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 0, transparent 6px, #000 6.5px);
+  mask-size: 50.2% 100%, 50.2% 100%;
+  mask-position: left top, right top;
+  mask-repeat: no-repeat;
+}
+/* mask 挖空：上下都有缺口（多单的中间张） */
+.bill-slip + .bill-slip:has(+ .bill-slip) {
+  -webkit-mask-image:
+    radial-gradient(circle 6px at 0 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 0 100%, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 100%, transparent 6px, #000 6.5px);
+  -webkit-mask-size: 50.2% 50.2%, 50.2% 50.2%, 50.2% 50.2%, 50.2% 50.2%;
+  -webkit-mask-position: left top, right top, left bottom, right bottom;
+  -webkit-mask-repeat: no-repeat;
+  mask-image:
+    radial-gradient(circle 6px at 0 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 0, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 0 100%, transparent 6px, #000 6.5px),
+    radial-gradient(circle 6px at 100% 100%, transparent 6px, #000 6.5px);
+  mask-size: 50.2% 50.2%, 50.2% 50.2%, 50.2% 50.2%, 50.2% 50.2%;
+  mask-position: left top, right top, left bottom, right bottom;
+  mask-repeat: no-repeat;
+}
 .bill-slip--draft {
   border-style: solid;
   background: #FFFCFA;
@@ -8674,13 +8767,30 @@ button.exp-flow-row:active { opacity: .92; }
   margin: 0; font-size: 13px; color: var(--text-sec); line-height: 1.45;
 }
 .bill-held-cards__tools {
-  display: none; gap: 16px; margin-top: 12px; padding-top: 10px;
+  display: none; align-items: center; justify-content: flex-end; gap: 8px;
+  margin-top: 12px; padding-top: 10px; padding-right: 0;
   border-top: 0.5px solid #F0F0F0;
+  box-sizing: border-box;
 }
 .bill-held-cards.is-tools-open .bill-held-cards__tools { display: flex; }
-.bill-held-cards__tools button {
-  border: none; background: transparent; color: var(--brand);
-  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; padding: 4px 0;
+.bill-held-cards__tools .bill-held-cards__btn {
+  height: 32px; min-height: 32px; padding: 0 16px; border-radius: 999px;
+  font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  white-space: nowrap; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+.bill-held-cards__tools .bill-held-cards__btn--secondary {
+  border: 1px solid var(--brand); background: transparent; color: var(--brand);
+}
+.bill-held-cards__tools .bill-held-cards__btn--secondary:active {
+  background: var(--brand-soft);
+}
+.bill-held-cards__tools .bill-held-cards__btn--primary {
+  border: 1px solid var(--brand); background: var(--brand); color: #fff;
+}
+.bill-held-cards__tools .bill-held-cards__btn--primary:active {
+  opacity: .88;
 }
 .bill-held-cards__fold {
   position: absolute; right: 8px; bottom: 6px;
@@ -9177,8 +9287,7 @@ button.exp-flow-row:active { opacity: .92; }
 #screen-biz-self-rpt,
 #screen-flow-list,
 #screen-flow-detail,
-#screen-flow-self,
-#screen-flow-product { background: var(--bg-page); }
+#screen-flow-self { background: var(--bg-page); }
 #screen-flow-hub,
 #screen-biz-hub,
 #screen-biz-store,
@@ -10933,392 +11042,7 @@ button.biz-pay-row:active { opacity: .72; }
 #screen-flow-detail.hidden { display: none; }
 #screen-flow-detail:not(.hidden) { display: flex; }
 #screen-flow-list .page-body,
-#screen-flow-self .page-body,
-#screen-flow-product .page-body { background: var(--bg-page); }
-#screen-flow-product {
-  display: flex; flex-direction: column;
-}
-#screen-flow-product.hidden { display: none; }
-#screen-flow-product:not(.hidden) { display: flex; }
-.flow-prod-range {
-  display: flex; align-items: stretch; flex-shrink: 0;
-  background: #fff; border-bottom: 0.5px solid #EDEDED;
-  padding: 0 4px; height: 44px; overflow-x: auto; -webkit-overflow-scrolling: touch;
-}
-.flow-prod-range::-webkit-scrollbar { display: none; }
-.flow-prod-range__btn {
-  flex: 1; min-width: 52px; border: none; background: transparent; font-family: inherit;
-  font-size: 13px; color: var(--text-sec); position: relative; cursor: pointer; white-space: nowrap; padding: 0 6px;
-}
-.flow-prod-range__btn.on { color: var(--brand); font-weight: 500; }
-.flow-prod-range__btn.on::after {
-  content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-  width: 24px; height: 3px; border-radius: 2px; background: var(--brand);
-}
-.flow-prod-sum {
-  position: sticky; top: 0; z-index: 3;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  margin: 0; padding: 12px 16px 10px;
-  background: #F7F7F7;
-  border-bottom: 0.5px solid #EDEDED;
-  box-sizing: border-box;
-}
-.flow-prod-sum__meta {
-  font-size: 13px; color: var(--text-sec); line-height: 18px;
-}
-.flow-prod-sum__meta strong {
-  color: #1A1A1A; font-weight: 700; font-variant-numeric: tabular-nums;
-}
-.flow-prod-sum__meta .flow-prod-sum__yen {
-  color: var(--brand); font-weight: 600; font-family: var(--font-data);
-}
-.flow-prod-sum__sort {
-  display: inline-flex; align-items: center; gap: 2px;
-  border: none; background: #fff; border-radius: 8px;
-  padding: 5px 8px; font-family: inherit; font-size: 12px; color: var(--text-sec);
-  cursor: pointer; flex-shrink: 0; box-shadow: 0 0 0 1px #EBEBEB;
-}
-.flow-prod-sum__sort:active { background: #FAFAFA; }
-.flow-prod-list { padding: 8px 0 24px; }
-.flow-prod-row {
-  display: flex; flex-direction: column; gap: 10px;
-  width: calc(100% - 32px); margin: 0 16px 8px; padding: 14px;
-  background: #fff; border-radius: 12px; border: 1px solid #EBEBEB;
-  box-sizing: border-box; text-align: left; font-family: inherit; color: inherit;
-  cursor: pointer; -webkit-tap-highlight-color: transparent; appearance: none;
-}
-.flow-prod-row:active { background: #FAFAFA; border-color: #E0E0E0; }
-.flow-prod-row__top {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-  width: 100%;
-}
-.flow-prod-row__main { min-width: 0; flex: 1; }
-.flow-prod-row__name {
-  font-size: 15px; font-weight: 500; color: var(--text); line-height: 21px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.flow-prod-row__spec {
-  margin-top: 2px; font-size: 12px; color: var(--text-sec); line-height: 17px;
-}
-.flow-prod-row__metrics {
-  display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0;
-}
-.flow-prod-row__metrics-nums { text-align: right; min-width: 72px; }
-.flow-prod-row__qty {
-  font-size: 14px; color: #1A1A1A; line-height: 20px;
-  font-variant-numeric: tabular-nums;
-}
-.flow-prod-row__qty-num { font-weight: 700; color: #1A1A1A; }
-.flow-prod-row__qty-unit { font-weight: 400; color: #1A1A1A; margin-left: 1px; }
-.flow-prod-row__amt {
-  margin-top: 2px; font-size: 16px; font-weight: 600; color: var(--brand); line-height: 22px;
-  font-family: var(--font-data); font-variant-numeric: tabular-nums;
-}
-.flow-prod-row__chev {
-  flex-shrink: 0; width: 16px; height: 16px; margin-bottom: 2px; color: #B2B2B2;
-}
-.flow-prod-row__done-mark {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-bottom: 0;
-  border-radius: 50%;
-  background: #E8F6EE;
-  color: #1B9E5A;
-}
-.flow-prod-row__done-mark svg { width: 14px; height: 14px; display: block; }
-.flow-prod-row__foot {
-  font-size: 12px; line-height: 17px; color: var(--text-sec);
-  padding-top: 8px; border-top: 1px solid #F2F2F2;
-}
-.flow-prod-row__foot.is-linked { color: #5C5C5C; }
-.flow-prod-row__foot.is-closed {
-  color: var(--brand);
-  font-weight: 500;
-}
-.flow-prod-row__foot.is-done {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #5C8F72;
-  border-top-color: #E8EFEA;
-}
-.flow-prod-row__foot-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #1B9E5A; flex-shrink: 0;
-}
-.flow-prod-row.is-done {
-  background: #F7F7F7;
-  border-color: #E8E8E8;
-  cursor: default;
-  pointer-events: none;
-}
-.flow-prod-row.is-done:active { background: #F7F7F7; border-color: #E8E8E8; }
-.flow-prod-row.is-done .flow-prod-row__name { color: #5C5C5C; font-weight: 500; }
-.flow-prod-row.is-done .flow-prod-row__spec { color: #A3A3A3; }
-.flow-prod-row.is-done .flow-prod-row__qty,
-.flow-prod-row.is-done .flow-prod-row__qty-num,
-.flow-prod-row.is-done .flow-prod-row__qty-unit { color: #8A8A8A; }
-.flow-prod-row.is-done .flow-prod-row__amt { color: #A3A3A3; font-weight: 500; }
-.flow-prod-deduct-sheet {
-  background: #F7F7F7;
-  border-radius: 16px 16px 0 0;
-  padding: 0;
-  max-height: min(88vh, 680px);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-#flowProdDeductMask .flow-prod-deduct-sheet .picker-head--stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  flex-shrink: 0;
-  padding: 14px 20px 12px;
-  border-bottom: none;
-  background: #fff;
-}
-#flowProdDeductMask .flow-prod-deduct-sheet .picker-head__title {
-  font-size: 17px;
-  font-weight: 600;
-  color: #1A1A1A;
-  line-height: 24px;
-  text-align: center;
-}
-#flowProdDeductMask .flow-prod-deduct-sheet .picker-head__sub { display: none; }
-.flow-prod-deduct-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 16px 12px;
-}
-.flow-prod-deduct-ctx {
-  margin-top: 4px;
-  padding: 14px 14px 12px;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #EBEBEB;
-  box-sizing: border-box;
-}
-.flow-prod-deduct-ctx__label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #929292;
-  line-height: 17px;
-  letter-spacing: 0.02em;
-}
-.flow-prod-deduct-ctx__name {
-  margin-top: 4px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1A1A1A;
-  line-height: 22px;
-}
-.flow-prod-deduct-ctx__spec {
-  margin-top: 2px;
-  font-size: 13px;
-  color: #929292;
-  line-height: 18px;
-}
-.flow-prod-deduct-ctx__stats {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-.flow-prod-deduct-stat {
-  flex: 1;
-  min-width: 0;
-  padding: 10px 12px;
-  background: #F7F7F7;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-.flow-prod-deduct-stat__lab {
-  display: block;
-  font-size: 12px;
-  color: #929292;
-  line-height: 16px;
-}
-.flow-prod-deduct-stat__val {
-  display: block;
-  margin-top: 4px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1A1A1A;
-  line-height: 24px;
-  font-variant-numeric: tabular-nums;
-}
-.flow-prod-deduct-stat__val em {
-  font-style: normal;
-  font-size: 12px;
-  font-weight: 500;
-  color: #5C5C5C;
-  margin-left: 2px;
-}
-.flow-prod-deduct-stat--pending .flow-prod-deduct-stat__val { color: var(--brand); }
-.flow-prod-deduct-sec {
-  margin-top: 16px;
-}
-.flow-prod-deduct-sec__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-  min-height: 22px;
-}
-.flow-prod-deduct-sec__title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #5C5C5C;
-  line-height: 18px;
-}
-.flow-prod-deduct-change {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: none;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--brand);
-  font-family: inherit;
-  cursor: pointer;
-  line-height: 18px;
-}
-.flow-prod-deduct-change:active { opacity: .72; }
-.flow-prod-deduct-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 8px;
-  padding: 0 12px;
-  height: 40px;
-  border-radius: 10px;
-  background: #fff;
-  border: 1px solid #EBEBEB;
-  box-sizing: border-box;
-}
-.flow-prod-deduct-search input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  font-family: inherit;
-  color: #1A1A1A;
-}
-.flow-prod-deduct-search input::placeholder { color: #B2B2B2; }
-.flow-prod-deduct-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: none;
-  overflow: visible;
-  padding: 0;
-}
-.flow-prod-deduct-list.is-picking {
-  max-height: min(42vh, 280px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 4px;
-}
-.flow-prod-deduct-list .bill-stock-pick-row {
-  margin: 0;
-  border-radius: 12px;
-  border: 1px solid #EBEBEB;
-  background: #fff;
-  padding: 12px 14px;
-}
-.flow-prod-deduct-list .bill-stock-pick-row.is-on {
-  border-color: var(--brand);
-  background: #FFF8F8;
-}
-.flow-prod-deduct-list .bill-stock-pick-row:disabled {
-  opacity: .45;
-}
-.flow-prod-deduct-empty {
-  padding: 28px 16px;
-  text-align: center;
-  font-size: 13px;
-  line-height: 20px;
-  color: #929292;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px dashed #E0E0E0;
-}
-.flow-prod-deduct-ops {
-  flex-shrink: 0;
-  background: #fff;
-  border-top: 1px solid #EBEBEB;
-  padding: 12px 16px 0;
-}
-.flow-prod-deduct-qty {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 0;
-  padding: 0 0 12px;
-  border-top: none;
-}
-.flow-prod-deduct-qty__lab {
-  font-size: 15px;
-  font-weight: 600;
-  color: #1A1A1A;
-  line-height: 21px;
-}
-.flow-prod-deduct-qty__type {
-  font-size: 12px;
-  color: #929292;
-  margin-top: 2px;
-  line-height: 17px;
-}
-.flow-prod-deduct-qty__val {
-  flex-shrink: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #1A1A1A;
-  line-height: 28px;
-  font-variant-numeric: tabular-nums;
-}
-.flow-prod-deduct-qty__val em {
-  font-style: normal;
-  font-size: 13px;
-  font-weight: 500;
-  color: #5C5C5C;
-  margin-left: 2px;
-}
-#flowProdDeductMask .picker-foot--row {
-  display: flex;
-  gap: 12px;
-  padding: 12px 16px calc(12px + var(--safe-bottom, 0px));
-  background: #fff;
-  border-top: none;
-  box-shadow: none;
-  flex-shrink: 0;
-}
-#flowProdDeductMask .picker-foot--row .btn-main {
-  flex: 1;
-  height: 48px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-}
-#flowProdDeductMask .picker-foot--row .btn-main.secondary {
-  background: transparent;
-  color: var(--brand);
-  border: 1px solid var(--brand);
-}
-#flowProdDeductMask .picker-foot--row .btn-main:disabled {
-  opacity: .4;
-  cursor: default;
-}
+#screen-flow-self .page-body { background: var(--bg-page); }
 .flow-filter-custom {
   margin-top: 10px; display: flex; align-items: center; gap: 8px;
 }
@@ -11984,11 +11708,13 @@ button.biz-pay-row:active { opacity: .72; }
   flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
 }
 .add-card-decision-scroll { padding: 0 0 12px; background: #F7F7F7; }
-#addCardCustomer { flex-shrink: 0; background: #fff; }
+#addCardCustomer { flex-shrink: 0; background: transparent; }
 .add-card-section { padding: 12px 16px 0; background: transparent; }
 .add-card-section--panel {
   margin: 12px 16px 0; padding: 14px 16px;
   background: #fff; border-radius: 12px; box-sizing: border-box;
+  border: none;
+  box-shadow: none;
 }
 .add-card-section:first-of-type { padding-top: 12px; }
 .add-card-section__title {
@@ -11997,19 +11723,27 @@ button.biz-pay-row:active { opacity: .72; }
 .add-card-section__title--row {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
 }
-.add-card-mode { display: flex; gap: 12px; }
+/* Soft Pass · 办理类型分段轨 */
+.add-card-mode {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  padding: 3px; border-radius: 12px; background: #F2F2F2;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
+}
 .add-card-mode__btn {
-  height: 36px; min-width: 106px; padding: 0 20px; border-radius: 20px; border: 1px solid transparent;
-  background: #F7F7F7; color: #1a1a1a; font-size: 12px; font-weight: 400;
+  height: 36px; min-width: 0; padding: 0 12px; border-radius: 10px; border: none;
+  background: transparent; color: #666; font-size: 13px; font-weight: 500;
   cursor: pointer; font-family: inherit;
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 .add-card-mode__btn.is-on {
-  background: #FFF2F2; border-color: #F32F41; color: #F32F41; font-weight: 600;
+  background: #fff; color: var(--brand); font-weight: 650;
+  box-shadow: none;
 }
 .add-card-create-btn {
   display: flex; align-items: center; justify-content: center; gap: 4px;
   width: calc(100% - 32px); height: 44px; margin: 12px 16px 4px; padding: 0 12px;
-  border: 1px dashed var(--brand); border-radius: 10px;
+  border: 1px dashed var(--brand); border-radius: 12px;
   background: transparent; color: var(--brand);
   font-size: 14px; font-weight: 600; line-height: 1.2;
   cursor: pointer; font-family: inherit; box-sizing: border-box;
@@ -12018,44 +11752,93 @@ button.biz-pay-row:active { opacity: .72; }
 .add-card-list {
   display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 32px;
 }
+/* Soft Pass · 已选/空槽凭证（扁平，对齐确认办卡） */
 .add-card-slot {
   display: flex; align-items: center; gap: 12px;
-  width: 100%; min-height: 64px; padding: 0; border: none; background: transparent;
+  width: 100%; min-height: 72px; padding: 12px 14px;
+  border-radius: 12px; background: #fff;
+  border: none;
+  box-shadow: none;
   font-family: inherit; text-align: left; cursor: pointer; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  min-width: 0;
 }
+.add-card-slot:active { background: #FAFAFA; }
 .add-card-slot.is-empty {
-  justify-content: center; gap: 6px;
-  min-height: 72px; padding: 16px;
-  border: 1px dashed var(--brand); border-radius: 10px;
-  background: transparent; color: var(--brand);
+  justify-content: center; gap: 8px;
+  min-height: 80px; padding: 18px 16px;
+  border: 1.5px dashed #FFB3BB; border-radius: 12px;
+  background: #FFF8F8;
+  color: var(--brand);
   font-size: 14px; font-weight: 600;
+  box-shadow: none;
+  overflow: visible;
 }
 .add-card-slot.is-empty .add-card-slot__plus {
   width: 18px; height: 18px; flex-shrink: 0;
 }
 .add-card-slot__face {
-  width: 52px; height: 36px; border-radius: 6px; flex-shrink: 0;
+  width: 56px; height: 38px; border-radius: 7px; flex-shrink: 0;
   display: flex; flex-direction: column; overflow: hidden;
   background: #fff; border: 1px solid #E8E8E8; box-sizing: border-box;
+  box-shadow: none;
 }
 .add-card-slot__face-head {
   flex: 0 0 16px; width: 100%;
   background-size: cover; background-position: center;
 }
 .add-card-slot__face-body { flex: 1; width: 100%; background: #fff; }
-.add-card-slot__meta { flex: 1; min-width: 0; }
+.add-card-slot__meta {
+  flex: 1 1 0%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 .add-card-slot__name {
-  font-size: 15px; font-weight: 600; color: #1a1a1a;
+  display: block;
+  font-size: 15px; font-weight: 650; color: #1a1a1a;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 21px;
+  max-width: 100%;
 }
 .add-card-slot__price {
-  font-size: 13px; color: var(--text-sec); line-height: 18px; margin-top: 2px;
+  display: block;
+  font-size: 13px; color: var(--text-sec); line-height: 18px; margin-top: 3px;
   font-family: var(--font-data); font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+.add-card-slot__benefit {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  margin-top: 4px; font-size: 12px; color: #888; line-height: 16px;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .add-card-slot__action {
-  flex-shrink: 0; font-size: 13px; font-weight: 500; color: var(--brand);
+  flex-shrink: 0; font-size: 13px; font-weight: 600; color: var(--brand);
   padding: 8px 0 8px 8px; white-space: nowrap;
 }
+.add-card-decision-scroll .detail-biz-date,
+.add-card-decision-scroll .quick-issue-pay {
+  display: flex;
+  width: calc(100% - 32px);
+  max-width: calc(100% - 32px);
+  margin: 12px 16px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+  background: #fff;
+}
+.add-card-decision-scroll .quick-issue-pay { margin-bottom: 12px; }
 .add-card-decision-foot {
   flex-shrink: 0; background: #fff;
   border-top: 1px solid var(--card-divider);
@@ -12249,7 +12032,6 @@ button.biz-pay-row:active { opacity: .72; }
   flex-shrink: 0; color: #C0C0C0; display: inline-flex; align-items: center;
 }
 .quick-issue-date__chev svg { display: block; }
-.add-card-decision-scroll .quick-issue-pay { margin: 0 0 12px; }
 .quick-issue-page .add-card-staff-row {
   border-radius: 12px; border-top: none; margin-bottom: 12px;
 }
@@ -12324,28 +12106,32 @@ button.biz-pay-row:active { opacity: .72; }
 #screen-add-card .member-card-item,
 #screen-add-card-pick .member-card-item {
   position: relative;
+  border: none;
+  box-shadow: none;
 }
 #screen-add-card .member-card-item__footer,
 #screen-add-card-pick .member-card-item__footer {
   background: #fff;
+  border-top: 1px dashed #EDEDED;
 }
 #screen-add-card .member-card-item.is-selected .member-card-item__footer,
 #screen-add-card-pick .member-card-item.is-selected .member-card-item__footer {
-  background: var(--brand-soft);
+  background: #FFF8F8;
 }
 #screen-add-card .member-card-item.is-selected,
 #screen-add-card-pick .member-card-item.is-selected {
-  border-color: var(--brand);
-  background: var(--brand-soft);
-  box-shadow: 0 0 0 1px var(--brand), 0 4px 12px rgba(243, 47, 65, 0.12);
+  border: 1.5px solid var(--brand);
+  background: #fff;
+  box-shadow: none;
 }
 #screen-add-card .member-card-item__check,
 #screen-add-card-pick .member-card-item__check {
-  position: absolute; right: 10px; bottom: 10px; top: auto; z-index: 3;
+  position: absolute; right: 10px; top: 10px; bottom: auto; z-index: 3;
   width: 22px; height: 22px; border-radius: 50%;
   background: var(--brand); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 1px 4px rgba(243, 47, 65, 0.35);
+  box-shadow: none;
+  animation: staffCheckIn .32s cubic-bezier(.22,.82,.24,1);
 }
 #screen-add-card .member-card-item__check svg,
 #screen-add-card-pick .member-card-item__check svg { width: 12px; height: 12px; display: block; }
@@ -12688,6 +12474,7 @@ button.biz-pay-row:active { opacity: .72; }
 }
 .benefit-chip.is-face { background: #4A7BF4; }
 .benefit-chip.is-project { background: #F56C9B; }
+.benefit-chip.is-product { background: #FF8C2E; }
 .benefit-chip.is-discount { background: #8B6CF6; }
 .benefit-picked-tag {
   display: inline-flex; align-items: center; gap: 3px; height: 18px; padding: 0 6px 0 4px;
@@ -12808,6 +12595,28 @@ button.biz-pay-row:active { opacity: .72; }
   display: flex; flex-direction: column; gap: 12px;
   margin: 12px 16px 0; box-sizing: border-box;
 }
+/* 结算确认 · 开单日期（内容区） */
+.detail-biz-date {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px; margin: 0;
+  background: #fff; border-radius: 12px; border: 1px solid #EDEDED;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.9);
+  font-family: inherit; text-align: left; cursor: pointer; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+.detail-biz-date:active { background: #FAFAFA; }
+.detail-biz-date__lbl { font-size: 14px; font-weight: 600; color: #1a1a1a; flex-shrink: 0; }
+.detail-biz-date__trail {
+  display: inline-flex; align-items: center; gap: 4px; min-width: 0; justify-content: flex-end;
+}
+.detail-biz-date__val {
+  font-size: 14px; font-weight: 500; color: #1a1a1a;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.detail-biz-date__chev {
+  flex-shrink: 0; color: #C0C0C0; display: inline-flex; align-items: center;
+}
+.detail-biz-date__chev svg { display: block; }
 /* 结算确认 · 记账单小票 */
 .detail-slip {
   position: relative; background: #fff; border-radius: 12px; overflow: hidden;
@@ -13049,7 +12858,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .staff-card-scrim {
   position: absolute; inset: -8px -4px -12px; z-index: 1;
   border: none; padding: 0; margin: 0; cursor: pointer;
-  background: rgba(247, 247, 247, .55); border-radius: 12px;
+  background: rgba(247, 247, 247, .42); border-radius: 12px;
   -webkit-tap-highlight-color: transparent;
 }
 .staff-grid {
@@ -13059,14 +12868,22 @@ button.detail-compose__row:active { background: #FAFAFA; }
   padding: 2px 0 12px;
   position: relative;
   z-index: 2;
+  overflow: visible;
+}
+.staff-grid.is-morphing > .staff-card {
+  justify-self: start;
+  align-self: start;
 }
 .staff-card {
   position: relative;
   min-height: 96px;
+  width: 100%;
+  box-sizing: border-box;
   z-index: 1;
   -webkit-tap-highlight-color: transparent;
+  will-change: transform, width;
 }
-.staff-card.is-dim { opacity: .38; pointer-events: none; }
+.staff-card.is-dim { opacity: .36; pointer-events: none; filter: saturate(.85); }
 .detail-item__staff-block--cards.is-picking {
   overflow: visible;
 }
@@ -13075,10 +12892,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
   pointer-events: none;
 }
 .staff-card.is-editing {
-  z-index: 5;
+  z-index: 6;
   pointer-events: auto;
   opacity: 1;
-  perspective: 800px;
+  filter: none;
 }
 .staff-card__panel {
   position: relative;
@@ -13094,124 +12911,118 @@ button.detail-compose__row:active { background: #FAFAFA; }
   cursor: pointer;
   font-family: inherit;
   color: #1a1a1a;
-  transition: border-color .2s, background .2s, box-shadow .28s cubic-bezier(.2,.8,.2,1),
-    transform .32s cubic-bezier(.2,.85,.25,1), width .32s cubic-bezier(.2,.85,.25,1),
-    height .32s cubic-bezier(.2,.85,.25,1), border-radius .28s;
-  transform-origin: var(--staff-origin, center center);
+  transition: border-color .22s ease, background .22s ease, box-shadow .28s cubic-bezier(.22,.82,.24,1);
   -webkit-tap-highlight-color: transparent;
-  perspective: 600px;
 }
 .staff-card__panel:active { transform: scale(.97); }
 .staff-card.is-done .staff-card__panel {
-  background: #FFF2F2;
+  background: linear-gradient(180deg, #FFF8F8 0%, #FFF2F2 100%);
   border-color: #FFD5D9;
   box-shadow: inset 0 0 0 1px rgba(243, 47, 65, .04);
+  animation: staffDonePop .42s cubic-bezier(.22,.82,.24,1);
 }
-/* 编辑态 · 点客/散客：放大圆角正方形，左右对切 */
-.staff-card.is-editing .staff-card__panel[data-face="designate"] {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 112px;
-  height: 112px;
-  min-height: 0;
-  padding: 0;
-  gap: 0;
-  border: none;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 16px 40px rgba(26, 26, 26, .2);
-  cursor: default;
-  transform: translate(-50%, -50%) scale(1);
-  animation: staffCardFlipSquare .34s cubic-bezier(.2,.85,.25,1);
+@keyframes staffDonePop {
+  0% { transform: scale(.96); }
+  55% { transform: scale(1.03); }
+  100% { transform: scale(1); }
 }
-.staff-card.is-editing .staff-card__panel[data-face="designate"]:active {
-  transform: translate(-50%, -50%) scale(1);
-}
-/* 编辑态 · 工位：宽>高圆角矩形，横向三等分 */
+/* Morph Split · 行内变宽切开（点客/散客 · 工位） */
+.staff-card.is-editing .staff-card__panel[data-face="designate"],
 .staff-card.is-editing .staff-card__panel[data-face="role"] {
-  position: absolute;
-  top: 50%;
-  width: min(196px, 56vw);
-  height: calc(min(196px, 56vw) / 2.15);
-  min-height: 0;
+  position: relative;
+  width: 100%;
+  height: 96px;
+  min-height: 96px;
   padding: 0;
   gap: 0;
-  border: none;
-  border-radius: 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(26, 26, 26, .2);
   cursor: default;
-  animation: staffCardFlipWide .34s cubic-bezier(.2,.85,.25,1);
+  box-shadow:
+    0 10px 28px rgba(26, 26, 26, .14),
+    0 0 0 1px rgba(243, 47, 65, .1);
 }
-.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"] {
-  left: 0; transform: translateY(-50%);
+.staff-card.is-editing .staff-card__panel[data-face="designate"]:active,
+.staff-card.is-editing .staff-card__panel[data-face="role"]:active {
+  transform: none;
 }
-.staff-card.is-editing[data-origin="center"] .staff-card__panel[data-face="role"] {
-  left: 50%; transform: translate(-50%, -50%);
+.staff-card.is-pinching .staff-card__panel[data-face="designate"],
+.staff-card.is-pinching .staff-card__panel[data-face="role"] {
+  border-color: #E8E8E8;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(26, 26, 26, .1);
 }
-.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"] {
-  right: 0; left: auto; transform: translateY(-50%);
+.staff-card.is-pinching .staff-card__split {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
-.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"]:active {
-  transform: translateY(-50%);
-}
-.staff-card.is-editing[data-origin="center"] .staff-card__panel[data-face="role"]:active {
-  transform: translate(-50%, -50%);
-}
-.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"]:active {
-  transform: translateY(-50%);
-}
-@keyframes staffCardFlipSquare {
-  0% { transform: translate(-50%, -50%) scale(.92) rotateY(-88deg); opacity: .4; }
-  100% { transform: translate(-50%, -50%) scale(1) rotateY(0); opacity: 1; }
-}
-@keyframes staffCardFlipWide {
-  0% { transform: translate(-50%, -50%) scale(.9) rotateY(88deg); opacity: .4; }
-  100% { transform: translate(-50%, -50%) scale(1) rotateY(0); opacity: 1; }
-}
-.staff-card.is-editing[data-origin="left"] .staff-card__panel[data-face="role"] {
-  animation-name: staffCardFlipWideLeft;
-}
-.staff-card.is-editing[data-origin="right"] .staff-card__panel[data-face="role"] {
-  animation-name: staffCardFlipWideRight;
-}
-@keyframes staffCardFlipWideLeft {
-  0% { transform: translateY(-50%) scale(.9) rotateY(88deg); opacity: .4; }
-  100% { transform: translateY(-50%) scale(1) rotateY(0); opacity: 1; }
-}
-@keyframes staffCardFlipWideRight {
-  0% { transform: translateY(-50%) scale(.9) rotateY(-88deg); opacity: .4; }
-  100% { transform: translateY(-50%) scale(1) rotateY(0); opacity: 1; }
+.staff-card.is-expanding .staff-card__split {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .11s ease .03s;
 }
 @media (prefers-reduced-motion: reduce) {
   .staff-card.is-editing .staff-card__panel { animation: none !important; }
+  .staff-card.is-done .staff-card__panel { animation: none !important; }
+  .staff-card { transition: none !important; }
   .staff-card__panel { transition: none; }
+  .staff-card__split-btn { transition: none !important; }
+  .staff-card.is-expanding .staff-card__split { transition: none !important; }
 }
 .staff-card__split {
   display: flex; align-items: stretch; width: 100%; height: 100%;
 }
 .staff-card__split-btn {
+  position: relative;
   flex: 1 1 0; min-width: 0;
-  margin: 0; padding: 0 6px;
+  margin: 0; padding: 0 8px;
   border: none; background: #fff;
-  color: var(--brand);
-  font-size: 15px; font-weight: 600; line-height: 1.2;
+  color: #1a1a1a;
+  font-size: 15px; font-weight: 650; letter-spacing: .02em; line-height: 1.15;
   font-family: inherit; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   -webkit-tap-highlight-color: transparent;
-  transition: background .15s, color .15s;
+  transition: background .18s ease, color .18s ease, transform .14s ease;
 }
 .staff-card__split-btn + .staff-card__split-btn {
-  border-left: 1px solid #FFE0E3;
+  border-left: 1px solid rgba(0,0,0,.06);
+}
+.staff-card__split-btn::after {
+  content: ''; position: absolute; inset: 6px; border-radius: 10px;
+  pointer-events: none; opacity: 0;
+  transition: opacity .18s ease;
 }
 .staff-card__split-btn:active {
-  background: #FFF2F2;
+  transform: scale(.97);
+}
+.staff-card__split-btn:active::after { opacity: 1; }
+.staff-card__split-btn--des {
+  color: #C62828;
+  background: linear-gradient(180deg, #FFF9F9 0%, #FFF2F2 100%);
+}
+.staff-card__split-btn--des::after { background: rgba(243, 47, 65, .08); }
+.staff-card__split-btn--guest {
+  color: #4A667A;
+  background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F8 100%);
+}
+.staff-card__split-btn--guest::after { background: rgba(74, 102, 122, .08); }
+.staff-card__split-btn--role {
+  color: #1a1a1a;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%);
+  font-size: 14px; font-weight: 600;
+}
+.staff-card__split-btn--role:nth-child(1) { color: #6B8F71; }
+.staff-card__split-btn--role:nth-child(2) { color: #6A7F96; }
+.staff-card__split-btn--role:nth-child(3) { color: #C62828; }
+.staff-card__split-btn--role::after { background: rgba(0,0,0,.04); }
+.staff-card__split-btn__hint {
+  font-size: 10px; font-weight: 500; opacity: .55; letter-spacing: 0;
 }
 .staff-card__split--3 .staff-card__split-btn {
-  font-size: 13px; font-weight: 600;
+  font-size: 14px; font-weight: 600;
 }
 .staff-card__avatar {
   width: 40px; height: 40px; border-radius: 20px; object-fit: cover;
@@ -13232,11 +13043,14 @@ button.detail-compose__row:active { background: #FAFAFA; }
   text-align: center; max-width: 100%;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.staff-card__edit-head .staff-card__title { font-size: 9px; }
-.staff-card__meta {
-  font-size: 10px; font-weight: 500; line-height: 1.2; color: var(--brand);
-  text-align: center; max-width: 100%;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.staff-card__title--pick {
+  font-size: 11px; font-weight: 600; color: var(--brand);
+  letter-spacing: .01em;
+  animation: staffMetaIn .36s cubic-bezier(.22,.82,.24,1);
+}
+@keyframes staffMetaIn {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 .staff-card__check {
   position: absolute; top: 6px; left: 6px;
@@ -13244,6 +13058,12 @@ button.detail-compose__row:active { background: #FAFAFA; }
   background: var(--brand); color: #fff;
   display: flex; align-items: center; justify-content: center;
   pointer-events: none;
+  animation: staffCheckIn .38s cubic-bezier(.22,.82,.24,1);
+}
+@keyframes staffCheckIn {
+  0% { transform: scale(.4); opacity: 0; }
+  70% { transform: scale(1.12); }
+  100% { transform: scale(1); opacity: 1; }
 }
 .staff-card__check svg { width: 10px; height: 10px; display: block; }
 .staff-card__clear {
@@ -13258,49 +13078,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .staff-card__clear:active { transform: scale(.92); }
 .staff-card__clear svg { width: 12px; height: 12px; display: block; }
 .staff-card.is-editing .staff-card__clear { display: none; }
-.staff-card__edit-head {
-  display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%;
-}
-.staff-card__edit-head .staff-card__avatar { width: 28px; height: 28px; border-radius: 14px; }
-.staff-card__edit-head .staff-card__name { font-size: 11px; }
-.staff-card__hint {
-  font-size: 10px; color: #929292; line-height: 1.2; text-align: center; margin: 0;
-}
-.staff-card__opts {
-  display: flex; flex-direction: column; gap: 5px; width: 100%;
-}
-.staff-card__opt {
-  width: 100%; box-sizing: border-box;
-  min-height: 28px; padding: 5px 10px; border-radius: 999px;
-  border: 1px solid var(--brand); background: transparent;
-  font-size: 11px; font-weight: 500; line-height: 1.2; color: var(--brand);
-  font-family: inherit; cursor: pointer;
-  transition: background .15s, border-color .15s, color .15s, transform .12s;
-  -webkit-tap-highlight-color: transparent;
-}
-.staff-card__opt:active {
-  transform: scale(.96);
-  background: var(--brand-soft); border-color: var(--brand); color: var(--brand);
-}
-.staff-card.is-editing .staff-card__opts {
-  align-self: stretch;
-  width: 100%;
-  box-sizing: border-box;
-}
-.staff-card__opts--row {
-  display: flex; flex-direction: row; align-items: center;
-  justify-content: space-between;
-  gap: 0; width: 100%; box-sizing: border-box;
-  padding: 0 2px;
-}
-.staff-card__opts--row .staff-card__opt {
-  width: 26px; height: 26px; min-height: 26px; min-width: 26px; max-width: 26px;
-  padding: 0; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 500; line-height: 1;
-  flex: 0 0 26px; white-space: nowrap;
-  box-sizing: border-box;
-}
 .detail-item__price-edit {
   display: flex; align-items: center; gap: 6px;
 }
@@ -16101,10 +15878,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <div class="title">结算确认</div>
-              <button type="button" class="action" id="btnDetailDate" aria-label="开单日期">
-                <span id="detailDateLabel">2026.7.18</span>
-                <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
-              </button>
             </div>
             <div class="page-body detail-page-body" id="detailBody"></div>
             <div class="bottom-bar bottom-bar--detail">
@@ -16399,55 +16172,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="flow-self-dd hidden" id="flowSelfDd" role="listbox" aria-label="筛选选项"></div>
             </div>
             <div class="page-body" id="flowSelfBody"></div>
-          </div>
-
-          <!-- 流水订单 · 产品销量 -->
-          <div id="screen-flow-product" class="screen hidden">
-            <div class="page-title-bar">
-              <button type="button" class="back" id="flowProductBack" aria-label="返回">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              <div class="title">产品销量</div>
-            </div>
-            <div class="flow-prod-range" id="flowProductRange" role="tablist" aria-label="统计时段"></div>
-            <div class="page-body" id="flowProductBody"></div>
-          </div>
-
-          <!-- 流水订单 · 产品销量 · 扣减库存 -->
-          <div class="picker-mask picker-mask--bottom" id="flowProdDeductMask" data-mask-close="flowProdDeductMask">
-            <div class="picker-sheet tall flow-prod-deduct-sheet" role="dialog" aria-label="扣减库存">
-              <div class="picker-head picker-head--stack">
-                <div class="picker-head__title">扣减库存</div>
-                <div class="picker-head__sub">从库存商品中选择对应规格出库</div>
-              </div>
-              <div class="flow-prod-deduct-body">
-                <div class="flow-prod-deduct-ctx" id="flowProdDeductHead"></div>
-                <div class="flow-prod-deduct-sec">
-                  <div class="flow-prod-deduct-sec__bar">
-                    <div class="flow-prod-deduct-sec__title" id="flowProdDeductSecTitle">选择库存商品</div>
-                    <button type="button" class="flow-prod-deduct-change hidden" id="flowProdDeductChange">更换</button>
-                  </div>
-                  <div class="flow-prod-deduct-search hidden" id="flowProdDeductSearchWrap">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B2B2B2" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-                    <input type="search" id="flowProdDeductSearch" placeholder="搜索库存商品 / 规格" autocomplete="off">
-                  </div>
-                  <div class="flow-prod-deduct-list" id="flowProdDeductList"></div>
-                </div>
-              </div>
-              <div class="flow-prod-deduct-ops" id="flowProdDeductQtyRow">
-                <div class="flow-prod-deduct-qty">
-                  <div>
-                    <div class="flow-prod-deduct-qty__lab">扣减数量</div>
-                    <div class="flow-prod-deduct-qty__type">出库类别 · 销售出库</div>
-                  </div>
-                  <div class="flow-prod-deduct-qty__val" id="flowProdDeductQtyVal">0<em>件</em></div>
-                </div>
-              </div>
-              <div class="picker-foot picker-foot--row">
-                <button type="button" class="btn-main secondary" id="flowProdDeductCancel">取消</button>
-                <button type="button" class="btn-main" id="flowProdDeductOk">确认扣减</button>
-              </div>
-            </div>
           </div>
 
           <!-- 流水订单 · 自定义时间范围 -->
@@ -16919,10 +16643,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <div class="title">添加卡</div>
-              <button type="button" class="action" id="btnAddCardDate" aria-label="办卡日期">
-                <span id="addCardDateLabel">2026.7.20</span>
-                <img class="title-cal" src="assets/billing/title-calendar.svg" alt="" width="16" height="16">
-              </button>
             </div>
             <div class="add-card-page add-card-page--decision">
               <div id="addCardCustomer"></div>
@@ -16939,6 +16659,13 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div id="addCardPicked" class="add-card-picked is-empty" hidden aria-hidden="true"></div>
                   <div id="addCardSlot"></div>
                 </div>
+                <button type="button" class="detail-biz-date" id="btnAddCardBizDate" data-add-card-biz-date aria-haspopup="dialog" aria-label="选择办卡日期">
+                  <span class="detail-biz-date__lbl">办卡日期</span>
+                  <span class="detail-biz-date__trail">
+                    <span class="detail-biz-date__val" id="addCardDateLabel">2026.7.20</span>
+                    <span class="detail-biz-date__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                  </span>
+                </button>
                 <button type="button" class="quick-issue-pay" id="btnAddCardPayEdit" aria-label="修改应付金额" hidden>
                   <span class="quick-issue-pay__lbl">应付</span>
                   <span class="quick-issue-pay__trail">
@@ -17059,7 +16786,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <div class="title">充卡/续卡</div>
-              <button type="button" class="action" id="btnBillCardAssetAdd" style="color:var(--brand);font-size:14px;font-weight:500">添加卡</button>
+              <button type="button" class="action bill-asset-title-add" id="btnBillCardAssetAdd">添加卡</button>
             </div>
             <div class="bill-asset-page">
               <div class="bill-asset-page__scroll" id="billCardAssetList"></div>
@@ -20135,7 +19862,7 @@ function applyGlobalInputLimits() {
   applyInputMaxLength(document.getElementById('stkOutRemark'), INPUT_LIMITS.REMARK_SHORT);
   [
     'billSearch', 'issueMemberSearch', 'pickSearch', 'stkHubSearch', 'stkGoodsSearch',
-    'flowWeikuanSearch', 'flowProdDeductSearch',
+    'flowWeikuanSearch',
   ].forEach(id => applyInputMaxLength(document.getElementById(id), INPUT_LIMITS.SEARCH));
 
   const phoneEl = document.getElementById('empFPhone');
@@ -30911,7 +30638,6 @@ window.CardHost.onBillingScreen = function (id) {
       'screen-flow-weikuan': 'flow-weikuan', 'screen-flow-weikuan-repay': 'flow-weikuan-repay',
       'screen-flow-weikuan-detail': 'flow-weikuan-detail', 'screen-flow-weikuan-success': 'flow-weikuan-success',
       'screen-flow-self': 'flow-self', 'screen-flow-self-detail': 'flow-self-detail',
-      'screen-flow-product': 'flow-product',
     };
     const hid = document.getElementById('cartSheetMask')?.classList.contains('open');
     const checkout = document.getElementById('checkoutMask')?.classList.contains('open');
@@ -30981,8 +30707,6 @@ function billingNav(fn) {
       { id: 'flow-weikuan-repay', label: '还款明细', screen: 'screen-flow-weikuan-repay' },
       { id: 'flow-self', label: '自助收银', screen: 'screen-flow-self' },
       { id: 'flow-self-detail', label: '自助详情', screen: 'screen-flow-self-detail' },
-      { id: 'flow-product', label: '产品销量', screen: 'screen-flow-product' },
-      { id: 'flow-product-empty', label: '产品销量·空库存', screen: 'screen-flow-product' },
     ],
   };
   const bizGroup = {
@@ -31022,8 +30746,6 @@ function billingNav(fn) {
       else if (fn === 'weikuan-repay' && window.BillingDemo.openFlowWeikuanRepay) window.BillingDemo.openFlowWeikuanRepay();
       else if (fn === 'self' && window.BillingDemo.openFlowSelf) window.BillingDemo.openFlowSelf();
       else if (fn === 'self-detail' && window.BillingDemo.openFlowSelfDetail) window.BillingDemo.openFlowSelfDetail();
-      else if (fn === 'product' && window.BillingDemo.openFlowProductSales) window.BillingDemo.openFlowProductSales();
-      else if (fn === 'product-empty' && window.BillingDemo.openFlowProductSalesEmptyDemo) window.BillingDemo.openFlowProductSalesEmptyDemo();
     };
   }
   function tryPatch() {
@@ -31115,8 +30837,6 @@ function billingNav(fn) {
       'flow-weikuan-repay': flowNav('weikuan-repay'),
       'flow-self': flowNav('self'),
       'flow-self-detail': flowNav('self-detail'),
-      'flow-product': flowNav('product'),
-      'flow-product-empty': flowNav('product-empty'),
     });
     if (typeof renderFlowMap === 'function') renderFlowMap();
     return true;
@@ -40198,10 +39918,6 @@ function billingNav(fn) {
     $('stkHubBack')?.addEventListener('click', function () {
       var ret = window.__stockReturnTo;
       window.__stockReturnTo = null;
-      if (ret === 'flow-product' && window.BillingDemo && typeof window.BillingDemo.openFlowProductSales === 'function') {
-        window.BillingDemo.openFlowProductSales();
-        return;
-      }
       if (typeof openWorkbench === 'function') openWorkbench();
     });
     $('stkHubTypes')?.addEventListener('click', openTypes);
@@ -40760,7 +40476,7 @@ window.__BILLING_EMBEDDED__ = true;
   ];
   const CARD_TPL_BY_ID = Object.fromEntries(CARD_TEMPLATES.map(t => [t.id, t]));
   function emptyBenefits() {
-    return { balance: false, timesOrValidity: false, projectDiscount: false };
+    return { balance: false, timesOrValidity: false, products: false, projectDiscount: false };
   }
   function heldTemplateId(card) {
     if (card.templateId) return card.templateId;
@@ -40776,6 +40492,7 @@ window.__BILLING_EMBEDDED__ = true;
       : {
           balance: Number(card.balance) > 0 || Number(card.rechargeBalance) > 0 || Number(card.giftBalance) > 0,
           timesOrValidity: (card.projects || []).length > 0,
+          products: (card.products || card.productItems || []).length > 0,
           projectDiscount: !!card.discount,
         };
     const next = { ...card, templateId, benefits };
@@ -40937,6 +40654,142 @@ window.__BILLING_EMBEDDED__ = true;
     if (col === 2) return 'right center';
     return 'center center';
   }
+  function staffPickSummaryText(it, sid) {
+    const designated = it && it.staffDesignated && it.staffDesignated[sid] === true;
+    const guest = designated ? '点客' : '散客';
+    if (isAvgAchCalcModeForItem(it)) return guest;
+    const role = staffRoleLabel(it && it.staffRoles ? it.staffRoles[sid] : '');
+    return role ? `${guest}·${role}` : guest;
+  }
+  function afterStaffPickerPaint(root) {
+    const scope = root && root.querySelectorAll ? root : document;
+    requestAnimationFrame(() => {
+      scope.querySelectorAll('.staff-grid').forEach(grid => animateStaffMorphLayout(grid));
+    });
+  }
+  function animateStaffMorphLayout(grid) {
+    if (!grid) return;
+    const token = (grid._staffMorphToken = (grid._staffMorphToken || 0) + 1);
+    const cards = [...grid.querySelectorAll(':scope > .staff-card')];
+    const editing = cards.find(c => c.classList.contains('is-editing'));
+    const reduce = typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    cards.forEach(c => {
+      c.classList.remove('is-pinching', 'is-expanding');
+      c.style.transition = 'none';
+      c.style.transform = '';
+      c.style.width = '';
+      c.style.zIndex = '';
+    });
+    grid.classList.toggle('is-morphing', !!editing);
+
+    /* A1：完成/取消时直接复原，不做收窄两段式 */
+    if (!editing) {
+      requestAnimationFrame(() => {
+        if (grid._staffMorphToken !== token) return;
+        cards.forEach(c => { c.style.transition = ''; });
+      });
+      return;
+    }
+
+    const gap = 8;
+    const narrowW = 32;
+    const gridW = grid.clientWidth;
+    if (gridW <= 0) return;
+    const cellW = (gridW - gap * 2) / 3;
+    const face = editing.querySelector('[data-face]')?.getAttribute('data-face');
+    const editW = face === 'role' ? gridW : Math.min(gridW, cellW * 2 + gap);
+    const idx = cards.indexOf(editing);
+    if (idx < 0) return;
+    const col = idx % 3;
+    const rowStart = idx - col;
+    const natural = [0, cellW + gap, 2 * (cellW + gap)];
+    const lefts = [natural[0], natural[1], natural[2]];
+    if (col === 0) {
+      lefts[0] = 0;
+      lefts[1] = editW + gap;
+      lefts[2] = editW + gap * 2 + cellW;
+    } else if (col === 2) {
+      lefts[2] = gridW - editW;
+      lefts[1] = lefts[2] - gap - cellW;
+      lefts[0] = lefts[1] - gap - cellW;
+    } else {
+      lefts[1] = (gridW - editW) / 2;
+      lefts[0] = lefts[1] - gap - cellW;
+      lefts[2] = lefts[1] + editW + gap;
+    }
+    const narrowDx = (cellW - narrowW) / 2;
+
+    const applyFinalLayout = () => {
+      for (let i = 0; i < 3; i++) {
+        const card = cards[rowStart + i];
+        if (!card) continue;
+        const dx = lefts[i] - natural[i];
+        const w = i === col ? editW : cellW;
+        card.style.width = `${w}px`;
+        card.style.transform = `translateX(${dx}px)`;
+        if (i === col) card.style.zIndex = '6';
+      }
+    };
+
+    editing.style.zIndex = '6';
+    editing.classList.add('is-pinching');
+    /* 起点：原格宽，邻卡不动 */
+    editing.style.width = `${cellW}px`;
+    editing.style.transform = 'translateX(0)';
+    for (let i = 0; i < 3; i++) {
+      if (i === col) continue;
+      const card = cards[rowStart + i];
+      if (!card) continue;
+      card.style.width = `${cellW}px`;
+      card.style.transform = 'translateX(0)';
+    }
+    void grid.offsetWidth;
+
+    if (reduce) {
+      editing.classList.remove('is-pinching');
+      editing.classList.add('is-expanding');
+      applyFinalLayout();
+      cards.forEach(c => { c.style.transition = ''; });
+      return;
+    }
+
+    let phaseDone = false;
+    const runExpand = () => {
+      if (phaseDone || grid._staffMorphToken !== token) return;
+      phaseDone = true;
+      editing.classList.remove('is-pinching');
+      editing.classList.add('is-expanding');
+      for (let i = 0; i < 3; i++) {
+        const card = cards[rowStart + i];
+        if (!card) continue;
+        const dx = lefts[i] - natural[i];
+        const w = i === col ? editW : cellW;
+        card.style.transition = 'transform .17s cubic-bezier(.22,.82,.24,1), width .17s cubic-bezier(.22,.82,.24,1)';
+        card.style.width = `${w}px`;
+        card.style.transform = `translateX(${dx}px)`;
+        if (i === col) card.style.zIndex = '6';
+      }
+    };
+
+    requestAnimationFrame(() => {
+      if (grid._staffMorphToken !== token) return;
+      /* ① 向中收缩成窄白卡，同行邻卡保持原位 */
+      editing.style.transition = 'transform .09s cubic-bezier(.4,0,.2,1), width .09s cubic-bezier(.4,0,.2,1)';
+      editing.style.width = `${narrowW}px`;
+      editing.style.transform = `translateX(${narrowDx}px)`;
+
+      const onShrinkEnd = (e) => {
+        if (e && e.target !== editing) return;
+        if (e && e.propertyName && e.propertyName !== 'width' && e.propertyName !== 'transform') return;
+        editing.removeEventListener('transitionend', onShrinkEnd);
+        runExpand();
+      };
+      editing.addEventListener('transitionend', onShrinkEnd);
+      setTimeout(runExpand, 110);
+    });
+  }
   function staffAvatarHtml(st, extraClass) {
     const cls = 'staff-card__avatar' + (extraClass ? ' ' + extraClass : '');
     if (st.avatar) {
@@ -40993,12 +40846,7 @@ window.__BILLING_EMBEDDED__ = true;
       const st = pool.find(s => s.id === sid);
       const name = st ? st.name : sid;
       const job = st && st.role ? st.role : '';
-      const designated = it.staffDesignated[sid] === true;
-      const guestLabel = designated ? '点客' : '散客';
-      const role = it.staffRoles[sid];
-      const params = isAvgAchCalcModeForItem(it)
-        ? guestLabel
-        : `${guestLabel}${role ? ` · ${staffRoleLabel(role)}` : ''}`;
+      const params = staffPickSummaryText(it, sid);
       return `<div class="detail-staff-summary__row">
         <div class="detail-staff-summary__main">
           <span class="detail-staff-summary__name">${escapeHtml(name)}</span>
@@ -41039,12 +40887,7 @@ window.__BILLING_EMBEDDED__ = true;
         : `可多选员工；点卡片后选择点客/散客，再选工位（${stationRoleLabelsJoined()}），即时生效。`;
     }
     root.innerHTML = renderStaffPickerHtml(it);
-    const editingPanel = root.querySelector('.staff-card.is-editing .staff-card__panel');
-    if (editingPanel) {
-      editingPanel.style.animation = 'none';
-      void editingPanel.offsetWidth;
-      editingPanel.style.animation = '';
-    }
+    afterStaffPickerPaint(root);
   }
 
   function openBillStaffSheet(cartId) {
@@ -41074,6 +40917,7 @@ window.__BILLING_EMBEDDED__ = true;
           : `可多选员工；点卡片后选择点客/散客，再选择工位（${stationRoleLabelsJoined()}）。`;
       }
       root.innerHTML = renderStaffPickerHtml(getIssueStaffRow());
+      afterStaffPickerPaint(root);
     }
     renderAddCardStaffRow();
   }
@@ -41545,19 +41389,6 @@ window.__BILLING_EMBEDDED__ = true;
     flowFromSuccess: false,
     flowFilter: { date: 'all', pay: 'all', guest: 'all', customStart: '', customEnd: '' },
     flowFilterDraft: null,
-    flowProductRange: 'today',
-    flowProductCustomStart: '',
-    flowProductCustomEnd: '',
-    flowProductSort: 'amount',
-    /* 销量品 key → 库存 SKU id（跨时段记忆） */
-    flowProductStockMap: {
-      '剑琅修护洗发水|500ml': 'sk1',
-      '剑琅造型发蜡|80g': 'sk7',
-      '剑琅滋养护发素|500ml': 'sk3',
-    },
-    /* periodKey → { productKey: 已扣件数 } */
-    flowProductDeducted: {},
-    flowProdDeductDraft: null,
     flowSelfCustomStart: '',
     flowSelfCustomEnd: '',
     flowRangeContext: null,
@@ -42020,6 +41851,9 @@ window.__BILLING_EMBEDDED__ = true;
     state.billComposerMode = 'browse';
     state.billDraft = null;
     state.billPickCardIds = [];
+    state.billTab = 'project';
+    state.billGroupId = { project: 'all', product: 'all' };
+    state.billHeldCardsToolsOpen = false;
   }
 
   function unsealSlipForEdit(slipId) {
@@ -42150,8 +41984,8 @@ window.__BILLING_EMBEDDED__ = true;
       <div class="bill-held-cards__title">选择会员卡${active.size ? `（已选 ${active.size}）` : '（可多选）'}</div>
       ${listHtml}
       <div class="bill-held-cards__tools">
-        <button type="button" id="btnBillCardAsset">充卡/续卡</button>
-        <button type="button" id="btnBillAddCard">添加卡</button>
+        <button type="button" class="bill-held-cards__btn bill-held-cards__btn--secondary" id="btnBillCardAsset">充卡/续卡</button>
+        <button type="button" class="bill-held-cards__btn bill-held-cards__btn--primary" id="btnBillAddCard">办卡</button>
       </div>
       <button type="button" class="bill-held-cards__fold" id="btnBillHeldCardsFold" data-bill-held-tools-toggle aria-expanded="${toolsOpen ? 'true' : 'false'}" aria-label="${toolsOpen ? '收起更多操作' : '展开更多操作'}">${foldSvg}</button>
     </div>`;
@@ -42439,6 +42273,7 @@ window.__BILLING_EMBEDDED__ = true;
           (open ? `<div class="bill-staff-line__body">${renderStaffPickerHtml(it)}</div>` : '') +
           `</div>`;
       }).join('');
+    afterStaffPickerPaint(root);
   }
 
   function openBillStaff() {
@@ -42875,9 +42710,12 @@ window.__BILLING_EMBEDDED__ = true;
     if (card?.benefits) return card.benefits;
     const tpl = CARD_TPL_BY_ID[heldTemplateId(card)];
     if (tpl?.benefits) return { ...emptyBenefits(), ...tpl.benefits };
+    const products = (card?.products || card?.productItems || []).length > 0
+      || !!(tpl?.productItems || []).length;
     return {
       balance: Number(card?.balance) > 0,
       timesOrValidity: (card?.projects || []).length > 0,
+      products,
       projectDiscount: !!card?.discount,
     };
   }
@@ -42889,8 +42727,9 @@ window.__BILLING_EMBEDDED__ = true;
     const chips = [];
     if (b.balance) chips.push('<span class="benefit-chip is-face">面值</span>');
     if (b.timesOrValidity) chips.push('<span class="benefit-chip is-project">项目</span>');
+    if (b.products) chips.push('<span class="benefit-chip is-product">产品</span>');
     if (b.projectDiscount) chips.push('<span class="benefit-chip is-discount">折扣</span>');
-    return chips.length ? chips.join('') : '<span class="benefit-chip is-project">权益</span>';
+    return chips.length ? chips.join('') : '';
   }
   function cardFaceSummary(card) {
     const b = cardBenefits(card);
@@ -43191,13 +43030,14 @@ window.__BILLING_EMBEDDED__ = true;
     const cards = (c && c.cards) || [];
     if (!cards.length) {
       root.innerHTML = `<div class="bill-asset-empty">
+        <div class="bill-asset-empty__illus" aria-hidden="true"><div class="bill-asset-empty__illus-h"></div><div class="bill-asset-empty__illus-b"></div></div>
         <div>暂无所持会员卡</div>
         <div style="margin-top:6px;font-size:13px">可先办卡，再进行充值、续次或延期</div>
         <button type="button" class="bill-asset-empty__cta" id="btnBillAssetEmptyAdd">去添加卡</button>
       </div>`;
       return;
     }
-    root.innerHTML = cards.map(card => {
+    root.innerHTML = cards.map((card, i) => {
       const acts = billCardAssetActions(card);
       const colorKey = card.cardColor || (acts.tpl && acts.tpl.cardColor);
       const theme = (typeof getCardTheme === 'function')
@@ -43211,23 +43051,27 @@ window.__BILLING_EMBEDDED__ = true;
         .join(' · ');
       const sub = [cardFaceSummary(card), timesLine].filter(Boolean).join(' · ');
       const actionBtns = [
-        acts.recharge ? `<button type="button" class="bill-asset-card__act" data-bill-recharge="${escapeHtml(card.id)}">充值</button>` : '',
+        acts.recharge ? `<button type="button" class="bill-asset-card__act bill-asset-card__act--primary" data-bill-recharge="${escapeHtml(card.id)}">充值</button>` : '',
         acts.renew ? `<button type="button" class="bill-asset-card__act" data-bill-times-topup="${escapeHtml(card.id)}">续次</button>` : '',
         acts.extend ? `<button type="button" class="bill-asset-card__act" data-bill-extend="${escapeHtml(card.id)}">延期</button>` : '',
       ].filter(Boolean).join('');
-      return `<div class="bill-asset-card" data-asset-card="${escapeHtml(card.id)}">
-        <div class="bill-asset-card__head">
-          <span class="bill-asset-card__face" aria-hidden="true">
-            <span class="bill-asset-card__face-h" style="background:${grad}"></span>
-            <span class="bill-asset-card__face-b"></span>
-          </span>
-          <div class="bill-asset-card__meta">
-            <div class="bill-asset-card__name">${escapeHtml(card.name)}</div>
-            <div class="bill-asset-card__sub">${escapeHtml(sub || '—')}</div>
-            <div class="bill-asset-card__chips">${benefitChipsHtml(card)}</div>
+      return `<div class="bill-asset-card" data-asset-card="${escapeHtml(card.id)}" style="--asset-band:${grad};animation-delay:${Math.min(i, 6) * 40}ms">
+        <div class="bill-asset-card__band" aria-hidden="true"></div>
+        <div class="bill-asset-card__body">
+          <div class="bill-asset-card__head">
+            <span class="bill-asset-card__face" aria-hidden="true">
+              <span class="bill-asset-card__face-h" style="background:${grad}"></span>
+              <span class="bill-asset-card__face-b"></span>
+            </span>
+            <div class="bill-asset-card__meta">
+              <div class="bill-asset-card__name">${escapeHtml(card.name)}</div>
+              <div class="bill-asset-card__sub">${escapeHtml(sub || '—')}</div>
+              <div class="bill-asset-card__chips">${benefitChipsHtml(card)}</div>
+            </div>
           </div>
+          <div class="bill-asset-card__tear" aria-hidden="true"></div>
         </div>
-        <div class="bill-asset-card__acts">${actionBtns || '<span style="font-size:12px;color:var(--text-sec)">暂无可用操作</span>'}</div>
+        <div class="bill-asset-card__acts">${actionBtns || '<span class="bill-asset-card__act-empty">暂无可用操作</span>'}</div>
       </div>`;
     }).join('');
   }
@@ -44781,8 +44625,6 @@ window.__BILLING_EMBEDDED__ = true;
     const clearSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
     const cards = pool.map((st, index) => {
       const done = (it.staffIds || []).includes(st.id);
-      const role = it.staffRoles[st.id];
-      const designated = it.staffDesignated[st.id] === true;
       const isEdit = !!(edit && edit.staffId === st.id);
       const dim = !!(edit && !isEdit);
       const origin = staffCardOrigin(index);
@@ -44791,28 +44633,24 @@ window.__BILLING_EMBEDDED__ = true;
       const jobTitle = staffJobTitleHtml(st);
       if (isEdit && edit.face === 'designate') {
         body = `<div class="staff-card__split" role="group" aria-label="点客或散客">
-          <button type="button" class="staff-card__split-btn" data-staff-opt-designate="1" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">点客</button>
-          <button type="button" class="staff-card__split-btn" data-staff-opt-designate="0" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">散客</button>
+          <button type="button" class="staff-card__split-btn staff-card__split-btn--des" data-staff-opt-designate="1" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">点客</button>
+          <button type="button" class="staff-card__split-btn staff-card__split-btn--guest" data-staff-opt-designate="0" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">散客</button>
         </div>`;
       } else if (isEdit && edit.face === 'role') {
         const roleBtns = STAFF_ROLE_PICK_ORDER.map(rid => {
           const label = staffRoleLabel(rid);
-          return `<button type="button" class="staff-card__split-btn" data-staff-opt-role="${escapeHtml(rid)}" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">${escapeHtml(label)}</button>`;
+          return `<button type="button" class="staff-card__split-btn staff-card__split-btn--role" data-staff-opt-role="${escapeHtml(rid)}" data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}">${escapeHtml(label)}</button>`;
         }).join('');
         body = `<div class="staff-card__split staff-card__split--3" role="group" aria-label="选择工位">${roleBtns}</div>`;
       } else {
-        const guestLabel = designated ? '点客' : '散客';
-        const meta = done
-          ? (isAvgAchCalcModeForItem(it)
-            ? guestLabel
-            : `${guestLabel} · ${escapeHtml(staffRoleLabel(role) || '')}`)
-          : '';
+        const pickLine = done
+          ? `<div class="staff-card__title staff-card__title--pick">${escapeHtml(staffPickSummaryText(it, st.id))}</div>`
+          : jobTitle;
         body = `
           ${done ? `<span class="staff-card__check">${checkSvg}</span>` : ''}
           ${staffAvatarHtml(st)}
           <div class="staff-card__name">${escapeHtml(st.name)}</div>
-          ${jobTitle}
-          ${done ? `<div class="staff-card__meta">${meta}</div>` : ''}`;
+          ${pickLine}`;
       }
       const clearBtn = (done && !isEdit)
         ? `<button type="button" class="staff-card__clear" data-staff-clear data-cart-id="${escapeHtml(it.id)}" data-staff-id="${escapeHtml(st.id)}" aria-label="清空选择">${clearSvg}</button>`
@@ -44838,7 +44676,7 @@ window.__BILLING_EMBEDDED__ = true;
     return `<div class="detail-item__staff-block detail-item__staff-block--cards${edit ? ' is-picking' : ''}">
       ${head}
       ${edit ? `<button type="button" class="staff-card-scrim" data-staff-scrim aria-label="取消选择"></button>` : ''}
-      <div class="staff-grid">${cards}</div>
+      <div class="staff-grid${edit ? ' is-morphing' : ''}">${cards}</div>
     </div>`;
   }
 
@@ -45014,9 +44852,17 @@ window.__BILLING_EMBEDDED__ = true;
         }).join('')
       : '<div class="detail-slip"><div class="empty-cart">无商品</div></div>';
 
+    const bizDateLabel = formatBillDateLabel(ensureBillBizDate());
     document.getElementById('detailBody').innerHTML = `
       <div class="detail-guest-slot">${renderCustomerNameCard(c, { withActions: true, genderMode: isAnonymousGuest(c) })}</div>
       <div class="detail-settle-stack">
+        <button type="button" class="detail-biz-date" id="btnDetailBizDate" data-detail-biz-date aria-haspopup="dialog" aria-label="选择开单日期">
+          <span class="detail-biz-date__lbl">开单日期</span>
+          <span class="detail-biz-date__trail">
+            <span class="detail-biz-date__val" id="detailDateLabel">${escapeHtml(bizDateLabel)}</span>
+            <span class="detail-biz-date__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+          </span>
+        </button>
         ${items}
         ${state.cart.length ? renderSettleComposeCard(s) : ''}
         <div class="detail-remark">
@@ -45029,12 +44875,7 @@ window.__BILLING_EMBEDDED__ = true;
       </div>`;
     syncDetailDueBar();
     bindDetailItemSwipes();
-    const editingPanel = document.querySelector('.staff-card.is-editing .staff-card__panel');
-    if (editingPanel) {
-      editingPanel.style.animation = 'none';
-      void editingPanel.offsetWidth;
-      editingPanel.style.animation = '';
-    }
+    afterStaffPickerPaint(document.getElementById('detailBody'));
   }
 
   function couponEligibleByOrderTotal(cp) {
@@ -46831,9 +46672,6 @@ window.__BILLING_EMBEDDED__ = true;
   function flowIconSelf() {
     return '<img class="flow-hub-card__icon-img" src="assets/flow/self.svg" alt="" width="40" height="40" draggable="false" />';
   }
-  function flowIconProduct() {
-    return '<img class="flow-hub-card__icon-img" src="assets/flow/product.svg" alt="" width="40" height="40" draggable="false" />';
-  }
   function flowIconMall() {
     return '<img class="flow-hub-card__icon-img" src="assets/flow/mall.svg" alt="" width="40" height="40" draggable="false" />';
   }
@@ -46959,83 +46797,8 @@ window.__BILLING_EMBEDDED__ = true;
     return left === right ? left : `${left}–${right}`;
   }
 
-  function flowParseProductLine(it) {
-    if (!it) return null;
-    const isProduct = it.type === 'product' || it.kind === 'product' || it.category === '产品';
-    if (!isProduct) return null;
-    let name = String(it.name || '').trim();
-    let spec = String(it.spec || '').trim();
-    const m = name.match(/^(.+?)\s*[（(]([^）)]+)[）)]\s*$/);
-    if (m) {
-      if (!spec) spec = m[2].trim();
-      name = m[1].trim();
-    }
-    const catalog = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []).find(p => {
-      if (!p) return false;
-      if (it.id && p.id === it.id) return true;
-      if (p.name === name && (!spec || String(p.spec || '') === spec)) return true;
-      return false;
-    });
-    if (catalog) {
-      name = catalog.name || name;
-      if (!spec && catalog.spec) spec = String(catalog.spec).trim();
-    }
-    const qty = Math.max(1, Number(it.qty) || 1);
-    const unit = Number(it.price != null ? it.price : it.unitPrice) || 0;
-    return {
-      key: `${name}|${spec}`,
-      name,
-      spec,
-      qty,
-      amount: round2(unit * qty),
-      catalogId: catalog ? catalog.id : '',
-    };
-  }
-
-  function flowCollectProductSales(opts) {
-    opts = opts || {};
-    const dateMode = opts.dateMode || 'today';
-    const customStart = opts.customStart || '';
-    const customEnd = opts.customEnd || '';
-    const map = new Map();
-    const pushOrder = (o) => {
-      if (!o || !flowIsActiveOrder(o)) return;
-      if (!flowMatchDateFilter(o, dateMode, customStart, customEnd)) return;
-      (o.items || []).forEach((it) => {
-        const line = flowParseProductLine(it);
-        if (!line) return;
-        const prev = map.get(line.key);
-        if (prev) {
-          prev.qty += line.qty;
-          prev.amount = round2(prev.amount + line.amount);
-        } else {
-          map.set(line.key, Object.assign({}, line));
-        }
-      });
-    };
-    (FLOW_ORDERS || []).forEach(pushOrder);
-    (FLOW_SELF_ORDERS || []).forEach(pushOrder);
-    let rows = Array.from(map.values());
-    const sort = opts.sort || 'amount';
-    rows.sort((a, b) => {
-      if (sort === 'qty') return (b.qty - a.qty) || (b.amount - a.amount) || a.name.localeCompare(b.name, 'zh');
-      return (b.amount - a.amount) || (b.qty - a.qty) || a.name.localeCompare(b.name, 'zh');
-    });
-    const totalQty = rows.reduce((s, r) => s + r.qty, 0);
-    const totalAmt = round2(rows.reduce((s, r) => s + r.amount, 0));
-    return { rows, totalQty, totalAmt };
-  }
-
-  function flowProductRangeLabel(id) {
-    if (id === 'other' || id === 'custom') {
-      return flowFmtShortRange(state.flowProductCustomStart, state.flowProductCustomEnd);
-    }
-    const map = { today: '今天', yesterday: '昨天', '7d': '7天', '30d': '30天' };
-    return map[id] || '今天';
-  }
-
   function openFlowRangeSheet(context) {
-    state.flowRangeContext = context || 'product';
+    state.flowRangeContext = context || 'filter';
     let start = '';
     let end = '';
     if (context === 'self') {
@@ -47045,9 +46808,6 @@ window.__BILLING_EMBEDDED__ = true;
       const draft = state.flowFilterDraft || state.flowFilter || {};
       start = draft.customStart || '';
       end = draft.customEnd || '';
-    } else {
-      start = state.flowProductCustomStart || '';
-      end = state.flowProductCustomEnd || '';
     }
     state.flowRangeDraftStart = start;
     state.flowRangeDraftEnd = end;
@@ -47190,7 +46950,7 @@ window.__BILLING_EMBEDDED__ = true;
     const start = state.flowRangeDraftStart;
     const end = state.flowRangeDraftEnd;
     if (!start || !end) return;
-    const ctx = state.flowRangeContext || 'product';
+    const ctx = state.flowRangeContext || 'filter';
     closeMask('flowRangeMask');
     restoreFlowFilterCover();
     if (ctx === 'self') {
@@ -47204,11 +46964,6 @@ window.__BILLING_EMBEDDED__ = true;
       state.flowFilterDraft.customStart = start;
       state.flowFilterDraft.customEnd = end;
       renderFlowFilterSheet();
-    } else {
-      state.flowProductCustomStart = start;
-      state.flowProductCustomEnd = end;
-      state.flowProductRange = 'other';
-      renderFlowProductSales();
     }
   }
 
@@ -47597,7 +47352,6 @@ window.__BILLING_EMBEDDED__ = true;
     const selfCount = FLOW_SELF_ORDERS.length;
     const stats = getFlowHubDemoStats();
     const selfAmt = FLOW_SELF_ORDERS.reduce((s, o) => s + (Number(o.amount) || 0), 0);
-    const prodToday = flowCollectProductSales({ dateMode: 'today', sort: 'amount' });
     const body = document.getElementById('flowHubBody');
     if (!body) return;
     body.innerHTML = `
@@ -47631,388 +47385,8 @@ window.__BILLING_EMBEDDED__ = true;
               <span class="flow-hub-card__sub">收款 <span class="flow-hub-card__sub-amt">${flowHubFormatYen(selfAmt)}</span></span>
             </span>
           </button>
-          <button type="button" class="flow-hub-card flow-hub-card--lg" data-flow-hub="product" aria-label="进入产品销量">
-            <span class="flow-hub-card__icon" aria-hidden="true">${flowIconProduct()}</span>
-            <span class="flow-hub-card__body">
-              <span class="flow-hub-card__title-row">
-                <span class="flow-hub-card__title">产品销量</span>
-                <span class="flow-hub-card__chev" aria-hidden="true">${flowIconChevron()}</span>
-              </span>
-              <span class="flow-hub-card__metric">
-                <span class="flow-hub-card__val">${prodToday.totalQty}</span>
-                <span class="flow-hub-card__unit">件</span>
-              </span>
-              <span class="flow-hub-card__sub">销售额 <span class="flow-hub-card__sub-amt">${flowHubFormatYen(prodToday.totalAmt)}</span></span>
-            </span>
-          </button>
         </div>
       </div>`;
-  }
-
-  function flowProdPeriodKey() {
-    const range = state.flowProductRange || 'today';
-    return `${range}|${state.flowProductCustomStart || ''}|${state.flowProductCustomEnd || ''}`;
-  }
-
-  function flowProdEnsureMaps() {
-    if (!state.flowProductStockMap || typeof state.flowProductStockMap !== 'object') {
-      state.flowProductStockMap = {};
-    }
-    if (!state.flowProductDeducted || typeof state.flowProductDeducted !== 'object') {
-      state.flowProductDeducted = {};
-    }
-  }
-
-  function flowProdGetSku(skuId) {
-    return ((window.StockStore && window.StockStore.skus) || []).find(s => s.id === skuId) || null;
-  }
-
-  function isStockModuleEmpty() {
-    /* D1：未使用库存管理 = 无任何 SKU */
-    return !((window.StockStore && window.StockStore.skus) || []).length;
-  }
-
-  function openStockHubFromFlowProduct() {
-    window.__stockReturnTo = 'flow-product';
-    if (window.StockDemo && typeof window.StockDemo.openHub === 'function') {
-      window.StockDemo.openHub();
-      showToast('请先新增商品并入库，再回来扣减');
-      return;
-    }
-    showToast('库存管理未就绪', true);
-  }
-
-  function flowProdGetDeductedQty(productKey) {
-    flowProdEnsureMaps();
-    const bag = state.flowProductDeducted[flowProdPeriodKey()] || {};
-    return Math.max(0, Number(bag[productKey]) || 0);
-  }
-
-  function flowProdPendingQty(row) {
-    const sold = Math.max(0, Number(row.qty) || 0);
-    return Math.max(0, sold - flowProdGetDeductedQty(row.key));
-  }
-
-  function flowProdFormatYen(n) {
-    return `¥${flowHubFormatYen(n)}`;
-  }
-
-  function flowProdSuggestSkuId(row) {
-    flowProdEnsureMaps();
-    const mapped = state.flowProductStockMap[row.key];
-    if (mapped && flowProdGetSku(mapped)) return mapped;
-    const skus = (window.StockStore && window.StockStore.skus) || [];
-    const name = String(row.name || '').trim();
-    const spec = String(row.spec || '').trim();
-    const exact = skus.find(s => s.product === name && (!spec || s.name === spec));
-    if (exact) return exact.id;
-    const byName = skus.find(s => s.product === name);
-    return byName ? byName.id : '';
-  }
-
-  function flowProdRowFootHtml(row) {
-    flowProdEnsureMaps();
-    const pending = flowProdPendingQty(row);
-    const deducted = flowProdGetDeductedQty(row.key);
-    /* A2：无库存 SKU 时不进扣减 Sheet，引导去开通 */
-    if (isStockModuleEmpty()) {
-      return `<div class="flow-prod-row__foot is-closed">未开通库存 · 去开通</div>`;
-    }
-    const skuId = state.flowProductStockMap[row.key];
-    const sku = skuId ? flowProdGetSku(skuId) : null;
-    if (pending <= 0 && deducted > 0) {
-      const tip = sku
-        ? `已扣减 ${deducted} 件 · ${sku.product}${sku.name ? ' / ' + sku.name : ''}`
-        : `已扣减 ${deducted} 件`;
-      return `<div class="flow-prod-row__foot is-done"><span class="flow-prod-row__foot-dot" aria-hidden="true"></span><span>${escapeHtml(tip)}</span></div>`;
-    }
-    if (sku) {
-      const stock = Math.max(0, Number(sku.stock) || 0);
-      const unit = sku.unit || '';
-      if (stock <= 0 && pending > 0) {
-        return `<div class="flow-prod-row__foot is-linked">已关联 ${escapeHtml(sku.product)}${sku.name ? ' / ' + escapeHtml(sku.name) : ''} · 库存 0 · 请先入库</div>`;
-      }
-      return `<div class="flow-prod-row__foot is-linked">库存：${escapeHtml(sku.product)}${sku.name ? ' / ' + escapeHtml(sku.name) : ''} · 库存 ${stock}${escapeHtml(unit)} · 待扣 ${pending} 件</div>`;
-    }
-    return `<div class="flow-prod-row__foot">点击扣减库存</div>`;
-  }
-
-  function flowProdIsDone(row) {
-    return flowProdPendingQty(row) <= 0 && flowProdGetDeductedQty(row.key) > 0;
-  }
-
-  function renderFlowProductSales() {
-    const rangeEl = document.getElementById('flowProductRange');
-    const range = state.flowProductRange || 'today';
-    const tabs = [
-      { id: 'today', label: '今天' },
-      { id: 'yesterday', label: '昨天' },
-      { id: '7d', label: '7天' },
-      { id: '30d', label: '30天' },
-      { id: 'other', label: range === 'other' ? flowProductRangeLabel('other') : '自定义' },
-    ];
-    if (rangeEl) {
-      rangeEl.innerHTML = tabs.map(t => (
-        `<button type="button" class="flow-prod-range__btn${range === t.id ? ' on' : ''}" data-flow-prod-range="${t.id}" role="tab" aria-selected="${range === t.id ? 'true' : 'false'}">${escapeHtml(t.label)}</button>`
-      )).join('');
-    }
-    const dateMode = range === 'other' ? 'custom' : range;
-    const data = flowCollectProductSales({
-      dateMode,
-      customStart: state.flowProductCustomStart,
-      customEnd: state.flowProductCustomEnd,
-      sort: state.flowProductSort || 'amount',
-    });
-    const body = document.getElementById('flowProductBody');
-    if (!body) return;
-    const sortLabel = (state.flowProductSort || 'amount') === 'qty' ? '按销量' : '按销售额';
-    const rangeHint = range === 'other' && state.flowProductCustomStart && state.flowProductCustomEnd
-      ? `<div class="flow-prod-sum__meta" style="margin:0 16px 8px;padding-top:0">统计：${escapeHtml(flowFmtShortRange(state.flowProductCustomStart, state.flowProductCustomEnd))}</div>`
-      : '';
-    const sum = `
-      <div class="flow-prod-sum">
-        <div class="flow-prod-sum__meta">共 <strong>${data.totalQty}</strong> 件 · 销售额 <span class="flow-prod-sum__yen">${escapeHtml(flowProdFormatYen(data.totalAmt))}</span></div>
-        <button type="button" class="flow-prod-sum__sort" id="flowProductSortBtn" aria-label="切换排序">${escapeHtml(sortLabel)} ↕</button>
-      </div>${rangeHint}`;
-    const chev = '<svg class="flow-prod-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
-    const doneMark = '<span class="flow-prod-row__done-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>';
-    if (!data.rows.length) {
-      body.innerHTML = sum + flowEmptyHtml('暂无产品销售', '所选时段内没有产品成交记录');
-      return;
-    }
-    body.innerHTML = sum + `<div class="flow-prod-list">${data.rows.map(r => {
-      const done = flowProdIsDone(r);
-      if (done) {
-        return `<div class="flow-prod-row is-done" aria-label="${escapeHtml(r.name)} 已扣减完成" role="group">
-        <div class="flow-prod-row__top">
-          <div class="flow-prod-row__main">
-            <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
-            ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
-          </div>
-          <div class="flow-prod-row__metrics">
-            <div class="flow-prod-row__metrics-nums">
-              <div class="flow-prod-row__qty"><span class="flow-prod-row__qty-num">${r.qty}</span><span class="flow-prod-row__qty-unit">件</span></div>
-              <div class="flow-prod-row__amt">${escapeHtml(flowProdFormatYen(r.amount))}</div>
-            </div>
-            ${doneMark}
-          </div>
-        </div>
-        ${flowProdRowFootHtml(r)}
-      </div>`;
-      }
-      return `<button type="button" class="flow-prod-row" data-flow-prod-key="${escapeHtml(r.key)}" aria-label="${isStockModuleEmpty() ? '去开通库存' : '扣减库存'} ${escapeHtml(r.name)}">
-        <div class="flow-prod-row__top">
-          <div class="flow-prod-row__main">
-            <div class="flow-prod-row__name">${escapeHtml(r.name)}</div>
-            ${r.spec ? `<div class="flow-prod-row__spec">${escapeHtml(r.spec)}</div>` : ''}
-          </div>
-          <div class="flow-prod-row__metrics">
-            <div class="flow-prod-row__metrics-nums">
-              <div class="flow-prod-row__qty"><span class="flow-prod-row__qty-num">${r.qty}</span><span class="flow-prod-row__qty-unit">件</span></div>
-              <div class="flow-prod-row__amt">${escapeHtml(flowProdFormatYen(r.amount))}</div>
-            </div>
-            ${chev}
-          </div>
-        </div>
-        ${flowProdRowFootHtml(r)}
-      </button>`;
-    }).join('')}</div>`;
-  }
-
-  function renderFlowProdDeductSheet() {
-    const draft = state.flowProdDeductDraft;
-    if (!draft) return;
-    const head = document.getElementById('flowProdDeductHead');
-    const listEl = document.getElementById('flowProdDeductList');
-    const searchWrap = document.getElementById('flowProdDeductSearchWrap');
-    const changeBtn = document.getElementById('flowProdDeductChange');
-    const secTitle = document.getElementById('flowProdDeductSecTitle');
-    const okBtn = document.getElementById('flowProdDeductOk');
-    const qtyVal = document.getElementById('flowProdDeductQtyVal');
-    if (head) {
-      head.innerHTML = `
-        <div class="flow-prod-deduct-ctx__label">销量商品</div>
-        <div class="flow-prod-deduct-ctx__name">${escapeHtml(draft.name)}</div>
-        ${draft.spec ? `<div class="flow-prod-deduct-ctx__spec">${escapeHtml(draft.spec)}</div>` : ''}
-        <div class="flow-prod-deduct-ctx__stats">
-          <div class="flow-prod-deduct-stat">
-            <span class="flow-prod-deduct-stat__lab">本时段销量</span>
-            <span class="flow-prod-deduct-stat__val">${draft.soldQty}<em>件</em></span>
-          </div>
-          <div class="flow-prod-deduct-stat flow-prod-deduct-stat--pending">
-            <span class="flow-prod-deduct-stat__lab">待扣减</span>
-            <span class="flow-prod-deduct-stat__val">${draft.pendingQty}<em>件</em></span>
-          </div>
-        </div>`;
-    }
-    const picking = !!draft.picking;
-    if (secTitle) secTitle.textContent = picking ? '选择库存商品' : '已选库存商品';
-    if (searchWrap) searchWrap.classList.toggle('hidden', !picking);
-    if (changeBtn) changeBtn.classList.toggle('hidden', picking || !draft.selectedSkuId);
-    if (listEl) listEl.classList.toggle('is-picking', picking);
-    if (!listEl) return;
-    if (!picking && draft.selectedSkuId) {
-      const sku = flowProdGetSku(draft.selectedSkuId);
-      if (sku) {
-        const stock = Math.max(0, Number(sku.stock) || 0);
-        listEl.innerHTML = `<button type="button" class="bill-stock-pick-row is-on" data-flow-prod-sku="${escapeHtml(sku.id)}">
-          <span class="bill-stock-pick-row__check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
-          <span class="bill-stock-pick-row__main">
-            <span class="bill-stock-pick-row__name">${escapeHtml(sku.product || '')}</span>
-            ${sku.name ? `<span class="bill-stock-pick-row__spec">${escapeHtml(sku.name)}</span>` : ''}
-            <span class="bill-stock-pick-row__meta">可用库存 ${stock}${sku.unit || ''}</span>
-          </span>
-        </button>`;
-      } else {
-        draft.picking = true;
-        renderFlowProdDeductSheet();
-        return;
-      }
-    } else {
-      const q = String(draft.search || '').trim().toLowerCase();
-      let list = ((window.StockStore && window.StockStore.skus) || []).slice();
-      list.sort((a, b) => {
-        const score = (s) => {
-          let n = 0;
-          if (s.product === draft.name) n += 4;
-          if (draft.spec && s.name === draft.spec) n += 2;
-          if (s.id === draft.selectedSkuId) n += 8;
-          return n;
-        };
-        return score(b) - score(a) || String(a.product || '').localeCompare(String(b.product || ''), 'zh');
-      });
-      if (q) {
-        list = list.filter(s => `${s.product || ''}${s.name || ''}${s.barcode || ''}`.toLowerCase().includes(q));
-      }
-      if (!list.length) {
-        const moduleEmpty = isStockModuleEmpty();
-        listEl.innerHTML = moduleEmpty
-          ? `<div class="flow-prod-deduct-empty">暂无库存商品<br>请先在「库存管理」中新增商品并入库<div style="margin-top:16px"><button type="button" class="btn-main" id="flowProdDeductGoStock" style="max-width:200px">去库存管理</button></div></div>`
-          : `<div class="flow-prod-deduct-empty">暂无匹配的库存商品<br>请先在「库存管理 · 商品」中新增对应规格，入库后再回来扣减<div style="margin-top:16px"><button type="button" class="btn-main secondary" id="flowProdDeductGoStock" style="max-width:200px">去库存管理</button></div></div>`;
-      } else {
-        listEl.innerHTML = list.map(sku => {
-          const on = draft.selectedSkuId === sku.id;
-          const stock = Math.max(0, Number(sku.stock) || 0);
-          return `<button type="button" class="bill-stock-pick-row${on ? ' is-on' : ''}" data-flow-prod-sku="${escapeHtml(sku.id)}" ${stock <= 0 ? 'disabled' : ''}>
-            <span class="bill-stock-pick-row__check" aria-hidden="true">${on ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>' : ''}</span>
-            <span class="bill-stock-pick-row__main">
-              <span class="bill-stock-pick-row__name">${escapeHtml(sku.product || '')}</span>
-              ${sku.name ? `<span class="bill-stock-pick-row__spec">${escapeHtml(sku.name)}</span>` : ''}
-              <span class="bill-stock-pick-row__meta">可用库存 ${stock}${sku.unit || ''}${stock <= 0 ? ' · 请先入库' : ''}</span>
-            </span>
-          </button>`;
-        }).join('');
-        if (list.every(s => (Number(s.stock) || 0) <= 0)) {
-          listEl.innerHTML += `<div class="flow-prod-deduct-empty" style="padding:12px 8px 4px">所选规格库存为 0，请先入库后再扣减<div style="margin-top:12px"><button type="button" class="btn-main secondary" id="flowProdDeductGoStock" style="max-width:200px">去入库</button></div></div>`;
-        }
-      }
-    }
-    const sku = draft.selectedSkuId ? flowProdGetSku(draft.selectedSkuId) : null;
-    const stock = sku ? Math.max(0, Number(sku.stock) || 0) : 0;
-    draft.maxQty = Math.max(0, Math.min(draft.pendingQty, stock));
-    draft.deductQty = draft.maxQty;
-    if (qtyVal) {
-      qtyVal.innerHTML = `${draft.deductQty}<em>件</em>`;
-    }
-    if (okBtn) {
-      const qty = draft.deductQty;
-      const can = !!sku && qty >= 1;
-      okBtn.disabled = !can;
-      if (!sku) okBtn.textContent = '确认扣减';
-      else if (stock <= 0) okBtn.textContent = '请先入库';
-      else okBtn.textContent = can ? `确认扣减 ${qty} 件` : '确认扣减';
-    }
-  }
-
-  function openFlowProdDeductSheet(row) {
-    /* A2 兜底：无 SKU 不打开扣减 Sheet */
-    if (isStockModuleEmpty()) {
-      openStockHubFromFlowProduct();
-      return;
-    }
-    flowProdEnsureMaps();
-    const pending = flowProdPendingQty(row);
-    const suggest = flowProdSuggestSkuId(row);
-    const sku = suggest ? flowProdGetSku(suggest) : null;
-    const stock = sku ? Math.max(0, Number(sku.stock) || 0) : 0;
-    const maxQty = Math.max(0, Math.min(pending, stock));
-    const deductDefault = maxQty > 0 ? maxQty : 0;
-    state.flowProdDeductDraft = {
-      productKey: row.key,
-      name: row.name,
-      spec: row.spec || '',
-      soldQty: row.qty,
-      pendingQty: pending,
-      selectedSkuId: suggest || '',
-      deductQty: deductDefault,
-      maxQty,
-      search: '',
-      picking: !suggest,
-    };
-    const searchInput = document.getElementById('flowProdDeductSearch');
-    if (searchInput) searchInput.value = '';
-    renderFlowProdDeductSheet();
-    openMask('flowProdDeductMask');
-  }
-
-  function confirmFlowProdDeduct() {
-    const draft = state.flowProdDeductDraft;
-    if (!draft) return;
-    const sku = flowProdGetSku(draft.selectedSkuId);
-    if (!sku) { showToast('请选择库存商品', true); return; }
-    if (draft.pendingQty <= 0) { showToast('本时段已全部扣减', true); return; }
-    const stock = Math.max(0, Number(sku.stock) || 0);
-    const qty = Math.max(0, Math.min(draft.pendingQty, stock));
-    if (qty <= 0) { showToast('库存为 0，请先入库后再扣减', true); return; }
-    sku.stock = Math.max(0, stock - qty);
-    sku.moved = true;
-    if (window.StockStore && Array.isArray(window.StockStore.outDocs)) {
-      window.StockStore.outDocs.unshift({
-        id: 'out-flow-' + Date.now(),
-        type: '销售出库',
-        date: new Date().toISOString().slice(0, 10),
-        lines: 1,
-        qty,
-        remark: `产品销量扣减 · ${draft.name}${draft.spec ? ' / ' + draft.spec : ''}`,
-      });
-    }
-    flowProdEnsureMaps();
-    state.flowProductStockMap[draft.productKey] = sku.id;
-    const pk = flowProdPeriodKey();
-    if (!state.flowProductDeducted[pk]) state.flowProductDeducted[pk] = {};
-    state.flowProductDeducted[pk][draft.productKey] = flowProdGetDeductedQty(draft.productKey) + qty;
-    state.flowProdDeductDraft = null;
-    closeMask('flowProdDeductMask');
-    showToast(`已扣减 ${qty} 件`);
-    renderFlowProductSales();
-  }
-
-  function openFlowProductSales() {
-    /* 从空库存演示返回时恢复种子 SKU */
-    if (window.__stockSkusBackup && window.StockStore && !(window.StockStore.skus || []).length) {
-      window.StockStore.skus = window.__stockSkusBackup.slice();
-    }
-    if (!state.flowProductRange) state.flowProductRange = 'today';
-    if (!state.flowProductSort) state.flowProductSort = 'amount';
-    flowProdEnsureMaps();
-    renderFlowProductSales();
-    showOnlyScreen('screen-flow-product');
-  }
-
-  /** FLOW / 验收：模拟未开通库存（D1 skus=[]） */
-  function openFlowProductSalesEmptyDemo() {
-    if (window.StockStore) {
-      if (!window.__stockSkusBackup) {
-        window.__stockSkusBackup = (window.StockStore.skus || []).slice();
-      }
-      window.StockStore.skus = [];
-    }
-    if (!state.flowProductRange) state.flowProductRange = 'today';
-    if (!state.flowProductSort) state.flowProductSort = 'amount';
-    flowProdEnsureMaps();
-    renderFlowProductSales();
-    showOnlyScreen('screen-flow-product');
-    showToast('已模拟空库存：点行脚「去开通」');
   }
 
   function renderFlowList() {
@@ -52492,6 +51866,9 @@ window.__BILLING_EMBEDDED__ = true;
       : { gradient: 'linear-gradient(90deg, #F4EAE5 0%, #EED1C3 100%)' };
     const grad = theme.gradient;
     const priceText = formatCardIssuePayText(getCardIssuePayAmount(tpl));
+    const benefitLine = (typeof formatQuickIssueBenefitLine === 'function')
+      ? formatQuickIssueBenefitLine(tpl)
+      : '';
     slot.innerHTML =
       `<button type="button" class="add-card-slot" data-add-card-pick aria-label="更换会员卡">` +
       `<span class="add-card-slot__face" aria-hidden="true">` +
@@ -52500,6 +51877,9 @@ window.__BILLING_EMBEDDED__ = true;
       `<span class="add-card-slot__meta">` +
       `<span class="add-card-slot__name">${escapeHtml(tpl.name)}</span>` +
       `<span class="add-card-slot__price">${escapeHtml(priceText)}</span>` +
+      (benefitLine && benefitLine !== '—'
+        ? `<span class="add-card-slot__benefit">${escapeHtml(benefitLine)}</span>`
+        : '') +
       `</span>` +
       `<span class="add-card-slot__action">更换</span>` +
       `</button>`;
@@ -53232,8 +52612,11 @@ window.__BILLING_EMBEDDED__ = true;
     openBillCatalog({ skipGate: true });
   });
   document.getElementById('btnDetailHold')?.addEventListener('click', createHoldOrder);
-  document.getElementById('btnDetailDate')?.addEventListener('click', () => openBillDateSheet('bill'));
   document.getElementById('detailBody').addEventListener('click', e => {
+    if (e.target.closest('[data-detail-biz-date]')) {
+      openBillDateSheet('bill');
+      return;
+    }
     if (!e.target.closest('.detail-item__track.is-open') && !e.target.closest('[data-del-cart]')) closeAllDetailSwipes();
     if (e.target.closest('[data-guest-switch]')) { onGuestSwitchClick(); return; }
     if (e.target.closest('[data-member-switch]')) { onMemberSwitchClick(); return; }
@@ -53617,16 +53000,11 @@ window.__BILLING_EMBEDDED__ = true;
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
     'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'addCardStaffMask',
     'billStockPickMask',
-    'flowProdDeductMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
     'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask', 'flowRangeMask',
   ].forEach(function (id) {
     window.__pickerMaskClosers[id] = function () { closeMask(id); };
   });
-  window.__pickerMaskClosers.flowProdDeductMask = function () {
-    state.flowProdDeductDraft = null;
-    closeMask('flowProdDeductMask');
-  };
   window.__pickerMaskClosers.flowRangeMask = function () { cancelFlowRangeSheet(); };
   window.__pickerMaskClosers.addCardStaffMask = function () { closeAddCardStaffSheet(); };
   document.getElementById('addCardBack').addEventListener('click', () => {
@@ -53671,7 +53049,10 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('btnQuickIssueNext')?.addEventListener('click', () => {
     confirmQuickIssueCheckout();
   });
-  document.getElementById('btnAddCardDate').addEventListener('click', () => openBillDateSheet('issue'));
+  document.getElementById('btnAddCardBizDate')?.addEventListener('click', () => openBillDateSheet('issue'));
+  document.querySelector('.add-card-decision-scroll')?.addEventListener('click', e => {
+    if (e.target.closest('[data-add-card-biz-date]')) openBillDateSheet('issue');
+  });
   document.getElementById('btnBillDateCancel')?.addEventListener('click', () => closeBillDateSheet());
   document.getElementById('btnBillDateOk')?.addEventListener('click', () => confirmBillDateDraft());
   document.getElementById('billDateQuick')?.addEventListener('click', e => {
@@ -54201,85 +53582,6 @@ window.__BILLING_EMBEDDED__ = true;
     state.flowHubReturn = null;
     if (btn.dataset.flowHub === 'store') openFlowList();
     else if (btn.dataset.flowHub === 'self') openFlowSelf();
-    else if (btn.dataset.flowHub === 'product') openFlowProductSales();
-  });
-  document.getElementById('flowProductBack')?.addEventListener('click', () => openFlowHub());
-  document.getElementById('flowProductRange')?.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-flow-prod-range]');
-    if (!btn) return;
-    const id = btn.dataset.flowProdRange;
-    if (id === 'other') {
-      openFlowRangeSheet('product');
-      return;
-    }
-    state.flowProductRange = id;
-    renderFlowProductSales();
-  });
-  document.getElementById('flowProductBody')?.addEventListener('click', (e) => {
-    if (e.target.closest('#flowProductSortBtn')) {
-      state.flowProductSort = (state.flowProductSort || 'amount') === 'amount' ? 'qty' : 'amount';
-      renderFlowProductSales();
-      return;
-    }
-    const rowBtn = e.target.closest('[data-flow-prod-key]');
-    if (!rowBtn) return;
-    const key = rowBtn.dataset.flowProdKey;
-    const range = state.flowProductRange || 'today';
-    const dateMode = range === 'other' ? 'custom' : range;
-    const data = flowCollectProductSales({
-      dateMode,
-      customStart: state.flowProductCustomStart,
-      customEnd: state.flowProductCustomEnd,
-      sort: state.flowProductSort || 'amount',
-    });
-    const row = data.rows.find(r => r.key === key);
-    if (!row) return;
-    if (isStockModuleEmpty()) {
-      openStockHubFromFlowProduct();
-      return;
-    }
-    openFlowProdDeductSheet(row);
-  });
-  document.getElementById('flowProdDeductCancel')?.addEventListener('click', () => {
-    state.flowProdDeductDraft = null;
-    closeMask('flowProdDeductMask');
-  });
-  document.getElementById('flowProdDeductOk')?.addEventListener('click', () => confirmFlowProdDeduct());
-  document.getElementById('flowProdDeductChange')?.addEventListener('click', () => {
-    if (!state.flowProdDeductDraft) return;
-    state.flowProdDeductDraft.picking = true;
-    renderFlowProdDeductSheet();
-  });
-  document.getElementById('flowProdDeductSearch')?.addEventListener('input', (e) => {
-    if (!state.flowProdDeductDraft) return;
-    state.flowProdDeductDraft.search = e.target.value || '';
-    renderFlowProdDeductSheet();
-  });
-  document.getElementById('flowProdDeductList')?.addEventListener('click', (e) => {
-    if (e.target.closest('#flowProdDeductGoStock')) {
-      const goIn = /入库/.test((e.target.closest('#flowProdDeductGoStock') || e.target).textContent || '');
-      state.flowProdDeductDraft = null;
-      closeMask('flowProdDeductMask');
-      window.__stockReturnTo = 'flow-product';
-      if (goIn && window.StockDemo && typeof window.StockDemo.openIn === 'function') {
-        window.StockDemo.openIn();
-        showToast('请先入库，完成后再回来扣减');
-        return;
-      }
-      openStockHubFromFlowProduct();
-      return;
-    }
-    const btn = e.target.closest('[data-flow-prod-sku]');
-    if (!btn || btn.disabled) return;
-    if (!state.flowProdDeductDraft) return;
-    const sku = flowProdGetSku(btn.dataset.flowProdSku);
-    if (!sku) return;
-    const stock = Math.max(0, Number(sku.stock) || 0);
-    state.flowProdDeductDraft.selectedSkuId = sku.id;
-    state.flowProdDeductDraft.picking = false;
-    state.flowProdDeductDraft.maxQty = Math.max(0, Math.min(state.flowProdDeductDraft.pendingQty, stock));
-    state.flowProdDeductDraft.deductQty = state.flowProdDeductDraft.maxQty;
-    renderFlowProdDeductSheet();
   });
   document.getElementById('flowRangeCancel')?.addEventListener('click', () => cancelFlowRangeSheet());
   document.getElementById('flowRangeOk')?.addEventListener('click', () => applyFlowRangeSheet());
@@ -55090,8 +54392,6 @@ window.__BILLING_EMBEDDED__ = true;
     openFlowList,
     openFlowDetail,
     openFlowSelf,
-    openFlowProductSales,
-    openFlowProductSalesEmptyDemo,
     openFlowRefund,
     openFlowEdit,
     openFlowEditLog,
