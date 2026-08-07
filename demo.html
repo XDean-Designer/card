@@ -41464,6 +41464,8 @@ window.__BILLING_EMBEDDED__ = true;
     billFromHold: false,
     activeHoldId: null,
     billDueEdited: false,
+    /** 结算应付手动覆盖：有值时即为最终应付，不再按行价/抵扣重算 */
+    billDueOverride: null,
     payDueSnapshot: null,
     guestGender: null,
     guestGenderPickerOpen: false,
@@ -42633,6 +42635,7 @@ window.__BILLING_EMBEDDED__ = true;
       state.selectedCouponId = null;
       showToast('已选权益与该券互斥，已取消优惠券');
     }
+    clearBillDueOverride();
   }
 
   function openBillSettle() {
@@ -42839,13 +42842,13 @@ window.__BILLING_EMBEDDED__ = true;
         const v = String(el.value || '').replace(/^¥/, '').trim();
         if (key === 'amount') {
           state.billRechargeAmount = v;
-          if (!state.billRechargeDueTouched) {
-            state.billRechargeDue = v;
-            const dueEl = body.querySelector('[data-bill-recharge-field="due"]');
-            if (dueEl) {
-              dueEl.value = v;
-              dueEl.classList.toggle('is-empty', !v);
-            }
+          /* X：改充值金额后清除应付覆盖，回到跟充值金额同步 */
+          state.billRechargeDueTouched = false;
+          state.billRechargeDue = v;
+          const dueEl = body.querySelector('[data-bill-recharge-field="due"]');
+          if (dueEl) {
+            dueEl.value = v;
+            dueEl.classList.toggle('is-empty', !v);
           }
         } else if (key === 'gift') {
           state.billRechargeGift = v;
@@ -42955,6 +42958,8 @@ window.__BILLING_EMBEDDED__ = true;
     const cur = Number(state.billTimesAdds[key]) || 0;
     const next = Math.max(0, Math.min(99, cur + delta));
     state.billTimesAdds[key] = next;
+    /* X：改次数后清除应付覆盖，按单价重算 */
+    state.billTimesDueTouched = false;
     renderBillTimesTopupSheet();
   }
   function payBillTimesTopup() {
@@ -43269,9 +43274,21 @@ window.__BILLING_EMBEDDED__ = true;
     renderBillHeader();
   }
 
+  function clearBillDueOverride() {
+    state.billDueOverride = null;
+    state.billDueEdited = false;
+  }
+
+  function setBillDueOverride(amount) {
+    const n = round2(Math.max(0, Number(amount) || 0));
+    state.billDueOverride = n;
+    state.billDueEdited = true;
+  }
+
   function getActivePayDue() {
     if (state.orderIsFree) return 0;
     if (state.billAssetPay) return round2(Number(state.billAssetPay.amount) || 0);
+    if (state.billDueOverride != null) return round2(Math.max(0, Number(state.billDueOverride) || 0));
     return round2(calcSettlement().dueCash);
   }
 
@@ -43380,7 +43397,7 @@ window.__BILLING_EMBEDDED__ = true;
       }, 1);
       target = state.cart[0];
     }
-    state.billDueEdited = false;
+    clearBillDueOverride();
     state.billAssetPay = null;
     state.cardIssuePending = null;
     state.cardExtendPending = null;
@@ -43902,6 +43919,7 @@ window.__BILLING_EMBEDDED__ = true;
         slipId: draft.id,
       });
     }
+    clearBillDueOverride();
     syncBillComposerMode();
     syncCartChrome();
     const billScreen = document.getElementById('screen-bill');
@@ -43909,7 +43927,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
   function clearCart() {
     state.cart = [];
-    state.billDueEdited = false;
+    clearBillDueOverride();
     state.payDueSnapshot = null;
     resetBillSlipState();
     syncCartChrome();
@@ -44058,9 +44076,13 @@ window.__BILLING_EMBEDDED__ = true;
       }
     }
 
-    const dueCash = membercardPay > 0 && isMemberBill()
+    let dueCash = membercardPay > 0 && isMemberBill()
       ? Math.max(0, round2(Math.max(0, remaining) + openCardAmount - balanceDeduct))
       : Math.max(0, round2(remaining + openCardAmount));
+    /* 手动改应付：输入值即最终应付，账单构成仍保留原抵扣展示 */
+    if (state.billDueOverride != null && !state.orderIsFree) {
+      dueCash = round2(Math.max(0, Number(state.billDueOverride) || 0));
+    }
 
     return {
       listTotal, projectDeduct, projectLines, discountDeduct, discountRate,
@@ -45498,7 +45520,8 @@ window.__BILLING_EMBEDDED__ = true;
       cashierId: state.cashierId,
       billPickCardId: state.billPickCardId,
       listTotal: cartListTotal(),
-      priceEdited: !!state.billDueEdited,
+      priceEdited: state.billDueOverride != null,
+      dueOverride: state.billDueOverride != null ? round2(Number(state.billDueOverride) || 0) : null,
     };
     /* 取单后再次挂单：替换原挂单，避免列表残留旧快照 */
     if (state.activeHoldId) {
@@ -45508,7 +45531,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.heldOrders.unshift(snap);
     state.billFromHold = false;
     state.cart = [];
-    state.billDueEdited = false;
+    clearBillDueOverride();
     state.benefitDraft = {};
     state.benefitApplied = {};
     state.selectedCouponId = null;
@@ -45531,30 +45554,14 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function applyBillDueTotal(newTotal) {
-    const next = round2(Math.max(0, Number(newTotal) || 0));
-    if (!state.cart.length) {
-      state.billDueEdited = true;
-      return;
+    if (Number.isFinite(Number(newTotal)) && Number(newTotal) > INPUT_LIMITS.MONEY_MAX) {
+      showToast('金额不能超过 ' + formatMoneyLimitLabel(), true);
+      return false;
     }
-    const oldDue = round2(calcSettlement().dueCash);
-    const oldList = cartListTotal();
-    const base = oldDue > 0.001 ? oldDue : oldList;
-    if (base > 0.001) {
-      const ratio = next / base;
-      state.cart.forEach(i => {
-        const u = lineUnit(i);
-        i.unitPrice = round2(u * ratio);
-        i.price = i.unitPrice;
-      });
-    } else if (next > 0) {
-      const totalQty = state.cart.reduce((s, i) => s + (Number(i.qty) || 0), 0) || 1;
-      state.cart.forEach(i => {
-        const q = Number(i.qty) || 1;
-        i.unitPrice = round2((next * q / totalQty) / q);
-        i.price = i.unitPrice;
-      });
-    }
-    state.billDueEdited = true;
+    setBillDueOverride(newTotal);
+    state.payAmounts = {};
+    state.payManualEdit = {};
+    return true;
   }
 
   function openQuickConsume() {
@@ -45593,6 +45600,7 @@ window.__BILLING_EMBEDDED__ = true;
           expanded: false,
           slipId: ensureBillDraft().id,
         });
+        clearBillDueOverride();
         syncBillComposerMode();
         syncCartChrome();
         if (document.getElementById('screen-bill') && !document.getElementById('screen-bill').classList.contains('hidden')) {
@@ -45627,7 +45635,7 @@ window.__BILLING_EMBEDDED__ = true;
           showToast('请输入有效金额');
           return;
         }
-        applyBillDueTotal(n);
+        if (!applyBillDueTotal(n)) return;
         renderDetail();
         syncCartChrome();
         showToast('已更新应付金额');
@@ -45645,6 +45653,7 @@ window.__BILLING_EMBEDDED__ = true;
     const next = round2(Math.max(0, Number(newTotal) || 0));
     row.unitPrice = round2(next / qty);
     row.price = row.unitPrice;
+    clearBillDueOverride();
   }
 
   function openLineSubtotalEditor(cartId) {
@@ -45682,17 +45691,14 @@ window.__BILLING_EMBEDDED__ = true;
 
   function applyHoldListTotal(hold, newTotal) {
     const next = round2(Math.max(0, Number(newTotal) || 0));
-    const old = round2(Number(hold.listTotal) || 0);
-    hold.listTotal = next;
-    hold.priceEdited = true;
-    if (hold.cart?.length && old > 0 && next !== old) {
-      const ratio = next / old;
-      hold.cart.forEach(i => {
-        const base = lineUnit(i);
-        i.unitPrice = round2(base * ratio);
-        i.price = i.unitPrice;
-      });
+    if (next > INPUT_LIMITS.MONEY_MAX) {
+      showToast('金额不能超过 ' + formatMoneyLimitLabel(), true);
+      return false;
     }
+    /* 挂单改应付：锁定金额，不按比例改写行价 */
+    hold.dueOverride = next;
+    hold.priceEdited = true;
+    return true;
   }
 
   function openHoldPriceEditor(holdId) {
@@ -45716,13 +45722,13 @@ window.__BILLING_EMBEDDED__ = true;
           showToast('请输入有效金额');
           return;
         }
-        applyHoldListTotal(h, n);
+        if (!applyHoldListTotal(h, n)) return;
         renderHoldList();
         showToast('已更新挂单金额');
       });
     }
     el.dataset.holdId = holdId;
-    el.value = String(hold.listTotal ?? 0);
+    el.value = String(hold.dueOverride != null ? hold.dueOverride : (hold.listTotal ?? 0));
     if (typeof window.openAmountKeypad === 'function') window.openAmountKeypad(el);
     else showToast('金额键盘未就绪');
   }
@@ -45769,11 +45775,12 @@ window.__BILLING_EMBEDDED__ = true;
     el.innerHTML = `<div class="hold-list">${state.heldOrders.map(h => {
       const time = (h.createdAt || '').replace('T', ' ').slice(0, 16);
       const items = (h.cart || []).map(i => `${i.name}×${i.qty}`).join('、');
+      const holdDue = h.dueOverride != null ? h.dueOverride : h.listTotal;
       return `<div class="hold-card" data-resume-hold="${h.id}">
         <div class="hold-card__main">
           <div class="hold-card__top">
             <span class="hold-card__name">${escapeHtml(h.customerName || '散客')}</span>
-            <button type="button" class="hold-card__amt-btn num" data-edit-hold-price="${h.id}" aria-label="修改挂单金额"><span>${formatYen(h.listTotal)}</span>${iconSvg('edit')}${h.priceEdited ? '<span class="hold-card__amt-hint">已改</span>' : ''}</button>
+            <button type="button" class="hold-card__amt-btn num" data-edit-hold-price="${h.id}" aria-label="修改挂单金额"><span>${formatYen(holdDue)}</span>${iconSvg('edit')}${h.priceEdited ? '<span class="hold-card__amt-hint">已改</span>' : ''}</button>
           </div>
           <div class="hold-card__meta">${escapeHtml(time)}${h.manualOrderNo ? ' · 单号 ' + escapeHtml(h.manualOrderNo) : ''}</div>
           <div class="hold-card__meta">${escapeHtml(items || '无商品')}</div>
@@ -45821,7 +45828,13 @@ window.__BILLING_EMBEDDED__ = true;
     state.payAmounts = {};
     state.activeHoldId = h.id;
     state.billFromHold = true;
-    state.billDueEdited = !!h.priceEdited;
+    if (h.dueOverride != null) {
+      setBillDueOverride(h.dueOverride);
+    } else {
+      clearBillDueOverride();
+      /* 旧挂单：曾按比例改行价，仅保留已改标记以跳过价目守卫 */
+      if (h.priceEdited) state.billDueEdited = true;
+    }
     resetBillSlipState();
     if (state.cart.length) {
       const slipId = 'slip_hold_' + Date.now();
@@ -45840,6 +45853,7 @@ window.__BILLING_EMBEDDED__ = true;
   function applyBenefitDraft() {
     if (state.benefitSkip) {
       state.benefitApplied = {};
+      clearBillDueOverride();
       return;
     }
     state.benefitApplied = JSON.parse(JSON.stringify(state.benefitDraft));
@@ -45850,6 +45864,7 @@ window.__BILLING_EMBEDDED__ = true;
       if (!cartHasDiscountableItems() || !cartHasDiscountableItemsForCard(card)) d.discountOn = false;
       if (d.fixedUse && !(Number(d.balanceUse) > 0)) d.balanceUse = 98;
     });
+    clearBillDueOverride();
   }
 
   function mutateCardsAfterPay(settlement) {
@@ -51496,7 +51511,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.billTab = 'project';
     state.searchQuery = '';
     state.cardsExpanded = false;
-    state.billDueEdited = false;
+    clearBillDueOverride();
     state.payDueSnapshot = null;
     ensureCashierId();
     resetBillCardPick();
@@ -51516,6 +51531,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.payAmounts = {};
     state.pendingOpenCard = null;
     state.lastSettlement = null;
+    clearBillDueOverride();
     state.pendingCatalogAdds = [];
     state.billStockPickSelected = {};
     state.guestGenderPickerOpen = false;
@@ -52581,6 +52597,11 @@ window.__BILLING_EMBEDDED__ = true;
     if (!btn || btn.disabled) return;
     bumpBillTimesAdd(btn.dataset.timesKey, Number(btn.dataset.timesD) || 0);
   });
+  document.getElementById('btnBillExtendCancel')?.addEventListener('click', () => closeMask('billExtendMask'));
+  document.getElementById('btnBillExtendConfirm')?.addEventListener('click', confirmBillExtend);
+  document.getElementById('billExtendMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billExtendMask') closeMask('billExtendMask');
+  });
   document.getElementById('btnBillRechargeOk')?.addEventListener('click', closeBillAssetOk);
   document.getElementById('billRechargeOkMask')?.addEventListener('click', e => {
     if (e.target.id === 'billRechargeOkMask') closeBillAssetOk();
@@ -52872,6 +52893,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.settleOffersTouched = true;
     state.selectedCouponId = draft;
     enforceSettleOfferMutex('coupon');
+    clearBillDueOverride();
     renderDetail();
     showOnlyScreen('screen-detail');
   });
