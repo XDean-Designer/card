@@ -15940,7 +15940,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="pick-holds-entry" id="pickHoldsEntry" hidden>
                 <button type="button" id="btnOpenHolds">
                   <svg class="pick-holds-entry__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-                  <span class="pick-holds-entry__label">取单（0）</span>
+                  <span class="pick-holds-entry__label">取挂单（0）</span>
                 </button>
               </div>
               <div class="pick-list-wrap">
@@ -44299,8 +44299,8 @@ window.__BILLING_EMBEDDED__ = true;
     const n = state.heldOrders.length;
     el.hidden = n <= 0;
     const label = btn.querySelector('.pick-holds-entry__label');
-    if (label) label.textContent = `取单（${n}）`;
-    else btn.textContent = `取单（${n}）`;
+    if (label) label.textContent = `取挂单（${n}）`;
+    else btn.textContent = `取挂单（${n}）`;
   }
   function syncCartChrome() {
     const n = cartCount();
