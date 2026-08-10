@@ -29,6 +29,7 @@
 ### 模块关系（总图）
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TB
   WB[RTB工作台]
   WB --> Cust[客户管理]
@@ -61,14 +62,18 @@ flowchart TB
 说明：
 
 - 每节含 **主链路图**、**关键支线**、**页面清单速查**
-- 主图只保留 Happy path；Sheet / Dialog 写入支线，避免已落地节点挤在一张图；占位模块仅列名称
-- 完整节点见 [五、附录](#五附录flow全量索引)
+- **已落地模块**：主链路为单张全量流程图，覆盖该模块附录全部 flow 节点及跳转（含面板 / 弹窗 / 拦截态）；**节点仅用中文**（英文 flow id 见下方页面清单与附录）；图内字号加大便于阅读
+- **关键支线**：仅补非页面跳转的规则与约束（锁定、支付回调、付费开通等）
+- **占位模块**（客户 / 预约 / 优惠券）：主链路仍为 `—`
+- 完整节点表见 [五、附录](#五附录flow全量索引)；**模块关系（总图）不变**
+
 
 ### 2.1 RTB工作台
 
 #### 主链路
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TB
   wb[RTB工作台]
   wb --> cust[客户管理]
@@ -132,23 +137,56 @@ flowchart TB
 #### 主链路
 
 ```mermaid
-flowchart TD
-  list[价目表列表_项目或产品]
-  list --> add[新增项目或产品]
-  list --> edit[详情编辑]
-  list --> groups[分组管理]
-  groups --> members[编辑成员]
-  add --> list
-  edit --> list
+%%{init: {'flowchart': {'nodeSpacing': 28, 'rankSpacing': 36, 'padding': 12, 'htmlLabels': true}, 'themeVariables': {'fontSize': '18px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
+flowchart TB
+  subgraph laneList [① 列表]
+    direction LR
+    empty["价目表·空态"] --> listP["价目表·项目"]
+    listP <--> listPr["价目表·产品"]
+    listP --> hidden["已隐藏展开"]
+  end
+
+  subgraph laneEdit [② 增改]
+    direction LR
+    listP2["价目表·项目"] --> add["新增项目"]
+    listP2 --> editN["项目详情·普通"]
+    listP2 --> editB["项目详情·绑卡锁定"]
+    listP2 --> editOff["项目详情·已下架"]
+    listPr2["价目表·产品"] --> addPr["新增产品"]
+    listPr2 --> editPr["产品详情·普通"]
+    listPr2 --> editPrOff["产品详情·已下架"]
+  end
+
+  subgraph laneRow [③ 行操作]
+    direction LR
+    listP3["价目表·项目"] --> action["行操作 面板"]
+    action --> setGroup["设置分组 面板"]
+    action --> setGroupEmpty["设置分组·无自定义组"]
+    listP3 --> swipe["左滑可删除"]
+    swipe --> delDlg["删除确认 弹窗"]
+    listP3 --> swipeLock["左滑不可删除"]
+  end
+
+  subgraph laneGroup [④ 分组]
+    direction LR
+    listP4["价目表·项目"] --> groups["分组管理"]
+    listPr4["价目表·产品"] --> groups
+    groups --> members["编辑成员"]
+    groups --> gMenu["分组行菜单 面板"]
+    gMenu --> gCreate["新建分组 弹窗"]
+    gMenu --> gRename["重命名 弹窗"]
+    gMenu --> gDelete["删除分组 弹窗"]
+  end
+
+  laneList ~~~ laneEdit ~~~ laneRow ~~~ laneGroup
 ```
 
 #### 关键支线
 
-- 行操作 Sheet：设置分组、下架/上架、隐藏等
-- 左滑删除（绑卡锁定时不可删）
-- 已隐藏折叠展开
-- 分组：新建 / 重命名 / 删除 Dialog；行菜单 Sheet
-- 详情态：普通 / 绑卡锁定 / 已下架（项目与产品）
+- 绑卡项目：左滑删除锁定，详情关键字段不可误改
+- 列表结构：项目 / 产品分页签；在售 → 已下架 → 已隐藏折叠
+- 分组拖拽排序：隐藏相关组禁拖并有真实文案
+- 新增 / 详情保存后回到对应项目或产品列表
 
 #### 页面清单速查
 
@@ -183,27 +221,70 @@ flowchart TD
 #### 主链路
 
 ```mermaid
-flowchart TD
-  list[会员卡列表_在售或下架]
-  list --> create1[Step1_基本信息]
-  create1 --> create2[Step2_权益组合]
-  create2 --> create3[Step3_用卡策略]
-  create3 --> ok[创建成功]
-  list --> detail[卡详情]
-  detail --> issue[确认办卡]
-  issue --> billPay[开单支付入账]
-  detail --> extend[延期]
-  detail --> refund[退卡估值]
-  detail --> shelf[下架或重新上架]
+%%{init: {'flowchart': {'nodeSpacing': 28, 'rankSpacing': 36, 'padding': 12, 'htmlLabels': true}, 'themeVariables': {'fontSize': '18px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
+flowchart TB
+  subgraph laneCreate [① 建卡]
+    direction LR
+    listOn["列表·在售"] --> s1["第1步 基本信息"]
+    s1 --> s2["第2步 权益组合"]
+    s2 --> s3["第3步 用卡策略"]
+    s3 --> createOk["创建成功"]
+    createOk --> listOn2["回列表·在售"]
+    s2 --> pickProj["添加项目权益"]
+    pickProj --> pickProjG["选项目·分组筛选"]
+    pickProjG --> s2
+    s2 --> pickProd["添加产品权益"]
+    pickProd --> pickProdG["选产品·分组筛选"]
+    pickProdG --> s2
+    s2 --> pickDisc["添加折扣权益"]
+    pickDisc --> pickDiscG["选折扣·分组筛选"]
+    pickDiscG --> s2
+  end
+
+  subgraph laneGroup [② 分组]
+    direction LR
+    listG["列表·在售"] --> setGroup["设置分组 面板"]
+    listG --> groups["分组管理"]
+    groups --> members["编辑成员"]
+    groups --> gCreate["新建分组 弹窗"]
+  end
+
+  subgraph laneShelf [③ 上下架]
+    direction LR
+    listOnS["列表·在售"] <--> listOff["列表·已下架"]
+    listOnS --> detailOnS["详情·在售"]
+    detailOnS --> shelf["下架确认 弹窗"]
+    shelf --> listOff
+    listOff --> detailOff["详情·已下架"]
+    detailOff --> reshelf["重新上架 弹窗"]
+    reshelf --> listOnS
+  end
+
+  subgraph laneIssue [④ 办卡]
+    direction LR
+    detailOnI["详情·在售"] --> issueTab["选择会员·办卡 页签"]
+    issueTab --> quick["确认办卡快捷"]
+    quick --> billPay["开单支付入账"]
+    billPay --> issueOk["办卡成功"]
+  end
+
+  subgraph laneHold [⑤ 持卡变更与说明]
+    direction LR
+    detailOnH["详情·在售"] --> holders["选择会员·退卡延期 页签"]
+    holders --> extend["持卡延期 面板"]
+    holders --> refund["退卡估值 面板"]
+    detailOnH --> stats["运营数据说明 弹窗"]
+    detailOnH --> unlim["永久转有限 弹窗"]
+  end
+
+  laneCreate ~~~ laneGroup ~~~ laneShelf ~~~ laneIssue ~~~ laneHold
 ```
 
 #### 关键支线
 
-- Step2 旁路：添加项目 / 产品 / 折扣权益（可按分组筛选）
-- 分组管理、编辑成员、设置分组 Sheet
-- 办卡选会员 Tab；持卡退卡/延期 Tab
-- 运营数据说明、永久转有限期 Dialog
-- 持卡数 > 0 时模板关键字段锁定（见 PRD）
+- 第2步至少配置一类权益方可进入第3步
+- 持卡数 > 0 时模板关键字段锁定（见 PRD）；下架后可重上架或克隆
+- 办卡付款对齐开单结账契约：支付成功回调后才入账并进入办卡成功页
 
 #### 页面清单速查
 
@@ -259,21 +340,57 @@ flowchart TD
 #### 主链路
 
 ```mermaid
-flowchart LR
-  pick[选择顾客] --> bill[点单台]
-  bill --> detail[结算确认]
-  detail --> pay[开单分账]
-  pay --> success[成功]
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
+flowchart TD
+  pick["①选择顾客"]
+  bill["②点单台"]
+  detail["③结算确认"]
+  cart["已选 面板"]
+  checkout["结账方式 面板"]
+  pay["开单分账"]
+  priceChg["价目变更拦截 弹窗"]
+  success["成功"]
+  hold["挂单列表"]
+  expand["展卡"]
+  addCard["添加卡"]
+  addCardG["添加卡·选卡"]
+  asset["充卡续卡"]
+  benefit["选择权益"]
+  discount["人工打折"]
+  scanMe["客户扫我"]
+  scanCust["我扫客户"]
+  pick --> bill
+  hold --> bill
+  bill --> cart
+  cart --> bill
+  bill --> expand
+  expand --> bill
+  bill --> addCard
+  addCard --> addCardG
+  addCardG --> bill
+  bill --> asset
+  asset --> bill
+  bill --> benefit
+  benefit --> bill
+  bill --> discount
+  discount --> bill
+  bill --> detail
+  detail --> checkout
+  checkout --> pay
+  pay --> priceChg
+  priceChg --> pay
+  pay --> success
+  checkout --> scanMe
+  checkout --> scanCust
+  scanMe --> success
+  scanCust --> success
 ```
 
 #### 关键支线
 
-- 已选 Sheet、结账方式 Sheet
-- 价目变更拦截 Dialog
-- 挂单列表 / 取挂单
-- 展卡、添加卡、充卡续卡
-- 选择权益、人工打折
-- 客户扫我 / 我扫客户收款
+- 挂单 / 取挂单与点单台共用购物车态
+- 价目变更拦截：分账前金额与价目不一致时阻断，确认后回到分账
+- 扫码收款为结账旁路，支付成功后同样进入成功页
 
 #### 页面清单速查
 
@@ -302,25 +419,51 @@ flowchart LR
 #### 主链路
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TD
-  hub[流水入口]
-  hub --> list[门店流水]
-  list --> detail[订单详情]
-  detail --> refund[选择退款]
-  detail --> edit[修改订单]
-  hub --> weikuan[尾款单]
-  weikuan --> wkDetail[尾款详情]
-  wkDetail --> wkPay[尾款分账]
-  wkPay --> wkOk[收款成功]
-  hub --> self[自助收银]
-  self --> selfDetail[自助详情]
+  hub["流水入口"]
+  list["门店流水"]
+  detail["订单详情"]
+  refund["选择退款"]
+  edit["修改订单"]
+  editLog["修改记录 面板"]
+  editAdd["添加服务项目"]
+  editItem["编辑项目"]
+  diffC["补收差价"]
+  diffR["退还差价"]
+  weikuan["尾款单"]
+  wkDetail["尾款详情"]
+  wkCheckout["收款方式"]
+  wkPay["尾款分账"]
+  wkOk["收款成功"]
+  wkRepay["还款明细"]
+  self["自助收银"]
+  selfDetail["自助详情"]
+  hub --> list
+  list --> detail
+  detail --> refund
+  detail --> edit
+  edit --> editLog
+  edit --> editAdd
+  editAdd --> edit
+  edit --> editItem
+  editItem --> edit
+  detail --> diffC
+  detail --> diffR
+  hub --> weikuan
+  weikuan --> wkDetail
+  wkDetail --> wkCheckout
+  wkCheckout --> wkPay
+  wkPay --> wkOk
+  wkDetail --> wkRepay
+  hub --> self
+  self --> selfDetail
 ```
 
 #### 关键支线
 
-- 修改记录 Sheet；改单添加/编辑项目
-- 补收差价 / 退还差价
-- 尾款：收款方式、还款明细
+- 改单保存后可能触发补收 / 退还差价，再走支付旁路
+- 尾款单与门店流水并列入口，还款明细从尾款详情进入
 
 #### 页面清单速查
 
@@ -350,18 +493,27 @@ flowchart TD
 #### 主链路
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TD
-  hub[经营分析入口]
-  hub --> pie[资金构成二级]
-  hub --> store[门店经营报表]
-  hub --> mall[商城售卖报表]
-  hub --> selfRpt[自助收银报表]
+  hub["经营分析入口"]
+  pie["资金构成·二级"]
+  store["门店经营报表"]
+  mall["商城售卖报表"]
+  selfRpt["自助收银报表"]
+  hub --> pie
+  hub --> store
+  hub --> mall
+  hub --> selfRpt
+  pie --> hub
+  store --> hub
+  mall --> hub
+  selfRpt --> hub
 ```
 
 #### 关键支线
 
-- 入口页可下钻资金构成饼图（`biz-pie`）
-- 三类报表并列，无强制先后顺序
+- 三类报表与资金构成并列，无强制先后；均可从入口直达或返回入口
+- 报表内页签 / 筛选项为页内态，不单独占用 FLOW 节点
 
 #### 页面清单速查
 
@@ -378,27 +530,71 @@ flowchart TD
 #### 主链路
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TD
-  list[员工管理]
-  list --> detail[员工详情]
-  list --> create[创建或完善员工]
-  list --> roles[职位管理]
-  list --> salary[员工薪资]
-  salary --> commDetail[业绩提成明细]
-  salary --> reward[设奖惩或奖惩明细]
-  list --> ach[业绩设置]
-  list --> scheme[提成设置]
-  scheme --> assign[分配员工]
-  list --> schedule[员工排班]
+  list["员工管理"]
+  roles["职位管理"]
+  detail["员工详情"]
+  create["创建员工"]
+  refine["完善员工"]
+  salary["员工薪资"]
+  cycle["结算周期"]
+  commDetail["业绩提成明细"]
+  pending["提成明细·待确认"]
+  staffView["提成明细·员工确认"]
+  rewardDetail["奖惩明细"]
+  rewards["设奖惩"]
+  ach["业绩设置"]
+  achAdv["基础设置"]
+  comm["提成设置"]
+  commCreate["新建方案"]
+  commItem["按项提成"]
+  commLadder["阶梯提成"]
+  itemPick["添加提成项目"]
+  scope["使用范围"]
+  assign["分配员工"]
+  schedule["员工排班·占位"]
+  list --> roles
+  list --> detail
+  list --> create
+  list --> refine
+  create --> list
+  refine --> list
+  detail --> list
+  list --> salary
+  salary --> cycle
+  cycle --> salary
+  salary --> commDetail
+  commDetail --> pending
+  pending --> staffView
+  staffView --> commDetail
+  pending --> commDetail
+  salary --> rewardDetail
+  salary --> rewards
+  rewards --> rewardDetail
+  list --> ach
+  ach --> achAdv
+  achAdv --> ach
+  list --> comm
+  comm --> commCreate
+  commCreate --> commItem
+  commCreate --> commLadder
+  comm --> commItem
+  comm --> commLadder
+  commItem --> itemPick
+  itemPick --> commItem
+  commItem --> scope
+  commLadder --> scope
+  scope --> assign
+  assign --> comm
+  list --> schedule
 ```
 
 #### 关键支线
 
-- 结算周期设置
-- 提成明细：店主调整 → 待确认草稿；员工同意后才生效（`pending` / `staff` 深链）
-- 提成方案：按项 / 阶梯；使用范围；新建方案类型
-- 业绩：基础设置 Tab
-- **员工排班**（下级子模块 · 占位）：班次与出勤安排，入口归员工管理，不单独占工作台一级入口
+- 提成明细：店主改数须填原因 → 待确认草稿；**员工同意后才计入合计**（可驳回；店主可撤回）
+- 职位权限能力点与开单 / 价目 / 卡等模块联动（见原型权限表）
+- **员工排班**为下级子模块占位：班次与出勤，不单独占工作台一级入口、无 FLOW 节点
 
 #### 页面清单速查
 
@@ -432,18 +628,20 @@ flowchart TD
 #### 主链路
 
 ```mermaid
-flowchart TD
-  list[支出管理]
-  list --> add[记一笔支出]
-  add --> types[选择支出项目]
-  list --> cats[分类管理]
-  list --> flow[支出流水]
-  list --> detail[支出详情]
+%%{init: {'flowchart': {'nodeSpacing': 24, 'rankSpacing': 32, 'padding': 8}, 'themeVariables': {'fontSize': '16px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
+flowchart TB
+  list["支出管理"]
+  list --> add["记一笔支出"]
+  add --> types["选择支出项目"]
+  list --> cats["分类管理"]
+  list --> flow["支出流水"]
+  flow --> detail["支出详情"]
 ```
 
 #### 关键支线
 
-- 记支出时选支付方式、经手人、日期（旁路选择器）
+- 记一笔 / 分类 / 详情完成后均返回支出列表；选支出项目后回填到记一笔页
+- 记支出旁路选择器：支付方式、经手人、日期（页内态，无独立 FLOW）
 - 列表支持日期范围筛选（含自定义区间）
 
 #### 页面清单速查
@@ -462,25 +660,38 @@ flowchart TD
 #### 主链路
 
 ```mermaid
+%%{init: {'themeVariables': {'fontSize': '22px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
 flowchart TD
-  hub[库存工作台]
-  hub --> tin[商品入库]
-  hub --> tout[商品出库]
-  hub --> goods[商品管理]
-  goods --> product[新增商品]
-  goods --> sku[新增规格]
-  hub --> types[入出类别]
-  hub --> tf[调拨管理]
-  tf --> tfAdd[新建调拨]
+  hub["库存工作台"]
+  tin["商品入库"]
+  tout["商品出库"]
+  goods["商品管理"]
+  product["新增商品"]
+  sku["新增规格"]
+  types["入出类别"]
+  tf["调拨管理"]
+  tfAdd["新建调拨"]
+  hub --> tin
+  hub --> tout
+  hub --> goods
+  goods --> product
+  product --> goods
+  goods --> sku
+  sku --> goods
+  hub --> types
+  types --> hub
+  hub --> tf
+  tf --> tfAdd
+  tfAdd --> tf
+  tin --> hub
+  tout --> hub
 ```
 
 #### 关键支线
 
-- 库存管理为**付费升级**功能，未开通时入口不可用或不可见（以产品策略为准）
-- 开通后**引导**用户完成：库存商品 ↔ 价目表「产品」的关联
-- 关联后：库存数据与价目表产品**同步**（数量/规格等细则不在本文展开）
-- 扫码添加入库在演示中降级为 toast 提示
-- 选货旁路 `stock-pick` 存在于导航，未列入 FLOW 地图节点
+- **付费升级**：未开通时入口不可用或不可见（以产品策略为准）
+- 开通后引导：库存商品 ↔ 价目表「产品」关联，关联后数量/规格与价目同步
+- 扫码添加入库在演示中降级为提示；选货旁路存在于导航但未列入 FLOW 地图
 
 #### 页面清单速查
 
