@@ -7913,10 +7913,12 @@ button.exp-flow-row:active { opacity: .92; }
   clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
   border-radius: 12px 0 0 0;
 }
+/* 右侧 Tab：左边斜切，与左 Tab 右斜边水平对称 */
 .bill-action__tab:last-child {
   z-index: 1;
-  margin-left: 0;
-  padding-left: 26px;
+  margin-left: -18px;
+  padding-left: 28px;
+  clip-path: polygon(18px 0, 100% 0, 100% 100%, 0 100%);
   border-radius: 0 12px 0 0;
 }
 .bill-action__tab.is-on {
@@ -42177,7 +42179,10 @@ window.__BILLING_EMBEDDED__ = true;
       const tid = heldTemplateId(card);
       const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
       const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
-      const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#E8E8E8';
+      const theme = (typeof getCardTheme === 'function')
+        ? getCardTheme(colorKey)
+        : { gradient: '#E8E8E8' };
+      const grad = theme.gradient || '#E8E8E8';
       return `<button type="button" class="bill-held-card${on ? ' is-on' : ''}${dim ? ' is-dim' : ''}" data-bill-held-card="${escapeHtml(card.id)}" aria-pressed="${on ? 'true' : 'false'}">
         <span class="bill-held-card__face" aria-hidden="true"><span class="bill-held-card__face-head" style="background:${grad}"></span><span class="bill-held-card__face-body"></span></span>
         <span class="bill-held-card__name">${escapeHtml(card.name)}</span>
@@ -42240,8 +42245,11 @@ window.__BILLING_EMBEDDED__ = true;
     const tid = heldTemplateId(card);
     const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
     const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
-    const grad = (CARD_COLORS && CARD_COLORS[colorKey]) || '#C0C0C0';
-    return `<span class="bill-slip__card-chip"><span class="bill-slip__card-dot" style="background:${grad}"></span>${escapeHtml(card.name)}</span>`;
+    const theme = (typeof getCardTheme === 'function')
+      ? getCardTheme(colorKey)
+      : { gradient: '#C0C0C0', accent: '#C0C0C0' };
+    const swatch = theme.accent || theme.gradient || '#C0C0C0';
+    return `<span class="bill-slip__card-chip"><span class="bill-slip__card-dot" style="background:${swatch}"></span>${escapeHtml(card.name)}</span>`;
   }
 
   function renderBillSlipCard(slip, opts) {
