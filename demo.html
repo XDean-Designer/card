@@ -8147,6 +8147,105 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .bill-held-card.is-on .bill-held-card__name { font-weight: 700; color: #FF7043; }
 .bill-held-card.is-dim .bill-held-card__name { color: #B0B0B0; font-weight: 400; }
+/* 计次票卡 · 浅金色券外形 */
+.bill-held-card--ticket .bill-held-card__face {
+  width: 56px;
+  height: 34px;
+  border-radius: 5px;
+  border: 1px solid #E4C98A;
+  overflow: visible;
+  position: relative;
+  background: linear-gradient(145deg, #FFF9EC 0%, #F3E2BE 48%, #EBD4A4 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.bill-held-card--ticket .bill-held-card__face::before,
+.bill-held-card--ticket .bill-held-card__face::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #E4C98A;
+  z-index: 1;
+  pointer-events: none;
+}
+.bill-held-card--ticket .bill-held-card__face::before { left: -5px; }
+.bill-held-card--ticket .bill-held-card__face::after { right: -5px; }
+.bill-held-card--ticket .bill-held-card__face-head {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A6A2E;
+  font-family: var(--font-data), inherit;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.bill-held-card--ticket .bill-held-card__face-body { display: none; }
+.bill-held-card--ticket.is-on .bill-held-card__face {
+  border-color: #D4A84A;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 0 0 2px rgba(212, 168, 74, 0.28);
+}
+.bill-held-card--ticket.is-on .bill-held-card__face::before,
+.bill-held-card--ticket.is-on .bill-held-card__face::after {
+  box-shadow: inset 0 0 0 1px #D4A84A;
+}
+.bill-held-card--ticket.is-on .bill-held-card__face-head { color: #6E5420; }
+.bill-held-card--ticket.is-on .bill-held-card__name { color: #8A6A2E; }
+.bill-ticket-deduct-meta {
+  padding: 4px 16px 12px; display: flex; flex-direction: column; gap: 4px;
+}
+.bill-ticket-deduct-meta__name {
+  font-size: 16px; font-weight: 600; color: #1a1a1a; line-height: 22px;
+}
+.bill-ticket-deduct-meta__remain {
+  font-size: 13px; color: var(--text-sec); line-height: 18px;
+}
+.bill-ticket-deduct-meta__remain strong {
+  font-weight: 600; color: #1a1a1a; font-family: var(--font-data), inherit;
+}
+.bill-ticket-deduct-step {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  padding: 8px 16px 16px;
+}
+.bill-ticket-deduct-step__btn {
+  width: 36px; height: 36px; border-radius: 10px; border: 1px solid #E8E8E8;
+  background: #fff; color: #1a1a1a; font-size: 20px; line-height: 1;
+  font-family: inherit; cursor: pointer; padding: 0;
+}
+.bill-ticket-deduct-step__btn:disabled { opacity: .35; cursor: default; }
+.bill-ticket-deduct-step__n {
+  min-width: 36px; text-align: center; font-size: 22px; font-weight: 700;
+  font-family: var(--font-data), inherit; color: #1a1a1a;
+}
+.proj-metering-seg {
+  display: flex; gap: 0; margin: 0 0 12px; padding: 3px;
+  background: #F2F2F2; border-radius: 10px;
+}
+.proj-metering-seg__btn {
+  flex: 1; height: 32px; border: none; border-radius: 8px;
+  background: transparent; color: #666; font-size: 13px; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+}
+.proj-metering-seg__btn.is-on {
+  background: #fff; color: #1a1a1a; box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+.catalog-times-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; padding: 0 6px; height: 20px; border-radius: 6px;
+  background: #FFF0EB; color: #C24A2E; font-size: 12px; font-weight: 600;
+  font-family: var(--font-data), inherit; line-height: 1;
+}
 .bill-held-card--add .bill-held-card__face {
   border: 1.5px dashed #D0D0D0;
   background: #FAFAFA;
@@ -8218,84 +8317,6 @@ button.exp-flow-row:active { opacity: .92; }
   -webkit-tap-highlight-color: transparent;
 }
 .bill-quick-row__add:active { opacity: .88; }
-/* 选择会员卡 · 快速扣次（单共计池） */
-.bill-qd-bar {
-  margin: 0 12px 10px;
-  padding: 12px;
-  border: 1px solid #F0F0F0;
-  border-radius: 12px;
-  background: #FAFAFA;
-  box-sizing: border-box;
-}
-.bill-qd-bar__head {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  margin-bottom: 8px;
-}
-.bill-qd-bar__title {
-  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
-}
-.bill-qd-bar__remain {
-  font-size: 12px; color: var(--text-sec); line-height: 16px; flex-shrink: 0;
-}
-.bill-qd-bar__row {
-  display: flex; align-items: center; gap: 8px;
-}
-.bill-qd-bar__meta { flex: 1; min-width: 0; }
-.bill-qd-bar__name {
-  font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.bill-qd-bar__sub {
-  font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 2px;
-}
-.bill-qd-bar__sub .num { font-family: var(--font-data), inherit; color: #1a1a1a; }
-.bill-qd-bar__step {
-  display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
-}
-.bill-qd-bar__step-btn {
-  width: 28px; height: 28px; border-radius: 8px; border: 1px solid #E8E8E8;
-  background: #fff; color: #1a1a1a; font-size: 16px; line-height: 1;
-  font-family: inherit; cursor: pointer; padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.bill-qd-bar__step-btn:disabled { opacity: .35; cursor: default; }
-.bill-qd-bar__step-n {
-  min-width: 22px; text-align: center; font-size: 15px; font-weight: 600;
-  font-family: var(--font-data), inherit; color: #1a1a1a;
-}
-.bill-qd-bar__foot {
-  display: flex; align-items: center; gap: 8px; margin-top: 10px;
-}
-.bill-qd-bar__swap {
-  flex: 1; height: 40px; border: 1px solid var(--brand-border, #ffc9cf);
-  border-radius: 10px; background: transparent; color: var(--brand);
-  font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.bill-qd-bar__go {
-  flex: 1; height: 40px; border: none; border-radius: 10px;
-  background: var(--brand); color: #fff; font-size: 15px; font-weight: 600;
-  font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
-}
-.bill-qd-bar__go:active, .bill-qd-bar__swap:active { opacity: .88; }
-.bill-qd-pick-list { padding: 4px 0 8px; max-height: min(52vh, 420px); overflow: auto; }
-.bill-qd-pick-item {
-  display: flex; align-items: center; gap: 10px; width: 100%;
-  padding: 14px 16px; border: none; border-bottom: 0.5px solid #EDEDED;
-  background: #fff; text-align: left; font-family: inherit; cursor: pointer;
-  -webkit-tap-highlight-color: transparent; box-sizing: border-box;
-}
-.bill-qd-pick-item:last-child { border-bottom: none; }
-.bill-qd-pick-item.is-on { background: #FFF5F6; }
-.bill-qd-pick-item__meta { flex: 1; min-width: 0; }
-.bill-qd-pick-item__name { font-size: 15px; color: #1a1a1a; font-weight: 500; }
-.bill-qd-pick-item__price {
-  font-size: 13px; color: var(--text-sec); margin-top: 2px;
-  font-family: var(--font-data), inherit;
-}
-.bill-qd-pick-item__tag {
-  flex-shrink: 0; font-size: 11px; color: var(--brand); font-weight: 500;
-}
 .bill-stock-entry {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: calc(100% - 32px); margin: 10px 16px 10px; height: 40px;
@@ -15869,7 +15890,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="table-card" id="projTableCard">
                 <div class="table-head" id="projTableHead">
                   <button type="button" class="table-head__cell" data-col-sort="name"><span class="table-head__inner">项目名称</span></button>
-                  <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长（分钟）</span></button>
+                  <button type="button" class="table-head__cell is-center" data-col-sort="duration" data-col-duration><span class="table-head__inner">时长/次数</span></button>
                   <button type="button" class="table-head__cell is-center" data-col-sort="price"><span class="table-head__inner">价格（¥）</span></button>
                 </div>
                 <div id="projProjectTable"></div>
@@ -17179,13 +17200,19 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
 
-          <div class="picker-mask picker-mask--bottom" id="billQuickDeductPickMask">
-            <div class="picker-sheet" role="dialog" aria-label="选择扣次项目">
-              <div class="picker-head"><span class="picker-head__title-main">选择扣次项目</span></div>
-              <p class="emp-comm-edit-hint" style="padding:0 16px 4px;margin:0">仅展示本卡「共计」池内项目</p>
-              <div class="bill-qd-pick-list" id="billQuickDeductPickList"></div>
-              <div class="picker-foot">
-                <button type="button" class="btn-main secondary" id="btnBillQuickDeductPickCancel">取消</button>
+          <!-- 开单 · 计次票卡一键扣次 -->
+          <div class="picker-mask picker-mask--bottom" id="billTimesTicketMask">
+            <div class="picker-sheet" role="dialog" aria-label="扣次确认">
+              <div class="picker-head"><span class="picker-head__title-main">扣次</span></div>
+              <div class="bill-ticket-deduct-meta" id="billTimesTicketMeta"></div>
+              <div class="bill-ticket-deduct-step" role="group" aria-label="扣次次数">
+                <button type="button" class="bill-ticket-deduct-step__btn" id="btnBillTimesTicketMinus" aria-label="减少">−</button>
+                <span class="bill-ticket-deduct-step__n" id="billTimesTicketQty">1</span>
+                <button type="button" class="bill-ticket-deduct-step__btn" id="btnBillTimesTicketPlus" aria-label="增加">+</button>
+              </div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="btnBillTimesTicketCancel">取消</button>
+                <button type="button" class="btn-main" id="btnBillTimesTicketConfirm">确认扣次</button>
               </div>
             </div>
           </div>
@@ -17424,8 +17451,14 @@ function seedProjectCatalog() {
     { id: 'p25', name: '卸甲重做', price: 68, duration: 40, onSale: true, bookable: false, category: '美甲' },
     { id: 'p26', name: '开花嫁接睫毛', price: 288, duration: 90, onSale: true, bookable: true, category: '美睫' },
     { id: 'p27', name: '美睫补嫁', price: 128, duration: 45, onSale: true, bookable: true, category: '美睫' },
+    { id: 'p28', name: '精致剪发10次', price: 680, metering: 'times', timesQty: 10, redeemName: '精致剪发', onSale: true, bookable: false, category: '剪发造型' },
+    { id: 'p29', name: '面部护理10次', price: 1980, metering: 'times', timesQty: 10, redeemName: '面部护理', onSale: true, bookable: false, category: '美容' },
   ].map(p => ({
     ...p,
+    metering: p.metering || 'service',
+    timesQty: p.metering === 'times' ? (p.timesQty || 10) : null,
+    redeemName: p.metering === 'times' ? (p.redeemName || p.name) : null,
+    duration: p.metering === 'times' ? null : p.duration,
     images: [],
     hasImage: false,
     boundToCard: false,
@@ -17503,8 +17536,8 @@ function seedCatalogGroups() {
       { id: 'g_proj_wash', name: '洗吹', itemIds: ['p1', 'p3', 'p19'] },
       { id: 'g_proj_tang', name: '烫染', itemIds: ['p6', 'p7', 'p8', 'p9', 'p10', 'p16', 'p18'] },
       { id: 'g_proj_care', name: '护理', itemIds: ['p11', 'p12', 'p13', 'p15'] },
-      { id: 'g_proj_cut', name: '剪发造型', itemIds: ['p2', 'p4', 'p5', 'p14', 'p17'] },
-      { id: 'g_proj_beauty', name: '美容', itemIds: ['p20', 'p21', 'p22'] },
+      { id: 'g_proj_cut', name: '剪发造型', itemIds: ['p2', 'p4', 'p5', 'p14', 'p17', 'p28'] },
+      { id: 'g_proj_beauty', name: '美容', itemIds: ['p20', 'p21', 'p22', 'p29'] },
       { id: 'g_proj_nail', name: '美甲', itemIds: ['p23', 'p24', 'p25'] },
       { id: 'g_proj_lash', name: '美睫', itemIds: ['p26', 'p27'] },
       { id: 'g_proj_empty', name: '待配置', itemIds: [] },
@@ -17656,7 +17689,11 @@ window.CardCatalogBridge = {
       name: p.name,
       category: p.category || '项目',
       price: p.price,
-      benefitKey: p.name,
+      benefitKey: p.metering === 'times' ? (p.redeemName || p.name) : p.name,
+      metering: p.metering || 'service',
+      timesQty: p.metering === 'times' ? (Number(p.timesQty) || 0) : null,
+      redeemName: p.metering === 'times' ? (p.redeemName || p.name) : null,
+      isTimesPackage: p.metering === 'times',
     }));
   },
   getBillProducts() {
@@ -17931,7 +17968,7 @@ function syncPriceCatalogTabs() {
   const nameHead = document.querySelector('#projTableHead [data-col-sort="name"] .table-head__inner');
   if (nameHead) nameHead.textContent = tab === 'product' ? '产品名称（规格）' : '项目名称';
   const durHead = document.querySelector('#projTableHead [data-col-sort="duration"] .table-head__inner');
-  if (durHead) durHead.textContent = '时长（分钟）';
+  if (durHead) durHead.textContent = '时长/次数';
   const priceHead = document.querySelector('#projTableHead [data-col-sort="price"] .table-head__inner');
   if (priceHead) priceHead.textContent = '价格（¥）';
   syncProjListDragHint();
@@ -21908,6 +21945,18 @@ function projFormatDurationListHtml(mins) {
   return `<span class="dur-cell"><span class="dur-text">${m}</span></span>`;
 }
 
+function projFormatMeteringListHtml(p) {
+  if (p && p.metering === 'times') {
+    const n = Math.max(0, parseInt(p.timesQty, 10) || 0);
+    return `<span class="catalog-times-badge">${n}次</span>`;
+  }
+  return projFormatDurationListHtml(p && p.duration);
+}
+
+function isTimesMeteringProject(p) {
+  return !!(p && p.metering === 'times');
+}
+
 function projMinutesToWheel(total) {
   const capped = Math.min(PROJ_DUR_HOUR_MAX * 60 + 55, Math.max(0, parseInt(total, 10) || 0));
   let hours = Math.floor(capped / 60);
@@ -22113,7 +22162,9 @@ function compareCatalogByCol(a, b, key, dir) {
   if (key === 'name') {
     cmp = a.name.localeCompare(b.name, 'zh-CN');
   } else if (key === 'duration') {
-    cmp = (a.duration || 0) - (b.duration || 0);
+    const av = a.metering === 'times' ? (Number(a.timesQty) || 0) : (a.duration || 0);
+    const bv = b.metering === 'times' ? (Number(b.timesQty) || 0) : (b.duration || 0);
+    cmp = av - bv;
   } else if (key === 'spec') {
     cmp = String(a.spec || '').localeCompare(String(b.spec || ''), 'zh-CN');
   } else if (key === 'price') {
@@ -22200,7 +22251,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
             <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(displayName)}</span>
           </div>
         </div>
-        <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
+        <div class="dur">${isProduct ? '' : projFormatMeteringListHtml(p)}</div>
         <div class="price">${projFormatPriceHtml(p.price)}</div>
       </div>`;
   const row = wrap.querySelector('.table-row');
@@ -22852,7 +22903,10 @@ function projDefaultForm(kind = 'project') {
   if (kind === 'product') {
     return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
-  return { kind: 'project', name: '', price: '', duration: 60, onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null };
+  return {
+    kind: 'project', metering: 'service', name: '', price: '', duration: 60, timesQty: 10, redeemName: '',
+    onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null,
+  };
 }
 
 function projProjectToForm(p) {
@@ -22864,7 +22918,23 @@ function projProjectToForm(p) {
       onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded,
     };
   }
-  return { kind: 'project', name: p.name, price: String(p.price), duration: p.duration, onSale: p.onSale, bookable: p.bookable, images, hasImage: images.length > 0, imageExpanded, _durUnit: null, _durAmount: null };
+  const metering = p.metering === 'times' ? 'times' : 'service';
+  return {
+    kind: 'project',
+    metering,
+    name: p.name,
+    price: String(p.price),
+    duration: metering === 'times' ? 60 : (p.duration || 60),
+    timesQty: metering === 'times' ? (Number(p.timesQty) || 10) : 10,
+    redeemName: p.redeemName || (metering === 'times' ? String(p.name || '').replace(/\d+次$/, '') : ''),
+    onSale: p.onSale,
+    bookable: metering === 'times' ? false : !!p.bookable,
+    images,
+    hasImage: images.length > 0,
+    imageExpanded,
+    _durUnit: null,
+    _durAmount: null,
+  };
 }
 
 function projImageUploadSectionHtml(s, imageLabel) {
@@ -22931,10 +23001,11 @@ function projSyncBookableLock(container, bound) {
 function projRenderForm(container, mode) {
   const p = mode === 'edit' ? findCatalogItemById(state.projEditingId) : null;
   const isProduct = state.projFormKind === 'product';
+  const isTimes = !isProduct && state.projFormState?.metering === 'times';
   const bound = !!p?.boundToCard && !isProduct;
   const offSale = !!p && !p.onSale;
   const isHidden = !!p && !!p.hidden;
-  const lockBookable = bound || offSale || isHidden;
+  const lockBookable = bound || offSale || isHidden || isTimes;
   const lockBookableToast = bound
     ? PROJ_LOCK_TOAST.bookable_bound
     : (isHidden ? PROJ_LOCK_TOAST.bookable_hidden : PROJ_LOCK_TOAST.bookable_offSale);
@@ -22945,28 +23016,38 @@ function projRenderForm(container, mode) {
   const nameLabel = isProduct ? '产品名称' : '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
   const imageLabel = isProduct ? '产品封面图（可选）' : '项目封面图（可选）';
-  container.innerHTML = `
-    <div class="proj-form-stack">
-      <div>
-        <div class="proj-section-label">基本信息</div>
-        <div class="proj-form-section">
-          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
-          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="选填" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
-          <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
-          ${isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
+  const meteringSeg = isProduct ? '' : `<div class="proj-metering-seg" role="tablist" aria-label="项目类型">
+    <button type="button" class="proj-metering-seg__btn${s.metering !== 'times' ? ' is-on' : ''}" data-proj-metering="service">服务</button>
+    <button type="button" class="proj-metering-seg__btn${s.metering === 'times' ? ' is-on' : ''}" data-proj-metering="times">计次</button>
+  </div>`;
+  const durationOrTimes = isProduct ? '' : (isTimes
+    ? `<div class="proj-form-row" id="projTimesRow"><span class="label${reqCls}">次数</span><div class="field"><input type="text" inputmode="numeric" id="fProjTimesQty" placeholder="请输入" value="${escapeAttr(String(s.timesQty || ''))}" maxlength="3"><span class="suffix">次</span></div></div>
+       <div class="proj-form-row"><span class="label">扣次项目</span><div class="field"><input type="text" id="fProjRedeemName" placeholder="默认取名称" value="${escapeAttr(s.redeemName || '')}" maxlength="30"></div></div>`
+    : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
             units: PROJ_SERVICE_DURATION_UNITS,
             unitLabels: DURATION_UNIT_LABELS,
             includePermanent: false,
-          })}</div></div>`}
+          })}</div></div>`);
+  container.innerHTML = `
+    <div class="proj-form-stack">
+      <div>
+        <div class="proj-section-label">基本信息</div>
+        <div class="proj-form-section">
+          ${meteringSeg}
+          <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
+          ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="选填" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
+          <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
+          ${durationOrTimes}
         </div>
       </div>
       <div>
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
           <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale"></button></div></div>
-          ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
+          ${isProduct || isTimes ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
+          ${isTimes ? '<p class="emp-comm-edit-hint" style="padding:12px 16px;margin:0">计次项目售出后，将以票卡形式出现在开单「选择会员卡」中，可一键扣次。</p>' : ''}
         </div>
       </div>
       <div>
@@ -22976,7 +23057,7 @@ function projRenderForm(container, mode) {
         </div>
       </div>
     </div>`;
-  projBindFormEvents(container, { bound, offSale, isHidden, isProduct });
+  projBindFormEvents(container, { bound, offSale, isHidden, isProduct, isTimes, mode });
 }
 
 function projBindFormEvents(container, lockCtx) {
@@ -22984,6 +23065,8 @@ function projBindFormEvents(container, lockCtx) {
   const offSale = !!lockCtx?.offSale;
   const isHidden = !!lockCtx?.isHidden;
   const isProduct = !!lockCtx?.isProduct;
+  const isTimes = !!lockCtx?.isTimes;
+  const formMode = lockCtx?.mode || (state.projEditingId ? 'edit' : 'add');
   const bindSwitch = (id, key, opts = {}) => {
     const el = container.querySelector(id);
     if (!el || opts.disabled) return;
@@ -22996,13 +23079,36 @@ function projBindFormEvents(container, lockCtx) {
   bindSwitch('#fProjOnSale', 'onSale', {
     afterToggle: () => projSyncBookableLock(container, bound),
   });
-  if (!isProduct) {
+  if (!isProduct && !isTimes) {
     const bookableLocked = bound || isHidden || (offSale && !state.projFormState.onSale);
     bindSwitch('#fProjBookable', 'bookable', { disabled: bookableLocked });
   }
   if (!isProduct) projWireLockToasts(container);
+  container.querySelectorAll('[data-proj-metering]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.getAttribute('data-proj-metering') === 'times' ? 'times' : 'service';
+      if (state.projFormState.metering === next) return;
+      state.projFormState.metering = next;
+      if (next === 'times') {
+        state.projFormState.bookable = false;
+        if (!(Number(state.projFormState.timesQty) > 0)) state.projFormState.timesQty = 10;
+        if (!state.projFormState.redeemName) {
+          state.projFormState.redeemName = String(state.projFormState.name || '').replace(/\d+次$/, '').trim();
+        }
+      } else {
+        if (!(Number(state.projFormState.duration) > 0)) state.projFormState.duration = 60;
+        state.projFormState.bookable = true;
+      }
+      projRenderForm(container, formMode);
+    });
+  });
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   container.querySelector('#fProjSpec')?.addEventListener('input', e => { state.projFormState.spec = e.target.value; });
+  container.querySelector('#fProjTimesQty')?.addEventListener('input', e => {
+    const n = parseInt(String(e.target.value || '').replace(/\D/g, ''), 10);
+    state.projFormState.timesQty = Number.isFinite(n) ? n : '';
+  });
+  container.querySelector('#fProjRedeemName')?.addEventListener('input', e => { state.projFormState.redeemName = e.target.value; });
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
     priceEl.setAttribute('readonly', 'readonly');
@@ -23012,7 +23118,7 @@ function projBindFormEvents(container, lockCtx) {
       priceEl.addEventListener('focus', e => { e.preventDefault(); priceEl.blur(); openAmountKeypad(priceEl); });
     }
   }
-  wireProjServiceDurationInput(container);
+  if (!isTimes) wireProjServiceDurationInput(container);
   const refreshImgSection = () => {
     const section = container.querySelector('#projImgCollapse')?.closest('.proj-form-row');
     if (!section) return;
@@ -23120,6 +23226,7 @@ function projValidateForm() {
   }
   const dur = parseInt(state.projFormState?.duration, 10) || 0;
   const isProduct = state.projFormKind === 'product';
+  const isTimes = !isProduct && state.projFormState?.metering === 'times';
   if (!name) { showToast(isProduct ? '请填写产品名称' : '请填写项目名称', true); return false; }
   const catalog = isProduct ? (state.productCatalog || []) : (state.projectCatalog || []);
   const nameNorm = name.trim();
@@ -23127,8 +23234,16 @@ function projValidateForm() {
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
   if (price > INPUT_LIMITS.MONEY_MAX) { showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true); return false; }
-  if (!isProduct && dur < 1) { showToast('请填写项目时长', true); return false; }
-  if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
+  if (isTimes) {
+    const tq = parseInt(state.projFormState.timesQty, 10);
+    if (!Number.isFinite(tq) || tq < 1) { showToast('请填写有效次数', true); return false; }
+    if (tq > 999) { showToast('次数不能超过 999', true); return false; }
+    state.projFormState.timesQty = tq;
+  } else if (!isProduct && dur < 1) {
+    showToast('请填写项目时长', true);
+    return false;
+  }
+  if (!isProduct && !isTimes && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
 }
 
@@ -23138,6 +23253,7 @@ function projSaveForm() {
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
   const images = projNormalizeImages(state.projFormState.images, false);
+  const isTimes = !isProduct && state.projFormState.metering === 'times';
   const payload = isProduct ? {
     name: state.projFormState.name.trim(),
     spec: (state.projFormState.spec || '').trim(),
@@ -23146,16 +23262,32 @@ function projSaveForm() {
     category: state.projFormState.category || '产品',
     images,
     hasImage: images.length > 0,
+  } : (isTimes ? {
+    name: state.projFormState.name.trim(),
+    price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
+    metering: 'times',
+    timesQty: Number(state.projFormState.timesQty) || 1,
+    redeemName: (state.projFormState.redeemName || state.projFormState.name || '').trim().replace(/\d+次$/, '').trim()
+      || state.projFormState.name.trim(),
+    duration: null,
+    onSale: state.projFormState.onSale,
+    bookable: false,
+    images,
+    hasImage: images.length > 0,
+    category: PROJ_DEFAULT_CATEGORY,
   } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
+    metering: 'service',
+    timesQty: null,
+    redeemName: null,
     duration: state.projFormState.duration,
     onSale: state.projFormState.onSale,
     bookable: state.projFormState.bookable,
     images,
     hasImage: images.length > 0,
     category: PROJ_DEFAULT_CATEGORY,
-  };
+  });
   if (state.projEditingId) {
     const idx = catalog.findIndex(p => p.id === state.projEditingId);
     if (idx >= 0) {
@@ -42207,9 +42339,9 @@ window.__BILLING_EMBEDDED__ = true;
     billHeldCardsToolsOpen: false,
     billActionTab: null, // 'card' | 'quick' | null(=auto)
     billQuickAmtDraft: '',
-    billQuickDeductQty: 1,
-    billQuickDeductProjectId: null,
     billCardRailScrollLeft: 0,
+    billTimesTicketCardId: null,
+    billTimesTicketQty: 1,
     benefitFocusLineId: null,
     linkedCardIds: [],
     billRechargeCardId: null,
@@ -42657,8 +42789,6 @@ window.__BILLING_EMBEDDED__ = true;
     state.billHeldCardsToolsOpen = false;
     state.billActionTab = null;
     state.billQuickAmtDraft = '';
-    state.billQuickDeductQty = 1;
-    state.billQuickDeductProjectId = null;
     state.billCardRailScrollLeft = 0;
     state.benefitFocusLineId = null;
   }
@@ -42776,8 +42906,6 @@ window.__BILLING_EMBEDDED__ = true;
     state.billPickCardIds = next;
     state.billPickCardId = next[0] || null;
     if (state.billDraft) state.billDraft.cardIds = next.slice();
-    state.billQuickDeductQty = 1;
-    state.billQuickDeductProjectId = null;
     if (next[0]) syncBillTabForSelectedCard(findHeldCardById(next[0]));
     else state.billTab = 'project';
     renderBillHeader();
@@ -42914,6 +43042,14 @@ window.__BILLING_EMBEDDED__ = true;
     const items = cards.map(card => {
       const on = activeIds[0] === card.id;
       const dim = hasSel && !on;
+      const isTicket = isTimesTicketCard(card);
+      if (isTicket) {
+        const rem = getTimesTicketRemain(card);
+        return `<button type="button" class="bill-held-card bill-held-card--ticket${on ? ' is-on' : ''}${dim ? ' is-dim' : ''}" data-bill-times-ticket="${escapeHtml(card.id)}" aria-label="${escapeHtml(card.name)} 剩 ${rem} 次">
+          <span class="bill-held-card__face" aria-hidden="true"><span class="bill-held-card__face-head">剩 ${rem} 次</span><span class="bill-held-card__face-body"></span></span>
+          <span class="bill-held-card__name">${escapeHtml(card.name)}</span>
+        </button>`;
+      }
       const tid = heldTemplateId(card);
       const tpl = (typeof getTemplateById === 'function' && tid) ? getTemplateById(tid) : (CARD_TPL_BY_ID[tid] || null);
       const colorKey = (card.cardColor || (tpl && tpl.cardColor) || 'brand_red');
@@ -42947,132 +43083,213 @@ window.__BILLING_EMBEDDED__ = true;
     </div>`;
   }
 
-  /** 选中卡是否仅有一个「共计」次数池，并给出可扣项目（默认最高价） */
-  function getSelectedCardSingleSharedPool() {
-    if (!hasBillCardSelected()) return null;
-    const card = findHeldCardById(getActiveBillPickCardIds()[0]);
-    if (!card) return null;
-    const tid = heldTemplateId(card);
-    const tpl = (typeof getTemplateById === 'function' && tid)
-      ? getTemplateById(tid)
-      : (CARD_TPL_BY_ID[tid] || null);
-    const tplItems = (tpl && Array.isArray(tpl.projectItems)) ? tpl.projectItems : [];
-    const sharedGids = [];
-    const seen = new Set();
-    tplItems.forEach(it => {
-      if (!it || it.unlimited) return;
-      if (it.qtyScope !== 'shared' || !it.sharedGroupId) return;
-      const gid = String(it.sharedGroupId);
-      if (seen.has(gid)) return;
-      seen.add(gid);
-      sharedGids.push(gid);
+  function isTimesTicketCard(card) {
+    return !!(card && (card.kind === 'times_ticket' || card.isTimesTicket));
+  }
+
+  function getTimesTicketRemain(card) {
+    if (!card) return 0;
+    const slot = (card.projects || [])[0];
+    return Math.max(0, Number(slot && slot.remain) || 0);
+  }
+
+  function getTimesTicketRedeemName(card) {
+    if (!card) return '';
+    return String(card.redeemName || (card.projects && card.projects[0] && (card.projects[0].label || card.projects[0].key)) || card.name || '').trim();
+  }
+
+  function preserveTimesTickets(prevCards, nextCards) {
+    const out = (nextCards || []).slice();
+    const ids = new Set(out.map(c => c && c.id));
+    (prevCards || []).filter(isTimesTicketCard).forEach(t => {
+      if (t && t.id && !ids.has(t.id)) {
+        out.push(t);
+        ids.add(t.id);
+      }
     });
-    if (sharedGids.length !== 1) return null;
-    const gid = sharedGids[0];
-    const names = tplItems
-      .filter(it => it && it.sharedGroupId === gid)
-      .map(it => String(it.name || ''))
-      .filter(Boolean);
-    if (!names.length) return null;
-    const poolRow = (card.projects || []).find(p => p && p.sharedGroupId === gid);
-    let remainRaw = poolRow ? poolRow.remain : 0;
-    const unlimited = remainRaw === '不限次' || remainRaw === Infinity;
-    let remain = unlimited ? Infinity : (Number(remainRaw) || 0);
-    const bridge = window.CardCatalogBridge;
-    const projects = bridge?.getBillProjects?.() || (typeof PROJECTS !== 'undefined' ? PROJECTS : []);
-    const nameSet = new Set(names);
-    const catalogItems = (projects || []).filter(it => {
-      if (!it || !nameSet.has(String(it.name || ''))) return false;
-      if (it.onSale === false) return false;
-      return true;
-    }).slice();
-    if (!catalogItems.length) return null;
-    const usedInCart = catalogItems.reduce((s, it) => s + (getCartQty(it.id) || 0), 0);
-    const left = unlimited ? Infinity : Math.max(0, remain - usedInCart);
-    if (!unlimited && left <= 0) return null;
-    catalogItems.sort((a, b) => {
-      const dp = (Number(b.price) || 0) - (Number(a.price) || 0);
-      if (dp) return dp;
-      return String(a.name || '').localeCompare(String(b.name || ''), 'zh');
+    return out;
+  }
+
+  function buildTimesTicketCard({ customerId, catalogProjectId, name, redeemName, remain }) {
+    const rid = String(redeemName || name || '').trim();
+    return normalizeHeldCard({
+      id: `tt_${catalogProjectId}_${customerId}`,
+      kind: 'times_ticket',
+      isTimesTicket: true,
+      catalogProjectId,
+      name: name || rid,
+      redeemName: rid,
+      balance: 0,
+      benefits: { balance: false, timesOrValidity: true, products: false, projectDiscount: false },
+      projects: [{ key: rid, label: rid, remain: Math.max(0, Number(remain) || 0), matchKeys: [rid] }],
+      cardColor: 'brand_red',
     });
-    let defaultItem = catalogItems[0];
-    if (state.billQuickDeductProjectId) {
-      const picked = catalogItems.find(x => x.id === state.billQuickDeductProjectId);
-      if (picked) defaultItem = picked;
-      else state.billQuickDeductProjectId = null;
+  }
+
+  function ensureDemoTimesTickets() {
+    const demo = [
+      { memberId: 'm4', catalogProjectId: 'p28', name: '精致剪发10次', redeemName: '精致剪发', remain: 6 },
+      { memberId: 'm2', catalogProjectId: 'p29', name: '面部护理10次', redeemName: '面部护理', remain: 7 },
+    ];
+    demo.forEach(row => {
+      const c = CUSTOMERS.find(x => x.id === row.memberId);
+      if (!c) return;
+      c.cards = c.cards || [];
+      const id = `tt_${row.catalogProjectId}_${row.memberId}`;
+      if (c.cards.some(card => card.id === id)) return;
+      c.cards.push(buildTimesTicketCard({
+        customerId: row.memberId,
+        catalogProjectId: row.catalogProjectId,
+        name: row.name,
+        redeemName: row.redeemName,
+        remain: row.remain,
+      }));
+    });
+  }
+
+  function mintTimesTicketsFromCart() {
+    const c = CUSTOMERS.find(x => x.id === getCustomer().id);
+    if (!c || !c.isMember) return;
+    c.cards = c.cards || [];
+    const bridgeItems = (window.CardCatalogBridge && window.CardCatalogBridge.getBillProjects)
+      ? window.CardCatalogBridge.getBillProjects()
+      : [];
+    const byId = Object.fromEntries(bridgeItems.map(p => [p.id, p]));
+    (state.cart || []).forEach(line => {
+      const cat = byId[line.id] || (typeof findCatalogItemById === 'function' ? findCatalogItemById(line.id) : null);
+      if (!cat || !(cat.metering === 'times' || cat.isTimesPackage)) return;
+      const packQty = Math.max(1, Number(line.qty) || 1);
+      const timesEach = Math.max(1, Number(cat.timesQty) || 1);
+      const addRemain = timesEach * packQty;
+      const redeemName = String(cat.redeemName || cat.benefitKey || cat.name || '').trim();
+      const ticketId = `tt_${cat.id}_${c.id}`;
+      let ticket = c.cards.find(x => x.id === ticketId);
+      if (ticket) {
+        const slot = (ticket.projects || [])[0];
+        if (slot) slot.remain = Math.max(0, (Number(slot.remain) || 0) + addRemain);
+        else ticket.projects = [{ key: redeemName, label: redeemName, remain: addRemain, matchKeys: [redeemName] }];
+      } else {
+        c.cards.push(buildTimesTicketCard({
+          customerId: c.id,
+          catalogProjectId: cat.id,
+          name: cat.name,
+          redeemName,
+          remain: addRemain,
+        }));
+      }
+    });
+    if (state.customer && state.customer.id === c.id) state.customer = c;
+  }
+
+  function openTimesTicketDeductSheet(cardId) {
+    const card = findHeldCardById(cardId);
+    if (!isTimesTicketCard(card)) return;
+    const rem = getTimesTicketRemain(card);
+    if (rem <= 0) {
+      showToast('该票卡次数已用完', true);
+      return;
     }
-    return {
-      card,
-      sharedGroupId: gid,
-      names,
-      catalogItems,
-      defaultItem,
-      remainLeft: left,
-      unlimited: !!unlimited,
-    };
+    state.billTimesTicketCardId = card.id;
+    state.billTimesTicketQty = 1;
+    const meta = document.getElementById('billTimesTicketMeta');
+    if (meta) {
+      meta.innerHTML = `<div class="bill-ticket-deduct-meta__name">${escapeHtml(getTimesTicketRedeemName(card) || card.name)}</div>
+        <div class="bill-ticket-deduct-meta__remain">票卡「${escapeHtml(card.name)}」· 余 <strong>${rem}</strong> 次</div>`;
+    }
+    syncTimesTicketDeductStep();
+    openMask('billTimesTicketMask');
   }
 
-  function ensureBillQuickDeductQty(maxLeft) {
-    let q = Math.max(1, Number(state.billQuickDeductQty) || 1);
-    const cap = (maxLeft != null && maxLeft !== Infinity)
-      ? Math.min(maxLeft, (typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
-      : ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99);
-    if (q > cap) q = Math.max(1, cap);
-    state.billQuickDeductQty = q;
-    return q;
+  function syncTimesTicketDeductStep() {
+    const card = findHeldCardById(state.billTimesTicketCardId);
+    const rem = getTimesTicketRemain(card);
+    let q = Math.max(1, Number(state.billTimesTicketQty) || 1);
+    q = Math.min(q, Math.max(1, rem));
+    state.billTimesTicketQty = q;
+    const nEl = document.getElementById('billTimesTicketQty');
+    if (nEl) nEl.textContent = String(q);
+    const minus = document.getElementById('btnBillTimesTicketMinus');
+    const plus = document.getElementById('btnBillTimesTicketPlus');
+    if (minus) minus.disabled = q <= 1;
+    if (plus) plus.disabled = q >= rem;
   }
 
-  function renderBillQuickDeductBar() {
-    const info = getSelectedCardSingleSharedPool();
-    if (!info || !info.defaultItem) return '';
-    const item = info.defaultItem;
-    const qty = ensureBillQuickDeductQty(info.remainLeft);
-    const maxQ = info.unlimited
-      ? ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
-      : info.remainLeft;
-    const remainText = info.unlimited ? '不限次' : (`池余 ${info.remainLeft} 次`);
-    return `<div class="bill-qd-bar" id="billQuickDeductBar">
-      <div class="bill-qd-bar__head">
-        <span class="bill-qd-bar__title">快速扣次</span>
-        <span class="bill-qd-bar__remain">${escapeHtml(remainText)}</span>
-      </div>
-      <div class="bill-qd-bar__row">
-        <div class="bill-qd-bar__meta">
-          <div class="bill-qd-bar__name">${escapeHtml(item.name)}</div>
-          <div class="bill-qd-bar__sub"><span class="num">${formatYen(item.price)}</span></div>
-        </div>
-        <div class="bill-qd-bar__step" role="group" aria-label="扣次次数">
-          <button type="button" class="bill-qd-bar__step-btn" data-qd-step="-1" aria-label="减少"${qty <= 1 ? ' disabled' : ''}>−</button>
-          <span class="bill-qd-bar__step-n">${qty}</span>
-          <button type="button" class="bill-qd-bar__step-btn" data-qd-step="1" aria-label="增加"${qty >= maxQ ? ' disabled' : ''}>+</button>
-        </div>
-      </div>
-      <div class="bill-qd-bar__foot">
-        <button type="button" class="bill-qd-bar__swap" id="btnBillQuickDeductSwap">换项目</button>
-        <button type="button" class="bill-qd-bar__go" id="btnBillQuickDeduct">扣次</button>
-      </div>
-    </div>`;
+  function submitTimesTicketDeduct() {
+    const card = findHeldCardById(state.billTimesTicketCardId);
+    if (!isTimesTicketCard(card)) {
+      showToast('票卡无效', true);
+      return;
+    }
+    const rem = getTimesTicketRemain(card);
+    const qty = Math.max(1, Math.min(rem, Number(state.billTimesTicketQty) || 1));
+    if (qty > rem) {
+      showToast(`剩余不足，最多 ${rem} 次`, true);
+      return;
+    }
+    const otherItems = (state.cart || []).filter(it => (it.qty || 0) > 0);
+    if (otherItems.length) {
+      showToast('购物车还有其他商品，请先结账或清空后再扣次', true);
+      return;
+    }
+    const redeemName = getTimesTicketRedeemName(card);
+    const bridge = window.CardCatalogBridge;
+    const projects = bridge?.getBillProjects?.() || PROJECTS;
+    let item = (projects || []).find(p => p && !p.isTimesPackage && (p.name === redeemName || p.benefitKey === redeemName));
+    if (!item) {
+      item = {
+        id: `redeem_${card.catalogProjectId || card.id}`,
+        name: redeemName,
+        price: 0,
+        benefitKey: redeemName,
+        category: '项目',
+      };
+    }
+    /* 用原价展示抵扣金额；若无价目则用 0 */
+    const unit = Number(item.price) || 0;
+    state.cart = [{
+      ...item,
+      qty,
+      price: unit,
+      unitPrice: unit,
+      staffIds: [],
+      staffRoles: {},
+      staffDesignated: {},
+      expanded: false,
+      slipId: null,
+    }];
+    state.billDraft = null;
+    state.billSlips = [{ id: 'slip_ticket_' + Date.now(), cardIds: [card.id] }];
+    state.billPickCardIds = [card.id];
+    state.billPickCardId = card.id;
+    state.billComposerMode = 'review';
+    clearBillDueOverride();
+    state.orderIsFree = false;
+    state.settleOffersTouched = false;
+    state.selectedCouponId = null;
+    autoApplyBestSettleOffers();
+    /* 强制落在本票卡次数权益 */
+    const picks = cloneEmptyBenefitPicks([card]);
+    const pick = picks[card.id];
+    if (pick && pick.projects && pick.projects[0]) {
+      pick.projects[0].qty = qty;
+      pick.projects[0].max = rem;
+    }
+    state.benefitApplied = picks;
+    state.benefitSkip = false;
+    const s = calcSettlement();
+    if (round2(Number(s.dueCash) || 0) > 0.01 && !(s.projectDeduct > 0)) {
+      showToast('无法一键抵扣，请走结账', true);
+      openBillSettle();
+      closeMask('billTimesTicketMask');
+      return;
+    }
+    s.paySplits = [];
+    state.payChannel = 'membercard';
+    closeMask('billTimesTicketMask');
+    completeBillPayFromSettlement(s);
   }
 
-  function openBillQuickDeductPickSheet() {
-    const info = getSelectedCardSingleSharedPool();
-    const list = document.getElementById('billQuickDeductPickList');
-    if (!info || !list) return;
-    const curId = info.defaultItem.id;
-    list.innerHTML = info.catalogItems.map((it, idx) => {
-      const on = it.id === curId;
-      const tag = idx === 0 ? '<span class="bill-qd-pick-item__tag">最高价</span>' : '';
-      return `<button type="button" class="bill-qd-pick-item${on ? ' is-on' : ''}" data-qd-pick="${escapeHtml(it.id)}">
-        <span class="bill-qd-pick-item__meta">
-          <span class="bill-qd-pick-item__name">${escapeHtml(it.name)}</span>
-          <span class="bill-qd-pick-item__price">${formatYen(it.price)}</span>
-        </span>${tag}
-      </button>`;
-    }).join('');
-    openMask('billQuickDeductPickMask');
-  }
-
-  /** 支付成功入账：扣卡权益 + 写流水 + 成功页（供分账确认 / 快速扣次一键闭环共用） */
+  /** 支付成功入账：扣卡权益 + 写流水 + 成功页 */
   function completeBillPayFromSettlement(s, opts) {
     opts = opts || {};
     const settlement = s || calcSettlement();
@@ -43083,6 +43300,7 @@ window.__BILLING_EMBEDDED__ = true;
     state.lastSettlement = settlement;
     if (opts.deductStock) deductProductStockAfterPay();
     mutateCardsAfterPay(settlement);
+    mintTimesTicketsFromCart();
     if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
       recordFlowOrderFromSettlement(settlement);
     }
@@ -43091,62 +43309,12 @@ window.__BILLING_EMBEDDED__ = true;
     closeMask('payMask', { keepCardExtendDraft: true });
     closeMask('checkoutMask');
     closeMask('cartSheetMask');
-    closeMask('billQuickDeductPickMask');
+    closeMask('billTimesTicketMask');
     renderSuccess();
     showOnlyScreen('screen-success');
     if ((state.pendingCatalogAdds || []).length) {
       requestAnimationFrame(() => openBillStockToCatalogDialog());
     }
-  }
-
-  function submitBillQuickDeduct() {
-    const info = getSelectedCardSingleSharedPool();
-    if (!info || !info.defaultItem) {
-      showToast('当前卡不支持快速扣次', true);
-      return;
-    }
-    const item = info.defaultItem;
-    const qty = ensureBillQuickDeductQty(info.remainLeft);
-    if (!info.unlimited && qty > info.remainLeft) {
-      showToast(`共计池剩余不足，最多 ${info.remainLeft} 次`, true);
-      return;
-    }
-    const otherItems = (state.cart || []).filter(it => it && it.id !== item.id && (it.qty || 0) > 0);
-    if (otherItems.length) {
-      showToast('购物车还有其他商品，请先结账或清空后再快速扣次', true);
-      return;
-    }
-    const beforeQty = getCartQty(item.id);
-    setCartQty(item, qty);
-    if (getCartQty(item.id) <= beforeQty) return;
-    state.billQuickDeductQty = 1;
-    closeMask('billQuickDeductPickMask');
-    clearBillDueOverride();
-    state.orderIsFree = false;
-    state.settleOffersTouched = false;
-    /* 保证权益优先落在当前选中卡 */
-    if (info.card && info.card.id) {
-      const draft = ensureBillDraft();
-      draft.cardIds = [info.card.id];
-      state.billPickCardIds = [info.card.id];
-      state.billPickCardId = info.card.id;
-    }
-    autoApplyBestSettleOffers();
-    const s = calcSettlement();
-    const covered = (s.projectLines || []).reduce((a, l) => a + (Number(l.qty) || 0), 0);
-    const need = getCartQty(item.id);
-    if (covered < need || round2(Number(s.dueCash) || 0) > 0) {
-      showToast('无法一键抵扣，已进入结账', true);
-      syncBillComposerMode();
-      if (state.billComposerMode === 'drafting' && getDraftLines().length) {
-        if (!sealBillDraft()) return;
-      }
-      openBillSettle();
-      return;
-    }
-    s.paySplits = [];
-    state.payChannel = 'membercard';
-    completeBillPayFromSettlement(s);
   }
 
   function renderBillActionPanel() {
@@ -43156,7 +43324,7 @@ window.__BILLING_EMBEDDED__ = true;
     let bodyInner = '';
     if (cardOn) {
       bodyInner = renderBillCardRail()
-        + (selected ? (renderBillQuickDeductBar() + renderBillCatalogBlock({ scope: true })) : '');
+        + (selected ? renderBillCatalogBlock({ scope: true }) : '');
     } else {
       bodyInner = renderBillQuickPanel();
     }
@@ -43968,19 +44136,20 @@ window.__BILLING_EMBEDDED__ = true;
       const tid = heldTemplateId(p) || p.templateId;
       return (tid && prevByTpl.get(tid)) || p;
     });
-    customer.cards = cards;
+    customer.cards = preserveTimesTickets(prev, cards);
     const root = CUSTOMERS.find(x => x.id === customer.id);
-    if (root) root.cards = cards;
+    if (root) root.cards = customer.cards;
     return customer;
   }
   function syncMemberCardsFromHoldings(memberId) {
     if (!memberId) return;
     const c = CUSTOMERS.find(x => x.id === memberId);
     if (!c) return;
+    const prev = c.cards || [];
     const cards = (window.CardHost && typeof window.CardHost.getMemberCards === 'function'
       ? window.CardHost.getMemberCards(memberId)
       : []).map(normalizeHeldCard);
-    c.cards = cards;
+    c.cards = preserveTimesTickets(prev, cards);
     if (state.customer && state.customer.id === memberId) {
       state.customer = c;
       const billEl = document.getElementById('screen-bill');
@@ -43993,11 +44162,13 @@ window.__BILLING_EMBEDDED__ = true;
   function syncAllMemberCardsFromHoldings() {
     CUSTOMERS.forEach(c => {
       if (!c.isMember || !c.id || String(c.id).indexOf('guest') === 0) return;
+      const prev = c.cards || [];
       const cards = (window.CardHost && typeof window.CardHost.getMemberCards === 'function'
         ? window.CardHost.getMemberCards(c.id)
         : []).map(normalizeHeldCard);
-      c.cards = cards;
+      c.cards = preserveTimesTickets(prev, cards);
     });
+    ensureDemoTimesTickets();
     if (state.customer && state.customer.isMember && state.customer.id) {
       const root = CUSTOMERS.find(x => x.id === state.customer.id);
       if (root) state.customer = root;
@@ -53789,6 +53960,13 @@ window.__BILLING_EMBEDDED__ = true;
       toggleBillPickCard(heldCard.getAttribute('data-bill-held-card'));
       return;
     }
+    const timesTicket = e.target.closest('[data-bill-times-ticket]');
+    if (timesTicket) {
+      const rail = document.getElementById('billCardRailScroll');
+      if (rail && rail.classList.contains('is-panning')) return;
+      openTimesTicketDeductSheet(timesTicket.getAttribute('data-bill-times-ticket'));
+      return;
+    }
     if (e.target.closest('[data-bill-add-card]')) {
       const rail = document.getElementById('billCardRailScroll');
       if (rail && rail.classList.contains('is-panning')) return;
@@ -53798,28 +53976,6 @@ window.__BILLING_EMBEDDED__ = true;
     if (e.target.id === 'btnBillQuickAdd' || e.target.closest('#btnBillQuickAdd')) {
       const inp = document.getElementById('billQuickAmt');
       submitBillQuickConsume(inp ? inp.value : state.billQuickAmtDraft);
-      return;
-    }
-    const qdStep = e.target.closest('[data-qd-step]');
-    if (qdStep) {
-      const info = getSelectedCardSingleSharedPool();
-      if (!info) return;
-      const d = Number(qdStep.getAttribute('data-qd-step')) || 0;
-      const maxQ = info.unlimited
-        ? ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
-        : info.remainLeft;
-      let next = (Number(state.billQuickDeductQty) || 1) + d;
-      next = Math.max(1, Math.min(maxQ, next));
-      state.billQuickDeductQty = next;
-      renderBillHeader();
-      return;
-    }
-    if (e.target.id === 'btnBillQuickDeduct' || e.target.closest('#btnBillQuickDeduct')) {
-      submitBillQuickDeduct();
-      return;
-    }
-    if (e.target.id === 'btnBillQuickDeductSwap' || e.target.closest('#btnBillQuickDeductSwap')) {
-      openBillQuickDeductPickSheet();
       return;
     }
     const slipDel = e.target.closest('[data-bill-slip-delete]');
@@ -53939,18 +54095,19 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('billExtendMask')?.addEventListener('click', e => {
     if (e.target.id === 'billExtendMask') closeMask('billExtendMask');
   });
-  document.getElementById('btnBillQuickDeductPickCancel')?.addEventListener('click', () => closeMask('billQuickDeductPickMask'));
-  document.getElementById('billQuickDeductPickMask')?.addEventListener('click', e => {
-    if (e.target.id === 'billQuickDeductPickMask') closeMask('billQuickDeductPickMask');
+  document.getElementById('btnBillTimesTicketCancel')?.addEventListener('click', () => closeMask('billTimesTicketMask'));
+  document.getElementById('billTimesTicketMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billTimesTicketMask') closeMask('billTimesTicketMask');
   });
-  document.getElementById('billQuickDeductPickList')?.addEventListener('click', e => {
-    const row = e.target.closest('[data-qd-pick]');
-    if (!row) return;
-    state.billQuickDeductProjectId = row.getAttribute('data-qd-pick');
-    state.billQuickDeductQty = 1;
-    closeMask('billQuickDeductPickMask');
-    renderBillHeader();
+  document.getElementById('btnBillTimesTicketMinus')?.addEventListener('click', () => {
+    state.billTimesTicketQty = Math.max(1, (Number(state.billTimesTicketQty) || 1) - 1);
+    syncTimesTicketDeductStep();
   });
+  document.getElementById('btnBillTimesTicketPlus')?.addEventListener('click', () => {
+    state.billTimesTicketQty = (Number(state.billTimesTicketQty) || 1) + 1;
+    syncTimesTicketDeductStep();
+  });
+  document.getElementById('btnBillTimesTicketConfirm')?.addEventListener('click', submitTimesTicketDeduct);
   document.getElementById('btnBillRechargeOk')?.addEventListener('click', closeBillAssetOk);
   document.getElementById('billRechargeOkMask')?.addEventListener('click', e => {
     if (e.target.id === 'billRechargeOkMask') closeBillAssetOk();
@@ -54369,7 +54526,7 @@ window.__BILLING_EMBEDDED__ = true;
   window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
   [
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
-    'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'billQuickDeductPickMask', 'addCardStaffMask',
+    'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'billTimesTicketMask', 'addCardStaffMask',
     'billStockPickMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
     'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask', 'flowRangeMask',
