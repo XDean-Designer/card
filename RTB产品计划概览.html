@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTB产品计划概览（预览）</title>
+<style>
+:root{--brand:#F32F41;--text:#1f2329;--text-sec:#646a73;--border:#e5e6eb;--bg:#f5f6f7;--card:#fff;--code-bg:#f2f3f5;--th-bg:#f8f9fa;--link:#3370ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg);line-height:1.7;font-size:15px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topbar__title{font-size:14px;font-weight:600}.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:8px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap}
+.topbar a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:6px;font-size:13px;text-decoration:none;font-weight:500}
+.topbar a.primary{background:var(--brand);color:#fff}.topbar a.ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+.article{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:32px 40px 48px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow-x:clip}
+@media(max-width:640px){.article{padding:20px 16px 32px;border-radius:0;border-left:none;border-right:none;overflow-x:auto}}
+.article>h1:first-child{margin-top:0}
+h1{font-size:28px;font-weight:700;line-height:1.35;margin:0 0 16px}
+h2{font-size:22px;font-weight:650;margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;font-weight:650;margin:28px 0 10px}h4{font-size:15px;font-weight:650;margin:20px 0 8px}
+p{margin:0 0 12px}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+ul,ol{margin:0 0 14px;padding-left:1.4em}li{margin:4px 0}
+hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+blockquote{margin:12px 0 16px;padding:10px 14px;border-left:3px solid var(--brand);background:#fff5f6;color:var(--text-sec);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:1px 6px;border-radius:4px}
+pre{background:#1f2329;color:#f5f6f7;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.55;margin:0 0 16px}
+pre code{background:none;padding:0;color:inherit}
+table{width:100%;max-width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px;display:block;overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;min-width:72px}
+th{font-weight:600;white-space:nowrap;background:var(--th-bg)}td{background:#fff}
+tr:nth-child(even) td{background:#fafbfc}
+.article img{max-width:100%;height:auto;display:block}
+table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;border:1px solid var(--border);background:#f5f6f7}
+.foot-note{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-sec)}
+.mermaid{margin:12px 0 20px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;overflow-x:auto;text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar__title">RTB产品计划概览<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
+    <div class="topbar__actions">
+      <a class="ghost" href="demo.html">打开交互原型</a>
+      <a class="ghost" href="RTB产品计划概览.md" download>下载 Markdown</a>
+      <a class="primary" href="RTB产品计划概览.md" target="_blank" rel="noopener">打开源文件 .md</a>
+    </div>
+  </div>
+  <div class="wrap"><article class="article">
+<h1>RTB产品计划概览</h1>
+<h2>一、产品总览</h2>
+<h3>定位</h3>
+<ul>
+<li><strong>产品</strong>：剑琅联盟 · 门店经营（RTB 重构原型）</li>
+<li><strong>端</strong>：商户端 B 端（手机框原型）</li>
+<li><strong>覆盖</strong>：客户 · 预约 · 价目 · 会员卡 · 优惠券 · 开单 · 流水 · 经营分析 · 员工管理 · 排班 · 支出管理 · 库存管理</li>
+</ul>
+<h3>模块一览</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th style="text-align: right;">节点数</th>
+<th>职责</th>
+<th>入口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTB工作台</td>
+<td style="text-align: right;">1</td>
+<td>门店经营模块总入口</td>
+<td>默认入口 / <code>?flow=workbench</code></td>
+</tr>
+<tr>
+<td>客户管理</td>
+<td style="text-align: right;">0</td>
+<td>会员/顾客档案与到店关系（占位）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>预约管理</td>
+<td style="text-align: right;">0</td>
+<td>预约排程与到店衔接（占位）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>项目创建与管理（价目表）</td>
+<td style="text-align: right;">23</td>
+<td>价目表：项目/产品创建、分组与售卖状态</td>
+<td>RTB工作台「价目表」 / <code>price-list-filled</code></td>
+</tr>
+<tr>
+<td>会员卡管理</td>
+<td style="text-align: right;">28</td>
+<td>卡模板权益组合、办卡/延期/退卡与上下架</td>
+<td>RTB工作台「卡管理」 / <code>list-active</code></td>
+</tr>
+<tr>
+<td>优惠券管理</td>
+<td style="text-align: right;">0</td>
+<td>优惠券发放与核销规则（占位）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>开单记账</td>
+<td style="text-align: right;">17</td>
+<td>选客→点单→结算→分账的开单主链路</td>
+<td>RTB工作台「开单」 / <code>bill-pick</code></td>
+</tr>
+<tr>
+<td>订单流水</td>
+<td style="text-align: right;">18</td>
+<td>门店流水、改单退款、尾款与自助收银</td>
+<td>RTB工作台或开单成功后 / <code>flow-hub</code></td>
+</tr>
+<tr>
+<td>经营分析</td>
+<td style="text-align: right;">5</td>
+<td>门店/商城/自助经营报表与资金构成</td>
+<td>RTB工作台 / <code>biz-hub</code></td>
+</tr>
+<tr>
+<td>员工管理</td>
+<td style="text-align: right;">21</td>
+<td>员工档案、薪资提成、业绩与提成方案</td>
+<td>RTB工作台「员工管理」 / <code>staff-list</code></td>
+</tr>
+<tr>
+<td>员工排班</td>
+<td style="text-align: right;">0</td>
+<td>员工班次与出勤安排（占位）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>支出管理</td>
+<td style="text-align: right;">6</td>
+<td>门店支出记账、分类与流水</td>
+<td>RTB工作台「支出管理」 / <code>expense-list</code></td>
+</tr>
+<tr>
+<td>库存管理</td>
+<td style="text-align: right;">9</td>
+<td>付费升级能力：入出库、商品规格与门店调拨；开通后引导与价目表产品关联，实现库存与价目同步</td>
+<td>RTB工作台「库存管理」 / <code>stock-hub</code></td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td style="text-align: right;"><strong>128</strong></td>
+<td>已落地 FLOW 节点（另 4 模块占位）</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>模块关系（总图）</h3>
+<div class="mermaid">
+flowchart TB
+  WB[RTB工作台]
+  WB --> Cust[客户管理]
+  WB --> Appt[预约管理]
+  WB --> P[项目创建与管理（价目表）]
+  WB --> C[会员卡管理]
+  WB --> Coupon[优惠券管理]
+  WB --> B[开单记账]
+  WB --> F[订单流水]
+  WB --> Z[经营分析]
+  WB --> S[员工管理]
+  WB --> Sch[员工排班]
+  WB --> E[支出管理]
+  WB --> K[库存管理]
+  Cust -.到店关系.-> Appt
+  Cust -.选客.-> B
+  P -.权益标的.-> C
+  Coupon -.核销.-> B
+  C -.办卡入账.-> B
+  B --> F
+  B -.业绩提成.-> S
+  S -.人员.-> Sch
+  Sch -.支撑.-> Appt
+  K -.付费开通后关联产品.-> P
+
+</div>
+<hr />
+<h2>二、功能链路流程图</h2>
+<p>说明：</p>
+<ul>
+<li>每节含 <strong>主链路图</strong>、<strong>关键支线</strong>、<strong>页面清单速查</strong></li>
+<li>主图只保留 Happy path；Sheet / Dialog 写入支线，避免已落地节点挤在一张图；占位模块仅列名称</li>
+<li>完整节点见 <a href="#五附录flow全量索引">五、附录</a></li>
+</ul>
+<h3>2.1 RTB工作台</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TB
+  wb[RTB工作台]
+  wb --> cust[客户管理]
+  wb --> appt[预约管理]
+  wb --> price[项目创建与管理（价目表）]
+  wb --> card[会员卡管理]
+  wb --> coupon[优惠券管理]
+  wb --> bill[开单记账]
+  wb --> flow[订单流水]
+  wb --> biz[经营分析]
+  wb --> staff[员工管理]
+  wb --> sch[员工排班]
+  wb --> exp[支出管理]
+  wb --> stock[库存管理]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>RTB工作台为星型分发入口；各模块可独立深链，不强制经 RTB工作台。</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workbench</code></td>
+<td>RTB工作台 · 入口</td>
+<td><code>screen-workbench</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 客户管理</h3>
+<h4>主链路</h4>
+<p>—</p>
+<h4>关键支线</h4>
+<p>—</p>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 预约管理</h3>
+<h4>主链路</h4>
+<p>—</p>
+<h4>关键支线</h4>
+<p>—</p>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>2.4 项目创建与管理（价目表）</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  list[价目表列表_项目或产品]
+  list --> add[新增项目或产品]
+  list --> edit[详情编辑]
+  list --> groups[分组管理]
+  groups --> members[编辑成员]
+  add --> list
+  edit --> list
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>行操作 Sheet：设置分组、下架/上架、隐藏等</li>
+<li>左滑删除（绑卡锁定时不可删）</li>
+<li>已隐藏折叠展开</li>
+<li>分组：新建 / 重命名 / 删除 Dialog；行菜单 Sheet</li>
+<li>详情态：普通 / 绑卡锁定 / 已下架（项目与产品）</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>price-list-empty</code></td>
+<td>价目表 · 空态</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-filled</code></td>
+<td>价目表 · 项目</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-product</code></td>
+<td>价目表 · 产品</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-groups</code></td>
+<td>价目表 · 分组管理</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-members</code></td>
+<td>分组 · 编辑成员</td>
+<td><code>screen-p-group-members</code></td>
+</tr>
+<tr>
+<td><code>price-add</code></td>
+<td>新增项目 · 空表单</td>
+<td><code>screen-p-add</code></td>
+</tr>
+<tr>
+<td><code>price-add-product</code></td>
+<td>新增产品 · 空表单</td>
+<td><code>screen-p-add</code></td>
+</tr>
+<tr>
+<td><code>price-edit-normal</code></td>
+<td>项目详情 · 普通</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-bound</code></td>
+<td>项目详情 · 绑卡锁定</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-off-sale</code></td>
+<td>项目详情 · 已下架</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-product</code></td>
+<td>产品详情 · 普通</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-product-off-sale</code></td>
+<td>产品详情 · 已下架</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-list-action</code></td>
+<td>价目表 · 行操作 Sheet</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-swipe</code></td>
+<td>价目表 · 左滑可删除</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-swipe-locked</code></td>
+<td>价目表 · 左滑不可删除</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-hidden-open</code></td>
+<td>价目表 · 已隐藏展开</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-item-group</code></td>
+<td>价目表 · 设置分组 Sheet</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-item-group-empty</code></td>
+<td>设置分组 · 无自定义组</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-group-menu</code></td>
+<td>分组 · 行菜单 Sheet</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-create</code></td>
+<td>分组 · 新建 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-rename</code></td>
+<td>分组 · 重命名 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-delete</code></td>
+<td>分组 · 删除确认 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-item-delete</code></td>
+<td>价目表 · 删除确认 Dialog</td>
+<td><code>screen-p-list</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.5 会员卡管理</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  list[会员卡列表_在售或下架]
+  list --> create1[Step1_基本信息]
+  create1 --> create2[Step2_权益组合]
+  create2 --> create3[Step3_用卡策略]
+  create3 --> ok[创建成功]
+  list --> detail[卡详情]
+  detail --> issue[确认办卡]
+  issue --> billPay[开单支付入账]
+  detail --> extend[延期]
+  detail --> refund[退卡估值]
+  detail --> shelf[下架或重新上架]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>Step2 旁路：添加项目 / 产品 / 折扣权益（可按分组筛选）</li>
+<li>分组管理、编辑成员、设置分组 Sheet</li>
+<li>办卡选会员 Tab；持卡退卡/延期 Tab</li>
+<li>运营数据说明、永久转有限期 Dialog</li>
+<li>持卡数 &gt; 0 时模板关键字段锁定（见 PRD）</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list-active</code></td>
+<td>会员卡列表 · 在售</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>list-shelved</code></td>
+<td>会员卡列表 · 已下架</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>card-groups</code></td>
+<td>会员卡 · 分组管理</td>
+<td><code>screen-card-groups</code></td>
+</tr>
+<tr>
+<td><code>card-group-members</code></td>
+<td>会员卡 · 编辑成员</td>
+<td><code>screen-card-group-members</code></td>
+</tr>
+<tr>
+<td><code>card-group-create</code></td>
+<td>会员卡 · 新建分组 Dialog</td>
+<td><code>screen-card-groups</code></td>
+</tr>
+<tr>
+<td><code>card-item-group</code></td>
+<td>会员卡 · 设置分组 Sheet</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>detail-active</code></td>
+<td>会员卡详情 · 在售</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>detail-shelved</code></td>
+<td>会员卡详情 · 已下架</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>create-step1</code></td>
+<td>Step1 基本信息</td>
+<td><code>screen10</code></td>
+</tr>
+<tr>
+<td><code>create-step2</code></td>
+<td>Step2 权益组合</td>
+<td><code>screen9</code></td>
+</tr>
+<tr>
+<td><code>create-step3</code></td>
+<td>Step3 用卡策略</td>
+<td><code>screen11</code></td>
+</tr>
+<tr>
+<td><code>create-success</code></td>
+<td>创建成功</td>
+<td><code>screen7</code></td>
+</tr>
+<tr>
+<td><code>issue-success</code></td>
+<td>办卡成功</td>
+<td><code>screen8</code></td>
+</tr>
+<tr>
+<td><code>pick-projects</code></td>
+<td>添加项目权益</td>
+<td><code>screen2</code></td>
+</tr>
+<tr>
+<td><code>pick-projects-group</code></td>
+<td>选项目 · 分组筛选</td>
+<td><code>screen2</code></td>
+</tr>
+<tr>
+<td><code>pick-products</code></td>
+<td>添加产品权益</td>
+<td><code>screen2p</code></td>
+</tr>
+<tr>
+<td><code>pick-products-group</code></td>
+<td>选产品 · 分组筛选</td>
+<td><code>screen2p</code></td>
+</tr>
+<tr>
+<td><code>pick-discount-list</code></td>
+<td>添加折扣权益</td>
+<td><code>screen4</code></td>
+</tr>
+<tr>
+<td><code>pick-discount-group</code></td>
+<td>选折扣 · 分组筛选</td>
+<td><code>screen4</code></td>
+</tr>
+<tr>
+<td><code>card-issue-new</code></td>
+<td>选择会员 · 办卡 Tab</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-quick-issue</code></td>
+<td>确认办卡（快捷）</td>
+<td><code>screen-quick-issue</code></td>
+</tr>
+<tr>
+<td><code>card-issue-holders</code></td>
+<td>选择会员 · 退卡/延期 Tab</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-extend</code></td>
+<td>持卡延期 · 行内面板</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-refund</code></td>
+<td>退卡估值 Sheet</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-shelf</code></td>
+<td>下架确认 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-reshelf</code></td>
+<td>重新上架 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-stats-help</code></td>
+<td>运营数据说明 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-unlimited-validity</code></td>
+<td>永久转有限 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.6 优惠券管理</h3>
+<h4>主链路</h4>
+<p>—</p>
+<h4>关键支线</h4>
+<p>—</p>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>2.7 开单记账</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart LR
+  pick[选择顾客] --> bill[点单台]
+  bill --> detail[结算确认]
+  detail --> pay[开单分账]
+  pay --> success[成功]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>已选 Sheet、结账方式 Sheet</li>
+<li>价目变更拦截 Dialog</li>
+<li>挂单列表 / 取挂单</li>
+<li>展卡、添加卡、充卡续卡</li>
+<li>选择权益、人工打折</li>
+<li>客户扫我 / 我扫客户收款</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bill-pick</code></td>
+<td>① 选择顾客</td>
+<td><code>screen-pick</code></td>
+</tr>
+<tr>
+<td><code>bill-bill</code></td>
+<td>② 点单台</td>
+<td><code>screen-bill</code></td>
+</tr>
+<tr>
+<td><code>bill-detail</code></td>
+<td>③ 结算确认</td>
+<td><code>screen-detail</code></td>
+</tr>
+<tr>
+<td><code>bill-cart</code></td>
+<td>已选</td>
+<td><code>cartSheetMask</code></td>
+</tr>
+<tr>
+<td><code>bill-checkout</code></td>
+<td>结账方式</td>
+<td><code>checkoutMask</code></td>
+</tr>
+<tr>
+<td><code>bill-pay</code></td>
+<td>开单分账</td>
+<td><code>payMask</code></td>
+</tr>
+<tr>
+<td><code>bill-pay-price-changed</code></td>
+<td>价目变更拦截 Dialog</td>
+<td><code>payAmountChangedMask</code></td>
+</tr>
+<tr>
+<td><code>bill-success</code></td>
+<td>成功</td>
+<td><code>screen-success</code></td>
+</tr>
+<tr>
+<td><code>bill-scan-me</code></td>
+<td>客户扫我</td>
+<td><code>screen-scan-me</code></td>
+</tr>
+<tr>
+<td><code>bill-scan-cust</code></td>
+<td>我扫客户</td>
+<td><code>screen-scan-cust</code></td>
+</tr>
+<tr>
+<td><code>bill-expand</code></td>
+<td>展卡</td>
+<td><code>screen-bill</code></td>
+</tr>
+<tr>
+<td><code>bill-add-card</code></td>
+<td>添加卡</td>
+<td><code>screen-add-card</code></td>
+</tr>
+<tr>
+<td><code>bill-add-card-group</code></td>
+<td>添加卡 · 选卡</td>
+<td><code>screen-add-card-pick</code></td>
+</tr>
+<tr>
+<td><code>bill-card-asset</code></td>
+<td>充卡/续卡</td>
+<td><code>screen-bill-card-asset</code></td>
+</tr>
+<tr>
+<td><code>bill-benefit</code></td>
+<td>选择权益</td>
+<td><code>screen-pick-benefit</code></td>
+</tr>
+<tr>
+<td><code>bill-discount</code></td>
+<td>人工打折</td>
+<td><code>screen-discount</code></td>
+</tr>
+<tr>
+<td><code>bill-hold</code></td>
+<td>挂单列表</td>
+<td><code>screen-holds</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.8 订单流水</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  hub[流水入口]
+  hub --> list[门店流水]
+  list --> detail[订单详情]
+  detail --> refund[选择退款]
+  detail --> edit[修改订单]
+  hub --> weikuan[尾款单]
+  weikuan --> wkDetail[尾款详情]
+  wkDetail --> wkPay[尾款分账]
+  wkPay --> wkOk[收款成功]
+  hub --> self[自助收银]
+  self --> selfDetail[自助详情]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>修改记录 Sheet；改单添加/编辑项目</li>
+<li>补收差价 / 退还差价</li>
+<li>尾款：收款方式、还款明细</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flow-hub</code></td>
+<td>流水入口</td>
+<td><code>screen-flow-hub</code></td>
+</tr>
+<tr>
+<td><code>flow-list</code></td>
+<td>门店流水</td>
+<td><code>screen-flow-list</code></td>
+</tr>
+<tr>
+<td><code>flow-detail</code></td>
+<td>订单详情</td>
+<td><code>screen-flow-detail</code></td>
+</tr>
+<tr>
+<td><code>flow-refund</code></td>
+<td>选择退款</td>
+<td><code>screen-flow-refund</code></td>
+</tr>
+<tr>
+<td><code>flow-edit</code></td>
+<td>修改订单</td>
+<td><code>screen-flow-edit</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-log</code></td>
+<td>修改记录</td>
+<td><code>flowEditLogMask</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-add</code></td>
+<td>添加服务项目</td>
+<td><code>screen-flow-edit-add</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-item</code></td>
+<td>编辑项目</td>
+<td><code>screen-flow-edit-item</code></td>
+</tr>
+<tr>
+<td><code>flow-diff-collect</code></td>
+<td>补收差价</td>
+<td><code>flowDiffPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-diff-refund</code></td>
+<td>退还差价</td>
+<td><code>flowDiffPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan</code></td>
+<td>尾款单</td>
+<td><code>screen-flow-weikuan</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-detail</code></td>
+<td>尾款详情</td>
+<td><code>screen-flow-weikuan-detail</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-checkout</code></td>
+<td>收款方式</td>
+<td><code>weikuanCheckoutMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-pay</code></td>
+<td>尾款分账</td>
+<td><code>weikuanPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-success</code></td>
+<td>收款成功</td>
+<td><code>screen-flow-weikuan-success</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-repay</code></td>
+<td>还款明细</td>
+<td><code>screen-flow-weikuan-repay</code></td>
+</tr>
+<tr>
+<td><code>flow-self</code></td>
+<td>自助收银</td>
+<td><code>screen-flow-self</code></td>
+</tr>
+<tr>
+<td><code>flow-self-detail</code></td>
+<td>自助详情</td>
+<td><code>screen-flow-self-detail</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.9 经营分析</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  hub[经营分析入口]
+  hub --> pie[资金构成二级]
+  hub --> store[门店经营报表]
+  hub --> mall[商城售卖报表]
+  hub --> selfRpt[自助收银报表]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>入口页可下钻资金构成饼图（<code>biz-pie</code>）</li>
+<li>三类报表并列，无强制先后顺序</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>biz-hub</code></td>
+<td>经营分析入口</td>
+<td><code>screen-biz-hub</code></td>
+</tr>
+<tr>
+<td><code>biz-pie</code></td>
+<td>资金构成 · 二级</td>
+<td><code>screen-biz-hub</code></td>
+</tr>
+<tr>
+<td><code>biz-store</code></td>
+<td>门店经营报表</td>
+<td><code>screen-biz-store</code></td>
+</tr>
+<tr>
+<td><code>biz-mall</code></td>
+<td>商城售卖报表</td>
+<td><code>screen-biz-mall</code></td>
+</tr>
+<tr>
+<td><code>biz-self-rpt</code></td>
+<td>自助收银报表</td>
+<td><code>screen-biz-self-rpt</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.10 员工管理</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  list[员工管理]
+  list --> detail[员工详情]
+  list --> create[创建或完善员工]
+  list --> roles[职位管理]
+  list --> salary[员工薪资]
+  salary --> commDetail[业绩提成明细]
+  salary --> reward[设奖惩或奖惩明细]
+  list --> ach[业绩设置]
+  list --> scheme[提成设置]
+  scheme --> assign[分配员工]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>结算周期设置</li>
+<li>提成明细：店主调整 → 待确认草稿；员工同意后才生效（<code>pending</code> / <code>staff</code> 深链）</li>
+<li>提成方案：按项 / 阶梯；使用范围；新建方案类型</li>
+<li>业绩：基础设置 Tab</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>staff-list</code></td>
+<td>员工管理</td>
+<td><code>screen-emp-list</code></td>
+</tr>
+<tr>
+<td><code>staff-roles</code></td>
+<td>职位管理</td>
+<td><code>screen-emp-roles</code></td>
+</tr>
+<tr>
+<td><code>staff-detail</code></td>
+<td>员工详情</td>
+<td><code>screen-emp-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-create</code></td>
+<td>创建员工</td>
+<td><code>screen-emp-form</code></td>
+</tr>
+<tr>
+<td><code>staff-refine</code></td>
+<td>完善员工</td>
+<td><code>screen-emp-form</code></td>
+</tr>
+<tr>
+<td><code>staff-salary</code></td>
+<td>员工薪资</td>
+<td><code>screen-emp-salary</code></td>
+</tr>
+<tr>
+<td><code>staff-pay-cycle</code></td>
+<td>结算周期</td>
+<td><code>screen-emp-pay-cycle</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail</code></td>
+<td>员工业绩提成明细</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail-pending</code></td>
+<td>提成明细·待确认</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail-staff</code></td>
+<td>提成明细·员工确认</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-reward-detail</code></td>
+<td>奖惩明细</td>
+<td><code>screen-emp-reward-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-rewards</code></td>
+<td>设奖惩</td>
+<td><code>screen-emp-rewards</code></td>
+</tr>
+<tr>
+<td><code>staff-ach</code></td>
+<td>业绩设置</td>
+<td><code>screen-emp-ach</code></td>
+</tr>
+<tr>
+<td><code>staff-ach-adv</code></td>
+<td>基础设置</td>
+<td><code>screen-emp-ach</code></td>
+</tr>
+<tr>
+<td><code>staff-comm</code></td>
+<td>提成设置</td>
+<td><code>screen-emp-comm</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-create</code></td>
+<td>新建方案</td>
+<td><code>screen-emp-comm</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-item</code></td>
+<td>按项提成</td>
+<td><code>screen-emp-comm-item</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-ladder</code></td>
+<td>阶梯提成</td>
+<td><code>screen-emp-comm-ladder</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-item-pick</code></td>
+<td>添加提成项目</td>
+<td><code>screen-emp-comm-scope</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-scope</code></td>
+<td>使用范围</td>
+<td><code>screen-emp-comm-scope</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-assign</code></td>
+<td>分配员工</td>
+<td><code>screen-emp-comm-assign</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.11 员工排班</h3>
+<h4>主链路</h4>
+<p>—</p>
+<h4>关键支线</h4>
+<p>—</p>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>2.12 支出管理</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  list[支出管理]
+  list --> add[记一笔支出]
+  add --> types[选择支出项目]
+  list --> cats[分类管理]
+  list --> flow[支出流水]
+  list --> detail[支出详情]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>记支出时选支付方式、经手人、日期（旁路选择器）</li>
+<li>列表支持日期范围筛选（含自定义区间）</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expense-list</code></td>
+<td>支出管理</td>
+<td><code>screen-exp-list</code></td>
+</tr>
+<tr>
+<td><code>expense-add</code></td>
+<td>记一笔支出</td>
+<td><code>screen-exp-add</code></td>
+</tr>
+<tr>
+<td><code>expense-types</code></td>
+<td>选择支出项目</td>
+<td><code>screen-exp-types</code></td>
+</tr>
+<tr>
+<td><code>expense-cats</code></td>
+<td>分类管理</td>
+<td><code>screen-exp-cats</code></td>
+</tr>
+<tr>
+<td><code>expense-flow</code></td>
+<td>支出流水</td>
+<td><code>screen-exp-flow</code></td>
+</tr>
+<tr>
+<td><code>expense-detail</code></td>
+<td>支出详情</td>
+<td><code>screen-exp-detail</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.13 库存管理</h3>
+<h4>主链路</h4>
+<div class="mermaid">
+flowchart TD
+  hub[库存工作台]
+  hub --> tin[商品入库]
+  hub --> tout[商品出库]
+  hub --> goods[商品管理]
+  goods --> product[新增商品]
+  goods --> sku[新增规格]
+  hub --> types[入出类别]
+  hub --> tf[调拨管理]
+  tf --> tfAdd[新建调拨]
+
+</div>
+<h4>关键支线</h4>
+<ul>
+<li>库存管理为<strong>付费升级</strong>功能，未开通时入口不可用或不可见（以产品策略为准）</li>
+<li>开通后<strong>引导</strong>用户完成：库存商品 ↔ 价目表「产品」的关联</li>
+<li>关联后：库存数据与价目表产品<strong>同步</strong>（数量/规格等细则不在本文展开）</li>
+<li>扫码添加入库在演示中降级为 toast 提示</li>
+<li>选货旁路 <code>stock-pick</code> 存在于导航，未列入 FLOW 地图节点</li>
+</ul>
+<h4>页面清单速查</h4>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stock-hub</code></td>
+<td>库存工作台</td>
+<td><code>screen-stock-hub</code></td>
+</tr>
+<tr>
+<td><code>stock-in</code></td>
+<td>商品入库</td>
+<td><code>screen-stock-in</code></td>
+</tr>
+<tr>
+<td><code>stock-out</code></td>
+<td>商品出库</td>
+<td><code>screen-stock-out</code></td>
+</tr>
+<tr>
+<td><code>stock-goods</code></td>
+<td>商品管理</td>
+<td><code>screen-stock-goods</code></td>
+</tr>
+<tr>
+<td><code>stock-product</code></td>
+<td>新增商品</td>
+<td><code>screen-stock-product</code></td>
+</tr>
+<tr>
+<td><code>stock-sku</code></td>
+<td>新增规格</td>
+<td><code>screen-stock-sku</code></td>
+</tr>
+<tr>
+<td><code>stock-types</code></td>
+<td>入出类别</td>
+<td><code>screen-stock-types</code></td>
+</tr>
+<tr>
+<td><code>stock-transfer</code></td>
+<td>调拨管理</td>
+<td><code>screen-stock-transfer</code></td>
+</tr>
+<tr>
+<td><code>stock-transfer-add</code></td>
+<td>新建调拨</td>
+<td><code>screen-stock-transfer-add</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、设计亮点与相对老版改进</h2>
+<h3>A. 跨模块原则</h3>
+<ul>
+<li><strong>权益能力模型打通</strong>：价目（项目/产品）→ 会员卡权益组合 → 开单扣减/办卡，同一套能力语义</li>
+<li><strong>演示数据同源</strong>：卡 / 价目 / 开单 / 员工管理 / 支出管理等共用演示池，便于联调演示</li>
+<li><strong>设计规范对齐</strong>：视觉与组件跟随剑琅联盟设计规范；原型以手机框交付</li>
+<li><strong>深链可测</strong>：FLOW 地图节点均可 <code>?flow=</code> 直达，便于评审与截图</li>
+</ul>
+<h3>B. 会员卡</h3>
+<ul>
+<li><strong>建模</strong>：固定「五类卡」→ <strong>权益组合</strong>（面值 / 项目 / 产品 / 折扣），可配出旧类型等价卡，也可配旧体系做不出的组合卡</li>
+<li><strong>创建</strong>：固定三步 —— 基本信息 → 权益组合 → 用卡策略；Step2 至少一类权益</li>
+<li><strong>产品线</strong>：整套取代旧系统，<strong>非</strong>长期双轨；旧入口本期切新体系</li>
+<li><strong>运营闭环</strong>：列表分组、上下架、克隆、办卡（经开单支付入账）、延期、全额退卡估值</li>
+<li><strong>锁定</strong>：持卡数 &gt; 0 时模板关键编辑锁定；下架可重上架 / 克隆</li>
+<li><strong>历史</strong>：旧已发卡可只读兼容；<strong>不可</strong>再新建旧类型卡</li>
+</ul>
+<h3>C. 价目表 / 项目创建</h3>
+<ul>
+<li><strong>定位</strong>：整体重构覆盖旧价目/项目管理，强调 B 端 <strong>工具属性</strong></li>
+<li><strong>列表</strong>：纯信息行（名称、时长/规格、价格）；无列表配图堆叠、无行内状态列；一屏密度更高</li>
+<li><strong>结构</strong>：项目 / 产品分 Tab；在售 → 已下架 → 已隐藏折叠</li>
+<li><strong>分组</strong>：自定义多组、隐藏组、拖拽排序（隐藏相关禁拖并有真实文案）</li>
+<li><strong>语义映射（摘要）</strong>：停售 → 下架；C 端隐藏 → 隐藏且开单仍可选；绑卡锁定防误删误改</li>
+<li><strong>范围</strong>：不做列表关键词搜索、不做 FAB；库存字段不在价目表落地（见纠偏）</li>
+</ul>
+<h3>D. 本版能力亮点</h3>
+<h4>开单记账</h4>
+<ul>
+<li>主链路清晰：选客 → 点单 → 结算确认 → 分账 → 成功</li>
+<li>权益与人工打折、展卡/加卡/充续卡与点单同屏能力打通</li>
+<li>挂单 / 取挂单；扫码收款双路径</li>
+<li>办卡付款对齐开单结账契约（支付成功回调后才入账）</li>
+</ul>
+<h4>订单流水</h4>
+<ul>
+<li>门店流水详情上的退款、改单、差价补退</li>
+<li>尾款单完整收款链路</li>
+<li>自助收银列表与详情</li>
+</ul>
+<h4>经营分析</h4>
+<ul>
+<li>入口聚合：门店经营 / 商城售卖 / 自助收银报表</li>
+<li>资金构成二级钻取</li>
+</ul>
+<h4>员工管理 · 人效</h4>
+<ul>
+<li>档案 + 职位权限 + 薪资结算周期</li>
+<li>员工排班（占位）：班次与出勤安排，支撑预约到店</li>
+<li>业绩设置与多种提成方案（按项 / 阶梯）及分配</li>
+<li><strong>业绩提成明细逐条展示</strong>；店主改数须填原因，形成待确认草稿；<strong>员工同意后才计入合计</strong>（可驳回 / 店主可撤回）</li>
+<li>奖惩独立明细与录入</li>
+</ul>
+<h4>支出管理 / 库存管理</h4>
+<ul>
+<li>支出管理：记一笔、分类、流水、详情与日期筛选</li>
+<li>库存管理：RTB工作台分发入库/出库/商品/调拨；规格与入出类别</li>
+<li>库存管理为<strong>付费升级</strong>能力；开通后引导关联价目表「产品」，实现库存与价目同步</li>
+<li>未开通时入口不可用或不可见（以产品策略为准）；价目表不内嵌库存字段</li>
+</ul>
+<hr />
+<h2>四、开发规划顺序</h2>
+<p>按<strong>逻辑前置后置</strong>排期，减少开发/测试中因主数据或单据缺失导致的联调空洞。前 3 项已确认锁定。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">序</th>
+<th>模块</th>
+<th>前置依赖（为何在此）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>项目创建与管理（价目表）</td>
+<td>已确认 · 卡权益标的、开单点单根基</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>会员卡管理</td>
+<td>已确认 · 依赖价目项目/产品</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>开单记账</td>
+<td>已确认 · 依赖价目 + 卡权益扣减</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>客户管理</td>
+<td>办卡持卡人、选客、预约/发券主数据；开单阶段可用散客顶住</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>员工管理</td>
+<td>开单分账/业绩、权限；排班与薪资前置</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td>订单流水</td>
+<td>依赖开单落单；退改/尾款在真实单据上测</td>
+</tr>
+<tr>
+<td style="text-align: right;">7</td>
+<td>优惠券管理</td>
+<td>发放→客户；核销→开单；标的可挂已有价目</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td>员工排班</td>
+<td>依赖员工档案；再支撑预约</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td>预约管理</td>
+<td>依赖客户 + 排班（+ 价目服务项）</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td>经营分析</td>
+<td>依赖流水/开单数据沉淀</td>
+</tr>
+<tr>
+<td style="text-align: right;">11</td>
+<td>支出管理</td>
+<td>弱依赖交易主链；经手人可挂员工</td>
+</tr>
+<tr>
+<td style="text-align: right;">12</td>
+<td>库存管理</td>
+<td>付费升级；开通后关联价目「产品」，宜主交易稳定后</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>五、附录：FLOW 全量索引</h2>
+<p>已落地 <strong>128</strong> 个地图节点（含浮层 / Dialog 深链态）；客户 / 预约 / 优惠券 / 员工排班为占位分组。顺序：计划模块序（占位穿插）+ 其余与原型 FLOW 地图一致。</p>
+<p>深链模板：</p>
+<pre><code class="language-text">http://localhost:8765/剑琅联盟-RTB重构.html?flow=&lt;id&gt;
+http://localhost:8765/剑琅联盟-RTB重构.html?flow=&lt;id&gt;&amp;capture=1
+</code></pre>
+<h3>RTB工作台（1）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>workbench</code></td>
+<td>RTB工作台 · 入口</td>
+<td><code>screen-workbench</code></td>
+</tr>
+</tbody>
+</table>
+<h3>客户管理（0）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>预约管理（0）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>项目创建与管理（价目表）（23）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>price-list-empty</code></td>
+<td>价目表 · 空态</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-filled</code></td>
+<td>价目表 · 项目</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-product</code></td>
+<td>价目表 · 产品</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-groups</code></td>
+<td>价目表 · 分组管理</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-members</code></td>
+<td>分组 · 编辑成员</td>
+<td><code>screen-p-group-members</code></td>
+</tr>
+<tr>
+<td><code>price-add</code></td>
+<td>新增项目 · 空表单</td>
+<td><code>screen-p-add</code></td>
+</tr>
+<tr>
+<td><code>price-add-product</code></td>
+<td>新增产品 · 空表单</td>
+<td><code>screen-p-add</code></td>
+</tr>
+<tr>
+<td><code>price-edit-normal</code></td>
+<td>项目详情 · 普通</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-bound</code></td>
+<td>项目详情 · 绑卡锁定</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-off-sale</code></td>
+<td>项目详情 · 已下架</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-product</code></td>
+<td>产品详情 · 普通</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-edit-product-off-sale</code></td>
+<td>产品详情 · 已下架</td>
+<td><code>screen-p-edit</code></td>
+</tr>
+<tr>
+<td><code>price-list-action</code></td>
+<td>价目表 · 行操作 Sheet</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-swipe</code></td>
+<td>价目表 · 左滑可删除</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-swipe-locked</code></td>
+<td>价目表 · 左滑不可删除</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-list-hidden-open</code></td>
+<td>价目表 · 已隐藏展开</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-item-group</code></td>
+<td>价目表 · 设置分组 Sheet</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-item-group-empty</code></td>
+<td>设置分组 · 无自定义组</td>
+<td><code>screen-p-list</code></td>
+</tr>
+<tr>
+<td><code>price-group-menu</code></td>
+<td>分组 · 行菜单 Sheet</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-create</code></td>
+<td>分组 · 新建 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-rename</code></td>
+<td>分组 · 重命名 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-group-delete</code></td>
+<td>分组 · 删除确认 Dialog</td>
+<td><code>screen-p-groups</code></td>
+</tr>
+<tr>
+<td><code>price-item-delete</code></td>
+<td>价目表 · 删除确认 Dialog</td>
+<td><code>screen-p-list</code></td>
+</tr>
+</tbody>
+</table>
+<h3>会员卡管理（28）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list-active</code></td>
+<td>会员卡列表 · 在售</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>list-shelved</code></td>
+<td>会员卡列表 · 已下架</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>card-groups</code></td>
+<td>会员卡 · 分组管理</td>
+<td><code>screen-card-groups</code></td>
+</tr>
+<tr>
+<td><code>card-group-members</code></td>
+<td>会员卡 · 编辑成员</td>
+<td><code>screen-card-group-members</code></td>
+</tr>
+<tr>
+<td><code>card-group-create</code></td>
+<td>会员卡 · 新建分组 Dialog</td>
+<td><code>screen-card-groups</code></td>
+</tr>
+<tr>
+<td><code>card-item-group</code></td>
+<td>会员卡 · 设置分组 Sheet</td>
+<td><code>screen0</code></td>
+</tr>
+<tr>
+<td><code>detail-active</code></td>
+<td>会员卡详情 · 在售</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>detail-shelved</code></td>
+<td>会员卡详情 · 已下架</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>create-step1</code></td>
+<td>Step1 基本信息</td>
+<td><code>screen10</code></td>
+</tr>
+<tr>
+<td><code>create-step2</code></td>
+<td>Step2 权益组合</td>
+<td><code>screen9</code></td>
+</tr>
+<tr>
+<td><code>create-step3</code></td>
+<td>Step3 用卡策略</td>
+<td><code>screen11</code></td>
+</tr>
+<tr>
+<td><code>create-success</code></td>
+<td>创建成功</td>
+<td><code>screen7</code></td>
+</tr>
+<tr>
+<td><code>issue-success</code></td>
+<td>办卡成功</td>
+<td><code>screen8</code></td>
+</tr>
+<tr>
+<td><code>pick-projects</code></td>
+<td>添加项目权益</td>
+<td><code>screen2</code></td>
+</tr>
+<tr>
+<td><code>pick-projects-group</code></td>
+<td>选项目 · 分组筛选</td>
+<td><code>screen2</code></td>
+</tr>
+<tr>
+<td><code>pick-products</code></td>
+<td>添加产品权益</td>
+<td><code>screen2p</code></td>
+</tr>
+<tr>
+<td><code>pick-products-group</code></td>
+<td>选产品 · 分组筛选</td>
+<td><code>screen2p</code></td>
+</tr>
+<tr>
+<td><code>pick-discount-list</code></td>
+<td>添加折扣权益</td>
+<td><code>screen4</code></td>
+</tr>
+<tr>
+<td><code>pick-discount-group</code></td>
+<td>选折扣 · 分组筛选</td>
+<td><code>screen4</code></td>
+</tr>
+<tr>
+<td><code>card-issue-new</code></td>
+<td>选择会员 · 办卡 Tab</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-quick-issue</code></td>
+<td>确认办卡（快捷）</td>
+<td><code>screen-quick-issue</code></td>
+</tr>
+<tr>
+<td><code>card-issue-holders</code></td>
+<td>选择会员 · 退卡/延期 Tab</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-extend</code></td>
+<td>持卡延期 · 行内面板</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-refund</code></td>
+<td>退卡估值 Sheet</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-shelf</code></td>
+<td>下架确认 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-reshelf</code></td>
+<td>重新上架 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-stats-help</code></td>
+<td>运营数据说明 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+<tr>
+<td><code>card-unlimited-validity</code></td>
+<td>永久转有限 Dialog</td>
+<td><code>screen6</code></td>
+</tr>
+</tbody>
+</table>
+<h3>优惠券管理（0）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>开单记账（17）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bill-pick</code></td>
+<td>① 选择顾客</td>
+<td><code>screen-pick</code></td>
+</tr>
+<tr>
+<td><code>bill-bill</code></td>
+<td>② 点单台</td>
+<td><code>screen-bill</code></td>
+</tr>
+<tr>
+<td><code>bill-detail</code></td>
+<td>③ 结算确认</td>
+<td><code>screen-detail</code></td>
+</tr>
+<tr>
+<td><code>bill-cart</code></td>
+<td>已选</td>
+<td><code>cartSheetMask</code></td>
+</tr>
+<tr>
+<td><code>bill-checkout</code></td>
+<td>结账方式</td>
+<td><code>checkoutMask</code></td>
+</tr>
+<tr>
+<td><code>bill-pay</code></td>
+<td>开单分账</td>
+<td><code>payMask</code></td>
+</tr>
+<tr>
+<td><code>bill-pay-price-changed</code></td>
+<td>价目变更拦截 Dialog</td>
+<td><code>payAmountChangedMask</code></td>
+</tr>
+<tr>
+<td><code>bill-success</code></td>
+<td>成功</td>
+<td><code>screen-success</code></td>
+</tr>
+<tr>
+<td><code>bill-scan-me</code></td>
+<td>客户扫我</td>
+<td><code>screen-scan-me</code></td>
+</tr>
+<tr>
+<td><code>bill-scan-cust</code></td>
+<td>我扫客户</td>
+<td><code>screen-scan-cust</code></td>
+</tr>
+<tr>
+<td><code>bill-expand</code></td>
+<td>展卡</td>
+<td><code>screen-bill</code></td>
+</tr>
+<tr>
+<td><code>bill-add-card</code></td>
+<td>添加卡</td>
+<td><code>screen-add-card</code></td>
+</tr>
+<tr>
+<td><code>bill-add-card-group</code></td>
+<td>添加卡 · 选卡</td>
+<td><code>screen-add-card-pick</code></td>
+</tr>
+<tr>
+<td><code>bill-card-asset</code></td>
+<td>充卡/续卡</td>
+<td><code>screen-bill-card-asset</code></td>
+</tr>
+<tr>
+<td><code>bill-benefit</code></td>
+<td>选择权益</td>
+<td><code>screen-pick-benefit</code></td>
+</tr>
+<tr>
+<td><code>bill-discount</code></td>
+<td>人工打折</td>
+<td><code>screen-discount</code></td>
+</tr>
+<tr>
+<td><code>bill-hold</code></td>
+<td>挂单列表</td>
+<td><code>screen-holds</code></td>
+</tr>
+</tbody>
+</table>
+<h3>订单流水（18）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flow-hub</code></td>
+<td>流水入口</td>
+<td><code>screen-flow-hub</code></td>
+</tr>
+<tr>
+<td><code>flow-list</code></td>
+<td>门店流水</td>
+<td><code>screen-flow-list</code></td>
+</tr>
+<tr>
+<td><code>flow-detail</code></td>
+<td>订单详情</td>
+<td><code>screen-flow-detail</code></td>
+</tr>
+<tr>
+<td><code>flow-refund</code></td>
+<td>选择退款</td>
+<td><code>screen-flow-refund</code></td>
+</tr>
+<tr>
+<td><code>flow-edit</code></td>
+<td>修改订单</td>
+<td><code>screen-flow-edit</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-log</code></td>
+<td>修改记录</td>
+<td><code>flowEditLogMask</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-add</code></td>
+<td>添加服务项目</td>
+<td><code>screen-flow-edit-add</code></td>
+</tr>
+<tr>
+<td><code>flow-edit-item</code></td>
+<td>编辑项目</td>
+<td><code>screen-flow-edit-item</code></td>
+</tr>
+<tr>
+<td><code>flow-diff-collect</code></td>
+<td>补收差价</td>
+<td><code>flowDiffPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-diff-refund</code></td>
+<td>退还差价</td>
+<td><code>flowDiffPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan</code></td>
+<td>尾款单</td>
+<td><code>screen-flow-weikuan</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-detail</code></td>
+<td>尾款详情</td>
+<td><code>screen-flow-weikuan-detail</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-checkout</code></td>
+<td>收款方式</td>
+<td><code>weikuanCheckoutMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-pay</code></td>
+<td>尾款分账</td>
+<td><code>weikuanPayMask</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-success</code></td>
+<td>收款成功</td>
+<td><code>screen-flow-weikuan-success</code></td>
+</tr>
+<tr>
+<td><code>flow-weikuan-repay</code></td>
+<td>还款明细</td>
+<td><code>screen-flow-weikuan-repay</code></td>
+</tr>
+<tr>
+<td><code>flow-self</code></td>
+<td>自助收银</td>
+<td><code>screen-flow-self</code></td>
+</tr>
+<tr>
+<td><code>flow-self-detail</code></td>
+<td>自助详情</td>
+<td><code>screen-flow-self-detail</code></td>
+</tr>
+</tbody>
+</table>
+<h3>经营分析（5）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>biz-hub</code></td>
+<td>经营分析入口</td>
+<td><code>screen-biz-hub</code></td>
+</tr>
+<tr>
+<td><code>biz-pie</code></td>
+<td>资金构成 · 二级</td>
+<td><code>screen-biz-hub</code></td>
+</tr>
+<tr>
+<td><code>biz-store</code></td>
+<td>门店经营报表</td>
+<td><code>screen-biz-store</code></td>
+</tr>
+<tr>
+<td><code>biz-mall</code></td>
+<td>商城售卖报表</td>
+<td><code>screen-biz-mall</code></td>
+</tr>
+<tr>
+<td><code>biz-self-rpt</code></td>
+<td>自助收银报表</td>
+<td><code>screen-biz-self-rpt</code></td>
+</tr>
+</tbody>
+</table>
+<h3>员工管理（21）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>staff-list</code></td>
+<td>员工管理</td>
+<td><code>screen-emp-list</code></td>
+</tr>
+<tr>
+<td><code>staff-roles</code></td>
+<td>职位管理</td>
+<td><code>screen-emp-roles</code></td>
+</tr>
+<tr>
+<td><code>staff-detail</code></td>
+<td>员工详情</td>
+<td><code>screen-emp-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-create</code></td>
+<td>创建员工</td>
+<td><code>screen-emp-form</code></td>
+</tr>
+<tr>
+<td><code>staff-refine</code></td>
+<td>完善员工</td>
+<td><code>screen-emp-form</code></td>
+</tr>
+<tr>
+<td><code>staff-salary</code></td>
+<td>员工薪资</td>
+<td><code>screen-emp-salary</code></td>
+</tr>
+<tr>
+<td><code>staff-pay-cycle</code></td>
+<td>结算周期</td>
+<td><code>screen-emp-pay-cycle</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail</code></td>
+<td>员工业绩提成明细</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail-pending</code></td>
+<td>提成明细·待确认</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-salary-detail-staff</code></td>
+<td>提成明细·员工确认</td>
+<td><code>screen-emp-salary-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-reward-detail</code></td>
+<td>奖惩明细</td>
+<td><code>screen-emp-reward-detail</code></td>
+</tr>
+<tr>
+<td><code>staff-rewards</code></td>
+<td>设奖惩</td>
+<td><code>screen-emp-rewards</code></td>
+</tr>
+<tr>
+<td><code>staff-ach</code></td>
+<td>业绩设置</td>
+<td><code>screen-emp-ach</code></td>
+</tr>
+<tr>
+<td><code>staff-ach-adv</code></td>
+<td>基础设置</td>
+<td><code>screen-emp-ach</code></td>
+</tr>
+<tr>
+<td><code>staff-comm</code></td>
+<td>提成设置</td>
+<td><code>screen-emp-comm</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-create</code></td>
+<td>新建方案</td>
+<td><code>screen-emp-comm</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-item</code></td>
+<td>按项提成</td>
+<td><code>screen-emp-comm-item</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-ladder</code></td>
+<td>阶梯提成</td>
+<td><code>screen-emp-comm-ladder</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-item-pick</code></td>
+<td>添加提成项目</td>
+<td><code>screen-emp-comm-scope</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-scope</code></td>
+<td>使用范围</td>
+<td><code>screen-emp-comm-scope</code></td>
+</tr>
+<tr>
+<td><code>staff-comm-assign</code></td>
+<td>分配员工</td>
+<td><code>screen-emp-comm-assign</code></td>
+</tr>
+</tbody>
+</table>
+<h3>员工排班（0）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>支出管理（6）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expense-list</code></td>
+<td>支出管理</td>
+<td><code>screen-exp-list</code></td>
+</tr>
+<tr>
+<td><code>expense-add</code></td>
+<td>记一笔支出</td>
+<td><code>screen-exp-add</code></td>
+</tr>
+<tr>
+<td><code>expense-types</code></td>
+<td>选择支出项目</td>
+<td><code>screen-exp-types</code></td>
+</tr>
+<tr>
+<td><code>expense-cats</code></td>
+<td>分类管理</td>
+<td><code>screen-exp-cats</code></td>
+</tr>
+<tr>
+<td><code>expense-flow</code></td>
+<td>支出流水</td>
+<td><code>screen-exp-flow</code></td>
+</tr>
+<tr>
+<td><code>expense-detail</code></td>
+<td>支出详情</td>
+<td><code>screen-exp-detail</code></td>
+</tr>
+</tbody>
+</table>
+<h3>库存管理（9）</h3>
+<table>
+<thead>
+<tr>
+<th>flow id</th>
+<th>中文标签</th>
+<th>screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stock-hub</code></td>
+<td>库存工作台</td>
+<td><code>screen-stock-hub</code></td>
+</tr>
+<tr>
+<td><code>stock-in</code></td>
+<td>商品入库</td>
+<td><code>screen-stock-in</code></td>
+</tr>
+<tr>
+<td><code>stock-out</code></td>
+<td>商品出库</td>
+<td><code>screen-stock-out</code></td>
+</tr>
+<tr>
+<td><code>stock-goods</code></td>
+<td>商品管理</td>
+<td><code>screen-stock-goods</code></td>
+</tr>
+<tr>
+<td><code>stock-product</code></td>
+<td>新增商品</td>
+<td><code>screen-stock-product</code></td>
+</tr>
+<tr>
+<td><code>stock-sku</code></td>
+<td>新增规格</td>
+<td><code>screen-stock-sku</code></td>
+</tr>
+<tr>
+<td><code>stock-types</code></td>
+<td>入出类别</td>
+<td><code>screen-stock-types</code></td>
+</tr>
+<tr>
+<td><code>stock-transfer</code></td>
+<td>调拨管理</td>
+<td><code>screen-stock-transfer</code></td>
+</tr>
+<tr>
+<td><code>stock-transfer-add</code></td>
+<td>新建调拨</td>
+<td><code>screen-stock-transfer-add</code></td>
+</tr>
+</tbody>
+</table>
+<p class="foot-note"></p>
+</article></div>
+
+<script src="assets/vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  if (!window.mermaid) return;
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: 'loose',
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#fff5f6',
+      primaryBorderColor: '#F32F41',
+      primaryTextColor: '#1f2329',
+      secondaryColor: '#f2f3f5',
+      tertiaryColor: '#ffffff',
+      lineColor: '#8f959e',
+      fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif'
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
