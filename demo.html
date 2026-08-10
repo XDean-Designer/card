@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>剑琅联盟·RTB重构</title>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 <style>
 @font-face {
   font-family: 'TCloudNumber';
@@ -130,6 +131,10 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: #f8f9fb;
   border-color: #e3e5ea;
 }
+.doc-link-group--overview {
+  background: #f3f8f7;
+  border-color: #d5e6e2;
+}
 .doc-link-group--case {
   background: #fff8f8;
   border-color: var(--brand-border);
@@ -144,6 +149,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 }
 .doc-link-group--prd .doc-link-group__tag {
   background: #e8eaed; color: #4e5969;
+}
+.doc-link-group--overview .doc-link-group__tag {
+  background: #dcecea; color: #3D7A6E;
 }
 .doc-link-group--case .doc-link-group__tag {
   background: var(--brand-soft); color: var(--brand);
@@ -170,6 +178,13 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   background: #e8eaed; color: #646a73; line-height: 1.2;
 }
 .doc-link-chip--prd:hover::before { background: #ffd6db; color: var(--brand); }
+.doc-link-chip--overview::before {
+  content: "概览";
+  display: inline-block; margin-right: 5px; padding: 1px 4px;
+  border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: .03em;
+  background: #dcecea; color: #3D7A6E; line-height: 1.2;
+}
+.doc-link-chip--overview:hover::before { background: #c8e0db; color: #2f5f55; }
 .doc-link-chip--accent {
   border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); font-weight: 600;
 }
@@ -579,9 +594,9 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
   position: absolute; inset: 0;
   background: url("assets/member-card-header-deco.png") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1;
-  /* Figma image 210: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
+  /* Figma image 210/211: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
   mix-blend-mode: plus-lighter;
-  opacity: 1;
+  opacity: 0.6;
   border-radius: inherit;
 }
 .member-card-compact__name {
@@ -926,12 +941,12 @@ body { font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans
 .phone-shell--success {
   background: #F7F7F7;
 }
-.phone-shell--success .status-bar { background: transparent; }
+.phone-shell--success .status-bar { background: #fff8db; } /* 仅延伸黄顶区到状态栏 */
 /* Figma 422:1769 · 办卡成功 / 422:1553 · 会员卡已创建（共享金黄顶区） */
 .phone-shell--issue-success {
   background: #F7F7F7;
 }
-.phone-shell--issue-success .status-bar { background: transparent; }
+.phone-shell--issue-success .status-bar { background: #fff8db; } /* 仅延伸黄顶区到状态栏 */
 #screen7,
 #screen8 {
   background: transparent;
@@ -4543,10 +4558,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .doc-link-stack { margin: 10px 0 12px; position: relative; z-index: 6; display: flex; flex-direction: column; gap: 8px; }
 .doc-link-group { padding: 8px 10px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
 .doc-link-group--prd { background: #f8f9fb; border-color: #e3e5ea; }
+.doc-link-group--overview { background: #f3f8f7; border-color: #d5e6e2; }
 .doc-link-group--case { background: #fff8f8; border-color: var(--brand-border); }
 .doc-link-group__head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 .doc-link-group__tag { display: inline-flex; align-items: center; height: 18px; padding: 0 6px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .04em; line-height: 1; }
 .doc-link-group--prd .doc-link-group__tag { background: #e8eaed; color: #4e5969; }
+.doc-link-group--overview .doc-link-group__tag { background: #dcecea; color: #3D7A6E; }
 .doc-link-group--case .doc-link-group__tag { background: var(--brand-soft); color: var(--brand); }
 .doc-link-group__desc { font-size: 11px; color: var(--text-sec); font-weight: 400; }
 .doc-link-row__btns { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
@@ -4563,6 +4580,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   background: #e8eaed; color: #646a73; line-height: 1.2;
 }
 .doc-link-chip--prd:hover::before { background: #ffd6db; color: var(--brand); }
+.doc-link-chip--overview::before {
+  content: "概览"; display: inline-block; margin-right: 5px; padding: 1px 4px;
+  border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: .03em;
+  background: #dcecea; color: #3D7A6E; line-height: 1.2;
+}
+.doc-link-chip--overview:hover::before { background: #c8e0db; color: #2f5f55; }
 .doc-link-chip--accent { border-color: var(--brand-border); background: var(--brand-soft); color: var(--brand); font-weight: 600; }
 .doc-link-chip--accent:hover { background: #ffe8eb; }
 /* ==== 工作台（Figma 入口） ==== */
@@ -5377,6 +5400,105 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-comm-order__box-sub {
   font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+/* 业绩提成 · 逐条明细 + 待确认 */
+.emp-comm-viewer-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin: 0 16px 10px; padding: 8px 12px; border-radius: 10px;
+  background: #FFF8F0; font-size: 12px; color: #B86A2A; line-height: 18px;
+}
+.emp-comm-viewer-bar.is-staff { background: #EEF6F4; color: #3D7A6E; }
+.emp-comm-filter {
+  display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.emp-comm-filter::-webkit-scrollbar { display: none; }
+.emp-comm-filter__chip {
+  flex: 0 0 auto; height: 28px; padding: 0 12px; border-radius: 999px;
+  border: none; background: #EFEFEF; color: #666; font-size: 12px; font-family: inherit;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.emp-comm-filter__chip.is-on { background: #1a1a1a; color: #fff; font-weight: 600; }
+.emp-comm-filter__chip .emp-comm-filter__n { margin-left: 4px; opacity: .75; }
+.emp-comm-line {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 0 16px 8px; padding: 12px 12px 12px 14px;
+  background: #fff; border-radius: 12px; border: 1px solid #F0F0F0;
+  position: relative; cursor: pointer; text-align: left; width: calc(100% - 32px);
+  box-sizing: border-box; font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.emp-comm-line.is-pending { border-color: rgba(255,112,67,.35); box-shadow: inset 3px 0 0 #FF7043; }
+.emp-comm-line.is-rejected { opacity: .78; }
+.emp-comm-line__top { display: flex; align-items: flex-start; gap: 8px; }
+.emp-comm-line__name {
+  flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px;
+  display: flex; align-items: center; gap: 6px;
+}
+.emp-comm-line__badge {
+  flex-shrink: 0; font-size: 11px; line-height: 16px; padding: 1px 6px; border-radius: 4px;
+  background: #FFF2E8; color: #E37318; font-weight: 500;
+}
+.emp-comm-line__badge.is-rejected { background: #F2F2F2; color: #929292; }
+.emp-comm-line__meta { font-size: 12px; color: var(--text-sec); line-height: 16px; }
+.emp-comm-line__vals { display: flex; gap: 20px; align-items: flex-start; }
+.emp-comm-line__val { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.emp-comm-line__val-lbl { font-size: 11px; color: var(--text-sec); }
+.emp-comm-line__val-num {
+  font-size: 15px; font-weight: 600; color: #1a1a1a;
+  font-family: var(--font-data); font-variant-numeric: tabular-nums;
+}
+.emp-comm-line__val-num.is-struck {
+  text-decoration: line-through; color: #B0B0B0; font-weight: 400; font-size: 12px;
+}
+.emp-comm-line__val-num.is-pending { color: #FF7043; }
+.emp-comm-line__reason {
+  font-size: 12px; color: #8A6A4A; line-height: 17px;
+  padding: 6px 8px; background: #FFF8F0; border-radius: 8px;
+}
+.emp-comm-day__pending {
+  margin-left: 6px; font-size: 11px; color: #E37318; font-weight: 500;
+}
+.emp-comm-sum__pending-tip {
+  margin-top: 10px; font-size: 12px; color: #E37318; line-height: 18px;
+}
+.emp-comm-edit-meta {
+  font-size: 13px; color: var(--text-sec); line-height: 20px; margin-bottom: 8px;
+}
+.emp-comm-edit-meta strong { color: var(--text); font-weight: 500; }
+.emp-comm-edit-fields { display: flex; flex-direction: column; gap: 12px; padding: 4px 0 8px; }
+.emp-comm-edit-fields label {
+  display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-sec);
+}
+.emp-comm-edit-fields input {
+  height: 44px; border: 1px solid var(--border); border-radius: 10px;
+  padding: 0 12px; font-size: 16px; font-family: var(--font-data); color: var(--text);
+  box-sizing: border-box;
+}
+.emp-comm-edit-fields input:focus { outline: none; border-color: var(--brand); }
+.emp-comm-edit-reason {
+  width: 100%; min-height: 72px; border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-size: 14px; font-family: inherit; box-sizing: border-box; resize: none;
+  color: var(--text);
+}
+.emp-comm-edit-reason:focus { outline: none; border-color: var(--brand); }
+.emp-comm-edit-hint {
+  margin: 8px 0 0; font-size: 12px; color: var(--text-sec); line-height: 18px;
+}
+.emp-comm-consent-diff {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;
+}
+.emp-comm-consent-diff__box {
+  background: #F7F7F7; border-radius: 10px; padding: 10px 12px;
+}
+.emp-comm-consent-diff__lbl { font-size: 12px; color: var(--text-sec); margin-bottom: 4px; }
+.emp-comm-consent-diff__from {
+  font-size: 12px; color: #B0B0B0; text-decoration: line-through;
+  font-family: var(--font-data);
+}
+.emp-comm-consent-diff__to {
+  font-size: 16px; font-weight: 600; color: #FF7043;
+  font-family: var(--font-data); margin-top: 2px;
 }
 
 /* 奖惩明细 */
@@ -12289,9 +12411,9 @@ button.biz-pay-row:active { opacity: .72; }
   position: absolute; inset: 0;
   background: url("assets/member-card-header-deco.png") center / 100% 100% no-repeat;
   pointer-events: none; z-index: 1;
-  /* Figma image 210: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
+  /* Figma image 210/211: LINEAR_DODGE + fill opacity 0.6 → CSS plus-lighter */
   mix-blend-mode: plus-lighter;
-  opacity: 1;
+  opacity: 0.6;
   border-radius: inherit;
 }
 .member-card-compact__title {
@@ -13598,6 +13720,15 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <p>创建分两步：基本信息 → 权益组合（勾选后在下方展开配置）。列表卡面可快捷办卡。</p>
     <p><a href="index.html">← 演示包入口</a> · <a href="剑琅联盟-卡模板-无类型版.html">权益定制版</a> · <a href="剑琅联盟-会员卡竞品对比与优化建议.html">竞品对比</a></p>
     <div class="doc-link-stack">
+      <div class="doc-link-group doc-link-group--overview">
+        <div class="doc-link-group__head">
+          <span class="doc-link-group__tag">概览</span>
+          <span class="doc-link-group__desc">产品计划速览</span>
+        </div>
+        <div class="doc-link-row__btns">
+          <a class="doc-link-chip doc-link-chip--overview" id="btnOpenOverview" href="RTB产品计划概览.html" title="RTB产品计划概览">RTB产品计划</a>
+        </div>
+      </div>
       <div class="doc-link-group doc-link-group--prd">
         <div class="doc-link-group__head">
           <span class="doc-link-group__tag">PRD</span>
@@ -13851,6 +13982,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   <div class="page-title-bar">
     <button type="button" class="back" data-emp-back-salary aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
     <span class="title" id="empSalaryDetailTitle">员工业绩提成明细</span>
+    <button type="button" class="action emp-title-link" id="empCommViewerToggle">员工视角</button>
   </div>
   <div class="page-body" id="empSalaryDetailBody" style="padding:0;background:#F7F7F7;"></div>
 </div>
@@ -14168,6 +14300,55 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <button type="button" class="btn-main secondary" id="empCommDateCancel">取消</button>
       <button type="button" class="btn-main" id="empCommDateOk">确定</button>
     </div>
+  </div>
+</div>
+
+<div class="picker-mask picker-mask--bottom" id="empCommLineEditMask">
+  <div class="picker-sheet emp-comm-edit-sheet">
+    <div class="picker-head"><span class="picker-head__title-main">调整业绩/提成</span></div>
+    <div style="padding:0 16px 8px;max-height:min(62vh,520px);overflow:auto;">
+      <div class="emp-comm-edit-meta" id="empCommLineEditMeta"></div>
+      <div class="emp-comm-edit-fields">
+        <label><span>业绩 (元)</span><input type="text" id="empCommLineEditAch" inputmode="decimal" autocomplete="off" /></label>
+        <label><span>提成 (元)</span><input type="text" id="empCommLineEditComm" inputmode="decimal" autocomplete="off" /></label>
+        <label><span>调整原因</span><textarea class="emp-comm-edit-reason" id="empCommLineEditReason" placeholder="请填写原因，员工确认时可见" maxlength="80"></textarea></label>
+      </div>
+      <p class="emp-comm-edit-hint">提交后为「待确认」草稿，员工同意后才会计入合计；员工可驳回，你也可撤回。</p>
+    </div>
+    <div class="picker-foot picker-foot--row">
+      <button type="button" class="btn-main secondary" id="empCommLineEditCancel">取消</button>
+      <button type="button" class="btn-main" id="empCommLineEditOk">提交待确认</button>
+    </div>
+  </div>
+</div>
+
+<div class="picker-mask picker-mask--bottom" id="empCommLineConsentMask">
+  <div class="picker-sheet">
+    <div class="picker-head"><span class="picker-head__title-main" id="empCommLineConsentTitle">确认调整</span></div>
+    <div style="padding:0 16px 8px;" id="empCommLineConsentBody"></div>
+    <div class="picker-foot picker-foot--row" id="empCommLineConsentFoot">
+      <button type="button" class="btn-main secondary" id="empCommLineConsentReject">驳回</button>
+      <button type="button" class="btn-main" id="empCommLineConsentOk">同意生效</button>
+    </div>
+  </div>
+</div>
+
+<div class="picker-mask picker-mask--bottom" id="empCommLineActMask">
+  <div class="picker-sheet picker-sheet--menu">
+    <div class="catalog-action-card">
+      <div class="picker-head picker-head--stack">
+        <div class="picker-head__title">待确认调整</div>
+        <div class="picker-head__sub" id="empCommLineActSub">员工同意后才会生效</div>
+      </div>
+      <div class="catalog-action-list">
+        <button type="button" class="catalog-action-item" id="empCommLineActEdit">修改草稿</button>
+        <button type="button" class="catalog-action-item catalog-action-item--danger" id="empCommLineActWithdraw">撤回调整</button>
+      </div>
+    </div>
+    <div class="catalog-action-foot">
+      <button type="button" class="catalog-action-item catalog-action-item--cancel" id="empCommLineActCancel">取消</button>
+    </div>
+    <div class="catalog-action-safe" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -31316,6 +31497,10 @@ function billingNav(fn) {
     commDetailCalDraftDay: null,
     commDetailCalYear: null,
     commDetailCalMonth: null,
+    commDetailViewer: 'owner',
+    commDetailFilter: 'all',
+    commLineEditId: null,
+    commLineActId: null,
     payCycleDraft: null,
     rewardDraft: null,
     editingRewardId: null,
@@ -31393,6 +31578,8 @@ function billingNav(fn) {
     swords: SWORD_ICONS,
     /* 办卡支付成功后写入的演示业绩分摊日志（正式环境由办卡业绩引擎落库） */
     cardIssueAchLogs: [],
+    /* 员工业绩提成逐条明细（含待确认草稿） key = month:staffId */
+    commLines: {},
     roles: DEFAULT_ROLES.slice(),
     staff: [
       { id: 'st0', name: '顾清扬', short: '顾', gender: '男', ageBand: '30以上', yearsExp: 12, role: '店主', phone: '18600186000', incomplete: false, status: '在职', baseSalary: 5000, perm: '店主', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw11' },
@@ -31541,7 +31728,8 @@ function billingNav(fn) {
   function openMask(id) { var el = $(id); if (el) el.classList.add('open'); }
   function closeMask(id) { var el = $(id); if (el) el.classList.remove('open'); }
   function closeAllEmpMasks() {
-    ['empMonthMask', 'empCommDateMask', 'empRuleMask', 'empSchemeMenuMask', 'empTypeSheetMask',
+    ['empMonthMask', 'empCommDateMask', 'empCommLineEditMask', 'empCommLineConsentMask', 'empCommLineActMask',
+      'empRuleMask', 'empSchemeMenuMask', 'empTypeSheetMask',
       'empAchEditMask', 'empRoleMask', 'empPermMask', 'empStatusMask', 'empDetailStatusMask', 'empSchemePickMask',
       'empGenderMask', 'empAgeBandMask', 'empAvatarActionMask', 'empAlbumMask', 'empCropMask',
       'empSwordTitleMask', 'empSwordMask', 'empScopeSelectedMask', 'empItemCommEditMask'].forEach(closeMask);
@@ -33007,20 +33195,25 @@ function billingNav(fn) {
     return label;
   }
 
-  function demoCommDetail(staffId) {
+  function roundMoney2(n) {
+    return Math.round((Number(n) || 0) * 100) / 100;
+  }
+
+  function ensureCommLineStore() {
+    if (!window.EmployeeStore.commLines) window.EmployeeStore.commLines = {};
+    return window.EmployeeStore.commLines;
+  }
+
+  function commLinesStoreKey(staffId) {
+    return state.salaryMonth + ':' + staffId;
+  }
+
+  function buildSeedCommLines(staffId) {
     var d = genSalaryIfMissing(state.salaryMonth, staffId);
     var labor = Number(d.labor) || 0;
     var commission = d.commission != null ? Number(d.commission) : Math.round(labor * 0.1 * 100) / 100;
-    var ach = {
-      cash: Math.round(labor * 0.55 * 100) / 100,
-      card: Math.round(labor * 0.25 * 100) / 100,
-      group: Math.round(labor * 0.2 * 100) / 100,
-      sign: 0,
-      debt: 0,
-    };
-    var comm = { cash: commission, card: 0, group: 0, sign: 0, debt: 0 };
     var dayAch = labor > 0 ? Math.min(226, labor) : 226;
-    var restAch = Math.max(0, Math.round((labor - dayAch) * 100) / 100);
+    var restAch = Math.max(0, roundMoney2(labor - dayAch));
     var parts = periodParts(state.salaryMonth);
     var today = todayYmd();
     var yesterday = shiftYmd(today, -1);
@@ -33031,54 +33224,162 @@ function billingNav(fn) {
       dayB = shiftYmd(dayA, -1);
       if (dayB < parts.start) dayB = parts.start;
     }
-    if (dayA === dayB) {
-      return {
-        achTotal: labor,
-        commTotal: commission,
-        ach: ach,
-        comm: comm,
-        days: [{
-          ymd: dayA, date: dayA.slice(5), ach: labor || dayAch, comm: commission,
-          orders: [{
-            time: '下午 14:20',
-            items: [
-              { name: '肩背调理体验价', price: 128, kind: 'project' },
-              { name: '快速消费', price: 98, kind: 'quick' },
-            ],
-            ach: labor || dayAch, comm: commission, achChannel: '现金类', commChannel: '现金类',
-          }],
-        }],
+    var lines = [];
+    var seq = 0;
+    function pushLine(ymd, time, item, ach, comm, channel, seedPending) {
+      seq += 1;
+      var ln = {
+        id: 'cl-' + staffId + '-' + state.salaryMonth + '-' + seq,
+        staffId: staffId,
+        ymd: ymd,
+        orderTime: time,
+        name: item.name,
+        kind: item.kind,
+        price: item.price,
+        channel: channel || '现金类',
+        ach: roundMoney2(ach),
+        comm: roundMoney2(comm),
+        status: 'effective',
+        pending: null,
+        rejectReason: null,
       };
+      if (seedPending) {
+        ln.status = 'pending';
+        ln.pending = {
+          ach: roundMoney2(ach + 20),
+          comm: roundMoney2(Math.max(0, comm + 5)),
+          reason: '活动价补差，按实收调整',
+          by: '店主',
+          at: todayYmd(),
+          prevAch: ln.ach,
+          prevComm: ln.comm,
+        };
+      }
+      lines.push(ln);
     }
+    if (dayA === dayB) {
+      var items1 = [
+        { name: '肩背调理体验价', price: 128, kind: 'project' },
+        { name: '快速消费', price: 98, kind: 'quick' },
+      ];
+      var totalP = items1.reduce(function (s, it) { return s + it.price; }, 0) || 1;
+      var achPool = labor || dayAch;
+      var commPool = commission;
+      items1.forEach(function (it, idx) {
+        var a = idx === items1.length - 1
+          ? roundMoney2(achPool - items1.slice(0, -1).reduce(function (s, x, i) {
+            return s + roundMoney2(achPool * (x.price / totalP));
+          }, 0))
+          : roundMoney2(achPool * (it.price / totalP));
+        var c = idx === items1.length - 1
+          ? roundMoney2(commPool - items1.slice(0, -1).reduce(function (s, x, i) {
+            return s + roundMoney2(commPool * (x.price / totalP));
+          }, 0))
+          : roundMoney2(commPool * (it.price / totalP));
+        pushLine(dayA, '下午 14:20', it, a, c, '现金类', idx === 0);
+      });
+      return lines;
+    }
+    var dayAItems = [
+      { name: '肩背调理体验价', price: 128, kind: 'project' },
+      { name: '水润嫩肤体验价', price: 98, kind: 'product' },
+    ];
+    var dayAPrice = dayAItems.reduce(function (s, it) { return s + it.price; }, 0) || 1;
+    dayAItems.forEach(function (it, idx) {
+      var a = idx === dayAItems.length - 1
+        ? roundMoney2(dayAch - dayAItems.slice(0, -1).reduce(function (s, x) {
+          return s + roundMoney2(dayAch * (x.price / dayAPrice));
+        }, 0))
+        : roundMoney2(dayAch * (it.price / dayAPrice));
+      pushLine(dayA, '上午 00:18', it, a, 0, '现金类', false);
+    });
+    var dayBItems = [
+      { name: '开卡·储值卡', price: 1280, kind: 'card' },
+      { name: '快速消费', price: 98, kind: 'quick' },
+    ];
+    var dayBPrice = dayBItems.reduce(function (s, it) { return s + it.price; }, 0) || 1;
+    var dayBAch = restAch || 2746.4;
+    var dayBAllocated = 0;
+    dayBItems.forEach(function (it, idx) {
+      var a = idx === dayBItems.length - 1
+        ? roundMoney2(dayBAch - dayBAllocated)
+        : roundMoney2(dayBAch * (it.price / dayBPrice));
+      dayBAllocated = roundMoney2(dayBAllocated + a);
+      var c = idx === 0 ? commission : 0;
+      /* 演示：第二日开卡行预置一条待员工确认的调整 */
+      pushLine(dayB, '下午 22:52', it, a, c, '现金类', idx === 0);
+    });
+    return lines;
+  }
+
+  function getCommLines(staffId) {
+    var store = ensureCommLineStore();
+    var key = commLinesStoreKey(staffId);
+    if (!store[key]) store[key] = buildSeedCommLines(staffId);
+    return store[key];
+  }
+
+  function findCommLine(staffId, lineId) {
+    return getCommLines(staffId).find(function (l) { return l.id === lineId; }) || null;
+  }
+
+  function countPendingCommLines(staffId) {
+    return getCommLines(staffId).filter(function (l) { return l.status === 'pending'; }).length;
+  }
+
+  function demoCommDetail(staffId) {
+    var lines = getCommLines(staffId);
+    var achTotal = 0;
+    var commTotal = 0;
+    var pendingCount = 0;
+    var dayMap = {};
+    lines.forEach(function (ln) {
+      achTotal += Number(ln.ach) || 0;
+      commTotal += Number(ln.comm) || 0;
+      if (ln.status === 'pending') pendingCount += 1;
+      if (!dayMap[ln.ymd]) {
+        dayMap[ln.ymd] = {
+          ymd: ln.ymd,
+          date: ln.ymd.slice(5),
+          ach: 0,
+          comm: 0,
+          pendingCount: 0,
+          lines: [],
+        };
+      }
+      dayMap[ln.ymd].ach += Number(ln.ach) || 0;
+      dayMap[ln.ymd].comm += Number(ln.comm) || 0;
+      if (ln.status === 'pending') dayMap[ln.ymd].pendingCount += 1;
+      dayMap[ln.ymd].lines.push(ln);
+    });
+    achTotal = roundMoney2(achTotal);
+    commTotal = roundMoney2(commTotal);
+    var ach = {
+      cash: roundMoney2(achTotal * 0.55),
+      card: roundMoney2(achTotal * 0.25),
+      group: roundMoney2(achTotal * 0.2),
+      sign: 0,
+      debt: 0,
+    };
+    var comm = { cash: commTotal, card: 0, group: 0, sign: 0, debt: 0 };
+    var days = Object.keys(dayMap).sort().reverse().map(function (k) {
+      var day = dayMap[k];
+      day.ach = roundMoney2(day.ach);
+      day.comm = roundMoney2(day.comm);
+      day.lines.sort(function (a, b) {
+        if (a.orderTime === b.orderTime) return (a.name || '').localeCompare(b.name || '');
+        return String(b.orderTime).localeCompare(String(a.orderTime));
+      });
+      return day;
+    });
     return {
-      achTotal: labor,
-      commTotal: commission,
+      achTotal: achTotal,
+      commTotal: commTotal,
       ach: ach,
       comm: comm,
-      days: [
-        {
-          ymd: dayA, date: dayA.slice(5), ach: dayAch, comm: 0,
-          orders: [{
-            time: '上午 00:18',
-            items: [
-              { name: '肩背调理体验价', price: 128, kind: 'project' },
-              { name: '水润嫩肤体验价', price: 98, kind: 'product' },
-            ],
-            ach: dayAch, comm: 0, achChannel: '现金类', commChannel: '现金类',
-          }],
-        },
-        {
-          ymd: dayB, date: dayB.slice(5), ach: restAch || 2746.4, comm: commission,
-          orders: [{
-            time: '下午 22:52',
-            items: [
-              { name: '开卡·储值卡', price: 1280, kind: 'card' },
-              { name: '快速消费', price: 98, kind: 'quick' },
-            ],
-            ach: Math.min(226, restAch || 226), comm: commission, achChannel: '现金类', commChannel: '现金类',
-          }],
-        },
-      ],
+      days: days,
+      lines: lines,
+      pendingCount: pendingCount,
     };
   }
 
@@ -33292,28 +33593,251 @@ function billingNav(fn) {
     }).join('') + '</div>';
   }
 
+  function syncCommViewerToggleBtn() {
+    var btn = $('empCommViewerToggle');
+    if (!btn) return;
+    var isStaff = state.commDetailViewer === 'staff';
+    btn.textContent = isStaff ? '店主视角' : '员工视角';
+  }
+
+  function openCommLineEditSheet(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln) return;
+    state.commLineEditId = lineId;
+    var meta = $('empCommLineEditMeta');
+    if (meta) {
+      meta.innerHTML = '<strong>' + esc(ln.name) + '</strong> · ' + esc(ln.orderTime) +
+        '<br>当前生效：业绩 ' + fmtMoney(ln.ach) + ' · 提成 ' + fmtMoney(ln.comm);
+    }
+    var achIn = $('empCommLineEditAch');
+    var commIn = $('empCommLineEditComm');
+    var reasonIn = $('empCommLineEditReason');
+    if (achIn) achIn.value = ln.pending ? String(ln.pending.ach) : String(ln.ach);
+    if (commIn) commIn.value = ln.pending ? String(ln.pending.comm) : String(ln.comm);
+    if (reasonIn) reasonIn.value = ln.pending && ln.pending.reason ? ln.pending.reason : '';
+    openMask('empCommLineEditMask');
+  }
+
+  function submitCommLineEdit() {
+    var sid = state.currentStaffId;
+    var ln = sid && state.commLineEditId ? findCommLine(sid, state.commLineEditId) : null;
+    if (!ln) return;
+    var achRaw = ($('empCommLineEditAch') || {}).value;
+    var commRaw = ($('empCommLineEditComm') || {}).value;
+    var reason = String(($('empCommLineEditReason') || {}).value || '').trim();
+    var ach = roundMoney2(achRaw);
+    var comm = roundMoney2(commRaw);
+    if (!String(achRaw || '').trim() || Number.isNaN(Number(achRaw))) {
+      toast('请输入有效业绩金额', true);
+      return;
+    }
+    if (!String(commRaw || '').trim() || Number.isNaN(Number(commRaw))) {
+      toast('请输入有效提成金额', true);
+      return;
+    }
+    if (ach < 0 || comm < 0) {
+      toast('金额不能为负', true);
+      return;
+    }
+    if (!reason) {
+      toast('请填写调整原因', true);
+      return;
+    }
+    if (ach === ln.ach && comm === ln.comm) {
+      toast('金额未变化', true);
+      return;
+    }
+    ln.status = 'pending';
+    ln.pending = {
+      ach: ach,
+      comm: comm,
+      reason: reason,
+      by: '店主',
+      at: todayYmd(),
+      prevAch: ln.ach,
+      prevComm: ln.comm,
+    };
+    ln.rejectReason = null;
+    closeMask('empCommLineEditMask');
+    state.commLineEditId = null;
+    toast('已提交，待员工确认后生效');
+    renderSalaryDetail(sid);
+  }
+
+  function withdrawCommLinePending(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln || ln.status !== 'pending') return;
+    ln.status = 'effective';
+    ln.pending = null;
+    closeMask('empCommLineActMask');
+    state.commLineActId = null;
+    toast('已撤回调整');
+    renderSalaryDetail(sid);
+  }
+
+  function openCommLineConsentSheet(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln || !ln.pending) return;
+    state.commLineActId = lineId;
+    var title = $('empCommLineConsentTitle');
+    if (title) title.textContent = state.commDetailViewer === 'staff' ? '确认店主调整' : '待确认详情';
+    var body = $('empCommLineConsentBody');
+    if (body) {
+      body.innerHTML =
+        '<div class="emp-comm-edit-meta"><strong>' + esc(ln.name) + '</strong> · ' + esc(ln.orderTime) +
+        '<br>售价 ' + fmtMoney(ln.price) + ' · ' + esc(ln.channel) + '</div>' +
+        '<div class="emp-comm-consent-diff">' +
+        '<div class="emp-comm-consent-diff__box"><div class="emp-comm-consent-diff__lbl">业绩</div>' +
+        '<div class="emp-comm-consent-diff__from">' + fmtMoney(ln.pending.prevAch != null ? ln.pending.prevAch : ln.ach) + '</div>' +
+        '<div class="emp-comm-consent-diff__to">' + fmtMoney(ln.pending.ach) + '</div></div>' +
+        '<div class="emp-comm-consent-diff__box"><div class="emp-comm-consent-diff__lbl">提成</div>' +
+        '<div class="emp-comm-consent-diff__from">' + fmtMoney(ln.pending.prevComm != null ? ln.pending.prevComm : ln.comm) + '</div>' +
+        '<div class="emp-comm-consent-diff__to">' + fmtMoney(ln.pending.comm) + '</div></div></div>' +
+        '<div class="emp-comm-line__reason">原因：' + esc(ln.pending.reason || '—') + '</div>';
+    }
+    var foot = $('empCommLineConsentFoot');
+    var rejectBtn = $('empCommLineConsentReject');
+    var okBtn = $('empCommLineConsentOk');
+    if (state.commDetailViewer === 'staff') {
+      if (foot) foot.classList.remove('hidden');
+      if (rejectBtn) rejectBtn.classList.remove('hidden');
+      if (okBtn) { okBtn.classList.remove('hidden'); okBtn.textContent = '同意生效'; }
+    } else {
+      if (rejectBtn) rejectBtn.classList.add('hidden');
+      if (okBtn) { okBtn.classList.remove('hidden'); okBtn.textContent = '关闭'; }
+    }
+    openMask('empCommLineConsentMask');
+  }
+
+  function approveCommLinePending(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln || !ln.pending) return;
+    ln.ach = roundMoney2(ln.pending.ach);
+    ln.comm = roundMoney2(ln.pending.comm);
+    ln.pending = null;
+    ln.status = 'effective';
+    ln.rejectReason = null;
+    closeMask('empCommLineConsentMask');
+    state.commLineActId = null;
+    toast('已同意，调整已生效');
+    renderSalaryDetail(sid);
+  }
+
+  function rejectCommLinePending(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln || !ln.pending) return;
+    ln.rejectReason = ln.pending.reason || '';
+    ln.pending = null;
+    ln.status = 'rejected';
+    closeMask('empCommLineConsentMask');
+    state.commLineActId = null;
+    toast('已驳回，仍按原金额计入');
+    renderSalaryDetail(sid);
+  }
+
+  function handleCommLineTap(lineId) {
+    var sid = state.currentStaffId;
+    var ln = sid ? findCommLine(sid, lineId) : null;
+    if (!ln) return;
+    var isStaff = state.commDetailViewer === 'staff';
+    if (ln.status === 'pending') {
+      if (isStaff) {
+        openCommLineConsentSheet(lineId);
+      } else {
+        state.commLineActId = lineId;
+        var sub = $('empCommLineActSub');
+        if (sub && ln.pending) {
+          sub.textContent = '拟改业绩 ' + fmtMoney(ln.pending.ach) + ' / 提成 ' + fmtMoney(ln.pending.comm) + ' · 待员工确认';
+        }
+        openMask('empCommLineActMask');
+      }
+      return;
+    }
+    if (isStaff) {
+      toast(ln.status === 'rejected' ? '该调整已被驳回' : '员工端仅可确认待处理调整');
+      return;
+    }
+    openCommLineEditSheet(lineId);
+  }
+
+  function renderCommLineCard(ln) {
+    var pending = ln.status === 'pending' && ln.pending;
+    var badge = '';
+    if (pending) badge = '<span class="emp-comm-line__badge">待确认</span>';
+    else if (ln.status === 'rejected') badge = '<span class="emp-comm-line__badge is-rejected">已驳回</span>';
+    var achHtml = pending
+      ? '<span class="emp-comm-line__val-num is-struck">' + fmtMoney(ln.ach) + '</span>' +
+        '<span class="emp-comm-line__val-num is-pending">' + fmtMoney(ln.pending.ach) + '</span>'
+      : '<span class="emp-comm-line__val-num">' + fmtMoney(ln.ach) + '</span>';
+    var commHtml = pending
+      ? '<span class="emp-comm-line__val-num is-struck">' + fmtMoney(ln.comm) + '</span>' +
+        '<span class="emp-comm-line__val-num is-pending">' + fmtMoney(ln.pending.comm) + '</span>'
+      : '<span class="emp-comm-line__val-num">' + fmtMoney(ln.comm) + '</span>';
+    var reason = '';
+    if (pending && ln.pending.reason) {
+      reason = '<div class="emp-comm-line__reason">' + esc(ln.pending.reason) + '</div>';
+    } else if (ln.status === 'rejected' && ln.rejectReason) {
+      reason = '<div class="emp-comm-line__reason">曾驳回：' + esc(ln.rejectReason) + '</div>';
+    }
+    var cls = 'emp-comm-line' + (pending ? ' is-pending' : '') + (ln.status === 'rejected' ? ' is-rejected' : '');
+    return '<button type="button" class="' + cls + '" data-comm-line="' + esc(ln.id) + '">' +
+      '<div class="emp-comm-line__top"><div class="emp-comm-line__name">' + empTypeTagHtml(ln.kind) +
+      '<span>' + esc(ln.name) + '</span></div>' + badge + '</div>' +
+      '<div class="emp-comm-line__meta">' + esc(ln.orderTime) + ' · 售价 ' + fmtMoney(ln.price) +
+      ' · ' + esc(ln.channel) + '</div>' +
+      '<div class="emp-comm-line__vals">' +
+      '<div class="emp-comm-line__val"><span class="emp-comm-line__val-lbl">业绩</span>' + achHtml + '</div>' +
+      '<div class="emp-comm-line__val"><span class="emp-comm-line__val-lbl">提成</span>' + commHtml + '</div>' +
+      '</div>' + reason + '</button>';
+  }
+
   function renderSalaryDetail(staffId) {
     var s = staffById(staffId);
     var body = $('empSalaryDetailBody');
     if (!s || !body) return;
     state.currentStaffId = staffId;
     ensureCommDetailScopeBound();
+    if (!state.commDetailFilter) state.commDetailFilter = 'all';
+    if (!state.commDetailViewer) state.commDetailViewer = 'owner';
     $('empSalaryDetailTitle').textContent = '员工业绩提成明细';
+    syncCommViewerToggleBtn();
     var data = demoCommDetail(staffId);
     var mk = state.salaryMonth;
     var prev = empPrevMonthComm(staffId, mk);
     var schemeTag = s.scheme && s.scheme !== '暂未分配' ? s.scheme : '未分配方案';
     var scopeIsDay = state.commDetailScope === 'day' && state.commDetailDay;
+    var filter = state.commDetailFilter || 'all';
     var days = data.days.slice();
     if (scopeIsDay) {
       days = days.filter(function (day) { return day.ymd === state.commDetailDay; });
     }
+    days = days.map(function (day) {
+      var lines = (day.lines || []).filter(function (ln) {
+        if (filter === 'pending') return ln.status === 'pending';
+        if (filter === 'effective') return ln.status === 'effective';
+        if (filter === 'rejected') return ln.status === 'rejected';
+        return true;
+      });
+      return Object.assign({}, day, { lines: lines });
+    }).filter(function (day) { return day.lines.length; });
     var achTotal = scopeIsDay
       ? days.reduce(function (sum, day) { return sum + (Number(day.ach) || 0); }, 0)
       : data.achTotal;
     var commTotal = scopeIsDay
       ? days.reduce(function (sum, day) { return sum + (Number(day.comm) || 0); }, 0)
       : data.commTotal;
+    /* 日合计仍按生效值（与 data.days 原值一致，不受筛选影响） */
+    if (scopeIsDay) {
+      var dayRaw = data.days.find(function (day) { return day.ymd === state.commDetailDay; });
+      achTotal = dayRaw ? dayRaw.ach : 0;
+      commTotal = dayRaw ? dayRaw.comm : 0;
+    }
+    var pendingCount = data.pendingCount || 0;
     var sumTitle = scopeIsDay
       ? (formatCommDayShort(state.commDetailDay) + ' 合计')
       : (periodLabel(mk) + ' 合计');
@@ -33324,36 +33848,44 @@ function billingNav(fn) {
     var nav = commDetailNavState(staffId);
     var chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
     var chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+    var filterDefs = [
+      { id: 'all', label: '全部' },
+      { id: 'pending', label: '待确认' },
+      { id: 'effective', label: '已生效' },
+      { id: 'rejected', label: '已驳回' },
+    ];
+    var rejectedCount = data.lines.filter(function (l) { return l.status === 'rejected'; }).length;
+    var filterHtml = '<div class="emp-comm-filter" role="tablist">' + filterDefs.map(function (f) {
+      var n = '';
+      if (f.id === 'pending' && pendingCount) n = '<span class="emp-comm-filter__n">' + pendingCount + '</span>';
+      if (f.id === 'rejected' && rejectedCount) n = '<span class="emp-comm-filter__n">' + rejectedCount + '</span>';
+      return '<button type="button" class="emp-comm-filter__chip' + (filter === f.id ? ' is-on' : '') +
+        '" data-comm-filter="' + f.id + '">' + f.label + n + '</button>';
+    }).join('') + '</div>';
+    var viewerHtml = state.commDetailViewer === 'staff'
+      ? '<div class="emp-comm-viewer-bar is-staff">员工视角：仅可同意/驳回待确认调整，不能直接改数</div>'
+      : '<div class="emp-comm-viewer-bar">店主视角：点条目可调整；提交后需员工同意才生效</div>';
     var daysHtml = days.map(function (day) {
-      var orders = (day.orders || []).map(function (od) {
-        var items = (od.items || []).map(function (it) {
-          return '<div class="emp-comm-order__item">' +
-            empTypeTagHtml(it.kind) +
-            '<span class="emp-comm-order__iname">' + esc(it.name) + '</span>' +
-            '<span class="emp-comm-order__iprice">' + fmtMoney(it.price) + '</span></div>';
-        }).join('');
-        return '<div class="emp-comm-order">' +
-          '<div class="emp-comm-order__time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>' +
-          esc(od.time) + '</div>' + items +
-          '<div class="emp-comm-order__split">' +
-          '<div class="emp-comm-order__box"><div class="emp-comm-order__box-title">' +
-          '<span class="emp-salary-card__bar" style="background:#C4A484" aria-hidden="true"></span>业绩: ' + fmtMoney(od.ach) +
-          '</div><div class="emp-comm-order__box-sub">' + esc(od.achChannel) + ': ' + fmtMoney(od.ach) + '</div></div>' +
-          '<div class="emp-comm-order__box"><div class="emp-comm-order__box-title">' +
-          '<span class="emp-salary-card__bar" style="background:#7FA8A0" aria-hidden="true"></span>提成: ' + fmtMoney(od.comm) +
-          '</div><div class="emp-comm-order__box-sub">' + esc(od.commChannel) + ': ' + fmtMoney(od.comm) + '</div></div>' +
-          '</div></div>';
-      }).join('');
+      var pendingTip = day.pendingCount
+        ? '<span class="emp-comm-day__pending">' + day.pendingCount + ' 条待确认</span>'
+        : '';
+      var linesHtml = day.lines.map(renderCommLineCard).join('');
       return '<div class="emp-comm-day">' +
-        '<div class="emp-comm-day__head"><span>' + esc(formatCommDayListHead(day.ymd)) + ' 合计 (元)</span>' +
+        '<div class="emp-comm-day__head"><span>' + esc(formatCommDayListHead(day.ymd)) + ' 合计 (元)' + pendingTip + '</span>' +
         '<span class="emp-comm-day__head-metrics">' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#C4A484"></span>业绩：<span class="emp-num">' + fmtMoney(day.ach) + '</span></span>' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#7FA8A0"></span>提成：<span class="emp-num">' + fmtMoney(day.comm) + '</span></span>' +
-        '</span></div>' + orders + '</div>';
+        '</span></div>' + linesHtml + '</div>';
     }).join('');
     if (!daysHtml) {
-      daysHtml = '<div class="emp-comm-empty">' + (scopeIsDay ? '当日暂无提成明细' : '本周期暂无提成明细') + '</div>';
+      var emptyMsg = filter === 'pending' ? '暂无待确认调整'
+        : filter === 'rejected' ? '暂无已驳回记录'
+        : (scopeIsDay ? '当日暂无提成明细' : '本周期暂无提成明细');
+      daysHtml = '<div class="emp-comm-empty">' + emptyMsg + '</div>';
     }
+    var pendingSumTip = pendingCount
+      ? '<div class="emp-comm-sum__pending-tip">' + pendingCount + ' 条待员工确认（未计入上方合计）</div>'
+      : '';
     body.innerHTML =
       '<div class="emp-comm-detail-head">' + empAvatarHtml(s, 'emp-avatar--md') +
       '<div class="emp-comm-detail-head__meta"><div class="emp-comm-detail-head__name">' + esc(s.name) + '</div>' +
@@ -33365,6 +33897,7 @@ function billingNav(fn) {
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>' +
       '<button type="button" class="emp-comm-detail-date__nav" id="empCommDetailNext" aria-label="下一有数据日"' + (nav.canNext ? '' : ' disabled') + '>' + chevR + '</button>' +
       '</div></div>' +
+      viewerHtml + filterHtml +
       '<div class="emp-comm-sum">' +
       '<div class="emp-comm-sum__head"><span class="emp-comm-sum__title">' + esc(sumTitle) + '</span><span class="emp-comm-sum__unit">(单位：元)</span></div>' +
       '<div class="emp-comm-sum__block"><div class="emp-comm-sum__label-row">' +
@@ -33376,7 +33909,7 @@ function billingNav(fn) {
       '<span class="emp-comm-sum__label"><span class="emp-comm-sum__bar emp-comm-sum__bar--comm"></span>提成：</span>' +
       '<span class="emp-comm-sum__amt-wrap"><span class="emp-comm-sum__amt">' + fmtMoney(commTotal) + '</span>' +
       trendComm + '</span></div>' +
-      channelsComm + '</div></div>' +
+      channelsComm + '</div>' + pendingSumTip + '</div>' +
       daysHtml;
   }
 
@@ -36370,8 +36903,36 @@ function billingNav(fn) {
       'staff-pay-cycle': openPayCycleSettings,
       'staff-salary-detail': function () {
         var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
-        if (id) { renderSalaryDetail(id); showScreen('screen-emp-salary-detail'); nav('staff-salary-detail'); }
-        else openSalary();
+        if (id) {
+          state.commDetailViewer = 'owner';
+          state.commDetailFilter = 'all';
+          resetCommDetailScope();
+          renderSalaryDetail(id);
+          showScreen('screen-emp-salary-detail');
+          nav('staff-salary-detail');
+        } else openSalary();
+      },
+      'staff-salary-detail-pending': function () {
+        var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        if (id) {
+          state.commDetailViewer = 'owner';
+          state.commDetailFilter = 'pending';
+          resetCommDetailScope();
+          renderSalaryDetail(id);
+          showScreen('screen-emp-salary-detail');
+          nav('staff-salary-detail-pending');
+        } else openSalary();
+      },
+      'staff-salary-detail-staff': function () {
+        var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        if (id) {
+          state.commDetailViewer = 'staff';
+          state.commDetailFilter = 'pending';
+          resetCommDetailScope();
+          renderSalaryDetail(id);
+          showScreen('screen-emp-salary-detail');
+          nav('staff-salary-detail-staff');
+        } else openSalary();
       },
       'staff-reward-detail': function () {
         var id = state.rewardDetailStaffId || state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
@@ -36426,6 +36987,8 @@ function billingNav(fn) {
           { id: 'staff-salary', label: '员工薪资', screen: 'screen-emp-salary' },
           { id: 'staff-pay-cycle', label: '结算周期', screen: 'screen-emp-pay-cycle' },
           { id: 'staff-salary-detail', label: '员工业绩提成明细', screen: 'screen-emp-salary-detail' },
+          { id: 'staff-salary-detail-pending', label: '提成明细·待确认', screen: 'screen-emp-salary-detail' },
+          { id: 'staff-salary-detail-staff', label: '提成明细·员工确认', screen: 'screen-emp-salary-detail' },
           { id: 'staff-reward-detail', label: '奖惩明细', screen: 'screen-emp-reward-detail' },
           { id: 'staff-rewards', label: '设奖惩', screen: 'screen-emp-rewards' },
           { id: 'staff-ach', label: '业绩设置', screen: 'screen-emp-ach' },
@@ -36451,7 +37014,9 @@ function billingNav(fn) {
           ['staff-comm-scope', '使用范围', 'screen-emp-comm-scope'],
           ['staff-comm-assign', '分配员工', 'screen-emp-comm-assign'],
           ['staff-reward-detail', '奖惩明细', 'screen-emp-reward-detail'],
-          ['staff-pay-cycle', '结算周期', 'screen-emp-pay-cycle']].forEach(function (item) {
+          ['staff-pay-cycle', '结算周期', 'screen-emp-pay-cycle'],
+          ['staff-salary-detail-pending', '提成明细·待确认', 'screen-emp-salary-detail'],
+          ['staff-salary-detail-staff', '提成明细·员工确认', 'screen-emp-salary-detail']].forEach(function (item) {
           if (!empGroup.nodes.some(function (n) { return n.id === item[0]; })) {
             empGroup.nodes.push({ id: item[0], label: item[1], screen: item[2] });
           }
@@ -36461,6 +37026,8 @@ function billingNav(fn) {
         });
         empGroup.nodes.forEach(function (n) {
           if (n.id === 'staff-salary-detail') n.label = '员工业绩提成明细';
+          if (n.id === 'staff-salary-detail-pending') n.label = '提成明细·待确认';
+          if (n.id === 'staff-salary-detail-staff') n.label = '提成明细·员工确认';
           if (n.id === 'staff-ach-adv') {
             n.label = '基础设置';
             n.screen = 'screen-emp-ach';
@@ -36961,7 +37528,63 @@ function billingNav(fn) {
         if (!state.currentStaffId) return;
         shiftCommDetailScopedDay(state.currentStaffId, 1);
         renderSalaryDetail(state.currentStaffId);
+        return;
       }
+      var filterBtn = e.target.closest('[data-comm-filter]');
+      if (filterBtn) {
+        state.commDetailFilter = filterBtn.dataset.commFilter || 'all';
+        if (state.currentStaffId) renderSalaryDetail(state.currentStaffId);
+        return;
+      }
+      var lineBtn = e.target.closest('[data-comm-line]');
+      if (lineBtn) {
+        handleCommLineTap(lineBtn.dataset.commLine);
+      }
+    });
+
+    $('empCommViewerToggle')?.addEventListener('click', function () {
+      state.commDetailViewer = state.commDetailViewer === 'staff' ? 'owner' : 'staff';
+      if (state.commDetailViewer === 'staff' && state.commDetailFilter === 'all') {
+        /* 切到员工视角时，若有待确认默认聚焦待确认 */
+        if (state.currentStaffId && countPendingCommLines(state.currentStaffId)) {
+          state.commDetailFilter = 'pending';
+        }
+      }
+      if (state.currentStaffId) renderSalaryDetail(state.currentStaffId);
+      else syncCommViewerToggleBtn();
+    });
+
+    $('empCommLineEditCancel')?.addEventListener('click', function () {
+      closeMask('empCommLineEditMask');
+      state.commLineEditId = null;
+    });
+    $('empCommLineEditOk')?.addEventListener('click', function () { submitCommLineEdit(); });
+    $('empCommLineConsentReject')?.addEventListener('click', function () {
+      if (state.commDetailViewer !== 'staff') {
+        closeMask('empCommLineConsentMask');
+        return;
+      }
+      if (state.commLineActId) rejectCommLinePending(state.commLineActId);
+    });
+    $('empCommLineConsentOk')?.addEventListener('click', function () {
+      if (state.commDetailViewer !== 'staff') {
+        closeMask('empCommLineConsentMask');
+        state.commLineActId = null;
+        return;
+      }
+      if (state.commLineActId) approveCommLinePending(state.commLineActId);
+    });
+    $('empCommLineActCancel')?.addEventListener('click', function () {
+      closeMask('empCommLineActMask');
+      state.commLineActId = null;
+    });
+    $('empCommLineActEdit')?.addEventListener('click', function () {
+      var id = state.commLineActId;
+      closeMask('empCommLineActMask');
+      if (id) openCommLineEditSheet(id);
+    });
+    $('empCommLineActWithdraw')?.addEventListener('click', function () {
+      if (state.commLineActId) withdrawCommLinePending(state.commLineActId);
     });
 
     $('empCommDateCancel')?.addEventListener('click', function () { closeMask('empCommDateMask'); });
