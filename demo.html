@@ -8218,6 +8218,84 @@ button.exp-flow-row:active { opacity: .92; }
   -webkit-tap-highlight-color: transparent;
 }
 .bill-quick-row__add:active { opacity: .88; }
+/* 选择会员卡 · 快速扣次（单共计池） */
+.bill-qd-bar {
+  margin: 0 12px 10px;
+  padding: 12px;
+  border: 1px solid #F0F0F0;
+  border-radius: 12px;
+  background: #FAFAFA;
+  box-sizing: border-box;
+}
+.bill-qd-bar__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 8px;
+}
+.bill-qd-bar__title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a; line-height: 18px;
+}
+.bill-qd-bar__remain {
+  font-size: 12px; color: var(--text-sec); line-height: 16px; flex-shrink: 0;
+}
+.bill-qd-bar__row {
+  display: flex; align-items: center; gap: 8px;
+}
+.bill-qd-bar__meta { flex: 1; min-width: 0; }
+.bill-qd-bar__name {
+  font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bill-qd-bar__sub {
+  font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 2px;
+}
+.bill-qd-bar__sub .num { font-family: var(--font-data), inherit; color: #1a1a1a; }
+.bill-qd-bar__step {
+  display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.bill-qd-bar__step-btn {
+  width: 28px; height: 28px; border-radius: 8px; border: 1px solid #E8E8E8;
+  background: #fff; color: #1a1a1a; font-size: 16px; line-height: 1;
+  font-family: inherit; cursor: pointer; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.bill-qd-bar__step-btn:disabled { opacity: .35; cursor: default; }
+.bill-qd-bar__step-n {
+  min-width: 22px; text-align: center; font-size: 15px; font-weight: 600;
+  font-family: var(--font-data), inherit; color: #1a1a1a;
+}
+.bill-qd-bar__foot {
+  display: flex; align-items: center; gap: 8px; margin-top: 10px;
+}
+.bill-qd-bar__swap {
+  flex: 1; height: 40px; border: 1px solid var(--brand-border, #ffc9cf);
+  border-radius: 10px; background: transparent; color: var(--brand);
+  font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.bill-qd-bar__go {
+  flex: 1; height: 40px; border: none; border-radius: 10px;
+  background: var(--brand); color: #fff; font-size: 15px; font-weight: 600;
+  font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.bill-qd-bar__go:active, .bill-qd-bar__swap:active { opacity: .88; }
+.bill-qd-pick-list { padding: 4px 0 8px; max-height: min(52vh, 420px); overflow: auto; }
+.bill-qd-pick-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 14px 16px; border: none; border-bottom: 0.5px solid #EDEDED;
+  background: #fff; text-align: left; font-family: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; box-sizing: border-box;
+}
+.bill-qd-pick-item:last-child { border-bottom: none; }
+.bill-qd-pick-item.is-on { background: #FFF5F6; }
+.bill-qd-pick-item__meta { flex: 1; min-width: 0; }
+.bill-qd-pick-item__name { font-size: 15px; color: #1a1a1a; font-weight: 500; }
+.bill-qd-pick-item__price {
+  font-size: 13px; color: var(--text-sec); margin-top: 2px;
+  font-family: var(--font-data), inherit;
+}
+.bill-qd-pick-item__tag {
+  flex-shrink: 0; font-size: 11px; color: var(--brand); font-weight: 500;
+}
 .bill-stock-entry {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: calc(100% - 32px); margin: 10px 16px 10px; height: 40px;
@@ -17097,6 +17175,17 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="picker-foot picker-foot--row">
                 <button type="button" class="btn-main secondary" id="btnBillExtendCancel">取消</button>
                 <button type="button" class="btn-main" id="btnBillExtendConfirm">确认延期</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="picker-mask picker-mask--bottom" id="billQuickDeductPickMask">
+            <div class="picker-sheet" role="dialog" aria-label="选择扣次项目">
+              <div class="picker-head"><span class="picker-head__title-main">选择扣次项目</span></div>
+              <p class="emp-comm-edit-hint" style="padding:0 16px 4px;margin:0">仅展示本卡「共计」池内项目</p>
+              <div class="bill-qd-pick-list" id="billQuickDeductPickList"></div>
+              <div class="picker-foot">
+                <button type="button" class="btn-main secondary" id="btnBillQuickDeductPickCancel">取消</button>
               </div>
             </div>
           </div>
@@ -42118,6 +42207,9 @@ window.__BILLING_EMBEDDED__ = true;
     billHeldCardsToolsOpen: false,
     billActionTab: null, // 'card' | 'quick' | null(=auto)
     billQuickAmtDraft: '',
+    billQuickDeductQty: 1,
+    billQuickDeductProjectId: null,
+    billCardRailScrollLeft: 0,
     benefitFocusLineId: null,
     linkedCardIds: [],
     billRechargeCardId: null,
@@ -42565,6 +42657,9 @@ window.__BILLING_EMBEDDED__ = true;
     state.billHeldCardsToolsOpen = false;
     state.billActionTab = null;
     state.billQuickAmtDraft = '';
+    state.billQuickDeductQty = 1;
+    state.billQuickDeductProjectId = null;
+    state.billCardRailScrollLeft = 0;
     state.benefitFocusLineId = null;
   }
 
@@ -42681,6 +42776,8 @@ window.__BILLING_EMBEDDED__ = true;
     state.billPickCardIds = next;
     state.billPickCardId = next[0] || null;
     if (state.billDraft) state.billDraft.cardIds = next.slice();
+    state.billQuickDeductQty = 1;
+    state.billQuickDeductProjectId = null;
     if (next[0]) syncBillTabForSelectedCard(findHeldCardById(next[0]));
     else state.billTab = 'project';
     renderBillHeader();
@@ -42734,6 +42831,20 @@ window.__BILLING_EMBEDDED__ = true;
     </div>`;
   }
 
+  function captureBillCardRailScroll() {
+    const rail = document.getElementById('billCardRailScroll');
+    if (rail) state.billCardRailScrollLeft = rail.scrollLeft;
+  }
+
+  function restoreBillCardRailScroll() {
+    const rail = document.getElementById('billCardRailScroll');
+    if (!rail) return;
+    const x = Math.max(0, Number(state.billCardRailScrollLeft) || 0);
+    rail.scrollLeft = x;
+    /* 内容变短时钳制，并回写 */
+    state.billCardRailScrollLeft = rail.scrollLeft;
+  }
+
   function wireBillCardRailScroll(el) {
     if (!el || el.dataset.railWired === '1') return;
     el.dataset.railWired = '1';
@@ -42744,6 +42855,8 @@ window.__BILLING_EMBEDDED__ = true;
     let axis = null;
     let moved = false;
     const THRESHOLD = 6;
+    const persist = () => { state.billCardRailScrollLeft = el.scrollLeft; };
+    el.addEventListener('scroll', persist, { passive: true });
     el.addEventListener('pointerdown', e => {
       if (e.button != null && e.button !== 0) return;
       pointerId = e.pointerId;
@@ -42768,12 +42881,14 @@ window.__BILLING_EMBEDDED__ = true;
       if (axis !== 'x') return;
       moved = true;
       el.scrollLeft = startScroll - dx;
+      persist();
       e.preventDefault();
     }, { passive: false });
     const endPan = e => {
       if (pointerId == null || (e && e.pointerId !== pointerId)) return;
       if (axis === 'x') {
         try { el.releasePointerCapture(pointerId); } catch (_) { /* ignore */ }
+        persist();
         /* 延后清 is-panning，避免同次手势触发 click 选卡 */
         setTimeout(() => el.classList.remove('is-panning'), 0);
       }
@@ -42832,13 +42947,216 @@ window.__BILLING_EMBEDDED__ = true;
     </div>`;
   }
 
+  /** 选中卡是否仅有一个「共计」次数池，并给出可扣项目（默认最高价） */
+  function getSelectedCardSingleSharedPool() {
+    if (!hasBillCardSelected()) return null;
+    const card = findHeldCardById(getActiveBillPickCardIds()[0]);
+    if (!card) return null;
+    const tid = heldTemplateId(card);
+    const tpl = (typeof getTemplateById === 'function' && tid)
+      ? getTemplateById(tid)
+      : (CARD_TPL_BY_ID[tid] || null);
+    const tplItems = (tpl && Array.isArray(tpl.projectItems)) ? tpl.projectItems : [];
+    const sharedGids = [];
+    const seen = new Set();
+    tplItems.forEach(it => {
+      if (!it || it.unlimited) return;
+      if (it.qtyScope !== 'shared' || !it.sharedGroupId) return;
+      const gid = String(it.sharedGroupId);
+      if (seen.has(gid)) return;
+      seen.add(gid);
+      sharedGids.push(gid);
+    });
+    if (sharedGids.length !== 1) return null;
+    const gid = sharedGids[0];
+    const names = tplItems
+      .filter(it => it && it.sharedGroupId === gid)
+      .map(it => String(it.name || ''))
+      .filter(Boolean);
+    if (!names.length) return null;
+    const poolRow = (card.projects || []).find(p => p && p.sharedGroupId === gid);
+    let remainRaw = poolRow ? poolRow.remain : 0;
+    const unlimited = remainRaw === '不限次' || remainRaw === Infinity;
+    let remain = unlimited ? Infinity : (Number(remainRaw) || 0);
+    const bridge = window.CardCatalogBridge;
+    const projects = bridge?.getBillProjects?.() || (typeof PROJECTS !== 'undefined' ? PROJECTS : []);
+    const nameSet = new Set(names);
+    const catalogItems = (projects || []).filter(it => {
+      if (!it || !nameSet.has(String(it.name || ''))) return false;
+      if (it.onSale === false) return false;
+      return true;
+    }).slice();
+    if (!catalogItems.length) return null;
+    const usedInCart = catalogItems.reduce((s, it) => s + (getCartQty(it.id) || 0), 0);
+    const left = unlimited ? Infinity : Math.max(0, remain - usedInCart);
+    if (!unlimited && left <= 0) return null;
+    catalogItems.sort((a, b) => {
+      const dp = (Number(b.price) || 0) - (Number(a.price) || 0);
+      if (dp) return dp;
+      return String(a.name || '').localeCompare(String(b.name || ''), 'zh');
+    });
+    let defaultItem = catalogItems[0];
+    if (state.billQuickDeductProjectId) {
+      const picked = catalogItems.find(x => x.id === state.billQuickDeductProjectId);
+      if (picked) defaultItem = picked;
+      else state.billQuickDeductProjectId = null;
+    }
+    return {
+      card,
+      sharedGroupId: gid,
+      names,
+      catalogItems,
+      defaultItem,
+      remainLeft: left,
+      unlimited: !!unlimited,
+    };
+  }
+
+  function ensureBillQuickDeductQty(maxLeft) {
+    let q = Math.max(1, Number(state.billQuickDeductQty) || 1);
+    const cap = (maxLeft != null && maxLeft !== Infinity)
+      ? Math.min(maxLeft, (typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
+      : ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99);
+    if (q > cap) q = Math.max(1, cap);
+    state.billQuickDeductQty = q;
+    return q;
+  }
+
+  function renderBillQuickDeductBar() {
+    const info = getSelectedCardSingleSharedPool();
+    if (!info || !info.defaultItem) return '';
+    const item = info.defaultItem;
+    const qty = ensureBillQuickDeductQty(info.remainLeft);
+    const maxQ = info.unlimited
+      ? ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
+      : info.remainLeft;
+    const remainText = info.unlimited ? '不限次' : (`池余 ${info.remainLeft} 次`);
+    return `<div class="bill-qd-bar" id="billQuickDeductBar">
+      <div class="bill-qd-bar__head">
+        <span class="bill-qd-bar__title">快速扣次</span>
+        <span class="bill-qd-bar__remain">${escapeHtml(remainText)}</span>
+      </div>
+      <div class="bill-qd-bar__row">
+        <div class="bill-qd-bar__meta">
+          <div class="bill-qd-bar__name">${escapeHtml(item.name)}</div>
+          <div class="bill-qd-bar__sub"><span class="num">${formatYen(item.price)}</span></div>
+        </div>
+        <div class="bill-qd-bar__step" role="group" aria-label="扣次次数">
+          <button type="button" class="bill-qd-bar__step-btn" data-qd-step="-1" aria-label="减少"${qty <= 1 ? ' disabled' : ''}>−</button>
+          <span class="bill-qd-bar__step-n">${qty}</span>
+          <button type="button" class="bill-qd-bar__step-btn" data-qd-step="1" aria-label="增加"${qty >= maxQ ? ' disabled' : ''}>+</button>
+        </div>
+      </div>
+      <div class="bill-qd-bar__foot">
+        <button type="button" class="bill-qd-bar__swap" id="btnBillQuickDeductSwap">换项目</button>
+        <button type="button" class="bill-qd-bar__go" id="btnBillQuickDeduct">扣次</button>
+      </div>
+    </div>`;
+  }
+
+  function openBillQuickDeductPickSheet() {
+    const info = getSelectedCardSingleSharedPool();
+    const list = document.getElementById('billQuickDeductPickList');
+    if (!info || !list) return;
+    const curId = info.defaultItem.id;
+    list.innerHTML = info.catalogItems.map((it, idx) => {
+      const on = it.id === curId;
+      const tag = idx === 0 ? '<span class="bill-qd-pick-item__tag">最高价</span>' : '';
+      return `<button type="button" class="bill-qd-pick-item${on ? ' is-on' : ''}" data-qd-pick="${escapeHtml(it.id)}">
+        <span class="bill-qd-pick-item__meta">
+          <span class="bill-qd-pick-item__name">${escapeHtml(it.name)}</span>
+          <span class="bill-qd-pick-item__price">${formatYen(it.price)}</span>
+        </span>${tag}
+      </button>`;
+    }).join('');
+    openMask('billQuickDeductPickMask');
+  }
+
+  /** 支付成功入账：扣卡权益 + 写流水 + 成功页（供分账确认 / 快速扣次一键闭环共用） */
+  function completeBillPayFromSettlement(s, opts) {
+    opts = opts || {};
+    const settlement = s || calcSettlement();
+    if (!Array.isArray(settlement.paySplits)) settlement.paySplits = [];
+    settlement.manualOrderNo = settlement.manualOrderNo || ensureManualOrderNo();
+    settlement.billBizDate = settlement.billBizDate || ensureBillBizDate();
+    settlement.orderIsFree = !!settlement.orderIsFree;
+    state.lastSettlement = settlement;
+    if (opts.deductStock) deductProductStockAfterPay();
+    mutateCardsAfterPay(settlement);
+    if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
+      recordFlowOrderFromSettlement(settlement);
+    }
+    consumeActiveHold();
+    state.pendingCatalogAdds = collectPendingCatalogAddsFromCart();
+    closeMask('payMask', { keepCardExtendDraft: true });
+    closeMask('checkoutMask');
+    closeMask('cartSheetMask');
+    closeMask('billQuickDeductPickMask');
+    renderSuccess();
+    showOnlyScreen('screen-success');
+    if ((state.pendingCatalogAdds || []).length) {
+      requestAnimationFrame(() => openBillStockToCatalogDialog());
+    }
+  }
+
+  function submitBillQuickDeduct() {
+    const info = getSelectedCardSingleSharedPool();
+    if (!info || !info.defaultItem) {
+      showToast('当前卡不支持快速扣次', true);
+      return;
+    }
+    const item = info.defaultItem;
+    const qty = ensureBillQuickDeductQty(info.remainLeft);
+    if (!info.unlimited && qty > info.remainLeft) {
+      showToast(`共计池剩余不足，最多 ${info.remainLeft} 次`, true);
+      return;
+    }
+    const otherItems = (state.cart || []).filter(it => it && it.id !== item.id && (it.qty || 0) > 0);
+    if (otherItems.length) {
+      showToast('购物车还有其他商品，请先结账或清空后再快速扣次', true);
+      return;
+    }
+    const beforeQty = getCartQty(item.id);
+    setCartQty(item, qty);
+    if (getCartQty(item.id) <= beforeQty) return;
+    state.billQuickDeductQty = 1;
+    closeMask('billQuickDeductPickMask');
+    clearBillDueOverride();
+    state.orderIsFree = false;
+    state.settleOffersTouched = false;
+    /* 保证权益优先落在当前选中卡 */
+    if (info.card && info.card.id) {
+      const draft = ensureBillDraft();
+      draft.cardIds = [info.card.id];
+      state.billPickCardIds = [info.card.id];
+      state.billPickCardId = info.card.id;
+    }
+    autoApplyBestSettleOffers();
+    const s = calcSettlement();
+    const covered = (s.projectLines || []).reduce((a, l) => a + (Number(l.qty) || 0), 0);
+    const need = getCartQty(item.id);
+    if (covered < need || round2(Number(s.dueCash) || 0) > 0) {
+      showToast('无法一键抵扣，已进入结账', true);
+      syncBillComposerMode();
+      if (state.billComposerMode === 'drafting' && getDraftLines().length) {
+        if (!sealBillDraft()) return;
+      }
+      openBillSettle();
+      return;
+    }
+    s.paySplits = [];
+    state.payChannel = 'membercard';
+    completeBillPayFromSettlement(s);
+  }
+
   function renderBillActionPanel() {
     const tab = ensureBillActionTab();
     const cardOn = tab === 'card';
     const selected = hasBillCardSelected();
     let bodyInner = '';
     if (cardOn) {
-      bodyInner = renderBillCardRail() + (selected ? renderBillCatalogBlock({ scope: true }) : '');
+      bodyInner = renderBillCardRail()
+        + (selected ? (renderBillQuickDeductBar() + renderBillCatalogBlock({ scope: true })) : '');
     } else {
       bodyInner = renderBillQuickPanel();
     }
@@ -45318,6 +45636,7 @@ window.__BILLING_EMBEDDED__ = true;
   function renderBillHeader() {
     const c = getCustomer();
     syncBillCardGateChrome();
+    captureBillCardRailScroll();
 
     if (state.billCustomerPickOpen) {
       document.getElementById('billBody').innerHTML = `
@@ -45358,6 +45677,8 @@ window.__BILLING_EMBEDDED__ = true;
     }
     const rail = document.getElementById('billCardRailScroll');
     if (rail && typeof wireBillCardRailScroll === 'function') wireBillCardRailScroll(rail);
+    restoreBillCardRailScroll();
+    requestAnimationFrame(() => restoreBillCardRailScroll());
     if (ensureBillActionTab() === 'quick') {
       const panel = document.getElementById('billActionPanel');
       const quickInp = document.getElementById('billQuickAmt');
@@ -53479,6 +53800,28 @@ window.__BILLING_EMBEDDED__ = true;
       submitBillQuickConsume(inp ? inp.value : state.billQuickAmtDraft);
       return;
     }
+    const qdStep = e.target.closest('[data-qd-step]');
+    if (qdStep) {
+      const info = getSelectedCardSingleSharedPool();
+      if (!info) return;
+      const d = Number(qdStep.getAttribute('data-qd-step')) || 0;
+      const maxQ = info.unlimited
+        ? ((typeof INPUT_LIMITS !== 'undefined' && INPUT_LIMITS.CART_QTY_MAX) || 99)
+        : info.remainLeft;
+      let next = (Number(state.billQuickDeductQty) || 1) + d;
+      next = Math.max(1, Math.min(maxQ, next));
+      state.billQuickDeductQty = next;
+      renderBillHeader();
+      return;
+    }
+    if (e.target.id === 'btnBillQuickDeduct' || e.target.closest('#btnBillQuickDeduct')) {
+      submitBillQuickDeduct();
+      return;
+    }
+    if (e.target.id === 'btnBillQuickDeductSwap' || e.target.closest('#btnBillQuickDeductSwap')) {
+      openBillQuickDeductPickSheet();
+      return;
+    }
     const slipDel = e.target.closest('[data-bill-slip-delete]');
     if (slipDel) {
       deleteBillSlip(slipDel.getAttribute('data-bill-slip-delete'));
@@ -53595,6 +53938,18 @@ window.__BILLING_EMBEDDED__ = true;
   document.getElementById('btnBillExtendConfirm')?.addEventListener('click', confirmBillExtend);
   document.getElementById('billExtendMask')?.addEventListener('click', e => {
     if (e.target.id === 'billExtendMask') closeMask('billExtendMask');
+  });
+  document.getElementById('btnBillQuickDeductPickCancel')?.addEventListener('click', () => closeMask('billQuickDeductPickMask'));
+  document.getElementById('billQuickDeductPickMask')?.addEventListener('click', e => {
+    if (e.target.id === 'billQuickDeductPickMask') closeMask('billQuickDeductPickMask');
+  });
+  document.getElementById('billQuickDeductPickList')?.addEventListener('click', e => {
+    const row = e.target.closest('[data-qd-pick]');
+    if (!row) return;
+    state.billQuickDeductProjectId = row.getAttribute('data-qd-pick');
+    state.billQuickDeductQty = 1;
+    closeMask('billQuickDeductPickMask');
+    renderBillHeader();
   });
   document.getElementById('btnBillRechargeOk')?.addEventListener('click', closeBillAssetOk);
   document.getElementById('billRechargeOkMask')?.addEventListener('click', e => {
@@ -54014,7 +54369,7 @@ window.__BILLING_EMBEDDED__ = true;
   window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
   [
     'cartSheetMask', 'checkoutMask', 'payMask', 'guestRecordMask',
-    'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'addCardStaffMask',
+    'billRechargeMask', 'billTimesTopupMask', 'billExtendMask', 'billQuickDeductPickMask', 'addCardStaffMask',
     'billStockPickMask',
     'weikuanCheckoutMask', 'weikuanPayMask',
     'flowEditStaffMask', 'flowWeikuanFilterMask', 'flowFilterMask', 'flowMoreMask', 'flowRangeMask',
@@ -54498,18 +54853,7 @@ window.__BILLING_EMBEDDED__ = true;
       }
       state.cardExtendPending = null;
     }
-    mutateCardsAfterPay(s);
-    if (!state.lastIssueFromCardMgmt && !state.lastRefundResult) {
-      recordFlowOrderFromSettlement(s);
-    }
-    consumeActiveHold();
-    state.pendingCatalogAdds = collectPendingCatalogAddsFromCart();
-    closeMask('payMask', { keepCardExtendDraft: true });
-    renderSuccess();
-    showOnlyScreen('screen-success');
-    if ((state.pendingCatalogAdds || []).length) {
-      requestAnimationFrame(() => openBillStockToCatalogDialog());
-    }
+    completeBillPayFromSettlement(s);
   });
   document.getElementById('btnSuccessHome').addEventListener('click', () => {
     if (state.lastIssueFromCardMgmt) returnToCardListFromIssueCheckout();
