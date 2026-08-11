@@ -2548,43 +2548,57 @@ input[type=number]::-webkit-inner-spin-button {
 .ruler-block { padding: 0; }
 .ruler-block .ruler--pill { padding-bottom: 0; min-height: 58px; }
 
-/* Figma capture: ?figma=list-active | issue-success | step2 — phone-only */
+/* Figma capture: ?figma=list-active | issue-success | step2 | quick-issue — phone-only */
 html.figma-capture-list-active,
 html.figma-capture-issue-success,
-html.figma-capture-step2 { --phone-scale: 1; }
+html.figma-capture-step2,
+html.figma-capture-quick-issue { --phone-scale: 1; }
 html.figma-capture-list-active body,
 html.figma-capture-issue-success body,
-html.figma-capture-step2 body { background: var(--bg-page); }
+html.figma-capture-step2 body,
+html.figma-capture-quick-issue body { background: var(--bg-page); }
 html.figma-capture-list-active .shell,
 html.figma-capture-issue-success .shell,
-html.figma-capture-step2 .shell { max-width: none; margin: 0; padding: 0; display: block; }
+html.figma-capture-step2 .shell,
+html.figma-capture-quick-issue .shell { max-width: none; margin: 0; padding: 0; display: block; }
 html.figma-capture-list-active .toolbar,
 html.figma-capture-issue-success .toolbar,
-html.figma-capture-step2 .toolbar { display: none !important; }
+html.figma-capture-step2 .toolbar,
+html.figma-capture-quick-issue .toolbar { display: none !important; }
 html.figma-capture-list-active .phone-label,
 html.figma-capture-issue-success .phone-label,
-html.figma-capture-step2 .phone-label { display: none !important; }
+html.figma-capture-step2 .phone-label,
+html.figma-capture-quick-issue .phone-label { display: none !important; }
 html.figma-capture-list-active .phone-scale-slot,
 html.figma-capture-issue-success .phone-scale-slot,
-html.figma-capture-step2 .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
+html.figma-capture-step2 .phone-scale-slot,
+html.figma-capture-quick-issue .phone-scale-slot { width: var(--phone-w); height: auto; overflow: visible; }
 html.figma-capture-list-active .phone-wrap,
 html.figma-capture-issue-success .phone-wrap,
-html.figma-capture-step2 .phone-wrap { transform: none; }
+html.figma-capture-step2 .phone-wrap,
+html.figma-capture-quick-issue .phone-wrap { transform: none; }
 html.figma-capture-list-active .phone,
 html.figma-capture-issue-success .phone,
-html.figma-capture-step2 .phone { height: auto; min-height: var(--phone-h); overflow: visible; border: none; }
+html.figma-capture-step2 .phone,
+html.figma-capture-quick-issue .phone { height: auto; min-height: var(--phone-h); overflow: visible; border: none; }
 html.figma-capture-list-active .phone-shell,
 html.figma-capture-issue-success .phone-shell,
-html.figma-capture-step2 .phone-shell { height: auto; overflow: visible; }
+html.figma-capture-step2 .phone-shell,
+html.figma-capture-quick-issue .phone-shell { height: auto; overflow: visible; }
 html.figma-capture-list-active .screen,
 html.figma-capture-issue-success .screen,
-html.figma-capture-step2 .screen { overflow: visible; min-height: auto; flex: none; }
+html.figma-capture-step2 .screen,
+html.figma-capture-quick-issue .screen { overflow: visible; min-height: auto; flex: none; }
 html.figma-capture-list-active .page-body,
 html.figma-capture-issue-success .page-body,
-html.figma-capture-step2 .page-body { overflow: visible; flex: none; min-height: auto; }
+html.figma-capture-step2 .page-body,
+html.figma-capture-quick-issue .page-body { overflow: visible; flex: none; min-height: auto; }
 html.figma-capture-list-active .list-page-body { flex: none; min-height: auto; }
 html.figma-capture-list-active .member-card-item__grid--more.is-collapsed { display: grid !important; }
-html.figma-capture-step2 .bottom-bar { position: static; }
+html.figma-capture-step2 .bottom-bar,
+html.figma-capture-quick-issue .bottom-bar { position: static; }
+html.figma-capture-quick-issue .quick-issue-page { flex: none; min-height: var(--phone-h); }
+html.figma-capture-quick-issue .quick-issue-page__body { overflow: visible; flex: none; }
 
 /* PRD shot / deep-link capture: ?flow=<id>&capture=1 — phone only；高度随内容向下延伸，避免列表被 844 裁切 */
 html.prd-capture { --phone-scale: 1; }
@@ -6482,10 +6496,18 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   background: #fff; color: var(--text); font-weight: 600;
   box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
-.emp-scope-group-bar {
-  display: flex; align-items: center; gap: 0; margin-top: 10px; padding: 0 16px;
-  min-height: 36px;
+.emp-scope-group-bar.catalog-group-bar--nogear {
+  margin-top: 10px;
+  padding: 0 16px 8px;
+  background: transparent;
 }
+.emp-scope-group-bar .catalog-group-segment {
+  flex: 1;
+  min-width: 0;
+  margin-right: 0;
+}
+.emp-scope-group-bar.hidden { display: none !important; }
+/* legacy chip styles (unused after catalog-group-tab migration) */
 .emp-scope-group-scroll {
   display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
   scrollbar-width: none; flex: 1; min-width: 0; padding: 2px 0;
@@ -8267,7 +8289,17 @@ button.exp-flow-row:active { opacity: .92; }
 .proj-metering-seg__btn.is-on {
   background: #fff; color: #1a1a1a; box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
+.simple-times-mode-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 0 10px; margin-bottom: 4px;
+  border-bottom: 0.5px solid #EDEDED;
+}
+.simple-times-mode-row__main { flex: 1; min-width: 0; }
+.simple-times-mode-row__title { display: block; font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px; }
+.simple-times-mode-row__desc { display: block; font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 2px; }
+.simple-times-fields .proj-form-row .suffix { display: inline; margin-left: 4px; color: var(--text-sec); }
 .catalog-times-badge {
+
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 36px; padding: 0 6px; height: 20px; border-radius: 6px;
   background: #FFF0EB; color: #C24A2E; font-size: 12px; font-weight: 600;
@@ -14299,8 +14331,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <button type="button" class="emp-scope-type-tab" data-scope-type="product" role="tab" aria-selected="false">产品</button>
       <button type="button" class="emp-scope-type-tab" data-scope-type="card" role="tab" aria-selected="false">会员卡</button>
     </div>
-    <div class="emp-scope-group-bar" id="empScopeGroupBar">
-      <div class="emp-scope-group-scroll" id="empScopeGroupScroll"></div>
+    <div class="catalog-group-bar catalog-group-bar--nogear emp-scope-group-bar" id="empScopeGroupBar">
+      <div class="catalog-group-segment">
+        <div class="catalog-group-scroll" id="empScopeGroupScroll" role="tablist" aria-label="分组"></div>
+        <div class="catalog-group-fade" aria-hidden="true"></div>
+      </div>
     </div>
     <div class="emp-scope-tools">
       <button type="button" id="empScopeSelectAll">全选</button>
@@ -15600,10 +15635,30 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandTimesValidity">
                   <div class="benefit-expand__inner benefit-tree">
-                    <div id="projectBenefitCardsStep2" class="step2-benefit-cards"></div>
-                    <div class="step2-benefit-foot">
-                      <span class="step2-benefit-count hidden" id="projectBenefitCountStep2">0项</span>
-                      <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">添加项目权益</button>
+                    <div class="simple-times-mode-row" id="simpleTimesModeRow">
+                      <div class="simple-times-mode-row__main">
+                        <span class="simple-times-mode-row__title">简单计次模式</span>
+                        <span class="simple-times-mode-row__desc">只设次数，无需配置具体项目</span>
+                      </div>
+                      <button type="button" class="switch" id="benSimpleTimesMode" role="switch" aria-checked="false" aria-label="简单计次模式"></button>
+                    </div>
+                    <div class="simple-times-fields hidden" id="simpleTimesFields">
+                      <div class="proj-form-row" style="padding:12px 0;border:none">
+                        <span class="label">次数</span>
+                        <div class="field"><input type="text" inputmode="numeric" id="fSimpleTimesQty" placeholder="请输入" maxlength="3"><span class="suffix">次</span></div>
+                      </div>
+                      <div class="proj-form-row" style="padding:12px 0 4px;border:none">
+                        <span class="label">扣次项目</span>
+                        <div class="field"><input type="text" id="fSimpleTimesProjectName" placeholder="默认会员卡名称" maxlength="30"></div>
+                      </div>
+                      <p class="emp-comm-edit-hint" style="padding:0;margin:0 0 8px">该项目仅用于开单扣次与业绩设置，不会出现在价目表。</p>
+                    </div>
+                    <div id="projectBenefitNormalWrap">
+                      <div id="projectBenefitCardsStep2" class="step2-benefit-cards"></div>
+                      <div class="step2-benefit-foot">
+                        <span class="step2-benefit-count hidden" id="projectBenefitCountStep2">0项</span>
+                        <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">添加项目权益</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -17490,14 +17545,8 @@ function seedProjectCatalog() {
     { id: 'p25', name: '卸甲重做', price: 68, duration: 40, onSale: true, bookable: false, category: '美甲' },
     { id: 'p26', name: '开花嫁接睫毛', price: 288, duration: 90, onSale: true, bookable: true, category: '美睫' },
     { id: 'p27', name: '美睫补嫁', price: 128, duration: 45, onSale: true, bookable: true, category: '美睫' },
-    { id: 'p28', name: '精致剪发10次', price: 680, metering: 'times', timesQty: 10, redeemName: '精致剪发', onSale: true, bookable: false, category: '剪发造型' },
-    { id: 'p29', name: '面部护理10次', price: 1980, metering: 'times', timesQty: 10, redeemName: '面部护理', onSale: true, bookable: false, category: '美容' },
   ].map(p => ({
     ...p,
-    metering: p.metering || 'service',
-    timesQty: p.metering === 'times' ? (p.timesQty || 10) : null,
-    redeemName: p.metering === 'times' ? (p.redeemName || p.name) : null,
-    duration: p.metering === 'times' ? null : p.duration,
     images: [],
     hasImage: false,
     boundToCard: false,
@@ -17575,8 +17624,8 @@ function seedCatalogGroups() {
       { id: 'g_proj_wash', name: '洗吹', itemIds: ['p1', 'p3', 'p19'] },
       { id: 'g_proj_tang', name: '烫染', itemIds: ['p6', 'p7', 'p8', 'p9', 'p10', 'p16', 'p18'] },
       { id: 'g_proj_care', name: '护理', itemIds: ['p11', 'p12', 'p13', 'p15'] },
-      { id: 'g_proj_cut', name: '剪发造型', itemIds: ['p2', 'p4', 'p5', 'p14', 'p17', 'p28'] },
-      { id: 'g_proj_beauty', name: '美容', itemIds: ['p20', 'p21', 'p22', 'p29'] },
+      { id: 'g_proj_cut', name: '剪发造型', itemIds: ['p2', 'p4', 'p5', 'p14', 'p17'] },
+      { id: 'g_proj_beauty', name: '美容', itemIds: ['p20', 'p21', 'p22'] },
       { id: 'g_proj_nail', name: '美甲', itemIds: ['p23', 'p24', 'p25'] },
       { id: 'g_proj_lash', name: '美睫', itemIds: ['p26', 'p27'] },
       { id: 'g_proj_empty', name: '待配置', itemIds: [] },
@@ -17728,11 +17777,7 @@ window.CardCatalogBridge = {
       name: p.name,
       category: p.category || '项目',
       price: p.price,
-      benefitKey: p.metering === 'times' ? (p.redeemName || p.name) : p.name,
-      metering: p.metering || 'service',
-      timesQty: p.metering === 'times' ? (Number(p.timesQty) || 0) : null,
-      redeemName: p.metering === 'times' ? (p.redeemName || p.name) : null,
-      isTimesPackage: p.metering === 'times',
+      benefitKey: p.name,
     }));
   },
   getBillProducts() {
@@ -18007,7 +18052,7 @@ function syncPriceCatalogTabs() {
   const nameHead = document.querySelector('#projTableHead [data-col-sort="name"] .table-head__inner');
   if (nameHead) nameHead.textContent = tab === 'product' ? '产品名称（规格）' : '项目名称';
   const durHead = document.querySelector('#projTableHead [data-col-sort="duration"] .table-head__inner');
-  if (durHead) durHead.textContent = '时长/次数';
+  if (durHead) durHead.textContent = '时长（分钟）';
   const priceHead = document.querySelector('#projTableHead [data-col-sort="price"] .table-head__inner');
   if (priceHead) priceHead.textContent = '价格（¥）';
   syncProjListDragHint();
@@ -19018,6 +19063,8 @@ const DEMO_TEMPLATE_HOLDERS = {
   demo_care_pack: ['m5', 'm7', 'm10', 'm17', 'm19'],
   demo_unlimited_wash: ['m2', 'm5', 'm8', 'm12', 'm15'],
   demo_shared_cut_pool: ['m4', 'm6', 'm9', 'm14', 'm18'],
+  demo_face_care_times: ['m2'],
+  demo_cut_style_times: ['m4'],
 };
 
 const DEMO_TEMPLATE_HOLDERS_INVALID = {
@@ -19344,6 +19391,17 @@ const DEMO_HOLDER_LEDGER = {
   'demo_unlimited_wash:m5': {},
   'demo_unlimited_wash:m9': {},
 
+
+  'demo_face_care_times:m2': {
+    projects: {
+      '面部护理10次卡': { purchaseRemaining: 7, giftRemaining: 0, purchaseUsed: 3, giftUsed: 0 },
+    },
+  },
+  'demo_cut_style_times:m4': {
+    projects: {
+      '剪发造型10次卡': { purchaseRemaining: 6, giftRemaining: 0, purchaseUsed: 4, giftUsed: 0 },
+    },
+  },
   // —— 剪发造型共计10次 · 共享次数池 ——
   'demo_shared_cut_pool:m4': {
     projects: {
@@ -19808,6 +19866,51 @@ const QUICK_TEMPLATES = [
       cardDesc: '演示用·剪发造型可见项共计池（不含隐藏「女士造型」/未上架「接发」）',
     },
   },
+
+  {
+    id: 'face_care_times',
+    title: '面部护理次卡',
+    desc: '简单计次 · 美容名义',
+    icon: '',
+    preset: {
+      name: '面部护理10次卡',
+      audience: ['all'],
+      recharge: '1980',
+      giftAmount: '0',
+      validityKey: '1y', validityMonths: 12,
+      benefits: { balance: false, timesOrValidity: true, products: false, projectDiscount: false, balanceCanBuyProducts: false },
+      simpleTimesMode: true,
+      simpleTimesQty: 10,
+      simpleTimesProjectName: '面部护理10次卡',
+      projectItems: [
+        { id: 'demo_face_care_st', name: '面部护理10次卡', purchaseQty: 10, giftQty: 0, unlimited: false },
+      ],
+      cardColor: 'brand_red',
+      cardDesc: '演示用·简单计次模式：名义项目=卡名，不进价目表',
+    },
+  },
+  {
+    id: 'cut_style_times',
+    title: '剪发造型次卡',
+    desc: '简单计次 · 剪发名义',
+    icon: '',
+    preset: {
+      name: '剪发造型10次卡',
+      audience: ['all'],
+      recharge: '680',
+      giftAmount: '0',
+      validityKey: '6m', validityMonths: 6,
+      benefits: { balance: false, timesOrValidity: true, products: false, projectDiscount: false, balanceCanBuyProducts: false },
+      simpleTimesMode: true,
+      simpleTimesQty: 10,
+      simpleTimesProjectName: '剪发造型10次卡',
+      projectItems: [
+        { id: 'demo_cut_style_st', name: '剪发造型10次卡', purchaseQty: 10, giftQty: 0, unlimited: false },
+      ],
+      cardColor: 'peach',
+      cardDesc: '演示用·简单计次模式：名义项目=卡名，不进价目表',
+    },
+  },
   {
     id: 'editable_demo',
     title: '可编辑演示',
@@ -19887,6 +19990,14 @@ const DEMO_TEMPLATE_STATS = {
       '洗头': { consumed: 0, remaining: 0 },
     },
   },
+  demo_face_care_times: {
+    issueTimes: 8, holderCount: 1, purchaseTotal: 1980, validCardCount: 1,
+    projectStats: { '面部护理10次卡': { consumed: 3, remaining: 7 } },
+  },
+  demo_cut_style_times: {
+    issueTimes: 6, holderCount: 1, purchaseTotal: 680, validCardCount: 1,
+    projectStats: { '剪发造型10次卡': { consumed: 4, remaining: 6 } },
+  },
   demo_shared_cut_pool: {
     issueTimes: 22, holderCount: 14, purchaseTotal: 15356, validCardCount: 12,
     projectStats: {
@@ -19946,6 +20057,9 @@ const state = {
   audienceOptions: cloneDefaultAudienceOptions(),
   projectItems: [],
   productItems: [],
+  simpleTimesMode: false,
+  simpleTimesQty: null,
+  simpleTimesProjectName: '',
   memberPrices: {},
   memberPricePickTemp: [],
   memberPriceDraft: {},
@@ -21985,15 +22099,11 @@ function projFormatDurationListHtml(mins) {
 }
 
 function projFormatMeteringListHtml(p) {
-  if (p && p.metering === 'times') {
-    const n = Math.max(0, parseInt(p.timesQty, 10) || 0);
-    return `<span class="catalog-times-badge">${n}次</span>`;
-  }
   return projFormatDurationListHtml(p && p.duration);
 }
 
-function isTimesMeteringProject(p) {
-  return !!(p && p.metering === 'times');
+function isTimesMeteringProject(_p) {
+  return false;
 }
 
 function projMinutesToWheel(total) {
@@ -22201,9 +22311,7 @@ function compareCatalogByCol(a, b, key, dir) {
   if (key === 'name') {
     cmp = a.name.localeCompare(b.name, 'zh-CN');
   } else if (key === 'duration') {
-    const av = a.metering === 'times' ? (Number(a.timesQty) || 0) : (a.duration || 0);
-    const bv = b.metering === 'times' ? (Number(b.timesQty) || 0) : (b.duration || 0);
-    cmp = av - bv;
+    cmp = (a.duration || 0) - (b.duration || 0);
   } else if (key === 'spec') {
     cmp = String(a.spec || '').localeCompare(String(b.spec || ''), 'zh-CN');
   } else if (key === 'price') {
@@ -22290,7 +22398,7 @@ function buildCatalogListRow(p, { isProduct, inHiddenSection }) {
             <span class="name-text${longName ? ' is-long' : ''}${p.boundToCard ? ' is-bound' : ''}">${escapeHtml(displayName)}</span>
           </div>
         </div>
-        <div class="dur">${isProduct ? '' : projFormatMeteringListHtml(p)}</div>
+        <div class="dur">${isProduct ? '' : projFormatDurationListHtml(p.duration)}</div>
         <div class="price">${projFormatPriceHtml(p.price)}</div>
       </div>`;
   const row = wrap.querySelector('.table-row');
@@ -22943,7 +23051,7 @@ function projDefaultForm(kind = 'project') {
     return { kind: 'product', name: '', spec: '', price: '', onSale: true, category: '产品', images: [], hasImage: false, imageExpanded: false };
   }
   return {
-    kind: 'project', metering: 'service', name: '', price: '', duration: 60, timesQty: 10, redeemName: '',
+    kind: 'project', name: '', price: '', duration: 60,
     onSale: true, bookable: true, images: [], hasImage: false, imageExpanded: false, _durUnit: null, _durAmount: null,
   };
 }
@@ -22957,17 +23065,13 @@ function projProjectToForm(p) {
       onSale: p.onSale, category: p.category || '产品', images, hasImage: images.length > 0, imageExpanded,
     };
   }
-  const metering = p.metering === 'times' ? 'times' : 'service';
   return {
     kind: 'project',
-    metering,
     name: p.name,
     price: String(p.price),
-    duration: metering === 'times' ? 60 : (p.duration || 60),
-    timesQty: metering === 'times' ? (Number(p.timesQty) || 10) : 10,
-    redeemName: p.redeemName || (metering === 'times' ? String(p.name || '').replace(/\d+次$/, '') : ''),
+    duration: p.duration || 60,
     onSale: p.onSale,
-    bookable: metering === 'times' ? false : !!p.bookable,
+    bookable: !!p.bookable,
     images,
     hasImage: images.length > 0,
     imageExpanded,
@@ -23040,11 +23144,10 @@ function projSyncBookableLock(container, bound) {
 function projRenderForm(container, mode) {
   const p = mode === 'edit' ? findCatalogItemById(state.projEditingId) : null;
   const isProduct = state.projFormKind === 'product';
-  const isTimes = !isProduct && state.projFormState?.metering === 'times';
   const bound = !!p?.boundToCard && !isProduct;
   const offSale = !!p && !p.onSale;
   const isHidden = !!p && !!p.hidden;
-  const lockBookable = bound || offSale || isHidden || isTimes;
+  const lockBookable = bound || offSale || isHidden;
   const lockBookableToast = bound
     ? PROJ_LOCK_TOAST.bookable_bound
     : (isHidden ? PROJ_LOCK_TOAST.bookable_hidden : PROJ_LOCK_TOAST.bookable_offSale);
@@ -23055,38 +23158,29 @@ function projRenderForm(container, mode) {
   const nameLabel = isProduct ? '产品名称' : '项目名称';
   const priceLabel = isProduct ? '产品价格' : '项目价格';
   const imageLabel = isProduct ? '产品封面图（可选）' : '项目封面图（可选）';
-  const meteringSeg = isProduct ? '' : `<div class="proj-metering-seg" role="tablist" aria-label="项目类型">
-    <button type="button" class="proj-metering-seg__btn${s.metering !== 'times' ? ' is-on' : ''}" data-proj-metering="service">服务</button>
-    <button type="button" class="proj-metering-seg__btn${s.metering === 'times' ? ' is-on' : ''}" data-proj-metering="times">计次</button>
-  </div>`;
-  const durationOrTimes = isProduct ? '' : (isTimes
-    ? `<div class="proj-form-row" id="projTimesRow"><span class="label${reqCls}">次数</span><div class="field"><input type="text" inputmode="numeric" id="fProjTimesQty" placeholder="请输入" value="${escapeAttr(String(s.timesQty || ''))}" maxlength="3"><span class="suffix">次</span></div></div>
-       <div class="proj-form-row"><span class="label">扣次项目</span><div class="field"><input type="text" id="fProjRedeemName" placeholder="默认取名称" value="${escapeAttr(s.redeemName || '')}" maxlength="30"></div></div>`
-    : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
+  const durationRow = isProduct ? '' : `<div class="proj-form-row form-row--duration" id="projDurRow"><span class="label">项目时长</span><div class="field">${buildDurationInputHtml({
             id: 'projServiceDuration',
             ...minutesToServiceDurationFields(s.duration),
             units: PROJ_SERVICE_DURATION_UNITS,
             unitLabels: DURATION_UNIT_LABELS,
             includePermanent: false,
-          })}</div></div>`);
+          })}</div></div>`;
   container.innerHTML = `
     <div class="proj-form-stack">
       <div>
         <div class="proj-section-label">基本信息</div>
         <div class="proj-form-section">
-          ${meteringSeg}
           <div${projFormRowAttrs('', bound, PROJ_LOCK_TOAST.name)}><span class="label${reqCls}">${nameLabel}</span><div class="field"><input type="text" id="fProjName" placeholder="请输入" value="${escapeAttr(s.name)}" maxlength="30" ${bound ? 'disabled' : ''}></div></div>
           ${isProduct ? `<div class="proj-form-row"><span class="label">规格</span><div class="field"><input type="text" id="fProjSpec" placeholder="选填" value="${escapeAttr(s.spec || '')}" maxlength="20"></div></div>` : ''}
           <div class="proj-form-row"><span class="label${reqCls}">${priceLabel}</span><div class="field"><input type="text" class="input-amount" id="fPrice" placeholder="请输入" value="${escapeAttr(s.price ? ('¥' + String(s.price).replace(/^¥/, '')) : '')}"></div></div>
-          ${durationOrTimes}
+          ${durationRow}
         </div>
       </div>
       <div>
         <div class="proj-section-label">售卖设置</div>
         <div class="proj-form-section">
           <div class="proj-form-row"><span class="label">在售</span><div class="field"><button type="button" class="switch ${s.onSale ? 'on' : ''}" id="fProjOnSale"></button></div></div>
-          ${isProduct || isTimes ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
-          ${isTimes ? '<p class="emp-comm-edit-hint" style="padding:12px 16px;margin:0">计次项目售出后，将以票卡形式出现在开单「选择会员卡」中，可一键扣次。</p>' : ''}
+          ${isProduct ? '' : `<div${projFormRowAttrs('col', lockBookable, lockBookableToast)}><div style="display:flex;align-items:center;justify-content:space-between;width:100%"><span class="label">可预约</span><button type="button" class="switch ${s.bookable ? 'on' : ''}" id="fProjBookable" ${lockBookable ? 'disabled' : ''}></button></div><p class="hint">打开后项目会在小程序-预约中显示</p></div>`}
         </div>
       </div>
       <div>
@@ -23096,7 +23190,7 @@ function projRenderForm(container, mode) {
         </div>
       </div>
     </div>`;
-  projBindFormEvents(container, { bound, offSale, isHidden, isProduct, isTimes, mode });
+  projBindFormEvents(container, { bound, offSale, isHidden, isProduct, mode });
 }
 
 function projBindFormEvents(container, lockCtx) {
@@ -23104,8 +23198,6 @@ function projBindFormEvents(container, lockCtx) {
   const offSale = !!lockCtx?.offSale;
   const isHidden = !!lockCtx?.isHidden;
   const isProduct = !!lockCtx?.isProduct;
-  const isTimes = !!lockCtx?.isTimes;
-  const formMode = lockCtx?.mode || (state.projEditingId ? 'edit' : 'add');
   const bindSwitch = (id, key, opts = {}) => {
     const el = container.querySelector(id);
     if (!el || opts.disabled) return;
@@ -23118,36 +23210,13 @@ function projBindFormEvents(container, lockCtx) {
   bindSwitch('#fProjOnSale', 'onSale', {
     afterToggle: () => projSyncBookableLock(container, bound),
   });
-  if (!isProduct && !isTimes) {
+  if (!isProduct) {
     const bookableLocked = bound || isHidden || (offSale && !state.projFormState.onSale);
     bindSwitch('#fProjBookable', 'bookable', { disabled: bookableLocked });
   }
   if (!isProduct) projWireLockToasts(container);
-  container.querySelectorAll('[data-proj-metering]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const next = btn.getAttribute('data-proj-metering') === 'times' ? 'times' : 'service';
-      if (state.projFormState.metering === next) return;
-      state.projFormState.metering = next;
-      if (next === 'times') {
-        state.projFormState.bookable = false;
-        if (!(Number(state.projFormState.timesQty) > 0)) state.projFormState.timesQty = 10;
-        if (!state.projFormState.redeemName) {
-          state.projFormState.redeemName = String(state.projFormState.name || '').replace(/\d+次$/, '').trim();
-        }
-      } else {
-        if (!(Number(state.projFormState.duration) > 0)) state.projFormState.duration = 60;
-        state.projFormState.bookable = true;
-      }
-      projRenderForm(container, formMode);
-    });
-  });
   container.querySelector('#fProjName')?.addEventListener('input', e => { state.projFormState.name = e.target.value; });
   container.querySelector('#fProjSpec')?.addEventListener('input', e => { state.projFormState.spec = e.target.value; });
-  container.querySelector('#fProjTimesQty')?.addEventListener('input', e => {
-    const n = parseInt(String(e.target.value || '').replace(/\D/g, ''), 10);
-    state.projFormState.timesQty = Number.isFinite(n) ? n : '';
-  });
-  container.querySelector('#fProjRedeemName')?.addEventListener('input', e => { state.projFormState.redeemName = e.target.value; });
   const priceEl = container.querySelector('#fPrice');
   if (priceEl) {
     priceEl.setAttribute('readonly', 'readonly');
@@ -23157,7 +23226,7 @@ function projBindFormEvents(container, lockCtx) {
       priceEl.addEventListener('focus', e => { e.preventDefault(); priceEl.blur(); openAmountKeypad(priceEl); });
     }
   }
-  if (!isTimes) wireProjServiceDurationInput(container);
+  wireProjServiceDurationInput(container);
   const refreshImgSection = () => {
     const section = container.querySelector('#projImgCollapse')?.closest('.proj-form-row');
     if (!section) return;
@@ -23265,7 +23334,6 @@ function projValidateForm() {
   }
   const dur = parseInt(state.projFormState?.duration, 10) || 0;
   const isProduct = state.projFormKind === 'product';
-  const isTimes = !isProduct && state.projFormState?.metering === 'times';
   if (!name) { showToast(isProduct ? '请填写产品名称' : '请填写项目名称', true); return false; }
   const catalog = isProduct ? (state.productCatalog || []) : (state.projectCatalog || []);
   const nameNorm = name.trim();
@@ -23273,16 +23341,11 @@ function projValidateForm() {
   if (dup) { showToast('名称已存在', true); return false; }
   if (isNaN(price) || price < 0) { showToast('请填写有效价格', true); return false; }
   if (price > INPUT_LIMITS.MONEY_MAX) { showToast(`金额不能超过 ${formatMoneyLimitLabel()}`, true); return false; }
-  if (isTimes) {
-    const tq = parseInt(state.projFormState.timesQty, 10);
-    if (!Number.isFinite(tq) || tq < 1) { showToast('请填写有效次数', true); return false; }
-    if (tq > 999) { showToast('次数不能超过 999', true); return false; }
-    state.projFormState.timesQty = tq;
-  } else if (!isProduct && dur < 1) {
+  if (!isProduct && dur < 1) {
     showToast('请填写项目时长', true);
     return false;
   }
-  if (!isProduct && !isTimes && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
+  if (!isProduct && dur > PROJ_SERVICE_DURATION_MAX_MIN) state.projFormState.duration = PROJ_SERVICE_DURATION_MAX_MIN;
   return true;
 }
 
@@ -23292,7 +23355,6 @@ function projSaveForm() {
   const isProduct = state.projFormKind === 'product';
   const catalog = isProduct ? state.productCatalog : state.projectCatalog;
   const images = projNormalizeImages(state.projFormState.images, false);
-  const isTimes = !isProduct && state.projFormState.metering === 'times';
   const payload = isProduct ? {
     name: state.projFormState.name.trim(),
     spec: (state.projFormState.spec || '').trim(),
@@ -23301,32 +23363,16 @@ function projSaveForm() {
     category: state.projFormState.category || '产品',
     images,
     hasImage: images.length > 0,
-  } : (isTimes ? {
-    name: state.projFormState.name.trim(),
-    price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
-    metering: 'times',
-    timesQty: Number(state.projFormState.timesQty) || 1,
-    redeemName: (state.projFormState.redeemName || state.projFormState.name || '').trim().replace(/\d+次$/, '').trim()
-      || state.projFormState.name.trim(),
-    duration: null,
-    onSale: state.projFormState.onSale,
-    bookable: false,
-    images,
-    hasImage: images.length > 0,
-    category: PROJ_DEFAULT_CATEGORY,
   } : {
     name: state.projFormState.name.trim(),
     price: Math.round(parseFloat(state.projFormState.price) * 100) / 100,
-    metering: 'service',
-    timesQty: null,
-    redeemName: null,
     duration: state.projFormState.duration,
     onSale: state.projFormState.onSale,
     bookable: state.projFormState.bookable,
     images,
     hasImage: images.length > 0,
     category: PROJ_DEFAULT_CATEGORY,
-  });
+  };
   if (state.projEditingId) {
     const idx = catalog.findIndex(p => p.id === state.projEditingId);
     if (idx >= 0) {
@@ -25367,12 +25413,58 @@ function setBenefitSwitchOn(id, on) {
   el.setAttribute('aria-checked', on ? 'true' : 'false');
 }
 
+function readSimpleTimesFieldsFromDom() {
+  const qtyEl = document.getElementById('fSimpleTimesQty');
+  const nameEl = document.getElementById('fSimpleTimesProjectName');
+  if (qtyEl) {
+    const n = parseInt(String(qtyEl.value || '').replace(/\D/g, ''), 10);
+    state.simpleTimesQty = Number.isFinite(n) ? n : state.simpleTimesQty;
+  }
+  if (nameEl) state.simpleTimesProjectName = String(nameEl.value || '').trim();
+}
+
+function applySimpleTimesToProjectItems() {
+  if (!state.simpleTimesMode) return;
+  readSimpleTimesFieldsFromDom();
+  const qty = Math.max(1, Math.min(999, parseInt(state.simpleTimesQty, 10) || 10));
+  const cardName = (document.getElementById('fName')?.value || '').trim();
+  const name = (state.simpleTimesProjectName || cardName || '扣次项目').trim();
+  state.simpleTimesQty = qty;
+  state.simpleTimesProjectName = name;
+  const keepId = state.projectItems[0]?.id || genId();
+  state.projectItems = [{ id: keepId, name, purchaseQty: qty, giftQty: 0, unlimited: false }];
+  state.projectBenefitCards = projectItemsToBenefitCards(state.projectItems);
+}
+
+function syncSimpleTimesModeUI() {
+  const on = !!state.simpleTimesMode;
+  setBenefitSwitchOn('benSimpleTimesMode', on);
+  document.getElementById('simpleTimesFields')?.classList.toggle('hidden', !on);
+  document.getElementById('projectBenefitNormalWrap')?.classList.toggle('hidden', !!on);
+  if (on) {
+    if (!state.benefits.timesOrValidity) {
+      state.benefits.timesOrValidity = true;
+      setBenefitSwitchOn('benTimesOrValidity', true);
+    }
+    const qtyEl = document.getElementById('fSimpleTimesQty');
+    const nameEl = document.getElementById('fSimpleTimesProjectName');
+    if (qtyEl && document.activeElement !== qtyEl) {
+      qtyEl.value = state.simpleTimesQty != null ? String(state.simpleTimesQty) : '10';
+    }
+    if (nameEl && document.activeElement !== nameEl) {
+      nameEl.value = state.simpleTimesProjectName || '';
+      nameEl.placeholder = '默认会员卡名称';
+    }
+  }
+}
+
 function syncStep2UI() {
   setBenefitSwitchOn('benBalance', state.benefits.balance);
   setBenefitSwitchOn('benTimesOrValidity', state.benefits.timesOrValidity);
   setBenefitSwitchOn('benProducts', state.benefits.products);
   setBenefitSwitchOn('benProjectDiscount', state.benefits.projectDiscount);
   applyBenefitVisibility();
+  syncSimpleTimesModeUI();
   syncBalanceCanBuyProductsField();
   renderProjectItemTags();
   renderProductItemTags();
@@ -25410,6 +25502,7 @@ function applyBenefitDiff(oldB, newB) {
   }
   if (oldB.timesOrValidity && !newB.timesOrValidity) {
     /* E2: switch off only collapses; keep project benefit cards */
+    state.simpleTimesMode = false;
   }
   if (oldB.products && !newB.products) {
     /* E2: switch off only collapses; keep product benefit cards */
@@ -25441,6 +25534,7 @@ function applyBenefitVisibility() {
   document.getElementById('blockTimesValidity').classList.toggle('is-expanded', b.timesOrValidity);
   document.getElementById('blockProduct')?.classList.toggle('is-expanded', b.products);
   document.getElementById('blockDiscount').classList.toggle('is-expanded', b.projectDiscount);
+  syncSimpleTimesModeUI();
   syncBalanceCanBuyProductsField();
   syncGiftCalculated();
 }
@@ -25488,6 +25582,9 @@ function buildDuplicateFormPreset(t) {
     projectItems: normalizeProjectItemsFromTpl(t).map(i => ({ ...i, id: genId() })),
     benefits: { ...(t.benefits || emptyBenefits()) },
     balanceCanBuyProducts: false,
+    simpleTimesMode: !!t.simpleTimesMode,
+    simpleTimesQty: t.simpleTimesMode ? (Number(t.simpleTimesQty) || Number((t.projectItems || [])[0]?.purchaseQty) || 10) : null,
+    simpleTimesProjectName: t.simpleTimesMode ? (t.simpleTimesProjectName || t.name || '') : '',
     cardColor: t.cardColor || 'brand_red',
     usagePolicy: normalizeUsagePolicy(t.usagePolicy),
     ...pickCardValidityFields(t),
@@ -25568,6 +25665,9 @@ function mapTemplateToBillingListItem(t) {
     cardColor: t.cardColor || 'brand_red',
     validity: formatCardValidity(t) || '—',
     benefits: { ...(t.benefits || emptyBenefits()) },
+    simpleTimesMode: !!t.simpleTimesMode,
+    simpleTimesQty: t.simpleTimesMode ? (Number(t.simpleTimesQty) || Number((t.projectItems || [])[0]?.purchaseQty) || 0) : null,
+    simpleTimesProjectName: t.simpleTimesMode ? (t.simpleTimesProjectName || t.name) : null,
     projects,
     discounts,
     memberPrices: t.memberPrices ? { ...t.memberPrices } : {},
@@ -25733,10 +25833,20 @@ function pruneEmptyStep2BenefitSwitches(benefits) {
   const cleared = [];
 
   if (next.timesOrValidity) {
-    ensureProjectBenefitCardsFromItems();
-    if (!state.projectBenefitCards.some(c => c.saved)) {
-      next.timesOrValidity = false;
-      cleared.push('项目');
+    if (state.simpleTimesMode) {
+      applySimpleTimesToProjectItems();
+      const tq = parseInt(state.simpleTimesQty, 10);
+      if (!Number.isFinite(tq) || tq < 1) {
+        next.timesOrValidity = false;
+        state.simpleTimesMode = false;
+        cleared.push('项目');
+      }
+    } else {
+      ensureProjectBenefitCardsFromItems();
+      if (!state.projectBenefitCards.some(c => c.saved)) {
+        next.timesOrValidity = false;
+        cleared.push('项目');
+      }
     }
   }
   if (next.products) {
@@ -25779,6 +25889,19 @@ function applyPrunedStep2Benefits(oldB, newB) {
 function onStep2Next() {
   const oldB = { ...state.benefits };
   const readB = readStep2Benefits();
+  if (state.simpleTimesMode) {
+    readB.timesOrValidity = true;
+    applySimpleTimesToProjectItems();
+    const tq = parseInt(state.simpleTimesQty, 10);
+    if (!Number.isFinite(tq) || tq < 1) {
+      showToast('请填写有效次数', true);
+      return;
+    }
+    if (tq > 999) {
+      showToast('次数不能超过 999', true);
+      return;
+    }
+  }
   const { benefits: newB, cleared } = pruneEmptyStep2BenefitSwitches(readB);
   if (!hasAnyBenefitContentOn(newB)) {
     applyPrunedStep2Benefits(oldB, newB);
@@ -27116,6 +27239,7 @@ function getFormData() {
     giftAmount = formatGiftAmountInput(document.getElementById('fGiftAmount')?.value ?? '');
     faceAmount = formatGiftAmountInput(document.getElementById('fFaceValue')?.value ?? '');
   }
+  if (state.simpleTimesMode) applySimpleTimesToProjectItems();
   return sanitizeTemplatePayload({
     name: document.getElementById('fName').value.trim(),
     audience: [...normalizeAudience(state.audience)],
@@ -27126,6 +27250,9 @@ function getFormData() {
     projectItems: state.projectItems.map(i => ({ ...i })),
     productItems: state.productItems.map(i => ({ ...i })),
     benefits: { ...state.benefits },
+    simpleTimesMode: !!state.simpleTimesMode,
+    simpleTimesQty: state.simpleTimesMode ? (Number(state.simpleTimesQty) || 10) : null,
+    simpleTimesProjectName: state.simpleTimesMode ? (state.simpleTimesProjectName || document.getElementById('fName').value.trim()) : null,
     cardColor: state.cardColor || 'brand_red',
     usagePolicy: normalizeUsagePolicy(state.usagePolicy),
     ...pickCardValidityFields(getCardValiditySnapshot()),
@@ -27156,6 +27283,11 @@ function loadPresetIntoForm(p) {
   state.usagePolicy = normalizeUsagePolicy(p.usagePolicy);
   state.projectItems = normalizeProjectItemsFromTpl(p);
   state.productItems = normalizeProductItemsFromTpl(p);
+  state.simpleTimesMode = !!p.simpleTimesMode;
+  state.simpleTimesQty = p.simpleTimesMode
+    ? (Number(p.simpleTimesQty) || Number((p.projectItems || [])[0]?.purchaseQty) || 10)
+    : null;
+  state.simpleTimesProjectName = p.simpleTimesMode ? (p.simpleTimesProjectName || p.name || '') : '';
   state.memberPrices = normalizeMemberPricesFromTpl(p.memberPrices);
   state.projectBenefitCards = projectItemsToBenefitCards(state.projectItems);
   state.productBenefitCards = productItemsToBenefitCards(state.productItems);
@@ -27178,6 +27310,9 @@ function clearFormFields() {
   state.audience = ['all'];
   state.projectItems = [];
   state.productItems = [];
+  state.simpleTimesMode = false;
+  state.simpleTimesQty = null;
+  state.simpleTimesProjectName = '';
   state.memberPrices = {};
   state.projectBenefitCards = [];
   state.productBenefitCards = [];
@@ -27262,6 +27397,12 @@ function basicValidate() {
   }
   if (!validateCardValidityOnSave()) return false;
   if (!validateBalanceAmounts()) return false;
+  if (state.simpleTimesMode) {
+    applySimpleTimesToProjectItems();
+    const tq = parseInt(state.simpleTimesQty, 10);
+    if (!Number.isFinite(tq) || tq < 1) { showToast('请填写有效次数', true); return false; }
+    if (tq > 999) { showToast('次数不能超过 999', true); return false; }
+  }
   if (!validateProjectItemsOnSave()) return false;
   if (!validateProductItems()) return false;
   return validateMemberPrices();
@@ -27579,6 +27720,33 @@ function projectHeldCardForBilling(templateId, memberId) {
     templateId,
     benefits: { ...(tpl.benefits || emptyBenefits()) },
   };
+  if (tpl.simpleTimesMode) {
+    const total = Math.max(1, Number(tpl.simpleTimesQty)
+      || Number((tpl.projectItems || [])[0]?.purchaseQty)
+      || 1);
+    const paidRaw = Number(meta?.purchaseAmount);
+    const paid = (Number.isFinite(paidRaw) && paidRaw > 0)
+      ? paidRaw
+      : (typeof getTemplatePurchaseAmount === 'function' ? getTemplatePurchaseAmount(tpl) : Number(tpl.recharge) || 0);
+    const pname = String(tpl.simpleTimesProjectName || tpl.name || '').trim();
+    card.kind = 'times_ticket';
+    card.isTimesTicket = true;
+    card.simpleTimesMode = true;
+    card.redeemName = pname;
+    card.issueTotalTimes = total;
+    card.issuePaidAmount = paid;
+    card.simpleTimesAchId = 'st_' + templateId;
+    if (!card.projects || !card.projects.length) {
+      card.projects = [{ key: pname, label: pname, remain: total, matchKeys: [pname] }];
+    } else {
+      card.projects = card.projects.map(p => ({
+        ...p,
+        key: p.key || pname,
+        label: p.label || pname,
+        matchKeys: p.matchKeys && p.matchKeys.length ? p.matchKeys : [pname],
+      }));
+    }
+  }
   if (discMeta?.rate != null) card.discount = discMeta.rate;
   if (discMeta) {
     card.discountScopeAll = !!discMeta.scopeAll;
@@ -28412,6 +28580,10 @@ function discountCardsToMemberPrices(cards) {
 }
 
 function syncProjectItemsFromBenefitCards() {
+  if (state.simpleTimesMode) {
+    applySimpleTimesToProjectItems();
+    return;
+  }
   state.projectItems = benefitCardsToProjectItems(state.projectBenefitCards);
 }
 
@@ -30658,6 +30830,9 @@ function buildDemoTemplates() {
       projectItems: normalizeProjectItemsFromTpl(p),
       productItems: normalizeProductItemsFromTpl(p),
       benefits: { ...emptyBenefits(), ...p.benefits, balanceCanBuyProducts: false },
+      simpleTimesMode: !!p.simpleTimesMode,
+      simpleTimesQty: p.simpleTimesMode ? (Number(p.simpleTimesQty) || Number((p.projectItems || [])[0]?.purchaseQty) || 10) : null,
+      simpleTimesProjectName: p.simpleTimesMode ? (p.simpleTimesProjectName || p.name) : null,
       cardColor: p.cardColor || 'brand_red',
       usagePolicy: normalizeUsagePolicy(p.usagePolicy),
       ...pickCardValidityFields(p),
@@ -30708,6 +30883,28 @@ function applyFigmaCaptureStep2() {
 
 function isFigmaCaptureStep2() {
   return new URLSearchParams(location.search).get('figma') === 'step2';
+}
+
+function applyFigmaCaptureQuickIssue() {
+  document.documentElement.classList.add('figma-capture-quick-issue');
+  const run = () => {
+    if (window.BillingDemo?.startCardIssueCheckout && typeof FLOW_NAV?.['card-quick-issue'] === 'function') {
+      FLOW_NAV['card-quick-issue']();
+      return true;
+    }
+    return false;
+  };
+  if (!run()) {
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries += 1;
+      if (run() || tries > 60) clearInterval(timer);
+    }, 50);
+  }
+}
+
+function isFigmaCaptureQuickIssue() {
+  return new URLSearchParams(location.search).get('figma') === 'quick-issue';
 }
 
 /** PRD / 深链：?flow=<FLOW_NAV id>；可选 &capture=1 仅保留手机框便于截图；可选 &device=1 真机等比预览 */
@@ -31059,12 +31256,34 @@ renderFlowMap();
     onBenefitCheckChange();
   });
 });
+document.getElementById('benSimpleTimesMode')?.addEventListener('click', () => {
+  state.simpleTimesMode = !state.simpleTimesMode;
+  if (state.simpleTimesMode) {
+    state.benefits.timesOrValidity = true;
+    setBenefitSwitchOn('benTimesOrValidity', true);
+    if (!(Number(state.simpleTimesQty) > 0)) state.simpleTimesQty = 10;
+    if (!state.simpleTimesProjectName) {
+      state.simpleTimesProjectName = (document.getElementById('fName')?.value || '').trim();
+    }
+  }
+  applyBenefitVisibility();
+  syncColorPreview();
+});
+document.getElementById('fSimpleTimesQty')?.addEventListener('input', e => {
+  const n = parseInt(String(e.target.value || '').replace(/\D/g, ''), 10);
+  state.simpleTimesQty = Number.isFinite(n) ? n : '';
+});
+document.getElementById('fSimpleTimesProjectName')?.addEventListener('input', e => {
+  state.simpleTimesProjectName = e.target.value;
+});
 if (isFigmaCaptureListActive()) {
   applyFigmaCaptureListActive();
 } else if (isFigmaCaptureIssueSuccess()) {
   applyFigmaCaptureIssueSuccess();
 } else if (isFigmaCaptureStep2()) {
   applyFigmaCaptureStep2();
+} else if (isFigmaCaptureQuickIssue()) {
+  applyFigmaCaptureQuickIssue();
 } else if (getFlowDeepLinkId()) {
   applyFlowDeepLink(getFlowDeepLinkId());
   syncDemoStateButtons();
@@ -34667,14 +34886,38 @@ function billingNav(fn) {
     return out;
   }
 
+  function getSimpleTimesAchProjects() {
+    if (typeof ensureDemoFilled === 'function') {
+      try { ensureDemoFilled(); } catch (e) { /* ignore */ }
+    }
+    var tpls = (typeof getActiveTemplates === 'function' ? getActiveTemplates() : []) || [];
+    var out = [];
+    (tpls || []).forEach(function (t) {
+      if (!t || !t.simpleTimesMode || t.shelved) return;
+      var total = Math.max(1, Number(t.simpleTimesQty) || Number((t.projectItems || [])[0] && (t.projectItems || [])[0].purchaseQty) || 1);
+      var paid = (typeof getTemplatePurchaseAmount === 'function')
+        ? getTemplatePurchaseAmount(t)
+        : (Number(t.recharge) || Number(t.price) || 0);
+      out.push({
+        id: 'st_' + t.id,
+        name: t.simpleTimesProjectName || t.name,
+        price: Math.round((paid / total) * 100) / 100,
+        category: '简单计次',
+        isSimpleTimesAch: true,
+      });
+    });
+    return out;
+  }
+
   function syncAchFromCatalog() {
     var projects = (typeof getCatalogProjects === 'function' ? getCatalogProjects() : []) || [];
     var products = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []) || [];
     if (!projects.length && typeof seedProjectCatalog === 'function') projects = seedProjectCatalog();
     if (!products.length && typeof seedProductCatalog === 'function') products = seedProductCatalog();
+    var laborList = projects.concat(getSimpleTimesAchProjects());
     var prev = window.EmployeeStore.ach || {};
     window.EmployeeStore.ach = {
-      labor: buildAchBucketFromCatalog(projects, prev.labor, 'lc'),
+      labor: buildAchBucketFromCatalog(laborList, prev.labor, 'lc'),
       sales: buildAchBucketFromCatalog(products, prev.sales, 'sc'),
       card: buildCardAchBucket(prev.card),
     };
@@ -35868,6 +36111,20 @@ function billingNav(fn) {
       '<div class="form-row is-readonly" style="border-top:1px solid #F0F0F0"><span class="label" style="color:var(--brand)">调整范围</span>' +
       '<span class="form-row__trail"><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>';
   }
+  var SIMPLE_TIMES_SCOPE_GROUP_ID = 'g_simple_times';
+
+  function getScopeSimpleTimesItems() {
+    if (typeof getSimpleTimesAchProjects !== 'function') return [];
+    return (getSimpleTimesAchProjects() || []).map(function (p) {
+      return {
+        id: p.id,
+        name: p.name || '未命名',
+        sub: '¥' + (p.price != null ? p.price : 0),
+        isSimpleTimes: true,
+      };
+    });
+  }
+
   function getScopeCatalogItems(type) {
     if (type === 'card') {
       var cards = [];
@@ -35890,26 +36147,48 @@ function billingNav(fn) {
     var list = [];
     if (type === 'product' && typeof getCatalogProducts === 'function') list = getCatalogProducts();
     else if (typeof getCatalogProjects === 'function') list = getCatalogProjects();
-    return (list || []).filter(function (it) { return !it.hidden; }).map(function (it) {
+    var out = (list || []).filter(function (it) { return !it.hidden; }).map(function (it) {
       return {
         id: it.id,
         name: it.name || '未命名',
         sub: '¥' + (it.price != null ? it.price : 0),
       };
     });
+    if (type === 'project') {
+      getScopeSimpleTimesItems().forEach(function (st) {
+        if (!out.some(function (x) { return x.id === st.id; })) out.push(st);
+      });
+    }
+    return out;
   }
   function getScopeGroups(type) {
     if (type === 'card') {
       return (typeof ensureCardGroups === 'function') ? (ensureCardGroups() || []) : [];
     }
+    var groups = [];
     if (typeof getCustomCatalogGroups === 'function') {
-      return getCustomCatalogGroups(type === 'product' ? 'product' : 'project') || [];
+      groups = (getCustomCatalogGroups(type === 'product' ? 'product' : 'project') || []).slice();
     }
-    return [];
+    if (type === 'project') {
+      var stItems = getScopeSimpleTimesItems();
+      if (stItems.length) {
+        groups = groups.filter(function (g) { return g && g.id !== SIMPLE_TIMES_SCOPE_GROUP_ID; });
+        groups.push({
+          id: SIMPLE_TIMES_SCOPE_GROUP_ID,
+          name: '简单计次',
+          itemIds: stItems.map(function (it) { return it.id; }),
+          system: true,
+        });
+      }
+    }
+    return groups;
   }
   function scopeVisibleItems(type, groupId) {
     var items = getScopeCatalogItems(type);
     if (!groupId || groupId === 'all') return items;
+    if (type === 'project' && groupId === SIMPLE_TIMES_SCOPE_GROUP_ID) {
+      return items.filter(function (it) { return !!it.isSimpleTimes || String(it.id || '').indexOf('st_') === 0; });
+    }
     var g = getScopeGroups(type).find(function (x) { return x.id === groupId; });
     if (!g) return items;
     var set = {};
@@ -35955,11 +36234,24 @@ function billingNav(fn) {
       gid = getActiveCardGroupId('empScope') || 'all';
       state.scopeGroupId = gid;
     }
-    var html = '<button type="button" class="emp-scope-group-chip' + (gid === 'all' ? ' on' : '') + '" data-scope-group="all">全部</button>';
-    groups.forEach(function (g) {
-      html += '<button type="button" class="emp-scope-group-chip' + (gid === g.id ? ' on' : '') + '" data-scope-group="' + esc(g.id) + '">' + esc(g.name) + '</button>';
+    if (gid !== 'all' && !groups.some(function (g) { return g.id === gid; })) {
+      gid = 'all';
+      state.scopeGroupId = 'all';
+    }
+    var tabs = [{ id: 'all', name: '全部' }].concat(groups.map(function (g) {
+      return { id: g.id, name: g.name };
+    }));
+    scroll.innerHTML = tabs.map(function (t) {
+      var on = t.id === gid;
+      return '<button type="button" class="catalog-group-tab' + (on ? ' on' : '') + '" data-scope-group="' + esc(t.id) + '" role="tab" aria-selected="' + (on ? 'true' : 'false') + '">' +
+        '<span class="catalog-group-tab__face"><span class="catalog-group-tab__label"><span class="catalog-group-tab__label-text">' + esc(t.name) + '</span></span></span>' +
+        '</button>';
+    }).join('');
+    if (typeof wirePickGroupScrollPan === 'function') wirePickGroupScrollPan(scroll);
+    requestAnimationFrame(function () {
+      var onEl = scroll.querySelector('.catalog-group-tab.on');
+      if (onEl && typeof ensureGroupTabFullyVisible === 'function') ensureGroupTabFullyVisible(scroll, onEl);
     });
-    scroll.innerHTML = html;
   }
   function renderScopeCount() {
     var el = $('empScopeCount');
@@ -37103,6 +37395,9 @@ function billingNav(fn) {
 
   function openAch() {
     closeAllEmpMasks();
+    if (typeof ensureDemoFilled === 'function') {
+      try { ensureDemoFilled(); } catch (e) { /* ignore */ }
+    }
     if (!state.achTab || state.achTab === 'base') state.achTab = 'labor';
     if (state.achTab === 'card' && !state.achCatId) state.achCatId = 'card_rules';
     if ((state.achTab === 'labor' || state.achTab === 'sales') && !state.achCatId) {
@@ -38534,6 +38829,8 @@ function billingNav(fn) {
       });
     });
     $('empScopeGroupScroll')?.addEventListener('click', function (e) {
+      var scroll = $('empScopeGroupScroll');
+      if (scroll && scroll.classList.contains('is-panning')) return;
       var chip = e.target.closest('[data-scope-group]');
       if (!chip) return;
       state.scopeGroupId = chip.dataset.scopeGroup || 'all';
@@ -38542,6 +38839,7 @@ function billingNav(fn) {
       }
       renderScopeGroupChips();
       renderScopeList();
+      syncScopeSelectAllBtn();
     });
     $('empScopeSelectAll')?.addEventListener('click', function () {
       if (state.scopeDraft && state.scopeDraft.mode === 'all') {
@@ -43217,58 +43515,11 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function ensureDemoTimesTickets() {
-    const demo = [
-      { memberId: 'm4', catalogProjectId: 'p28', name: '精致剪发10次', redeemName: '精致剪发', remain: 6 },
-      { memberId: 'm2', catalogProjectId: 'p29', name: '面部护理10次', redeemName: '面部护理', remain: 7 },
-    ];
-    demo.forEach(row => {
-      const c = CUSTOMERS.find(x => x.id === row.memberId);
-      if (!c) return;
-      c.cards = c.cards || [];
-      const id = `tt_${row.catalogProjectId}_${row.memberId}`;
-      if (c.cards.some(card => card.id === id)) return;
-      c.cards.push(buildTimesTicketCard({
-        customerId: row.memberId,
-        catalogProjectId: row.catalogProjectId,
-        name: row.name,
-        redeemName: row.redeemName,
-        remain: row.remain,
-      }));
-    });
+    /* 扣次卡改由会员卡「简单计次模式」持卡投影，不再从价目计次项目铸造 */
   }
 
   function mintTimesTicketsFromCart() {
-    const c = CUSTOMERS.find(x => x.id === getCustomer().id);
-    if (!c || !c.isMember) return;
-    c.cards = c.cards || [];
-    const bridgeItems = (window.CardCatalogBridge && window.CardCatalogBridge.getBillProjects)
-      ? window.CardCatalogBridge.getBillProjects()
-      : [];
-    const byId = Object.fromEntries(bridgeItems.map(p => [p.id, p]));
-    (state.cart || []).forEach(line => {
-      const cat = byId[line.id] || (typeof findCatalogItemById === 'function' ? findCatalogItemById(line.id) : null);
-      if (!cat || !(cat.metering === 'times' || cat.isTimesPackage)) return;
-      const packQty = Math.max(1, Number(line.qty) || 1);
-      const timesEach = Math.max(1, Number(cat.timesQty) || 1);
-      const addRemain = timesEach * packQty;
-      const redeemName = String(cat.redeemName || cat.benefitKey || cat.name || '').trim();
-      const ticketId = `tt_${cat.id}_${c.id}`;
-      let ticket = c.cards.find(x => x.id === ticketId);
-      if (ticket) {
-        const slot = (ticket.projects || [])[0];
-        if (slot) slot.remain = Math.max(0, (Number(slot.remain) || 0) + addRemain);
-        else ticket.projects = [{ key: redeemName, label: redeemName, remain: addRemain, matchKeys: [redeemName] }];
-      } else {
-        c.cards.push(buildTimesTicketCard({
-          customerId: c.id,
-          catalogProjectId: cat.id,
-          name: cat.name,
-          redeemName,
-          remain: addRemain,
-        }));
-      }
-    });
-    if (state.customer && state.customer.id === c.id) state.customer = c;
+    /* no-op：扣次卡随办卡持仓产生，不在购物车售出后铸造 */
   }
 
   function openTimesTicketDeductSheet(cardId) {
@@ -43285,7 +43536,7 @@ window.__BILLING_EMBEDDED__ = true;
     const meta = document.getElementById('billTimesTicketMeta');
     if (meta) {
       meta.innerHTML = `<div class="bill-ticket-deduct-meta__name">${escapeHtml(getTimesTicketRedeemName(card) || card.name)}</div>
-        <div class="bill-ticket-deduct-meta__remain">票卡「${escapeHtml(card.name)}」· 余 <strong>${rem}</strong> 次</div>`;
+        <div class="bill-ticket-deduct-meta__remain">扣次卡「${escapeHtml(card.name)}」· 余 <strong>${rem}</strong> 次</div>`;
     }
     syncTimesTicketDeductStep();
     renderTimesTicketStaffRow();
@@ -43333,20 +43584,18 @@ window.__BILLING_EMBEDDED__ = true;
       return;
     }
     const redeemName = getTimesTicketRedeemName(card);
-    const bridge = window.CardCatalogBridge;
-    const projects = bridge?.getBillProjects?.() || PROJECTS;
-    let item = (projects || []).find(p => p && !p.isTimesPackage && (p.name === redeemName || p.benefitKey === redeemName));
-    if (!item) {
-      item = {
-        id: `redeem_${card.catalogProjectId || card.id}`,
-        name: redeemName,
-        price: 0,
-        benefitKey: redeemName,
-        category: '项目',
-      };
-    }
-    /* 用原价展示抵扣金额；若无价目则用 0 */
-    const unit = Number(item.price) || 0;
+    const totalTimes = Math.max(1, Number(card.issueTotalTimes) || 1);
+    const paid = Number(card.issuePaidAmount);
+    const unitFromIssue = Number.isFinite(paid) ? round2(paid / totalTimes) : 0;
+    const item = {
+      id: card.simpleTimesAchId || (`st_${card.templateId || card.id}`),
+      name: redeemName || card.name,
+      price: unitFromIssue,
+      benefitKey: redeemName || card.name,
+      category: '简单计次',
+      isSimpleTimesConsume: true,
+    };
+    const unit = unitFromIssue;
     state.cart = [{
       ...item,
       qty,
