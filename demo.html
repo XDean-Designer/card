@@ -8295,9 +8295,23 @@ button.exp-flow-row:active { opacity: .92; }
   border-bottom: 0.5px solid #EDEDED;
 }
 .simple-times-mode-row__main { flex: 1; min-width: 0; }
+.simple-times-mode-row__title-line {
+  display: flex; align-items: center; gap: 6px; min-width: 0;
+}
 .simple-times-mode-row__title { display: block; font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px; }
+.simple-times-mode-row__title-line .section-head__help {
+  color: #929292;
+}
 .simple-times-mode-row__desc { display: block; font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 2px; }
 .simple-times-fields .proj-form-row .suffix { display: inline; margin-left: 4px; color: var(--text-sec); }
+.simple-times-help h4 {
+  font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; margin: 14px 0 6px;
+}
+.simple-times-help h4:first-child { margin-top: 0; }
+.simple-times-help p {
+  margin: 0; font-size: 13px; color: var(--text-sec); line-height: 1.55;
+}
+.simple-times-help p + p { margin-top: 6px; }
 .catalog-times-badge {
 
   display: inline-flex; align-items: center; justify-content: center;
@@ -15637,7 +15651,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div class="benefit-expand__inner benefit-tree">
                     <div class="simple-times-mode-row" id="simpleTimesModeRow">
                       <div class="simple-times-mode-row__main">
-                        <span class="simple-times-mode-row__title">简单计次模式</span>
+                        <div class="simple-times-mode-row__title-line">
+                          <span class="simple-times-mode-row__title">简单计次模式</span>
+                          <button type="button" class="section-head__help" id="btnSimpleTimesHelp" aria-label="简单计次模式说明">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
+                          </button>
+                        </div>
                         <span class="simple-times-mode-row__desc">只设次数，无需配置具体项目</span>
                       </div>
                       <button type="button" class="switch" id="benSimpleTimesMode" role="switch" aria-checked="false" aria-label="简单计次模式"></button>
@@ -20314,6 +20333,7 @@ function openDetailUsagePolicyHelp(field) {
   const bodyEl = document.getElementById('qtyScopeHelpBody');
   if (!mask || !bodyEl) return;
   if (titleEl) titleEl.textContent = title;
+  bodyEl.classList.remove('simple-times-help', 'usage-policy-help');
   const modeLine = opt?.name
     ? `<p class="usage-policy-help__mode">当前模式：${escapeHtml(opt.name)}</p>`
     : '';
@@ -24826,8 +24846,27 @@ function openQtyScopeHelp(title, body) {
   const bodyEl = document.getElementById('qtyScopeHelpBody');
   if (!mask || !bodyEl) return;
   if (titleEl) titleEl.textContent = title || '计次模式说明';
-  bodyEl.classList.remove('usage-policy-help');
+  bodyEl.classList.remove('usage-policy-help', 'simple-times-help');
   bodyEl.textContent = body || '';
+  mask.classList.add('show');
+}
+
+function openSimpleTimesModeHelp() {
+  const mask = document.getElementById('qtyScopeHelpMask');
+  const titleEl = document.getElementById('qtyScopeHelpTitle');
+  const bodyEl = document.getElementById('qtyScopeHelpBody');
+  if (!mask || !bodyEl) return;
+  if (titleEl) titleEl.textContent = '简单计次模式说明';
+  bodyEl.classList.remove('usage-policy-help');
+  bodyEl.classList.add('simple-times-help');
+  bodyEl.innerHTML =
+    '<h4>如何设置业绩 / 提成</h4>' +
+    '<p>办卡：业绩设置 → 办卡业绩 →「简单计次」分组，配置开卡等办卡口径。</p>' +
+    '<p>消耗：业绩设置 → 项目业绩 →「简单计次」分组，配置名义项目（单价按开卡实付 ÷ 开卡总次数）。</p>' +
+    '<p>提成：提成设置 → 按项提成 → 添加项目 →「简单计次」分组勾选后配置。</p>' +
+    '<h4>如何开单</h4>' +
+    '<p>会员办卡后，开单「选择会员卡」会出现浅金扣次券，并显示剩余次数。</p>' +
+    '<p>点击该券即可一键扣次；名义项目不进价目表，无需先售卖计次项目。</p>';
   mask.classList.add('show');
 }
 
@@ -31108,6 +31147,11 @@ document.getElementById('qtyScopeHelpOk').onclick = closeQtyScopeHelp;
 document.getElementById('qtyScopeHelpMask').onclick = event => {
   if (event.target.id === 'qtyScopeHelpMask') closeQtyScopeHelp();
 };
+document.getElementById('btnSimpleTimesHelp')?.addEventListener('click', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  openSimpleTimesModeHelp();
+});
 document.getElementById('btnSuccessBackList').onclick = () => setStep(0);
 document.getElementById('backFromCreateSuccess')?.addEventListener('click', () => setStep(0));
 document.getElementById('btnSuccessIssue').onclick = () => {
@@ -34722,37 +34766,70 @@ function billingNav(fn) {
     return map;
   }
 
-  function buildAchBucketFromCatalog(list, prevBucket, idPrefix) {
+  var ACH_SIMPLE_TIMES_CAT_ID = 'ach_simple_times';
+  var ACH_UNGROUPED_CAT = { labor: 'ach_ungrouped_lc', sales: 'ach_ungrouped_sc', card: 'ach_ungrouped_card' };
+
+  function makeLaborSalesAchItem(p, prev, defaultScheme) {
+    var old = prev['id:' + p.id] || prev['name:' + p.name];
+    var scheme = mergeAchScheme(old, defaultScheme);
+    return Object.assign({
+      id: p.id,
+      name: p.name,
+      price: Number(p.price) || 0,
+      isSimpleTimesAch: !!p.isSimpleTimesAch,
+    }, scheme);
+  }
+
+  /** 方案A：通用规则 → 自定义管理分组 → 简单计次 → 未分组 */
+  function buildAchBucketFromCatalog(list, prevBucket, idPrefix, opts) {
+    opts = opts || {};
     var prev = collectPrevAchPcts(prevBucket);
-    var cats = [];
-    var items = {};
-    var catIds = Object.create(null);
-    var order = 0;
     var rulesId = idPrefix === 'sc' ? 'sales_rules' : 'labor_rules';
+    var bucket = opts.bucket || (idPrefix === 'sc' ? 'product' : 'project');
+    var ungroupedId = idPrefix === 'sc' ? ACH_UNGROUPED_CAT.sales : ACH_UNGROUPED_CAT.labor;
     var defaultScheme = ensureAchStations(mergeAchScheme(
       prevBucket && prevBucket.defaultScheme,
       defaultAchScheme()
     ));
-    cats.push({ id: rulesId, name: '通用规则' });
+    var cats = [{ id: rulesId, name: '通用规则' }];
+    var items = {};
     items[rulesId] = [];
-    (list || []).forEach(function (p) {
-      var catName = (p.category || (idPrefix === 'sc' ? '产品' : '项目')).trim() || '未分组';
-      var catId = catIds[catName];
-      if (!catId) {
-        order += 1;
-        catId = idPrefix + order;
-        catIds[catName] = catId;
-        cats.push({ id: catId, name: catName });
-        items[catId] = [];
-      }
-      var old = prev['id:' + p.id] || prev['name:' + p.name];
-      var scheme = mergeAchScheme(old, defaultScheme);
-      items[catId].push(Object.assign({
-        id: p.id,
-        name: p.name,
-        price: Number(p.price) || 0,
-      }, scheme));
+
+    var visible = (list || []).filter(function (p) { return p && p.id && !p.hidden && !p.isSimpleTimesAch; });
+    var byId = Object.create(null);
+    visible.forEach(function (p) {
+      byId[p.id] = makeLaborSalesAchItem(p, prev, defaultScheme);
     });
+
+    var assigned = Object.create(null);
+    var customGroups = (typeof getCustomCatalogGroups === 'function' ? getCustomCatalogGroups(bucket) : []) || [];
+    customGroups.forEach(function (g) {
+      if (!g || !g.id) return;
+      var row = [];
+      (g.itemIds || []).forEach(function (id) {
+        if (!byId[id] || assigned[id]) return;
+        row.push(byId[id]);
+        assigned[id] = true;
+      });
+      if (!row.length) return;
+      cats.push({ id: g.id, name: g.name || '未命名分组' });
+      items[g.id] = row;
+    });
+
+    var simpleList = opts.simpleTimesList || [];
+    if (simpleList.length) {
+      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '简单计次' });
+      items[ACH_SIMPLE_TIMES_CAT_ID] = simpleList.map(function (p) {
+        return makeLaborSalesAchItem(p, prev, defaultScheme);
+      });
+    }
+
+    var ungrouped = visible.filter(function (p) { return !assigned[p.id]; }).map(function (p) { return byId[p.id]; });
+    if (ungrouped.length) {
+      cats.push({ id: ungroupedId, name: '未分组' });
+      items[ungroupedId] = ungrouped;
+    }
+
     return { cats: cats, items: items, defaultScheme: defaultScheme };
   }
 
@@ -34770,6 +34847,7 @@ function billingNav(fn) {
             giftAmount: t.giftAmount != null ? Number(t.giftAmount) : 0,
             cardColor: t.cardColor || 'brand_red',
             benefits: t.benefits || {},
+            simpleTimesMode: !!t.simpleTimesMode,
           };
         });
       }
@@ -34845,26 +34923,47 @@ function billingNav(fn) {
         price: Number(t.price) || 0,
         cardColor: t.cardColor || 'brand_red',
         benefits: benefits,
+        simpleTimesMode: !!t.simpleTimesMode,
         typeKeys: typeKeys,
         types: types,
         designated: types.open ? types.open.designated : card.incomeTypes.open.designated,
         nonDesignated: types.open ? types.open.nonDesignated : card.incomeTypes.open.nonDesignated,
       };
     });
-    var groups = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []) || [];
     var cats = [{ id: 'card_rules', name: '通用规则' }];
     var items = { card_rules: [] };
-    if (groups.length) {
-      groups.forEach(function (g) {
-        if (!g || !g.id) return;
-        cats.push({ id: g.id, name: g.name || '未命名分组' });
-        items[g.id] = (g.itemIds || []).map(function (id) { return byId[id]; }).filter(Boolean);
+    var assigned = Object.create(null);
+
+    var groups = (typeof ensureCardGroups === 'function' ? ensureCardGroups() : []) || [];
+    groups.forEach(function (g) {
+      if (!g || !g.id) return;
+      var row = [];
+      (g.itemIds || []).forEach(function (id) {
+        var it = byId[id];
+        if (!it || it.simpleTimesMode || assigned[id]) return;
+        row.push(it);
+        assigned[id] = true;
       });
-    } else {
-      /* 尚无分组时回退「卡模板」整表，避免业绩页空白 */
-      cats.push({ id: 'card_tpl', name: '卡模板' });
-      items.card_tpl = list.map(function (t) { return byId[t.id]; }).filter(Boolean);
+      if (!row.length) return;
+      cats.push({ id: g.id, name: g.name || '未命名分组' });
+      items[g.id] = row;
+    });
+
+    var simpleRows = list.filter(function (t) { return t.simpleTimesMode && byId[t.id]; }).map(function (t) {
+      assigned[t.id] = true;
+      return byId[t.id];
+    });
+    if (simpleRows.length) {
+      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '简单计次' });
+      items[ACH_SIMPLE_TIMES_CAT_ID] = simpleRows;
     }
+
+    var ungrouped = list.filter(function (t) { return byId[t.id] && !assigned[t.id]; }).map(function (t) { return byId[t.id]; });
+    if (ungrouped.length) {
+      cats.push({ id: ACH_UNGROUPED_CAT.card, name: '未分组' });
+      items[ACH_UNGROUPED_CAT.card] = ungrouped;
+    }
+
     card.cats = cats;
     card.items = items;
     return card;
@@ -34910,15 +35009,23 @@ function billingNav(fn) {
   }
 
   function syncAchFromCatalog() {
+    if (typeof ensureDemoFilled === 'function') {
+      try { ensureDemoFilled(); } catch (e) { /* ignore */ }
+    }
     var projects = (typeof getCatalogProjects === 'function' ? getCatalogProjects() : []) || [];
     var products = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []) || [];
     if (!projects.length && typeof seedProjectCatalog === 'function') projects = seedProjectCatalog();
     if (!products.length && typeof seedProductCatalog === 'function') products = seedProductCatalog();
-    var laborList = projects.concat(getSimpleTimesAchProjects());
     var prev = window.EmployeeStore.ach || {};
     window.EmployeeStore.ach = {
-      labor: buildAchBucketFromCatalog(laborList, prev.labor, 'lc'),
-      sales: buildAchBucketFromCatalog(products, prev.sales, 'sc'),
+      labor: buildAchBucketFromCatalog(projects, prev.labor, 'lc', {
+        bucket: 'project',
+        simpleTimesList: getSimpleTimesAchProjects(),
+      }),
+      sales: buildAchBucketFromCatalog(products, prev.sales, 'sc', {
+        bucket: 'product',
+        simpleTimesList: [],
+      }),
       card: buildCardAchBucket(prev.card),
     };
     applyDemoApprenticeAchOverrides();
