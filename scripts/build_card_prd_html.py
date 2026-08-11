@@ -46,7 +46,7 @@ def main():
             'html_name': 'PRD-会员卡管理-精简版.html',
             'title': 'PRD-会员卡管理 · 精简版（预览）',
             'top': 'PRD-会员卡管理 · 精简版',
-            'foot': '精简版仅含模块 1–3；完整规格见 <code>PRD-会员卡管理.md</code>。交互以 <code>demo.html</code> 为准。',
+            'foot': '精简版含模块 1–5（公式与本期任务摘要）；完整规格见 <code>PRD-会员卡管理.md</code>（含 §8 / §13）。交互以 <code>demo.html</code> 为准。',
         },
     ]
     for job in jobs:
@@ -62,7 +62,7 @@ def main():
         path = CARD / job['html_name']
         path.write_text(out, encoding='utf-8')
         assert '修改记录' not in out and '变更记录' not in out
-        assert 'v1.14' in out
+        assert 'v1.15' in out
         print('wrote', path)
 
     for p in [
@@ -72,7 +72,7 @@ def main():
         CARD / 'PRD-会员卡管理-精简版.html',
     ]:
         t = p.read_text(encoding='utf-8')
-        assert 'v1.14' in t, p
+        assert 'v1.15' in t, p
         assert '确认办卡' in t, p
         assert '立即办卡' in t, p
         assert '橙→红' in t, p
@@ -81,6 +81,7 @@ def main():
         assert '卡管理' in t, p
         assert '应付' in t, p
         assert 'FinalizeIssue' in t or '§7.7' in t or '7.7' in t, p
+        assert '延期费用' in t or '参考费用' in t, p
         print('ok', p.name)
     print('done')
 

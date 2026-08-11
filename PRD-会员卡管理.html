@@ -60,11 +60,11 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.14</td>
+<td>v1.15</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-10</td>
+<td>2026-08-11</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -164,7 +164,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <td style="text-align: center;">✓</td>
 <td style="text-align: center;"><strong>必看</strong></td>
 <td style="text-align: center;">✓</td>
-<td>权益、策略、退卡</td>
+<td>消耗退卡 / 业绩 / 延期费用公式</td>
 </tr>
 <tr>
 <td>9</td>
@@ -197,6 +197,14 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <td style="text-align: center;">—</td>
 <td style="text-align: center;">✓</td>
 <td>仅 PRD + 原型</td>
+</tr>
+<tr>
+<td>13</td>
+<td>本期研发与测试工作范围</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>任务包、目标、不做项</td>
 </tr>
 </tbody>
 </table>
@@ -1901,7 +1909,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <h2>7.9 提测前实现清单（不阻塞本契约定稿）</h2>
 <p>下列属客户端/后端完整度，<strong>契约已定</strong>但仍须对照原型补齐实现后再提测：</p>
 <ul>
-<li>退卡公式算例（纯折扣按天摊销、不限次摊销、组合细节）与模块 8 对齐  </li>
+<li>退卡 / 延期 / 业绩公式与算例见 <strong>模块 8</strong>（已与原型对齐）  </li>
 <li>Android/iOS 权益选择 UI 还原 demo（项目每项/共计、不限次、赠送、产品步进、折扣 Switch/标尺/固定金额、分组只读筛选）  </li>
 <li>iOS 分组拖拽排序 UI（API 已有）  </li>
 <li>会员/持卡人选择：搜索与分页  </li>
@@ -1911,8 +1919,64 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <hr />
 <h1>模块 8　业务规则与算例</h1>
 <blockquote>
-<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓</p>
+<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓<br />
+<strong>算法唯一依据</strong>：同目录 <code>demo.html</code> 当前实现；冲突时以原型为准回改本文。金额统一 <strong>元、两位小数</strong>（四舍五入到分）。</p>
 </blockquote>
+<h2>8.0 符号与前置</h2>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(P)</td>
+<td>办卡实付（持卡 <code>purchaseAmount</code>；缺省取模板购买金额）</td>
+</tr>
+<tr>
+<td>(W)</td>
+<td>总权益面值（均值分母，见 8.3）</td>
+</tr>
+<tr>
+<td>(w_i)</td>
+<td>第 (i) 项权益名义权重</td>
+</tr>
+<tr>
+<td>(A_i)</td>
+<td>该项分摊实付 (= P \times (w_i / W))（(W=0) 时按分母 1 防除零，见实现）</td>
+</tr>
+<tr>
+<td>已过天数 / 总有效期</td>
+<td>按自然日 0 点对齐；已过夹紧到 ([0,\ \text{总有效期}])</td>
+</tr>
+</tbody>
+</table>
+<p><strong>卡型判定（影响走哪条公式）</strong></p>
+<table>
+<thead>
+<tr>
+<th>判定</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯折扣</td>
+<td>开启折扣；无有限次项目、无不限次项目、无产品；未开面值或面值合计 = 0</td>
+</tr>
+<tr>
+<td>固定期限不限次</td>
+<td>含不限次项目且卡有效期非永久</td>
+</tr>
+<tr>
+<td>组合卡</td>
+<td>其余（可含面值 / 有限次 / 产品 / 折扣等组合）</td>
+</tr>
+</tbody>
+</table>
+<p>用卡策略两轨独立保存：<code>refundRule</code>（均值 <code>alloc_pool</code> / 减值 <code>retail</code>）、<code>performanceRule</code>（均值 / 原价→界面「减值计绩」）。</p>
 <h2>8.1 赠送面值</h2>
 <p>开启面值：<code>赠送 = max(0, 面值金额 − 购买金额)</code>。面值金额可为 0。</p>
 <p><strong>持卡面值支付（开单支付页「会员卡」渠道）</strong></p>
@@ -1970,34 +2034,275 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </tbody>
 </table>
-<h2>8.3 总权益面值（均值分母）</h2>
-<p><strong>仅</strong>面值权重 + <strong>有限次</strong>项目权重 + <strong>产品数量权重</strong>（<code>价目原价 × 数量</code>）；<strong>不含折扣、不含不限次</strong>。</p>
-<h2>8.4 用卡策略公式</h2>
-<p><strong>组合卡 · 均值退卡/业绩</strong></p>
+<h2>8.3 总权益面值（均值分母 (W)）</h2>
+<p><strong>计入</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>权重项</th>
+<th>计算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面值</td>
+<td>面值金额合计（含赠送口径的模板面值）</td>
+</tr>
+<tr>
+<td>有限次项目 · 每项</td>
+<td><code>价目原价 ×（购买次数 + 赠送次数）</code>（次数和为 0 时按 1）</td>
+</tr>
+<tr>
+<td>有限次项目 · 共计</td>
+<td>组内项目原价 <strong>算术平均</strong> × 共享次数</td>
+</tr>
+<tr>
+<td>产品</td>
+<td><code>价目原价 × 数量</code>（数量至少 1）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>不计入</strong>：折扣名义、不限次项目。</p>
+<p>Step3「总权益面值」旁 <code>?</code> 弹层按上表列明细。</p>
+<h2>8.4 消耗及退卡计算规则</h2>
+<p>统一：</p>
+<p>[
+\text{建议退款} = \max(0,\ P - \text{消耗价值})
+]</p>
+<p>实退金额商户可改；确认后 <strong>仅结束持卡 + 记实退</strong>，不走支付退款通道。</p>
+<h3>8.4.1 均值退卡（<code>refundRule = alloc_pool</code>）</h3>
+<p><strong>A. 纯折扣</strong></p>
+<p>[
+\text{消耗} = P \times \frac{\text{已过天数}}{\text{总有效期}}
+]</p>
 <ul>
-<li><code>结果 = 项目面值 ×（办卡实付 ÷ 总权益面值）</code>（业绩同结构）  </li>
-<li>含固定期限不限次时：不限次劳动业绩按价目表原价计  </li>
+<li>有期限：总有效期 = 模板有效期对应天数（或持卡起止推算）。  </li>
+<li><strong>永久</strong>：总有效期按 <strong>1095 天（3 年）</strong>；已过满 3 年按满额消耗。  </li>
+<li>「累计已享折扣优惠」仅作信息行，<strong>不计入消耗</strong>。</li>
 </ul>
-<p><strong>纯折扣 · 均值退卡</strong></p>
+<p><strong>B. 组合卡（(W &gt; 0)）</strong></p>
+<ol>
+<li>对每项计入 (W) 的权益：分摊 (A_i = P \times (w_i / W))。  </li>
+<li><strong>面值行</strong>：按购买面值/赠送面值已用·剩余，分别乘系数（购买系数 (= A_{\text{面值}} / \text{购买初始})；赠送系数 (= A_{\text{面值}} / \text{面值合计})）累加得消耗与剩余。  </li>
+<li><strong>有限次项目行</strong>：单次摊销 (= A_i / \text{总次数})；消耗 (= \text{已用次数} \times \text{单次摊销})（购/赠次数分别记账，合计计次）。共计池：合并组内已用/剩余后同上。  </li>
+<li><strong>产品行</strong>：单件摊销 (= A_i / \text{数量})；消耗 (= \text{已用数量} \times \text{单件摊销})。  </li>
+<li><strong>固定期限不限次且 (W = 0)</strong>（实付未被面值/有限次/产品分完）：整笔 (P) 按已过/总天数摊销（同时间摊销公式）。若 (W &gt; 0)，不限次 <strong>不再另占</strong> 实付份额。  </li>
+<li><strong>折扣行（非纯折扣）</strong>：消耗 (= \text{累计已省优惠})；<strong>不占</strong>购卡实付分摊份额；剩余价值记 0。  </li>
+<li>消耗价值 = 各行消耗之和。</li>
+</ol>
+<h3>8.4.2 减值退卡（<code>refundRule = retail</code>）</h3>
+<p>不按 (P/W) 比例切分项目消耗（面值行仍可借用分摊系数，与实现一致）：</p>
+<table>
+<thead>
+<tr>
+<th>行</th>
+<th>消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>面值</td>
+<td>同均值面值行算法（系数相对 (P) 与面值权重）</td>
+</tr>
+<tr>
+<td>有限次 · 每项</td>
+<td><code>价目原价 × 已用次数</code></td>
+</tr>
+<tr>
+<td>有限次 · 共计</td>
+<td><code>组内原价均值 × 已用次数</code></td>
+</tr>
+<tr>
+<td>折扣</td>
+<td><code>累计已省优惠</code>（计入消耗；明细注明不占实付份额）</td>
+</tr>
+<tr>
+<td>产品</td>
+<td>减值路径以原型为准；组合产品消耗主路径见均值</td>
+</tr>
+</tbody>
+</table>
+<p>建议退款仍 (= \max(0, P - \text{消耗}))。</p>
+<h3>8.4.3 无分项估值</h3>
+<p>无可分项权益时：提示协商退款文案（见模块 9）；建议值可回落到按办卡实付协商。</p>
+<h2>8.5 业绩计算规则</h2>
+<h3>8.5.1 卡模板 · 用卡策略（Step3「业绩计算规则」）</h3>
+<table>
+<thead>
+<tr>
+<th>配置（存盘）</th>
+<th>界面文案</th>
+<th>开单卡耗时劳动/项目业绩口径（摘要）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alloc_pool</code></td>
+<td>均值计绩</td>
+<td>组合：<code>项目面值 × (P ÷ W)</code> 同分摊结构；<strong>纯折扣</strong>：<code>员工业绩 = 项目折后价格</code>；固定期限不限次：不限次劳动业绩按 <strong>价目表原价</strong></td>
+</tr>
+<tr>
+<td><code>retail</code></td>
+<td>减值计绩（配置名「原价模式」）</td>
+<td>按价目原价（×次数等）计；与减值退卡语义对齐</td>
+</tr>
+</tbody>
+</table>
+<p>两轨与退卡规则独立：可「均值退卡 + 减值计绩」等组合。</p>
+<h3>8.5.2 办卡业绩（员工 · 业绩设置，非 Step3）</h3>
+<p>支付成功 Finalize 办卡后，按 <strong>确认办卡页应付</strong> 与所选服务员工写入 <strong>办卡业绩分摊</strong>（权威在收款单据，不在持卡表）：</p>
+<table>
+<thead>
+<tr>
+<th>业绩设置 · 办卡业绩</th>
+<th>确认办卡 UI</th>
+<th>分摊摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均分配</td>
+<td>必选员工 ≥1；<strong>不要求</strong>工位</td>
+<td>应付在已选员工间平均</td>
+</tr>
+<tr>
+<td>按工位分配</td>
+<td>每名已选员工 <strong>必选工位</strong></td>
+<td>按工位规则分摊（与员工模块同口径）</td>
+</tr>
+</tbody>
+</table>
+<p>演示种子默认 <code>calcModeCard = station</code>。收费延期、退卡 <strong>不</strong> 采集服务员工、不写办卡业绩。</p>
+<h2>8.6 延期费用计算规则</h2>
+<h3>8.6.1 是否展示参考费用</h3>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯面值或模板永久</td>
+<td>仍显示延期入口；点按 toast「该卡永久有效，无需延期」</td>
+</tr>
+<tr>
+<td>有期限权益且 <strong>含折扣</strong></td>
+<td>展示时长 + <strong>参考费用</strong>（可改）</td>
+</tr>
+<tr>
+<td>有期限但不含折扣</td>
+<td>可延期；参考费用按实现可不展示或为 0（免费路径）</td>
+</tr>
+</tbody>
+</table>
+<h3>8.6.2 默认参考费用（含折扣）</h3>
+<p>[
+\text{参考费用} = \text{round}!\left( P_{\text{基}} \times \frac{\text{延期天数}}{\text{原有效期天数}} \right)
+]</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>取值（与原型一致）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(P_{\text{基}})</td>
+<td>模板购买金额（办卡实付默认；<code>getDiscountExtendFeeBase</code>）</td>
+</tr>
+<tr>
+<td>原有效期天数</td>
+<td>由模板有效期推算的天数；永久模板不走本公式</td>
+</tr>
+<tr>
+<td>延期天数</td>
+<td>用户所选日/月/年折算天数；选 <strong>永久</strong> 不走本公式</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><code>消耗价值 = 办卡实付 ×（已过天数 ÷ 总有效期）</code>  </li>
-<li><strong>永久有效按 1095 天（3 年）折算</strong>  </li>
-<li>累计已享优惠作信息行，<strong>不计入消耗</strong>  </li>
+<li>未选手动改价前：随时长变化自动重算。  </li>
+<li>商户可改为任意 ≥0 金额（上限见 5.5）；<strong>改为 0</strong> = 免费延期。  </li>
 </ul>
-<p><strong>纯折扣 · 均值业绩</strong>：<code>员工业绩 = 项目折后价格</code>  </p>
-<p><strong>仅不限次且权重池为空 · 均值退卡</strong>：实付按已过/总天数摊销。  </p>
-<p><strong>减值退卡 / 原价业绩</strong>：按项目面值（价目原价×次数等）累计；折扣在 retail 下已省优惠可计入消耗（明细文案区分）。  </p>
-<p><strong>建议退款</strong>：<code>max(0, 办卡实付 − 消耗价值)</code>。  </p>
-<p>配置「原价模式」在详情展示为 <strong>「减值计绩」</strong>。</p>
-<h2>8.5 办卡约束</h2>
+<h3>8.6.3 写卡与支付</h3>
+<table>
+<thead>
+<tr>
+<th>参考费用 / 时长</th>
+<th>写卡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选永久，或费用 = 0</td>
+<td><strong>立即</strong>更新有效期（不打开支付页）</td>
+</tr>
+<tr>
+<td>费用 &gt; 0</td>
+<td>走开单同款支付页 → <strong>支付成功回调后再写</strong>；取消支付不写延期</td>
+</tr>
+<tr>
+<td>开单模块缺失且须收费</td>
+<td>toast「开单记账模块未就绪」</td>
+</tr>
+</tbody>
+</table>
+<p>提示文案：若同时拥有余额和折扣权益，延期按折扣权益售价口径收费（实现上基数为整卡购买金额）。</p>
+<h2>8.7 办卡约束</h2>
 <ul>
 <li>单次单选一位会员；已持卡不可再选；已下架不可新办；购买金额须 &gt;0；须开单模块就绪。  </li>
+<li>未支付 / 取消支付：<strong>禁止</strong>写持卡、禁止写办卡业绩。</li>
 </ul>
-<h2>8.6 算例（测试对照）</h2>
-<p><strong>A 纯面值</strong>：购买 1000、面值 1000、未消费 → 建议退款接近 1000。  </p>
-<p><strong>B 项目每项</strong>：实付 500；项目原价 50×10；已用 2 次。减值消耗≈100；均值按分摊。  </p>
-<p><strong>C 纯折扣永久 · 均值</strong>：消耗按已过/1095；已享优惠不计入消耗。  </p>
-<p><strong>D 不限次</strong>：禁永久建卡；延期可选改永久。  </p>
+<h2>8.8 算例（测试对照）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>场景</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>纯面值</td>
+<td>买 1000、面值 1000、未消费 → 建议退款接近 1000</td>
+</tr>
+<tr>
+<td>B</td>
+<td>项目每项 · 减值</td>
+<td>实付 500；原价 50×10；已用 2 → 消耗 ≈ 100；建议退 ≈ 400</td>
+</tr>
+<tr>
+<td>B′</td>
+<td>同上 · 均值</td>
+<td>项目权重进 (W)；消耗 = 已用次数 × ((P\times w/W)/\text{总次数})</td>
+</tr>
+<tr>
+<td>C</td>
+<td>纯折扣永久 · 均值</td>
+<td>消耗 = (P \times) 已过/1095；已享优惠不计入消耗</td>
+</tr>
+<tr>
+<td>D</td>
+<td>不限次</td>
+<td>禁永久建卡；(W=0) 时整笔按天摊销；延期可选改永久</td>
+</tr>
+<tr>
+<td>E</td>
+<td>产品</td>
+<td>均值：产品权重 <code>原价×数量</code> 进 (W)；按已用数量摊销消耗</td>
+</tr>
+<tr>
+<td>F</td>
+<td>延期费用</td>
+<td>购买 900、原有效期 365 天、延期 30 天、含折扣 → 默认参考费用 (= \mathrm{round}(900\times 30/365))；改为 0 则免费立即写</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h1>模块 9　文案清单与权限</h1>
 <blockquote>
@@ -2502,6 +2807,178 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </table>
 <p>开发与测试只需 <strong>PRD + 原型</strong>。冲突时以原型界面为准修正 PRD。画布 390×844；品牌色 <code>#F32F41</code>。</p>
 <hr />
+<h1>模块 13　本期研发与测试工作范围</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓<br />
+本章描述 <strong>本模块本期要实现的目标与任务包</strong>（非排期看板；不含负责人/人天，除非另行附任务表）。</p>
+</blockquote>
+<h2>13.1 本期目标（Done 判定）</h2>
+<ol>
+<li><strong>新建模上线</strong>：权益组合建卡三步 + 用卡策略可保存；可配置出旧五类等价能力及组合卡。  </li>
+<li><strong>运营闭环可用</strong>：列表/分组/详情/上下架/复制/办卡/延期/整卡退卡按本文与原型可用。  </li>
+<li><strong>联调契约达标</strong>：办卡与收费延期须支付成功回调后入账；服务员工→单据+办卡业绩；退卡仅记账；金额统一元。  </li>
+<li><strong>旧入口切换</strong>：工作台「卡管理」等入口本期全量切新体系（§1.6）；历史旧卡只读兼容。  </li>
+<li><strong>公式可测</strong>：消耗/退卡/业绩/延期费用按 <strong>模块 8</strong> 与原型一致；§10.1 P0 通过。</li>
+</ol>
+<h2>13.2 开发任务包（前端）</h2>
+<table>
+<thead>
+<tr>
+<th>包</th>
+<th>范围（要实现）</th>
+<th>主要依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1 列表与分组</td>
+<td>在售/已下架、分组轨、分组管理、编辑成员、快速分组、空态</td>
+<td>§6 列表/分组；§4 状态</td>
+</tr>
+<tr>
+<td>F2 三步建卡</td>
+<td>Step1–3、权益多 ticket、项目/产品/折扣选页、不限次与永久冲突弹窗</td>
+<td>§6 Step*；§5 校验</td>
+</tr>
+<tr>
+<td>F3 详情与锁编辑</td>
+<td>运营数据、策略文案、有持卡锁编辑、复制建卡、上下架</td>
+<td>§4 / §6.x</td>
+</tr>
+<tr>
+<td>F4 办卡</td>
+<td>选人 Sheet、确认办卡（应付/日期/员工/工位）、调起开单支付、成功页</td>
+<td>§6.10a；§7.7</td>
+</tr>
+<tr>
+<td>F5 延期</td>
+<td>行内延期、参考费用默认与改价、免费立即写 / 收费支付后写</td>
+<td>§8.6；§6 延期</td>
+</tr>
+<tr>
+<td>F6 退卡</td>
+<td>估值 Sheet（建议/实退/明细）、退卡成功页、幂等不可重复退</td>
+<td>§8.4；§6.11 / 6.14</td>
+</tr>
+<tr>
+<td>F7 旧入口切换</td>
+<td>入口文案「卡管理」、深链进新流程；禁用新建旧类型</td>
+<td>§1.6</td>
+</tr>
+<tr>
+<td>F8 文案与边界</td>
+<td>toast/拦截与 §5、§9 一致；金额键盘与输入上限</td>
+<td>§5.5；§9</td>
+</tr>
+</tbody>
+</table>
+<h2>13.3 开发任务包（后端）</h2>
+<table>
+<thead>
+<tr>
+<th>包</th>
+<th>范围（要实现）</th>
+<th>主要依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1 模板与分组</td>
+<td>模板 CRUD、权益结构、策略字段、分组多对多；有持卡禁改模板</td>
+<td>§7 模型</td>
+</tr>
+<tr>
+<td>B2 办卡入账</td>
+<td>创建支付单 → 回调 Finalize → 写持卡 + 运营统计 + 办卡业绩分摊；幂等</td>
+<td>§7.7；§8.5.2</td>
+</tr>
+<tr>
+<td>B3 延期</td>
+<td>免费/永久直接写；收费单回调 FinalizeExtend；记参考费用</td>
+<td>§8.6；§7.7</td>
+</tr>
+<tr>
+<td>B4 退卡</td>
+<td>估值只读计算或服务端复算；确认结束持卡 + 实退记账；无退款通道</td>
+<td>§8.4；§6.11</td>
+</tr>
+<tr>
+<td>B5 公式服务</td>
+<td>总权益面值、均值/减值消耗、建议退款、延期默认费用与原型一致</td>
+<td><strong>模块 8</strong></td>
+</tr>
+<tr>
+<td>B6 兼容</td>
+<td>旧类型已发卡只读映射；禁止新建旧类型</td>
+<td>§1.5 / §1.6</td>
+</tr>
+</tbody>
+</table>
+<h2>13.4 测试任务包与目标</h2>
+<table>
+<thead>
+<tr>
+<th>包</th>
+<th>范围</th>
+<th>通过目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 建卡与权益</td>
+<td>空态三步、无权益拦截、面值赠送、产品/项目拆票、不限次禁永久</td>
+<td>§10.1 #1–7, #19–20</td>
+</tr>
+<tr>
+<td>T2 分组</td>
+<td>新建/快速分组/空组/删组不删卡</td>
+<td>§10.1 #21–24</td>
+</tr>
+<tr>
+<td>T3 办卡支付</td>
+<td>成功入账、改应付、工位/平均分配、重复办卡、模块未就绪</td>
+<td>§10.1 #8–9, #18；§7.7</td>
+</tr>
+<tr>
+<td>T4 锁与上下架</td>
+<td>有持卡不可编辑、复制、下架不可新办、上架恢复</td>
+<td>§10.1 #10–13</td>
+</tr>
+<tr>
+<td>T5 延期</td>
+<td>免费 / 收费 / 纯面值 toast；费用公式算例 F</td>
+<td>§10.1 #14–15；§8.6 / §8.8 F</td>
+</tr>
+<tr>
+<td>T6 退卡与公式</td>
+<td>均值/减值/纯折扣/计次/产品对照算例；实退可改；成功页</td>
+<td>§10.1 #16–17；§8.4 / §8.8</td>
+</tr>
+<tr>
+<td>T7 回归</td>
+<td>编辑后详情一致；退卡取消不变持卡；折扣未配置不可空存</td>
+<td>§10.2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>测试不做（本期）</strong>：支付原路退款渠道、部分退卡、劳动业绩独立运算台、预约联调、价目/会员 CRUD 本体（仅依赖联调）。</p>
+<h2>13.5 明确不做（与 §1.4 对齐）</h2>
+<ul>
+<li>开单支付页 UI 全链路规格（只接 §7.7 契约）  </li>
+<li>价目表 / 会员管理作为本 PRD 交付  </li>
+<li>部分退卡；退卡资金原路退  </li>
+<li>劳动业绩独立运算台；预约联调  </li>
+<li>原型「无数据/有数据」造数进正式包  </li>
+</ul>
+<h2>13.6 依赖与联调检查清单</h2>
+<ul>
+<li>[ ] 价目：项目/产品原价与分组可供选权益  </li>
+<li>[ ] 会员：办卡选人列表可用  </li>
+<li>[ ] 开单：支付页 + 成功/取消回调 + <code>card_issue</code> / <code>card_extend</code>  </li>
+<li>[ ] 员工：业绩设置 · 办卡业绩（平均 / 按工位）可读  </li>
+<li>[ ] 金额：元、两位小数；Finalize 幂等  </li>
+</ul>
+<hr />
 <h2>附录 A · 卡面颜色</h2>
 <table>
 <thead>
@@ -2559,6 +3036,16 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.15</td>
+<td>2026-08-11</td>
+<td>扩写模块 8（消耗退卡/业绩/延期费用公式与算例）；新增模块 13 本期研发与测试工作范围</td>
+</tr>
+<tr>
+<td>v1.14</td>
+<td>2026-08-10</td>
+<td>确认办卡应付可改、办卡日期、服务员工与工位；演示办卡业绩默认按工位</td>
+</tr>
 <tr>
 <td>v1.13</td>
 <td>2026-08-07</td>

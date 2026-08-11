@@ -60,19 +60,19 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.14-lite</td>
+<td>v1.15-lite</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-10</td>
+<td>2026-08-11</td>
 </tr>
 <tr>
 <td>文档类型</td>
-<td><strong>精简版</strong>（仅模块 1–3；无 3.1 视觉索引）</td>
+<td><strong>精简版</strong>（模块 1–3 + <strong>公式摘要</strong> + <strong>本期任务摘要</strong>；无 3.1 视觉索引）</td>
 </tr>
 <tr>
 <td>完整规格</td>
-<td>同目录 <code>PRD-会员卡管理.md</code>（含状态机 / 功能规格 / 接口 / 验收等）</td>
+<td>同目录 <code>PRD-会员卡管理.md</code>（含状态机 / 功能规格 / 接口 / 验收 / <strong>模块 8 全量公式</strong> / <strong>模块 13 任务包</strong>）</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -84,12 +84,12 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>目的</td>
-<td>快速对齐背景、场景与信息架构；落地细节以完整稿 + 原型为准</td>
+<td>快速对齐背景、场景、信息架构、<strong>关键公式</strong>与<strong>本期目标</strong>；落地细节以完整稿 + 原型为准</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>联调一句话</strong>：办卡/收费延期须支付成功回调后入账；<strong>确认办卡</strong>可改应付与办卡日期并必选服务员工；服务员工写单据并同步办卡业绩；退卡仅记实退；金额统一元；旧入口本期全量切新体系。工作台入口为 <strong>「卡管理」</strong>。详见完整稿 §1.6 / §6.10a / §7.7–7.8。</p>
+<p><strong>联调一句话</strong>：办卡/收费延期须支付成功回调后入账；<strong>确认办卡</strong>可改应付与办卡日期并必选服务员工；服务员工写单据并同步办卡业绩；退卡仅记实退；金额统一元；旧入口本期全量切新体系。工作台入口为 <strong>「卡管理」</strong>。详见完整稿 §1.6 / §6.10a / §7.7–7.8 / <strong>§8 / §13</strong>。</p>
 </blockquote>
 <hr />
 <h2>怎么读这份 PRD</h2>
@@ -130,6 +130,22 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <td style="text-align: center;">✓</td>
 <td>做哪些页</td>
 </tr>
+<tr>
+<td>4</td>
+<td>公式与策略摘要</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;"><strong>必看</strong></td>
+<td style="text-align: center;">✓</td>
+<td>消耗退卡 / 业绩 / 延期；细则见完整稿 §8</td>
+</tr>
+<tr>
+<td>5</td>
+<td>本期研发与测试目标摘要</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td>任务包索引；细则见完整稿 §13</td>
+</tr>
 </tbody>
 </table>
 <p><strong>先读这几条（贯穿全文）</strong></p>
@@ -145,9 +161,10 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li><strong>输入边界</strong>（完整稿 <strong>5.5</strong>）：卡名 ≤30；金额 0～999,999.99（<strong>元</strong>）；有效期日/月/年上限 3650/120/10；次数/产品数量 0～999。  </li>
 <li>开单支付交接与金额单位已定稿（完整稿 <strong>§7.7 / §7.8</strong>）；其余路径名标 <code>【待联调确认】</code> 处不臆造现网 URL。  </li>
 <li><strong>旧入口本期全量替换</strong>（完整稿 <strong>§1.6</strong>）：工作台「卡管理」/会员卡管理/顾客详情/开单办卡/旧卡搜索/认领·AI 录卡一律切新体系。  </li>
-<li><strong>延期</strong>：纯面值或模板永久仍显示延期入口，点按 toast「该卡永久有效，无需延期」；有期限权益可改时长，收费须支付成功后再写。</li>
+<li><strong>延期</strong>：纯面值或模板永久仍显示延期入口，点按 toast「该卡永久有效，无需延期」；有期限含折扣展示参考费用，收费须支付成功后再写。  </li>
+<li><strong>公式与本期任务</strong>：见本文模块 4–5；全量公式与任务包见完整稿 <strong>§8 / §13</strong>。</li>
 </ol>
-<p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。本文为精简版；状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-会员卡管理.md</code>。</p>
+<p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-会员卡管理.md</code>。</p>
 <hr />
 <h1>模块 1　背景 / 目标 / 范围 / 能力映射</h1>
 <blockquote>
@@ -518,6 +535,141 @@ flowchart LR
 </table>
 <p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单记账路由。</p>
 <hr />
+<h1>模块 4　公式与策略摘要</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 <strong>必看</strong> · 测试 ✓<br />
+算法以 <code>demo.html</code> 为准；<strong>逐步公式、明细行与完整算例见完整稿模块 8</strong>。</p>
+</blockquote>
+<h2>4.1 总权益面值（均值分母）</h2>
+<p><strong>计入</strong>：面值 + 有限次项目权重（原价×次数；共计用组内均价×次数）+ 产品（原价×数量）。<br />
+<strong>不计入</strong>：折扣、不限次。</p>
+<h2>4.2 消耗及退卡</h2>
+<p>[
+\text{建议退款} = \max(0,\ \text{办卡实付} - \text{消耗价值})
+]</p>
+<table>
+<thead>
+<tr>
+<th>策略 / 卡型</th>
+<th>消耗要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均值 · 纯折扣</td>
+<td>实付 ×（已过天数 ÷ 总有效期）；永久按 <strong>1095 天</strong>；已享优惠不计入消耗</td>
+</tr>
+<tr>
+<td>均值 · 组合</td>
+<td>各项按权重分摊实付，再按已用次数/数量/面值折算消耗；折扣已省可另计行且不占实付份额</td>
+</tr>
+<tr>
+<td>均值 · 仅不限次且分母为空</td>
+<td>整笔实付按天摊销</td>
+</tr>
+<tr>
+<td>减值</td>
+<td>项目按原价×已用次数等累计；建议退款公式同上</td>
+</tr>
+</tbody>
+</table>
+<p>实退可改；确认后仅结束持卡并记实退。</p>
+<h2>4.3 业绩</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>卡模板 · 均值计绩</td>
+<td>组合同分摊结构；纯折扣 = 项目折后价；不限次劳动按价目原价</td>
+</tr>
+<tr>
+<td>卡模板 · 减值计绩</td>
+<td>按价目原价口径（配置名「原价模式」）</td>
+</tr>
+<tr>
+<td>办卡业绩</td>
+<td>支付成功后按应付分摊到服务员工；平均分配 / 按工位（演示默认按工位）</td>
+</tr>
+</tbody>
+</table>
+<h2>4.4 延期费用（含折扣时）</h2>
+<p>[
+\text{参考费用} = \mathrm{round}!\left(\text{模板购买金额} \times \frac{\text{延期天数}}{\text{原有效期天数}}\right)
+]</p>
+<p>可改为 ≥0；<strong>0 或选永久</strong> → 立即写卡；<strong>&gt;0</strong> → 支付成功后再写。纯面值/模板永久：toast 无需延期。</p>
+<h2>4.5 速查算例</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>场景</th>
+<th>期望方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>纯面值未消费</td>
+<td>建议退 ≈ 实付</td>
+</tr>
+<tr>
+<td>B</td>
+<td>计次减值已用 2×50</td>
+<td>消耗 ≈ 100</td>
+</tr>
+<tr>
+<td>C</td>
+<td>纯折扣永久均值</td>
+<td>按已过/1095 摊销</td>
+</tr>
+<tr>
+<td>F</td>
+<td>买 900、延期 30/365、含折扣</td>
+<td>默认参考费 = round(900×30/365)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>模块 5　本期研发与测试目标摘要</h1>
+<blockquote>
+<p>读者：前端 ✓ · 后端 ✓ · 测试 ✓<br />
+<strong>任务包拆解、联调清单见完整稿模块 13</strong>；此处只对齐目标与边界。</p>
+</blockquote>
+<h2>5.1 本期目标</h2>
+<ol>
+<li>新权益组合建卡 + 用卡策略可上线运营。  </li>
+<li>办卡 / 收费延期支付回调入账；退卡仅记账；旧入口全量切新。  </li>
+<li>公式与原型一致；完整稿 §10.1 P0 可验收通过。</li>
+</ol>
+<h2>5.2 开发范围（摘要）</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>要做</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前端</td>
+<td>列表分组、三步建卡、详情锁编辑、办卡确认与支付调起、延期/退卡 UI、旧入口、文案边界</td>
+</tr>
+<tr>
+<td>后端</td>
+<td>模板分组、Finalize 办卡/延期、退卡记账、公式服务与原型一致、旧卡只读兼容</td>
+</tr>
+</tbody>
+</table>
+<h2>5.3 测试范围（摘要）</h2>
+<p>建卡权益、分组、办卡支付与改应付、锁编辑与上下架、延期（免费/收费/公式）、退卡估值与算例、回归；<strong>不测</strong>原路退款、部分退卡、预约联调。</p>
+<h2>5.4 明确不做</h2>
+<p>同 §1.4；另见完整稿 §13.5。</p>
+<hr />
 <h1>交付说明（精简版）</h1>
 <table>
 <thead>
@@ -529,11 +681,11 @@ flowchart LR
 <tbody>
 <tr>
 <td>本文 <code>PRD-会员卡管理-精简版.md</code></td>
-<td>仅模块 1–3（无 3.1）</td>
+<td>模块 1–3 + 公式摘要 + 本期任务摘要</td>
 </tr>
 <tr>
 <td>完整稿 <code>PRD-会员卡管理.md</code></td>
-<td>开发 / 测试落地准稿</td>
+<td>开发 / 测试落地准稿（含 §8 / §13）</td>
 </tr>
 <tr>
 <td>交互原型 <code>demo.html</code></td>
@@ -541,7 +693,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p class="foot-note">精简版仅含模块 1–3；完整规格见 <code>PRD-会员卡管理.md</code>。交互以 <code>demo.html</code> 为准。</p>
+<p class="foot-note">精简版含模块 1–5（公式与本期任务摘要）；完整规格见 <code>PRD-会员卡管理.md</code>（含 §8 / §13）。交互以 <code>demo.html</code> 为准。</p>
 </article></div>
 
 <script src="assets/vendor/mermaid.min.js"></script>

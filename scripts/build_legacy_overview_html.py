@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Build HTML preview for RTB产品重构计划概览.md"""
+"""Build HTML preview for RTB现有产品概览.md"""
 import re
 import pathlib
 import markdown
@@ -40,7 +40,6 @@ MERMAID_FIT_SCRIPT = r"""
     document.querySelectorAll('.mermaid').forEach(function (box) {
       var svg = box.querySelector('svg');
       if (!svg) return;
-      // Fit entirely inside the module frame (no transform overflow)
       svg.removeAttribute('width');
       svg.removeAttribute('height');
       svg.style.width = '100%';
@@ -121,12 +120,12 @@ def md_to_body(text: str) -> str:
 
 
 def main():
-    md_path = CARD / "RTB产品重构计划概览.md"
+    md_path = CARD / "RTB现有产品概览.md"
     md_text = md_path.read_text(encoding="utf-8")
     body = md_to_body(md_text)
     out = TEMPLATE.format(
-        title="RTB产品重构计划概览（预览）",
-        top="RTB产品重构计划概览",
+        title="RTB现有产品概览（预览）",
+        top="RTB现有产品概览",
         md_name=md_path.name,
         body=body,
         foot="",
@@ -151,20 +150,6 @@ def main():
         raise SystemExit(f"mermaid CSS replace failed n={n}")
     out = out2
 
-    for h3, tag in (
-        (r"2\.4 项目创建与管理（价目表）", "price-main"),
-        (r"2\.5 会员卡管理", "card-main"),
-    ):
-        out, n_xl = re.subn(
-            rf"(<h3>{h3}</h3>\s*<h4>主链路</h4>\s*)"
-            r'<div class="mermaid(?: mermaid--xl)?"[^>]*>',
-            rf'\1<div class="mermaid mermaid--xl" data-diagram="{tag}">',
-            out,
-            count=1,
-        )
-        if n_xl != 1:
-            raise SystemExit(f"mermaid--xl inject failed for {tag} n={n_xl}")
-
     out4, n3 = re.subn(
         r"<script src=\"assets/vendor/mermaid\.min\.js\"></script>\s*"
         r"<script>[\s\S]*?</script>\s*</body>",
@@ -176,15 +161,12 @@ def main():
         raise SystemExit(f"mermaid script replace failed n={n3}")
     out = out4
 
-    path = CARD / "RTB产品重构计划概览.html"
+    path = CARD / "RTB现有产品概览.html"
     path.write_text(out, encoding="utf-8")
     assert "一、产品总览" in out
     assert "fitMermaidBoxes" in out
-    assert 'data-diagram="price-main"' in out
-    assert 'data-diagram="card-main"' in out
-    assert "① 列表" in out
-    assert "④ 分组" in out
-    assert "RTB产品重构计划概览" in out
+    assert "前线反馈" in out
+    assert "RTB现有产品概览" in out
     print("wrote", path, "bytes", path.stat().st_size)
 
 
