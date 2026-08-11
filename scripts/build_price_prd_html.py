@@ -53,6 +53,7 @@ table img{{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;b
   <div class="topbar">
     <div class="topbar__title">{top}<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
     <div class="topbar__actions">
+      <a class="ghost" href="RTB功能流程.html">打开功能流程</a>
       <a class="ghost" href="demo.html">打开交互原型</a>
       <a class="ghost" href="{md_name}" download>下载 Markdown</a>
       <a class="primary" href="{md_name}" target="_blank" rel="noopener">打开源文件 .md</a>

@@ -8236,10 +8236,7 @@ button.exp-flow-row:active { opacity: .92; }
 .bill-held-card--ticket.is-on .bill-held-card__face-head { color: #6E5420; }
 .bill-held-card--ticket.is-on .bill-held-card__name { color: #8A6A2E; }
 .bill-ticket-deduct-meta {
-  padding: 4px 16px 12px; display: flex; flex-direction: column; gap: 4px;
-}
-.bill-ticket-deduct-meta__name {
-  font-size: 16px; font-weight: 600; color: #1a1a1a; line-height: 22px;
+  padding: 0 16px 4px;
 }
 .bill-ticket-deduct-meta__remain {
   font-size: 13px; color: var(--text-sec); line-height: 18px;
@@ -8249,23 +8246,48 @@ button.exp-flow-row:active { opacity: .92; }
 }
 .bill-ticket-deduct-step {
   display: flex; align-items: center; justify-content: center; gap: 16px;
-  padding: 8px 16px 16px;
+  padding: 8px 16px 12px;
 }
 .bill-ticket-deduct-staff {
-  margin: 0 16px 12px;
-  padding: 0 12px;
-  background: #FAFAFA;
-  border-radius: 12px;
+  margin: 0 16px 14px;
+  padding: 0;
   box-sizing: border-box;
 }
-.bill-ticket-deduct-staff .add-card-staff-row {
-  width: 100%;
-  margin: 0;
-  padding: 12px 0;
-  background: transparent;
-  border-radius: 0;
-  border-top: none;
+.bill-ticket-staff-card {
+  display: flex; flex-direction: column; gap: 10px; width: 100%;
+  margin: 0; padding: 14px 14px 12px; box-sizing: border-box;
+  border: 1px solid #E0E0E0; border-radius: 14px;
+  background: transparent; text-align: left; font-family: inherit; cursor: pointer;
 }
+.bill-ticket-staff-card.has-staff {
+  border-color: #E0E0E0; background: transparent;
+}
+.bill-ticket-staff-card:active { opacity: .92; }
+.bill-ticket-staff-card__head {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.bill-ticket-staff-card__title {
+  font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 20px;
+}
+.bill-ticket-staff-card__body {
+  display: flex; align-items: center; gap: 8px; min-height: 28px;
+}
+.bill-ticket-staff-card__val {
+  flex: 1; min-width: 0; font-size: 15px; font-weight: 500; color: #1a1a1a;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bill-ticket-staff-card__val.is-placeholder { color: var(--text-sec); font-weight: 400; }
+.bill-ticket-staff-card__action {
+  flex-shrink: 0; padding: 5px 12px; border-radius: 999px;
+  border: 1px solid #FF7043; color: #FF7043; background: #fff;
+  font-size: 12px; font-weight: 600; line-height: 16px;
+}
+.bill-ticket-staff-card.has-staff .bill-ticket-staff-card__action { display: none; }
+.bill-ticket-staff-card__chev {
+  display: none; color: var(--text-sec); flex-shrink: 0;
+}
+.bill-ticket-staff-card.has-staff .bill-ticket-staff-card__chev { display: inline-flex; }
+.bill-ticket-staff-card__chev svg { display: block; }
 #billStaffMask.picker-mask { z-index: 42; }
 .bill-ticket-deduct-step__btn {
   width: 36px; height: 36px; border-radius: 10px; border: 1px solid #E8E8E8;
@@ -8289,20 +8311,26 @@ button.exp-flow-row:active { opacity: .92; }
 .proj-metering-seg__btn.is-on {
   background: #fff; color: #1a1a1a; box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
-.simple-times-mode-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 0 10px; margin-bottom: 4px;
-  border-bottom: 0.5px solid #EDEDED;
+.proj-times-seg {
+  display: flex; align-items: center; gap: 8px;
+  margin: 4px 0 10px; padding: 3px; box-sizing: border-box;
+  background: #F2F2F2; border-radius: 999px; min-height: 36px;
 }
-.simple-times-mode-row__main { flex: 1; min-width: 0; }
-.simple-times-mode-row__title-line {
-  display: flex; align-items: center; gap: 6px; min-width: 0;
+.proj-times-seg__btn {
+  flex: 1; min-width: 0; height: 30px; border: none; border-radius: 999px;
+  background: transparent; color: var(--text-sec); font-size: 13px; font-weight: 500;
+  font-family: inherit; cursor: pointer; padding: 0 10px;
 }
-.simple-times-mode-row__title { display: block; font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 20px; }
-.simple-times-mode-row__title-line .section-head__help {
-  color: #929292;
+.proj-times-seg__btn.is-on {
+  background: #fff; color: #1a1a1a; font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
-.simple-times-mode-row__desc { display: block; font-size: 12px; color: var(--text-sec); line-height: 16px; margin-top: 2px; }
+.proj-times-seg__help {
+  flex-shrink: 0; margin-right: 4px; color: #929292;
+}
+.proj-times-seg__hint {
+  margin: 0 0 4px; font-size: 12px; color: var(--text-sec); line-height: 16px;
+}
 .simple-times-fields .proj-form-row .suffix { display: inline; margin-left: 4px; color: var(--text-sec); }
 .simple-times-help h4 {
   font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; margin: 14px 0 6px;
@@ -8312,6 +8340,15 @@ button.exp-flow-row:active { opacity: .92; }
   margin: 0; font-size: 13px; color: var(--text-sec); line-height: 1.55;
 }
 .simple-times-help p + p { margin-top: 6px; }
+.btn-add-benefit.btn-add-benefit--outline {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  margin: 0 0 0 auto; padding: 0 14px; min-height: 34px; width: auto;
+  border: 1px solid #FF7043; border-radius: 999px; background: #fff;
+  color: #FF7043; font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer; box-sizing: border-box;
+}
+.btn-add-benefit.btn-add-benefit--outline:active { background: #FFF4F0; opacity: 1; }
+.btn-add-benefit__plus { display: block; flex-shrink: 0; }
 .catalog-times-badge {
 
   display: inline-flex; align-items: center; justify-content: center;
@@ -13895,11 +13932,12 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="doc-link-group doc-link-group--overview">
         <div class="doc-link-group__head">
           <span class="doc-link-group__tag">概览</span>
-          <span class="doc-link-group__desc">重构计划 / 现网对照</span>
+          <span class="doc-link-group__desc">重构计划 / 现网对照 / 功能流程</span>
         </div>
         <div class="doc-link-row__btns">
           <a class="doc-link-chip doc-link-chip--overview" id="btnOpenOverview" href="RTB产品重构计划概览.html" title="RTB产品重构计划概览">RTB产品重构计划</a>
           <a class="doc-link-chip doc-link-chip--overview" id="btnOpenLegacyOverview" href="RTB现有产品概览.html" title="RTB现有产品概览">RTB现有产品</a>
+          <a class="doc-link-chip doc-link-chip--overview" id="btnOpenFuncFlow" href="RTB功能流程.html" title="RTB功能流程 · 会议讲解">RTB功能流程</a>
         </div>
       </div>
       <div class="doc-link-group doc-link-group--prd">
@@ -14187,7 +14225,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
   <div class="page-tabs" id="empAchTabs" role="tablist">
     <button type="button" class="page-tabs__item" data-ach-tab="base" role="tab"><span class="page-tabs__label">基础设置</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
-    <button type="button" class="page-tabs__item on" data-ach-tab="labor" role="tab"><span class="page-tabs__label">项目业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
+    <button type="button" class="page-tabs__item on" data-ach-tab="labor" role="tab"><span class="page-tabs__label">劳动业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
     <button type="button" class="page-tabs__item" data-ach-tab="sales" role="tab"><span class="page-tabs__label">产品业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
     <button type="button" class="page-tabs__item" data-ach-tab="card" role="tab"><span class="page-tabs__label">办卡业绩</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
   </div>
@@ -14663,7 +14701,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <p>若设置扣除成本，则根据实收或售价减去成本再计算。</p>
       <p>按比例设定：业绩=(售价-成本)*百分比。项目/产品/办卡「通用规则」仅支持按比例。</p>
       <p>单项或单独设置卡时可另设固定金额：业绩=固定金额。</p>
-      <p>快速消费默认计入项目业绩。</p>
+      <p>快速消费默认计入劳动业绩。</p>
       <p>计算模式在「通用规则」中切换：平均分配无需选工位；按工位分配需选工位并可分工位配置。</p>
       <p>「基础设置」可配置消耗赠送金额、免单等场景口径，以及工位显示名称。</p>
     </div>
@@ -15649,19 +15687,15 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 </div>
                 <div class="benefit-expand benefit-expand--tree hidden" id="expandTimesValidity">
                   <div class="benefit-expand__inner benefit-tree">
-                    <div class="simple-times-mode-row" id="simpleTimesModeRow">
-                      <div class="simple-times-mode-row__main">
-                        <div class="simple-times-mode-row__title-line">
-                          <span class="simple-times-mode-row__title">简单计次模式</span>
-                          <button type="button" class="section-head__help" id="btnSimpleTimesHelp" aria-label="简单计次模式说明">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
-                          </button>
-                        </div>
-                        <span class="simple-times-mode-row__desc">只设次数，无需配置具体项目</span>
-                      </div>
-                      <button type="button" class="switch" id="benSimpleTimesMode" role="switch" aria-checked="false" aria-label="简单计次模式"></button>
+                    <div class="proj-times-seg" id="projTimesSeg" role="tablist" aria-label="项目计次方式">
+                      <button type="button" class="proj-times-seg__btn is-on" data-proj-times-tab="independent" role="tab" aria-selected="true">独立计次</button>
+                      <button type="button" class="proj-times-seg__btn" data-proj-times-tab="linked" role="tab" aria-selected="false">关联计次</button>
+                      <button type="button" class="section-head__help proj-times-seg__help" id="btnSimpleTimesHelp" aria-label="独立计次说明">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.15 6.2c.25-1.15 1.05-1.85 1.95-1.85 1.05 0 1.75.72 1.75 1.62 0 .78-.38 1.18-1.08 1.68-.72.52-.97.95-.97 1.65" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><circle cx="8" cy="11.35" r="0.55" fill="currentColor"/></svg>
+                      </button>
                     </div>
-                    <div class="simple-times-fields hidden" id="simpleTimesFields">
+                    <div class="simple-times-fields" id="simpleTimesFields">
+                      <p class="proj-times-seg__hint">只设次数，无需配置具体项目</p>
                       <div class="proj-form-row" style="padding:12px 0;border:none">
                         <span class="label">次数</span>
                         <div class="field"><input type="text" inputmode="numeric" id="fSimpleTimesQty" placeholder="请输入" maxlength="3"><span class="suffix">次</span></div>
@@ -15672,11 +15706,11 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                       </div>
                       <p class="emp-comm-edit-hint" style="padding:0;margin:0 0 8px">该项目仅用于开单扣次与业绩设置，不会出现在价目表。</p>
                     </div>
-                    <div id="projectBenefitNormalWrap">
+                    <div id="projectBenefitNormalWrap" class="hidden">
                       <div id="projectBenefitCardsStep2" class="step2-benefit-cards"></div>
                       <div class="step2-benefit-foot">
                         <span class="step2-benefit-count hidden" id="projectBenefitCountStep2">0项</span>
-                        <button type="button" class="btn-add-benefit" id="btnAddProjectBenefitStep2">添加项目权益</button>
+                        <button type="button" class="btn-add-benefit btn-add-benefit--outline" id="btnAddProjectBenefitStep2"><svg class="btn-add-benefit__plus" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>添加项目权益</span></button>
                       </div>
                     </div>
                   </div>
@@ -15695,7 +15729,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                     <div id="productBenefitCardsStep2" class="step2-benefit-cards"></div>
                     <div class="step2-benefit-foot">
                       <span class="step2-benefit-count hidden" id="productBenefitCountStep2">0项</span>
-                      <button type="button" class="btn-add-benefit" id="btnAddProductBenefitStep2">添加产品权益</button>
+                      <button type="button" class="btn-add-benefit btn-add-benefit--outline" id="btnAddProductBenefitStep2"><svg class="btn-add-benefit__plus" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>添加产品权益</span></button>
                     </div>
                   </div>
                 </div>
@@ -15713,7 +15747,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                     <div id="discountBenefitCardsStep2" class="step2-benefit-cards"></div>
                     <div class="step2-benefit-foot">
                       <span class="step2-benefit-count hidden" id="discountBenefitCountStep2">0项</span>
-                      <button type="button" class="btn-add-benefit" id="btnAddDiscountBenefitStep2">添加折扣权益</button>
+                      <button type="button" class="btn-add-benefit btn-add-benefit--outline" id="btnAddDiscountBenefitStep2"><svg class="btn-add-benefit__plus" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>添加折扣权益</span></button>
                     </div>
                   </div>
                 </div>
@@ -17305,22 +17339,23 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
           <!-- 开单 · 计次票卡一键扣次 -->
           <div class="picker-mask picker-mask--bottom" id="billTimesTicketMask">
             <div class="picker-sheet" role="dialog" aria-label="扣次确认">
-              <div class="picker-head"><span class="picker-head__title-main">扣次</span></div>
+              <div class="picker-head"><span class="picker-head__title-main" id="billTimesTicketTitle">扣次</span></div>
               <div class="bill-ticket-deduct-meta" id="billTimesTicketMeta"></div>
               <div class="bill-ticket-deduct-step" role="group" aria-label="扣次次数">
                 <button type="button" class="bill-ticket-deduct-step__btn" id="btnBillTimesTicketMinus" aria-label="减少">−</button>
                 <span class="bill-ticket-deduct-step__n" id="billTimesTicketQty">1</span>
                 <button type="button" class="bill-ticket-deduct-step__btn" id="btnBillTimesTicketPlus" aria-label="增加">+</button>
               </div>
-              <div class="bill-ticket-deduct-staff">
-                <button type="button" class="add-card-staff-row" id="billTimesTicketStaffRow" aria-haspopup="dialog">
-                  <span class="add-card-staff-row__icon" aria-hidden="true">
-                    <svg viewBox="0 0 21.2 21.2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 19.1124C1 15.3369 4.15429 12.2762 10.6 12.2762C17.0457 12.2762 20.2 15.3369 20.2 19.1124C20.2 19.7131 19.7618 20.2 19.2212 20.2H1.97882C1.43823 20.2 1 19.7131 1 19.1124Z" stroke="currentColor" stroke-width="2"/><path d="M14.2 4.6C14.2 6.58822 12.5882 8.2 10.6 8.2C8.61177 8.2 7 6.58822 7 4.6C7 2.61177 8.61177 1 10.6 1C12.5882 1 14.2 2.61177 14.2 4.6Z" stroke="currentColor" stroke-width="2"/></svg>
+              <div class="bill-ticket-deduct-staff" id="billTimesTicketStaffWrap">
+                <button type="button" class="bill-ticket-staff-card" id="billTimesTicketStaffRow" aria-haspopup="dialog">
+                  <span class="bill-ticket-staff-card__head">
+                    <span class="bill-ticket-staff-card__title">服务员工</span>
                   </span>
-                  <span class="add-card-staff-row__lbl">服务员工</span>
-                  <span class="add-card-staff-row__val is-placeholder" id="billTimesTicketStaffVal">请选择</span>
-                  <span class="add-card-staff-row__cta" aria-hidden="true">请选择</span>
-                  <span class="add-card-staff-row__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                  <span class="bill-ticket-staff-card__body">
+                    <span class="bill-ticket-staff-card__val is-placeholder" id="billTimesTicketStaffVal">未选择</span>
+                    <span class="bill-ticket-staff-card__action" id="billTimesTicketStaffAction">去选择</span>
+                    <span class="bill-ticket-staff-card__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                  </span>
                 </button>
               </div>
               <div class="picker-foot picker-foot--row">
@@ -19889,7 +19924,7 @@ const QUICK_TEMPLATES = [
   {
     id: 'face_care_times',
     title: '面部护理次卡',
-    desc: '简单计次 · 美容名义',
+    desc: '独立计次 · 美容名义',
     icon: '',
     preset: {
       name: '面部护理10次卡',
@@ -19905,13 +19940,13 @@ const QUICK_TEMPLATES = [
         { id: 'demo_face_care_st', name: '面部护理10次卡', purchaseQty: 10, giftQty: 0, unlimited: false },
       ],
       cardColor: 'brand_red',
-      cardDesc: '演示用·简单计次模式：名义项目=卡名，不进价目表',
+      cardDesc: '演示用·独立计次：名义项目=卡名，不进价目表',
     },
   },
   {
     id: 'cut_style_times',
     title: '剪发造型次卡',
-    desc: '简单计次 · 剪发名义',
+    desc: '独立计次 · 剪发名义',
     icon: '',
     preset: {
       name: '剪发造型10次卡',
@@ -19927,7 +19962,7 @@ const QUICK_TEMPLATES = [
         { id: 'demo_cut_style_st', name: '剪发造型10次卡', purchaseQty: 10, giftQty: 0, unlimited: false },
       ],
       cardColor: 'peach',
-      cardDesc: '演示用·简单计次模式：名义项目=卡名，不进价目表',
+      cardDesc: '演示用·独立计次：名义项目=卡名，不进价目表',
     },
   },
   {
@@ -20076,7 +20111,7 @@ const state = {
   audienceOptions: cloneDefaultAudienceOptions(),
   projectItems: [],
   productItems: [],
-  simpleTimesMode: false,
+  simpleTimesMode: true,
   simpleTimesQty: null,
   simpleTimesProjectName: '',
   memberPrices: {},
@@ -24856,14 +24891,14 @@ function openSimpleTimesModeHelp() {
   const titleEl = document.getElementById('qtyScopeHelpTitle');
   const bodyEl = document.getElementById('qtyScopeHelpBody');
   if (!mask || !bodyEl) return;
-  if (titleEl) titleEl.textContent = '简单计次模式说明';
+  if (titleEl) titleEl.textContent = '独立计次说明';
   bodyEl.classList.remove('usage-policy-help');
   bodyEl.classList.add('simple-times-help');
   bodyEl.innerHTML =
     '<h4>如何设置业绩 / 提成</h4>' +
-    '<p>办卡：业绩设置 → 办卡业绩 →「简单计次」分组，配置开卡等办卡口径。</p>' +
-    '<p>消耗：业绩设置 → 项目业绩 →「简单计次」分组，配置名义项目（单价按开卡实付 ÷ 开卡总次数）。</p>' +
-    '<p>提成：提成设置 → 按项提成 → 添加项目 →「简单计次」分组勾选后配置。</p>' +
+    '<p>办卡：业绩设置 → 办卡业绩 →「独立计次卡」分组，配置开卡等办卡口径。</p>' +
+    '<p>消耗：业绩设置 → 劳动业绩 →「独立计次卡」分组，配置名义项目（单价按开卡实付 ÷ 开卡总次数）。</p>' +
+    '<p>提成：提成设置 → 按项提成 → 添加项目 →「独立计次卡」分组勾选后配置。</p>' +
     '<h4>如何开单</h4>' +
     '<p>会员办卡后，开单「选择会员卡」会出现浅金扣次券，并显示剩余次数。</p>' +
     '<p>点击该券即可一键扣次；名义项目不进价目表，无需先售卖计次项目。</p>';
@@ -25477,7 +25512,12 @@ function applySimpleTimesToProjectItems() {
 
 function syncSimpleTimesModeUI() {
   const on = !!state.simpleTimesMode;
-  setBenefitSwitchOn('benSimpleTimesMode', on);
+  document.querySelectorAll('[data-proj-times-tab]').forEach(btn => {
+    const tab = btn.getAttribute('data-proj-times-tab');
+    const active = on ? tab === 'independent' : tab === 'linked';
+    btn.classList.toggle('is-on', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
   document.getElementById('simpleTimesFields')?.classList.toggle('hidden', !on);
   document.getElementById('projectBenefitNormalWrap')?.classList.toggle('hidden', !!on);
   if (on) {
@@ -25495,6 +25535,20 @@ function syncSimpleTimesModeUI() {
       nameEl.placeholder = '默认会员卡名称';
     }
   }
+}
+
+function setProjectTimesTab(tab) {
+  const independent = tab !== 'linked';
+  state.simpleTimesMode = independent;
+  if (independent) {
+    if (!(Number(state.simpleTimesQty) > 0)) state.simpleTimesQty = 10;
+    if (!state.simpleTimesProjectName) {
+      state.simpleTimesProjectName = (document.getElementById('fName')?.value || '').trim();
+    }
+  }
+  syncSimpleTimesModeUI();
+  syncColorPreview();
+  updateStep2NextChrome();
 }
 
 function syncStep2UI() {
@@ -25540,8 +25594,7 @@ function applyBenefitDiff(oldB, newB) {
     newB.balanceCanBuyProducts = false;
   }
   if (oldB.timesOrValidity && !newB.timesOrValidity) {
-    /* E2: switch off only collapses; keep project benefit cards */
-    state.simpleTimesMode = false;
+    /* E2: switch off only collapses; keep project benefit / 独立计次草稿 */
   }
   if (oldB.products && !newB.products) {
     /* E2: switch off only collapses; keep product benefit cards */
@@ -25561,6 +25614,19 @@ function onBenefitCheckChange() {
   syncColorPreview();
   syncGiftCalculated();
   syncStep1ValidityScope();
+  /* 产品/折扣：打开后自动进入适用项选择，免再点「添加」 */
+  if (!oldB.products && newB.products) {
+    const saved = (state.productBenefitCards || []).filter(c => c.saved);
+    if (!saved.length) requestAnimationFrame(() => openAddProductBenefit());
+  }
+  if (!oldB.projectDiscount && newB.projectDiscount) {
+    const saved = (state.discountBenefitCards || []).filter(c => c.saved);
+    if (!saved.length) requestAnimationFrame(() => openAddDiscountBenefit());
+  }
+  if (!oldB.timesOrValidity && newB.timesOrValidity && state.simpleTimesMode == null) {
+    state.simpleTimesMode = true;
+    syncSimpleTimesModeUI();
+  }
 }
 
 function applyBenefitVisibility() {
@@ -27349,7 +27415,7 @@ function clearFormFields() {
   state.audience = ['all'];
   state.projectItems = [];
   state.productItems = [];
-  state.simpleTimesMode = false;
+  state.simpleTimesMode = true;
   state.simpleTimesQty = null;
   state.simpleTimesProjectName = '';
   state.memberPrices = {};
@@ -31300,18 +31366,11 @@ renderFlowMap();
     onBenefitCheckChange();
   });
 });
-document.getElementById('benSimpleTimesMode')?.addEventListener('click', () => {
-  state.simpleTimesMode = !state.simpleTimesMode;
-  if (state.simpleTimesMode) {
-    state.benefits.timesOrValidity = true;
-    setBenefitSwitchOn('benTimesOrValidity', true);
-    if (!(Number(state.simpleTimesQty) > 0)) state.simpleTimesQty = 10;
-    if (!state.simpleTimesProjectName) {
-      state.simpleTimesProjectName = (document.getElementById('fName')?.value || '').trim();
-    }
-  }
-  applyBenefitVisibility();
-  syncColorPreview();
+document.getElementById('projTimesSeg')?.addEventListener('click', e => {
+  if (e.target.closest('#btnSimpleTimesHelp')) return;
+  const tabBtn = e.target.closest('[data-proj-times-tab]');
+  if (!tabBtn) return;
+  setProjectTimesTab(tabBtn.getAttribute('data-proj-times-tab'));
 });
 document.getElementById('fSimpleTimesQty')?.addEventListener('input', e => {
   const n = parseInt(String(e.target.value || '').replace(/\D/g, ''), 10);
@@ -31994,7 +32053,7 @@ function billingNav(fn) {
     { id: 'station', label: '按工位分配' },
   ];
   var CALC_MODE_GROUPS = [
-    { key: 'labor', label: '项目业绩', storeKey: 'calcModeLabor' },
+    { key: 'labor', label: '劳动业绩', storeKey: 'calcModeLabor' },
     { key: 'sales', label: '产品业绩', storeKey: 'calcModeSales' },
     { key: 'card', label: '办卡业绩', storeKey: 'calcModeCard' },
   ];
@@ -34780,7 +34839,7 @@ function billingNav(fn) {
     }, scheme);
   }
 
-  /** 方案A：通用规则 → 自定义管理分组 → 简单计次 → 未分组 */
+  /** 方案A：通用规则 → 自定义管理分组 → 独立计次卡 → 未分组 */
   function buildAchBucketFromCatalog(list, prevBucket, idPrefix, opts) {
     opts = opts || {};
     var prev = collectPrevAchPcts(prevBucket);
@@ -34818,7 +34877,7 @@ function billingNav(fn) {
 
     var simpleList = opts.simpleTimesList || [];
     if (simpleList.length) {
-      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '简单计次' });
+      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '独立计次卡' });
       items[ACH_SIMPLE_TIMES_CAT_ID] = simpleList.map(function (p) {
         return makeLaborSalesAchItem(p, prev, defaultScheme);
       });
@@ -34954,7 +35013,7 @@ function billingNav(fn) {
       return byId[t.id];
     });
     if (simpleRows.length) {
-      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '简单计次' });
+      cats.push({ id: ACH_SIMPLE_TIMES_CAT_ID, name: '独立计次卡' });
       items[ACH_SIMPLE_TIMES_CAT_ID] = simpleRows;
     }
 
@@ -35001,7 +35060,7 @@ function billingNav(fn) {
         id: 'st_' + t.id,
         name: t.simpleTimesProjectName || t.name,
         price: Math.round((paid / total) * 100) / 100,
-        category: '简单计次',
+        category: '独立计次卡',
         isSimpleTimesAch: true,
       });
     });
@@ -36282,7 +36341,7 @@ function billingNav(fn) {
         groups = groups.filter(function (g) { return g && g.id !== SIMPLE_TIMES_SCOPE_GROUP_ID; });
         groups.push({
           id: SIMPLE_TIMES_SCOPE_GROUP_ID,
-          name: '简单计次',
+          name: '独立计次卡',
           itemIds: stItems.map(function (it) { return it.id; }),
           system: true,
         });
@@ -42376,14 +42435,16 @@ window.__BILLING_EMBEDDED__ = true;
       const st = pool.find(s => s.id === id);
       return st ? st.name : id;
     });
-    const text = names.length ? names.join('、') : '请选择';
     const hasStaff = names.length > 0;
+    const text = hasStaff ? names.join('、') : '未选择员工';
     const rowEl = document.getElementById('billTimesTicketStaffRow');
     const valEl = document.getElementById('billTimesTicketStaffVal');
+    const actionEl = document.getElementById('billTimesTicketStaffAction');
     if (valEl) {
       valEl.textContent = text;
       valEl.classList.toggle('is-placeholder', !hasStaff);
     }
+    if (actionEl) actionEl.textContent = '去选择';
     if (rowEl) rowEl.classList.toggle('has-staff', hasStaff);
   }
 
@@ -43622,7 +43683,7 @@ window.__BILLING_EMBEDDED__ = true;
   }
 
   function ensureDemoTimesTickets() {
-    /* 扣次卡改由会员卡「简单计次模式」持卡投影，不再从价目计次项目铸造 */
+    /* 扣次卡改由会员卡「独立计次」持卡投影，不再从价目计次项目铸造 */
   }
 
   function mintTimesTicketsFromCart() {
@@ -43640,10 +43701,11 @@ window.__BILLING_EMBEDDED__ = true;
     state.billTimesTicketCardId = card.id;
     state.billTimesTicketQty = 1;
     resetTimesTicketStaffDraft();
+    const titleEl = document.getElementById('billTimesTicketTitle');
+    if (titleEl) titleEl.textContent = `扣次·${card.name || '扣次卡'}`;
     const meta = document.getElementById('billTimesTicketMeta');
     if (meta) {
-      meta.innerHTML = `<div class="bill-ticket-deduct-meta__name">${escapeHtml(getTimesTicketRedeemName(card) || card.name)}</div>
-        <div class="bill-ticket-deduct-meta__remain">扣次卡「${escapeHtml(card.name)}」· 余 <strong>${rem}</strong> 次</div>`;
+      meta.innerHTML = `<div class="bill-ticket-deduct-meta__remain">余 <strong>${rem}</strong> 次</div>`;
     }
     syncTimesTicketDeductStep();
     renderTimesTicketStaffRow();
@@ -43699,7 +43761,7 @@ window.__BILLING_EMBEDDED__ = true;
       name: redeemName || card.name,
       price: unitFromIssue,
       benefitKey: redeemName || card.name,
-      category: '简单计次',
+      category: '独立计次卡',
       isSimpleTimesConsume: true,
     };
     const unit = unitFromIssue;

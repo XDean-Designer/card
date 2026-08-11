@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTB功能流程 · 会议讲解</title>
+<script src="assets/vendor/mermaid.min.js"></script>
+<style>
+:root{
+  --brand:#F32F41;--brand-soft:#fff5f6;--brand-deep:#c41e2e;
+  --text:#1a1d23;--text-sec:#5c6370;--muted:#8b929e;
+  --border:#e6e8ec;--bg:#eef0f3;--card:#fff;
+  --owner:#2f6fed;--clerk:#0f9d7a;--ok:#1a7f4b;--ok-bg:#e8f7ef;
+  --up:#8a5a00;--up-bg:#fff7e6;--future:#6b5cff;--shadow:0 8px 28px rgba(28,35,51,.08);
+  --radius:16px;--font:"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:var(--font);color:var(--text);background:
+  radial-gradient(1200px 500px at 10% -10%,#ffe8eb 0%,transparent 55%),
+  radial-gradient(900px 420px at 100% 0%,#e8f0ff 0%,transparent 50%),
+  var(--bg);line-height:1.55}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-columns:300px 1fr;grid-template-rows:auto 1fr;height:100vh;min-height:560px}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:10px 18px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:30}
+.topbar__brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.topbar__brand .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(145deg,#ff5a68,var(--brand));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 10px rgba(243,47,65,.35)}
+.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:4px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tb-btn{height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:500;color:var(--text)}
+.tb-btn:hover{border-color:#cfd3da}
+.tb-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.tb-btn.ghost-link{text-decoration:none;display:inline-flex;align-items:center}
+.tb-nav{display:flex;gap:6px}
+.tb-nav .tb-btn{min-width:36px;padding:0 10px}
+
+.side{border-right:1px solid var(--border);background:rgba(255,255,255,.78);backdrop-filter:blur(8px);overflow:auto;padding:14px 12px 28px}
+.side__label{font-size:11px;font-weight:650;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin:12px 8px 8px}
+.side__filters{display:flex;gap:6px;padding:0 4px 10px;flex-wrap:wrap}
+.chip{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:12px;color:var(--text-sec)}
+.chip.on{background:#1f2329;border-color:#1f2329;color:#fff}
+.nav-group{margin-bottom:10px}
+.nav-group__title{font-size:12px;font-weight:650;color:var(--text-sec);padding:6px 8px}
+.nav-item{display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;padding:10px 10px;border:1px solid transparent;
+  border-radius:12px;background:transparent;margin-bottom:4px}
+.nav-item:hover{background:#fff;border-color:var(--border)}
+.nav-item.on{background:#fff;border-color:rgba(243,47,65,.28);box-shadow:var(--shadow)}
+.nav-item__id{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--brand);min-width:28px}
+.nav-item__body{min-width:0}
+.nav-item__title{font-size:13px;font-weight:600;line-height:1.35}
+.nav-item__meta{font-size:11px;color:var(--muted);margin-top:2px}
+.badge{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:6px;font-size:10px;font-weight:650}
+.badge-owner{background:#eaf1ff;color:var(--owner)}
+.badge-clerk{background:#e6f7f2;color:var(--clerk)}
+.badge-both{background:#f3f0ff;color:#5b4bd6}
+
+.main{overflow:auto;padding:22px 28px 48px}
+.panel{display:none;max-width:1080px;margin:0 auto}
+.panel.on{display:block}
+
+.hero{background:linear-gradient(160deg,#fff 0%,#fff8f8 45%,#f3f7ff 100%);border:1px solid var(--border);
+  border-radius:22px;padding:36px 40px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(243,47,65,.12),transparent 70%)}
+.hero h1{margin:0 0 10px;font-size:32px;line-height:1.25;letter-spacing:-.02em}
+.hero .lead{font-size:17px;color:var(--text-sec);margin:0 0 22px;max-width:42em}
+.beats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 22px}
+.beat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.beat__n{font-size:12px;font-weight:700;color:var(--brand);margin-bottom:4px}
+.beat__t{font-size:15px;font-weight:650;margin-bottom:4px}
+.beat__d{font-size:13px;color:var(--text-sec)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:rgba(255,255,255,.85);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.stat__v{font-size:28px;font-weight:750;color:var(--text)}
+.stat__l{font-size:12px;color:var(--muted);margin-top:2px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn-main{height:42px;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#ff4d5c,var(--brand));
+  color:#fff;font-size:14px;font-weight:650;box-shadow:0 8px 18px rgba(243,47,65,.28)}
+.btn-sec{height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:600}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h2{margin:0 0 8px;font-size:22px}
+.card h3{margin:0 0 10px;font-size:16px}
+.muted{color:var(--text-sec);font-size:14px}
+.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.perm-col{border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,#fafbfc)}
+.perm-col h3{display:flex;align-items:center;gap:8px}
+.perm-list{list-style:none;margin:0;padding:0}
+.perm-list li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed #eef0f3;font-size:13px}
+.perm-list li:last-child{border-bottom:none}
+.dot-on,.dot-off{width:16px;height:16px;border-radius:50%;flex:0 0 auto;margin-top:2px}
+.dot-on{background:var(--ok-bg);box-shadow:inset 0 0 0 1.5px var(--ok)}
+.dot-off{background:#f2f3f5;box-shadow:inset 0 0 0 1.5px #c5c9d0}
+.note-box{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--brand-soft);border:1px solid #ffd5da;font-size:13px;color:var(--text-sec)}
+
+.case-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
+.case-head h2{margin:0;font-size:24px;line-height:1.3}
+.case-tags{display:flex;gap:8px;flex-wrap:wrap}
+.proof{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:var(--ok-bg);
+  border:1px solid #b7e4c7;margin-bottom:16px}
+.proof__badge{flex:0 0 auto;background:var(--ok);color:#fff;font-size:12px;font-weight:750;padding:4px 10px;border-radius:999px}
+.proof__text{font-size:15px;font-weight:600;line-height:1.45}
+.story{font-size:15px;color:var(--text-sec);margin:0 0 16px}
+
+.flow-wrap{border:1px solid var(--border);border-radius:14px;background:#fafbfc;padding:12px 8px;margin-bottom:16px;overflow:auto}
+.mermaid{text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+
+.steps{display:grid;gap:10px;margin-bottom:16px}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:#fff}
+.step__icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#fff,#f3f5f8);border:1px solid var(--border);box-shadow:inset 0 1px 0 #fff}
+.step__icon svg{width:22px;height:22px;stroke:var(--brand);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.step__mod{font-size:12px;font-weight:700;color:var(--brand);margin-bottom:2px}
+.step__act{font-size:14px;font-weight:600}
+.step__desc{font-size:13px;color:var(--text-sec);margin-top:2px}
+.step__foot{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.shot-btn{height:28px;padding:0 10px;border-radius:8px;border:1px solid #ffc9cf;background:var(--brand-soft);
+  color:var(--brand-deep);font-size:12px;font-weight:650}
+.shot-btn:hover{border-color:var(--brand);background:#ffe8eb}
+.shot-btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+.lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(18,22,30,.62);backdrop-filter:blur(4px)}
+.lightbox.on{display:flex}
+.lightbox__panel{position:relative;max-width:min(420px,92vw);max-height:92vh;background:#fff;border-radius:18px;
+  box-shadow:0 24px 64px rgba(0,0,0,.35);padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.lightbox__cap{font-size:13px;font-weight:650;color:var(--text);text-align:center;padding:0 28px}
+.lightbox__img{display:block;width:100%;max-height:calc(92vh - 72px);object-fit:contain;border-radius:12px;
+  background:#f2f3f5;border:1px solid var(--border)}
+.lightbox__close{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:10px;border:1px solid var(--border);
+  background:#fff;font-size:18px;line-height:1;color:var(--text-sec)}
+.lightbox__close:hover{color:var(--text);border-color:#cfd3da}
+
+.upgrade{border:1px solid #f0dfa8;background:var(--up-bg);border-radius:14px;padding:14px 16px}
+.upgrade__title{font-size:13px;font-weight:750;color:var(--up);margin-bottom:8px}
+.upgrade ul{margin:0;padding-left:1.15em}
+.upgrade li{margin:4px 0;font-size:14px;color:#5c4a1f}
+.upgrade .future{color:var(--future);font-weight:650}
+
+.close-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.check{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#fff}
+.check__ok{width:22px;height:22px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:0 0 auto}
+.up-list{margin:0;padding:0;list-style:none}
+.up-list li{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:8px;font-size:14px}
+.up-list li.hi{border-color:#d4ccff;background:linear-gradient(180deg,#f8f6ff,#fff);box-shadow:0 4px 14px rgba(107,92,255,.08)}
+.finale{margin-top:18px;padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,#1f2329,#3a414d);color:#fff}
+.finale strong{color:#ffb4bb}
+
+.foot{margin-top:20px;font-size:12px;color:var(--muted)}
+body.present-mode .foot,body.present-mode .tech-only{display:none}
+body.present-mode .side__label.tech-only{display:none}
+
+@media(max-width:980px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;height:auto;min-height:100vh}
+  .side{border-right:none;border-bottom:1px solid var(--border);max-height:220px}
+  .beats,.stat-row,.perm-grid,.close-grid{grid-template-columns:1fr}
+  .main{padding:16px}
+  .hero{padding:24px 18px}
+  .hero h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="mark" aria-hidden="true"></span>
+      <span>RTB功能流程<span class="topbar__hint">现网能力 · 场景闭环 · 体验升级</span></span>
+    </div>
+    <div class="topbar__actions">
+      <div class="tb-nav">
+        <button type="button" class="tb-btn" id="btnPrev" title="上一页">←</button>
+        <button type="button" class="tb-btn" id="btnNext" title="下一页">→</button>
+      </div>
+      <button type="button" class="tb-btn" id="btnPresent">讲解模式</button>
+      <a class="tb-btn ghost-link" href="RTB现有产品概览.html">现有产品概览</a>
+      <a class="tb-btn ghost-link" href="RTB产品重构计划概览.html">重构计划概览</a>
+    </div>
+  </header>
+
+  <aside class="side">
+    <div class="side__label">角色筛选</div>
+    <div class="side__filters">
+      <button type="button" class="chip on" data-filter="all">全部</button>
+      <button type="button" class="chip" data-filter="owner">店主</button>
+      <button type="button" class="chip" data-filter="clerk">店员</button>
+    </div>
+    <div class="side__label">讲解目录</div>
+    <nav id="sideNav"></nav>
+  </aside>
+
+  <main class="main">
+    <section class="panel on" id="panel-cover" data-slide="cover">
+      <div class="hero">
+        <h1>现网 RTB：场景能闭环<br>体验可持续升级</h1>
+        <p class="lead">用店主与店员的真实经营故事，说明当前产品<strong>已经能够支撑门店日常经营</strong>；同时梳理体验升级方向，后续将打造更完美的 RTB（含研发中的 AI 助手快速导入）。</p>
+        <div class="beats">
+          <div class="beat"><div class="beat__n">01</div><div class="beat__t">现网已能满足</div><div class="beat__d">入驻就位、预约接待、收银办卡、员工库存、经营看数均可走通</div></div>
+          <div class="beat"><div class="beat__n">02</div><div class="beat__t">看见可优化点</div><div class="beat__d">在「能完成」的前提下，指出效率与体验升级空间</div></div>
+          <div class="beat"><div class="beat__n">03</div><div class="beat__t">通往更完美 RTB</div><div class="beat__d">对齐重构方向与 AI 能力，持续把好用做成更好用</div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="stat__v">6</div><div class="stat__l">场景分组</div></div>
+          <div class="stat"><div class="stat__v">10</div><div class="stat__l">端到端案例</div></div>
+          <div class="stat"><div class="stat__v">2</div><div class="stat__l">店主 / 店员身份</div></div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-main" data-go="roles">查看双角色权限</button>
+          <button type="button" class="btn-sec" data-go="F1">从入驻案例开始讲</button>
+        </div>
+      </div>
+      <p class="foot tech-only">流程真源：《RTB现有产品概览》。权限对照重构原型「添加员工 → 权限说明」。AI 导入为研发中能力，本页不以现网已上线表述。</p>
+    </section>
+
+    <section class="panel" id="panel-roles" data-slide="roles">
+      <div class="card">
+        <h2>店主与店员：分工清晰，前线高效</h2>
+        <p class="muted">权限分层保证店员可高效完成接待与收银，店主保留经营配置与看数权。以下摘自员工「权限说明」中的能力对照（会议版精简）。</p>
+        <div class="perm-grid">
+          <div class="perm-col">
+            <h3><span class="badge badge-owner">店主</span> 全店最高权限</h3>
+            <ul class="perm-list">
+              <li><span class="dot-on"></span>开单 / 结算 / 查看流水</li>
+              <li><span class="dot-on"></span>查看与改动价目表、会员卡</li>
+              <li><span class="dot-on"></span>办卡、充值、续费续次、延期、退卡</li>
+              <li><span class="dot-on"></span>创建员工、经营配置与报表相关能力</li>
+              <li><span class="dot-on"></span>开单改价等完整经营动作</li>
+            </ul>
+          </div>
+          <div class="perm-col">
+            <h3><span class="badge badge-clerk">店员</span> 前线作业权限</h3>
+            <ul class="perm-list">
+              <li><span class="dot-on"></span>开单 / 结算</li>
+              <li><span class="dot-on"></span>查看价目表、查看卡项</li>
+              <li><span class="dot-on"></span>办新卡、充值、续费/续次</li>
+              <li><span class="dot-off"></span>不改价目 / 不改会员卡模板</li>
+              <li><span class="dot-off"></span>不开单改价、不延期退卡、不创建员工、不看流水</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-box">配置类与看数类由店主完成、前线收银由店员完成——这是<strong>角色分工</strong>，不是能力缺失。原型另有合伙人 / 店长 / 高级店员等档位，本页讲解聚焦店主与店员。</div>
+        <div class="hero-actions" style="margin-top:18px">
+          <button type="button" class="btn-main" data-go="F1">进入场景案例</button>
+        </div>
+      </div>
+      <p class="foot tech-only">权限矩阵来源：交互原型添加员工页「权限说明」弹窗。现网细权若有差异，以线上配置为准。</p>
+    </section>
+
+    <section class="panel" id="panel-case" data-slide="case">
+      <div class="card" id="caseRoot"></div>
+    </section>
+
+    <section class="panel" id="panel-close" data-slide="close">
+      <div class="card">
+        <h2>结论：现网可闭环 · 升级有路径</h2>
+        <p class="muted">六组场景均可在当前 RTB 走通；体验升级与 AI 能力将持续把「能用」做成「更好用」。</p>
+        <div class="close-grid" id="closeChecks"></div>
+        <h3 style="margin-top:8px">体验升级主题（后续打造更完美 RTB）</h3>
+        <ul class="up-list">
+          <li class="hi"><strong class="future">AI 助手 · 存量数据快速准确导入（研发中）</strong> — 降低上线与迁店成本，让选择 RTB 后的数据就位更快。</li>
+          <li>开单路径更短：选客 / 选卡 / 点单更顺滑，缩短前线操作步数。</li>
+          <li>预约与到店、开单心智更一体；预约成功通知等体验补强。</li>
+          <li>价目与库存结构更清晰：可售卖与项目消耗管理更直观。</li>
+          <li>经营分析一体感与老板端业绩下钻更直达；支出与报表衔接更顺。</li>
+        </ul>
+        <div class="finale">
+          <strong>一句话：</strong>今天的 RTB 已经能支撑门店把经营做起来；我们正沿着重构方向与 AI 能力，把它打磨成更完美的 RTB。
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-sec" data-go="cover">返回开场</button>
+          <a class="btn-sec" href="RTB产品重构计划概览.html" style="display:inline-flex;align-items:center">查看重构计划概览</a>
+        </div>
+      </div>
+      <p class="foot tech-only">材料对照：《RTB现有产品概览》《RTB产品重构计划概览》。本页为会议讲解稿，非工程需求规格。</p>
+    </section>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lightboxCap">
+  <div class="lightbox__panel">
+    <button type="button" class="lightbox__close" id="lightboxClose" aria-label="关闭">×</button>
+    <div class="lightbox__cap" id="lightboxCap">现网截图</div>
+    <img class="lightbox__img" id="lightboxImg" alt="">
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ICONS = {
+    store: '<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/></svg>',
+    bill: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+    user: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.8-3.2 4-4.5 7-4.5s5.2 1.3 7 4.5"/></svg>',
+    card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14h4"/></svg>',
+    appt: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    price: '<svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9 12h6M12 9v6"/></svg>',
+    coupon: '<svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 1 0 0 4v2a2 2 0 1 0 0 4v2H5v-2a2 2 0 1 0 0-4V9z"/><path d="M12 7v10"/></svg>',
+    staff: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M2 19c1.5-3 3.5-4.2 7-4.2"/><circle cx="17" cy="9" r="2.5"/><path d="M14 19c1-2.2 2.2-3.2 5-3.5"/></svg>',
+    stock: '<svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>',
+    chart: '<svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 16V10M12 16V7M16 16v-5"/></svg>',
+    pay: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/></svg>',
+    ai: '<svg viewBox="0 0 24 24"><path d="M12 3l2.2 4.5L19 9l-4 3.2.8 5.3L12 15.8 8.2 17.5 9 12.2 5 9l4.8-1.5L12 3z"/></svg>',
+    flow: '<svg viewBox="0 0 24 24"><path d="M4 6h10M4 12h16M4 18h8"/><circle cx="18" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
+    ok: '<svg viewBox="0 0 24 24"><path d="M20 7L10 17l-5-5"/></svg>'
+  };
+
+  var GROUPS = [
+    { id: 'F', title: 'F · 入驻与数据就位' },
+    { id: 'A', title: 'A · 顾客到店与预约' },
+    { id: 'B', title: 'B · 员工入职与人效' },
+    { id: 'C', title: 'C · 库存管理' },
+    { id: 'D', title: 'D · 经营数据分析' },
+    { id: 'E', title: 'E · 前置配置与收银' }
+  ];
+
+  var CASES = [
+    {
+      id: 'F1', group: 'F', role: 'owner', roleLabel: '店主',
+      title: '选择 RTB 后，把店里已有数据就位并开工',
+      story: '新店或迁店老板决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。',
+      proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。',
+      mermaid: "flowchart LR\n  choose[选择使用RTB] --> openShop[登录开店]\n  openShop --> wb[进入工作台]\n  wb --> price[录入价目表]\n  wb --> cards[配置会员卡]\n  wb --> coupon[配置优惠券]\n  wb --> cust[录入客户员工]\n  price --> ready[数据就位可开工]\n  cards --> ready\n  coupon --> ready\n  cust --> ready\n  ready -.-> ai[AI助手快速导入]",
+      steps: [
+        { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。' },
+        { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shot: '08-price-list', shotLabel: '价目表 · 项目列表' },
+        { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shot: '11-card-manage', shotLabel: '卡管理' },
+        { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shot: '12-coupon', shotLabel: '优惠券管理' },
+        { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。' }
+      ],
+      upgrades: [
+        '<span class="future">正在研发 AI 助手</span>：后续支持将店内已有数据<strong>快速、准确导入</strong> RTB，显著降低上线与迁店成本（流程图虚线节点表示「后续」，非现网已上线）。',
+        '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'
+      ]
+    },
+    {
+      id: 'A1', group: 'A', role: 'clerk', roleLabel: '店员',
+      title: '未预约顾客到店完成服务',
+      story: '傍晚一位熟客直接进店，没有提前预约。店员需要立刻选客、点单、划卡或收款，不耽误排队。',
+      proof: '未预约顾客可直接走开单链路完成服务结算，不依赖预约单。',
+      mermaid: "flowchart LR\n  walkin[顾客未预约到店] --> wb[工作台]\n  wb --> bill[开单]\n  bill --> pick[选客或散客]\n  pick --> items[点单项目产品]\n  items --> pay[结算收款]\n  pay --> done[服务完成落单]",
+      steps: [
+        { icon: 'bill', mod: '开单记账', act: '从工作台进入开单', desc: '前线主操作入口。', shot: '02-bill-entry', shotLabel: '开单结账 · 选品' },
+        { icon: 'user', mod: '客户 / 选客', act: '选择会员或登记散客', desc: '快速确认服务对象。', shot: '02-bill-entry', shotLabel: '开单页 · 选客入口' },
+        { icon: 'price', mod: '价目点单', act: '添加本次服务或产品', desc: '按价目完成点单。', shot: '02-bill-entry', shotLabel: '开单 · 点单列表' },
+        { icon: 'pay', mod: '结算', act: '扣卡或收款完成', desc: '店员权限覆盖开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算页' }
+      ],
+      upgrades: [
+        '现网已能完成未预约接待；后续可继续压缩开单步骤，让高峰时段更快。',
+        '与「先选卡再操作」等新版开单方向对齐，体验会更顺。'
+      ]
+    },
+    {
+      id: 'A2', group: 'A', role: 'clerk', roleLabel: '店员',
+      title: '先预约后进店完成服务',
+      story: '顾客早上在线上或到店约了下午护理。到点进店后，店员按预约找到人，再完成服务开单。',
+      proof: '预约履约后可衔接到开单收款，形成「约得到、接得住、收得齐」的闭环。',
+      mermaid: "flowchart LR\n  appt[新建预约] --> list[预约列表或日历]\n  list --> arrive[顾客到店]\n  arrive --> detail[预约详情]\n  detail --> bill[开单结算]\n  bill --> done[履约完成]",
+      steps: [
+        { icon: 'appt', mod: '预约管理', act: '创建或确认预约', desc: '选时间、员工、项目。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'appt', mod: '预约列表', act: '到店时定位该预约', desc: '日历 / 列表快速找到人。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'bill', mod: '开单', act: '按履约内容收款', desc: '预约与收银衔接完成。', shot: '02-bill-entry', shotLabel: '开单结账' }
+      ],
+      upgrades: [
+        '现网可完成预约到开单；后续可让预约、客户、开单的心智更一体。',
+        '预约成功店铺消息通知等体验仍在加强（前线待开始项）。'
+      ]
+    },
+    {
+      id: 'A3', group: 'A', role: 'both', roleLabel: '店员 / 店主',
+      title: '预约后改时间或取消',
+      story: '顾客临时有事，需要把预约改到明天，或直接取消。店员在预约里调整，避免空位与冲突。',
+      proof: '可在预约编辑流程中改期，也可进入已取消状态，档期保持可管理。',
+      mermaid: "flowchart LR\n  list[预约列表] --> detail[预约详情]\n  detail --> edit[编辑改时间]\n  detail --> cancel[取消预约]\n  edit --> ok[档期更新]\n  cancel --> canceled[已取消详情]",
+      steps: [
+        { icon: 'appt', mod: '预约详情', act: '打开原预约', desc: '确认顾客与原定时间。', shot: '05-appt-list', shotLabel: '预约看板（详情入口）' },
+        { icon: 'appt', mod: '新建或编辑预约', act: '修改时间或项目', desc: '完成改期。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'appt', mod: '已取消详情', act: '取消后保留可追溯状态', desc: '档期释放，记录清晰。' }
+      ],
+      upgrades: [
+        '改期与取消路径现网可用；后续可强化提醒与改期协作体验。'
+      ]
+    },
+    {
+      id: 'B1', group: 'B', role: 'owner', roleLabel: '店主',
+      title: '新招聘员工的管理配置闭环',
+      story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。',
+      proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。',
+      mermaid: "flowchart LR\n  hire[新员工入职] --> emp[员工管理]\n  emp --> profile[建档与职位]\n  emp --> perm[设置权限]\n  emp --> scheme[业绩提成方案]\n  scheme --> cross[流水与提成明细]\n  emp --> schedule[排班口径]\n  emp --> reward[奖惩相关设置]\n  perm --> online[可参与开单]",
+      steps: [
+        { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。', shot: '22-staff-create', shotLabel: '创建员工' },
+        { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shot: '23-staff-perm', shotLabel: '选择权限' },
+        { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。',
+          shots: [
+            { id: '24-staff-commission', label: '提成设置' },
+            { id: '25-staff-performance', label: '业绩设置' }
+          ] },
+        { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
+        { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
+      ],
+      upgrades: [
+        '现网可完成新人上线配置；后续排班可更显式、老板看提成下钻更直达。',
+        '月末核提成可结合流水与经营分析场景一起看。'
+      ]
+    },
+    {
+      id: 'C1', group: 'C', role: 'owner', roleLabel: '店主',
+      title: '产品库存：可售卖 + 项目消耗',
+      story: '店主要管理两类货：柜台上可卖的护理产品，以及做项目时消耗的物料。他需要能加库存、批量补货，避免断货。',
+      proof: '现网在价目/产品增改链路提供添加库存与批量添加库存，可支撑卖品与耗材类管理。',
+      mermaid: "flowchart LR\n  price[价目表产品] --> edit[产品增改]\n  edit --> sale[可售卖产品库存]\n  edit --> use[项目消耗物料库存]\n  sale --> one[添加库存]\n  use --> many[批量添加库存]\n  one --> ok[库存可管]\n  many --> ok",
+      steps: [
+        { icon: 'price', mod: '价目表', act: '进入产品侧价目', desc: '库存入口挂在价目增改。', shot: '08b-price-products', shotLabel: '价目表 · 产品' },
+        { icon: 'stock', mod: '添加库存', act: '为可售卖产品补货', desc: '单品入库。', shot: '09-price-edit', shotLabel: '产品增改（含库存）' },
+        { icon: 'stock', mod: '批量添加库存', act: '为耗材类批量补货', desc: '服务项目消耗物料同步管理。', shot: '09-price-edit', shotLabel: '产品增改' }
+      ],
+      upgrades: [
+        '现网已能管库存；后续「独立库存中心、与价目同步」会让结构更清晰（对照重构库存方向）。'
+      ]
+    },
+    {
+      id: 'D1', group: 'D', role: 'owner', roleLabel: '店主',
+      title: '经营数据分析：看清店、看清人、看清卡',
+      story: '店主早上想看客流，周末想看项目与营收，月末要核对卡项与员工业绩。他还关心现金类收款与支出结余。',
+      proof: '报表统计覆盖营收、客流、卡项、经营分析及人员下钻；并可与门店经营报表、支出统计交叉使用。',
+      mermaid: "flowchart TB\n  hub[报表统计入口] --> rev[营收状态]\n  hub --> flow[客流统计]\n  hub --> cards[卡项统计]\n  hub --> biz[经营分析]\n  biz --> staff[选择人员下钻]\n  hub --> shop[门店经营报表]\n  pay[支出管理] --> stat[看统计结余]\n  shop --> morning[早上客流]\n  rev --> week[周营收]\n  cards --> month[月末卡与业绩]",
+      steps: [
+        { icon: 'chart', mod: '报表统计', act: '进入多维报表入口', desc: '亮点：一个入口覆盖经营主指标。', shot: '17-report-hub', shotLabel: '经营分析' },
+        { icon: 'chart', mod: '营收 / 客流', act: '查看营收状态与客流', desc: '应用：早上看客流、周看营收。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+        { icon: 'card', mod: '卡项统计', act: '掌握持卡与卡相关数据', desc: '应用：月末看卡。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+        { icon: 'staff', mod: '经营分析下钻', act: '按人员查看经营情况', desc: '应用：看清人效。', shot: '17-report-hub', shotLabel: '经营分析' },
+        { icon: 'pay', mod: '支出与结余', act: '记支出并看统计 / 门店经营报表', desc: '资金侧与经营侧对照。', shot: '20-expense-book', shotLabel: '支出 · 记一笔' }
+      ],
+      upgrades: [
+        '现网数据能力完整可用；后续经营分析一体感、老板端业绩下钻会更直达。',
+        '支出统计与经营报表的衔接可继续做「更好用」。'
+      ]
+    },
+    {
+      id: 'E1', group: 'E', role: 'owner', roleLabel: '店主',
+      title: '前置配置：价目表 · 会员卡 · 优惠券',
+      story: '换季调价前，店主要先把项目价格、卡权益和优惠券规则准备好，店员才能顺利办卡、核销与开单。',
+      proof: '店主可完成价目、会员卡模板与优惠券等逻辑前置，供前线持续使用。',
+      mermaid: "flowchart LR\n  owner[店主前置] --> price[价目表配置]\n  owner --> card[会员卡模板]\n  owner --> coupon[优惠券规则]\n  price --> front[前线可卖可开]\n  card --> front\n  coupon --> front",
+      steps: [
+        { icon: 'price', mod: '价目表', act: '维护项目与产品及分类', desc: '可卖内容的基础。', shot: '08-price-list', shotLabel: '价目表' },
+        { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡划卡规则就绪。', shot: '11-card-manage', shotLabel: '卡管理' },
+        { icon: 'coupon', mod: '优惠券管理', act: '配置券与核销规则', desc: '营销动作可落地。', shot: '12-coupon', shotLabel: '优惠券' }
+      ],
+      upgrades: [
+        '前置配置现网齐全；后续卡权益组合建模、价目工具化会进一步降低配置成本。',
+        '与 F1 入驻案例衔接：今天靠模块配置就位，后续 AI 导入加速。'
+      ]
+    },
+    {
+      id: 'E2', group: 'E', role: 'clerk', roleLabel: '店员',
+      title: '熟客划卡开单结算',
+      story: '会员到店做常规护理。店员选客、带出权益、点单划卡，快速完成收款。',
+      proof: '店员权限下可独立完成选客→点单→结算的前线收银闭环。',
+      mermaid: "flowchart LR\n  wb[工作台] --> bill[开单]\n  bill --> member[选择会员]\n  member --> rights[使用卡权益]\n  rights --> items[点单]\n  items --> settle[结算完成]",
+      steps: [
+        { icon: 'bill', mod: '开单', act: '进入开单', desc: '店员日常主路径。', shot: '02-bill-entry', shotLabel: '开单结账' },
+        { icon: 'user', mod: '选客', act: '找到熟客会员', desc: '带出已有卡权益。', shot: '03-bill-items', shotLabel: '结算页 · 会员信息' },
+        { icon: 'card', mod: '扣卡结算', act: '完成划卡或支付', desc: '权限含开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+      ],
+      upgrades: [
+        '收银闭环已成立；后续缩短步骤、权益同屏会让体验更好。'
+      ]
+    },
+    {
+      id: 'E3', group: 'E', role: 'clerk', roleLabel: '店员',
+      title: '新客办卡并首次消费',
+      story: '新客体验后决定办卡。店员办理新卡，并立刻用新卡完成第一单消费。',
+      proof: '店员可办新卡并衔接首次开单消费，一次接待完成转化。',
+      mermaid: "flowchart LR\n  guest[新客到店] --> issue[办新卡]\n  issue --> bill[开单]\n  bill --> first[首次消费结算]\n  first --> done[会员转化完成]",
+      steps: [
+        { icon: 'card', mod: '办新卡', act: '为新客开卡', desc: '店员权限含办新卡。', shot: '11-card-manage', shotLabel: '卡管理 · 添加卡' },
+        { icon: 'bill', mod: '开单', act: '用新卡完成首单', desc: '办卡与消费同会话完成。', shot: '02-bill-entry', shotLabel: '开单结账' },
+        { icon: 'ok', mod: '结算', act: '收款成功', desc: '转化闭环。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+      ],
+      upgrades: [
+        '办卡+首消现网可完成；后续办卡与开单衔接可更顺滑。'
+      ]
+    }
+  ];
+
+  var SLIDES = ['cover', 'roles'].concat(CASES.map(function (c) { return c.id; })).concat(['close']);
+  var state = { slide: 'cover', filter: 'all', mermaidReady: false };
+
+  function roleBadge(role, label) {
+    var cls = role === 'owner' ? 'badge-owner' : role === 'clerk' ? 'badge-clerk' : 'badge-both';
+    return '<span class="badge ' + cls + '">' + label + '</span>';
+  }
+
+  function buildNav() {
+    var root = document.getElementById('sideNav');
+    var html = '';
+    html += itemBtn('cover', null, '开场结论', '会议三拍');
+    html += itemBtn('roles', null, '双角色权限', '店主 / 店员');
+    GROUPS.forEach(function (g) {
+      var cases = CASES.filter(function (c) { return c.group === g.id && passFilter(c); });
+      if (!cases.length) return;
+      html += '<div class="nav-group"><div class="nav-group__title">' + g.title + '</div>';
+      cases.forEach(function (c) {
+        html += itemBtn(c.id, c, c.title, c.roleLabel);
+      });
+      html += '</div>';
+    });
+    html += itemBtn('close', null, '收束与路线', '更完美的 RTB');
+    root.innerHTML = html;
+    root.querySelectorAll('[data-go]').forEach(function (el) {
+      el.addEventListener('click', function () { go(el.getAttribute('data-go')); });
+    });
+    syncNavOn();
+  }
+
+  function itemBtn(id, c, title, meta) {
+    var badge = c ? roleBadge(c.role, c.roleLabel) : '';
+    return '<button type="button" class="nav-item" data-go="' + id + '">' +
+      '<span class="nav-item__id">' + (c ? c.id : '·') + '</span>' +
+      '<span class="nav-item__body"><div class="nav-item__title">' + title + '</div>' +
+      '<div class="nav-item__meta">' + badge + ' ' + meta + '</div></span></button>';
+  }
+
+  function passFilter(c) {
+    if (state.filter === 'all') return true;
+    if (state.filter === 'owner') return c.role === 'owner' || c.role === 'both';
+    if (state.filter === 'clerk') return c.role === 'clerk' || c.role === 'both';
+    return true;
+  }
+
+  function syncNavOn() {
+    document.querySelectorAll('.nav-item').forEach(function (el) {
+      el.classList.toggle('on', el.getAttribute('data-go') === state.slide);
+    });
+  }
+
+  function renderCase(c) {
+    var steps = c.steps.map(function (s) {
+      var shotHtml = '';
+      var list = s.shots || (s.shot ? [{ id: s.shot, label: s.shotLabel || s.mod }] : []);
+      if (list.length) {
+        shotHtml = '<div class="step__foot">' + list.map(function (sh) {
+          return '<button type="button" class="shot-btn" data-shot="' + sh.id +
+            '" data-cap="' + escapeAttr(sh.label || s.mod) + '">查看截图' +
+            (list.length > 1 ? ' · ' + escapeAttr(sh.label) : '') + '</button>';
+        }).join('') + '</div>';
+      }
+      return '<div class="step"><div class="step__icon">' + (ICONS[s.icon] || ICONS.bill) + '</div>' +
+        '<div><div class="step__mod">' + s.mod + '</div><div class="step__act">' + s.act + '</div>' +
+        '<div class="step__desc">' + s.desc + '</div>' + shotHtml + '</div></div>';
+    }).join('');
+    var ups = c.upgrades.map(function (u) { return '<li>' + u + '</li>'; }).join('');
+    document.getElementById('caseRoot').innerHTML =
+      '<div class="case-head"><div><div class="case-tags">' + roleBadge(c.role, c.roleLabel) +
+      '<span class="badge" style="background:#f2f3f5;color:#5c6370">' + c.id + '</span></div>' +
+      '<h2 style="margin-top:10px">' + c.title + '</h2></div></div>' +
+      '<p class="story">' + c.story + '</p>' +
+      '<div class="proof"><span class="proof__badge">场景闭环 ✓</span><div class="proof__text">' + c.proof + '</div></div>' +
+      '<h3>功能流程（节点 = 现网功能）</h3>' +
+      '<div class="flow-wrap"><pre class="mermaid">' + c.mermaid + '</pre></div>' +
+      '<h3>分步讲述</h3><div class="steps">' + steps + '</div>' +
+      '<div class="upgrade"><div class="upgrade__title">体验升级 · 后续可更好</div><ul>' + ups + '</ul></div>';
+    document.getElementById('caseRoot').querySelectorAll('[data-shot]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        openShot(btn.getAttribute('data-shot'), btn.getAttribute('data-cap') || '');
+      });
+    });
+    runMermaid();
+  }
+
+  function escapeAttr(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  var SHOT_BASE = 'assets/flow-shots/';
+
+  function openShot(id, cap) {
+    var box = document.getElementById('lightbox');
+    var img = document.getElementById('lightboxImg');
+    var title = document.getElementById('lightboxCap');
+    img.src = SHOT_BASE + id + '.png';
+    img.alt = cap || id;
+    title.textContent = cap || '现网截图';
+    box.classList.add('on');
+    box.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeShot() {
+    var box = document.getElementById('lightbox');
+    box.classList.remove('on');
+    box.setAttribute('aria-hidden', 'true');
+    document.getElementById('lightboxImg').removeAttribute('src');
+  }
+
+  function renderCloseChecks() {
+    var items = [
+      ['F', '入驻与数据就位', '开店 + 模块录入可开工'],
+      ['A', '顾客到店与预约', '未预约 / 履约 / 改期取消'],
+      ['B', '员工入职与人效', '建档权限提成排班奖惩'],
+      ['C', '库存管理', '可售卖 + 项目消耗'],
+      ['D', '经营数据分析', '营收客流卡项与下钻'],
+      ['E', '前置配置与收银', '价目卡券 + 划卡办卡']
+    ];
+    document.getElementById('closeChecks').innerHTML = items.map(function (it) {
+      return '<div class="check"><span class="check__ok">✓</span><div><strong>' + it[0] + ' · ' + it[1] +
+        '</strong><div class="muted">' + it[2] + ' · 现网可完成</div></div></div>';
+    }).join('');
+  }
+
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
+    if (name === 'cover' || name === 'roles' || name === 'close') {
+      document.getElementById('panel-' + name).classList.add('on');
+    } else {
+      document.getElementById('panel-case').classList.add('on');
+    }
+  }
+
+  function go(id) {
+    if (id === 'case') id = 'F1';
+    state.slide = id;
+    if (id === 'cover' || id === 'roles' || id === 'close') {
+      showPanel(id);
+      if (id === 'close') renderCloseChecks();
+    } else {
+      var c = CASES.find(function (x) { return x.id === id; });
+      if (!c) return;
+      if (!passFilter(c)) {
+        state.filter = 'all';
+        document.querySelectorAll('.chip').forEach(function (ch) {
+          ch.classList.toggle('on', ch.getAttribute('data-filter') === 'all');
+        });
+        buildNav();
+      }
+      showPanel('case');
+      renderCase(c);
+    }
+    syncNavOn();
+    document.querySelector('.main').scrollTop = 0;
+  }
+
+  function runMermaid() {
+    if (!window.mermaid) return;
+    try {
+      mermaid.run({ nodes: document.querySelectorAll('#caseRoot .mermaid') });
+    } catch (e) { /* ignore redraw races */ }
+  }
+
+  function shift(delta) {
+    var idx = SLIDES.indexOf(state.slide);
+    if (idx < 0) idx = 0;
+    var next = SLIDES[Math.max(0, Math.min(SLIDES.length - 1, idx + delta))];
+    go(next);
+  }
+
+  function initMermaid() {
+    if (!window.mermaid) return;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      securityLevel: 'loose',
+      flowchart: { curve: 'basis', padding: 12, nodeSpacing: 28, rankSpacing: 36 },
+      themeVariables: {
+        fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif',
+        fontSize: '15px',
+        primaryColor: '#fff5f6',
+        primaryBorderColor: '#F32F41',
+        primaryTextColor: '#1a1d23',
+        lineColor: '#8b929e',
+        secondaryColor: '#f5f6f7',
+        tertiaryColor: '#ffffff'
+      }
+    });
+    state.mermaidReady = true;
+  }
+
+  document.querySelectorAll('.chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      state.filter = chip.getAttribute('data-filter');
+      document.querySelectorAll('.chip').forEach(function (c) {
+        c.classList.toggle('on', c === chip);
+      });
+      buildNav();
+    });
+  });
+
+  document.getElementById('btnPrev').addEventListener('click', function () { shift(-1); });
+  document.getElementById('btnNext').addEventListener('click', function () { shift(1); });
+  document.getElementById('btnPresent').addEventListener('click', function () {
+    document.body.classList.toggle('present-mode');
+    this.classList.toggle('on', document.body.classList.contains('present-mode'));
+    this.textContent = document.body.classList.contains('present-mode') ? '讲解模式 · 开' : '讲解模式';
+  });
+
+  document.body.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-go]');
+    if (!t || t.classList.contains('nav-item')) return;
+    if (t.hasAttribute('data-go')) go(t.getAttribute('data-go'));
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', closeShot);
+  document.getElementById('lightbox').addEventListener('click', function (e) {
+    if (e.target === this) closeShot();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('on')) {
+      e.preventDefault();
+      closeShot();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); shift(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); shift(-1); }
+  });
+
+  initMermaid();
+  buildNav();
+  go('cover');
+})();
+</script>
+</body>
+</html>

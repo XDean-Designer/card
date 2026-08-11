@@ -43,6 +43,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
   <div class="topbar">
     <div class="topbar__title">RTB现有产品概览<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
     <div class="topbar__actions">
+      <a class="ghost" href="RTB功能流程.html">打开功能流程</a>
       <a class="ghost" href="demo.html">打开交互原型</a>
       <a class="ghost" href="RTB现有产品概览.md" download>下载 Markdown</a>
       <a class="primary" href="RTB现有产品概览.md" target="_blank" rel="noopener">打开源文件 .md</a>
@@ -53,6 +54,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <blockquote>
 <p><strong>定位说明</strong>：本文描述 <strong>剑琅联盟现网老版本</strong>（已上线商户端），与《RTB产品重构计划概览》（未上线、开发中重构原型）对照阅读。<br />
 <strong>材料来源</strong>：<a href="../剑琅联盟-功能与页面分析.md">剑琅联盟-功能与页面分析.md</a>（APK 逆向 · 约 <code>5.0.10</code>）+ 前线任务快照（薛鼎 · 15 条）。链路多为 Activity 命名与 DEX 邻近引用推断，文中标注「现网推断」，<strong>非</strong>运行时精确跳转。<br />
+<strong>运行时补全</strong>：§2.11 支出管理另据 MuMu（<code>emulator-5554</code> · 包 <code>com.jiyong.rta.next.debug</code>）<code>uiautomator</code> / 截图实测，标注「MuMu 实测」。<br />
 <strong>快照说明</strong>：第四章前线进度取自任务文档某一时刻，<strong>非</strong>实时看板。</p>
 </blockquote>
 <h2>一、产品总览</h2>
@@ -61,7 +63,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li><strong>产品</strong>：剑琅联盟 · 门店经营（现网商户端）</li>
 <li><strong>端</strong>：Android 原生为主 + DCloud/uni-app 混合 + 内嵌 H5</li>
 <li><strong>包体参考</strong>：<code>com.jiyong.rta.next.debug</code> · 版本 <code>5.0.10</code>（分析样本）</li>
-<li><strong>覆盖（对照重构席位）</strong>：客户 · 预约 · 价目（项目与产品） · 会员卡 · 优惠券 · 开单 · 流水 · 经营分析 · 员工管理（含排班能力若有则并入口径） · 支出（弱/分散） · 库存（并入项目与产品）</li>
+<li><strong>覆盖（对照重构席位）</strong>：客户 · 预约 · 价目（项目与产品） · 会员卡 · 优惠券 · 开单 · 流水 · 经营分析 · 员工管理（含排班能力若有则并入口径） · 支出管理 · 库存（并入项目与产品）</li>
 </ul>
 <h3>模块一览</h3>
 <p>与《RTB产品重构计划概览》<strong>模块席位对齐</strong>，职责与入口改为现网表述。Activity / Fragment 数为分析报告归类合计，便于感知规模（非整 App 仅 RTB）。</p>
@@ -148,10 +150,10 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>支出管理</td>
+<td style="text-align: right;">≥3（实测）</td>
 <td style="text-align: right;">—</td>
-<td style="text-align: right;">—</td>
-<td><strong>弱存在</strong>：分析未独立成模块；可能分散在流水/记账侧</td>
-<td>待业务确认入口</td>
+<td>门店支出记账、分类管理、月汇总；统计为 H5</td>
+<td>工作台「支出管理」→ <code>PayHomeActivity</code></td>
 </tr>
 <tr>
 <td>库存管理</td>
@@ -184,7 +186,7 @@ flowchart TB
   WB --> Z[报表经营分析]
   WB --> S[员工管理]
   S --> Sch[排班口径]
-  WB -.-> E[支出弱入口]
+  WB --> E[支出管理]
   P --> K[库存并入价目]
   Cust -.到店关系.-> Appt
   Cust -.选客.-> B
@@ -786,7 +788,7 @@ flowchart TB
 <h4>关键支线</h4>
 <ul>
 <li>现网步骤偏「先选项目再扣卡结账」；前线多条开单体验需求指向 <strong>新版开单（预计 9 月）</strong>。</li>
-<li>散客性别默认等见第四章待确认。</li>
+<li>散客性别默认等见第四章暂不修复。</li>
 <li>支付第三方页（微信/支付宝入口）未画入主图。</li>
 <li>现网推断。</li>
 </ul>
@@ -958,7 +960,7 @@ flowchart TB
 </div>
 <h4>关键支线</h4>
 <ul>
-<li>前线：首页「门店经营/业绩构成/项目排名」跳转期望跟首页改版（待确认）。</li>
+<li>前线：首页「门店经营/业绩构成/项目排名」跳转期望跟首页改版（暂不修复）。</li>
 <li>首页经营分析 Fragment 与报表模块交叉。</li>
 <li>现网推断。</li>
 </ul>
@@ -1093,12 +1095,48 @@ flowchart TB
 </tbody>
 </table>
 <h3>2.11 支出管理</h3>
+<blockquote>
+<p><strong>MuMu 实测</strong>（2026-08-11）：包 <code>com.jiyong.rta.next.debug</code>；入口已在工作台打开「支出管理」。APK 分析模块地图仍无独立「支出」归类，包名实测为 <code>com.rts.rta.paymanage</code>。本次 <strong>未保存/未删除</strong> 任何支出或分类。</p>
+</blockquote>
 <h4>主链路</h4>
-<p>—</p>
+<div class="mermaid">
+%%{init: {'flowchart': {'nodeSpacing': 24, 'rankSpacing': 32, 'padding': 10, 'htmlLabels': true}, 'themeVariables': {'fontSize': '18px', 'fontFamily': 'PingFang SC, Microsoft YaHei, sans-serif'}}}%%
+flowchart TB
+  subgraph laneHome [① 首页汇总]
+    direction LR
+    home[支出管理] --> month[月份筛选]
+    home --> tip[现金类总收款说明]
+    home --> report[门店经营报表]
+    home --> list[支出列表或空态]
+  end
+
+  subgraph laneBook [② 记一笔]
+    direction LR
+    home2[支出管理] --> book[记一笔]
+    book --> cats[分类管理]
+    cats --> addCat[添加分类弹层]
+    book --> confirm[确定记账]
+  end
+
+  subgraph laneStat [③ 看统计]
+    direction LR
+    home3[支出管理] --> stats[支出统计页]
+    stats --> trend[支出趋势]
+    stats --> compose[支出构成]
+  end
+
+  laneHome ~~~ laneBook ~~~ laneStat
+
+</div>
 <h4>关键支线</h4>
 <ul>
-<li>APK 模块地图 <strong>无独立「支出管理」归类</strong>；可能弱入口或并入流水/其他记账。</li>
-<li>对照重构席位保留；待业务确认现网入口后可补链路。</li>
+<li><strong>首页</strong>：月维度切换（前/后一月）；汇总卡「支出」+「现金类总收款」；「?」提示文案为「门店经营 项目、开续卡获得的现金流收入」；列表无数据时空态「暂无数据」。</li>
+<li><strong>记一笔</strong>（<code>PayBookkeepingActivity</code>）：顶栏日期；金额数字键盘 +「确定」；备注「请输入备注」；类型宫格默认含：进货成本、房租、水电、店内支出、奖金、工资发放、餐饮、交通、团建、其它，另有「分类管理」。</li>
+<li><strong>分类管理</strong>（<code>SortManageActivity</code>）：提示「长按拖动可调整位置 点击自定义的分类可删除或编辑」；「添加分类」底栏弹层（选图标 + 名称「不能与已有分类重名，限1~4字」+「确定」/关闭）。</li>
+<li><strong>看统计</strong>：进入 <code>StoreDataStatisticsActivity</code>（H5「web-剑琅管家」），仍标题「支出管理」；含前/后一月、支出 / 现金类总收款 / 结余、支出趋势（年）、支出构成。</li>
+<li><strong>查看门店经营报表</strong>：同 Activity 族 H5，打开「门店经营报表」（数据总览 / 实收分析 / 员工业绩分析 / 卡相关 / 客流分析等），属经营分析交叉入口。</li>
+<li><strong>未进入</strong>：本店当月无支出记录，<strong>列表行详情 / 改删</strong> 未实测；有数据时列表应可点入（推断）。</li>
+<li>对照重构：重构原型另有独立「支出流水」页；现网首页即列表 +「看统计」H5，信息架构不完全同构。</li>
 </ul>
 <h4>页面清单速查</h4>
 <table>
@@ -1110,8 +1148,20 @@ flowchart TB
 </thead>
 <tbody>
 <tr>
-<td>—</td>
-<td>弱/待确认</td>
+<td>PayHomeActivity</td>
+<td>支出管理首页（月汇总 + 列表 + 记一笔/看统计）</td>
+</tr>
+<tr>
+<td>PayBookkeepingActivity</td>
+<td>记一笔（金额 / 类型 / 日期 / 备注）</td>
+</tr>
+<tr>
+<td>SortManageActivity</td>
+<td>分类管理（排序 / 添加分类弹层）</td>
+</tr>
+<tr>
+<td>StoreDataStatisticsActivity</td>
+<td>「看统计」与「门店经营报表」H5 容器（剑琅管家）</td>
 </tr>
 </tbody>
 </table>
@@ -1223,7 +1273,7 @@ flowchart TB
 <hr />
 <h2>四、前线反馈与处理进度</h2>
 <p>来源：前线任务文档（负责人 <strong>薛鼎</strong> · 共 <strong>15</strong> 条）。<br />
-<strong>汇总</strong>：进行中 4 · 待确认 4 · 待开始 1 · 已完成 3 · 已关闭 1 · 暂不修复 2；<strong>待办 9</strong>（进行中+待确认+待开始）；<strong>无延期项</strong>。<br />
+<strong>汇总</strong>：进行中 4 · 待开始 3 · 已完成 3 · 已关闭 1 · 暂不修复 4；<strong>待办 7</strong>（进行中+待开始）；<strong>无延期项</strong>。<br />
 快照非实时看板。</p>
 <h3>4.1 进行中（4）</h3>
 <table>
@@ -1272,7 +1322,7 @@ flowchart TB
 </tr>
 </tbody>
 </table>
-<h3>4.2 待确认（4）</h3>
+<h3>4.2 待开始（3）</h3>
 <table>
 <thead>
 <tr>
@@ -1287,14 +1337,6 @@ flowchart TB
 <tbody>
 <tr>
 <td style="text-align: right;">5</td>
-<td>首页「门店经营/业绩构成/项目排名」跳转业绩板块而非详情页</td>
-<td>销售体验</td>
-<td>需求</td>
-<td>leon：跟首页改版来做</td>
-<td>工作台 / 经营分析</td>
-</tr>
-<tr>
-<td style="text-align: right;">6</td>
 <td>员工业绩提成明细时间模块颜色需要加深</td>
 <td>艾美造型（喜哥）</td>
 <td>优化</td>
@@ -1302,38 +1344,15 @@ flowchart TB
 <td>员工 / 流水</td>
 </tr>
 <tr>
-<td style="text-align: right;">7</td>
-<td>散客大部分为男性但开单默认被选为女性</td>
-<td>艾美造型（喜哥）</td>
-<td>优化</td>
-<td>系统默认女性可手动修改，沿用上次散客性别</td>
-<td>开单 / 客户</td>
-</tr>
-<tr>
-<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
 <td>老板端门店业绩页应可直接点击员工查看业绩提成</td>
 <td>艾美造型（喜哥）</td>
 <td>需求</td>
 <td>如何更方便地看到（待确认方案）</td>
 <td>经营分析 / 员工</td>
 </tr>
-</tbody>
-</table>
-<h3>4.3 待开始（1）</h3>
-<table>
-<thead>
 <tr>
-<th style="text-align: right;">序号</th>
-<th>问题描述</th>
-<th>门店</th>
-<th>类型</th>
-<th>处理进度</th>
-<th>关联模块</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: right;">9</td>
+<td style="text-align: right;">7</td>
 <td>预约成功后店铺增加消息通知功能</td>
 <td>艾美造型（喜哥）</td>
 <td>需求</td>
@@ -1342,7 +1361,7 @@ flowchart TB
 </tr>
 </tbody>
 </table>
-<h3>4.4 已完成（3）</h3>
+<h3>4.3 已完成（3）</h3>
 <table>
 <thead>
 <tr>
@@ -1356,7 +1375,7 @@ flowchart TB
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">8</td>
 <td>会员卡增加项目减金额的设置</td>
 <td>高美丝造型</td>
 <td>需求</td>
@@ -1364,7 +1383,7 @@ flowchart TB
 <td>会员卡</td>
 </tr>
 <tr>
-<td style="text-align: right;">11</td>
+<td style="text-align: right;">9</td>
 <td>项目已添加为卡项后，修改项目名称无法修改</td>
 <td>销售体验</td>
 <td>优化</td>
@@ -1372,7 +1391,7 @@ flowchart TB
 <td>价目 / 会员卡</td>
 </tr>
 <tr>
-<td style="text-align: right;">12</td>
+<td style="text-align: right;">10</td>
 <td>设置项目时选错所属项目大类无法更改</td>
 <td>销售体验</td>
 <td>优化</td>
@@ -1381,7 +1400,7 @@ flowchart TB
 </tr>
 </tbody>
 </table>
-<h3>4.5 已关闭（1）</h3>
+<h3>4.4 已关闭（1）</h3>
 <table>
 <thead>
 <tr>
@@ -1395,7 +1414,7 @@ flowchart TB
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">13</td>
+<td style="text-align: right;">11</td>
 <td>美发师没有优惠券设置功能</td>
 <td>艾美造型（喜哥）</td>
 <td>需求</td>
@@ -1404,7 +1423,7 @@ flowchart TB
 </tr>
 </tbody>
 </table>
-<h3>4.6 暂不修复（2）</h3>
+<h3>4.5 暂不修复（4）</h3>
 <table>
 <thead>
 <tr>
@@ -1417,6 +1436,22 @@ flowchart TB
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align: right;">12</td>
+<td>首页「门店经营/业绩构成/项目排名」跳转业绩板块而非详情页</td>
+<td>销售体验</td>
+<td>需求</td>
+<td>leon：跟首页改版来做</td>
+<td>工作台 / 经营分析</td>
+</tr>
+<tr>
+<td style="text-align: right;">13</td>
+<td>散客大部分为男性但开单默认被选为女性</td>
+<td>艾美造型（喜哥）</td>
+<td>优化</td>
+<td>系统默认女性可手动修改，沿用上次散客性别</td>
+<td>开单 / 客户</td>
+</tr>
 <tr>
 <td style="text-align: right;">14</td>
 <td>优化会员收银系统逻辑，减少开单及签名次数</td>
@@ -1545,10 +1580,10 @@ flowchart TB
 <td>员工管理</td>
 </tr>
 <tr>
-<td>（无独立归类）</td>
+<td>（APK 分析无独立归类 · <code>paymanage</code>）</td>
+<td style="text-align: right;">≥3（MuMu）</td>
 <td style="text-align: right;">—</td>
-<td style="text-align: right;">—</td>
-<td>支出管理（弱）</td>
+<td>支出管理（实测补全）</td>
 </tr>
 <tr>
 <td>商城与联盟 / 店铺与认证 / 登录与开店 等</td>
