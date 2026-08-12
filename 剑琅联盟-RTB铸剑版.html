@@ -77,8 +77,8 @@ a:hover{text-decoration:underline}
 .hero::before{content:"";position:absolute;inset:0;background:
   radial-gradient(520px 260px at 88% -10%,rgba(201,162,95,.16) 0%,transparent 60%),
   radial-gradient(420px 240px at -5% 115%,rgba(255,59,78,.13) 0%,transparent 60%);pointer-events:none}
-.hero__emblem{position:absolute;right:30px;top:50%;transform:translateY(-50%);width:170px;height:170px;opacity:.2;pointer-events:none;display:flex;align-items:center;justify-content:center}
-.hero__emblem img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.hero__bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.hero__bg img{width:100%;height:100%;object-fit:cover;opacity:.32;-webkit-mask-image:linear-gradient(105deg,transparent 0%,rgba(0,0,0,.25) 30%,rgba(0,0,0,.75) 62%,rgba(0,0,0,.9) 100%);mask-image:linear-gradient(105deg,transparent 0%,rgba(0,0,0,.25) 30%,rgba(0,0,0,.75) 62%,rgba(0,0,0,.9) 100%)}
 .hero__kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--serif);font-size:13px;letter-spacing:.32em;color:var(--gold);margin-bottom:14px;position:relative}
 .hero__kicker::before,.hero__kicker::after{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
 .hero__kicker::after{background:linear-gradient(90deg,var(--gold),transparent)}
@@ -103,6 +103,10 @@ a:hover{text-decoration:underline}
 .btn-sec:hover{border-color:var(--gold);color:var(--gold-bright)}
 
 .card{background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+.card-fig{position:relative;overflow:hidden}
+.card-fig > :not(.hero__bg){position:relative;z-index:1}
+.card-fig .hero__bg{z-index:0}
+.card-fig .hero__bg img{opacity:.3}
 .card h2{margin:0 0 8px;font-size:23px;font-family:var(--serif)}
 .card h3{margin:0 0 10px;font-size:16px}
 .muted{color:var(--text-sec);font-size:14px}
@@ -180,6 +184,26 @@ a:hover{text-decoration:underline}
 .finale strong{color:var(--gold-bright);font-family:var(--serif)}
 .finale .quote{color:var(--text-sec)}
 
+/* ── 剑锋所指 · 重构之后 ─────────────── */
+.edge-grid{display:grid;gap:14px}
+.edge{display:grid;grid-template-columns:1fr;gap:10px;padding:18px 20px;border:1px solid var(--border);border-radius:16px;background:var(--card-2);position:relative}
+.edge__tag{position:absolute;top:16px;right:18px;font-size:11px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:999px;color:var(--gold-bright);background:var(--gold-soft);border:1px solid rgba(201,162,95,.4)}
+.edge__head{display:flex;align-items:center;gap:12px}
+.edge__n{font-family:var(--serif);font-size:20px;font-weight:750;color:var(--gold);min-width:46px}
+.edge__title{font-size:19px;font-weight:700;font-family:var(--serif)}
+.edge__gain{font-size:14px;color:var(--gold-bright);font-weight:600;margin-top:2px}
+.edge ul{margin:8px 0 0;padding-left:1.15em}
+.edge li{margin:4px 0;font-size:14px;color:var(--text-sec)}
+.edge li b{color:var(--text)}
+.edge li .wip{color:var(--future);font-weight:650}
+.edge li.ai-item{display:flex;align-items:center;gap:10px;margin-top:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(169,155,255,.35);background:linear-gradient(90deg,rgba(169,155,255,.10),transparent)}
+.edge li.ai-item .ai-thumb{width:34px;height:34px;flex:none;border-radius:10px;overflow:hidden;background:#1b1e2c;border:1px solid rgba(169,155,255,.4);display:grid;place-items:center}
+.edge li.ai-item .ai-thumb img{width:100%;height:100%;object-fit:cover;opacity:.95}
+.edge li.ai-item .ai-thumb::after{content:"";position:absolute;inset:0;border-radius:10px;background:radial-gradient(circle at 50% 50%,transparent 40%,rgba(169,155,255,.25) 100%);pointer-events:none}
+.edge li.ai-item .ai-thumb{position:relative}
+.edge-quote{margin-top:14px;padding:16px 20px;border-radius:14px;background:linear-gradient(135deg,rgba(201,162,95,.12),rgba(201,162,95,.03));border:1px solid rgba(201,162,95,.4)}
+.edge-quote .em{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--gold-bright)}
+
 /* ── 铸剑五炼 ───────────────────────── */
 .forges{display:grid;gap:14px}
 .forge{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:16px 18px;border:1px solid var(--border);border-radius:16px;background:var(--card-2);position:relative}
@@ -226,7 +250,7 @@ body.present-mode .side__label.tech-only{display:none}
   .main{padding:16px}
   .hero{padding:24px 18px}
   .hero h1{font-size:24px;padding-right:0}
-  .hero__emblem{display:none}
+  .hero__bg img{opacity:.22}
 }
 </style>
 </head>
@@ -263,12 +287,12 @@ body.present-mode .side__label.tech-only{display:none}
 
     <section class="panel on" id="panel-cover" data-slide="cover">
       <div class="hero">
-        <div class="hero__emblem" aria-hidden="true">
-          <img src="assets/logo-jl.png" alt="剑琅联盟">
+        <div class="hero__bg" aria-hidden="true">
+          <img src="assets/sword-king.png" alt="">
         </div>
         <div class="hero__kicker">剑琅联盟 · 会议军令</div>
         <h1>铸剑 · 让门店的每一笔经营<br>都有<span class="accent">锋芒</span></h1>
-        <p class="lead">剑琅联盟从名字起就与剑同源——<strong>每一位门店老板，都是持剑之人；我们做的，是为老板铸剑。</strong>
+        <p class="lead">剑琅联盟从名字起就与剑同源——<strong>每一位门店店主，都是持剑之人；我们做的，是为店主铸剑。</strong>
           今天不讲功能清单，Danny，请检阅两把剑：现网这把，<strong>已经出鞘能战</strong>；炉中这把绝世神兵，<strong>正在五炼之中</strong>。</p>
         <div class="beats">
           <div class="beat"><div class="beat__n">01 · 剑已出鞘</div><div class="beat__t">现网六大战役全闭环</div><div class="beat__d">入驻、接待、收银、员工、库存、看数——门店今日即可开工</div></div>
@@ -290,7 +314,10 @@ body.present-mode .side__label.tech-only{display:none}
     </section>
 
     <section class="panel" id="panel-roles" data-slide="roles">
-      <div class="card">
+      <div class="card card-fig">
+        <div class="hero__bg" aria-hidden="true">
+          <img src="assets/army-formation.png" alt="">
+        </div>
         <h2>军阵 · 主帅与先锋</h2>
         <p class="muted">主帅（店主）调兵布阵、执掌全局；先锋（店员）前线接敌、完成收银。分工不是能力缺失，是阵法本应如此。</p>
         <div class="perm-grid">
@@ -329,7 +356,7 @@ body.present-mode .side__label.tech-only{display:none}
         <span class="sect-sub">铸剑五炼</span>
         <h2>从好钢到绝世神兵</h2>
         <p class="muted">一柄绝世宝剑，必经选矿、熔炉、锻打、淬火、开刃五道工序。RTB 重构正是同一炉火。<br>
-        <strong style="color:var(--gold-bright)">铸剑的是我们，持剑的是老板——老板出剑，我们护剑。</strong></p>
+        <strong style="color:var(--gold-bright)">铸剑的是我们，持剑的是店主——店主出剑，我们护剑。</strong></p>
         <div class="forges">
           <div class="forge on">
             <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M6 3h12l3 5-9 12L3 8l3-5z"/><path d="M3 8h18"/><path d="M12 20L9 8l3-5 3 5-3 12"/></svg></div>
@@ -355,14 +382,14 @@ body.present-mode .side__label.tech-only{display:none}
               <div class="forge__quote">千度熔炼，杂质成渣，铁骨合一。重构把各模块放进<strong>同一座熔炉</strong>，语义与数据不再各说各话。</div>
               <ul>
                 <li><b>权益能力模型打通</b>：价目（项目/产品）→ 会员卡权益组合 → 开单扣减/办卡，同一套能力语义</li>
-                <li><b>演示数据同源</b>：卡 / 价目 / 开单 / 员工 / 支出共用演示池，联调演示一致</li>
-                <li><b>设计规范对齐</b>：视觉与组件跟随剑琅联盟设计规范，手机框交付</li>
-                <li><b>深链可测</b>：FLOW 地图节点均可 <code>?flow=</code> 直达，评审与截图直达</li>
+                <li><b>配置即生效 · 全店协同</b>：店主改价、调卡、调库存，前台开单即时生效；主帅配置、先锋执行，店里各角色经由 RTB 协作顺畅</li>
+                <li><b>体验一致</b>：UI 与交互风格统一，操作路径一致，界面整洁、用起来顺畅顺手</li>
+                <li><b>多端一致</b>：门店 / 商城 / 自助收银同一套价目与卡权益，会员任一入口所见一致</li>
               </ul>
             </div>
           </div>
           <div class="forge on">
-            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M3 18h18"/><path d="M7 18v-4h10v4"/><path d="M9 14V7h6v7"/><path d="M15 4l4 4-5 1-3-3 4-2z"/></svg></div>
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M8.5 8 4.5 4"/><path d="M8.5 8h7"/><path d="M8.5 8 6 20h12l-2.5-12"/><path d="M4.5 20h15"/></svg></div>
             <div>
               <div class="forge__status done">已铸成</div>
               <div class="forge__head"><span class="forge__n">第三炼</span><span class="forge__name">锻打 · 铸骨成型</span></div>
@@ -394,7 +421,7 @@ body.present-mode .side__label.tech-only{display:none}
             </div>
           </div>
           <div class="forge">
-            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M6 20l9-9"/><path d="M12 8l4 4-2 2-4-4 2-2z"/><path d="M8 14l4 4"/><path d="M13 5l6-2-2 6-4-4z"/><path d="M5 21l4-1-1-3-4 1 1 3z"/></svg></div>
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M12 2c.9 5.4 2.6 7.1 8 8-5.4.9-7.1 2.6-8 8-.9-5.4-2.6-7.1-8-8 5.4-.9 7.1-2.6 8-8z"/><path d="M19.5 3.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2z"/><path d="M5 18.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6z"/></svg></div>
             <div>
               <div class="forge__status wip">淬刃在途</div>
               <div class="forge__head"><span class="forge__n">第五炼</span><span class="forge__name">开刃 · 锋芒初现</span></div>
@@ -402,7 +429,7 @@ body.present-mode .side__label.tech-only{display:none}
               <ul>
                 <li><b>AI 助手 · 存量数据快速准确导入（研发中）</b>——降低上线与迁店成本，让数据就位更快</li>
                 <li><b>待铸部件</b>：客户管理、预约管理、优惠券管理、员工排班（当前为占位）</li>
-                <li>开单路径更短、预约与开单心智一体、价目库存结构更清晰、老板端业绩下钻更直达</li>
+                <li>开单路径更短、预约与开单心智一体、价目库存结构更清晰、店主端业绩下钻更直达</li>
               </ul>
             </div>
           </div>
@@ -511,27 +538,72 @@ body.present-mode .side__label.tech-only{display:none}
       <div class="card" id="caseRoot"></div>
     </section>
 
+    <section class="panel" id="panel-edge" data-slide="edge">
+      <div class="card">
+        <span class="sect-sub">剑锋所指</span>
+        <h2>重构之后 · 这把剑能带来什么</h2>
+        <p class="muted">铸剑五炼讲了怎么铸，这页讲<strong style="color:var(--gold-bright)">铸成之后店主拿到什么</strong>。三个锋芒，笔笔都是经营账。</p>
+        <div class="edge-grid">
+          <div class="edge">
+            <div class="edge__tag">第一锋芒 · 更快</div>
+            <div class="edge__head"><span class="edge__n">壹</span><div><div class="edge__title">前线更快 · 高峰不排队</div><div class="edge__gain">把店员的时间，还给顾客</div></div></div>
+            <ul>
+              <li><b>开单主链路更短</b>：选客 → 点单 → 结算 → 分账一步到底，权益与人工打折同屏完成</li>
+              <li><b>预约与到店、开单心智一体</b>：约得到、接得住、收得齐，不再来回切换入口</li>
+              <li class="ai-item"><span class="ai-thumb"><img src="assets/ai-bot.png" alt="AI 助手"></span><span><b class="wip">AI 助手 · 存量数据快速准确导入（研发中）</b>：上线与迁店的数据就位不再折腾，后手还有这张牌</span></li>
+            </ul>
+          </div>
+          <div class="edge">
+            <div class="edge__tag">第二锋芒 · 更清</div>
+            <div class="edge__head"><span class="edge__n">贰</span><div><div class="edge__title">经营更清 · 一笔账看得透</div><div class="edge__gain">赚多少、花哪了、谁干得好，一眼见底</div></div></div>
+            <ul>
+              <li><b>经营分析一体感</b>：门店 / 商城 / 自助报表聚合，资金构成可钻取</li>
+              <li><b>店主端业绩下钻更直达</b>：从整体一路看到员工个人，人效清清楚楚</li>
+              <li><b>提成明细逐条展示 + 员工确认制</b>：改数须填原因，员工同意才入账，月底对账省心</li>
+            </ul>
+          </div>
+          <div class="edge">
+            <div class="edge__tag">第三锋芒 · 更活</div>
+            <div class="edge__head"><span class="edge__n">叁</span><div><div class="edge__title">组合更活 · 别人做不出的卡</div><div class="edge__gain">权益自己配，竞争有差异</div></div></div>
+            <ul>
+              <li><b>会员卡权益组合建模</b>：面值 / 项目 / 产品 / 折扣自由搭配，配出旧体系做不出的组合卡</li>
+              <li><b>价目与库存结构更清晰</b>：可售卖与项目消耗分开管理；库存付费升级后入出库、规格、调拨齐备</li>
+              <li><b>员工排班落地</b>：班次出勤安排，支撑预约到店，把人排到该在的位置</li>
+            </ul>
+          </div>
+        </div>
+        <div class="edge-quote">
+          <span class="em">重构不是翻新——是让这把剑，配得上店主的事业版图。</span>
+          <div class="muted" style="margin-top:6px">现网已能战，重构让它更锋利；AI 与余下部件在炉，值得期待。</div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-main" data-go="close">检阅授剑</button>
+          <button type="button" class="btn-sec" data-go="march">回顾行军图</button>
+        </div>
+      </div>
+      <p class="foot tech-only">价值来源：《RTB产品重构计划概览》三、四章。AI 导入为研发中能力，不以上线状态表述。</p>
+    </section>
+
     <section class="panel" id="panel-close" data-slide="close">
       <div class="card">
         <h2>授剑 · 亮剑出鞘</h2>
-        <p class="muted">六大战役皆告捷，两把剑交付 Danny 检阅：一把今天就能让门店开战，一把绝世神兵正为你而炼。</p>
+        <p class="muted">六大战役皆告捷，两把剑在此检阅：一把今天就能让门店开战，一把绝世神兵正在炉中淬炼。</p>
         <div class="close-grid" id="closeChecks"></div>
-        <h3 style="margin-top:8px">战后整训 · 铸剑余工（打造更完美 RTB）</h3>
+        <h3 style="margin-top:8px">战后整训 · 铸剑余工</h3>
         <ul class="up-list">
           <li class="hi"><strong class="future">AI 助手 · 存量数据快速准确导入（研发中）</strong> — 降低上线与迁店成本，让选择 RTB 后的数据就位更快。</li>
-          <li>开单路径更短：选客 / 选卡 / 点单更顺滑，缩短前线操作步数。</li>
-          <li>预约与到店、开单心智更一体；预约成功通知等体验补强。</li>
-          <li>价目与库存结构更清晰：可售卖与项目消耗管理更直观。</li>
-          <li>经营分析一体感与老板端业绩下钻更直达；支出与报表衔接更顺。</li>
+          <li>更快 · 更清 · 更活——重构三大锋芒，详见「<strong>剑锋所指</strong>」。</li>
+          <li>预约与到店、开单心智一体；经营分析一体感与店主端业绩下钻更直达。</li>
         </ul>
         <div class="finale">
           <img class="finale__logo" src="assets/logo-jl.png" alt="剑琅联盟 logo">
-          <div class="quote">此剑已为 Danny 出鞘——能战；</div>
-          <strong>绝世神兵，正为你而炼。</strong>
-          <div class="quote" style="margin-top:6px">老板持剑，我们铸剑。Danny，今天的 RTB 已能支撑门店把经营做起来；我们正沿着铸剑五炼的路，把它磨成真正配得上你的绝世宝剑。</div>
+          <div class="quote">此剑已出鞘——能战；</div>
+          <strong>绝世神兵，正在炉中。</strong>
+          <div class="quote" style="margin-top:6px">店主持剑，我们铸剑。今天的 RTB 已能支撑门店把经营做起来；我们正沿着铸剑五炼的路，把它磨成配得上每一位店主的绝世宝剑。</div>
         </div>
         <div class="hero-actions">
           <button type="button" class="btn-sec" data-go="cover">返回军令状</button>
+          <button type="button" class="btn-sec" data-go="edge">剑锋所指 · 重构价值</button>
           <button type="button" class="btn-sec" data-go="forge">再看铸剑五炼</button>
           <a class="btn-sec" href="RTB产品重构计划概览.html">查看重构计划概览</a>
         </div>
@@ -592,7 +664,7 @@ body.present-mode .side__label.tech-only{display:none}
     {
       id: 'F1', group: 'F', role: 'owner', roleLabel: '店主',
       title: '选择 RTB 后，把店里已有数据就位并开工',
-      story: '新店或迁店老板决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。',
+      story: '新店或迁店店主决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。',
       proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。',
       mermaid: "flowchart LR\n  choose[选择使用RTB] --> openShop[登录开店]\n  openShop --> wb[进入工作台]\n  wb --> price[录入价目表]\n  wb --> cards[配置会员卡]\n  wb --> coupon[配置优惠券]\n  wb --> cust[录入客户员工]\n  price --> ready[数据就位可开工]\n  cards --> ready\n  coupon --> ready\n  cust --> ready\n  ready -.-> ai[AI助手快速导入]",
       steps: [
@@ -673,7 +745,7 @@ body.present-mode .side__label.tech-only{display:none}
         { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
       ],
       upgrades: [
-        '现网可完成新人上线配置；后续排班可更显式、老板看提成下钻更直达。',
+        '现网可完成新人上线配置；后续排班可更显式、店主看提成下钻更直达。',
         '月末核提成可结合流水与经营分析场景一起看。'
       ]
     },
@@ -706,7 +778,7 @@ body.present-mode .side__label.tech-only{display:none}
         { icon: 'pay', mod: '支出与结余', act: '记支出并看统计 / 门店经营报表', desc: '资金侧与经营侧对照。', shot: '20-expense-book', shotLabel: '支出 · 记一笔' }
       ],
       upgrades: [
-        '现网数据能力完整可用；后续经营分析一体感、老板端业绩下钻会更直达。',
+        '现网数据能力完整可用；后续经营分析一体感、店主端业绩下钻会更直达。',
         '支出统计与经营报表的衔接可继续做「更好用」。'
       ]
     },
@@ -758,7 +830,7 @@ body.present-mode .side__label.tech-only{display:none}
     }
   ];
 
-  var SLIDES = ['cover', 'roles', 'forge', 'march'].concat(CASES.map(function (c) { return c.id; })).concat(['close']);
+  var SLIDES = ['cover', 'roles', 'forge', 'march'].concat(CASES.map(function (c) { return c.id; })).concat(['edge', 'close']);
   var state = { slide: 'cover', filter: 'all', mermaidReady: false };
 
   function roleBadge(role, label) {
@@ -782,6 +854,7 @@ body.present-mode .side__label.tech-only{display:none}
       });
       html += '</div>';
     });
+    html += itemBtn('edge', null, '剑锋所指 · 重构之后', '三大锋芒');
     html += itemBtn('close', null, '授剑 · 亮剑出鞘', '更完美的 RTB');
     root.innerHTML = html;
     root.querySelectorAll('[data-go]').forEach(function (el) {
@@ -897,7 +970,7 @@ body.present-mode .side__label.tech-only{display:none}
 
   function showPanel(name) {
     document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
-    if (name === 'cover' || name === 'roles' || name === 'forge' || name === 'march' || name === 'close') {
+    if (name === 'cover' || name === 'roles' || name === 'forge' || name === 'march' || name === 'edge' || name === 'close') {
       document.getElementById('panel-' + name).classList.add('on');
     } else {
       document.getElementById('panel-case').classList.add('on');
@@ -907,7 +980,7 @@ body.present-mode .side__label.tech-only{display:none}
   function go(id) {
     if (id === 'case') id = 'F1';
     state.slide = id;
-    if (id === 'cover' || id === 'roles' || id === 'forge' || id === 'march' || id === 'close') {
+    if (id === 'cover' || id === 'roles' || id === 'forge' || id === 'march' || id === 'edge' || id === 'close') {
       showPanel(id);
       if (id === 'close') renderCloseChecks();
     } else {
@@ -1003,8 +1076,10 @@ body.present-mode .side__label.tech-only{display:none}
   });
 
   function goFromHash() {
+    var q = new URLSearchParams(location.search).get('slide');
     var h = (location.hash || '').replace(/^#\/?/, '');
-    if (h && SLIDES.indexOf(h) >= 0) go(h);
+    var id = (q || h || '').replace(/[^a-zA-Z0-9_-]/g, '');
+    if (id && SLIDES.indexOf(id) >= 0) go(id);
   }
 
   initMermaid();

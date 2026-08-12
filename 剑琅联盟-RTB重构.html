@@ -5334,11 +5334,25 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-comm-sum {
   margin: 0 16px 12px; padding: 14px 16px 16px; background: #fff; border-radius: 12px;
+  position: relative; overflow: hidden;
+}
+.emp-comm-sum::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; background: linear-gradient(180deg, #E8C07D, #C4A484);
 }
 .emp-comm-sum__head {
-  display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
 }
-.emp-comm-sum__title { font-size: 14px; font-weight: 500; color: var(--text); }
+.emp-comm-sum__head-left {
+  display: inline-flex; align-items: center; gap: 8px; min-width: 0;
+}
+.emp-comm-sum__badge {
+  flex-shrink: 0; display: inline-flex; align-items: center; height: 20px;
+  padding: 0 8px; border-radius: 10px;
+  background: linear-gradient(90deg, #E8C07D, #C4A484); color: #fff;
+  font-size: 11px; font-weight: 600; line-height: 20px; letter-spacing: .5px;
+}
+.emp-comm-sum__title { font-size: 14px; font-weight: 600; color: var(--text); }
 .emp-comm-sum__unit { font-size: 12px; color: var(--text-sec); }
 .emp-comm-sum__block + .emp-comm-sum__block { margin-top: 16px; }
 .emp-comm-sum__label-row {
@@ -5382,11 +5396,27 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-comm-day { margin: 0 16px 16px; }
 .emp-comm-day__head {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  flex-wrap: wrap; row-gap: 6px;
   padding: 8px 2px 10px; font-size: 13px; color: var(--text);
 }
+.emp-comm-day__date-pill {
+  flex-shrink: 0; display: inline-flex; align-items: center;
+  height: 26px; padding: 0 10px; border-radius: 13px;
+  background: #F2F2F2; font-size: 12px; font-weight: 600; color: var(--text);
+  letter-spacing: .3px;
+}
+.emp-comm-day__head-label {
+  display: inline-flex; align-items: center; gap: 8px; min-width: 0;
+}
+.emp-comm-day__head-total {
+  font-size: 12px; color: var(--text-sec); white-space: nowrap;
+}
+.emp-comm-day__head-total .emp-num { font-size: 13px; }
 .emp-comm-day__head-metrics {
   display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-sec);
+  flex-shrink: 0; min-width: 0;
 }
+.emp-comm-day__head-metrics .emp-comm-day__pending { margin-left: 2px; }
 .emp-comm-day__metric { display: inline-flex; align-items: center; gap: 6px; }
 .emp-comm-day__metric .emp-num { color: var(--text); font-size: 13px; }
 .emp-comm-order {
@@ -5472,7 +5502,10 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   padding: 6px 8px; background: #FFF8F0; border-radius: 8px;
 }
 .emp-comm-day__pending {
-  margin-left: 6px; font-size: 11px; color: #E37318; font-weight: 500;
+  flex-shrink: 0; display: inline-flex; align-items: center;
+  height: 20px; padding: 0 8px; border-radius: 10px;
+  background: #FFF3E8; color: #E37318;
+  font-size: 11px; font-weight: 500; line-height: 20px; white-space: nowrap;
 }
 .emp-comm-sum__pending-tip {
   margin-top: 10px; font-size: 12px; color: #E37318; line-height: 18px;
@@ -34513,8 +34546,9 @@ function billingNav(fn) {
     }
     var pendingCount = data.pendingCount || 0;
     var sumTitle = scopeIsDay
-      ? (formatCommDayShort(state.commDetailDay) + ' 合计')
-      : (periodLabel(mk) + ' 合计');
+      ? (formatCommDayShort(state.commDetailDay) + ' 当日合计')
+      : (isCustomPeriodKey(mk) ? '本期业绩汇总' : '本月业绩汇总');
+    var sumBadge = scopeIsDay ? '' : (isCustomPeriodKey(mk) ? '本期汇总' : '本月汇总');
     var trendAch = scopeIsDay ? '' : empTrendHtml(achTotal, prev.ach);
     var trendComm = scopeIsDay ? '' : empTrendHtml(commTotal, prev.comm);
     var channelsAch = scopeIsDay ? '' : renderChannelsHtml(data.ach);
@@ -34536,20 +34570,21 @@ function billingNav(fn) {
       return '<button type="button" class="emp-comm-filter__chip' + (filter === f.id ? ' is-on' : '') +
         '" data-comm-filter="' + f.id + '">' + f.label + n + '</button>';
     }).join('') + '</div>';
-    var viewerHtml = state.commDetailViewer === 'staff'
-      ? '<div class="emp-comm-viewer-bar is-staff">员工视角：仅可同意/驳回待确认调整，不能直接改数</div>'
-      : '<div class="emp-comm-viewer-bar">店主视角：点条目可调整；提交后需员工同意才生效</div>';
     var daysHtml = days.map(function (day) {
       var pendingTip = day.pendingCount
         ? '<span class="emp-comm-day__pending">' + day.pendingCount + ' 条待确认</span>'
         : '';
       var linesHtml = day.lines.map(renderCommLineCard).join('');
       return '<div class="emp-comm-day">' +
-        '<div class="emp-comm-day__head"><span>' + esc(formatCommDayListHead(day.ymd)) + ' 合计 (元)' + pendingTip + '</span>' +
+        '<div class="emp-comm-day__head">' +
+        '<span class="emp-comm-day__head-label">' +
+        '<span class="emp-comm-day__date-pill">' + esc(formatCommDayListHead(day.ymd)) + '</span>' +
+        '<span class="emp-comm-day__head-total">当日合计 (元)</span>' +
+        '</span>' +
         '<span class="emp-comm-day__head-metrics">' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#C4A484"></span>业绩：<span class="emp-num">' + fmtMoney(day.ach) + '</span></span>' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#7FA8A0"></span>提成：<span class="emp-num">' + fmtMoney(day.comm) + '</span></span>' +
-        '</span></div>' + linesHtml + '</div>';
+        pendingTip + '</span></div>' + linesHtml + '</div>';
     }).join('');
     if (!daysHtml) {
       var emptyMsg = filter === 'pending' ? '暂无待确认调整'
@@ -34571,9 +34606,12 @@ function billingNav(fn) {
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>' +
       '<button type="button" class="emp-comm-detail-date__nav" id="empCommDetailNext" aria-label="下一有数据日"' + (nav.canNext ? '' : ' disabled') + '>' + chevR + '</button>' +
       '</div></div>' +
-      viewerHtml + filterHtml +
+      filterHtml +
       '<div class="emp-comm-sum">' +
-      '<div class="emp-comm-sum__head"><span class="emp-comm-sum__title">' + esc(sumTitle) + '</span><span class="emp-comm-sum__unit">(单位：元)</span></div>' +
+      '<div class="emp-comm-sum__head"><span class="emp-comm-sum__head-left">' +
+      (sumBadge ? '<span class="emp-comm-sum__badge">' + esc(sumBadge) + '</span>' : '') +
+      '<span class="emp-comm-sum__title">' + esc(sumTitle) + '</span></span>' +
+      '<span class="emp-comm-sum__unit">(单位：元)</span></div>' +
       '<div class="emp-comm-sum__block"><div class="emp-comm-sum__label-row">' +
       '<span class="emp-comm-sum__label"><span class="emp-comm-sum__bar emp-comm-sum__bar--ach"></span>业绩：</span>' +
       '<span class="emp-comm-sum__amt-wrap"><span class="emp-comm-sum__amt">' + fmtMoney(achTotal) + '</span>' +

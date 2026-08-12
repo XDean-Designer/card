@@ -14,6 +14,7 @@ proto_*.png
 *_help.png
 *_indep.png
 *_linked.png
+_ref_*.png
 *.backup.png
 
 # 调试脚本与临时数据
