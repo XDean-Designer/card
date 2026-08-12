@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SAMPLE · 记账单行 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/surface"
+    android:padding="@dimen/space_12"
+    android:layout_marginBottom="@dimen/space_8">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+        <TextView android:id="@+id/tv_card" style="@style/Text.Body" android:layout_width="0dp" android:layout_weight="1" android:textColor="@color/slip_no_card" android:text="未选卡" />
+        <ImageButton android:id="@+id/btn_del" android:layout_width="32dp" android:layout_height="32dp" android:background="@android:color/transparent" android:tint="@color/trash" android:contentDescription="删除记账单" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/lines" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+        <TextView style="@style/Text.Secondary" android:layout_width="0dp" android:layout_weight="1" android:text="共 N 项" />
+        <TextView android:id="@+id/tv_total" style="@style/Text.Amount" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

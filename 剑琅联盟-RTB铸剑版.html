@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>剑琅联盟 · RTB 铸剑版 · 会议讲解</title>
+<script src="assets/vendor/mermaid.min.js"></script>
+<style>
+:root{
+  --brand:#ff3b4e; --brand-deep:#c41e2e; --brand-soft:rgba(255,59,78,.14);
+  --gold:#c9a25f; --gold-bright:#e6c284; --gold-deep:#8a6a33; --gold-soft:rgba(201,162,95,.15);
+  --steel:#93a3b8; --steel-soft:rgba(147,163,184,.13);
+  --text:#ece9e1; --text-sec:#b0b3bc; --muted:#7a7f8b;
+  --border:#2b2f3a; --border-strong:#3d4352;
+  --bg:#0e1015; --bg-deep:#090b0f; --card:#161a23; --card-2:#1b202b;
+  --owner:#7fa7ff; --clerk:#53c9a8; --both:#a99bff;
+  --ok:#4ecb8a; --ok-bg:rgba(78,203,138,.13);
+  --up:#e6b95c; --up-bg:rgba(230,185,92,.1);
+  --future:#a99bff;
+  --shadow:0 14px 44px rgba(0,0,0,.5);
+  --radius:16px;
+  --font:"PingFang SC","Microsoft YaHei",sans-serif;
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:var(--font);color:var(--text);background:
+  radial-gradient(1100px 520px at 8% -12%,rgba(255,59,78,.13) 0%,transparent 55%),
+  radial-gradient(1000px 500px at 100% -8%,rgba(201,162,95,.09) 0%,transparent 50%),
+  var(--bg);line-height:1.55}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--gold-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-columns:300px 1fr;grid-template-rows:auto 1fr;height:100vh;min-height:560px}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:10px 18px;background:rgba(14,16,21,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:30}
+.topbar__brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text)}
+.topbar__brand .mark{height:30px;width:auto;border-radius:6px;background:transparent;box-shadow:none;object-fit:contain}
+.topbar__hint{font-size:12px;color:var(--text-sec);font-weight:400;margin-left:4px}
+.topbar__actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tb-btn{height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--border);background:#151922;font-size:13px;font-weight:500;color:var(--text)}
+.tb-btn:hover{border-color:var(--border-strong)}
+.tb-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.tb-btn.ghost-link{text-decoration:none;display:inline-flex;align-items:center}
+.tb-nav{display:flex;gap:6px}
+.tb-nav .tb-btn{min-width:36px;padding:0 10px}
+
+.side{border-right:1px solid var(--border);background:rgba(13,15,20,.82);backdrop-filter:blur(8px);overflow:auto;padding:14px 12px 28px}
+.side__label{font-size:11px;font-weight:650;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin:12px 8px 8px}
+.side__filters{display:flex;gap:6px;padding:0 4px 10px;flex-wrap:wrap}
+.chip{height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:#151922;font-size:12px;color:var(--text-sec)}
+.chip:hover{border-color:var(--border-strong)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#201507}
+.nav-group{margin-bottom:10px}
+.nav-group__title{font-size:12px;font-weight:650;color:var(--text-sec);padding:6px 8px;display:flex;align-items:center;gap:6px}
+.nav-group__title::before{content:"";width:12px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.nav-item{display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;padding:10px 10px;border:1px solid transparent;
+  border-radius:12px;background:transparent;margin-bottom:4px;color:var(--text)}
+.nav-item:hover{background:rgba(255,255,255,.04);border-color:var(--border)}
+.nav-item.on{background:linear-gradient(180deg,rgba(201,162,95,.14),rgba(201,162,95,.05));border-color:rgba(201,162,95,.35);box-shadow:var(--shadow)}
+.nav-item__id{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--gold);min-width:28px}
+.nav-item__body{min-width:0}
+.nav-item__title{font-size:13px;font-weight:600;line-height:1.35}
+.nav-item__meta{font-size:11px;color:var(--muted);margin-top:2px}
+.badge{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:6px;font-size:10px;font-weight:650}
+.badge-owner{background:rgba(127,167,255,.16);color:var(--owner)}
+.badge-clerk{background:rgba(83,201,168,.15);color:var(--clerk)}
+.badge-both{background:rgba(169,155,255,.16);color:var(--both)}
+.badge-war{background:var(--gold-soft);color:var(--gold-bright);height:20px;padding:0 8px}
+
+.main{overflow:auto;padding:22px 28px 48px}
+.panel{display:none;max-width:1120px;margin:0 auto}
+.panel.on{display:block}
+
+.hero{background:linear-gradient(155deg,#151922 0%,#14161f 40%,#171421 70%,#151922 100%);
+  border:1px solid var(--border-strong);border-radius:22px;padding:38px 40px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(520px 260px at 88% -10%,rgba(201,162,95,.16) 0%,transparent 60%),
+  radial-gradient(420px 240px at -5% 115%,rgba(255,59,78,.13) 0%,transparent 60%);pointer-events:none}
+.hero__emblem{position:absolute;right:30px;top:50%;transform:translateY(-50%);width:170px;height:170px;opacity:.2;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.hero__emblem img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5))}
+.hero__kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--serif);font-size:13px;letter-spacing:.32em;color:var(--gold);margin-bottom:14px;position:relative}
+.hero__kicker::before,.hero__kicker::after{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.hero__kicker::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.hero h1{margin:0 0 12px;font-size:34px;line-height:1.28;letter-spacing:.01em;font-family:var(--serif);font-weight:700;position:relative;padding-right:170px}
+.hero h1 .accent{color:var(--gold-bright)}
+.hero .lead{font-size:16px;color:var(--text-sec);margin:0 0 22px;max-width:46em;position:relative}
+.hero .lead strong{color:var(--gold-bright)}
+.beats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 22px;position:relative}
+.beat{background:rgba(22,26,35,.85);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.beat__n{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:4px;font-family:var(--serif);letter-spacing:.1em}
+.beat__t{font-size:15px;font-weight:650;margin-bottom:4px}
+.beat__d{font-size:13px;color:var(--text-sec)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative}
+.stat{background:rgba(22,26,35,.85);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.stat__v{font-size:28px;font-weight:750;color:var(--gold-bright);font-family:var(--serif)}
+.stat__l{font-size:12px;color:var(--muted);margin-top:2px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;position:relative}
+.btn-main{height:42px;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#ff5a68,var(--brand));
+  color:#fff;font-size:14px;font-weight:650;box-shadow:0 8px 20px rgba(243,47,65,.35)}
+.btn-main:hover{filter:brightness(1.06)}
+.btn-sec{height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--border-strong);background:#151922;font-size:14px;font-weight:600;color:var(--text);display:inline-flex;align-items:center}
+.btn-sec:hover{border-color:var(--gold);color:var(--gold-bright)}
+
+.card{background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h2{margin:0 0 8px;font-size:23px;font-family:var(--serif)}
+.card h3{margin:0 0 10px;font-size:16px}
+.muted{color:var(--text-sec);font-size:14px}
+.sect-sub{font-family:var(--serif);letter-spacing:.24em;color:var(--gold);font-size:12px;margin-bottom:6px;display:block}
+.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.perm-col{border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(180deg,var(--card-2),#141820)}
+.perm-col h3{display:flex;align-items:center;gap:8px;font-size:15px}
+.perm-list{list-style:none;margin:0;padding:0}
+.perm-list li{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.07);font-size:13px}
+.perm-list li:last-child{border-bottom:none}
+.dot-on,.dot-off{width:16px;height:16px;border-radius:50%;flex:0 0 auto;margin-top:2px}
+.dot-on{background:var(--ok-bg);box-shadow:inset 0 0 0 1.5px var(--ok)}
+.dot-off{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1.5px var(--border-strong)}
+.note-box{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--brand-soft);border:1px solid rgba(255,59,78,.3);font-size:13px;color:var(--text-sec)}
+.note-box strong{color:var(--text)}
+
+.war-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding:10px 14px;border-radius:12px;
+  background:linear-gradient(90deg,rgba(201,162,95,.14),rgba(201,162,95,.03));border:1px solid rgba(201,162,95,.32)}
+.war-strip__n{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--gold-bright)}
+.war-strip__name{font-size:13px;font-weight:650;color:var(--text)}
+.war-strip__state{margin-left:auto;font-size:12px;font-weight:650;color:var(--ok)}
+.case-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
+.case-head h2{margin:0;font-size:22px;line-height:1.3;font-family:var(--serif)}
+.case-tags{display:flex;gap:8px;flex-wrap:wrap}
+.proof{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:var(--ok-bg);
+  border:1px solid rgba(78,203,138,.35);margin-bottom:16px}
+.proof__badge{flex:0 0 auto;background:linear-gradient(180deg,#57d795,var(--ok));color:#0a1f14;font-size:12px;font-weight:750;padding:4px 10px;border-radius:999px}
+.proof__text{font-size:15px;font-weight:600;line-height:1.45}
+.story{font-size:15px;color:var(--text-sec);margin:0 0 16px}
+
+.flow-wrap{border:1px solid var(--border);border-radius:14px;background:#10131a;padding:12px 8px;margin-bottom:16px;overflow:auto}
+.mermaid{text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+
+.steps{display:grid;gap:10px;margin-bottom:16px}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--card-2)}
+.step__icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(160deg,#20242f,#171b24);border:1px solid var(--border-strong)}
+.step__icon svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.step__mod{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.step__act{font-size:14px;font-weight:600}
+.step__desc{font-size:13px;color:var(--text-sec);margin-top:2px}
+.step__foot{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.shot-btn{height:28px;padding:0 10px;border-radius:8px;border:1px solid rgba(255,59,78,.45);background:var(--brand-soft);
+  color:#ff8a96;font-size:12px;font-weight:650}
+.shot-btn:hover{border-color:var(--brand);background:rgba(255,59,78,.22);color:#ffb3ba}
+.shot-btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+.lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(5,6,9,.78);backdrop-filter:blur(6px)}
+.lightbox.on{display:flex}
+.lightbox__panel{position:relative;max-width:min(420px,92vw);max-height:92vh;background:#10131a;border:1px solid var(--border-strong);border-radius:18px;
+  box-shadow:0 24px 64px rgba(0,0,0,.55);padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.lightbox__cap{font-size:13px;font-weight:650;color:var(--text);text-align:center;padding:0 28px}
+.lightbox__img{display:block;width:100%;max-height:calc(92vh - 72px);object-fit:contain;border-radius:12px;
+  background:#0b0d12;border:1px solid var(--border)}
+.lightbox__close{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:10px;border:1px solid var(--border-strong);
+  background:#151922;font-size:18px;line-height:1;color:var(--text-sec)}
+.lightbox__close:hover{color:var(--text);border-color:var(--gold)}
+
+.upgrade{border:1px solid rgba(230,185,92,.4);background:var(--up-bg);border-radius:14px;padding:14px 16px}
+.upgrade__title{font-size:13px;font-weight:750;color:var(--up);margin-bottom:8px}
+.upgrade ul{margin:0;padding-left:1.15em}
+.upgrade li{margin:4px 0;font-size:14px;color:var(--text-sec)}
+.upgrade .future{color:var(--future);font-weight:650}
+
+.close-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.check{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card-2)}
+.check__ok{width:22px;height:22px;border-radius:50%;background:var(--ok);color:#0a1f14;display:grid;place-items:center;font-size:12px;font-weight:700;flex:0 0 auto}
+.up-list{margin:0;padding:0;list-style:none}
+.up-list li{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card-2);margin-bottom:8px;font-size:14px}
+.up-list li.hi{border-color:rgba(169,155,255,.45);background:linear-gradient(180deg,rgba(169,155,255,.1),transparent);box-shadow:0 4px 14px rgba(107,92,255,.1)}
+.finale{margin-top:18px;padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,#1a1510,#241d12);border:1px solid rgba(201,162,95,.45)}
+.finale__logo{height:52px;width:auto;object-fit:contain;margin:0 0 14px;filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
+.finale strong{color:var(--gold-bright);font-family:var(--serif)}
+.finale .quote{color:var(--text-sec)}
+
+/* ── 铸剑五炼 ───────────────────────── */
+.forges{display:grid;gap:14px}
+.forge{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:16px 18px;border:1px solid var(--border);border-radius:16px;background:var(--card-2);position:relative}
+.forge.on{border-color:rgba(201,162,95,.45);background:linear-gradient(180deg,rgba(201,162,95,.08),var(--card-2))}
+.forge__icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(160deg,#232838,#191d27);border:1px solid var(--border-strong)}
+.forge__icon svg{width:28px;height:28px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.forge__head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.forge__n{font-family:var(--serif);font-size:14px;font-weight:700;letter-spacing:.14em;color:var(--gold-bright)}
+.forge__name{font-size:18px;font-weight:700;font-family:var(--serif)}
+.forge__quote{font-size:13px;color:var(--text-sec);margin-bottom:8px}
+.forge__quote strong{color:var(--text)}
+.forge ul{margin:0;padding-left:1.15em}
+.forge li{margin:3px 0;font-size:13.5px;color:var(--text-sec)}
+.forge li b{color:var(--text)}
+.forge__status{position:absolute;top:16px;right:18px;font-size:11px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:999px}
+.forge__status.done{color:var(--gold-bright);background:var(--gold-soft);border:1px solid rgba(201,162,95,.4)}
+.forge__status.wip{color:#ff8a96;background:var(--brand-soft);border:1px solid rgba(255,59,78,.4)}
+
+/* ── 行军图 ─────────────────────────── */
+.timeline{position:relative;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:13px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,var(--gold),rgba(201,162,95,.15))}
+.tl-item{position:relative;margin-bottom:12px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-34px;top:6px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;font-weight:750;font-family:var(--serif);background:#151922;border:1px solid var(--border-strong);color:var(--muted)}
+.tl-item.on .tl-dot{background:linear-gradient(160deg,var(--gold-bright),var(--gold));color:#201507;border-color:var(--gold);box-shadow:0 0 14px rgba(201,162,95,.4)}
+.tl-body{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--card-2)}
+.tl-item.on .tl-body{border-color:rgba(201,162,95,.4)}
+.tl-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tl-mod{font-size:15px;font-weight:700}
+.tl-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+.tl-badge.confirm{color:var(--gold-bright);background:var(--gold-soft)}
+.tl-badge.wait{color:var(--muted);background:rgba(255,255,255,.05)}
+.tl-desc{font-size:13px;color:var(--text-sec)}
+
+.foot{margin-top:20px;font-size:12px;color:var(--muted)}
+body.present-mode .foot,body.present-mode .tech-only{display:none}
+body.present-mode .side__label.tech-only{display:none}
+
+@media(max-width:980px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;height:auto;min-height:100vh}
+  .side{border-right:none;border-bottom:1px solid var(--border);max-height:220px}
+  .beats,.stat-row,.perm-grid,.close-grid{grid-template-columns:1fr}
+  .main{padding:16px}
+  .hero{padding:24px 18px}
+  .hero h1{font-size:24px;padding-right:0}
+  .hero__emblem{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar__brand">
+      <img class="mark" src="assets/logo-jl.png" alt="剑琅联盟 logo">
+      <span>剑琅联盟 · RTB 铸剑<span class="topbar__hint">现网能战 · 绝世神兵在炉</span></span>
+    </div>
+    <div class="topbar__actions">
+      <div class="tb-nav">
+        <button type="button" class="tb-btn" id="btnPrev" title="上一页">←</button>
+        <button type="button" class="tb-btn" id="btnNext" title="下一页">→</button>
+      </div>
+      <button type="button" class="tb-btn" id="btnPresent">讲解模式</button>
+      <a class="tb-btn ghost-link" href="RTB现有产品概览.html">现有产品概览</a>
+      <a class="tb-btn ghost-link" href="RTB产品重构计划概览.html">重构计划概览</a>
+    </div>
+  </header>
+
+  <aside class="side">
+    <div class="side__label">兵种筛选</div>
+    <div class="side__filters">
+      <button type="button" class="chip on" data-filter="all">全部</button>
+      <button type="button" class="chip" data-filter="owner">店主 · 主帅</button>
+      <button type="button" class="chip" data-filter="clerk">店员 · 先锋</button>
+    </div>
+    <div class="side__label">军令目录</div>
+    <nav id="sideNav"></nav>
+  </aside>
+
+  <main class="main">
+
+    <section class="panel on" id="panel-cover" data-slide="cover">
+      <div class="hero">
+        <div class="hero__emblem" aria-hidden="true">
+          <img src="assets/logo-jl.png" alt="剑琅联盟">
+        </div>
+        <div class="hero__kicker">剑琅联盟 · 会议军令</div>
+        <h1>铸剑 · 让门店的每一笔经营<br>都有<span class="accent">锋芒</span></h1>
+        <p class="lead">剑琅联盟从名字起就与剑同源——<strong>每一位门店老板，都是持剑之人；我们做的，是为老板铸剑。</strong>
+          今天不讲功能清单，Danny，请检阅两把剑：现网这把，<strong>已经出鞘能战</strong>；炉中这把绝世神兵，<strong>正在五炼之中</strong>。</p>
+        <div class="beats">
+          <div class="beat"><div class="beat__n">01 · 剑已出鞘</div><div class="beat__t">现网六大战役全闭环</div><div class="beat__d">入驻、接待、收银、员工、库存、看数——门店今日即可开工</div></div>
+          <div class="beat"><div class="beat__n">02 · 铸剑五炼</div><div class="beat__t">重构骨架熔铸成型</div><div class="beat__d">128 个流程节点落地，权益、开单、卡项同一炉冶炼</div></div>
+          <div class="beat"><div class="beat__n">03 · 锋芒初现</div><div class="beat__t">AI 淬火在途</div><div class="beat__d">数据快速导入等开刃之功持续推进，绝世神兵将至</div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="stat__v">6</div><div class="stat__l">大战役 · 场景分组</div></div>
+          <div class="stat"><div class="stat__v">10</div><div class="stat__l">场胜仗 · 端到端案例</div></div>
+          <div class="stat"><div class="stat__v">128</div><div class="stat__l">个铸剑节点 · 流程落地</div></div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-main" data-go="forge">检阅铸剑五炼</button>
+          <button type="button" class="btn-sec" data-go="roles">查看军阵 · 主帅先锋</button>
+          <button type="button" class="btn-sec" data-go="F1">从第一战开始讲</button>
+        </div>
+      </div>
+      <p class="foot tech-only">流程真源：《RTB现有产品概览》《RTB产品重构计划概览》。AI 导入为研发中能力，本页不以现网已上线表述。</p>
+    </section>
+
+    <section class="panel" id="panel-roles" data-slide="roles">
+      <div class="card">
+        <h2>军阵 · 主帅与先锋</h2>
+        <p class="muted">主帅（店主）调兵布阵、执掌全局；先锋（店员）前线接敌、完成收银。分工不是能力缺失，是阵法本应如此。</p>
+        <div class="perm-grid">
+          <div class="perm-col">
+            <h3><span class="badge badge-owner">主帅</span> 店主 · 全店最高权限</h3>
+            <ul class="perm-list">
+              <li><span class="dot-on"></span>开单 / 结算 / 查看流水</li>
+              <li><span class="dot-on"></span>查看与改动价目表、会员卡</li>
+              <li><span class="dot-on"></span>办卡、充值、续费续次、延期、退卡</li>
+              <li><span class="dot-on"></span>创建员工、经营配置与报表相关能力</li>
+              <li><span class="dot-on"></span>开单改价等完整经营动作</li>
+            </ul>
+          </div>
+          <div class="perm-col">
+            <h3><span class="badge badge-clerk">先锋</span> 店员 · 前线作业权限</h3>
+            <ul class="perm-list">
+              <li><span class="dot-on"></span>开单 / 结算</li>
+              <li><span class="dot-on"></span>查看价目表、查看卡项</li>
+              <li><span class="dot-on"></span>办新卡、充值、续费/续次</li>
+              <li><span class="dot-off"></span>不改价目 / 不改会员卡模板</li>
+              <li><span class="dot-off"></span>不开单改价、不延期退卡、不创建员工、不看流水</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note-box">配置与看数由主帅完成、前线收银由先锋完成——这是<strong>角色分工</strong>。原型另有合伙人 / 店长 / 高级店员等档位，本页讲解聚焦店主与店员。</div>
+        <div class="hero-actions" style="margin-top:18px">
+          <button type="button" class="btn-main" data-go="F1">进入战例</button>
+          <button type="button" class="btn-sec" data-go="forge">先看铸剑五炼</button>
+        </div>
+      </div>
+      <p class="foot tech-only">权限矩阵来源：交互原型添加员工页「权限说明」弹窗。现网细权若有差异，以线上配置为准。</p>
+    </section>
+
+    <section class="panel" id="panel-forge" data-slide="forge">
+      <div class="card">
+        <span class="sect-sub">铸剑五炼</span>
+        <h2>从好钢到绝世神兵</h2>
+        <p class="muted">一柄绝世宝剑，必经选矿、熔炉、锻打、淬火、开刃五道工序。RTB 重构正是同一炉火。<br>
+        <strong style="color:var(--gold-bright)">铸剑的是我们，持剑的是老板——老板出剑，我们护剑。</strong></p>
+        <div class="forges">
+          <div class="forge on">
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M6 3h12l3 5-9 12L3 8l3-5z"/><path d="M3 8h18"/><path d="M12 20L9 8l3-5 3 5-3 12"/></svg></div>
+            <div>
+              <div class="forge__status done">已铸成</div>
+              <div class="forge__head"><span class="forge__n">第一炼</span><span class="forge__name">选矿 · 好钢已备</span></div>
+              <div class="forge__quote">铸剑的前提是选对矿。现网六大战役、十场胜仗全部走通，<strong>证明经营场景这块矿，已经是好钢</strong>——不赌从零开始。</div>
+              <ul>
+                <li><b>F 入驻就位</b>：开店 + 价目卡券 + 客户员工录入，数据就位即可开工</li>
+                <li><b>A 到店预约</b>：未预约、预约履约、改期取消均可闭环</li>
+                <li><b>B 员工人效</b>：建档、权限、提成、排班口径、奖惩齐备</li>
+                <li><b>C 库存</b>：可售卖 + 项目消耗两类货都可管理</li>
+                <li><b>D 经营看数</b>：营收、客流、卡项、下钻与支出结余可查</li>
+                <li><b>E 前置与收银</b>：价目卡券前置 + 划卡办卡收银闭环</li>
+              </ul>
+            </div>
+          </div>
+          <div class="forge on">
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M12 3c3.5 4.5 5.5 7 5.5 10a5.5 5.5 0 0 1-11 0c0-3 2-5.5 5.5-10z"/><path d="M12 9c1.6 1.8 2.4 3 2.4 4.2a2.4 2.4 0 0 1-4.8 0C9.6 12 10.4 10.8 12 9z"/></svg></div>
+            <div>
+              <div class="forge__status done">已铸成</div>
+              <div class="forge__head"><span class="forge__n">第二炼</span><span class="forge__name">熔炉 · 融会贯通</span></div>
+              <div class="forge__quote">千度熔炼，杂质成渣，铁骨合一。重构把各模块放进<strong>同一座熔炉</strong>，语义与数据不再各说各话。</div>
+              <ul>
+                <li><b>权益能力模型打通</b>：价目（项目/产品）→ 会员卡权益组合 → 开单扣减/办卡，同一套能力语义</li>
+                <li><b>演示数据同源</b>：卡 / 价目 / 开单 / 员工 / 支出共用演示池，联调演示一致</li>
+                <li><b>设计规范对齐</b>：视觉与组件跟随剑琅联盟设计规范，手机框交付</li>
+                <li><b>深链可测</b>：FLOW 地图节点均可 <code>?flow=</code> 直达，评审与截图直达</li>
+              </ul>
+            </div>
+          </div>
+          <div class="forge on">
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M3 18h18"/><path d="M7 18v-4h10v4"/><path d="M9 14V7h6v7"/><path d="M15 4l4 4-5 1-3-3 4-2z"/></svg></div>
+            <div>
+              <div class="forge__status done">已铸成</div>
+              <div class="forge__head"><span class="forge__n">第三炼</span><span class="forge__name">锻打 · 铸骨成型</span></div>
+              <div class="forge__quote">千锤百炼，剑骨成形。<strong>128 个流程节点已熔铸落地</strong>，主链、支线、拦截态一应俱全。</div>
+              <ul>
+                <li><b>价目表（23 节点）</b>：项目/产品、分组拖拽、绑卡锁定、下架隐藏</li>
+                <li><b>会员卡（28 节点）</b>：三步建卡、权益组合、上下架、办卡、延期、退卡估值</li>
+                <li><b>开单记账（17 节点）</b>：选客→点单→结算→分账→成功，权益与打折同屏</li>
+                <li><b>订单流水（18 节点）</b>：退改、差价、尾款单、自助收银</li>
+                <li><b>员工管理（21 节点）</b>：职位权限、薪资提成、业绩奖惩，排班为下级子能力</li>
+                <li><b>支出（6）/ 库存（9）</b>：记支出流水；入出库、规格、调拨</li>
+                <li><b>经营分析（5 节点）</b>：门店 / 商城 / 自助报表与资金构成钻取</li>
+              </ul>
+            </div>
+          </div>
+          <div class="forge on">
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/><path d="M9.5 15a3 3 0 0 0 3 3"/></svg></div>
+            <div>
+              <div class="forge__status done">已铸成</div>
+              <div class="forge__head"><span class="forge__n">第四炼</span><span class="forge__name">淬火 · 刚而不脆</span></div>
+              <div class="forge__quote">淬水定形，剑身既利且韧。重构把<strong>关键契约</strong>钉死，钱、卡、账在任何场景都不含糊。</div>
+              <ul>
+                <li><b>支付成功回调后才入账</b>：办卡付款对齐开单结账契约，钱到才成单</li>
+                <li><b>持卡数 &gt; 0 锁定模板</b>：关键字段不可误改，历史卡只读兼容、不可新建旧类型</li>
+                <li><b>提成员工确认制</b>：店主改数须填原因 → 待确认草稿 → 员工同意后才计入合计（可驳回）</li>
+                <li><b>绑卡锁定防误改误删</b>：价目与卡、开单联动处均有护栏</li>
+                <li><b>价目变更拦截</b>：分账前金额与价目不一致即阻断，确认后回到分账</li>
+              </ul>
+            </div>
+          </div>
+          <div class="forge">
+            <div class="forge__icon"><svg viewBox="0 0 24 24"><path d="M6 20l9-9"/><path d="M12 8l4 4-2 2-4-4 2-2z"/><path d="M8 14l4 4"/><path d="M13 5l6-2-2 6-4-4z"/><path d="M5 21l4-1-1-3-4 1 1 3z"/></svg></div>
+            <div>
+              <div class="forge__status wip">淬刃在途</div>
+              <div class="forge__head"><span class="forge__n">第五炼</span><span class="forge__name">开刃 · 锋芒初现</span></div>
+              <div class="forge__quote">磨砺开刃，锋芒毕现。利器再淬一把火，<strong>AI 与余下部件正在炉中</strong>。</div>
+              <ul>
+                <li><b>AI 助手 · 存量数据快速准确导入（研发中）</b>——降低上线与迁店成本，让数据就位更快</li>
+                <li><b>待铸部件</b>：客户管理、预约管理、优惠券管理、员工排班（当前为占位）</li>
+                <li>开单路径更短、预约与开单心智一体、价目库存结构更清晰、老板端业绩下钻更直达</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-main" data-go="march">看行军图 · 排期</button>
+          <button type="button" class="btn-sec" data-go="roles">返回军阵</button>
+        </div>
+      </div>
+      <p class="foot tech-only">铸剑五炼内容对照：《RTB产品重构计划概览》一至四章。AI 导入为研发中能力，不以上线状态表述。</p>
+    </section>
+
+    <section class="panel" id="panel-march" data-slide="march">
+      <div class="card">
+        <span class="sect-sub">行军图</span>
+        <h2>十一营布阵 · 大军有序推进</h2>
+        <p class="muted">按逻辑前置后置排期，减少联调空洞。前三营军令已下（已确认锁定），后续各营逐次进军。</p>
+        <div class="timeline">
+          <div class="tl-item on">
+            <div class="tl-dot">1</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">项目创建与管理 · 价目表</span><span class="tl-badge confirm">军令已下</span></div>
+              <div class="tl-desc">卡权益标的、开单点单根基——全剑之脊。</div>
+            </div>
+          </div>
+          <div class="tl-item on">
+            <div class="tl-dot">2</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">会员卡管理</span><span class="tl-badge confirm">军令已下</span></div>
+              <div class="tl-desc">依赖价目项目/产品——剑格护手。</div>
+            </div>
+          </div>
+          <div class="tl-item on">
+            <div class="tl-dot">3</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">开单记账</span><span class="tl-badge confirm">军令已下</span></div>
+              <div class="tl-desc">依赖价目 + 卡权益扣减——剑刃主体。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">4</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">客户管理</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">办卡持卡人、选客、预约/发券主数据；开单阶段可用散客顶住——鞘与柄饰。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">5</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">员工管理（含排班）</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">开单分账/业绩、权限与薪资前置；排班依赖员工档案再支撑预约——军中编练。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">6</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">订单流水</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">依赖开单落单；退改/尾款在真实单据上测——战功簿。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">7</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">优惠券管理</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">发放→客户、核销→开单；标的可挂已有价目——箭袋弓矢。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">8</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">预约管理</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">依赖客户 + 员工排班（+ 价目服务项）——烽火台。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">9</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">经营分析</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">依赖流水/开单数据沉淀——沙盘军机。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">10</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">支出管理</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">弱依赖交易主链；经手人可挂员工——粮草账簿。</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">11</div>
+            <div class="tl-body">
+              <div class="tl-head"><span class="tl-mod">库存管理</span><span class="tl-badge wait">待进军</span></div>
+              <div class="tl-desc">付费升级；开通后关联价目「产品」，宜主交易稳定后——辎重营。</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-main" data-go="F1">看第一战战报</button>
+          <button type="button" class="btn-sec" data-go="forge">返回铸剑五炼</button>
+        </div>
+      </div>
+      <p class="foot tech-only">排期对照：《RTB产品重构计划概览》第四章「开发规划顺序」。前三项已确认锁定。</p>
+    </section>
+
+    <section class="panel" id="panel-case" data-slide="case">
+      <div class="card" id="caseRoot"></div>
+    </section>
+
+    <section class="panel" id="panel-close" data-slide="close">
+      <div class="card">
+        <h2>授剑 · 亮剑出鞘</h2>
+        <p class="muted">六大战役皆告捷，两把剑交付 Danny 检阅：一把今天就能让门店开战，一把绝世神兵正为你而炼。</p>
+        <div class="close-grid" id="closeChecks"></div>
+        <h3 style="margin-top:8px">战后整训 · 铸剑余工（打造更完美 RTB）</h3>
+        <ul class="up-list">
+          <li class="hi"><strong class="future">AI 助手 · 存量数据快速准确导入（研发中）</strong> — 降低上线与迁店成本，让选择 RTB 后的数据就位更快。</li>
+          <li>开单路径更短：选客 / 选卡 / 点单更顺滑，缩短前线操作步数。</li>
+          <li>预约与到店、开单心智更一体；预约成功通知等体验补强。</li>
+          <li>价目与库存结构更清晰：可售卖与项目消耗管理更直观。</li>
+          <li>经营分析一体感与老板端业绩下钻更直达；支出与报表衔接更顺。</li>
+        </ul>
+        <div class="finale">
+          <img class="finale__logo" src="assets/logo-jl.png" alt="剑琅联盟 logo">
+          <div class="quote">此剑已为 Danny 出鞘——能战；</div>
+          <strong>绝世神兵，正为你而炼。</strong>
+          <div class="quote" style="margin-top:6px">老板持剑，我们铸剑。Danny，今天的 RTB 已能支撑门店把经营做起来；我们正沿着铸剑五炼的路，把它磨成真正配得上你的绝世宝剑。</div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn-sec" data-go="cover">返回军令状</button>
+          <button type="button" class="btn-sec" data-go="forge">再看铸剑五炼</button>
+          <a class="btn-sec" href="RTB产品重构计划概览.html">查看重构计划概览</a>
+        </div>
+      </div>
+      <p class="foot tech-only">材料对照：《RTB现有产品概览》《RTB产品重构计划概览》。本页为会议讲解稿，非工程需求规格。</p>
+    </section>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lightboxCap">
+  <div class="lightbox__panel">
+    <button type="button" class="lightbox__close" id="lightboxClose" aria-label="关闭">×</button>
+    <div class="lightbox__cap" id="lightboxCap">现网截图</div>
+    <img class="lightbox__img" id="lightboxImg" alt="">
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ICONS = {
+    store: '<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/></svg>',
+    bill: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+    user: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.8-3.2 4-4.5 7-4.5s5.2 1.3 7 4.5"/></svg>',
+    card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14h4"/></svg>',
+    appt: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    price: '<svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9 12h6M12 9v6"/></svg>',
+    coupon: '<svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 1 0 0 4v2a2 2 0 1 0 0 4v2H5v-2a2 2 0 1 0 0-4V9z"/><path d="M12 7v10"/></svg>',
+    staff: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M2 19c1.5-3 3.5-4.2 7-4.2"/><circle cx="17" cy="9" r="2.5"/><path d="M14 19c1-2.2 2.2-3.2 5-3.5"/></svg>',
+    stock: '<svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>',
+    chart: '<svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 16V10M12 16V7M16 16v-5"/></svg>',
+    pay: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/></svg>',
+    ai: '<svg viewBox="0 0 24 24"><path d="M12 3l2.2 4.5L19 9l-4 3.2.8 5.3L12 15.8 8.2 17.5 9 12.2 5 9l4.8-1.5L12 3z"/></svg>',
+    flow: '<svg viewBox="0 0 24 24"><path d="M4 6h10M4 12h16M4 18h8"/><circle cx="18" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
+    ok: '<svg viewBox="0 0 24 24"><path d="M20 7L10 17l-5-5"/></svg>'
+  };
+
+  var WAR = {
+    F: { n: '第 1 战', name: '立营 · 军械入营', tag: '立营告捷' },
+    A: { n: '第 2 战', name: '烽火 · 接敌迎战', tag: '接敌告捷' },
+    B: { n: '第 3 战', name: '练兵 · 强将精兵', tag: '练兵告捷' },
+    C: { n: '第 4 战', name: '辎重 · 粮草先行', tag: '辎重告捷' },
+    D: { n: '第 5 战', name: '军机 · 沙盘帷幄', tag: '军机告捷' },
+    E: { n: '第 6 战', name: '布阵 · 决胜收尾', tag: '布阵告捷' }
+  };
+
+  var GROUPS = [
+    { id: 'F', title: 'F · 立营 · 军械入营' },
+    { id: 'A', title: 'A · 烽火 · 接敌迎战' },
+    { id: 'B', title: 'B · 练兵 · 强将精兵' },
+    { id: 'C', title: 'C · 辎重 · 粮草先行' },
+    { id: 'D', title: 'D · 军机 · 沙盘帷幄' },
+    { id: 'E', title: 'E · 布阵 · 决胜收尾' }
+  ];
+
+  var CASES = [
+    {
+      id: 'F1', group: 'F', role: 'owner', roleLabel: '店主',
+      title: '选择 RTB 后，把店里已有数据就位并开工',
+      story: '新店或迁店老板决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。',
+      proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。',
+      mermaid: "flowchart LR\n  choose[选择使用RTB] --> openShop[登录开店]\n  openShop --> wb[进入工作台]\n  wb --> price[录入价目表]\n  wb --> cards[配置会员卡]\n  wb --> coupon[配置优惠券]\n  wb --> cust[录入客户员工]\n  price --> ready[数据就位可开工]\n  cards --> ready\n  coupon --> ready\n  cust --> ready\n  ready -.-> ai[AI助手快速导入]",
+      steps: [
+        { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。' },
+        { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shot: '08-price-list', shotLabel: '价目表 · 项目列表' },
+        { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shot: '11-card-manage', shotLabel: '卡管理' },
+        { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shot: '12-coupon', shotLabel: '优惠券管理' },
+        { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。' }
+      ],
+      upgrades: [
+        '<span class="future">正在研发 AI 助手</span>：后续支持将店内已有数据<strong>快速、准确导入</strong> RTB，显著降低上线与迁店成本（流程图虚线节点表示「后续」，非现网已上线）。',
+        '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'
+      ]
+    },
+    {
+      id: 'A1', group: 'A', role: 'clerk', roleLabel: '店员',
+      title: '未预约顾客到店完成服务',
+      story: '傍晚一位熟客直接进店，没有提前预约。店员需要立刻选客、点单、划卡或收款，不耽误排队。',
+      proof: '未预约顾客可直接走开单链路完成服务结算，不依赖预约单。',
+      mermaid: "flowchart LR\n  walkin[顾客未预约到店] --> wb[工作台]\n  wb --> bill[开单]\n  bill --> pick[选客或散客]\n  pick --> items[点单项目产品]\n  items --> pay[结算收款]\n  pay --> done[服务完成落单]",
+      steps: [
+        { icon: 'bill', mod: '开单记账', act: '从工作台进入开单', desc: '前线主操作入口。', shot: '02-bill-entry', shotLabel: '开单结账 · 选品' },
+        { icon: 'user', mod: '客户 / 选客', act: '选择会员或登记散客', desc: '快速确认服务对象。', shot: '02-bill-entry', shotLabel: '开单页 · 选客入口' },
+        { icon: 'price', mod: '价目点单', act: '添加本次服务或产品', desc: '按价目完成点单。', shot: '02-bill-entry', shotLabel: '开单 · 点单列表' },
+        { icon: 'pay', mod: '结算', act: '扣卡或收款完成', desc: '店员权限覆盖开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算页' }
+      ],
+      upgrades: [
+        '现网已能完成未预约接待；后续可继续压缩开单步骤，让高峰时段更快。',
+        '与「先选卡再操作」等新版开单方向对齐，体验会更顺。'
+      ]
+    },
+    {
+      id: 'A2', group: 'A', role: 'clerk', roleLabel: '店员',
+      title: '先预约后进店完成服务',
+      story: '顾客早上在线上或到店约了下午护理。到点进店后，店员按预约找到人，再完成服务开单。',
+      proof: '预约履约后可衔接到开单收款，形成「约得到、接得住、收得齐」的闭环。',
+      mermaid: "flowchart LR\n  appt[新建预约] --> list[预约列表或日历]\n  list --> arrive[顾客到店]\n  arrive --> detail[预约详情]\n  detail --> bill[开单结算]\n  bill --> done[履约完成]",
+      steps: [
+        { icon: 'appt', mod: '预约管理', act: '创建或确认预约', desc: '选时间、员工、项目。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'appt', mod: '预约列表', act: '到店时定位该预约', desc: '日历 / 列表快速找到人。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'bill', mod: '开单', act: '按履约内容收款', desc: '预约与收银衔接完成。', shot: '02-bill-entry', shotLabel: '开单结账' }
+      ],
+      upgrades: [
+        '现网可完成预约到开单；后续可让预约、客户、开单的心智更一体。',
+        '预约成功店铺消息通知等体验仍在加强（前线待开始项）。'
+      ]
+    },
+    {
+      id: 'A3', group: 'A', role: 'both', roleLabel: '店员 / 店主',
+      title: '预约后改时间或取消',
+      story: '顾客临时有事，需要把预约改到明天，或直接取消。店员在预约里调整，避免空位与冲突。',
+      proof: '可在预约编辑流程中改期，也可进入已取消状态，档期保持可管理。',
+      mermaid: "flowchart LR\n  list[预约列表] --> detail[预约详情]\n  detail --> edit[编辑改时间]\n  detail --> cancel[取消预约]\n  edit --> ok[档期更新]\n  cancel --> canceled[已取消详情]",
+      steps: [
+        { icon: 'appt', mod: '预约详情', act: '打开原预约', desc: '确认顾客与原定时间。', shot: '05-appt-list', shotLabel: '预约看板（详情入口）' },
+        { icon: 'appt', mod: '新建或编辑预约', act: '修改时间或项目', desc: '完成改期。', shot: '05-appt-list', shotLabel: '预约看板' },
+        { icon: 'appt', mod: '已取消详情', act: '取消后保留可追溯状态', desc: '档期释放，记录清晰。' }
+      ],
+      upgrades: [
+        '改期与取消路径现网可用；后续可强化提醒与改期协作体验。'
+      ]
+    },
+    {
+      id: 'B1', group: 'B', role: 'owner', roleLabel: '店主',
+      title: '新招聘员工的管理配置闭环',
+      story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。',
+      proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。',
+      mermaid: "flowchart LR\n  hire[新员工入职] --> emp[员工管理]\n  emp --> profile[建档与职位]\n  emp --> perm[设置权限]\n  emp --> scheme[业绩提成方案]\n  scheme --> cross[流水与提成明细]\n  emp --> schedule[排班口径]\n  emp --> reward[奖惩相关设置]\n  perm --> online[可参与开单]",
+      steps: [
+        { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。', shot: '22-staff-create', shotLabel: '创建员工' },
+        { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shot: '23-staff-perm', shotLabel: '选择权限' },
+        { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。',
+          shots: [
+            { id: '24-staff-commission', label: '提成设置' },
+            { id: '25-staff-performance', label: '业绩设置' }
+          ] },
+        { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
+        { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
+      ],
+      upgrades: [
+        '现网可完成新人上线配置；后续排班可更显式、老板看提成下钻更直达。',
+        '月末核提成可结合流水与经营分析场景一起看。'
+      ]
+    },
+    {
+      id: 'C1', group: 'C', role: 'owner', roleLabel: '店主',
+      title: '产品库存：可售卖 + 项目消耗',
+      story: '店主要管理两类货：柜台上可卖的护理产品，以及做项目时消耗的物料。他需要能加库存、批量补货，避免断货。',
+      proof: '现网在价目/产品增改链路提供添加库存与批量添加库存，可支撑卖品与耗材类管理。',
+      mermaid: "flowchart LR\n  price[价目表产品] --> edit[产品增改]\n  edit --> sale[可售卖产品库存]\n  edit --> use[项目消耗物料库存]\n  sale --> one[添加库存]\n  use --> many[批量添加库存]\n  one --> ok[库存可管]\n  many --> ok",
+      steps: [
+        { icon: 'price', mod: '价目表', act: '进入产品侧价目', desc: '库存入口挂在价目增改。', shot: '08b-price-products', shotLabel: '价目表 · 产品' },
+        { icon: 'stock', mod: '添加库存', act: '为可售卖产品补货', desc: '单品入库。', shot: '09-price-edit', shotLabel: '产品增改（含库存）' },
+        { icon: 'stock', mod: '批量添加库存', act: '为耗材类批量补货', desc: '服务项目消耗物料同步管理。', shot: '09-price-edit', shotLabel: '产品增改' }
+      ],
+      upgrades: [
+        '现网已能管库存；后续「独立库存中心、与价目同步」会让结构更清晰（对照重构库存方向）。'
+      ]
+    },
+    {
+      id: 'D1', group: 'D', role: 'owner', roleLabel: '店主',
+      title: '经营数据分析：看清店、看清人、看清卡',
+      story: '店主早上想看客流，周末想看项目与营收，月末要核对卡项与员工业绩。他还关心现金类收款与支出结余。',
+      proof: '报表统计覆盖营收、客流、卡项、经营分析及人员下钻；并可与门店经营报表、支出统计交叉使用。',
+      mermaid: "flowchart TB\n  hub[报表统计入口] --> rev[营收状态]\n  hub --> flow[客流统计]\n  hub --> cards[卡项统计]\n  hub --> biz[经营分析]\n  biz --> staff[选择人员下钻]\n  hub --> shop[门店经营报表]\n  pay[支出管理] --> stat[看统计结余]\n  shop --> morning[早上客流]\n  rev --> week[周营收]\n  cards --> month[月末卡与业绩]",
+      steps: [
+        { icon: 'chart', mod: '报表统计', act: '进入多维报表入口', desc: '亮点：一个入口覆盖经营主指标。', shot: '17-report-hub', shotLabel: '经营分析' },
+        { icon: 'chart', mod: '营收 / 客流', act: '查看营收状态与客流', desc: '应用：早上看客流、周看营收。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+        { icon: 'card', mod: '卡项统计', act: '掌握持卡与卡相关数据', desc: '应用：月末看卡。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+        { icon: 'staff', mod: '经营分析下钻', act: '按人员查看经营情况', desc: '应用：看清人效。', shot: '17-report-hub', shotLabel: '经营分析' },
+        { icon: 'pay', mod: '支出与结余', act: '记支出并看统计 / 门店经营报表', desc: '资金侧与经营侧对照。', shot: '20-expense-book', shotLabel: '支出 · 记一笔' }
+      ],
+      upgrades: [
+        '现网数据能力完整可用；后续经营分析一体感、老板端业绩下钻会更直达。',
+        '支出统计与经营报表的衔接可继续做「更好用」。'
+      ]
+    },
+    {
+      id: 'E1', group: 'E', role: 'owner', roleLabel: '店主',
+      title: '前置配置：价目表 · 会员卡 · 优惠券',
+      story: '换季调价前，店主要先把项目价格、卡权益和优惠券规则准备好，店员才能顺利办卡、核销与开单。',
+      proof: '店主可完成价目、会员卡模板与优惠券等逻辑前置，供前线持续使用。',
+      mermaid: "flowchart LR\n  owner[店主前置] --> price[价目表配置]\n  owner --> card[会员卡模板]\n  owner --> coupon[优惠券规则]\n  price --> front[前线可卖可开]\n  card --> front\n  coupon --> front",
+      steps: [
+        { icon: 'price', mod: '价目表', act: '维护项目与产品及分类', desc: '可卖内容的基础。', shot: '08-price-list', shotLabel: '价目表' },
+        { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡划卡规则就绪。', shot: '11-card-manage', shotLabel: '卡管理' },
+        { icon: 'coupon', mod: '优惠券管理', act: '配置券与核销规则', desc: '营销动作可落地。', shot: '12-coupon', shotLabel: '优惠券' }
+      ],
+      upgrades: [
+        '前置配置现网齐全；后续卡权益组合建模、价目工具化会进一步降低配置成本。',
+        '与 F1 入驻案例衔接：今天靠模块配置就位，后续 AI 导入加速。'
+      ]
+    },
+    {
+      id: 'E2', group: 'E', role: 'clerk', roleLabel: '店员',
+      title: '熟客划卡开单结算',
+      story: '会员到店做常规护理。店员选客、带出权益、点单划卡，快速完成收款。',
+      proof: '店员权限下可独立完成选客→点单→结算的前线收银闭环。',
+      mermaid: "flowchart LR\n  wb[工作台] --> bill[开单]\n  bill --> member[选择会员]\n  member --> rights[使用卡权益]\n  rights --> items[点单]\n  items --> settle[结算完成]",
+      steps: [
+        { icon: 'bill', mod: '开单', act: '进入开单', desc: '店员日常主路径。', shot: '02-bill-entry', shotLabel: '开单结账' },
+        { icon: 'user', mod: '选客', act: '找到熟客会员', desc: '带出已有卡权益。', shot: '03-bill-items', shotLabel: '结算页 · 会员信息' },
+        { icon: 'card', mod: '扣卡结算', act: '完成划卡或支付', desc: '权限含开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+      ],
+      upgrades: [
+        '收银闭环已成立；后续缩短步骤、权益同屏会让体验更好。'
+      ]
+    },
+    {
+      id: 'E3', group: 'E', role: 'clerk', roleLabel: '店员',
+      title: '新客办卡并首次消费',
+      story: '新客体验后决定办卡。店员办理新卡，并立刻用新卡完成第一单消费。',
+      proof: '店员可办新卡并衔接首次开单消费，一次接待完成转化。',
+      mermaid: "flowchart LR\n  guest[新客到店] --> issue[办新卡]\n  issue --> bill[开单]\n  bill --> first[首次消费结算]\n  first --> done[会员转化完成]",
+      steps: [
+        { icon: 'card', mod: '办新卡', act: '为新客开卡', desc: '店员权限含办新卡。', shot: '11-card-manage', shotLabel: '卡管理 · 添加卡' },
+        { icon: 'bill', mod: '开单', act: '用新卡完成首单', desc: '办卡与消费同会话完成。', shot: '02-bill-entry', shotLabel: '开单结账' },
+        { icon: 'ok', mod: '结算', act: '收款成功', desc: '转化闭环。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+      ],
+      upgrades: [
+        '办卡+首消现网可完成；后续办卡与开单衔接可更顺滑。'
+      ]
+    }
+  ];
+
+  var SLIDES = ['cover', 'roles', 'forge', 'march'].concat(CASES.map(function (c) { return c.id; })).concat(['close']);
+  var state = { slide: 'cover', filter: 'all', mermaidReady: false };
+
+  function roleBadge(role, label) {
+    var cls = role === 'owner' ? 'badge-owner' : role === 'clerk' ? 'badge-clerk' : 'badge-both';
+    return '<span class="badge ' + cls + '">' + label + '</span>';
+  }
+
+  function buildNav() {
+    var root = document.getElementById('sideNav');
+    var html = '';
+    html += itemBtn('cover', null, '军令状 · 开场', '铸剑宣言');
+    html += itemBtn('roles', null, '军阵 · 主帅先锋', '店主 / 店员');
+    html += itemBtn('forge', null, '铸剑五炼', '重构为何值得信');
+    html += itemBtn('march', null, '行军图 · 排期', '十一营布阵');
+    GROUPS.forEach(function (g) {
+      var cases = CASES.filter(function (c) { return c.group === g.id && passFilter(c); });
+      if (!cases.length) return;
+      html += '<div class="nav-group"><div class="nav-group__title">' + g.title + '</div>';
+      cases.forEach(function (c) {
+        html += itemBtn(c.id, c, c.title, c.roleLabel);
+      });
+      html += '</div>';
+    });
+    html += itemBtn('close', null, '授剑 · 亮剑出鞘', '更完美的 RTB');
+    root.innerHTML = html;
+    root.querySelectorAll('[data-go]').forEach(function (el) {
+      el.addEventListener('click', function () { go(el.getAttribute('data-go')); });
+    });
+    syncNavOn();
+  }
+
+  function itemBtn(id, c, title, meta) {
+    var badge = c ? roleBadge(c.role, c.roleLabel) : '';
+    return '<button type="button" class="nav-item" data-go="' + id + '">' +
+      '<span class="nav-item__id">' + (c ? c.id : '·') + '</span>' +
+      '<span class="nav-item__body"><div class="nav-item__title">' + title + '</div>' +
+      '<div class="nav-item__meta">' + badge + ' ' + meta + '</div></span></button>';
+  }
+
+  function passFilter(c) {
+    if (state.filter === 'all') return true;
+    if (state.filter === 'owner') return c.role === 'owner' || c.role === 'both';
+    if (state.filter === 'clerk') return c.role === 'clerk' || c.role === 'both';
+    return true;
+  }
+
+  function syncNavOn() {
+    document.querySelectorAll('.nav-item').forEach(function (el) {
+      el.classList.toggle('on', el.getAttribute('data-go') === state.slide);
+    });
+  }
+
+  function warHtml(group) {
+    var w = WAR[group];
+    if (!w) return '';
+    return '<div class="war-strip">' +
+      '<span class="war-strip__n">' + w.n + '</span>' +
+      '<span class="war-strip__name">' + w.name + '</span>' +
+      '<span class="war-strip__state">战报 · ' + w.tag + ' ✓ 场景闭环</span></div>';
+  }
+
+  function renderCase(c) {
+    var steps = c.steps.map(function (s) {
+      var shotHtml = '';
+      var list = s.shots || (s.shot ? [{ id: s.shot, label: s.shotLabel || s.mod }] : []);
+      if (list.length) {
+        shotHtml = '<div class="step__foot">' + list.map(function (sh) {
+          return '<button type="button" class="shot-btn" data-shot="' + sh.id +
+            '" data-cap="' + escapeAttr(sh.label || s.mod) + '">查看截图' +
+            (list.length > 1 ? ' · ' + escapeAttr(sh.label) : '') + '</button>';
+        }).join('') + '</div>';
+      }
+      return '<div class="step"><div class="step__icon">' + (ICONS[s.icon] || ICONS.bill) + '</div>' +
+        '<div><div class="step__mod">' + s.mod + '</div><div class="step__act">' + s.act + '</div>' +
+        '<div class="step__desc">' + s.desc + '</div>' + shotHtml + '</div></div>';
+    }).join('');
+    var ups = c.upgrades.map(function (u) { return '<li>' + u + '</li>'; }).join('');
+    document.getElementById('caseRoot').innerHTML =
+      warHtml(c.group) +
+      '<div class="case-head"><div><div class="case-tags">' + roleBadge(c.role, c.roleLabel) +
+      '<span class="badge badge-war">' + WAR[c.group].n + ' · ' + WAR[c.group].tag + '</span>' +
+      '<span class="badge" style="background:rgba(255,255,255,.06);color:var(--text-sec)">' + c.id + '</span></div>' +
+      '<h2 style="margin-top:10px">' + c.title + '</h2></div></div>' +
+      '<p class="story">' + c.story + '</p>' +
+      '<div class="proof"><span class="proof__badge">战报 · 告捷 ✓</span><div class="proof__text">' + c.proof + '</div></div>' +
+      '<h3>战法流程（节点 = 现网功能）</h3>' +
+      '<div class="flow-wrap"><pre class="mermaid">' + c.mermaid + '</pre></div>' +
+      '<h3>分步讲述</h3><div class="steps">' + steps + '</div>' +
+      '<div class="upgrade"><div class="upgrade__title">战后整训 · 下一步更锋利</div><ul>' + ups + '</ul></div>';
+    document.getElementById('caseRoot').querySelectorAll('[data-shot]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        openShot(btn.getAttribute('data-shot'), btn.getAttribute('data-cap') || '');
+      });
+    });
+    runMermaid();
+  }
+
+  function escapeAttr(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  var SHOT_BASE = 'assets/flow-shots/';
+
+  function openShot(id, cap) {
+    var box = document.getElementById('lightbox');
+    var img = document.getElementById('lightboxImg');
+    var title = document.getElementById('lightboxCap');
+    img.src = SHOT_BASE + id + '.png';
+    img.alt = cap || id;
+    title.textContent = cap || '现网截图';
+    box.classList.add('on');
+    box.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeShot() {
+    var box = document.getElementById('lightbox');
+    box.classList.remove('on');
+    box.setAttribute('aria-hidden', 'true');
+    document.getElementById('lightboxImg').removeAttribute('src');
+  }
+
+  function renderCloseChecks() {
+    var items = [
+      ['F', '立营 · 军械入营', '开店 + 模块录入可开工'],
+      ['A', '烽火 · 接敌迎战', '未预约 / 履约 / 改期取消'],
+      ['B', '练兵 · 强将精兵', '建档权限提成排班奖惩'],
+      ['C', '辎重 · 粮草先行', '可售卖 + 项目消耗'],
+      ['D', '军机 · 沙盘帷幄', '营收客流卡项与下钻'],
+      ['E', '布阵 · 决胜收尾', '价目卡券 + 划卡办卡']
+    ];
+    document.getElementById('closeChecks').innerHTML = items.map(function (it) {
+      return '<div class="check"><span class="check__ok">✓</span><div><strong>' + it[0] + ' · ' + it[1] +
+        '</strong><div class="muted">' + it[2] + ' · 现网可完成</div></div></div>';
+    }).join('');
+  }
+
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
+    if (name === 'cover' || name === 'roles' || name === 'forge' || name === 'march' || name === 'close') {
+      document.getElementById('panel-' + name).classList.add('on');
+    } else {
+      document.getElementById('panel-case').classList.add('on');
+    }
+  }
+
+  function go(id) {
+    if (id === 'case') id = 'F1';
+    state.slide = id;
+    if (id === 'cover' || id === 'roles' || id === 'forge' || id === 'march' || id === 'close') {
+      showPanel(id);
+      if (id === 'close') renderCloseChecks();
+    } else {
+      var c = CASES.find(function (x) { return x.id === id; });
+      if (!c) return;
+      if (!passFilter(c)) {
+        state.filter = 'all';
+        document.querySelectorAll('.chip').forEach(function (ch) {
+          ch.classList.toggle('on', ch.getAttribute('data-filter') === 'all');
+        });
+        buildNav();
+      }
+      showPanel('case');
+      renderCase(c);
+    }
+    syncNavOn();
+    document.querySelector('.main').scrollTop = 0;
+  }
+
+  function runMermaid() {
+    if (!window.mermaid) return;
+    try {
+      mermaid.run({ nodes: document.querySelectorAll('#caseRoot .mermaid') });
+    } catch (e) { /* ignore redraw races */ }
+  }
+
+  function shift(delta) {
+    var idx = SLIDES.indexOf(state.slide);
+    if (idx < 0) idx = 0;
+    var next = SLIDES[Math.max(0, Math.min(SLIDES.length - 1, idx + delta))];
+    go(next);
+  }
+
+  function initMermaid() {
+    if (!window.mermaid) return;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      securityLevel: 'loose',
+      flowchart: { curve: 'basis', padding: 12, nodeSpacing: 28, rankSpacing: 36 },
+      themeVariables: {
+        fontFamily: 'PingFang SC, Microsoft YaHei, sans-serif',
+        fontSize: '15px',
+        primaryColor: '#1b202b',
+        primaryBorderColor: '#c9a25f',
+        primaryTextColor: '#ece9e1',
+        secondaryColor: '#161a23',
+        tertiaryColor: '#161a23',
+        lineColor: '#7a7f8b',
+        edgeLabelBackground: '#161a23'
+      }
+    });
+    state.mermaidReady = true;
+  }
+
+  document.querySelectorAll('.chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      state.filter = chip.getAttribute('data-filter');
+      document.querySelectorAll('.chip').forEach(function (c) {
+        c.classList.toggle('on', c === chip);
+      });
+      buildNav();
+    });
+  });
+
+  document.getElementById('btnPrev').addEventListener('click', function () { shift(-1); });
+  document.getElementById('btnNext').addEventListener('click', function () { shift(1); });
+  document.getElementById('btnPresent').addEventListener('click', function () {
+    document.body.classList.toggle('present-mode');
+    this.classList.toggle('on', document.body.classList.contains('present-mode'));
+    this.textContent = document.body.classList.contains('present-mode') ? '讲解模式 · 开' : '讲解模式';
+  });
+
+  document.body.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-go]');
+    if (!t || t.classList.contains('nav-item')) return;
+    if (t.hasAttribute('data-go')) go(t.getAttribute('data-go'));
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', closeShot);
+  document.getElementById('lightbox').addEventListener('click', function (e) {
+    if (e.target === this) closeShot();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('on')) {
+      e.preventDefault();
+      closeShot();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); shift(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); shift(-1); }
+  });
+
+  function goFromHash() {
+    var h = (location.hash || '').replace(/^#\/?/, '');
+    if (h && SLIDES.indexOf(h) >= 0) go(h);
+  }
+
+  initMermaid();
+  buildNav();
+  go('cover');
+  goFromHash();
+})();
+</script>
+</body>
+</html>

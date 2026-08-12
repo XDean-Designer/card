@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "scope": "billing-only",
+    "canvas": {
+      "width": 390,
+      "height": 844,
+      "unit": "pt"
+    },
+    "source": "card/demo.html FLOW_MAP「开单记账」(extracted, no Figma)",
+    "platforms": [
+      "Android XML",
+      "iOS SwiftUI"
+    ],
+    "conflictRule": [
+      "Visual: capture PNG at ?flow=&capture=1 (390 logical width)",
+      "Behavior/copy/state: demo.html?flow=bill-* (no dedicated billing PRD yet)",
+      "Do NOT clone prototype fake iOS status bar; use system safe areas"
+    ]
+  },
+  "color": {
+    "brand": "#F32F41",
+    "brandSoft": "#FFF2F2",
+    "brandBorder": "#FFD5D9",
+    "success": "#2BA471",
+    "successSoft": "#E8F8F2",
+    "successText": "#008858",
+    "bgPage": "#F7F7F7",
+    "surface": "#FFFFFF",
+    "textPrimary": "#333333",
+    "textSecondary": "#929292",
+    "textMid": "#666666",
+    "textStrong": "#1A1A1A",
+    "border": "#D7D7D5",
+    "borderLight": "#E8E8E8",
+    "disabled": "#EDEDED",
+    "accentOrange": "#FF7043",
+    "folderTabIdle": "#EFEFEF",
+    "folderTabIdleText": "#8A8A8A",
+    "continueAdd": "#5FA890",
+    "continueAddActive": "#4F9A82",
+    "offerNone": "#C47B7B",
+    "offerManual": "#7A9BB8",
+    "toastBg": "rgba(26,26,26,0.88)",
+    "slipNoCard": "#5C5C5C",
+    "trash": "#F32F41",
+    "shellChrome": "#E8EAED"
+  },
+  "typography": {
+    "fontText": {
+      "ios": "PingFang SC",
+      "android": "sans-serif",
+      "note": "Prefer PingFang on iOS, system sans on Android"
+    },
+    "fontData": {
+      "family": "TCloudNumber",
+      "fallback": [
+        "DIN Alternate",
+        "Helvetica Neue",
+        "monospace"
+      ],
+      "files": "card/assets/fonts/TCloudNumber/*.ttf"
+    },
+    "sizesPt": {
+      "caption2": 10,
+      "caption": 11,
+      "footnote": 12,
+      "subhead": 13,
+      "body": 14,
+      "callout": 15,
+      "headline": 16,
+      "title3": 17,
+      "title2": 18,
+      "title1": 20,
+      "largeTitle": 22,
+      "display": 28,
+      "amountXL": 32
+    },
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  "spacing": {
+    "scalePt": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      20,
+      24,
+      30,
+      32,
+      40,
+      48
+    ],
+    "common": {
+      "pageH": 16,
+      "sectionGap": 12,
+      "rowV": 14,
+      "rowH": 16,
+      "chipHPad": 12,
+      "bottomBarPad": 16,
+      "sheetTopPad": 20,
+      "billActionGap": 30,
+      "folderSlant": 18
+    }
+  },
+  "radius": {
+    "xs": 4,
+    "sm": 6,
+    "md": 8,
+    "lg": 10,
+    "xl": 12,
+    "xxl": 16,
+    "pill": 999,
+    "sheetTop": [
+      16,
+      16,
+      0,
+      0
+    ]
+  },
+  "elevation": {
+    "bottomBarShadow": "0 -0.5 4 rgba(0,0,0,0.08)",
+    "actionCardShadow": "0 2 10 rgba(0,0,0,0.04)"
+  },
+  "touch": {
+    "minHeightPt": 44,
+    "navBarHeightPt": 44,
+    "bottomPrimaryButtonHeightPt": 44,
+    "folderTabHeightPt": 36,
+    "heldCardFace": {
+      "w": 48,
+      "h": 32
+    },
+    "safeBottomHintPt": 34
+  }
+}

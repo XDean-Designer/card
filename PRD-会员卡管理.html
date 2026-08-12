@@ -43,6 +43,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
   <div class="topbar">
     <div class="topbar__title">PRD-会员卡管理<span class="topbar__hint">阅读预览 · 表格与标题已排版</span></div>
     <div class="topbar__actions">
+      <a class="ghost" href="RTB功能流程.html">打开功能流程</a>
       <a class="ghost" href="demo.html">打开交互原型</a>
       <a class="ghost" href="PRD-会员卡管理.md" download>下载 Markdown</a>
       <a class="primary" href="PRD-会员卡管理.md" target="_blank" rel="noopener">打开源文件 .md</a>
@@ -60,11 +61,11 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.15</td>
+<td>v1.16</td>
 </tr>
 <tr>
 <td>日期</td>
-<td>2026-08-11</td>
+<td>2026-08-12</td>
 </tr>
 <tr>
 <td>交互原型（唯一可视依据）</td>
@@ -219,6 +220,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认；本期 <strong>仅结束持卡 + 记实退</strong>，不走支付原路退款通道。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
 <li>金额字段统一 <strong>元、两位小数</strong>；接口路径/字段名以联调为准；标 <code>【待联调确认】</code> 处不臆造现网 URL。开单支付交接契约见 <strong>§7.7</strong>（已定稿）。</li>
+<li><strong>项目权益 = 独立计次 / 关联计次 双模式</strong>：Step2 打开「项目」开关展开计次模式切换。<strong>独立计次</strong>（默认）只设次数、无需配置具体项目：<strong>适用范围</strong>（= 会员卡名称，只读不可改）+ <strong>次数</strong>；保存后生成「名义项目」= 卡名，<strong>不进价目表</strong>；办卡后开单出现 <strong>浅金扣次券</strong> 一键扣次（单价 = 开卡实付 ÷ 开卡总次数）。<strong>关联计次</strong> = 普通项目权益（每项/共计、适用项目多选）；<strong>无已保存项时切换即自动展开适用项选择页</strong>（与产品/折扣开关行为一致）。演示种子：面部护理10次卡 / 剪发造型10次卡。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准；本文把规则与验收写全，便于无历史上下文的机器与人直接开工。</p>
 <hr />
@@ -269,7 +271,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
 <li><strong>会员卡分组</strong>：自定义分组（名称 ≤20 字、不可重名）；列表筛选轨（全部 + 分组 + 齿轮进管理）；分组管理（拖排序 / 新建 / 重命名 / 删除）；编辑成员（多选卡入组）；列表「快速分组」Sheet（多选加入，可同时属多组）；删除分组 <strong>不删卡</strong>  </li>
 <li>
-<p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+<p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（<strong>独立计次 / 关联计次 双模式</strong>：独立计次 = 只设次数 + 适用范围（=卡名只读），名义项目不进价目表；关联计次 = 每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
@@ -493,10 +495,11 @@ flowchart LR
  ├─ 列表（在售 / 已下架 + 分组筛选轨）
  ├─ 分组管理 / 编辑成员
  ├─ 添加/编辑/复制 · Step1 基本信息
- ├─ Step2 权益组合
- │    ├─ 添加/编辑项目权益（标题栏「管理价目表」）
- │    ├─ 添加/编辑产品权益（标题栏「管理价目表」）
- │    └─ 添加/编辑折扣权益（标题栏「管理价目表」）
+├─ Step2 权益组合
+│    ├─ 项目权益（独立计次 / 关联计次 双模式 +「独立计次说明」弹窗）
+│    ├─ 添加/编辑项目权益（标题栏「管理价目表」）
+│    ├─ 添加/编辑产品权益（标题栏「管理价目表」）
+│    └─ 添加/编辑折扣权益（标题栏「管理价目表」）
  ├─ Step3 用卡策略
  ├─ 创建成功
  ├─ 会员卡详情（在售无底栏；已下架有「重新上架 | 已持卡管理」）
@@ -510,7 +513,7 @@ flowchart LR
       ├─ 下架确认 / 重新上架确认（居中 sheet）
       ├─ 持卡延期（行内面板）
       ├─ 设置有效期限（不限次与永久冲突）
-      ├─ 总权益面值计算明细 / 计次模式说明 / 运营数据说明
+      ├─ 总权益面值计算明细 / 计次模式说明 / 独立计次说明 / 运营数据说明
       └─ 金额键盘
 </code></pre>
 <table>
@@ -545,7 +548,12 @@ flowchart LR
 <tr>
 <td>Step2</td>
 <td>权益组合</td>
-<td>四类权益 Switch（面值/项目/产品/折扣）+ 多 ticket；步骤条第 2/3 步</td>
+<td>四类权益 Switch（面值/项目/产品/折扣）+ 多 ticket；<strong>项目展开后为「独立计次 / 关联计次」双 tab</strong>；步骤条第 2/3 步</td>
+</tr>
+<tr>
+<td>独立计次说明</td>
+<td>独立计次说明</td>
+<td>业绩/提成设置引导（办卡业绩/劳动业绩/提成 →「独立计次卡」分组）与开单方式（浅金扣次券一键扣次）</td>
 </tr>
 <tr>
 <td>Step3</td>
@@ -1032,6 +1040,16 @@ flowchart LR
 <td>请设置次数或选择不限次</td>
 </tr>
 <tr>
+<td>独立计次</td>
+<td>次数为空或 &lt;1</td>
+<td>请填写有效次数</td>
+</tr>
+<tr>
+<td>独立计次</td>
+<td>次数 &gt; 999</td>
+<td>次数不能超过 999</td>
+</tr>
+<tr>
 <td>产品权益确定</td>
 <td>未选产品（无任一产品 qty≥1）</td>
 <td>请先选择产品范围</td>
@@ -1365,14 +1383,30 @@ flowchart LR
 <li><strong>多卡</strong>：会员有多张可用面值余额时，支付页须 <strong>单选一张</strong>；抵扣上限为该卡余额，不跨卡分摊  </li>
 <li>Step2 <strong>无</strong>「可购买产品」配置项</li>
 </ul>
-<h3>6.3.2 项目</h3>
+<h3>6.3.2 项目（独立计次 / 关联计次）</h3>
+<p><strong>原型</strong>：<a href="demo.html?flow=create-step2">Step2 项目区</a></p>
+<p>打开「项目」Switch 后展开权益区，顶部为 <strong>计次模式 tab</strong>（<code>独立计次</code> / <code>关联计次</code>，默认 <strong>独立计次</strong>）：</p>
+<p><strong>独立计次（默认，只设次数，无需配置具体项目）</strong></p>
 <ul>
-<li>+添加项目权益。  </li>
-<li>选品页计次模式为「每项 / 共计」；<strong>保存后</strong>：  </li>
-<li><strong>每项</strong> → <strong>一种项目一张 ticket</strong>（同次数参数分别落卡）  </li>
-<li><strong>共计</strong> → 共享次数池合并为一张 ticket；票面为 <strong>「共」+ 次数同一行</strong>（非「共计」）  </li>
-<li>有赠送时：第一行 <code>共N次</code>（或仅 <code>N次</code>），第二行 <code>+送M次</code>。</li>
+<li>说明行：<code>只设次数，无需配置具体项目</code>。</li>
+<li><strong>适用范围</strong>：只读字段（<code>readonly</code>），值 = <strong>会员卡名称</strong>（Step1 <code>fName</code>），不可编辑；卡名改动时自动同步（placeholder「默认会员卡名称」）。保存后作为<strong>名义项目名</strong>（= 卡名）写入 <code>projectItems</code>。</li>
+<li><strong>次数</strong>：1～999；校验见 §5.3（<code>请填写有效次数</code> / <code>次数不能超过 999</code>）。</li>
+<li>行顺序：<strong>适用范围在上、次数在下</strong>。</li>
+<li>帮助 <code>?</code> →「独立计次说明」弹窗：业绩/提成设置引导（办卡业绩 → 办卡业绩 →「独立计次卡」分组；劳动业绩 → 劳动业绩 →「独立计次卡」分组，名义项目单价按开卡实付 ÷ 开卡总次数；提成 → 提成设置 → 按项提成 →「独立计次卡」分组）；开单方式（办卡后开单「选择会员卡」出现<strong>浅金扣次券</strong>，显示剩余次数，点击一键扣次；<strong>名义项目不进价目表</strong>，无需先售卖计次项目）。</li>
+<li><strong>保存后</strong>：生成一张名义项目 ticket（<code>name</code> = 卡名，<code>purchaseQty</code> = 次数，<code>giftQty</code> = 0，<code>unlimited</code> = false）；列表/详情项目摘要显示为 <code>卡名 · N次</code>。</li>
 </ul>
+<p><strong>关联计次（普通项目权益模式）</strong></p>
+<ul>
+<li>行为等同产品/折扣开关：<strong>无已保存项目权益时，切换到「关联计次」即自动展开适用项选择页</strong>（<code>openAddProjectBenefit</code>，见 6.4）；已有已保存项则内联展示权益 ticket 列表 +「添加项目权益」。</li>
+<li>选品页计次模式为「每项 / 共计」；<strong>保存后</strong>：</li>
+<li><strong>每项</strong> → <strong>一种项目一张 ticket</strong>（同次数参数分别落卡）</li>
+<li><strong>共计</strong> → 共享次数池合并为一张 ticket；票面为 <strong>「共」+ 次数同一行</strong>（非「共计」）</li>
+<li>有赠送时：第一行 <code>共N次</code>（或仅 <code>N次</code>），第二行 <code>+送M次</code>。</li>
+<li>独立计次 ↔ 关联计次切换保留各自草稿（<code>simpleTimesMode</code> / 项目权益卡互不影响）。</li>
+</ul>
+<blockquote>
+<p>数据字段：模板保存 <code>simpleTimesMode: bool</code>、<code>simpleTimesQty</code>（次数）、<code>simpleTimesProjectName</code>（适用范围，= 卡名）；见 §7.1。</p>
+</blockquote>
 <h3>6.3.3 产品</h3>
 <ul>
 <li>+添加产品权益；ticket 展示数量摘要（如 <code>×3</code>），<strong>无「每项」字样</strong>。  </li>
@@ -1586,6 +1620,18 @@ flowchart LR
 <td>项目权益项</td>
 </tr>
 <tr>
+<td><code>simpleTimesMode</code></td>
+<td>bool：是否「独立计次」（默认 true；false 为关联计次/普通项目权益）</td>
+</tr>
+<tr>
+<td><code>simpleTimesQty</code></td>
+<td>独立计次次数（1～999；未填默认 10）</td>
+</tr>
+<tr>
+<td><code>simpleTimesProjectName</code></td>
+<td>独立计次适用范围（= 卡名；保存时由卡名回填，名义项目名）</td>
+</tr>
+<tr>
 <td><code>productItems[]</code></td>
 <td>产品权益项：<code>id</code>/<code>name</code>/<code>qty</code>（数量 ≥1）</td>
 </tr>
@@ -1659,6 +1705,7 @@ flowchart LR
 </ul>
 <h2>7.2 持卡实例（示意）</h2>
 <p>会员 ID、模板 ID、办卡实付、有效期至/永久、余额拆分、项目已用剩余、折扣已用与已省、延期记录、<code>refundActualAmount</code>（已退时）等；须支撑模块 8 计算。</p>
+<p><strong>独立计次持卡投影（浅金扣次券）</strong>：<code>simpleTimesMode</code> 模板办卡后持卡实例投影为 <strong>扣次券</strong>（<code>kind='times_ticket'</code> / <code>isTimesTicket</code>）：<code>redeemName</code> = 适用范围（= 卡名）、<code>issueTotalTimes</code> = 总次数、<code>issuePaidAmount</code> = 办卡实付、<code>simpleTimesAchId</code> = <code>st_{templateId}</code>（业绩项 ID）；开单「选择会员卡」展示剩余次数并支持一键扣次（单价 = 办卡实付 ÷ 总次数，见 §8.8）。</p>
 <p><strong>服务员工不作为持卡权威字段</strong>：办卡时选定的服务员工写入 <strong>开单/收款单据</strong>；支付成功入账时同步生成 <strong>办卡业绩分摊明细</strong>。持卡详情若展示「办卡员工」，只读引用办卡单据快照，<strong>不以持卡表为准算提成</strong>。收费延期、退卡 <strong>不</strong> 采集服务员工。</p>
 <h2>7.3 接口能力清单</h2>
 <ol>
@@ -2021,6 +2068,10 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </thead>
 <tbody>
 <tr>
+<td>独立计次</td>
+<td>名义项目 = <strong>适用范围（卡名）</strong>，不进价目表；只设次数（1～999）；办卡后投影为浅金扣次券，开单单价 = 办卡实付 ÷ 开卡总次数，按次扣减剩余</td>
+</tr>
+<tr>
 <td>每项</td>
 <td>各项目各自次数或不限次；<strong>落库/票面为一项目一张 ticket</strong></td>
 </tr>
@@ -2256,7 +2307,23 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <li>单次单选一位会员；已持卡不可再选；已下架不可新办；购买金额须 &gt;0；须开单模块就绪。  </li>
 <li>未支付 / 取消支付：<strong>禁止</strong>写持卡、禁止写办卡业绩。</li>
 </ul>
-<h2>8.8 算例（测试对照）</h2>
+<h2>8.8 独立计次 · 开单扣次（浅金扣次券）</h2>
+<p>独立计次模板办卡后，持卡在开单「选择会员卡」中投影为 <strong>浅金扣次券</strong>（展示剩余次数）：</p>
+<ul>
+<li>点击扣次券即打开扣次 Sheet：可调次数（1～剩余次数；超剩 toast「剩余不足，最多 N 次」）；次数为 0 → toast「该票卡次数已用完」。</li>
+<li><strong>单价 = 办卡实付 ÷ 开卡总次数</strong>（四舍五入到分）；开单行 <code>category = '独立计次卡'</code>。</li>
+<li><strong>购物车限制</strong>：扣次须购物车无其他商品，否则 toast「购物车还有其他商品，请先结账或清空后再扣次」。</li>
+<li>员工：扣次允许不选员工；若已选员工且业绩为按工位分配，须设完工位。</li>
+<li>扣次成功扣减剩余次数并写流水；<strong>名义项目不进价目表</strong>，无需先售卖计次项目。</li>
+</ul>
+<h2>8.9 独立计次 · 业绩 / 提成</h2>
+<ul>
+<li><strong>办卡业绩</strong>：业绩设置 → 办卡业绩 →「独立计次卡」分组，配置开卡等办卡口径（默认 <code>calcModeCard</code> 演示种子 = station，随业绩设置可改平均分配）。</li>
+<li><strong>劳动业绩（消耗）</strong>：业绩设置 → 劳动业绩 →「独立计次卡」分组，配置名义项目（单价按开卡实付 ÷ 开卡总次数）。</li>
+<li><strong>提成</strong>：提成设置 → 按项提成 → 添加项目 →「独立计次卡」分组勾选后配置。</li>
+<li>独立计次卡模板在建卡/办卡流程不暴露价目项目选择；名义项目仅在开单扣次券与上述分组中出现。</li>
+</ul>
+<h2>8.10 算例（测试对照）</h2>
 <table>
 <thead>
 <tr>
@@ -2300,6 +2367,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>F</td>
 <td>延期费用</td>
 <td>购买 900、原有效期 365 天、延期 30 天、含折扣 → 默认参考费用 (= \mathrm{round}(900\times 30/365))；改为 0 则免费立即写</td>
+</tr>
+<tr>
+<td>G</td>
+<td>独立计次</td>
+<td>买 680、总次数 10 → 开单扣次单价 68/次；已用 4 → 剩余 6 次；名义项目不进价目表</td>
 </tr>
 </tbody>
 </table>
@@ -2348,6 +2420,22 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tr>
 <td>权益页</td>
 <td>管理价目表；分组 Tab（全部 + 自定义组）；本组暂无项目/产品；反选；全选；项目行打勾圆选；折扣行橙色 Switch；产品行内数量步进；打折标尺橙→红渐变；确定</td>
+</tr>
+<tr>
+<td>Step2 项目</td>
+<td>独立计次；关联计次；适用范围；次数；只设次数，无需配置具体项目；默认会员卡名称；独立计次说明</td>
+</tr>
+<tr>
+<td>独立计次说明</td>
+<td>独立计次卡；办卡业绩；劳动业绩；提成设置；按项提成；名义项目；浅金扣次券；一键扣次；名义项目不进价目表</td>
+</tr>
+<tr>
+<td>独立计次校验</td>
+<td>请填写有效次数；次数不能超过 999</td>
+</tr>
+<tr>
+<td>开单扣次</td>
+<td>扣次·{卡名}；余 N 次；剩余不足，最多 N 次；该票卡次数已用完；购物车还有其他商品，请先结账或清空后再扣次</td>
 </tr>
 <tr>
 <td>步骤</td>
@@ -2668,6 +2756,62 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>删除分组</td>
 <td>卡仍在「全部」；组 Tab 消失</td>
 </tr>
+<tr>
+<td>25</td>
+<td>独立计次建卡</td>
+<td>打开项目开关</td>
+<td>默认独立计次：适用范围只读=卡名；填次数 10 保存</td>
+<td>Step2 一张名义项目 ticket（卡名 · 10次）；列表/详情显示 <code>卡名 · 10次</code></td>
+</tr>
+<tr>
+<td>25b</td>
+<td>独立计次适用范围联动</td>
+<td>卡名「X卡」</td>
+<td>回 Step1 改名</td>
+<td>适用范围字段自动同步为新卡名</td>
+</tr>
+<tr>
+<td>26</td>
+<td>关联计次自动展开</td>
+<td>项目开关已开</td>
+<td>切「关联计次」（无已保存项目权益）</td>
+<td>自动展开适用项选择页（同产品/折扣开关行为）</td>
+</tr>
+<tr>
+<td>26b</td>
+<td>独立计次校验</td>
+<td>独立计次</td>
+<td>次数空/0/超 999 下一步</td>
+<td>toast 请填写有效次数 / 次数不能超过 999</td>
+</tr>
+<tr>
+<td>27</td>
+<td>独立计次办卡→扣次券</td>
+<td>独立计次卡办卡成功</td>
+<td>开单「选择会员卡」</td>
+<td>出现浅金扣次券，显示剩余次数</td>
+</tr>
+<tr>
+<td>27b</td>
+<td>扣次券一键扣次</td>
+<td>持独立计次卡</td>
+<td>点扣次券扣 1 次</td>
+<td>剩余次数 -1；单价=实付÷总次数</td>
+</tr>
+<tr>
+<td>27c</td>
+<td>扣次购物车限制</td>
+<td>购物车有其他商品</td>
+<td>尝试扣次</td>
+<td>toast 购物车还有其他商品，请先结账或清空后再扣次</td>
+</tr>
+<tr>
+<td>27d</td>
+<td>名义项目不进价目表</td>
+<td>独立计次卡</td>
+<td>看价目表</td>
+<td>无该名义项目</td>
+</tr>
 </tbody>
 </table>
 <h2>10.2 回归</h2>
@@ -2755,6 +2899,16 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>—</td>
 <td>无持卡 · 可编辑沙箱</td>
 </tr>
+<tr>
+<td>面部护理10次卡 <code>demo_face_care_times</code></td>
+<td>—（名义项目 = 卡名，不进价目表）</td>
+<td>独立计次 · 1980 元 / 10 次 / 1 年 · 演示已用 3 次</td>
+</tr>
+<tr>
+<td>剪发造型10次卡 <code>demo_cut_style_times</code></td>
+<td>—（名义项目 = 卡名，不进价目表）</td>
+<td>独立计次 · 680 元 / 10 次 / 6 个月 · 演示已用 4 次</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -2837,7 +2991,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>F2 三步建卡</td>
-<td>Step1–3、权益多 ticket、项目/产品/折扣选页、不限次与永久冲突弹窗</td>
+<td>Step1–3、权益多 ticket、项目/产品/折扣选页、<strong>项目独立计次/关联计次双模式（适用范围=卡名只读、次数校验、关联计次自动展开适用项）</strong>、不限次与永久冲突弹窗</td>
 <td>§6 Step*；§5 校验</td>
 </tr>
 <tr>
@@ -2854,6 +3008,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>F5 延期</td>
 <td>行内延期、参考费用默认与改价、免费立即写 / 收费支付后写</td>
 <td>§8.6；§6 延期</td>
+</tr>
+<tr>
+<td>F5b 独立计次开单扣次</td>
+<td>持卡投影浅金扣次券（剩余次数）、一键扣次（单价=实付÷总次数）、购物车限制、名义项目不进价目表</td>
+<td>§7.2；§8.8；开单模块</td>
 </tr>
 <tr>
 <td>F6 退卡</td>
@@ -2884,13 +3043,13 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tbody>
 <tr>
 <td>B1 模板与分组</td>
-<td>模板 CRUD、权益结构、策略字段、分组多对多；有持卡禁改模板</td>
+<td>模板 CRUD、权益结构、策略字段、<strong>独立计次字段（simpleTimesMode / simpleTimesQty / simpleTimesProjectName）</strong>、分组多对多；有持卡禁改模板</td>
 <td>§7 模型</td>
 </tr>
 <tr>
 <td>B2 办卡入账</td>
-<td>创建支付单 → 回调 Finalize → 写持卡 + 运营统计 + 办卡业绩分摊；幂等</td>
-<td>§7.7；§8.5.2</td>
+<td>创建支付单 → 回调 Finalize → 写持卡 + 运营统计 + 办卡业绩分摊；幂等；<strong>独立计次持卡投影为扣次券（剩余次数/总次数/实付）</strong></td>
+<td>§7.7；§8.5.2；§8.8</td>
 </tr>
 <tr>
 <td>B3 延期</td>
@@ -2926,8 +3085,8 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tbody>
 <tr>
 <td>T1 建卡与权益</td>
-<td>空态三步、无权益拦截、面值赠送、产品/项目拆票、不限次禁永久</td>
-<td>§10.1 #1–7, #19–20</td>
+<td>空态三步、无权益拦截、面值赠送、产品/项目拆票、不限次禁永久、<strong>独立计次建卡（适用范围只读联动卡名、次数校验、名义项目 ticket）与关联计次自动展开</strong></td>
+<td>§10.1 #1–7, #19–20, #25–26</td>
 </tr>
 <tr>
 <td>T2 分组</td>
@@ -2940,6 +3099,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>§10.1 #8–9, #18；§7.7</td>
 </tr>
 <tr>
+<td>T3b 独立计次扣次</td>
+<td>办卡→扣次券展示剩余、一键扣次、单价=实付÷总次数、购物车限制、名义项目不进价目表</td>
+<td>§10.1 #27；§8.8</td>
+</tr>
+<tr>
 <td>T4 锁与上下架</td>
 <td>有持卡不可编辑、复制、下架不可新办、上架恢复</td>
 <td>§10.1 #10–13</td>
@@ -2947,12 +3111,12 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tr>
 <td>T5 延期</td>
 <td>免费 / 收费 / 纯面值 toast；费用公式算例 F</td>
-<td>§10.1 #14–15；§8.6 / §8.8 F</td>
+<td>§10.1 #14–15；§8.6 / §8.10 F</td>
 </tr>
 <tr>
 <td>T6 退卡与公式</td>
 <td>均值/减值/纯折扣/计次/产品对照算例；实退可改；成功页</td>
-<td>§10.1 #16–17；§8.4 / §8.8</td>
+<td>§10.1 #16–17；§8.4 / §8.10</td>
 </tr>
 <tr>
 <td>T7 回归</td>
@@ -3036,6 +3200,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.16</td>
+<td>2026-08-12</td>
+<td>Step2「项目」拆为 <strong>独立计次 / 关联计次</strong> 双模式：独立计次 = 适用范围（=卡名只读）+ 次数 + 名义项目不进价目表 + 浅金扣次券一键扣次；关联计次 = 普通项目权益、无已保存项自动展开适用项；补齐 §1.3 / §6.3.2 / §7.1–7.2 / §8.2 / §8.8–8.9 / §9 / §10 / §13 与演示卡</td>
+</tr>
 <tr>
 <td>v1.15</td>
 <td>2026-08-11</td>

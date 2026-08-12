@@ -1,0 +1,40 @@
+# 临时截图 / 调试产物
+_cap*/
+cap2_*.png
+cap_*.png
+blend_*.png
+final_*.png
+font_*.png
+phone_*.png
+proto_*.png
+*_detail.png
+*_list.png
+*_step2*.png
+*_times*.png
+*_help.png
+*_indep.png
+*_linked.png
+*.backup.png
+
+# 调试脚本与临时数据
+_run_*.py
+_*.py
+_fix_*.py
+_patch_*.py
+_diag_*.py
+_nodes.json
+_ui_flow.xml
+_step3_policy.png
+_tmp_exp_screen.png
+*-MOVED.txt
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 预览截图
+_预览截图/
+
+# Figma 检查 / 导出临时产物
+_figma_chk/
+assets/workbench/_figma_tab/

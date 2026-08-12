@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SAMPLE · 点单台 bill-bill · Token 用法示范 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_bill_desk"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page">
+
+    <LinearLayout
+        android:id="@+id/nav_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/nav_bar"
+        android:background="@color/surface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_pageH"
+        android:paddingEnd="@dimen/space_pageH"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/touch_min"
+            android:layout_height="@dimen/touch_min"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back" />
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/Text.NavTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="开单记账" />
+        <View android:layout_width="@dimen/touch_min" android:layout_height="@dimen/touch_min" />
+    </LinearLayout>
+
+    <!-- 顾客条 -->
+    <FrameLayout
+        android:id="@+id/customer_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_pageH"
+        app:layout_constraintTop_toBottomOf="@id/nav_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 文件夹 Tab + 选卡轨 / 快消 -->
+    <LinearLayout
+        android:id="@+id/bill_action"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/space_pageH"
+        android:layout_marginEnd="@dimen/space_pageH"
+        app:layout_constraintTop_toBottomOf="@id/customer_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:id="@+id/folder_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/folder_tab_h"
+            android:orientation="horizontal">
+            <TextView style="@style/Bill.FolderTab" android:layout_width="0dp" android:layout_weight="1" android:text="选择会员卡" android:background="@color/surface" />
+            <TextView style="@style/Bill.FolderTab" android:layout_width="0dp" android:layout_weight="1" android:text="快速消费" android:background="@color/folder_tab_idle" android:textColor="@color/folder_tab_idle_text" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_held_cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:padding="@dimen/space_12"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_catalog_or_slips"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/space_pageH"
+        app:layout_constraintTop_toBottomOf="@id/bill_action"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/space_bottomBarPad"
+        android:background="@color/surface"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView android:id="@+id/tv_due_label" style="@style/Text.Secondary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="应付" />
+        <TextView android:id="@+id/tv_due" style="@style/Text.Amount" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:paddingStart="@dimen/space_8" android:text="¥0" />
+        <Button android:id="@+id/btn_next" style="@style/Btn.Main" android:layout_width="120dp" android:text="去结账" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

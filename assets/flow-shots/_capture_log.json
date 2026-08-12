@@ -1,0 +1,52 @@
+[
+  {
+    "name": "01-wb-home",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "bill",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "appt",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "price",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "card",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "coupon",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "customer",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "staff",
+    "ok": true,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "report",
+    "ok": false,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  },
+  {
+    "name": "expense",
+    "ok": false,
+    "act": "com.jiyong.rta.next.debug/com.rts.rta.MainActivity"
+  }
+]

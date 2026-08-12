@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 开单：文档 + 铅笔（Figma 151:5114） -->
+  <path d="M8.2 20.2H4.9C4.3 20.2 3.8 20.0 3.45 19.6C3.1 19.2 2.9 18.7 2.9 18.1V7.2V3.6C2.9 3.0 3.1 2.5 3.45 2.1C3.8 1.7 4.3 1.5 4.9 1.5H16.9C17.5 1.5 18.0 1.7 18.35 2.1C18.7 2.5 18.9 3.0 18.9 3.6V9.0" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.7 5.6H14.7" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M6.7 10.6H11.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M13.2 18.4c0 .25.2.45.45.45h1.35c.12 0 .24-.05.32-.14l6.9-7.24c.17-.17.17-.45 0-.62l-1.37-1.44c-.18-.19-.48-.19-.66 0l-6.87 7.21c-.08.08-.13.2-.13.31v1.47z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M16.6 11.5l1.55 1.55" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+</svg>
