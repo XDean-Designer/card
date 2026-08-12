@@ -15536,6 +15536,16 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             </div>
           </div>
         </div>
+        <div class="dialog-mask" id="exitCreateConfirmMask">
+          <div class="dialog">
+            <div class="dialog__title">退出创建？</div>
+            <div class="dialog__body">确定要退出会员卡创建吗？退出后当前已填写的资料将清空且无法恢复。</div>
+            <div class="dialog__actions">
+              <button type="button" class="btn-main secondary" id="exitCreateCancel">取消</button>
+              <button type="button" class="btn-main" id="exitCreateConfirm">退出</button>
+            </div>
+          </div>
+        </div>
         <div class="picker-mask picker-mask--bottom" id="cardGroupMenuMask">
           <div class="picker-sheet picker-sheet--menu">
             <div class="catalog-action-card">
@@ -25541,10 +25551,12 @@ function syncSimpleTimesModeUI() {
   });
   document.getElementById('simpleTimesFields')?.classList.toggle('hidden', !on);
   document.getElementById('projectBenefitNormalWrap')?.classList.toggle('hidden', !!on);
-  /* 独立计次卡只能有独立计次一种权益：独立计次模式下禁用面值/产品/折扣开关 */
+  /* 独立计次卡只能有独立计次一种权益：独立计次模式下锁定面值/产品/折扣开关（置灰 + 点击弹 toast） */
   ['benBalance', 'benProducts', 'benProjectDiscount'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.disabled = on;
+    if (!el) return;
+    el.classList.toggle('is-locked', on);
+    el.setAttribute('aria-disabled', on ? 'true' : 'false');
   });
   if (on) {
     if (!state.benefits.timesOrValidity) {
@@ -26813,6 +26825,25 @@ function openCardGroupDeleteConfirm(groupId) {
 function closeCardGroupDeleteConfirm() {
   document.getElementById('cardGroupDeleteMask')?.classList.remove('show');
   state.cardGroupDeletingId = null;
+}
+
+function openExitCreateConfirm() {
+  document.getElementById('exitCreateConfirmMask')?.classList.add('show');
+}
+
+function closeExitCreateConfirm() {
+  document.getElementById('exitCreateConfirmMask')?.classList.remove('show');
+}
+
+function confirmExitCreate() {
+  closeExitCreateConfirm();
+  /* 退出创建：清空已填临时数据后返回列表 */
+  state.formMode = 'create';
+  state.editingTemplateId = null;
+  state.sourceTemplateId = null;
+  state.returnAfterFlow = 'list';
+  clearFormFields();
+  setStep(0);
 }
 
 function confirmCardGroupDelete() {
@@ -31328,24 +31359,8 @@ document.getElementById('issueMemberMask').addEventListener('click', e => {
 window.__pickerMaskClosers = window.__pickerMaskClosers || Object.create(null);
 window.__pickerMaskClosers.issueMemberMask = closeIssueMemberPicker;
 document.getElementById('backFromStep1').onclick = () => {
-  if (state.returnAfterFlow === 'billing-issue') {
-    state.billingIssueCustomerId = null;
-    state.returnAfterFlow = 'list';
-    if (window.BillingDemo && window.BillingDemo.nav && window.BillingDemo.nav['add-card']) {
-      window.BillingDemo.nav['add-card']();
-      return;
-    }
-  }
-  if (state.returnAfterFlow === 'detail') {
-    const detailId = state.formMode === 'edit'
-      ? state.editingTemplateId
-      : (state.formMode === 'duplicate' ? state.sourceTemplateId : null);
-    if (detailId) {
-      openTemplateDetail(detailId);
-      return;
-    }
-  }
-  setStep(0);
+  openExitCreateConfirm();
+  return;
 };
 document.getElementById('backFromStep2').onclick = () => {
   syncStep1UI();
@@ -31354,6 +31369,11 @@ document.getElementById('backFromStep2').onclick = () => {
 document.getElementById('backFromStep3').onclick = () => {
   setStep(2);
 };
+document.getElementById('exitCreateCancel')?.addEventListener('click', closeExitCreateConfirm);
+document.getElementById('exitCreateConfirm')?.addEventListener('click', confirmExitCreate);
+document.getElementById('exitCreateConfirmMask')?.addEventListener('click', e => {
+  if (e.target === document.getElementById('exitCreateConfirmMask')) closeExitCreateConfirm();
+});
 document.getElementById('backFromDetail').onclick = () => setStep(0);
 document.getElementById('btnEditTemplate').onclick = () => {
   if (!state.viewingTemplateId) return;
@@ -31430,6 +31450,10 @@ renderFlowMap();
 ['benBalance', 'benTimesOrValidity', 'benProducts', 'benProjectDiscount'].forEach(id => {
   document.getElementById(id).addEventListener('click', () => {
     const el = document.getElementById(id);
+    if (el.classList.contains('is-locked')) {
+      showToast('独立计次卡只能配置独立计次权益，其他权益不可开启', true);
+      return;
+    }
     setBenefitSwitchOn(id, !el.classList.contains('on'));
     onBenefitCheckChange();
   });

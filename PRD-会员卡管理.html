@@ -61,7 +61,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.17</td>
+<td>v1.19</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -86,7 +86,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tbody>
 </table>
 <blockquote>
-<p><strong>联调一句话</strong>：办卡/收费延期必须经开单支付成功回调后才入账；<strong>确认办卡</strong>页可改应付与办卡日期并必选服务员工；服务员工写收款单据并同步办卡业绩；退卡只结束持卡并记实退、不走退款通道；金额统一元两位小数；旧会员卡入口本期全量切新体系。工作台入口文案为 <strong>「卡管理」</strong>（页内标题仍为「会员卡管理」）。</p>
+<p><strong>联调一句话</strong>：办卡/收费延期必须经开单记账确认回调后才入账；<strong>确认办卡</strong>页可改应付与办卡日期并必选服务员工；服务员工写收款单据并同步办卡业绩；退卡只结束持卡并记实退（纯记账、无资金退回）；金额统一元两位小数；旧会员卡入口本期全量切新体系。工作台入口文案为 <strong>「卡管理」</strong>（页内标题仍为「会员卡管理」）。</p>
 </blockquote>
 <hr />
 <h2>怎么读这份 PRD</h2>
@@ -216,10 +216,10 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li><strong>当前有效持卡数 &gt; 0</strong> 时模板 <strong>不可编辑</strong>（可复制建卡、可下架、可经结账办卡/退卡/延期）。  </li>
 <li><strong>已下架</strong>不可新办；已持卡仍可退卡/延期；可重新上架或复制建卡。  </li>
 <li><strong>会员卡分组</strong>：列表可按分组筛选；支持分组管理（新建/重命名/删除/拖排序）、编辑成员、列表「快速分组」；一张卡可同时属于多个分组。  </li>
-<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（会员/卡锁定；<strong>应付</strong>默认可改；<strong>办卡日期</strong>可改；<strong>服务员工</strong>必选 ≥1；<strong>是否选工位</strong>取决于业绩设置·办卡业绩：按工位分配则每人必选工位，平均分配则不要求）→ 开单记账完成支付 → <strong>支付成功回调</strong>后才写持卡与办卡业绩 → 办卡成功（来自结账时底栏可为「返回开单」）。演示种子默认办卡业绩为 <strong>按工位分配</strong>，便于完整演示选工位。  </li>
-<li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认；本期 <strong>仅结束持卡 + 记实退</strong>，不走支付原路退款通道。  </li>
+<li><strong>办卡</strong>：选择会员 Sheet <strong>单选</strong>一位未持卡会员 → <strong>「去结账」</strong> → <strong>确认办卡</strong>（会员/卡锁定；<strong>应付</strong>默认可改；<strong>办卡日期</strong>可改；<strong>服务员工</strong>必选 ≥1；<strong>是否选工位</strong>取决于业绩设置·办卡业绩：按工位分配则每人必选工位，平均分配则不要求）→ 开单记账确认 → <strong>记账确认回调</strong>后才写持卡与办卡业绩 → 办卡成功（来自结账时底栏可为「返回开单」）。演示种子默认办卡业绩为 <strong>按工位分配</strong>，便于完整演示选工位。  </li>
+<li>退卡为 <strong>整卡退</strong>；建议退款可按策略计算，<strong>实际退款金额可改</strong>后确认；本期 <strong>仅结束持卡 + 记实退</strong>（纯记账，无资金退回）。  </li>
 <li>用卡策略两轨独立；公式随卡型（组合 / 纯折扣 / 不限次）变化；均值分母为面值 + 有限次项目权重 + <strong>产品数量权重</strong>。  </li>
-<li>金额字段统一 <strong>元、两位小数</strong>；接口路径/字段名以联调为准；标 <code>【待联调确认】</code> 处不臆造现网 URL。开单支付交接契约见 <strong>§7.7</strong>（已定稿）。</li>
+<li>金额字段统一 <strong>元、两位小数</strong>；接口路径/字段名以联调为准；标 <code>【待联调确认】</code> 处不臆造现网 URL。开单记账交接契约见 <strong>§7.7</strong>（已定稿）。</li>
 <li><strong>项目权益 = 独立计次 / 关联计次 双模式</strong>：Step2 四类权益 Switch <strong>默认全部关闭</strong>，打开「项目」开关展开计次模式切换。<strong>独立计次</strong>（默认）只设次数、无需配置具体项目：<strong>适用范围</strong>（= 会员卡名称，只读不可改）+ <strong>次数</strong>；保存后生成「名义项目」= 卡名，<strong>不进价目表</strong>；办卡后开单出现 <strong>浅金扣次券</strong> 一键扣次（单价 = 开卡实付 ÷ 开卡总次数）。<strong>关联计次</strong> = 普通项目权益（每项/共计、适用项目多选）；<strong>无已保存项时切换即自动展开适用项选择页</strong>（与产品/折扣开关行为一致）。<strong>互斥规则：独立计次卡只能有「独立计次」一种权益且只有一个次数池——其他权益（面值/产品/折扣）已开启时禁止切换独立计次（toast 提示先关闭）；独立计次模式下其他三个 Switch 置灰禁用；保存/下一步做防御性强制关闭</strong>。演示种子：面部护理10次卡 / 剪发造型10次卡。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准；本文把规则与验收写全，便于无历史上下文的机器与人直接开工。</p>
@@ -271,24 +271,25 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
 <li><strong>会员卡分组</strong>：自定义分组（名称 ≤20 字、不可重名）；列表筛选轨（全部 + 分组 + 齿轮进管理）；分组管理（拖排序 / 新建 / 重命名 / 删除）；编辑成员（多选卡入组）；列表「快速分组」Sheet（多选加入，可同时属多组）；删除分组 <strong>不删卡</strong>  </li>
 <li>
-<p>权益组合：面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（<strong>独立计次 / 关联计次 双模式</strong>：独立计次 = 只设次数 + 适用范围（=卡名只读），名义项目不进价目表，<strong>与面值/产品/折扣互斥（只能有独立计次一种权益 + 单一次数池）</strong>；关联计次 = 每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+<p>权益组合：面值（金额与赠送；<strong>仅可用于抵扣不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（<strong>独立计次 / 关联计次 双模式</strong>：独立计次 = 只设次数 + 适用范围（=卡名只读），名义项目不进价目表，<strong>与面值/产品/折扣互斥（只能有独立计次一种权益 + 单一次数池）</strong>；关联计次 = 每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
 </li>
 <li>用卡策略：消耗及退卡计算规则、业绩计算规则（含总权益面值明细）  </li>
-<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（应付可改、办卡日期、服务员工）→ 开单记账支付 → <strong>支付成功回调入账</strong> → 办卡成功  </li>
-<li>已持卡：延期（免费立即写；收费须支付成功后再写；纯面值或模板永久点延期 toast「该卡永久有效，无需延期」）、整卡退卡（估值 + 实退可改；仅记账）  </li>
+<li>办卡：单选既存会员 → 「去结账」→ <strong>确认办卡</strong>（应付可改、办卡日期、服务员工）→ 开单记账确认 → <strong>记账确认回调入账</strong> → 办卡成功  </li>
+<li>已持卡：延期（免费立即写；收费须记账确认后再写；纯面值或模板永久点延期 toast「该卡永久有效，无需延期」）、整卡退卡（估值 + 实退可改；仅记账）  </li>
 <li>上下架及文案提示  </li>
 <li><strong>旧入口全量替换</strong>（见 §1.6）：工作台「卡管理」/ 会员卡管理 / 顾客详情 / 开单办卡 / 旧卡搜索详情 / 认领·AI 录卡等一律切新模板体系  </li>
 </ul>
 <h2>1.4 本期不做（Out）</h2>
 <ul>
-<li><strong>开单记账支付页 UI</strong> 全链路规格 — 不在本文展开；但办卡/收费延期 <strong>必须依赖开单模块收款</strong>，交接字段与回调见 <strong>§7.7</strong>（未就绪时 toast「开单记账模块未就绪」）  </li>
+<li><strong>开单记账页 UI</strong> 全链路规格 — 不在本文展开；但办卡/收费延期 <strong>必须依赖开单模块记账确认</strong>，交接字段与回调见 <strong>§7.7</strong>（未就绪时 toast「开单记账模块未就绪」）  </li>
 <li><strong>价目表</strong>作为独立产品交付 — 不在本文展开；规格见同目录 <code>PRD-项目创建与管理.md</code>。建卡「选项目/产品」与「管理价目表」依赖价目数据（项目 Tab / 产品 Tab）。会员卡域金额以 <strong>元</strong> 为准（见 §7.8）；与价目「存分」建议冲突时以本定稿为准  </li>
 <li><strong>会员管理</strong>（会员 CRUD；办卡仅从既存会员列表 <strong>单选</strong>）  </li>
 <li>部分退卡、劳动业绩独立运算台、预约联调  </li>
-<li><strong>退卡资金原路退 / 退款渠道选择 / 退款成功回调后再改持卡</strong> — 本期不做（见 §6.11、§7.4）  </li>
+<li><strong>退款通道</strong>（系统为纯记账，<strong>不存在钱款原路退回的逻辑</strong>；退卡仅记实退，资金由门店线下/财务另处理）  </li>
+<li><strong>退卡订单入「订单流水·退款类」、退卡联动员工业绩提成冲销</strong> — 后续开发（见 §6.11「后续扩展」）；本期退卡仅记实退、不联动</li>
 <li>原型工具栏「无数据/有数据」造数按钮 — <strong>仅演示</strong>，不进正式产品  </li>
 </ul>
 <h2>1.5 旧能力 ↔ 新组合权益（能力映射，不写废弃产品名）</h2>
@@ -302,7 +303,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>储值/充值类（买赠面值）</td>
-<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；持卡面值 <strong>仅可</strong>支付不含面值的办卡/购卡、延期与项目消费；<strong>不可</strong>支付含面值新办卡，<strong>不可</strong>购价目产品</td>
+<td>开启 <strong>面值</strong>：填面值金额；赠送 = 面值 − 购买金额（自动）；持卡面值 <strong>仅可</strong>抵扣不含面值的办卡/购卡、延期与项目消费；<strong>不可</strong>抵扣含面值新办卡，<strong>不可</strong>购价目产品</td>
 </tr>
 <tr>
 <td>次卡/项目次数类</td>
@@ -355,7 +356,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>开单 · 办卡 / 添加卡</td>
-<td>确认办卡 → 开单支付契约（§7.7）；不复用旧卡类型选择</td>
+<td>确认办卡 → 开单记账契约（§7.7）；不复用旧卡类型选择</td>
 </tr>
 <tr>
 <td>旧卡搜索 / 详情</td>
@@ -427,15 +428,15 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>为会员办卡</td>
-<td>单选未持该卡的会员 → 「去结账」→ 确认办卡（改应付/办卡日期、选服务员工；演示默认还须选工位）→ 开单记账支付 → 办卡成功</td>
+<td>单选未持该卡的会员 → 「去结账」→ 确认办卡（改应付/办卡日期、选服务员工；演示默认还须选工位）→ 开单记账确认 → 办卡成功</td>
 </tr>
 <tr>
 <td>延期</td>
-<td>对有期限权益持卡设置延期时长；含折扣且参考费用 &gt; 0 时走开单同款支付页，支付成功后再写延期；费用为 0 或选永久则立即生效；纯面值/模板永久仅 toast 无需延期</td>
+<td>对有期限权益持卡设置延期时长；含折扣且参考费用 &gt; 0 时走开单同款记账页，记账确认后再写延期；费用为 0 或选永久则立即生效；纯面值/模板永久仅 toast 无需延期</td>
 </tr>
 <tr>
 <td>退卡</td>
-<td>看到建议退款与明细，改实际退款后确认整卡退；结束持卡并记实退（不走支付退款通道）</td>
+<td>看到建议退款与明细，改实际退款后确认整卡退；结束持卡并记实退（纯记账，无资金退回）</td>
 </tr>
 </tbody>
 </table>
@@ -445,7 +446,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>Step2 <strong>至少有一类已配置有效内容的权益</strong> 才能进入 Step3 / 保存成功；开关已开但无内容时 <strong>自动关闭该开关</strong>（不拦截下一步，见 5.2 / 6.3）。  </li>
 <li><code>当前有效持卡 &gt; 0</code> 时详情「编辑」不可用，并提示复制建卡。  </li>
 <li>已下架卡列表无「办卡/退卡」入口；详情可「已持卡管理」（退卡/延期）。  </li>
-<li>支付成功办卡后，持卡人数/办卡次数等运营数据按规则增加；入账金额以确认办卡页应付为准。  </li>
+<li>记账确认办卡后，持卡人数/办卡次数等运营数据按规则增加；入账金额以确认办卡页应付为准。  </li>
 <li>退卡确认后该会员不再作为有效持卡；进入退卡成功页，实退金额以确认值为准展示。  </li>
 <li>有卡时列表展示分组筛选；空组筛选显示「本组暂无会员卡」并可进入编辑成员。</li>
 </ol>
@@ -543,7 +544,7 @@ flowchart LR
 <tr>
 <td>Step1</td>
 <td>添加会员卡 / 编辑会员卡</td>
-<td>基本信息 + 卡面模板；步骤条「第 1/3 步 · 基本信息」</td>
+<td>基本信息 + 卡面模板；步骤条「第 1/3 步 · 基本信息」；<strong>返回弹「退出创建？」确认框（取消留步/确认清空回列表）</strong></td>
 </tr>
 <tr>
 <td>Step2</td>
@@ -785,7 +786,7 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡支付复用开单记账路由。</p>
+<p>实现路由建议（名称可调整）：<code>card-list</code> / <code>card-groups</code> / <code>card-group-members</code> / <code>card-step1</code> / <code>card-step2</code> / <code>card-step3</code> / <code>card-create-success</code> / <code>card-detail</code> / <code>card-project-benefit</code> / <code>card-product-benefit</code> / <code>card-discount-benefit</code> / <code>card-issue-success</code> / <code>card-quick-issue</code> + sheets；办卡记账复用开单记账路由。</p>
 <hr />
 <h1>模块 4　状态机</h1>
 <blockquote>
@@ -955,9 +956,9 @@ flowchart LR
 </ol>
 <h2>5.2 离开与返回</h2>
 <ul>
-<li>各步标题栏返回：回到上一步或列表（与原型一致：Step1 回列表，Step2→1，Step3→2）。  </li>
+<li>各步标题栏返回：<strong>Step1 返回时弹「退出创建？」确认框</strong>（正文：确定要退出会员卡创建吗？退出后当前已填写的资料将清空且无法恢复；按钮：取消 / 退出）。取消 → 留在当前步骤、草稿保留；确认 → 清空已填临时数据并返回列表（Step1 从开单/详情进入时同样拦截，确认后清空并回列表）。Step2→1、Step3→2 仅回退上一步，不拦截。  </li>
 <li>Sheet 点遮罩关闭：取消当前 sheet，不提交。  </li>
-<li><strong>【待联调确认】</strong> 三步中途系统返回是否弹「放弃编辑」：原型未做拦截时，正式产品可按现网统一规范补齐。</li>
+<li>【已实现】三步中途返回列表由「退出创建？」确认框拦截（防误触丢失草稿），确认后清空临时数据。</li>
 </ul>
 <h2>5.3 校验失败（须拦截前进/保存）</h2>
 <table>
@@ -1388,10 +1389,10 @@ flowchart LR
 <li>描述：购买与赠送的面值，永久有效。  </li>
 <li>面值金额（可编，可为 0）  </li>
 <li>赠送（只读）= max(0, 面值 − 购买金额)  </li>
-<li><strong>面值支付规则</strong>（与开单支付页一致）：  </li>
+<li><strong>面值抵扣规则</strong>（与开单记账页一致）：  </li>
 <li><strong>可用</strong>：办理 <strong>未</strong> 开启面值权益的会员卡；收费延期；开单中的服务项目消费  </li>
 <li><strong>不可用</strong>：办理 <strong>已</strong> 开启面值权益的会员卡（禁止面值买面值）；购买价目「产品」  </li>
-<li><strong>多卡</strong>：会员有多张可用面值余额时，支付页须 <strong>单选一张</strong>；抵扣上限为该卡余额，不跨卡分摊  </li>
+<li><strong>多卡</strong>：会员有多张可用面值余额时，记账页须 <strong>单选一张</strong>；抵扣上限为该卡余额，不跨卡分摊  </li>
 <li>Step2 <strong>无</strong>「可购买产品」配置项</li>
 </ul>
 <h3>6.3.2 项目（独立计次 / 关联计次）</h3>
@@ -1409,7 +1410,7 @@ flowchart LR
 <p><strong>互斥规则（独立计次 = 唯一权益 + 单一次数池）</strong>：独立计次卡<strong>只能有「独立计次」一种权益</strong>，不可与面值/产品/折扣并存；且只有一个次数池（名义项目 <code>purchaseQty</code> = 总次数，无多 ticket）：</p>
 <ul>
 <li>其他权益（面值/产品/折扣）<strong>任一已开启</strong>时，切换到「独立计次」tab 被<strong>阻止</strong>，toast「独立计次卡只能配置独立计次权益，请先关闭{面值/产品/折扣}」，停留在当前模式。</li>
-<li><strong>独立计次模式下</strong>，面值/产品/折扣三个 Switch <strong>置灰禁用</strong>（<code>disabled</code>），不可点击开启。</li>
+<li><strong>独立计次模式下</strong>，面值/产品/折扣三个 Switch <strong>置灰禁用</strong>（<code>is-locked</code> + <code>aria-disabled</code>），点击时 toast「独立计次卡只能配置独立计次权益，其他权益不可开启」。</li>
 <li>打开「项目」Switch 时若其他权益已开 → 默认进入 <strong>关联计次</strong>（非独立计次）。</li>
 <li>保存/「下一步」<strong>防御性校验</strong>：若存在非法组合（独立计次 + 其他权益已开），强制关闭面值/产品/折扣并 toast「独立计次卡不能配置其他权益，已关闭面值/产品/折扣」。</li>
 </ul>
@@ -1516,12 +1517,12 @@ flowchart LR
 <h2>6.10 选择会员 Sheet</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=card-issue-new">办卡选人</a> · <a href="demo.html?flow=card-issue-holders">退卡/延期</a> · <a href="demo.html?flow=card-extend">延期行内</a></p>
 <ul>
-<li>办卡 Tab：<strong>单选</strong>；底栏 <strong>去结账</strong>（未选禁用）→ <strong>确认办卡</strong>（见 6.10a）→ 开单收款 → 支付成功写持卡并进办卡成功  </li>
+<li>办卡 Tab：<strong>单选</strong>；底栏 <strong>去结账</strong>（未选禁用）→ <strong>确认办卡</strong>（见 6.10a）→ 开单记账确认 → 记账确认写持卡并进办卡成功  </li>
 <li>已持卡管理 / 已下架：隐藏办卡 Tab（仅「退卡/延期」）  </li>
 <li>退卡/延期：badge 已持卡/已失效；行操作「退卡」「延期」  </li>
 <li><strong>延期写卡规则</strong>（含折扣且非永久时展示参考费用）：  </li>
 <li>选 <strong>永久</strong>，或参考费用 <strong>= 0</strong> → 关闭 Sheet 后 <strong>立即</strong> 更新有效期（免费延期 toast）  </li>
-<li>参考费用 <strong>&gt; 0</strong> → 关闭选人 Sheet → 打开开单同款 <strong>支付页（payMask）</strong> → 支付成功后再写延期并 toast；取消支付不写延期  </li>
+<li>参考费用 <strong>&gt; 0</strong> → 关闭选人 Sheet → 打开开单同款 <strong>记账页（payMask）</strong> → 记账确认后再写延期并 toast；取消记账不写延期  </li>
 <li>纯面值或模板永久 → <strong>仍展示延期按钮</strong>；点延期即 toast「该卡永久有效，无需延期」（不进延期表单）  </li>
 </ul>
 <h2>6.10a 确认办卡（快捷）</h2>
@@ -1557,26 +1558,31 @@ flowchart LR
 </tr>
 <tr>
 <td>底栏</td>
-<td><strong>确认办卡</strong> → 校验员工（及工位，若按工位）后进入开单支付；成功回调后办卡成功页</td>
+<td><strong>确认办卡</strong> → 校验员工（及工位，若按工位）后进入开单记账；记账确认回调后办卡成功页</td>
 </tr>
 </tbody>
 </table>
 <p>与开单「添加卡」差异：开单侧仍可选卡 / 补录老卡；本页卡与会员已定。</p>
 <h2>6.11 退卡估值 Sheet</h2>
 <p>副标题含均值退卡/减值退卡。办卡实付、消耗价值、权益剩余明细、建议退款、实际退款。无分项 fallback 文案见模块 9。确认后关闭估值 Sheet（及选人 Sheet），进入 <strong>退卡成功页</strong>（见 6.14），不 toast 后重开选人。</p>
-<p><strong>资金与通道（定稿）</strong></p>
+<p><strong>资金与记账（定稿）</strong></p>
 <ul>
 <li>确认退卡 = <strong>结束持卡</strong> + 记 <code>refundActualAmount</code>（元）+ 退卡成功页。  </li>
-<li><strong>本期不做</strong>：支付原路退、退款渠道选择、退款回调成功后再改持卡。资金退回由门店线下或财务另处理。  </li>
+<li><strong>纯记账系统</strong>：无支付通道、无资金流转，<strong>不存在钱款原路退回逻辑</strong>；退卡仅记实退，资金退回由门店线下或财务另处理。  </li>
 <li><strong>幂等</strong>：同一持卡不可重复退；已退卡再次确认应失败提示。  </li>
-<li>经营分析「退卡金额」取实退记账值，<strong>不</strong>依赖支付退款流水。</li>
+<li>经营分析「退卡金额」取实退记账值。</li>
+</ul>
+<p><strong>后续扩展（本期仅说明，不排入本期开发）</strong></p>
+<ul>
+<li><strong>退卡订单</strong>：退卡确认后会产生一笔 <strong>退卡订单</strong>，归入「订单流水 → 门店流水页 → <strong>退款</strong> 类」（与开单退款同列）。订单记录退卡时间、持卡人、卡名、实际退款金额；原型门店流水「退款」Tab 与空态「暂无退款订单」已为此预留。  </li>
+<li><strong>退卡业绩提成</strong>：退卡会<strong>关联员工的业绩提成计算</strong>——退卡时按原办卡业绩口径反向冲销/回滚对应员工业绩（含劳动业绩与按项提成），具体冲销公式与员工业绩模块的联动在后续版本定稿。本期退卡仅记实退，不联动业绩冲销。</li>
 </ul>
 <h2>6.12 下架 / 重新上架</h2>
 <p>居中 sheet；确认后 toast「已下架」/「已重新上架」。</p>
 <h2>6.13 办卡成功</h2>
 <p><strong>原型</strong>：<a href="demo.html?flow=issue-success">打开办卡成功</a></p>
 <p><img alt="办卡成功" src="assets/prd-shots/issue-success.png" /></p>
-<p>返回列表或 <strong>返回开单</strong>（来自结账）| 继续办卡。收费延期支付成功亦走同款成功页（标题「延期成功」）。办卡成功页展示服务员工（来自收款单据快照）；入账说明：已记入办卡单据与办卡业绩。</p>
+<p>返回列表或 <strong>返回开单</strong>（来自结账）| 继续办卡。收费延期记账确认亦走同款成功页（标题「延期成功」）。办卡成功页展示服务员工（来自收款单据快照）；入账说明：已记入办卡单据与办卡业绩。</p>
 <h2>6.14 退卡成功</h2>
 <p>与办卡成功同屏结构（<code>screen-success</code>）：</p>
 <ul>
@@ -1724,7 +1730,7 @@ flowchart LR
 <h2>7.2 持卡实例（示意）</h2>
 <p>会员 ID、模板 ID、办卡实付、有效期至/永久、余额拆分、项目已用剩余、折扣已用与已省、延期记录、<code>refundActualAmount</code>（已退时）等；须支撑模块 8 计算。</p>
 <p><strong>独立计次持卡投影（浅金扣次券）</strong>：<code>simpleTimesMode</code> 模板办卡后持卡实例投影为 <strong>扣次券</strong>（<code>kind='times_ticket'</code> / <code>isTimesTicket</code>）：<code>redeemName</code> = 适用范围（= 卡名）、<code>issueTotalTimes</code> = 总次数、<code>issuePaidAmount</code> = 办卡实付、<code>simpleTimesAchId</code> = <code>st_{templateId}</code>（业绩项 ID）；开单「选择会员卡」展示剩余次数并支持一键扣次（单价 = 办卡实付 ÷ 总次数，见 §8.8）。<strong>互斥约束：独立计次持卡实例仅含扣次券一类权益，无面值/产品/折扣项；次数池唯一</strong>（<code>issueTotalTimes</code> 单一池，见 §6.3.2）。</p>
-<p><strong>服务员工不作为持卡权威字段</strong>：办卡时选定的服务员工写入 <strong>开单/收款单据</strong>；支付成功入账时同步生成 <strong>办卡业绩分摊明细</strong>。持卡详情若展示「办卡员工」，只读引用办卡单据快照，<strong>不以持卡表为准算提成</strong>。收费延期、退卡 <strong>不</strong> 采集服务员工。</p>
+<p><strong>服务员工不作为持卡权威字段</strong>：办卡时选定的服务员工写入 <strong>开单/收款单据</strong>；记账确认入账时同步生成 <strong>办卡业绩分摊明细</strong>。持卡详情若展示「办卡员工」，只读引用办卡单据快照，<strong>不以持卡表为准算提成</strong>。收费延期、退卡 <strong>不</strong> 采集服务员工。</p>
 <h2>7.3 接口能力清单</h2>
 <ol>
 <li>模板列表（在售/已下架）  </li>
@@ -1733,9 +1739,9 @@ flowchart LR
 <li>下架 / 重新上架  </li>
 <li>价目项目与产品列表  </li>
 <li>可办卡会员（排除已持）/ 已持卡会员  </li>
-<li><strong>发起办卡结账</strong>（<code>bizType=card_issue</code> + 会员 + 金额 + 服务员工）→ 支付成功回调 <strong>FinalizeIssue</strong>  </li>
-<li><strong>延期</strong>（免费立即写；收费 <code>bizType=card_extend</code> → 开单支付成功回调 <strong>FinalizeExtend</strong>）  </li>
-<li>退卡估值 + 确认退卡（结束持卡 + 记实退；无退款通道）  </li>
+<li><strong>发起办卡结账</strong>（<code>bizType=card_issue</code> + 会员 + 金额 + 服务员工）→ 记账确认回调 <strong>FinalizeIssue</strong>  </li>
+<li><strong>延期</strong>（免费立即写；收费 <code>bizType=card_extend</code> → 开单记账确认回调 <strong>FinalizeExtend</strong>）  </li>
+<li>退卡估值 + 确认退卡（结束持卡 + 记实退；纯记账、无资金退回）  </li>
 <li>运营统计  </li>
 </ol>
 <h2>7.4 谁在什么时机写数据</h2>
@@ -1760,11 +1766,11 @@ flowchart LR
 <td>更新 shelved</td>
 </tr>
 <tr>
-<td>办卡 · 未支付 / 取消支付</td>
+<td>办卡 · 未确认 / 取消记账</td>
 <td><strong>禁止</strong>写持卡、禁止写办卡业绩</td>
 </tr>
 <tr>
-<td>办卡支付成功（FinalizeIssue）</td>
+<td>办卡记账确认（FinalizeIssue）</td>
 <td>写持卡、累加统计、按单据员工写办卡业绩分摊、再进成功页</td>
 </tr>
 <tr>
@@ -1772,16 +1778,16 @@ flowchart LR
 <td>立即更新有效期</td>
 </tr>
 <tr>
-<td>收费延期 · 取消支付</td>
+<td>收费延期 · 取消记账</td>
 <td><strong>不</strong>写延期</td>
 </tr>
 <tr>
-<td>收费延期支付成功（FinalizeExtend）</td>
+<td>收费延期记账确认（FinalizeExtend）</td>
 <td>更新有效期；记实付参考费用（不要求服务员工）</td>
 </tr>
 <tr>
 <td>确认退卡</td>
-<td>结束持卡；记实退（元）；<strong>不</strong>调支付退款接口</td>
+<td>结束持卡；记实退（元）；纯记账、无资金退回</td>
 </tr>
 </tbody>
 </table>
@@ -1795,17 +1801,17 @@ flowchart LR
 <h2>7.6 联调待确认</h2>
 <ul>
 <li>[ ] 模板/持卡 API 命名空间与路径  </li>
-<li>[x] 办卡结账订单与支付回调（<strong>已定稿</strong> → §7.7）  </li>
-<li>[x] 收费延期订单与支付回调（<strong>已定稿</strong> → §7.7）  </li>
-<li>[x] 实退退款通道（<strong>已定稿：本期无通道，仅记账</strong> → §6.11）  </li>
+<li>[x] 办卡结账订单与记账回调（<strong>已定稿</strong> → §7.7）  </li>
+<li>[x] 收费延期订单与记账回调（<strong>已定稿</strong> → §7.7）  </li>
+<li>[x] 实退记账（<strong>已定稿：纯记账、无资金退回</strong> → §6.11）  </li>
 <li>[x] 金额单位（<strong>已定稿：元、两位小数</strong> → §7.8）  </li>
 <li>[x] 服务员工落库（<strong>已定稿：单据 + 办卡业绩</strong> → §7.2 / §7.7）  </li>
 <li>[x] 旧入口替换范围（<strong>已定稿：本期全量</strong> → §1.6）  </li>
 <li>[ ] 管理价目表路由与权限码  </li>
 </ul>
-<h2>7.7 办卡 / 收费延期 ↔ 开单支付契约（已定稿）</h2>
+<h2>7.7 办卡 / 收费延期 ↔ 开单记账契约（已定稿）</h2>
 <blockquote>
-<p>支付页 UI 细节属开单模块；本节省 <strong>交接字段、业务类型、回调与返回页</strong>。路径名可按现网命名；能力字段如下。</p>
+<p>记账页 UI 细节属开单模块；本节省 <strong>交接字段、业务类型、回调与返回页</strong>。路径名可按现网命名；能力字段如下。系统为 <strong>纯记账系统</strong>（无支付通道、无资金流转），「记账确认回调」即开单模块收银记账成功回执。</p>
 </blockquote>
 <h3>业务类型</h3>
 <table>
@@ -1814,7 +1820,7 @@ flowchart LR
 <th>场景</th>
 <th><code>bizType</code>（示意）</th>
 <th>是否经「确认办卡」选员工</th>
-<th>支付成功入账</th>
+<th>记账确认入账</th>
 </tr>
 </thead>
 <tbody>
@@ -1827,14 +1833,14 @@ flowchart LR
 <tr>
 <td>收费延期（费用 &gt; 0）</td>
 <td><code>card_extend</code></td>
-<td>否（直达支付页，与原型一致）</td>
+<td>否（直达记账页，与原型一致）</td>
 <td><code>FinalizeExtend</code></td>
 </tr>
 <tr>
 <td>免费/永久延期</td>
 <td>—</td>
 <td>—</td>
-<td>无支付；立即写有效期</td>
+<td>无记账；立即写有效期</td>
 </tr>
 </tbody>
 </table>
@@ -1869,7 +1875,7 @@ flowchart LR
 </tr>
 <tr>
 <td><code>bizDate</code></td>
-<td>办卡业务日（确认办卡页「办卡日期」）；延期可与支付日一致</td>
+<td>办卡业务日（确认办卡页「办卡日期」）；延期可与记账日一致</td>
 </tr>
 <tr>
 <td><code>returnRoute</code></td>
@@ -1885,12 +1891,12 @@ flowchart LR
 </tr>
 </tbody>
 </table>
-<h3>支付成功回调 → 入账（硬规则）</h3>
-<pre><code>未支付 / 取消支付 → 禁止写持卡或延期
-支付成功且拿到收据 ID → 才允许 Finalize*
+<h3>记账确认回调 → 入账（硬规则）</h3>
+<pre><code>未确认 / 取消记账 → 禁止写持卡或延期
+记账确认且拿到收据 ID → 才允许 Finalize*
 Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回调不重复开卡/延期
 </code></pre>
-<p>回调入参至少含：<code>tradeReceiptId</code>（或现网等价收据/订单号）、<code>bizType</code>、原发起参数回传、实付金额（元）。</p>
+<p>回调入参至少含：<code>tradeReceiptId</code>（或现网等价收据/订单号）、<code>bizType</code>、原发起参数回传、实收金额（元）。</p>
 <table>
 <thead>
 <tr>
@@ -1905,7 +1911,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td><code>FinalizeExtend</code></td>
-<td>更新有效期、记延期实付参考费用；<strong>不</strong>要求服务员工</td>
+<td>更新有效期、记延期实收参考费用；<strong>不</strong>要求服务员工</td>
 </tr>
 </tbody>
 </table>
@@ -1915,7 +1921,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tr>
 <th>来源</th>
 <th>成功</th>
-<th>取消支付</th>
+<th>取消记账</th>
 </tr>
 </thead>
 <tbody>
@@ -1963,7 +1969,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </tbody>
 </table>
-<p>原型为 mock 支付：确认支付后才调用 Finalize<em>；正式环境须以真实支付成功回调为准，</em><em>禁止</em>*未支付直接入账。</p>
+<p>原型为 mock 记账：确认记账后才调用 Finalize<em>；正式环境须以真实记账确认回调为准，</em><em>禁止</em>*未确认直接入账。</p>
 <h2>7.8 金额单位（已定稿）</h2>
 <ul>
 <li>本模块金额字段（购买金额、办卡实付、延期费用、建议/实际退款、面值等）：统一 <strong>元、两位小数</strong>。  </li>
@@ -2044,7 +2050,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <p>用卡策略两轨独立保存：<code>refundRule</code>（均值 <code>alloc_pool</code> / 减值 <code>retail</code>）、<code>performanceRule</code>（均值 / 原价→界面「减值计绩」）。</p>
 <h2>8.1 赠送面值</h2>
 <p>开启面值：<code>赠送 = max(0, 面值金额 − 购买金额)</code>。面值金额可为 0。</p>
-<p><strong>持卡面值支付（开单支付页「会员卡」渠道）</strong></p>
+<p><strong>持卡面值抵扣（开单记账页「会员卡」渠道）</strong></p>
 <table>
 <thead>
 <tr>
@@ -2063,7 +2069,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>办卡 · 被办模板 <strong>已</strong> 开启面值</td>
-<td style="text-align: center;">✗（支付页不展示会员卡渠道）</td>
+<td style="text-align: center;">✗（记账页不展示会员卡渠道）</td>
 </tr>
 <tr>
 <td>收费延期</td>
@@ -2138,7 +2144,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <p>[
 \text{建议退款} = \max(0,\ P - \text{消耗价值})
 ]</p>
-<p>实退金额商户可改；确认后 <strong>仅结束持卡 + 记实退</strong>，不走支付退款通道。</p>
+<p>实退金额商户可改；确认后 <strong>仅结束持卡 + 记实退</strong>（纯记账，无资金退回）。</p>
 <h3>8.4.1 均值退卡（<code>refundRule = alloc_pool</code>）</h3>
 <p><strong>A. 纯折扣</strong></p>
 <p>[
@@ -2219,7 +2225,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </table>
 <p>两轨与退卡规则独立：可「均值退卡 + 减值计绩」等组合。</p>
 <h3>8.5.2 办卡业绩（员工 · 业绩设置，非 Step3）</h3>
-<p>支付成功 Finalize 办卡后，按 <strong>确认办卡页应付</strong> 与所选服务员工写入 <strong>办卡业绩分摊</strong>（权威在收款单据，不在持卡表）：</p>
+<p>记账确认 Finalize 办卡后，按 <strong>确认办卡页应付</strong> 与所选服务员工写入 <strong>办卡业绩分摊</strong>（权威在收款单据，不在持卡表）：</p>
 <table>
 <thead>
 <tr>
@@ -2296,7 +2302,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <li>未选手动改价前：随时长变化自动重算。  </li>
 <li>商户可改为任意 ≥0 金额（上限见 5.5）；<strong>改为 0</strong> = 免费延期。  </li>
 </ul>
-<h3>8.6.3 写卡与支付</h3>
+<h3>8.6.3 写卡与记账</h3>
 <table>
 <thead>
 <tr>
@@ -2307,11 +2313,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tbody>
 <tr>
 <td>选永久，或费用 = 0</td>
-<td><strong>立即</strong>更新有效期（不打开支付页）</td>
+<td><strong>立即</strong>更新有效期（不打开记账页）</td>
 </tr>
 <tr>
 <td>费用 &gt; 0</td>
-<td>走开单同款支付页 → <strong>支付成功回调后再写</strong>；取消支付不写延期</td>
+<td>走开单同款记账页 → <strong>记账确认回调后再写</strong>；取消记账不写延期</td>
 </tr>
 <tr>
 <td>开单模块缺失且须收费</td>
@@ -2323,7 +2329,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <h2>8.7 办卡约束</h2>
 <ul>
 <li>单次单选一位会员；已持卡不可再选；已下架不可新办；购买金额须 &gt;0；须开单模块就绪。  </li>
-<li>未支付 / 取消支付：<strong>禁止</strong>写持卡、禁止写办卡业绩。</li>
+<li>未确认 / 取消记账：<strong>禁止</strong>写持卡、禁止写办卡业绩。</li>
 </ul>
 <h2>8.8 独立计次 · 开单扣次（浅金扣次券）</h2>
 <p>独立计次模板办卡后，持卡在开单「选择会员卡」中投影为 <strong>浅金扣次券</strong>（展示剩余次数）：</p>
@@ -2485,7 +2491,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>延期</td>
-<td>该卡永久有效，无需延期；已将 {名} 的本卡改为永久有效；延长…（收费走支付页 / 免费立即生效）；开单记账模块未就绪</td>
+<td>该卡永久有效，无需延期；已将 {名} 的本卡改为永久有效；延长…（收费走记账页 / 免费立即生效）；开单记账模块未就绪</td>
 </tr>
 <tr>
 <td>办卡成功</td>
@@ -2610,15 +2616,15 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>4b</td>
 <td>面值可办无面值卡</td>
 <td>会员有面值余额；目标卡无面值</td>
-<td>结账选会员卡支付</td>
+<td>结账选会员卡抵扣</td>
 <td>可用面值抵扣；多卡时须单选一张</td>
 </tr>
 <tr>
 <td>4c</td>
 <td>面值不可办含面值卡</td>
 <td>会员有面值余额；目标卡含面值</td>
-<td>打开支付页</td>
-<td>无「会员卡」支付渠道</td>
+<td>打开记账页</td>
+<td>无「会员卡」抵扣渠道</td>
 </tr>
 <tr>
 <td>5</td>
@@ -2645,21 +2651,21 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>8</td>
 <td>办卡</td>
 <td>在售卡；演示默认按工位</td>
-<td>单选→去结账→确认办卡（员工+工位+应付）→支付成功</td>
+<td>单选→去结账→确认办卡（员工+工位+应付）→记账确认</td>
 <td>办卡成功；统计增加</td>
 </tr>
 <tr>
 <td>8b</td>
 <td>确认办卡改应付</td>
 <td>在售卡</td>
-<td>确认办卡改应付后支付</td>
+<td>确认办卡改应付后记账确认</td>
 <td>入账金额=改后应付；成功页一致</td>
 </tr>
 <tr>
 <td>8c</td>
 <td>办卡平均分配</td>
 <td>业绩设置·办卡业绩改为平均分配</td>
-<td>确认办卡只选员工、不选工位即可去支付</td>
+<td>确认办卡只选员工、不选工位即可去记账确认</td>
 <td>不校验工位</td>
 </tr>
 <tr>
@@ -2702,14 +2708,14 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>延期·免费</td>
 <td>非永久有期限权益；费用 0</td>
 <td>确认延期</td>
-<td>立即成功 toast；未打开支付页</td>
+<td>立即成功 toast；未打开记账页</td>
 </tr>
 <tr>
 <td>14b</td>
 <td>延期·收费</td>
 <td>含折扣；参考费用 &gt; 0</td>
 <td>确认延期</td>
-<td>打开支付页；支付成功后写延期</td>
+<td>打开记账页；记账确认后写延期</td>
 </tr>
 <tr>
 <td>15</td>
@@ -3023,7 +3029,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <ol>
 <li><strong>新建模上线</strong>：权益组合建卡三步 + 用卡策略可保存；可配置出旧五类等价能力及组合卡。  </li>
 <li><strong>运营闭环可用</strong>：列表/分组/详情/上下架/复制/办卡/延期/整卡退卡按本文与原型可用。  </li>
-<li><strong>联调契约达标</strong>：办卡与收费延期须支付成功回调后入账；服务员工→单据+办卡业绩；退卡仅记账；金额统一元。  </li>
+<li><strong>联调契约达标</strong>：办卡与收费延期须记账确认回调后入账；服务员工→单据+办卡业绩；退卡仅记账；金额统一元。  </li>
 <li><strong>旧入口切换</strong>：工作台「卡管理」等入口本期全量切新体系（§1.6）；历史旧卡只读兼容。  </li>
 <li><strong>公式可测</strong>：消耗/退卡/业绩/延期费用按 <strong>模块 8</strong> 与原型一致；§10.1 P0 通过。</li>
 </ol>
@@ -3054,12 +3060,12 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>F4 办卡</td>
-<td>选人 Sheet、确认办卡（应付/日期/员工/工位）、调起开单支付、成功页</td>
+<td>选人 Sheet、确认办卡（应付/日期/员工/工位）、调起开单记账、成功页</td>
 <td>§6.10a；§7.7</td>
 </tr>
 <tr>
 <td>F5 延期</td>
-<td>行内延期、参考费用默认与改价、免费立即写 / 收费支付后写</td>
+<td>行内延期、参考费用默认与改价、免费立即写 / 收费记账确认后写</td>
 <td>§8.6；§6 延期</td>
 </tr>
 <tr>
@@ -3101,7 +3107,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>B2 办卡入账</td>
-<td>创建支付单 → 回调 Finalize → 写持卡 + 运营统计 + 办卡业绩分摊；幂等；<strong>独立计次持卡投影为扣次券（剩余次数/总次数/实付）</strong></td>
+<td>创建记账单 → 回调 Finalize → 写持卡 + 运营统计 + 办卡业绩分摊；幂等；<strong>独立计次持卡投影为扣次券（剩余次数/总次数/实付）</strong></td>
 <td>§7.7；§8.5.2；§8.8</td>
 </tr>
 <tr>
@@ -3111,7 +3117,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>B4 退卡</td>
-<td>估值只读计算或服务端复算；确认结束持卡 + 实退记账；无退款通道</td>
+<td>估值只读计算或服务端复算；确认结束持卡 + 实退记账；纯记账、无资金退回</td>
 <td>§8.4；§6.11</td>
 </tr>
 <tr>
@@ -3147,7 +3153,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <td>§10.1 #21–24</td>
 </tr>
 <tr>
-<td>T3 办卡支付</td>
+<td>T3 办卡记账</td>
 <td>成功入账、改应付、工位/平均分配、重复办卡、模块未就绪</td>
 <td>§10.1 #8–9, #18；§7.7</td>
 </tr>
@@ -3178,12 +3184,13 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </tbody>
 </table>
-<p><strong>测试不做（本期）</strong>：支付原路退款渠道、部分退卡、劳动业绩独立运算台、预约联调、价目/会员 CRUD 本体（仅依赖联调）。</p>
+<p><strong>测试不做（本期）</strong>：退款通道、部分退卡、劳动业绩独立运算台、预约联调、价目/会员 CRUD 本体（仅依赖联调）。</p>
 <h2>13.5 明确不做（与 §1.4 对齐）</h2>
 <ul>
-<li>开单支付页 UI 全链路规格（只接 §7.7 契约）  </li>
+<li>开单记账页 UI 全链路规格（只接 §7.7 契约）  </li>
 <li>价目表 / 会员管理作为本 PRD 交付  </li>
-<li>部分退卡；退卡资金原路退  </li>
+<li>部分退卡；退款通道（系统纯记账，无资金退回逻辑）  </li>
+<li>退卡订单入「订单流水·退款类」与退卡业绩提成冲销（后续开发，见 §6.11 后续扩展）  </li>
 <li>劳动业绩独立运算台；预约联调  </li>
 <li>原型「无数据/有数据」造数进正式包  </li>
 </ul>
@@ -3191,7 +3198,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <ul>
 <li>[ ] 价目：项目/产品原价与分组可供选权益  </li>
 <li>[ ] 会员：办卡选人列表可用  </li>
-<li>[ ] 开单：支付页 + 成功/取消回调 + <code>card_issue</code> / <code>card_extend</code>  </li>
+<li>[ ] 开单：记账页 + 成功/取消回调 + <code>card_issue</code> / <code>card_extend</code>  </li>
 <li>[ ] 员工：业绩设置 · 办卡业绩（平均 / 按工位）可读  </li>
 <li>[ ] 金额：元、两位小数；Finalize 幂等  </li>
 </ul>
@@ -3236,11 +3243,11 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <p>兼容别名（读旧数据）：<code>brand_red→peach</code>，<code>gold→milk</code>，<code>blue→haze</code>，<code>purple→taro</code>，<code>teal→mint</code>。</p>
 <h2>附录 B · 依赖说明</h2>
 <ul>
-<li>价目：选项目（打勾圆选）/ 选产品（行内数量步进）依赖价目数据；价目产品本身不在本文交付。面值支付范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>
+<li>价目：选项目（打勾圆选）/ 选产品（行内数量步进）依赖价目数据；价目产品本身不在本文交付。面值抵扣范围见 8.1（仅不含面值办卡/延期/项目；禁含面值办卡与价目产品）。  </li>
 <li>会员：办卡单选既存会员。  </li>
-<li>开单记账：办卡/收费延期收款与支付成功回调；交接契约见 <strong>§7.7</strong>。  </li>
-<li>办卡支付通道：复用开单支付页；<strong>未支付不得入账</strong>。  </li>
-<li>退卡：<strong>本期无</strong>支付退款通道；仅结束持卡并记实退（§6.11）。  </li>
+<li>开单记账：办卡/收费延期收款与记账确认回调；交接契约见 <strong>§7.7</strong>。  </li>
+<li>办卡记账通道：复用开单记账页；<strong>未记账确认不得入账</strong>。  </li>
+<li>退卡：<strong>纯记账</strong>；仅结束持卡并记实退、无资金退回（§6.11）。  </li>
 <li>金额单位：统一 <strong>元、两位小数</strong>（§7.8）。</li>
 </ul>
 <h2>附录 C · 版本历史</h2>
@@ -3253,6 +3260,21 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>v1.20</td>
+<td>2026-08-12</td>
+<td><strong>澄清系统定位：纯记账系统（无支付通道、无资金流转，不存在钱款原路退回逻辑）</strong>。全文统一为记账语义：办卡/延期的「回调入账」改为「记账确认回调」、开单「支付页」改为「记账页」、退卡「退款通道」改为「纯记账无资金退回」；面值「支付」改为「抵扣」；同步 §1.x / §6.10a / §6.11 / §7.7 / §8 / §13 与精简版。保留退卡订单与业绩提成为后续扩展说明</td>
+</tr>
+<tr>
+<td>v1.19</td>
+<td>2026-08-12</td>
+<td><strong>后续扩展说明（不排本期）</strong>：退卡确认后产生退卡订单，入「订单流水→门店流水页→退款」类；退卡关联员工业绩提成计算（冲销/回滚）。同步 §6.11 后续扩展 / §1.4 / §13.5</td>
+</tr>
+<tr>
+<td>v1.18</td>
+<td>2026-08-12</td>
+<td>Step1 返回列表弹「退出创建？」确认框（取消留步/确认清空临时数据回列表），防误触丢草稿；同步 §5.2 / 模块 3 Step1 行</td>
+</tr>
 <tr>
 <td>v1.17</td>
 <td>2026-08-12</td>

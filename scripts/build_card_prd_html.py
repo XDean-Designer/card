@@ -62,7 +62,7 @@ def main():
         path = CARD / job['html_name']
         path.write_text(out, encoding='utf-8')
         assert '修改记录' not in out and '变更记录' not in out
-        assert 'v1.17' in out
+        assert 'v1.20' in out
         print('wrote', path)
 
     for p in [
@@ -72,7 +72,7 @@ def main():
         CARD / 'PRD-会员卡管理-精简版.html',
     ]:
         t = p.read_text(encoding='utf-8')
-        assert 'v1.17' in t, p
+        assert 'v1.20' in t, p
         assert '确认办卡' in t, p
         assert '立即办卡' in t, p
         assert '橙→红' in t, p
@@ -89,6 +89,13 @@ def main():
         assert '只能有「独立计次」一种权益' in t, p
         assert '置灰禁用' in t, p
         assert '防御性' in t, p
+        assert '退出创建' in t, p
+        assert '退卡订单' in t, p
+        assert '业绩提成' in t, p
+        assert '纯记账' in t, p
+        assert '记账确认' in t, p
+        assert '原路退回' in t, p
+        assert '支付成功回调' not in t, p
         print('ok', p.name)
     print('done')
 
