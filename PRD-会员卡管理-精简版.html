@@ -61,7 +61,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <tbody>
 <tr>
 <td>文档版本</td>
-<td>v1.16-lite</td>
+<td>v1.17-lite</td>
 </tr>
 <tr>
 <td>日期</td>
@@ -163,7 +163,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>开单支付交接与金额单位已定稿（完整稿 <strong>§7.7 / §7.8</strong>）；其余路径名标 <code>【待联调确认】</code> 处不臆造现网 URL。  </li>
 <li><strong>旧入口本期全量替换</strong>（完整稿 <strong>§1.6</strong>）：工作台「卡管理」/会员卡管理/顾客详情/开单办卡/旧卡搜索/认领·AI 录卡一律切新体系。  </li>
 <li><strong>延期</strong>：纯面值或模板永久仍显示延期入口，点按 toast「该卡永久有效，无需延期」；有期限含折扣展示参考费用，收费须支付成功后再写。  </li>
-<li><strong>项目权益 = 独立计次 / 关联计次 双模式</strong>：Step2 四类权益 Switch <strong>默认全部关闭</strong>，打开「项目」开关默认进入 <strong>独立计次</strong>（只设次数，<strong>适用范围 = 会员卡名称（只读不可改）</strong> + 次数；保存后名义项目 = 卡名、<strong>不进价目表</strong>；办卡后开单出<strong>浅金扣次券</strong>一键扣次（单价 = 实付 ÷ 总次数））。关联计次 = 普通项目权益（每项/共计），<strong>无已保存项时切换即自动展开适用项选择页</strong>（同产品/折扣开关）。  </li>
+<li><strong>项目权益 = 独立计次 / 关联计次 双模式</strong>：Step2 四类权益 Switch <strong>默认全部关闭</strong>，打开「项目」开关默认进入 <strong>独立计次</strong>（只设次数，<strong>适用范围 = 会员卡名称（只读不可改）</strong> + 次数；保存后名义项目 = 卡名、<strong>不进价目表</strong>；办卡后开单出<strong>浅金扣次券</strong>一键扣次（单价 = 实付 ÷ 总次数））。<strong>互斥规则：独立计次卡只能有「独立计次」一种权益且只有一个次数池</strong>——其他权益（面值/产品/折扣）已开时禁止切独立计次（toast 提示先关闭）；独立计次模式下其他三个 Switch 置灰禁用；打开项目 Switch 时若有其他权益已开 → 默认关联计次；保存/下一步防御性强制关闭非法组合。关联计次 = 普通项目权益（每项/共计），<strong>无已保存项时切换即自动展开适用项选择页</strong>（同产品/折扣开关）。  </li>
 <li><strong>公式与本期任务</strong>：见本文模块 4–5；全量公式与任务包见完整稿 <strong>§8 / §13</strong>。</li>
 </ol>
 <p>交互行为与文案以 <strong><code>demo.html</code> 当前表现</strong> 为准。状态机、交互细则、功能规格、接口、验收等见完整稿 <code>PRD-会员卡管理.md</code>。</p>
@@ -215,7 +215,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 <li>会员卡模板：创建、编辑（无持卡时）、复制建卡、在售/已下架列表与详情  </li>
 <li><strong>会员卡分组</strong>：自定义分组（名称 ≤20 字、不可重名）；列表筛选轨（全部 + 分组 + 齿轮进管理）；分组管理（拖排序 / 新建 / 重命名 / 删除）；编辑成员（多选卡入组；反选/全选 + <strong>确定</strong>）；列表「快速分组」Sheet（多选加入，可同时属多组）；删除分组 <strong>不删卡</strong>  </li>
 <li>
-<p>权益组合：新建默认 <strong>四类 Switch 全部关闭</strong>，按需开启配置；面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（<strong>独立计次 / 关联计次 双模式</strong>：打开项目开关默认独立计次 = 只设次数 + 适用范围（=卡名只读），名义项目不进价目表；关联计次 = 每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
+<p>权益组合：新建默认 <strong>四类 Switch 全部关闭</strong>，按需开启配置；面值（金额与赠送；<strong>仅可用于</strong>支付<strong>不含面值</strong>的办卡/购卡、收费延期及项目消费；<strong>不可</strong>用于含面值办卡、<strong>不可</strong>购买价目产品）、项目（<strong>独立计次 / 关联计次 双模式</strong>：打开项目开关默认独立计次 = 只设次数 + 适用范围（=卡名只读），名义项目不进价目表，<strong>与面值/产品/折扣互斥（只能有独立计次一种权益 + 单一次数池）</strong>；关联计次 = 每项/共计、购买/赠送/不限次；<strong>每项拆成一项目一票</strong>）、<strong>产品（行内数量，一种产品一票，不可不限量）</strong>、折扣（比例/固定金额）；均可配置多张权益 ticket  </p>
 </li>
 <li>
 <p>卡面主题色（5 色：蜜桃/薄荷/雾霾/香芋/奶茶，默认蜜桃）、卡有效期限（日/月/年/永久；含项目/产品/折扣时受期限约束；含不限次项目时不可为永久）  </p>
@@ -457,7 +457,7 @@ flowchart LR
 <tr>
 <td>Step2</td>
 <td>权益组合</td>
-<td>四类权益 Switch（面值/项目/产品/折扣）<strong>默认全关</strong>，按需开启 + 多 ticket；<strong>项目展开后为「独立计次 / 关联计次」双 tab</strong>；步骤条第 2/3 步</td>
+<td>四类权益 Switch（面值/项目/产品/折扣）<strong>默认全关</strong>，按需开启 + 多 ticket；<strong>项目展开后为「独立计次 / 关联计次」双 tab</strong>；<strong>独立计次模式下面值/产品/折扣 Switch 置灰禁用（互斥）</strong>；步骤条第 2/3 步</td>
 </tr>
 <tr>
 <td>Step3</td>
@@ -576,7 +576,7 @@ flowchart LR
 </tr>
 <tr>
 <td>独立计次</td>
-<td>名义项目 = 适用范围（=卡名），不进价目表；开单扣次单价 = 实付 ÷ 总次数，按次扣减剩余</td>
+<td>名义项目 = 适用范围（=卡名），不进价目表；开单扣次单价 = 实付 ÷ 总次数，按次扣减剩余；<strong>唯一权益 + 单一次数池（与面值/产品/折扣互斥）</strong></td>
 </tr>
 </tbody>
 </table>
@@ -673,7 +673,7 @@ flowchart LR
 <tbody>
 <tr>
 <td>前端</td>
-<td>列表分组、三步建卡（含项目独立计次/关联计次双模式）、详情锁编辑、办卡确认与支付调起、延期/退卡 UI、独立计次扣次券开单、旧入口、文案边界</td>
+<td>列表分组、三步建卡（含项目独立计次/关联计次双模式 + <strong>互斥规则：独立计次卡唯一权益、其他 Switch 禁用、切 tab 拦截、保存防御</strong>）、详情锁编辑、办卡确认与支付调起、延期/退卡 UI、独立计次扣次券开单、旧入口、文案边界</td>
 </tr>
 <tr>
 <td>后端</td>
@@ -682,7 +682,7 @@ flowchart LR
 </tbody>
 </table>
 <h2>5.3 测试范围（摘要）</h2>
-<p>建卡权益（含独立计次/关联计次、适用范围联动、次数校验、名义项目 ticket）、分组、办卡支付与改应付、独立计次扣次券、锁编辑与上下架、延期（免费/收费/公式）、退卡估值与算例、回归；<strong>不测</strong>原路退款、部分退卡、预约联调。</p>
+<p>建卡权益（含独立计次/关联计次、<strong>独立计次互斥校验（切tab拦截/其他Switch禁用/保存防御）</strong>、适用范围联动、次数校验、名义项目 ticket）、分组、办卡支付与改应付、独立计次扣次券、锁编辑与上下架、延期（免费/收费/公式）、退卡估值与算例、回归；<strong>不测</strong>原路退款、部分退卡、预约联调。</p>
 <h2>5.4 明确不做</h2>
 <p>同 §1.4；另见完整稿 §13.5。</p>
 <hr />
