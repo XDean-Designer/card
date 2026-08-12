@@ -25623,6 +25623,8 @@ function applyBenefitDiff(oldB, newB) {
   }
   if (oldB.timesOrValidity && !newB.timesOrValidity) {
     /* E2: switch off only collapses; keep project benefit / 独立计次草稿 */
+    /* 关闭项目权益时退出独立计次模式，避免 syncSimpleTimesModeUI 强制回弹开关 */
+    state.simpleTimesMode = null;
   }
   if (oldB.products && !newB.products) {
     /* E2: switch off only collapses; keep product benefit cards */
@@ -27443,7 +27445,7 @@ function clearFormFields() {
   state.audience = ['all'];
   state.projectItems = [];
   state.productItems = [];
-  state.simpleTimesMode = true;
+  state.simpleTimesMode = null;
   state.simpleTimesQty = null;
   state.simpleTimesProjectName = '';
   state.memberPrices = {};
