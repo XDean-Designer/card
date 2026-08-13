@@ -432,7 +432,7 @@ table img{max-width:min(260px,100%);width:auto;height:auto;border-radius:10px;bo
 </tr>
 <tr>
 <td>延期</td>
-<td>对有期限权益持卡设置延期时长；含折扣且参考费用 &gt; 0 时走开单同款记账页，记账确认后再写延期；费用为 0 或选永久则立即生效；纯面值/模板永久仅 toast 无需延期</td>
+<td>对有期限权益持卡设置延期时长；含折扣且延期费用 &gt; 0 时走开单同款记账页，记账确认后再写延期；费用为 0 或选永久则立即生效；纯面值/模板永久仅 toast 无需延期</td>
 </tr>
 <tr>
 <td>退卡</td>
@@ -619,7 +619,7 @@ flowchart LR
 <tr>
 <td>持卡延期</td>
 <td>（行内）</td>
-<td>有期限权益；可含参考费用；永久/纯面值仅 toast</td>
+<td>有期限权益；可含延期费用；永久/纯面值仅 toast</td>
 </tr>
 <tr>
 <td>运营数据说明</td>
@@ -1142,12 +1142,12 @@ flowchart LR
 </tr>
 <tr>
 <td>延期</td>
-<td>参考费用为负</td>
-<td>参考费用不能为负数</td>
+<td>延期费用为负</td>
+<td>延期费用不能为负数</td>
 </tr>
 <tr>
 <td>延期</td>
-<td>含折扣且参考费用 &gt; 0，开单模块缺失</td>
+<td>含折扣且延期费用 &gt; 0，开单模块缺失</td>
 <td>开单记账模块未就绪</td>
 </tr>
 <tr>
@@ -1268,7 +1268,7 @@ flowchart LR
 <li><strong>共计</strong>：同共享池多名合并一行；<code>A、B · 共计N次</code>（卡面文案用「共计」；Step2 票根仍为「共」）  </li>
 <li><strong>折扣</strong>（对齐 Step2 折扣 ticket）：<strong>同折扣规则</strong>的多名合并一行；<code>A、B · 8.5折</code>；全选键 <code>__ALL__</code> 展示为 <code>全部项目 · …</code>  </li>
 <li><strong>产品</strong>：一项一行（不合并）；<code>产品名 ×N</code>（名称与数量之间为空格，不加「·」）  </li>
-<li><strong>期限</strong>：开启项目/产品/折扣时展示卡有效期文案；纯面值「永久有效」；否则「—」  </li>
+<li><strong>期限</strong>：开启项目/产品/折扣时展示卡有效期文案；纯面值「永久有效」；含面值且有效期非永久时追加「·面值永久有效」（如「1年 ·面值永久有效」）；否则「—」  </li>
 </ul>
 <p><strong>跳转</strong></p>
 <table>
@@ -1511,7 +1511,7 @@ flowchart LR
 <li>已下架顶栏：已下架标记、复制建卡  </li>
 <li><strong>仅已下架有底栏</strong>：重新上架 | 已持卡管理  </li>
 <li>运营数据 + <code>?</code> 说明（定义见模块 9）  </li>
-<li>卡面信息：面值金额 / 赠送（不含可否购产品）；项目 / 产品 / 折扣摘要；有期限权益时展示 <strong>「项目/产品/折扣有效期」</strong>；用卡策略展示为 <code>均值退卡 · 均值计绩</code> 等形式，退卡/业绩各带 <code>?</code>  </li>
+<li>卡面信息：面值金额 / 赠送（不含可否购产品）；项目 / 产品 / 折扣摘要；有期限权益时展示 <strong>「项目/产品/折扣有效期」</strong>（含面值且有效期非永久追加「·面值永久有效」）；用卡策略展示为 <code>均值退卡 · 均值计绩</code> 等形式，退卡/业绩各带 <code>?</code>  </li>
 <li>列表折叠网格规则见 6.1；详情为键值列表（不套用「展开 N 项」）</li>
 </ul>
 <h2>6.10 选择会员 Sheet</h2>
@@ -1520,9 +1520,9 @@ flowchart LR
 <li>办卡 Tab：<strong>单选</strong>；底栏 <strong>去结账</strong>（未选禁用）→ <strong>确认办卡</strong>（见 6.10a）→ 开单记账确认 → 记账确认写持卡并进办卡成功  </li>
 <li>已持卡管理 / 已下架：隐藏办卡 Tab（仅「退卡/延期」）  </li>
 <li>退卡/延期：badge 已持卡/已失效；行操作「退卡」「延期」  </li>
-<li><strong>延期写卡规则</strong>（含折扣且非永久时展示参考费用）：  </li>
-<li>选 <strong>永久</strong>，或参考费用 <strong>= 0</strong> → 关闭 Sheet 后 <strong>立即</strong> 更新有效期（免费延期 toast）  </li>
-<li>参考费用 <strong>&gt; 0</strong> → 关闭选人 Sheet → 打开开单同款 <strong>记账页（payMask）</strong> → 记账确认后再写延期并 toast；取消记账不写延期  </li>
+<li><strong>延期写卡规则</strong>（含折扣且非永久时展示延期费用）：  </li>
+<li>选 <strong>永久</strong>，或延期费用 <strong>= 0</strong> → 关闭 Sheet 后 <strong>立即</strong> 更新有效期（免费延期 toast）  </li>
+<li>延期费用 <strong>&gt; 0</strong> → 关闭选人 Sheet → 打开开单同款 <strong>记账页（payMask）</strong> → 记账确认后再写延期并 toast；取消记账不写延期  </li>
 <li>纯面值或模板永久 → <strong>仍展示延期按钮</strong>；点延期即 toast「该卡永久有效，无需延期」（不进延期表单）  </li>
 </ul>
 <h2>6.10a 确认办卡（快捷）</h2>
@@ -1783,7 +1783,7 @@ flowchart LR
 </tr>
 <tr>
 <td>收费延期记账确认（FinalizeExtend）</td>
-<td>更新有效期；记实付参考费用（不要求服务员工）</td>
+<td>更新有效期；记实付延期费用（不要求服务员工）</td>
 </tr>
 <tr>
 <td>确认退卡</td>
@@ -1871,7 +1871,7 @@ flowchart LR
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td><strong>元</strong>，两位小数：办卡=<strong>确认办卡页应付</strong>（默认模板购买金额，商户可改）；延期=参考费用</td>
+<td><strong>元</strong>，两位小数：办卡=<strong>确认办卡页应付</strong>（默认模板购买金额，商户可改）；延期=延期费用</td>
 </tr>
 <tr>
 <td><code>bizDate</code></td>
@@ -1911,7 +1911,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td><code>FinalizeExtend</code></td>
-<td>更新有效期、记延期实收参考费用；<strong>不</strong>要求服务员工</td>
+<td>更新有效期、记延期实收延期费用；<strong>不</strong>要求服务员工</td>
 </tr>
 </tbody>
 </table>
@@ -2249,7 +2249,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </table>
 <p>演示种子默认 <code>calcModeCard = station</code>。收费延期、退卡 <strong>不</strong> 采集服务员工、不写办卡业绩。</p>
 <h2>8.6 延期费用计算规则</h2>
-<h3>8.6.1 是否展示参考费用</h3>
+<h3>8.6.1 是否展示延期费用</h3>
 <table>
 <thead>
 <tr>
@@ -2264,17 +2264,17 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>有期限权益且 <strong>含折扣</strong></td>
-<td>展示时长 + <strong>参考费用</strong>（可改）</td>
+<td>展示时长 + <strong>延期费用</strong>（可改）</td>
 </tr>
 <tr>
 <td>有期限但不含折扣</td>
-<td>可延期；参考费用按实现可不展示或为 0（免费路径）</td>
+<td>可延期；延期费用按实现可不展示或为 0（免费路径）</td>
 </tr>
 </tbody>
 </table>
-<h3>8.6.2 默认参考费用（含折扣）</h3>
+<h3>8.6.2 默认延期费用（含折扣）</h3>
 <p>[
-\text{参考费用} = \text{round}!\left( P_{\text{基}} \times \frac{\text{延期天数}}{\text{原有效期天数}} \right)
+\text{延期费用} = \text{round}!\left( P_{\text{基}} \times \frac{\text{延期天数}}{\text{原有效期天数}} \right)
 ]</p>
 <table>
 <thead>
@@ -2306,7 +2306,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <table>
 <thead>
 <tr>
-<th>参考费用 / 时长</th>
+<th>延期费用 / 时长</th>
 <th>写卡</th>
 </tr>
 </thead>
@@ -2390,7 +2390,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tr>
 <td>F</td>
 <td>延期费用</td>
-<td>购买 900、原有效期 365 天、延期 30 天、含折扣 → 默认参考费用 (= \mathrm{round}(900\times 30/365))；改为 0 则免费立即写</td>
+<td>购买 900、原有效期 365 天、延期 30 天、含折扣 → 默认延期费用 (= \mathrm{round}(900\times 30/365))；改为 0 则免费立即写</td>
 </tr>
 <tr>
 <td>G</td>
@@ -2713,7 +2713,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 <tr>
 <td>14b</td>
 <td>延期·收费</td>
-<td>含折扣；参考费用 &gt; 0</td>
+<td>含折扣；延期费用 &gt; 0</td>
 <td>确认延期</td>
 <td>打开记账页；记账确认后写延期</td>
 </tr>
@@ -3065,7 +3065,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>F5 延期</td>
-<td>行内延期、参考费用默认与改价、免费立即写 / 收费记账确认后写</td>
+<td>行内延期、延期费用默认与改价、免费立即写 / 收费记账确认后写</td>
 <td>§8.6；§6 延期</td>
 </tr>
 <tr>
@@ -3112,7 +3112,7 @@ Finalize 幂等：同一 tradeReceiptId（或现网等价订单号）重复回�
 </tr>
 <tr>
 <td>B3 延期</td>
-<td>免费/永久直接写；收费单回调 FinalizeExtend；记参考费用</td>
+<td>免费/永久直接写；收费单回调 FinalizeExtend；记延期费用</td>
 <td>§8.6；§7.7</td>
 </tr>
 <tr>

@@ -5027,9 +5027,10 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .emp-detail-card .emp-form-sword-thumb { margin-right: 0; }
 
 .emp-salary-summary {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px;
   margin: 12px 16px; padding: 16px; background: #fff; border-radius: 12px;
 }
+.emp-salary-summary__left { flex: 1 1 auto; min-width: 0; }
 .emp-salary-summary__lbl { font-size: 13px; color: var(--text-sec); }
 .emp-salary-summary__amt {
   font-size: 28px; font-weight: 700; font-family: var(--font-data); color: var(--text);
@@ -5046,6 +5047,18 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   color: var(--brand); flex-shrink: 0;
 }
 .emp-salary-summary__cycle-act svg { display: block; width: 16px; height: 16px; }
+.emp-salary-summary__tones {
+  flex: 1 1 100%; min-width: 0;
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; max-width: 100%;
+}
+.emp-tone-chip {
+  flex: 0 0 auto; max-width: 100%; box-sizing: border-box;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 999px; background: #F4F4F4;
+  font-size: 11px; color: var(--text-sec); line-height: 1.4; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.emp-tone-chip__lbl { color: var(--text); font-weight: 500; }
 .emp-pay-cycle-lead { font-size: 13px; color: var(--text-sec); line-height: 1.5; margin: 0 0 12px; }
 .emp-pay-cycle-card { padding: 4px 0; overflow: hidden; }
 .emp-pay-cycle-opt {
@@ -14434,6 +14447,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <button type="button" class="emp-salary-summary__cycle" id="empPayCycleEntry" aria-label="结算周期设置"><span id="empPayCycleHint">自然月</span><span class="emp-salary-summary__cycle-act" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 21 20" fill="none"><path d="M13.6338 0.882812C14.786 1.26977 15.8411 1.86545 16.7549 2.62305C16.6385 2.9904 16.5752 3.3808 16.5752 3.78516C16.5752 5.74918 18.0453 7.36153 19.9424 7.61914C20.1419 8.38846 20.25 9.19492 20.25 10.0273C20.25 10.4841 20.2151 10.9328 20.1533 11.3721C18.1554 11.5343 16.5752 13.1932 16.5752 15.2295C16.5752 15.9263 16.7624 16.5798 17.0869 17.1445C16.1709 17.9762 15.094 18.6361 13.9082 19.0742C13.2417 17.8842 11.9652 17.0801 10.5 17.0801C9.03459 17.0801 7.75726 17.884 7.09082 19.0742C5.90512 18.636 4.82807 17.9762 3.91211 17.1445C4.23683 16.5797 4.42477 15.9264 4.4248 15.2295C4.4248 13.1929 2.84413 11.5338 0.845703 11.3721C0.783923 10.9329 0.75 10.4841 0.75 10.0273C0.750014 9.195 0.857153 8.38838 1.05664 7.61914C2.95418 7.36195 4.4248 5.74951 4.4248 3.78516C4.42479 3.3807 4.3606 2.99048 4.24414 2.62305C5.1578 1.86541 6.21308 1.26986 7.36523 0.882812C8.07596 1.83601 9.21522 2.45508 10.5 2.45508C11.7846 2.45508 12.923 1.83574 13.6338 0.882812Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.5 13.5C12.433 13.5 14 11.933 14 10C14 8.067 12.433 6.5 10.5 6.5C8.567 6.5 7 8.067 7 10C7 11.933 8.567 13.5 10.5 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span></button>
       </div>
       <button type="button" class="emp-month-pill" id="empMonthLabel">2026年07月<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="emp-salary-summary__tones" id="empToneChips"></div>
     </div>
     <div class="emp-salary-list" id="empSalaryList"></div>
   </div>
@@ -20053,7 +20067,7 @@ const QUICK_TEMPLATES = [
       benefits: { balance: true, timesOrValidity: false, projectDiscount: true },
       memberPrices: { ...DEMO_WASH_GROUP_MEMBER_PRICES },
       cardColor: 'haze',
-      cardDesc: '演示用·面值+洗吹分组折扣（时尚洗吹/洗剪吹/洗头）；退卡/延期可看参考费用',
+      cardDesc: '演示用·面值+洗吹分组折扣（时尚洗吹/洗剪吹/洗头）；退卡/延期可看延期费用',
     },
   },
   {
@@ -20085,7 +20099,7 @@ const QUICK_TEMPLATES = [
       benefits: { balance: false, timesOrValidity: false, projectDiscount: true },
       memberPrices: { ...DEMO_TANG_GROUP_MEMBER_PRICES },
       cardColor: 'taro',
-      cardDesc: '演示用·烫染分组全部在售项折扣；可与「减值烫染卡」对照；含参考费用',
+      cardDesc: '演示用·烫染分组全部在售项折扣；可与「减值烫染卡」对照；含延期费用',
     },
   },
   {
@@ -27155,8 +27169,19 @@ function isBalanceOnlyCard(tpl) {
 }
 
 function formatListCardValidity(tpl) {
-  if (templateHasTimedBenefits(tpl)) return formatCardValidity(tpl);
+  if (!tpl) return '—';
   if (isBalanceOnlyCard(tpl)) return '永久有效';
+  if (templateHasTimedBenefits(tpl)) {
+    const raw = (typeof tpl.validity === 'string' && tpl.validity && tpl.validity !== 'custom')
+      ? tpl.validity
+      : '';
+    const validity = raw || formatCardValidity(tpl);
+    const isPerm = raw ? raw === '永久有效' : isTemplatePermanent(tpl);
+    if (tpl.benefits && tpl.benefits.balance && !isPerm) {
+      return validity + ' ·面值永久有效';
+    }
+    return validity;
+  }
   return '—';
 }
 
@@ -28848,7 +28873,7 @@ function buildIssueExtendInlineHtml(memberId, tpl) {
   const feeValue = days ? state.issueExtendFee : '';
   const feeBlock = hasDiscount
     ? `<div class="issue-extend-row">
-        <span class="issue-extend-block__label">参考费用</span>
+        <span class="issue-extend-block__label">延期费用</span>
         <div class="issue-extend-fee">
           <input type="number" class="input-amount issue-extend-fee-input" data-extend-fee-input="${escapeAttr(memberId)}" min="0" step="0.01" placeholder="${escapeAttr(feePlaceholder)}" value="${escapeAttr(feeValue)}"${feeDisabled ? ' disabled' : ''} />
           <span class="suffix">元</span>
@@ -29282,7 +29307,7 @@ function confirmIssueExtend(memberId) {
     const feeRaw = String(state.issueExtendFee ?? '').trim();
     extendFee = feeRaw === '' ? parseAmount(computeExtendFeeDefault(tpl, extendDays)) : parseAmount(feeRaw);
     if (extendFee < 0) {
-      showToast('参考费用不能为负数', true);
+      showToast('延期费用不能为负数', true);
       return;
     }
     if (extendFee > INPUT_LIMITS.MONEY_MAX) {
@@ -34187,15 +34212,28 @@ function billingNav(fn) {
     return r ? r.value : fallback;
   }
 
-  /** 基础设置四条口径的可见摘要（薪资列表顶部展示，改配置即可见） */
-  function advToneSummaryText() {
+  /** 基础设置四条口径的可见条目（薪资列表顶部 chip 展示，改配置即可见） */
+  function advToneItems() {
     var labels = ['免单', '消耗赠送金额', '赠送项目（产品）', '抵用券'];
-    var parts = [];
+    var out = [];
     labels.forEach(function (label) {
       var v = getAdvRuleValue(label, '');
-      if (v) parts.push(label + '：' + v);
+      if (v) out.push({ label: label, value: v });
     });
-    return parts.join(' · ');
+    return out;
+  }
+
+  function advToneSummaryText() {
+    return advToneItems().map(function (it) { return it.label + '：' + it.value; }).join(' · ');
+  }
+
+  /** 薪资 hero 卡：口径规则以独立 chip 呈现，与结算周期分层展示 */
+  function renderToneChips() {
+    var chipsEl = $('empToneChips');
+    if (!chipsEl) return;
+    chipsEl.innerHTML = advToneItems().map(function (it) {
+      return '<span class="emp-tone-chip"><span class="emp-tone-chip__lbl">' + esc(it.label) + '</span>' + esc(it.value) + '</span>';
+    }).join('');
   }
 
   /** 方案/分配/口径变更后：清空提成明细缓存并按明细行重算薪资行 */
@@ -34748,9 +34786,9 @@ function billingNav(fn) {
     var staffOnly = isStaffSelfViewer();
     if (sumLbl) sumLbl.textContent = staffOnly ? '我的薪酬' : '本期全店合计薪酬';
     if (cycleHint) {
-      var tone = advToneSummaryText();
-      cycleHint.textContent = payCycleModeLabel(pc) + ' · ' + periodRangeText(mk) + (tone ? ' · ' + tone : '');
+      cycleHint.textContent = payCycleModeLabel(pc) + ' · ' + periodRangeText(mk);
     }
+    renderToneChips();
     var pool = staffOnly
       ? storeActiveStaff().filter(function (s) { return s.id === getSessionStaffId(); })
       : storeActiveStaff();
@@ -54824,7 +54862,7 @@ window.__BILLING_EMBEDDED__ = true;
       }
       sections.push(`<div class="member-card-item__section"><div class="member-card-item__section-row">
         <div class="member-card-item__section-head">期限</div>
-        <div class="member-card-item__section-content"><div class="member-card-item__line">${escapeHtml(tpl.validity)}</div></div>
+        <div class="member-card-item__section-content"><div class="member-card-item__line">${escapeHtml(typeof formatListCardValidity === 'function' ? formatListCardValidity(tpl) : tpl.validity)}</div></div>
       </div></div>`);
       const vipHtml = (typeof cardVipIconHtml === 'function')
         ? cardVipIconHtml(tpl.cardColor)
