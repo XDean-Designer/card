@@ -370,23 +370,26 @@ body.present-mode .nav{display:none}
           { t: '进入工作台', d: '用店主账号登录，进入门店工作台。', shots: ['28-onboard-home'] },
           { t: '开始配置', d: '工作台提供价目、卡、券、员工等配置入口。' }
         ] },
-        { t: '录入价目表', d: '把店里在卖的服务与卖品建到价目中，含分组与价格。', shots: ['29-onboard-price'], sub: [
-          { t: '新增项目', d: '录入服务项目名称、分组与价格。', shots: ['29-onboard-price'] },
-          { t: '新增产品', d: '把可售产品录入价目，支持批量。' },
-          { t: '分组与排序', d: '用分组让价目更清晰，调整展示顺序。' }
+        { t: '录入价目表', d: '把店里在卖的服务与卖品建到价目中，含分组与价格。', shots: ['29-onboard-price', '51-price-item-new', '52-price-product-new', '53-price-category'], sub: [
+          { t: '新增项目', d: '录入服务项目名称、分组与价格，支持预约展示。', shots: ['29-onboard-price', '51-price-item-new'] },
+          { t: '新增产品', d: '把可售产品录入价目，可关联库存自动划扣。', shots: ['52-price-product-new'] },
+          { t: '分组与排序', d: '用分组让价目更清晰，调整展示顺序。', shots: ['53-price-category'] }
         ] },
-        { t: '配置会员卡', d: '办卡、充值、划卡的基础规则与卡模板就位。', shots: ['30-onboard-card'], sub: [
-          { t: '新建卡模板', d: '选择卡类型，配置面值 / 次数 / 权益。', shots: ['30-onboard-card'] },
-          { t: '设置权益', d: '绑定项目或产品权益，卡可划可充。' }
+        { t: '配置会员卡', d: '办卡、充值、划卡的基础规则与卡模板就位。', shots: ['30-onboard-card', '54-card-save', '55-card-count', '59-card-discount', '58-card-period', '56-card-project', '57-card-gift'], sub: [
+          { t: '新建卡模板', d: '选择卡类型，配置面值 / 次数 / 折扣等。', shots: ['54-card-save', '55-card-count'] },
+          { t: '设置折扣', d: '享受折扣与折扣数值，卡权益更灵活。', shots: ['59-card-discount'] },
+          { t: '设置有效期限', d: '永久有效或按开卡 / 到期日计算。', shots: ['58-card-period'] },
+          { t: '选择赠送项目', d: '选择适用项目或赠送项目，卡可划可充。', shots: ['56-card-project', '57-card-gift'] }
         ] },
-        { t: '配置优惠券', d: '营销与到店核销有据可依。', shots: ['31-onboard-coupon'], sub: [
-          { t: '新建优惠券', d: '配置券名称、面额、有效期与使用范围。', shots: ['31-onboard-coupon'] },
-          { t: '发放与核销', d: '券随开单核销，营销动作可落地。' }
+        { t: '配置优惠券', d: '营销与到店核销有据可依。', shots: ['31-onboard-coupon', '60-coupon-new', '61-coupon-scope', '62-coupon-board'], sub: [
+          { t: '新建优惠券', d: '配置券名称、面额、使用规则与适用范围。', shots: ['60-coupon-new', '61-coupon-scope'] },
+          { t: '发放与核销', d: '券随开单核销，营销看板追踪发券、核销与分享。', shots: ['62-coupon-board'] }
         ] },
-        { t: '录入客户与员工', d: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff'], sub: [
+        { t: '录入客户与员工', d: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'], sub: [
           { t: '录入客户', d: '建档老客与会员，开单时可直接选。', shots: ['32-onboard-staff'] },
-          { t: '录入员工', d: '为员工建档并分配权限身份。' },
-          { t: '分配权限', d: '控制员工能开单、能否改价目等。' }
+          { t: '录入员工', d: '为员工建档，填写基础信息与职位。', shots: ['63-staff-create', '64-staff-position'] },
+          { t: '分配权限', d: '选择权限身份，控制能开单、能否改价目等。', shots: ['65-staff-perm'] },
+          { t: '提成与状态', d: '分配提成方案，设置在职 / 休假状态。', shots: ['66-staff-commission', '67-staff-status'] }
         ] },
         { t: '数据就位可开工', d: '价目、卡、券、人与权限齐备，门店当日即可开单。', shots: ['33-onboard-workbench'], sub: [
           { t: '数据核对', d: '价目、卡、券、人、权限逐项确认。' },
@@ -522,10 +525,10 @@ body.present-mode .nav{display:none}
   var CASES = [
     { id: 'F1', scene: 'F', title: '选择 RTB 后，把店里已有数据就位并开工', story: '新店或迁店店主决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。', proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。', steps: [
       { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。', shot: '28-onboard-home', shotLabel: '首页' },
-      { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shot: '29-onboard-price', shotLabel: '价目表 · 项目列表' },
-      { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shot: '30-onboard-card', shotLabel: '卡管理' },
-      { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shot: '31-onboard-coupon', shotLabel: '优惠券管理' },
-      { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shot: '32-onboard-staff', shotLabel: '员工管理' }
+      { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shots: ['29-onboard-price', '51-price-item-new', '52-price-product-new', '53-price-category'] },
+      { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shots: ['30-onboard-card', '54-card-save', '55-card-count', '59-card-discount', '58-card-period', '56-card-project', '57-card-gift'] },
+      { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shots: ['31-onboard-coupon', '60-coupon-new', '61-coupon-scope', '62-coupon-board'] },
+      { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'] }
     ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
     { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
       { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shot: '22-staff-create', shotLabel: '创建员工' },
@@ -818,7 +821,15 @@ body.present-mode .nav{display:none}
       '42-appt-board2': '预约看板', '43-appt-create': '新增预约',
       '44-appt-detail': '预约详情 · 待到店', '45-appt-bill': '开单结账', '46-appt-cancel': '取消预约确认',
       '47-appt-create2': '新增预约 · 已选内容', '48-appt-arrived': '预约详情 · 已到店',
-      '49-bill-cashier': '开单结账 · 散客选品', '50-bill-pay': '开单结账 · 结算支付'
+      '49-bill-cashier': '开单结账 · 散客选品', '50-bill-pay': '开单结账 · 结算支付',
+      '51-price-item-new': '新增项目', '52-price-product-new': '新增产品', '53-price-category': '产品分类',
+      '54-card-save': '添加卡模板 · 储值', '55-card-count': '添加卡模板 · 次卡',
+      '56-card-project': '选择项目', '57-card-gift': '选择赠送项目',
+      '58-card-period': '卡模板 · 有效期限', '59-card-discount': '卡模板 · 折扣设置',
+      '60-coupon-new': '新增优惠券 · 代金券', '61-coupon-scope': '新增优惠券 · 适用范围',
+      '62-coupon-board': '营销看板', '63-staff-create': '创建员工 · 基础信息',
+      '64-staff-position': '创建员工 · 职位', '65-staff-perm': '创建员工 · 权限',
+      '66-staff-commission': '创建员工 · 提成方案', '67-staff-status': '创建员工 · 状态'
     };
     return map[id] || id;
   }
