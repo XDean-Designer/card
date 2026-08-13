@@ -439,9 +439,9 @@ body.present-mode .nav{display:none}
           { t: '进入产品价目', d: '从价目表切到产品侧，查看可售产品。', shots: ['08b-price-products'] },
           { t: '找到库存入口', d: '在价目增改链路找到库存管理入口。' }
         ] },
-        { t: '产品增改', d: '区分可售卖产品与项目消耗物料。', shots: ['09-price-edit'], sub: [
+        { t: '产品增改', d: '区分可售卖产品与项目消耗物料。', shots: ['09-price-edit', '80-product-detail'], sub: [
           { t: '新增产品', d: '区分可售卖产品与项目消耗物料。', shots: ['09-price-edit'] },
-          { t: '编辑产品', d: '维护价格、类别与库存关联。' }
+          { t: '编辑产品', d: '维护价格、类别与库存关联，可删除产品。', shots: ['80-product-detail'] }
         ] },
         { t: '店铺小仓', d: '库存中心：入库、出库、调拨、商品管理统一入口。', shots: ['34-inv-home'], sub: [
           { t: '进入库存中心', d: '入库、出库、调拨、商品统一管理。', shots: ['34-inv-home'] }
@@ -452,17 +452,21 @@ body.present-mode .nav{display:none}
         { t: '出库', d: '销售出库并登记门店与类别。', shots: ['36-inv-outbound'], sub: [
           { t: '登记出库', d: '选择门店与类别，登记出库数量。', shots: ['36-inv-outbound'] }
         ] },
-        { t: '调拨管理', d: '调拨入库 / 调拨出库，门店间调货。', shots: ['37-inv-transfer'], sub: [
-          { t: '发起调拨', d: '选择调出 / 调入门店与数量。', shots: ['37-inv-transfer'] }
+        { t: '调拨管理', d: '调拨入库 / 调拨出库，门店间调货。', shots: ['37-inv-transfer', '81-inv-transfer-new'], sub: [
+          { t: '发起调拨', d: '选择调出 / 调入门店与数量，登记经办人。', shots: ['81-inv-transfer-new'] },
+          { t: '调拨清单', d: '添加商品，确认调拨数量。', shots: ['37-inv-transfer'] }
         ] },
-        { t: '商品管理', d: '商品与规格维护，现库存总额一目了然。', shots: ['38-inv-goods'], sub: [
-          { t: '维护商品', d: '商品与规格维护，现库存总额一目了然。', shots: ['38-inv-goods'] }
+        { t: '商品管理', d: '商品与规格维护，现库存总额一目了然。', shots: ['38-inv-goods', '82-inv-goods-new'], sub: [
+          { t: '维护商品', d: '商品与规格维护，现库存总额一目了然。', shots: ['38-inv-goods'] },
+          { t: '新增商品', d: '支持多规格型号与商品分类。', shots: ['82-inv-goods-new'] }
         ] },
-        { t: '入出类别', d: '入库 / 出库类别配置，如正常入库、采购入库。', shots: ['39-inv-category'], sub: [
-          { t: '配置类别', d: '自定义入库 / 出库类别。', shots: ['39-inv-category'] }
+        { t: '入出类别', d: '入库 / 出库类别配置，如正常入库、采购入库。', shots: ['39-inv-category', '83-inv-category-new'], sub: [
+          { t: '配置类别', d: '自定义入库 / 出库类别。', shots: ['39-inv-category'] },
+          { t: '新增类别', d: '填写类型名称，选择入库或出库。', shots: ['83-inv-category-new'] }
         ] },
-        { t: '供应商管理', d: '维护供应商资料，支撑采购与补货。', shots: ['40-inv-supplier'], sub: [
-          { t: '维护供应商', d: '新增 / 编辑供应商资料。', shots: ['40-inv-supplier'] }
+        { t: '供应商管理', d: '维护供应商资料，支撑采购与补货。', shots: ['40-inv-supplier', '84-inv-supplier-new'], sub: [
+          { t: '维护供应商', d: '新增 / 编辑供应商资料。', shots: ['40-inv-supplier'] },
+          { t: '新增供应商', d: '填写名称、联系人、账号与地址等信息。', shots: ['84-inv-supplier-new'] }
         ] }
       ],
       cases: ['C1']
@@ -546,9 +550,14 @@ body.present-mode .nav{display:none}
     ], upgrades: ['现网可完成新人上线配置；后续排班可更显式、店主看提成下钻更直达。', '月末核提成可结合流水与经营分析场景一起看。'] },
     { id: 'C1', scene: 'C', title: '产品库存：可售卖 + 项目消耗', story: '店主要管理两类货：柜台上可卖的护理产品，以及做项目时消耗的物料。他需要能加库存、批量补货，避免断货。', proof: '现网通过店铺小仓覆盖入库、出库、调拨与商品管理，可支撑卖品与耗材类管理。', steps: [
       { icon: 'price', mod: '价目表', act: '进入产品侧价目', desc: '库存入口挂在价目增改。', shot: '08b-price-products', shotLabel: '价目表 · 产品' },
+      { icon: 'price', mod: '产品增改', act: '编辑产品并关联库存', desc: '维护价格、类别与库存关联。', shot: '80-product-detail', shotLabel: '产品详情' },
       { icon: 'stock', mod: '店铺小仓', act: '进入库存中心', desc: '入库、出库、调拨、商品统一入口。', shot: '34-inv-home', shotLabel: '店铺小仓' },
       { icon: 'stock', mod: '入库', act: '扫码或手动添加入库', desc: '登记门店与类别。', shot: '35-inv-inbound', shotLabel: '入库' },
-      { icon: 'stock', mod: '出库', act: '销售出库并登记', desc: '耗材与卖品出库可追溯。', shot: '36-inv-outbound', shotLabel: '出库' }
+      { icon: 'stock', mod: '出库', act: '销售出库并登记', desc: '耗材与卖品出库可追溯。', shot: '36-inv-outbound', shotLabel: '出库' },
+      { icon: 'stock', mod: '调拨', act: '门店间调货', desc: '选择调出 / 调入门店与数量。', shot: '81-inv-transfer-new', shotLabel: '新建调拨' },
+      { icon: 'stock', mod: '商品管理', act: '维护商品与规格', desc: '支持多规格型号。', shot: '82-inv-goods-new', shotLabel: '新增商品' },
+      { icon: 'stock', mod: '入出类别', act: '配置入库 / 出库类别', desc: '自定义类别名称。', shot: '83-inv-category-new', shotLabel: '新增类别' },
+      { icon: 'stock', mod: '供应商管理', act: '维护供应商资料', desc: '支撑采购与补货。', shot: '84-inv-supplier-new', shotLabel: '新增供应商' }
     ], upgrades: ['现网已能管库存；后续「独立库存中心、与价目同步」会让结构更清晰（对照重构库存方向）。'] },
     { id: 'D1', scene: 'D', title: '经营数据分析：看清店、看清人、看清卡', story: '店主早上想看客流，周末想看项目与营收，月末要核对卡项与员工业绩。他还关心现金类收款与支出结余。', proof: '报表统计覆盖营收、客流、卡项、经营分析及人员下钻；并可与门店经营报表、支出统计交叉使用。', steps: [
       { icon: 'chart', mod: '报表统计', act: '进入多维报表入口', desc: '亮点：一个入口覆盖经营主指标。', shot: '17-report-hub', shotLabel: '经营分析' },
@@ -844,7 +853,10 @@ body.present-mode .nav{display:none}
       '72-report-traffic': '客流分析', '73-report-revenue': '实收分析',
       '74-report-card': '卡相关', '75-report-staff': '员工业绩分析',
       '76-mall-report1': '商城报表 · 交易统计', '77-mall-report2': '商城报表 · 流量统计',
-      '78-self-checkout': '自助收银报表', '79-staff-list': '员工管理'
+      '78-self-checkout': '自助收银报表', '79-staff-list': '员工管理',
+      '80-product-detail': '产品详情', '81-inv-transfer-new': '新建调拨',
+      '82-inv-goods-new': '新增商品', '83-inv-category-new': '新增类别',
+      '84-inv-supplier-new': '新增供应商'
     };
     return map[id] || id;
   }
