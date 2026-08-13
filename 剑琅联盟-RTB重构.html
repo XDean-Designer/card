@@ -6427,9 +6427,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-ladder-row__head {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px;
+  position: relative;
+}
+.emp-ladder-row__head::before {
+  content: ''; position: absolute; left: -14px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4a7bf4;
+  pointer-events: none;
 }
 .emp-ladder-row__badge {
   font-size: 14px; font-weight: 600; color: #1A1A1A; line-height: 20px;
+  padding-left: 1px;
 }
 .emp-ladder-row__del {
   flex-shrink: 0; width: 28px; height: 28px; border: none; background: transparent;
@@ -6528,8 +6535,30 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 #screen-emp-comm-ladder .page-body { background: #F7F7F7; }
 .emp-scope-entry {
   margin: 12px 16px 0; width: calc(100% - 32px); box-sizing: border-box; text-align: left;
+  position: relative;
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  cursor: pointer; font-family: inherit;
+  transition: background .15s ease;
 }
-.emp-scope-entry .form-row { pointer-events: none; }
+.emp-scope-entry:active { background: var(--brand-soft); }
+.emp-scope-entry::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #4a7bf4;
+}
+.emp-scope-entry__main {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;
+}
+.emp-scope-entry__title {
+  font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3;
+}
+.emp-scope-entry__sub {
+  font-size: 12px; color: var(--text-sec); line-height: 1.35;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.emp-scope-entry__chev {
+  flex-shrink: 0; color: var(--brand); display: inline-flex; align-items: center; justify-content: center;
+}
+.emp-scope-entry__chev svg { display: block; width: 16px; height: 16px; }
 .emp-scope-all-card {
   margin: 12px 16px 0; padding: 14px 16px; background: #fff; border-radius: 12px;
   display: flex; align-items: center; gap: 12px; box-sizing: border-box;
@@ -37414,22 +37443,24 @@ function billingNav(fn) {
   }
   function scopeSummaryHtml(sch) {
     ensureSchemeScope(sch);
+    var preview;
     if (sch.scopeMode !== 'custom') {
-      return row('使用范围', '全部适用', true) +
-        '<div class="form-row is-readonly" style="border-top:1px solid #F0F0F0"><span class="label" style="color:var(--brand)">调整范围</span>' +
-        '<span class="form-row__trail"><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>';
+      preview = '全部适用';
+    } else {
+      var p = (sch.scope.projectIds || []).length;
+      var d = (sch.scope.productIds || []).length;
+      var c = (sch.scope.cardIds || []).length;
+      var parts = [];
+      if (p) parts.push('项目 ' + p);
+      if (d) parts.push('产品 ' + d);
+      if (c) parts.push('卡 ' + c);
+      preview = parts.length ? parts.join(' · ') : '未选择任何项';
     }
-    var p = (sch.scope.projectIds || []).length;
-    var d = (sch.scope.productIds || []).length;
-    var c = (sch.scope.cardIds || []).length;
-    var parts = [];
-    if (p) parts.push('项目 ' + p);
-    if (d) parts.push('产品 ' + d);
-    if (c) parts.push('卡 ' + c);
-    var preview = parts.length ? parts.join(' · ') : '未选择任何项';
-    return row('使用范围', preview, true) +
-      '<div class="form-row is-readonly" style="border-top:1px solid #F0F0F0"><span class="label" style="color:var(--brand)">调整范围</span>' +
-      '<span class="form-row__trail"><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>';
+    return '<span class="emp-scope-entry__main">' +
+      '<span class="emp-scope-entry__title">适用范围</span>' +
+      '<span class="emp-scope-entry__sub">' + esc(preview) + '</span>' +
+      '</span>' +
+      '<span class="emp-scope-entry__chev" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>';
   }
   var SIMPLE_TIMES_SCOPE_GROUP_ID = 'g_simple_times';
 
