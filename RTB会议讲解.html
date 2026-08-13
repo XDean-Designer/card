@@ -377,8 +377,8 @@ body.present-mode .present-exit{display:block}
       icon: 'store', color: '#e8862d', gradient: 'linear-gradient(150deg,#f09a3f,#e0762a)',
       desc: '新店或迁店店主选择 RTB，把价目、卡项、券、客户与员工等经营数据就位，门店当天即可预约、开单。',
       flow: [
-        { t: '登录开店', d: '店主拿到门店经营入口，进入工作台开始配置。', shots: ['28-onboard-home'], sub: [
-          { t: '进入工作台', d: '用店主账号登录，进入门店工作台。', shots: ['28-onboard-home'] },
+        { t: '登录开店', d: '店主拿到门店经营入口，进入工作台开始配置。', shots: ['28-onboard-home', '33-onboard-workbench'], sub: [
+          { t: '进入工作台', d: '用店主账号登录，进入门店工作台。', shots: ['28-onboard-home', '33-onboard-workbench'] },
           { t: '开始配置', d: '工作台提供价目、卡、券、员工等配置入口。' }
         ] },
         { t: '录入价目表', d: '把店里在卖的服务与卖品建到价目中，含分组与价格。', shots: ['29-onboard-price', '51-price-item-new', '52-price-product-new', '53-price-category'], sub: [
@@ -396,10 +396,10 @@ body.present-mode .present-exit{display:block}
           { t: '新建优惠券', d: '配置券名称、面额、使用规则与适用范围。', shots: ['60-coupon-new', '61-coupon-scope'] },
           { t: '发放与核销', d: '券随开单核销，营销看板追踪发券、核销与分享。', shots: ['62-coupon-board'] }
         ] },
-        { t: '录入客户与员工', d: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'], sub: [
+        { t: '录入客户与员工', d: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '85-staff-perm-detail', '66-staff-commission', '67-staff-status'], sub: [
           { t: '录入客户', d: '建档老客与会员，开单时可直接选。', shots: ['32-onboard-staff'] },
           { t: '录入员工', d: '为员工建档，填写基础信息与职位。', shots: ['63-staff-create', '64-staff-position'] },
-          { t: '分配权限', d: '选择权限身份，控制能开单、能否改价目等。', shots: ['65-staff-perm'] },
+          { t: '分配权限', d: '选择权限身份，控制能开单、能否改价目等。', shots: ['85-staff-perm-detail'] },
           { t: '提成与状态', d: '分配提成方案，设置在职 / 休假状态。', shots: ['66-staff-commission', '67-staff-status'] }
         ] },
         { t: '数据就位可开工', d: '价目、卡、券、人与权限齐备，门店当日即可开单。', shots: ['33-onboard-workbench'], sub: [
@@ -423,8 +423,8 @@ body.present-mode .present-exit{display:block}
           { t: '选择职位', d: '从店长、美容师、技师等头衔中选择职位。', shots: ['64-staff-position'] },
           { t: '设置状态', d: '设置在职 / 休假状态，同步薪资口径。', shots: ['67-staff-status'] }
         ] },
-        { t: '设置权限', d: '选择店员等权限身份，控制能开单、能否改价目等。', shots: ['23-staff-perm', '65-staff-perm'], sub: [
-          { t: '选择权限身份', d: '合伙人、店长、高级店员、店员等身份，决定操作范围。', shots: ['23-staff-perm', '65-staff-perm'] },
+        { t: '设置权限', d: '选择店员等权限身份，控制能开单、能否改价目等。', shots: ['23-staff-perm', '85-staff-perm-detail'], sub: [
+          { t: '选择权限身份', d: '合伙人、店长、高级店员、店员等身份，决定操作范围。', shots: ['23-staff-perm', '85-staff-perm-detail'] },
           { t: '细化操作权限', d: '能开单、能否改价目等按需开关。' }
         ] },
         { t: '业绩提成方案', d: '配置提成方案与规则，与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'], sub: [
@@ -435,8 +435,8 @@ body.present-mode .present-exit{display:block}
           { t: '排班口径', d: '出勤班次与口径确认，支撑预约排人。', shots: ['27-staff-appt'] },
           { t: '奖惩规则', d: '按现网能力维护奖惩，人效管理闭环。', shots: ['26-staff-reward'] }
         ] },
-        { t: '可参与开单', d: '权限就位后前线可正常开单，人效管理闭环。', shots: [], sub: [
-          { t: '上线开单', d: '权限与档案就位，员工即可参与开单。' }
+        { t: '可参与开单', d: '权限就位后前线可正常开单，人效管理闭环。', shots: ['33-onboard-workbench'], sub: [
+          { t: '上线开单', d: '权限与档案就位，员工即可参与开单。', shots: ['33-onboard-workbench'] }
         ] }
       ],
       cases: ['B1']
@@ -546,15 +546,15 @@ body.present-mode .present-exit{display:block}
   /* 端到端案例 */
   var CASES = [
     { id: 'F1', scene: 'F', title: '选择 RTB 后，把店里已有数据就位并开工', story: '新店或迁店店主决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。', proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。', steps: [
-      { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。', shot: '28-onboard-home', shotLabel: '首页' },
+      { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。', shots: ['28-onboard-home', '33-onboard-workbench'] },
       { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shots: ['29-onboard-price', '51-price-item-new', '52-price-product-new', '53-price-category'] },
       { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shots: ['30-onboard-card', '54-card-save', '55-card-count', '59-card-discount', '58-card-period', '56-card-project', '57-card-gift'] },
       { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shots: ['31-onboard-coupon', '60-coupon-new', '61-coupon-scope', '62-coupon-board'] },
-      { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'] }
+      { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '85-staff-perm-detail', '66-staff-commission', '67-staff-status'] }
     ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
     { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
       { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '从员工管理进入创建，填写姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['79-staff-list', '22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'] },
-      { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shots: ['23-staff-perm', '65-staff-perm'] },
+      { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shots: ['23-staff-perm', '85-staff-perm-detail'] },
       { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'] },
       { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
       { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
@@ -857,7 +857,7 @@ body.present-mode .present-exit{display:block}
       '58-card-period': '卡模板 · 有效期限', '59-card-discount': '卡模板 · 折扣设置',
       '60-coupon-new': '新增优惠券 · 代金券', '61-coupon-scope': '新增优惠券 · 适用范围',
       '62-coupon-board': '营销看板', '63-staff-create': '创建员工 · 基础信息',
-      '64-staff-position': '创建员工 · 职位', '65-staff-perm': '创建员工 · 权限',
+      '64-staff-position': '创建员工 · 职位', '85-staff-perm-detail': '权限详情',
       '66-staff-commission': '创建员工 · 提成方案', '67-staff-status': '创建员工 · 状态',
       '68-bill-credit': '带出权益点单', '69-bill-checkout': '结算收款',
       '70-bill-customer': '选客或散客', '71-bill-done': '开单成功',
