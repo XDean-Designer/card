@@ -734,7 +734,7 @@ body.present-mode .side__label.tech-only{display:none}
       proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。',
       mermaid: "flowchart LR\n  hire[新员工入职] --> emp[员工管理]\n  emp --> profile[建档与职位]\n  emp --> perm[设置权限]\n  emp --> scheme[业绩提成方案]\n  scheme --> cross[流水与提成明细]\n  emp --> schedule[排班口径]\n  emp --> reward[奖惩相关设置]\n  perm --> online[可参与开单]",
       steps: [
-        { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。', shot: '22-staff-create', shotLabel: '创建员工' },
+        { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shot: '22-staff-create', shotLabel: '创建员工' },
         { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shot: '23-staff-perm', shotLabel: '选择权限' },
         { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。',
           shots: [
