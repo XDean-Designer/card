@@ -403,8 +403,9 @@ body.present-mode .nav{display:none}
       icon: 'staff', color: '#7258d7', gradient: 'linear-gradient(150deg,#8a6fe8,#6a4fc4)',
       desc: '新员工从建档、权限到提成业绩、排班奖惩的配置闭环，让人效管理有据可依。',
       flow: [
-        { t: '新员工入职', d: '店主准备为新员工建档与配置。', shots: [], sub: [
-          { t: '准备建档', d: '收集员工姓名、职位、入职信息。' }
+        { t: '新员工入职', d: '店主准备为新员工建档与配置。', shots: ['79-staff-list'], sub: [
+          { t: '进入员工管理', d: '从工作台进入员工管理，查看现有员工。', shots: ['79-staff-list'] },
+          { t: '准备建档', d: '点击「创建员工」，收集姓名、职位、入职信息。' }
         ] },
         { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'], sub: [
           { t: '创建员工档案', d: '录入员工姓名、手机号、归属店铺等基础信息。', shots: ['22-staff-create', '63-staff-create'] },
@@ -537,7 +538,7 @@ body.present-mode .nav{display:none}
       { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'] }
     ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
     { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
-      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'] },
+      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '从员工管理进入创建，填写姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['79-staff-list', '22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'] },
       { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shots: ['23-staff-perm', '65-staff-perm'] },
       { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'] },
       { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
@@ -843,7 +844,7 @@ body.present-mode .nav{display:none}
       '72-report-traffic': '客流分析', '73-report-revenue': '实收分析',
       '74-report-card': '卡相关', '75-report-staff': '员工业绩分析',
       '76-mall-report1': '商城报表 · 交易统计', '77-mall-report2': '商城报表 · 流量统计',
-      '78-self-checkout': '自助收银报表'
+      '78-self-checkout': '自助收银报表', '79-staff-list': '员工管理'
     };
     return map[id] || id;
   }
