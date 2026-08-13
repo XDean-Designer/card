@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>剑琅联盟 · RTB 会议讲解</title>
+<style>
+:root{
+  --red:#f62e43; --red2:#ff5566; --red-soft:#fff3f4; --red-line:#ffd8dd;
+  --gold:#b8893a; --gold-soft:#faf3e6; --gold-line:#ecdcb9;
+  --ink:#1a1e26; --muted:#687284; --faint:#9aa3b1;
+  --bg:#f6f7f9; --card:#fff; --line:#e6e9ef;
+  --blue:#2f6bff; --green:#16a36a; --orange:#e8862d; --purple:#7258d7; --teal:#0fa3a3;
+  --shadow:0 10px 30px rgba(28,42,62,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+button{font:inherit;cursor:pointer}
+a{color:var(--red);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* 顶栏 */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 28px;gap:18px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;white-space:nowrap}
+.brand .mark{height:32px;width:auto;border-radius:8px}
+.brand b{color:var(--red)}
+.brand .tagline{font-weight:400;color:var(--muted);font-size:12px;margin-left:2px}
+.nav{display:flex;gap:4px;overflow:auto;scrollbar-width:none;flex:1}
+.nav::-webkit-scrollbar{display:none}
+.nav a{text-decoration:none;color:#5b6473;padding:8px 12px;border-radius:10px;white-space:nowrap;font-size:13px;font-weight:600}
+.nav a:hover{background:var(--red-soft);color:var(--red)}
+.nav a.active{background:var(--red-soft);color:var(--red)}
+.top-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tb-link{font-size:13px;color:var(--muted);padding:8px 10px;border-radius:10px;white-space:nowrap}
+.tb-link:hover{background:#f0f1f4;text-decoration:none;color:var(--ink)}
+
+main{max-width:1180px;margin:0 auto;padding:0 28px 70px}
+.section{padding:30px 0 10px}
+.hidden{display:none!important}
+
+/* 首页 hero */
+.hero{padding:58px 0 12px}
+.eyebrow{color:var(--red);font-size:12px;font-weight:900;letter-spacing:.16em}
+.hero h1{font-size:40px;line-height:1.15;margin:12px 0 14px;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero .lead{font-size:16px;color:var(--muted);max-width:760px;margin:0 0 6px}
+.hero .lead b{color:var(--ink)}
+.hero-key{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.hero-key span{padding:7px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:700;font-size:12px;color:var(--muted)}
+.hero-key span i{font-style:normal;color:var(--red);font-weight:900}
+
+/* 场景入口大卡片 */
+.scene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.scene-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 22px 20px;box-shadow:0 6px 22px rgba(28,42,62,.05);transition:transform .18s,box-shadow .18s,border-color .18s;cursor:pointer;text-align:left;overflow:hidden}
+.scene-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#d6dae2}
+.scene-card__accent{position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:22px 0 0 22px}
+.scene-card__no{font-size:12px;font-weight:900;letter-spacing:.1em;color:var(--faint)}
+.scene-card__head{display:flex;align-items:center;gap:14px;margin-top:12px}
+.scene-card__icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex-shrink:0}
+.scene-card__icon svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.scene-card__name{font-size:20px;font-weight:800;margin:0}
+.scene-card__name small{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
+.scene-card__desc{font-size:13.5px;color:var(--muted);margin-top:14px;line-height:1.6}
+.scene-card__foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+.scene-card__count{font-size:12px;color:var(--faint)}
+.scene-card__count b{color:var(--red)}
+.scene-card__go{font-size:13px;font-weight:700;color:var(--red);display:inline-flex;align-items:center;gap:3px}
+.scene-card__go svg{width:14px;height:14px}
+
+/* 场景详情页 */
+.scene-head{display:flex;align-items:center;gap:18px;margin:34px 0 6px}
+.scene-head .back{width:40px;height:40px;border-radius:13px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--muted);flex-shrink:0}
+.scene-head .back:hover{border-color:var(--red);color:var(--red)}
+.scene-head .back svg{width:18px;height:18px}
+.scene-head__title{flex:1;min-width:0}
+.scene-head__title h1{font-size:28px;margin:0 0 2px;letter-spacing:-.3px}
+.scene-head__title .sub{font-size:14px;color:var(--muted)}
+.scene-head__icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;flex-shrink:0}
+.scene-head__icon svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* 流程条 */
+.flow-card-wrap{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:18px;box-shadow:0 6px 22px rgba(28,42,62,.05)}
+.flow-card-wrap .fc-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;margin:0 0 16px}
+.flow-card-wrap .fc-title .fc-eyebrow{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--red);background:var(--red-soft);border:1px solid var(--red-line);padding:3px 9px;border-radius:999px}
+.flowstrip{display:flex;gap:10px;align-items:stretch;overflow:auto;padding:4px 2px 14px}
+.fnode{min-width:150px;background:#fafbfc;border:1px solid var(--line);border-radius:14px;padding:14px 13px;cursor:pointer;transition:.18s;text-align:left;font-family:inherit;color:var(--ink)}
+.fnode:hover{border-color:#cfd4de;background:#fff}
+.fnode.selected{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft);background:#fff}
+.fnode small{color:var(--red);font-weight:900;font-size:11px;letter-spacing:.06em}
+.fnode b{display:block;margin-top:6px;font-size:13px;line-height:1.35}
+.farr{align-self:center;color:#a5adba;font-size:20px;flex-shrink:0}
+.flow-card{display:grid;grid-template-columns:300px 1fr;gap:20px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:18px}
+.flow-copy{padding:4px 2px}
+.flow-copy .fc-eyebrow2{color:var(--red);font-size:11px;font-weight:900;letter-spacing:.12em}
+.flow-copy h3{font-size:19px;margin:8px 0 8px}
+.flow-copy p{color:var(--muted);font-size:14px;margin:0 0 14px;line-height:1.7}
+.flow-copy .count{color:var(--faint);font-size:12px}
+.flow-copy .count b{color:var(--red)}
+.gallery{display:flex;gap:12px;overflow:auto;padding-bottom:4px}
+.shot{flex:0 0 168px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:6px;cursor:zoom-in}
+.shot img{display:block;width:100%;aspect-ratio:9/18.3;object-fit:cover;object-position:top;border-radius:11px}
+.shot span{display:block;text-align:center;color:#677284;font-size:12px;padding:7px 2px 1px;line-height:1.4}
+.shot--ph{flex:0 0 168px;background:#fff;border:1.5px dashed #ccd2db;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--faint);cursor:default}
+.shot--ph svg{width:26px;height:26px;stroke:#b6becb;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.shot--ph .ph-t{font-size:13px;font-weight:700;color:#9aa3b1}
+.shot--ph .ph-d{font-size:11px;color:#b6becb}
+
+/* 场景内案例 */
+.case-sec{margin-top:34px}
+.case-sec__head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.case-sec__head h2{font-size:19px;margin:0}
+.case-sec__head .n{font-size:12px;color:var(--faint);background:#fff;border:1px solid var(--line);padding:2px 10px;border-radius:999px}
+.case-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.case-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:0 4px 14px rgba(28,42,62,.04)}
+.case-card__tag{display:inline-flex;gap:6px;margin-bottom:8px}
+.case-card h3{font-size:16px;margin:0 0 6px;line-height:1.4}
+.case-card .story{font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.65}
+.case-card .proof{font-size:13px;color:var(--green);background:#f0faf5;border:1px solid #d2eee0;border-radius:10px;padding:8px 12px;margin-bottom:12px;line-height:1.55}
+.case-card .proof b{font-weight:800}
+.case-steps{margin-top:4px}
+.case-step{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line)}
+.case-step:first-of-type{border-top:none;padding-top:0}
+.case-step__icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;background:var(--red-soft);color:var(--red)}
+.case-step__icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.case-step__body{min-width:0}
+.case-step__mod{font-size:11px;font-weight:900;color:var(--faint);letter-spacing:.05em}
+.case-step__act{font-size:14px;font-weight:700;margin-top:1px}
+.case-step__desc{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.55}
+.shot-btn{margin-top:8px;height:26px;padding:0 10px;border-radius:8px;border:1px solid var(--red-line);background:var(--red-soft);color:var(--red);font-size:12px;font-weight:700}
+.shot-btn:hover{background:#ffe9ec}
+.case-upgrades{margin-top:12px;padding:10px 12px;background:var(--gold-soft);border:1px solid var(--gold-line);border-radius:10px;font-size:12.5px;color:#7a5b1e;line-height:1.6}
+.case-upgrades b{color:var(--gold)}
+
+/* 底部 */
+.foot{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+body.present-mode .top-actions .tb-link{display:none}
+body.present-mode .nav{display:none}
+
+/* 看图 viewer */
+.viewer{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:30px;background:rgba(15,18,25,.82);backdrop-filter:blur(8px)}
+.viewer.open{display:flex}
+.viewer__panel{position:relative;max-width:min(420px,94vw);max-height:94vh;background:#fff;border-radius:20px;padding:10px 10px 12px;box-shadow:0 30px 80px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:8px}
+.viewer__close{position:absolute;top:6px;right:6px;width:34px;height:34px;border-radius:11px;border:none;background:rgba(0,0,0,.42);color:#fff;font-size:18px;line-height:1;z-index:2}
+.viewer__close:hover{background:rgba(0,0,0,.6)}
+.viewer img{display:block;width:100%;max-height:calc(94vh - 84px);object-fit:contain;border-radius:14px}
+.viewer__cap{font-size:13px;font-weight:700;color:var(--ink);text-align:center;padding:2px 20px}
+.viewer__nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:20px;line-height:1}
+.viewer__nav:hover{background:rgba(255,255,255,.28)}
+.viewer__nav.prev{left:-54px}
+.viewer__nav.next{right:-54px}
+
+@media(max-width:900px){
+  .scene-grid,.case-list{grid-template-columns:1fr 1fr}
+  .flow-card{grid-template-columns:1fr}
+  main{padding:0 16px 50px}
+  .top{padding:0 14px}
+  .hero h1{font-size:30px}
+  .viewer__nav.prev{left:-8px}
+  .viewer__nav.next{right:-8px}
+}
+@media(max-width:560px){
+  .scene-grid,.case-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <img class="mark" src="assets/logo-jl.png" alt="剑琅联盟 logo">
+    <span><b>剑琅联盟</b> · RTB 会议讲解</span>
+    <span class="tagline">六个场景 · 讲透门店经营闭环</span>
+  </div>
+  <nav class="nav" id="topNav"></nav>
+  <div class="top-actions">
+    <a class="tb-link" href="RTB现有产品概览.html">现有产品概览</a>
+    <a class="tb-link" href="RTB产品重构计划概览.html">重构计划概览</a>
+    <button type="button" id="btnPresent" class="tb-link" style="background:none;border:none">讲解模式</button>
+  </div>
+</header>
+
+<main>
+  <!-- 首页：6 类应用场景入口 -->
+  <section class="section" id="viewHome">
+    <div class="hero">
+      <div class="eyebrow">剑琅联盟 · RTB 会议讲解</div>
+      <h1>六个应用场景，<em>把门店经营讲透</em></h1>
+      <p class="lead">RTB 从入驻开店到日常收银，是一条完整的经营链路。<b>选择任一场景</b>，查看它的核心业务流程与真实页面；部分页面截图仍在整理，先以占位呈现。</p>
+      <div class="hero-key">
+        <span><i>6</i> 大应用场景</span>
+        <span><i>10</i> 场端到端案例</span>
+        <span>核心业务流程 · 按场景讲解</span>
+      </div>
+    </div>
+    <div class="scene-grid" id="sceneGrid"></div>
+  </section>
+
+  <!-- 场景详情 -->
+  <section class="section hidden" id="viewScene">
+    <div class="scene-head">
+      <button type="button" class="back" id="btnBackHome" aria-label="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="scene-head__icon" id="sceneIcon"></div>
+      <div class="scene-head__title">
+        <h1 id="sceneTitle"></h1>
+        <div class="sub" id="sceneSub"></div>
+      </div>
+    </div>
+    <div class="flow-card-wrap">
+      <div class="fc-title"><span class="fc-eyebrow" id="fcEyebrow">核心业务流程</span><span id="fcTitle"></span></div>
+      <div class="flowstrip" id="sceneFlow"></div>
+      <div class="flow-card">
+        <div class="flow-copy" id="flowCopy"></div>
+        <div class="gallery" id="flowGallery"></div>
+      </div>
+    </div>
+    <div class="case-sec">
+      <div class="case-sec__head"><h2>场景内案例</h2><span class="n" id="caseCount"></span></div>
+      <div class="case-list" id="sceneCases"></div>
+    </div>
+    <div class="foot">
+      <span>流程真源：《RTB现有产品概览》《RTB产品重构计划概览》。AI 导入为研发中能力，本页不以现网已上线表述。</span>
+      <span>截图待补充的页面，后续替换即可。</span>
+    </div>
+  </section>
+</main>
+
+<div class="viewer" id="viewer" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="viewerCap">
+  <button type="button" class="viewer__nav prev" id="viewerPrev" aria-label="上一张">‹</button>
+  <div class="viewer__panel">
+    <button type="button" class="viewer__close" id="viewerClose" aria-label="关闭">×</button>
+    <img id="viewerImg" alt="">
+    <div class="viewer__cap" id="viewerCap">现网截图</div>
+  </div>
+  <button type="button" class="viewer__nav next" id="viewerNext" aria-label="下一张">›</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var ICONS = {
+    store: '<svg viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/></svg>',
+    bill: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+    user: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.8-3.2 4-4.5 7-4.5s5.2 1.3 7 4.5"/></svg>',
+    card: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14h4"/></svg>',
+    appt: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    price: '<svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9 12h6M12 9v6"/></svg>',
+    coupon: '<svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 1 0 0 4v2a2 2 0 1 0 0 4v2H5v-2a2 2 0 1 0 0-4V9z"/><path d="M12 7v10"/></svg>',
+    staff: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M2 19c1.5-3 3.5-4.2 7-4.2"/><circle cx="17" cy="9" r="2.5"/><path d="M14 19c1-2.2 2.2-3.2 5-3.5"/></svg>',
+    stock: '<svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>',
+    chart: '<svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 16V10M12 16V7M16 16v-5"/></svg>',
+    pay: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/></svg>',
+    ai: '<svg viewBox="0 0 24 24"><path d="M12 3l2.2 4.5L19 9l-4 3.2.8 5.3L12 15.8 8.2 17.5 9 12.2 5 9l4.8-1.5L12 3z"/></svg>',
+    flow: '<svg viewBox="0 0 24 24"><path d="M4 6h10M4 12h16M4 18h8"/><circle cx="18" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
+    ok: '<svg viewBox="0 0 24 24"><path d="M20 7L10 17l-5-5"/></svg>'
+  };
+
+  /* 六个应用场景 */
+  var SCENES = [
+    {
+      id: 'F', no: '场景 F · 立营', name: '入驻就位 · 开店配置',
+      icon: 'store', color: '#e8862d', gradient: 'linear-gradient(150deg,#f09a3f,#e0762a)',
+      desc: '新店或迁店店主选择 RTB，把价目、卡项、券、客户与员工等经营数据就位，门店当天即可预约、开单。',
+      flow: [
+        { t: '选择使用 RTB', d: '新店或迁店店主决定使用 RTB，确认需要就位的经营数据范围。', shots: [] },
+        { t: '登录开店', d: '拿到门店经营入口，进入工作台开始配置。', shots: [] },
+        { t: '录入价目表', d: '把店里在卖的服务与卖品建到价目中，含分组与价格。', shots: ['08-price-list'] },
+        { t: '配置会员卡', d: '办卡、充值、划卡的基础规则与卡模板就位。', shots: ['11-card-manage'] },
+        { t: '配置优惠券', d: '营销与到店核销有据可依。', shots: ['12-coupon'] },
+        { t: '录入客户与员工', d: '前线能选客、能开单、权责清晰。', shots: [] },
+        { t: '数据就位可开工', d: '价目、卡、券、人与权限齐备，门店当日即可开单。', shots: ['01-wb-home'] }
+      ],
+      cases: ['F1']
+    },
+    {
+      id: 'A', no: '场景 A · 烽火', name: '预约到店 · 接待闭环',
+      icon: 'appt', color: '#2f6bff', gradient: 'linear-gradient(150deg,#4b84ff,#2f63e8)',
+      desc: '从预约到到店、从改期取消到履约开单，约得到、接得住、收得齐的完整接待链路。',
+      flow: [
+        { t: '新建预约', d: '选择时间、员工、项目，创建或确认预约。', shots: ['05-appt-list'] },
+        { t: '预约列表 / 日历', d: '到店时在列表或日历中快速定位顾客。', shots: ['05-appt-list'] },
+        { t: '顾客到店', d: '按预约找到人，确认服务对象。', shots: [] },
+        { t: '履约开单', d: '按预约内容完成服务与收款，预约与收银衔接。', shots: ['02-bill-entry', '03-bill-items'] },
+        { t: '改期或取消', d: '临时改时间或直接取消，档期释放、记录可追溯。', shots: [] },
+        { t: '履约完成', d: '服务结束、账目落单，接待闭环完成。', shots: ['04-bill-pay'] }
+      ],
+      cases: ['A1', 'A2', 'A3']
+    },
+    {
+      id: 'B', no: '场景 B · 练兵', name: '员工人效管理',
+      icon: 'staff', color: '#7258d7', gradient: 'linear-gradient(150deg,#8a6fe8,#6a4fc4)',
+      desc: '新员工从建档、权限到提成业绩、排班奖惩的配置闭环，让人效管理有据可依。',
+      flow: [
+        { t: '新员工入职', d: '店主准备为新员工建档与配置。', shots: [] },
+        { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['22-staff-create'] },
+        { t: '设置权限', d: '选择店员等权限身份，控制能开单、能否改价目等。', shots: ['23-staff-perm'] },
+        { t: '业绩提成方案', d: '配置提成方案与规则，与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance'] },
+        { t: '排班口径与奖惩', d: '安排出勤班次、维护奖惩规则，支撑预约与到店排人。', shots: ['27-staff-appt', '26-staff-reward'] },
+        { t: '可参与开单', d: '权限就位后前线可正常开单，人效管理闭环。', shots: [] }
+      ],
+      cases: ['B1']
+    },
+    {
+      id: 'C', no: '场景 C · 辎重', name: '库存与进销',
+      icon: 'stock', color: '#16a36a', gradient: 'linear-gradient(150deg,#2fc07f,#0f8f58)',
+      desc: '可售卖产品与项目消耗物料两类货分开管理，单品补货与批量补货避免断货。',
+      flow: [
+        { t: '价目表产品', d: '进入产品侧价目，库存入口挂在价目增改链路。', shots: ['08b-price-products'] },
+        { t: '产品增改', d: '区分可售卖产品与项目消耗物料。', shots: ['09-price-edit'] },
+        { t: '可售卖产品库存', d: '柜台上可卖的护理产品等卖品。', shots: [] },
+        { t: '项目消耗物料', d: '做项目时消耗的耗材类物料。', shots: [] },
+        { t: '添加 / 批量补货', d: '单品入库 + 耗材批量补货，避免断货。', shots: [] },
+        { t: '库存可管', d: '两类货都有据可查，进销平衡。', shots: ['10b-inventory-manage'] }
+      ],
+      cases: ['C1']
+    },
+    {
+      id: 'D', no: '场景 D · 军机', name: '经营看数',
+      icon: 'chart', color: '#0fa3a3', gradient: 'linear-gradient(150deg,#1bbdbd,#0d8f8f)',
+      desc: '营收、客流、卡项与员工下钻一个入口覆盖，配合支出结余看透门店经营。',
+      flow: [
+        { t: '报表统计入口', d: '进入多维报表入口，一个入口覆盖经营主指标。', shots: ['17-report-hub'] },
+        { t: '营收与客流', d: '查看营收状态与客流统计，早上看客流、周看营收。', shots: ['18-report-detail'] },
+        { t: '卡项统计', d: '掌握持卡与卡相关数据，月末看卡。', shots: ['18-report-detail'] },
+        { t: '经营分析下钻', d: '按人员查看经营情况，看清人效。', shots: ['17-report-hub'] },
+        { t: '支出与结余', d: '记支出并看统计结余，资金侧与经营侧对照。', shots: ['20-expense-book', '21-expense-stats'] }
+      ],
+      cases: ['D1']
+    },
+    {
+      id: 'E', no: '场景 E · 布阵', name: '收银闭环',
+      icon: 'bill', color: '#f62e43', gradient: 'linear-gradient(150deg,#ff4d5e,#e0263a)',
+      desc: '价目卡券前置后，选客、带权益点单、结算收款的完整收银闭环。',
+      flow: [
+        { t: '前置配置', d: '价目、会员卡、优惠券规则由店主前置就绪。', shots: ['08-price-list', '11-card-manage', '12-coupon'] },
+        { t: '选客或散客', d: '选择会员或登记散客，快速确认服务对象。', shots: ['02-bill-entry'] },
+        { t: '带出权益点单', d: '会员卡权益自动带出，项目产品入单。', shots: ['03-bill-items'] },
+        { t: '结算收款', d: '扣卡或收款完成，权益与打折同屏。', shots: ['04-bill-pay'] },
+        { t: '落单完成', d: '账目与流水可查，收银闭环成立。', shots: ['01-wb-home'] }
+      ],
+      cases: ['E1', 'E2', 'E3']
+    }
+  ];
+
+  /* 端到端案例 */
+  var CASES = [
+    { id: 'F1', scene: 'F', title: '选择 RTB 后，把店里已有数据就位并开工', story: '新店或迁店店主决定使用 RTB。他需要尽快把价目、卡项、券、客户与员工等经营数据放到系统里，让门店当天就能预约、开单。', proof: '现网可通过开店进入工作台，并在各业务模块完成数据录入与配置，门店即可开始日常经营。', steps: [
+      { icon: 'store', mod: '登录与开店', act: '完成开店并进入门店经营', desc: '店主拿到门店经营入口，开始配置。' },
+      { icon: 'price', mod: '价目表', act: '录入项目与产品价格', desc: '把店里在卖的服务与卖品建到价目中。', shot: '08-price-list', shotLabel: '价目表 · 项目列表' },
+      { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡、充值、划卡的基础规则就位。', shot: '11-card-manage', shotLabel: '卡管理' },
+      { icon: 'coupon', mod: '优惠券', act: '配置可核销的券规则', desc: '营销与到店核销有据可依。', shot: '12-coupon', shotLabel: '优惠券管理' },
+      { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。' }
+    ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
+    { id: 'A1', scene: 'A', title: '未预约顾客到店完成服务', story: '傍晚一位熟客直接进店，没有提前预约。店员需要立刻选客、点单、划卡或收款，不耽误排队。', proof: '未预约顾客可直接走开单链路完成服务结算，不依赖预约单。', steps: [
+      { icon: 'bill', mod: '开单记账', act: '从工作台进入开单', desc: '前线主操作入口。', shot: '02-bill-entry', shotLabel: '开单结账 · 选品' },
+      { icon: 'user', mod: '客户 / 选客', act: '选择会员或登记散客', desc: '快速确认服务对象。', shot: '02-bill-entry', shotLabel: '开单页 · 选客入口' },
+      { icon: 'price', mod: '价目点单', act: '添加本次服务或产品', desc: '按价目完成点单。', shot: '02-bill-entry', shotLabel: '开单 · 点单列表' },
+      { icon: 'pay', mod: '结算', act: '扣卡或收款完成', desc: '店员权限覆盖开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算页' }
+    ], upgrades: ['现网已能完成未预约接待；后续可继续压缩开单步骤，让高峰时段更快。'] },
+    { id: 'A2', scene: 'A', title: '先预约后进店完成服务', story: '顾客早上在线上或到店约了下午护理。到点进店后，店员按预约找到人，再完成服务开单。', proof: '预约履约后可衔接到开单收款，形成「约得到、接得住、收得齐」的闭环。', steps: [
+      { icon: 'appt', mod: '预约管理', act: '创建或确认预约', desc: '选时间、员工、项目。', shot: '05-appt-list', shotLabel: '预约看板' },
+      { icon: 'appt', mod: '预约列表', act: '到店时定位该预约', desc: '日历 / 列表快速找到人。', shot: '05-appt-list', shotLabel: '预约看板' },
+      { icon: 'bill', mod: '开单', act: '按履约内容收款', desc: '预约与收银衔接完成。', shot: '02-bill-entry', shotLabel: '开单结账' }
+    ], upgrades: ['现网可完成预约到开单；后续可让预约、客户、开单的心智更一体。'] },
+    { id: 'A3', scene: 'A', title: '预约后改时间或取消', story: '顾客临时有事，需要把预约改到明天，或直接取消。店员在预约里调整，避免空位与冲突。', proof: '可在预约编辑流程中改期，也可进入已取消状态，档期保持可管理。', steps: [
+      { icon: 'appt', mod: '预约详情', act: '打开原预约', desc: '确认顾客与原定时间。', shot: '05-appt-list', shotLabel: '预约看板（详情入口）' },
+      { icon: 'appt', mod: '新建或编辑预约', act: '修改时间或项目', desc: '完成改期。', shot: '05-appt-list', shotLabel: '预约看板' },
+      { icon: 'appt', mod: '已取消详情', act: '取消后保留可追溯状态', desc: '档期释放，记录清晰。' }
+    ], upgrades: ['改期与取消路径现网可用；后续可强化提醒与改期协作体验。'] },
+    { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
+      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shot: '22-staff-create', shotLabel: '创建员工' },
+      { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shot: '23-staff-perm', shotLabel: '选择权限' },
+      { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance'] },
+      { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
+      { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
+    ], upgrades: ['现网可完成新人上线配置；后续排班可更显式、店主看提成下钻更直达。', '月末核提成可结合流水与经营分析场景一起看。'] },
+    { id: 'C1', scene: 'C', title: '产品库存：可售卖 + 项目消耗', story: '店主要管理两类货：柜台上可卖的护理产品，以及做项目时消耗的物料。他需要能加库存、批量补货，避免断货。', proof: '现网在价目/产品增改链路提供添加库存与批量添加库存，可支撑卖品与耗材类管理。', steps: [
+      { icon: 'price', mod: '价目表', act: '进入产品侧价目', desc: '库存入口挂在价目增改。', shot: '08b-price-products', shotLabel: '价目表 · 产品' },
+      { icon: 'stock', mod: '添加库存', act: '为可售卖产品补货', desc: '单品入库。', shot: '09-price-edit', shotLabel: '产品增改（含库存）' },
+      { icon: 'stock', mod: '批量添加库存', act: '为耗材类批量补货', desc: '服务项目消耗物料同步管理。', shot: '09-price-edit', shotLabel: '产品增改' }
+    ], upgrades: ['现网已能管库存；后续「独立库存中心、与价目同步」会让结构更清晰（对照重构库存方向）。'] },
+    { id: 'D1', scene: 'D', title: '经营数据分析：看清店、看清人、看清卡', story: '店主早上想看客流，周末想看项目与营收，月末要核对卡项与员工业绩。他还关心现金类收款与支出结余。', proof: '报表统计覆盖营收、客流、卡项、经营分析及人员下钻；并可与门店经营报表、支出统计交叉使用。', steps: [
+      { icon: 'chart', mod: '报表统计', act: '进入多维报表入口', desc: '亮点：一个入口覆盖经营主指标。', shot: '17-report-hub', shotLabel: '经营分析' },
+      { icon: 'chart', mod: '营收 / 客流', act: '查看营收状态与客流', desc: '应用：早上看客流、周看营收。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+      { icon: 'card', mod: '卡项统计', act: '掌握持卡与卡相关数据', desc: '应用：月末看卡。', shot: '18-report-detail', shotLabel: '门店经营报表' },
+      { icon: 'staff', mod: '经营分析下钻', act: '按人员查看经营情况', desc: '应用：看清人效。', shot: '17-report-hub', shotLabel: '经营分析' },
+      { icon: 'pay', mod: '支出与结余', act: '记支出并看统计 / 门店经营报表', desc: '资金侧与经营侧对照。', shot: '20-expense-book', shotLabel: '支出 · 记一笔' }
+    ], upgrades: ['现网数据能力完整可用；后续经营分析一体感、店主端业绩下钻会更直达。'] },
+    { id: 'E1', scene: 'E', title: '前置配置：价目表 · 会员卡 · 优惠券', story: '换季调价前，店主要先把项目价格、卡权益和优惠券规则准备好，店员才能顺利办卡、核销与开单。', proof: '店主可完成价目、会员卡模板与优惠券等逻辑前置，供前线持续使用。', steps: [
+      { icon: 'price', mod: '价目表', act: '维护项目与产品及分类', desc: '可卖内容的基础。', shot: '08-price-list', shotLabel: '价目表' },
+      { icon: 'card', mod: '会员卡管理', act: '配置卡模板与权益', desc: '办卡划卡规则就绪。', shot: '11-card-manage', shotLabel: '卡管理' },
+      { icon: 'coupon', mod: '优惠券管理', act: '配置券与核销规则', desc: '营销动作可落地。', shot: '12-coupon', shotLabel: '优惠券' }
+    ], upgrades: ['前置配置现网齐全；后续卡权益组合建模、价目工具化会进一步降低配置成本。', '与入驻案例衔接：今天靠模块配置就位，后续 AI 导入加速。'] },
+    { id: 'E2', scene: 'E', title: '熟客划卡开单结算', story: '会员到店做常规护理。店员选客、带出权益、点单划卡，快速完成收款。', proof: '店员权限下可独立完成选客→点单→结算的前线收银闭环。', steps: [
+      { icon: 'bill', mod: '开单', act: '进入开单', desc: '店员日常主路径。', shot: '02-bill-entry', shotLabel: '开单结账' },
+      { icon: 'user', mod: '选客', act: '找到熟客会员', desc: '带出已有卡权益。', shot: '03-bill-items', shotLabel: '结算页 · 会员信息' },
+      { icon: 'card', mod: '扣卡结算', act: '完成划卡或支付', desc: '权限含开单与结算。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+    ], upgrades: ['收银闭环已成立；后续缩短步骤、权益同屏会让体验更好。'] },
+    { id: 'E3', scene: 'E', title: '新客办卡并首次消费', story: '新客体验后决定办卡。店员办理新卡，并立刻用新卡完成第一单消费。', proof: '店员可办新卡并衔接首次开单消费，一次接待完成转化。', steps: [
+      { icon: 'card', mod: '办新卡', act: '为新客开卡', desc: '店员权限含办新卡。', shot: '11-card-manage', shotLabel: '卡管理 · 添加卡' },
+      { icon: 'bill', mod: '开单', act: '用新卡完成首单', desc: '办卡与消费同会话完成。', shot: '02-bill-entry', shotLabel: '开单结账' },
+      { icon: 'ok', mod: '结算', act: '收款成功', desc: '转化闭环。', shot: '03-bill-items', shotLabel: '开单结账 · 结算' }
+    ], upgrades: ['办卡+首消现网可完成；后续办卡与开单衔接可更顺滑。'] }
+  ];
+
+  var SHOT_BASE = 'assets/flow-shots/';
+  var state = { scene: null, flowIdx: 0 };
+  var viewerList = [];
+  var viewerIdx = 0;
+
+  function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+  /* ---------- 首页场景大卡 ---------- */
+  function renderSceneGrid() {
+    var html = SCENES.map(function (s) {
+      var n = (CASES.filter(function (c) { return c.scene === s.id; })).length;
+      return '<button type="button" class="scene-card" data-scene="' + s.id + '">' +
+        '<span class="scene-card__accent" style="background:' + s.color + '"></span>' +
+        '<div class="scene-card__no">' + esc(s.no) + '</div>' +
+        '<div class="scene-card__head">' +
+          '<span class="scene-card__icon" style="background:' + s.gradient + '">' + ICONS[s.icon] + '</span>' +
+          '<div class="scene-card__name">' + esc(s.name) + '</div>' +
+        '</div>' +
+        '<p class="scene-card__desc">' + esc(s.desc) + '</p>' +
+        '<div class="scene-card__foot">' +
+          '<span class="scene-card__count"><b>' + n + '</b> 场案例</span>' +
+          '<span class="scene-card__go">查看案例 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+        '</div>' +
+      '</button>';
+    }).join('');
+    document.getElementById('sceneGrid').innerHTML = html;
+    document.getElementById('sceneGrid').querySelectorAll('[data-scene]').forEach(function (el) {
+      el.addEventListener('click', function () { openScene(el.getAttribute('data-scene')); });
+    });
+  }
+
+  /* ---------- 顶栏导航 ---------- */
+  function renderTopNav() {
+    var html = '<a href="#viewHome" data-nav="home">首页</a>' + SCENES.map(function (s) {
+      return '<a href="#scene-' + s.id + '" data-nav="' + s.id + '">' + esc(s.name) + '</a>';
+    }).join('');
+    var nav = document.getElementById('topNav');
+    nav.innerHTML = html;
+    nav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var id = a.getAttribute('data-nav');
+        if (id === 'home') goHome();
+        else openScene(id);
+      });
+    });
+  }
+  function syncNav() {
+    document.querySelectorAll('#topNav a').forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-nav') === (state.scene || 'home'));
+    });
+  }
+
+  /* ---------- 场景详情 ---------- */
+  function openScene(id) {
+    var s = SCENES.find(function (x) { return x.id === id; });
+    if (!s) return;
+    state.scene = s.id;
+    state.flowIdx = 0;
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewScene').classList.remove('hidden');
+    document.getElementById('sceneIcon').innerHTML = '<span style="display:contents">' + ICONS[s.icon] + '</span>';
+    document.getElementById('sceneIcon').style.background = s.gradient;
+    document.getElementById('sceneTitle').textContent = s.name;
+    document.getElementById('sceneSub').textContent = s.no + ' · ' + s.desc;
+    document.getElementById('fcTitle').textContent = '核心业务流程 · ' + s.name;
+    renderFlowStrip();
+    renderFlowDetail();
+    renderSceneCases();
+    syncNav();
+    window.scrollTo(0, 0);
+  }
+
+  function renderFlowStrip() {
+    var s = SCENES.find(function (x) { return x.id === state.scene; });
+    var html = s.flow.map(function (f, i) {
+      return '<button type="button" class="fnode ' + (i === state.flowIdx ? 'selected' : '') + '" data-i="' + i + '">' +
+        '<small>' + String(i + 1).padStart(2, '0') + '</small><b>' + esc(f.t) + '</b></button>' +
+        (i < s.flow.length - 1 ? '<span class="farr">›</span>' : '');
+    }).join('');
+    var strip = document.getElementById('sceneFlow');
+    strip.innerHTML = html;
+    strip.querySelectorAll('.fnode').forEach(function (n) {
+      n.addEventListener('click', function () {
+        state.flowIdx = Number(n.getAttribute('data-i'));
+        renderFlowStrip();
+        renderFlowDetail();
+      });
+    });
+  }
+
+  function renderFlowDetail() {
+    var s = SCENES.find(function (x) { return x.id === state.scene; });
+    var f = s.flow[state.flowIdx];
+    var shots = f.shots || [];
+    document.getElementById('flowCopy').innerHTML =
+      '<span class="fc-eyebrow2">' + esc(s.no) + ' · ' + String(state.flowIdx + 1).padStart(2, '0') + '</span>' +
+      '<h3>' + esc(f.t) + '</h3>' +
+      '<p>' + esc(f.d) + '</p>' +
+      '<div class="count">' + (shots.length ? '<b>' + shots.length + '</b> 张页面截图' : '截图待补充') + '</div>';
+    renderGallery(shots, document.getElementById('flowGallery'));
+  }
+
+  function renderGallery(shots, container) {
+    var html;
+    if (!shots.length) {
+      html = '<div class="shot--ph"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20l3-4 3 4M12 5v3"/></svg><span class="ph-t">截图待补充</span><span class="ph-d">页面截图整理中 · 后续替换</span></div>';
+    } else {
+      html = shots.map(function (sh, i) {
+        return '<div class="shot" data-shot="' + esc(sh) + '" data-cap="' + esc(flowShotLabel(sh)) + '">' +
+          '<img src="' + SHOT_BASE + esc(sh) + '.png" alt="' + esc(flowShotLabel(sh)) + '" loading="lazy">' +
+          '<span>' + esc(flowShotLabel(sh)) + '</span></div>';
+      }).join('');
+    }
+    container.innerHTML = html;
+    wireShotList(container);
+  }
+
+  function flowShotLabel(id) {
+    var map = {
+      '01-wb-home': '工作台首页', '02-bill-entry': '开单 · 选品', '03-bill-items': '开单 · 结算',
+      '04-bill-pay': '开单 · 收款', '05-appt-list': '预约看板', '08-price-list': '价目表 · 项目',
+      '08b-price-products': '价目表 · 产品', '09-price-edit': '产品增改', '10b-inventory-manage': '库存管理',
+      '11-card-manage': '卡管理', '12-coupon': '优惠券', '17-report-hub': '经营分析',
+      '18-report-detail': '门店经营报表', '20-expense-book': '支出 · 记一笔', '21-expense-stats': '支出统计',
+      '22-staff-create': '创建员工', '23-staff-perm': '选择权限', '24-staff-commission': '提成设置',
+      '25-staff-performance': '业绩设置', '26-staff-reward': '奖惩设置', '27-staff-appt': '预约 · 选手艺人'
+    };
+    return map[id] || id;
+  }
+
+  /* ---------- 场景内案例 ---------- */
+  function renderSceneCases() {
+    var list = CASES.filter(function (c) { return c.scene === state.scene; });
+    document.getElementById('caseCount').textContent = list.length + ' 场';
+    document.getElementById('sceneCases').innerHTML = list.map(function (c) { return caseCardHtml(c); }).join('');
+    document.getElementById('sceneCases').querySelectorAll('[data-shot]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openViewer([el.getAttribute('data-shot')], el.getAttribute('data-cap') || '');
+      });
+    });
+    document.getElementById('sceneCases').querySelectorAll('[data-shots]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openViewer(JSON.parse(el.getAttribute('data-shots')));
+      });
+    });
+  }
+
+  function caseCardHtml(c) {
+    var steps = c.steps.map(function (s) {
+      var shotHtml = '';
+      var list = s.shots || (s.shot ? [s.shot] : []);
+      if (list.length) {
+        var label = s.shots ? (s.shots.length + ' 张截图') : (s.shotLabel || s.mod);
+        shotHtml = '<div><button type="button" class="shot-btn" ' +
+          (s.shots ? 'data-shots="' + esc(JSON.stringify(s.shots)) + '"' : 'data-shot="' + esc(s.shot) + '" data-cap="' + esc(s.shotLabel || s.mod) + '"') +
+          '>查看截图 · ' + esc(label) + '</button></div>';
+      }
+      return '<div class="case-step">' +
+        '<span class="case-step__icon">' + (ICONS[s.icon] || ICONS.bill) + '</span>' +
+        '<div class="case-step__body">' +
+          '<div class="case-step__mod">' + esc(s.mod) + '</div>' +
+          '<div class="case-step__act">' + esc(s.act) + '</div>' +
+          '<div class="case-step__desc">' + esc(s.desc) + '</div>' +
+          shotHtml +
+        '</div></div>';
+    }).join('');
+    var ups = c.upgrades && c.upgrades.length ? '<div class="case-upgrades"><b>下一步更锋利 ·</b> ' + c.upgrades.map(function (u) { return esc(u); }).join('　') + '</div>' : '';
+    return '<div class="case-card">' +
+      '<div class="case-card__tag"><span class="fc-eyebrow">' + esc(c.id) + '</span></div>' +
+      '<h3>' + esc(c.title) + '</h3>' +
+      '<p class="story">' + esc(c.story) + '</p>' +
+      '<div class="proof"><b>现网可完成 ·</b> ' + esc(c.proof) + '</div>' +
+      '<div class="case-steps">' + steps + '</div>' +
+      ups +
+    '</div>';
+  }
+
+  /* ---------- 看图 viewer ---------- */
+  function wireShotList(container) {
+    container.querySelectorAll('.shot[data-shot]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        openViewer([el.getAttribute('data-shot')], el.getAttribute('data-cap') || '');
+      });
+    });
+  }
+  function openViewer(shots, cap) {
+    viewerList = shots.slice();
+    viewerIdx = 0;
+    var s = SCENES.find(function (x) { return x.id === state.scene; });
+    showViewer(cap || (s ? s.name : ''));
+  }
+  function showViewer(cap) {
+    var img = document.getElementById('viewerImg');
+    img.src = SHOT_BASE + viewerList[viewerIdx] + '.png';
+    img.alt = cap;
+    document.getElementById('viewerCap').textContent = cap + ' · ' + (viewerIdx + 1) + '/' + viewerList.length;
+    var viewer = document.getElementById('viewer');
+    viewer.classList.add('open');
+    viewer.setAttribute('aria-hidden', 'false');
+    document.getElementById('viewerPrev').style.visibility = viewerList.length > 1 ? 'visible' : 'hidden';
+    document.getElementById('viewerNext').style.visibility = viewerList.length > 1 ? 'visible' : 'hidden';
+  }
+  function moveViewer(delta) {
+    if (!viewerList.length) return;
+    viewerIdx = (viewerIdx + delta + viewerList.length) % viewerList.length;
+    showViewer(document.getElementById('viewerCap').textContent.split(' · ')[0]);
+  }
+  function closeViewer() {
+    var viewer = document.getElementById('viewer');
+    viewer.classList.remove('open');
+    viewer.setAttribute('aria-hidden', 'true');
+    document.getElementById('viewerImg').removeAttribute('src');
+    viewerList = [];
+  }
+
+  /* ---------- 导航 ---------- */
+  function goHome() {
+    state.scene = null;
+    document.getElementById('viewScene').classList.add('hidden');
+    document.getElementById('viewHome').classList.remove('hidden');
+    syncNav();
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- 讲解模式 ---------- */
+  document.getElementById('btnPresent').addEventListener('click', function () {
+    document.body.classList.toggle('present-mode');
+    this.textContent = document.body.classList.contains('present-mode') ? '讲解模式 · 开' : '讲解模式';
+  });
+  document.getElementById('btnBackHome').addEventListener('click', goHome);
+  document.getElementById('viewerClose').addEventListener('click', closeViewer);
+  document.getElementById('viewer').addEventListener('click', function (e) { if (e.target === this) closeViewer(); });
+  document.getElementById('viewerPrev').addEventListener('click', function () { moveViewer(-1); });
+  document.getElementById('viewerNext').addEventListener('click', function () { moveViewer(1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.getElementById('viewer').classList.contains('open')) { e.preventDefault(); closeViewer(); return; }
+    if (!document.getElementById('viewer').classList.contains('open')) {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        var idx = SCENES.findIndex(function (s) { return s.id === state.scene; });
+        if (idx >= 0) { var next = SCENES[(idx + 1) % SCENES.length]; openScene(next.id); }
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        if (!state.scene) return;
+        var i2 = SCENES.findIndex(function (s) { return s.id === state.scene; });
+        var prev = SCENES[(i2 - 1 + SCENES.length) % SCENES.length];
+        openScene(prev.id);
+      }
+    }
+  });
+
+  function goFromHash() {
+    var q = new URLSearchParams(location.search).get('scene');
+    var h = (location.hash || '').replace(/^#\//, '');
+    var m = /^#scene-(.+)$/.exec(h || '');
+    var id = q || (m ? m[1] : '');
+    if (id && SCENES.some(function (s) { return s.id === id; })) openScene(id);
+  }
+
+  renderTopNav();
+  renderSceneGrid();
+  goHome();
+  goFromHash();
+})();
+</script>
+</body>
+</html>
