@@ -471,19 +471,24 @@ body.present-mode .nav{display:none}
       icon: 'chart', color: '#0fa3a3', gradient: 'linear-gradient(150deg,#1bbdbd,#0d8f8f)',
       desc: '营收、客流、卡项与员工下钻一个入口覆盖，配合支出结余看透门店经营。',
       flow: [
-        { t: '报表统计入口', d: '进入多维报表入口，一个入口覆盖经营主指标。', shots: ['17-report-hub'], sub: [
+        { t: '报表统计入口', d: '进入多维报表入口，一个入口覆盖经营主指标。', shots: ['17-report-hub', '18-report-detail'], sub: [
           { t: '进入经营分析', d: '从工作台进入多维报表入口。', shots: ['17-report-hub'] },
-          { t: '选择统计维度', d: '营收、客流、卡项、人员下钻任选。' }
+          { t: '选择统计维度', d: '实收、客流、卡项、员工、商城、自助收银任选。', shots: ['18-report-detail'] }
         ] },
-        { t: '营收与客流', d: '查看营收状态与客流统计，早上看客流、周看营收。', shots: ['18-report-detail'], sub: [
-          { t: '查看营收', d: '今日 / 本周 / 本月营收状态。', shots: ['18-report-detail'] },
-          { t: '查看客流', d: '客流量与转化，配合经营报表。' }
+        { t: '营收与客流', d: '查看营收状态与客流统计，早上看客流、周看营收。', shots: ['73-report-revenue', '72-report-traffic'], sub: [
+          { t: '查看实收', d: '总营收 / 日均营收 / 环比，支付方式统计。', shots: ['73-report-revenue'] },
+          { t: '查看客流', d: '消费人数、人次、会员与男女客比例。', shots: ['72-report-traffic'] }
         ] },
-        { t: '卡项统计', d: '掌握持卡与卡相关数据，月末看卡。', shots: ['18-report-detail'], sub: [
-          { t: '卡项数据', d: '持卡、办卡、划卡数据概览。', shots: ['18-report-detail'] }
+        { t: '卡项统计', d: '掌握持卡与卡相关数据，月末看卡。', shots: ['74-report-card'], sub: [
+          { t: '卡项数据', d: '售卡 / 耗卡 / 充值 / 退卡数据概览。', shots: ['74-report-card'] }
         ] },
-        { t: '经营分析下钻', d: '按人员查看经营情况，看清人效。', shots: ['17-report-hub'], sub: [
-          { t: '按人员下钻', d: '查看每位员工的业绩与贡献。', shots: ['17-report-hub'] }
+        { t: '经营分析下钻', d: '按人员查看经营情况，看清人效。', shots: ['75-report-staff'], sub: [
+          { t: '按人员下钻', d: '查看每位员工的业绩与贡献。', shots: ['75-report-staff'] }
+        ] },
+        { t: '商城与自助收银', d: '线上商城交易流量、自助收银报表。', shots: ['76-mall-report1', '77-mall-report2', '78-self-checkout'], sub: [
+          { t: '商城交易统计', d: '交易金额、订单数与退款情况。', shots: ['76-mall-report1'] },
+          { t: '商城流量统计', d: '访问人数 / 次数、转化漏斗。', shots: ['77-mall-report2'] },
+          { t: '自助收银报表', d: '自助收银实际收款与笔数。', shots: ['78-self-checkout'] }
         ] },
         { t: '支出与结余', d: '记支出并看统计结余，资金侧与经营侧对照。', shots: ['20-expense-book', '21-expense-stats'], sub: [
           { t: '记一笔支出', d: '登记门店支出事项与金额。', shots: ['20-expense-book'] },
@@ -502,20 +507,20 @@ body.present-mode .nav{display:none}
           { t: '会员卡管理', d: '配置卡模板与权益，办卡划卡规则就绪。', shots: ['11-card-manage'] },
           { t: '优惠券管理', d: '配置券与核销规则，营销动作可落地。', shots: ['12-coupon'] }
         ] },
-        { t: '选客或散客', d: '选择会员或登记散客，快速确认服务对象。', shots: ['02-bill-entry'], sub: [
+        { t: '选客或散客', d: '选择会员或登记散客，快速确认服务对象。', shots: ['02-bill-entry', '70-bill-customer'], sub: [
           { t: '进入开单', d: '从工作台进入开单结账。', shots: ['02-bill-entry'] },
-          { t: '选会员 / 散客', d: '搜索会员带出卡权益，或登记散客。' }
+          { t: '选会员 / 散客', d: '搜索会员带出卡权益，或登记散客。', shots: ['70-bill-customer'] }
         ] },
-        { t: '带出权益点单', d: '会员卡权益自动带出，项目产品入单。', shots: ['49-bill-cashier'], sub: [
-          { t: '带出权益', d: '会员卡权益与可用次数自动带出。', shots: ['49-bill-cashier'] },
-          { t: '项目 / 产品入单', d: '按价目添加本次服务或产品。' }
+        { t: '带出权益点单', d: '会员卡权益自动带出，项目产品入单。', shots: ['49-bill-cashier', '68-bill-credit'], sub: [
+          { t: '带出权益', d: '会员卡权益与可用次数自动带出，可收起卡项。', shots: ['68-bill-credit'] },
+          { t: '项目 / 产品入单', d: '按价目添加本次服务或产品。', shots: ['49-bill-cashier'] }
         ] },
-        { t: '结算收款', d: '选择支付宝 / 微信 / 现金等收款方式完成结算。', shots: ['50-bill-pay'], sub: [
-          { t: '选择收款方式', d: '支付宝 / 微信 / 现金 / 组合收款。', shots: ['50-bill-pay'] },
-          { t: '确认支付', d: '收付款完成，账目进入流水。' }
+        { t: '结算收款', d: '选择支付宝 / 微信 / 现金等收款方式完成结算。', shots: ['50-bill-pay', '69-bill-checkout'], sub: [
+          { t: '确认结算信息', d: '选择员工、核对权益与小计，可关联优惠券。', shots: ['69-bill-checkout'] },
+          { t: '选择收款方式', d: '支付宝 / 微信 / 现金 / 组合收款。', shots: ['50-bill-pay'] }
         ] },
-        { t: '落单完成', d: '散客或会员开单完成，账目与流水可查，收银闭环成立。', shots: [], sub: [
-          { t: '落单归档', d: '订单进入流水，账目与凭证可查。' }
+        { t: '落单完成', d: '散客或会员开单完成，账目与流水可查，收银闭环成立。', shots: ['71-bill-done'], sub: [
+          { t: '开单成功', d: '订单进入流水，可返回首页、查看流水或继续开单。', shots: ['71-bill-done'] }
         ] }
       ],
       cases: ['E1', 'E2', 'E3']
@@ -546,9 +551,10 @@ body.present-mode .nav{display:none}
     ], upgrades: ['现网已能管库存；后续「独立库存中心、与价目同步」会让结构更清晰（对照重构库存方向）。'] },
     { id: 'D1', scene: 'D', title: '经营数据分析：看清店、看清人、看清卡', story: '店主早上想看客流，周末想看项目与营收，月末要核对卡项与员工业绩。他还关心现金类收款与支出结余。', proof: '报表统计覆盖营收、客流、卡项、经营分析及人员下钻；并可与门店经营报表、支出统计交叉使用。', steps: [
       { icon: 'chart', mod: '报表统计', act: '进入多维报表入口', desc: '亮点：一个入口覆盖经营主指标。', shot: '17-report-hub', shotLabel: '经营分析' },
-      { icon: 'chart', mod: '营收 / 客流', act: '查看营收状态与客流', desc: '应用：早上看客流、周看营收。', shot: '18-report-detail', shotLabel: '门店经营报表' },
-      { icon: 'card', mod: '卡项统计', act: '掌握持卡与卡相关数据', desc: '应用：月末看卡。', shot: '18-report-detail', shotLabel: '门店经营报表' },
-      { icon: 'staff', mod: '经营分析下钻', act: '按人员查看经营情况', desc: '应用：看清人效。', shot: '17-report-hub', shotLabel: '经营分析' },
+      { icon: 'chart', mod: '营收 / 客流', act: '查看实收与客流', desc: '应用：早上看客流、周看营收。', shots: ['73-report-revenue', '72-report-traffic'] },
+      { icon: 'card', mod: '卡项统计', act: '掌握持卡与卡相关数据', desc: '应用：月末看卡。', shot: '74-report-card', shotLabel: '卡相关' },
+      { icon: 'staff', mod: '经营分析下钻', act: '按人员查看经营情况', desc: '应用：看清人效。', shot: '75-report-staff', shotLabel: '员工业绩分析' },
+      { icon: 'pay', mod: '商城与自助收银', act: '线上商城与自助收银报表', desc: '交易、流量与自助收银一目了然。', shots: ['76-mall-report1', '77-mall-report2', '78-self-checkout'] },
       { icon: 'pay', mod: '支出与结余', act: '记支出并看统计 / 门店经营报表', desc: '资金侧与经营侧对照。', shot: '20-expense-book', shotLabel: '支出 · 记一笔' }
     ], upgrades: ['现网数据能力完整可用；后续经营分析一体感、店主端业绩下钻会更直达。'] },
     { id: 'E1', scene: 'E', title: '前置配置：价目表 · 会员卡 · 优惠券', story: '换季调价前，店主要先把项目价格、卡权益和优惠券规则准备好，店员才能顺利办卡、核销与开单。', proof: '店主可完成价目、会员卡模板与优惠券等逻辑前置，供前线持续使用。', steps: [
@@ -558,13 +564,14 @@ body.present-mode .nav{display:none}
     ], upgrades: ['前置配置现网齐全；后续卡权益组合建模、价目工具化会进一步降低配置成本。', '与入驻案例衔接：今天靠模块配置就位，后续 AI 导入加速。'] },
     { id: 'E2', scene: 'E', title: '熟客划卡开单结算', story: '会员到店做常规护理。店员选客、带出权益、点单划卡，快速完成收款。', proof: '店员权限下可独立完成选客→点单→结算的前线收银闭环。', steps: [
       { icon: 'bill', mod: '开单', act: '进入开单', desc: '店员日常主路径。', shot: '02-bill-entry', shotLabel: '开单结账' },
-      { icon: 'user', mod: '选客', act: '找到熟客会员', desc: '带出已有卡权益。', shot: '49-bill-cashier', shotLabel: '开单结账 · 散客选品' },
-      { icon: 'card', mod: '扣卡结算', act: '完成划卡或支付', desc: '权限含开单与结算。', shot: '49-bill-cashier', shotLabel: '开单结账 · 散客选品' }
+      { icon: 'user', mod: '选客', act: '找到熟客会员', desc: '带出已有卡权益。', shot: '70-bill-customer', shotLabel: '选客或散客' },
+      { icon: 'card', mod: '带出权益点单', act: '会员卡权益自动带出', desc: '卡权益与次数同屏展示。', shot: '68-bill-credit', shotLabel: '带出权益点单' },
+      { icon: 'ok', mod: '落单完成', act: '开单成功收款', desc: '收银闭环成立。', shot: '71-bill-done', shotLabel: '开单成功' }
     ], upgrades: ['收银闭环已成立；后续缩短步骤、权益同屏会让体验更好。'] },
     { id: 'E3', scene: 'E', title: '新客办卡并首次消费', story: '新客体验后决定办卡。店员办理新卡，并立刻用新卡完成第一单消费。', proof: '店员可办新卡并衔接首次开单消费，一次接待完成转化。', steps: [
       { icon: 'card', mod: '办新卡', act: '为新客开卡', desc: '店员权限含办新卡。', shot: '11-card-manage', shotLabel: '卡管理 · 添加卡' },
-      { icon: 'bill', mod: '开单', act: '用新卡完成首单', desc: '办卡与消费同会话完成。', shot: '02-bill-entry', shotLabel: '开单结账' },
-      { icon: 'ok', mod: '结算', act: '收款成功', desc: '转化闭环。', shot: '49-bill-cashier', shotLabel: '开单结账 · 散客选品' }
+      { icon: 'bill', mod: '开单', act: '用新卡完成首单', desc: '办卡与消费同会话完成。', shot: '70-bill-customer', shotLabel: '选客或散客' },
+      { icon: 'ok', mod: '结算', act: '收款成功', desc: '转化闭环。', shot: '71-bill-done', shotLabel: '开单成功' }
     ], upgrades: ['办卡+首消现网可完成；后续办卡与开单衔接可更顺滑。'] }
   ];
 
@@ -830,7 +837,13 @@ body.present-mode .nav{display:none}
       '60-coupon-new': '新增优惠券 · 代金券', '61-coupon-scope': '新增优惠券 · 适用范围',
       '62-coupon-board': '营销看板', '63-staff-create': '创建员工 · 基础信息',
       '64-staff-position': '创建员工 · 职位', '65-staff-perm': '创建员工 · 权限',
-      '66-staff-commission': '创建员工 · 提成方案', '67-staff-status': '创建员工 · 状态'
+      '66-staff-commission': '创建员工 · 提成方案', '67-staff-status': '创建员工 · 状态',
+      '68-bill-credit': '带出权益点单', '69-bill-checkout': '结算收款',
+      '70-bill-customer': '选客或散客', '71-bill-done': '开单成功',
+      '72-report-traffic': '客流分析', '73-report-revenue': '实收分析',
+      '74-report-card': '卡相关', '75-report-staff': '员工业绩分析',
+      '76-mall-report1': '商城报表 · 交易统计', '77-mall-report2': '商城报表 · 流量统计',
+      '78-self-checkout': '自助收银报表'
     };
     return map[id] || id;
   }
