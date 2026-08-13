@@ -5395,9 +5395,12 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 .emp-comm-day { margin: 0 16px 16px; }
 .emp-comm-day__head {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  flex-wrap: wrap; row-gap: 6px;
+  display: flex; flex-direction: column; gap: 6px;
   padding: 8px 2px 10px; font-size: 13px; color: var(--text);
+}
+.emp-comm-day__head-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-width: 0;
 }
 .emp-comm-day__date-pill {
   flex-shrink: 0; display: inline-flex; align-items: center;
@@ -5409,9 +5412,14 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   display: inline-flex; align-items: center; gap: 8px; min-width: 0;
 }
 .emp-comm-day__head-total {
-  font-size: 12px; color: var(--text-sec); white-space: nowrap;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 12px; color: var(--text-sec);
+  white-space: nowrap; overflow: hidden; min-width: 0;
+  flex-wrap: nowrap;
 }
+.emp-comm-day__head-total-lbl { flex-shrink: 0; font-weight: 600; color: var(--text); }
 .emp-comm-day__head-total .emp-num { font-size: 13px; }
+.emp-comm-day__head-total .emp-comm-day__metric { flex-shrink: 0; }
 .emp-comm-day__head-metrics {
   display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-sec);
   flex-shrink: 0; min-width: 0;
@@ -5501,6 +5509,13 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   font-size: 12px; color: #8A6A4A; line-height: 17px;
   padding: 6px 8px; background: #FFF8F0; border-radius: 8px;
 }
+.emp-comm-line__editor {
+  display: inline-flex; align-items: center; align-self: flex-start;
+  font-size: 11px; color: #C2740E; line-height: 16px;
+  padding: 2px 8px; border-radius: 6px;
+  background: rgba(255, 112, 67, .08); white-space: nowrap;
+}
+.emp-comm-line__editor.is-history { color: var(--text-sec); background: transparent; padding: 0 8px; }
 .emp-comm-day__pending {
   flex-shrink: 0; display: inline-flex; align-items: center;
   height: 20px; padding: 0 8px; border-radius: 10px;
@@ -7129,9 +7144,6 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 #expPayList .exp-pay-opt__label { flex: 1; min-width: 0; line-height: 22px; }
 #expPayMask .emp-picker-list { max-height: 360px; }
-
-.emp-comm-edit-body { padding: 12px 16px 16px; }
-.emp-comm-edit-body .form-row:last-child::after { display: none; }
 .emp-comm-block {
   background: #fff; border-radius: 12px; padding: 14px 16px;
   margin-top: 10px; box-sizing: border-box;
@@ -13625,6 +13637,218 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .coupon-section-label {
   margin: 4px 0 0; padding: 4px 0 0; font-size: 12px; color: var(--text-sec);
 }
+/* ===== 优惠券管理 · 莫兰迪票据风 ===== */
+:root {
+  --cp-red: #B0806F; --cp-red-deep: #9C6E5E;
+  --cp-blue: #7A8CA8; --cp-blue-deep: #6B7D99;
+  --cp-green: #7D9B8E; --cp-green-deep: #68877A;
+  --cp-gold: #B39468;
+}
+.cp-manage-page { display: flex; flex-direction: column; flex: 1; min-height: 0; background: var(--bg-page); }
+.cp-tabs.page-tabs { height: 44px; }
+.cp-tabs.page-tabs .page-tabs__label { font-size: 15px; }
+.cp-tabs .page-tabs__item.on .page-tabs__indicator { width: 28px; height: 3px; }
+.cp-list { display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 24px; }
+/* 券票本体 · 整面莫兰迪 */
+.cp-ticket {
+  position: relative; display: flex; flex-direction: column;
+  background: linear-gradient(150deg, var(--cp-red) 0%, var(--cp-red-deep) 100%);
+  border-radius: 14px; overflow: hidden; cursor: pointer;
+  text-align: left; font-family: inherit; color: #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.09), 0 2px 6px rgba(0,0,0,.05);
+  border: none; padding: 0; width: 100%; box-sizing: border-box;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cp-ticket:active { transform: scale(.985); }
+.cp-ticket--full { background: linear-gradient(150deg, var(--cp-red) 0%, var(--cp-red-deep) 100%); }
+.cp-ticket--discount { background: linear-gradient(150deg, var(--cp-blue) 0%, var(--cp-blue-deep) 100%); }
+.cp-ticket--cash { background: linear-gradient(150deg, var(--cp-green) 0%, var(--cp-green-deep) 100%); }
+.cp-ticket--ended,
+.cp-ticket--void { background: linear-gradient(150deg, #BFBBB6 0%, #D4D1CD 100%); }
+.cp-ticket--draft { background: linear-gradient(150deg, #EFEBE2 0%, #F7F3EC 100%); }
+.cp-ticket__body { display: flex; align-items: stretch; min-height: 96px; }
+.cp-ticket__left {
+  flex: 0 0 118px; width: 118px; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; color: #fff; position: relative; overflow: hidden;
+}
+.cp-ticket__left::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,.16), rgba(255,255,255,0) 46%);
+  pointer-events: none;
+}
+.cp-ticket__amount {
+  display: flex; align-items: flex-start; justify-content: center; gap: 1px; line-height: 1;
+  text-shadow: 0 1px 3px rgba(0,0,0,.14);
+}
+.cp-ticket__yen { font-size: 16px; font-family: var(--font-data); margin-top: 8px; font-weight: 500; }
+.cp-ticket__num { font-size: 38px; font-family: var(--font-data); font-weight: 600; letter-spacing: -.5px; }
+.cp-ticket__off { font-size: 15px; font-family: var(--font-data); font-weight: 600; }
+.cp-ticket__type {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; letter-spacing: .5px;
+  padding: 3px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.5);
+  line-height: 1.3; text-shadow: 0 1px 2px rgba(0,0,0,.12);
+}
+.cp-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cp-icon svg { display: block; width: 13px; height: 13px; }
+/* 撕票分隔 · 半透明白虚线 */
+.cp-ticket__perf {
+  position: relative; flex: 0 0 0; width: 0; align-self: stretch;
+  border-left: 2px dashed rgba(255,255,255,.45);
+}
+.cp-ticket__right {
+  flex: 1; min-width: 0; display: flex; flex-direction: column;
+  justify-content: center; gap: 8px; padding: 14px 14px 14px 16px;
+}
+.cp-ticket__name {
+  font-size: 15px; font-weight: 600; color: #fff; line-height: 1.35;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,.12);
+}
+.cp-ticket__meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,.82); line-height: 1.4; }
+.cp-ticket__meta-dot { flex-shrink: 0; width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,.5); }
+.cp-ticket__status {
+  position: absolute; right: 10px; top: 10px; z-index: 2;
+  height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center; line-height: 20px;
+  background: rgba(255,255,255,.24); color: #fff; border: 1px solid rgba(255,255,255,.5);
+  backdrop-filter: blur(2px);
+}
+.cp-ticket__status--draft { background: rgba(0,0,0,.06); color: #8A7D6B; border-color: rgba(0,0,0,.14); }
+/* 撕票底边 · 半透明白 */
+.cp-ticket__foot {
+  border-top: 1px dashed rgba(255,255,255,.35); padding: 10px 16px;
+  display: flex; align-items: center; gap: 18px; font-size: 12px;
+  color: rgba(255,255,255,.9); background: rgba(255,255,255,.1);
+}
+.cp-ticket__foot-item { display: inline-flex; align-items: center; gap: 5px; }
+.cp-ticket__foot-item b { font-family: var(--font-data); font-weight: 500; color: #fff; font-size: 13px; }
+.cp-ticket__foot-spacer { flex: 1; }
+.cp-ticket__foot-more { color: rgba(255,255,255,.85); display: inline-flex; align-items: center; gap: 2px; }
+.cp-ticket__foot-more svg { width: 14px; height: 14px; }
+/* 草稿：浅米色底 + 深字 */
+.cp-ticket--draft { border: 1px dashed #C9BFAF; box-shadow: none; }
+.cp-ticket--draft .cp-ticket__left { color: #8A7D6B; }
+.cp-ticket--draft .cp-ticket__left::after { background: radial-gradient(120% 120% at 0% 0%, rgba(0,0,0,.03), rgba(0,0,0,0) 46%); }
+.cp-ticket--draft .cp-ticket__name { color: #6B6050; text-shadow: none; }
+.cp-ticket--draft .cp-ticket__meta { color: #A69A87; }
+.cp-ticket--draft .cp-ticket__meta-dot { background: #C9BFAF; }
+.cp-ticket--draft .cp-ticket__amount, .cp-ticket--draft .cp-ticket__type { text-shadow: none; }
+.cp-ticket--draft .cp-ticket__type { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.14); color: #8A7D6B; }
+.cp-ticket--draft .cp-ticket__perf { border-left-color: rgba(0,0,0,.12); }
+.cp-ticket--draft .cp-ticket__foot { color: #A69A87; background: rgba(0,0,0,.02); border-top-color: rgba(0,0,0,.08); }
+.cp-ticket--draft .cp-ticket__foot b { color: #6B6050; }
+/* 已作废 */
+.cp-ticket--void { opacity: .7; }
+/* 发放摘要 · 迷你券块 */
+.cp-type-chip--full { background: linear-gradient(150deg, var(--cp-red), var(--cp-red-deep)); }
+.cp-type-chip--discount { background: linear-gradient(150deg, var(--cp-blue), var(--cp-blue-deep)); }
+.cp-type-chip--cash { background: linear-gradient(150deg, var(--cp-green), var(--cp-green-deep)); }
+.cp-issue-summary .cp-ticket__left { color: #fff; border-radius: 10px; }
+.cp-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; color: var(--text-sec); gap: 10px; }
+.cp-empty__icon { width: 72px; height: 72px; border-radius: 20px; background: #F1F1F1; display: flex; align-items: center; justify-content: center; color: #C4C4C4; }
+.cp-empty__title { font-size: 14px; color: #6B6B6B; }
+.cp-empty__hint { font-size: 12px; }
+/* 券详情 hero */
+.cp-detail-hero { padding: 16px 16px 4px; background: var(--bg-page); }
+.cp-detail-hero .cp-ticket { cursor: default; }
+.cp-detail-hero .cp-ticket:active { transform: none; }
+.cp-detail-hero .cp-ticket__left { flex-basis: 132px; width: 132px; }
+.cp-detail-hero .cp-ticket__num { font-size: 40px; }
+.cp-detail-hero .cp-ticket__body { min-height: 116px; }
+/* 券详情数据卡 */
+.cp-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 12px 16px; }
+.cp-stat {
+  background: #fff; border-radius: 12px; padding: 14px 8px; text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,.04);
+}
+.cp-stat__num { font-family: var(--font-data); font-size: 22px; font-weight: 500; color: #1a1a1a; line-height: 1.1; }
+.cp-stat__label { margin-top: 6px; font-size: 12px; color: var(--text-sec); }
+.cp-detail-info { margin: 4px 16px 16px; background: #fff; border-radius: 12px; overflow: hidden; }
+.cp-detail-info .form-row { margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--card-divider); }
+.cp-detail-info .form-row:last-child { border-bottom: none; }
+/* 新建表单 */
+.cp-form-step-bar {
+  display: flex; align-items: flex-start; gap: 0; width: 100%; box-sizing: border-box;
+  padding: 16px 28px 12px; background: var(--card); flex-shrink: 0;
+}
+.cp-step { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.cp-step__dot {
+  width: 26px; height: 26px; border-radius: 50%; box-sizing: border-box;
+  border: 1.5px solid #D6D6D6; background: #fff; color: transparent;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.cp-step__dot svg { width: 14px; height: 14px; display: block; }
+.cp-step__label { font-size: 11px; color: var(--text-sec); white-space: nowrap; line-height: 1; }
+.cp-step.is-active .cp-step__dot,
+.cp-step.is-done .cp-step__dot { color: #fff; }
+.cp-step.is-active .cp-step__dot { border-color: var(--cp-red); background: var(--cp-red); }
+.cp-step.is-active .cp-step__label { color: var(--cp-red); font-weight: 600; }
+.cp-step.is-done .cp-step__dot { border-color: var(--cp-green); background: var(--cp-green); }
+.cp-step__line {
+  flex: 1; min-width: 24px; max-width: 64px; align-self: flex-start;
+  margin: 13px 10px 0; border-top: 1.5px solid #E2E2E2; box-sizing: border-box;
+}
+.cp-step__line.is-done { border-top-color: var(--cp-green); }
+.cp-form-card { margin: 12px 16px 16px; background: #fff; border-radius: 12px; overflow: hidden; }
+.cp-form-card .form-row { margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--card-divider); }
+.cp-form-card .form-row:last-child { border-bottom: none; }
+.cp-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 4px 0; }
+.cp-type-opt {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 16px 6px; border-radius: 12px; border: 1.5px solid var(--border);
+  background: #fff; cursor: pointer; font-family: inherit; color: var(--text);
+}
+.cp-type-opt.on { border-color: var(--cp-red); background: #F7EFEB; }
+.cp-type-opt__icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cp-type-opt__icon svg { width: 24px; height: 24px; display: block; }
+.cp-type-opt__icon--full { background: #F0E4DE; color: #A97164; }
+.cp-type-opt__icon--discount { background: #E4EAF2; color: #6B7D99; }
+.cp-type-opt__icon--cash { background: #E6EDE7; color: #68877A; }
+.cp-type-opt.on .cp-type-opt__icon { color: #fff; }
+.cp-type-opt.on .cp-type-opt__icon--full { background: linear-gradient(150deg, var(--cp-red), var(--cp-red-deep)); }
+.cp-type-opt.on .cp-type-opt__icon--discount { background: linear-gradient(150deg, var(--cp-blue), var(--cp-blue-deep)); }
+.cp-type-opt.on .cp-type-opt__icon--cash { background: linear-gradient(150deg, var(--cp-green), var(--cp-green-deep)); }
+.cp-type-opt__label { font-size: 13px; font-weight: 500; }
+.cp-type-opt__desc { font-size: 11px; color: var(--text-sec); }
+.cp-type-opt.on .cp-type-opt__label { color: var(--cp-red-deep); }
+.cp-chip-group { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0; }
+.cp-chip {
+  height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid var(--border);
+  background: #fff; color: var(--text); font-size: 13px; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center;
+}
+.cp-chip.on { border-color: var(--cp-red); color: var(--cp-red-deep); background: #F7EFEB; }
+/* 发放 */
+.cp-issue-summary { margin: 12px 16px 16px; background: #fff; border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: center; }
+.cp-issue-summary .cp-ticket__left { flex: 0 0 76px; width: 76px; border-radius: 10px; align-self: stretch; min-height: 68px; }
+.cp-issue-summary .cp-ticket__num { font-size: 24px; }
+.cp-issue-summary .cp-ticket__yen { font-size: 12px; margin-top: 4px; }
+.cp-issue-summary .cp-ticket__type { font-size: 10px; padding: 1px 8px; }
+.cp-issue-summary__info { flex: 1; min-width: 0; }
+.cp-issue-summary__name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+.cp-issue-summary__meta { margin-top: 4px; font-size: 12px; color: var(--text-sec); }
+.cp-member-row { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #fff; border-radius: 12px; margin: 0 16px 10px; cursor: pointer; }
+.cp-member-row__avatar { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #F0E6DD; color: #8A6F5F; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; }
+.cp-member-row__info { flex: 1; min-width: 0; }
+.cp-member-row__name { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.cp-member-row__sub { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
+.cp-member-row__check { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; color: transparent; }
+.cp-member-row.on .cp-member-row__check { border-color: var(--brand); background: var(--brand); color: #fff; }
+.cp-member-row__check svg { width: 12px; height: 12px; }
+/* 核销记录 */
+.cp-usage-item { margin: 0 16px 10px; background: #fff; border-radius: 12px; padding: 14px 16px; }
+.cp-usage-item__head { display: flex; align-items: center; gap: 8px; }
+.cp-usage-item__name { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-usage-item__amt { font-family: var(--font-data); font-size: 16px; font-weight: 500; color: var(--cp-red-deep); }
+.cp-usage-item__meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--text-sec); }
+.cp-usage-item__order { color: var(--info-text); }
 .bottom-bar--detail .bottom-bar__action { gap: 10px; }
 .bottom-bar--detail .bottom-bar__btns { display: flex; gap: 10px; margin-left: auto; }
 .bottom-bar--detail .btn-hold-detail {
@@ -14309,74 +14533,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
   </div>
 </div>
 
-<div class="screen hidden" id="screen-emp-comm-edit">
-  <div class="page-title-bar">
-    <button type="button" class="back" data-emp-back-comm aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-    <span class="title" id="empCommEditTitle">提成方案</span>
-  </div>
-  <div class="page-body emp-comm-edit-body">
-    <div class="emp-card">
-      <div class="form-row"><span class="label">方案名称</span><span class="form-row__trail"><span class="value has-val" id="empCommEditName"></span></span></div>
-    </div>
-    <div class="emp-comm-block" data-comm-kind="labor">
-      <div class="emp-comm-block__title">项目提成</div>
-      <div class="emp-comm-mode-radios" role="radiogroup" aria-label="项目提成方式">
-        <label class="emp-comm-radio"><input type="radio" name="empCommLaborMode" value="pct" /> 按比例</label>
-        <label class="emp-comm-radio"><input type="radio" name="empCommLaborMode" value="amount" /> 固定金额</label>
-      </div>
-      <div class="emp-comm-value-field" data-comm-input="pct">
-        <label><span>提成比例 (%)</span><input id="empCommLaborPct" class="emp-comm-num" type="text" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label>
-      </div>
-      <div class="emp-comm-value-field hidden" data-comm-input="amount">
-        <label><span>提成金额 (¥)</span><input id="empCommLaborAmt" class="emp-comm-num" type="text" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label>
-      </div>
-    </div>
-    <div class="emp-comm-block" data-comm-kind="sales">
-      <div class="emp-comm-block__title">产品提成</div>
-      <div class="emp-comm-mode-radios" role="radiogroup" aria-label="产品提成方式">
-        <label class="emp-comm-radio"><input type="radio" name="empCommSalesMode" value="pct" /> 按比例</label>
-        <label class="emp-comm-radio"><input type="radio" name="empCommSalesMode" value="amount" /> 固定金额</label>
-      </div>
-      <div class="emp-comm-value-field" data-comm-input="pct">
-        <label><span>提成比例 (%)</span><input id="empCommSalesPct" class="emp-comm-num" type="text" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label>
-      </div>
-      <div class="emp-comm-value-field hidden" data-comm-input="amount">
-        <label><span>提成金额 (¥)</span><input id="empCommSalesAmt" class="emp-comm-num" type="text" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label>
-      </div>
-    </div>
-    <div class="emp-comm-block" data-comm-kind="issue">
-      <div class="emp-comm-block__title">办卡提成</div>
-      <div class="emp-comm-mode-radios" role="radiogroup" aria-label="办卡提成方式">
-        <label class="emp-comm-radio"><input type="radio" name="empCommIssueMode" value="pct" /> 按比例</label>
-        <label class="emp-comm-radio"><input type="radio" name="empCommIssueMode" value="amount" /> 固定金额</label>
-      </div>
-      <div class="emp-comm-value-field" data-comm-input="pct">
-        <label><span>提成比例 (%)</span><input id="empCommIssuePct" class="emp-comm-num" type="text" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label>
-      </div>
-      <div class="emp-comm-value-field hidden" data-comm-input="amount">
-        <label><span>提成金额 (¥)</span><input id="empCommIssueAmt" class="emp-comm-num" type="text" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label>
-      </div>
-    </div>
-    <div class="emp-comm-block" data-comm-kind="card">
-      <div class="emp-comm-block__title">卡耗提成</div>
-      <div class="emp-comm-mode-radios" role="radiogroup" aria-label="卡耗提成方式">
-        <label class="emp-comm-radio"><input type="radio" name="empCommCardMode" value="pct" /> 按比例</label>
-        <label class="emp-comm-radio"><input type="radio" name="empCommCardMode" value="amount" /> 固定金额</label>
-      </div>
-      <div class="emp-comm-value-field" data-comm-input="pct">
-        <label><span>提成比例 (%)</span><input id="empCommCardPct" class="emp-comm-num" type="text" placeholder="请输入比例" inputmode="decimal" data-comm-num-mode="pct" autocomplete="off" /></label>
-      </div>
-      <div class="emp-comm-value-field hidden" data-comm-input="amount">
-        <label><span>提成金额 (¥)</span><input id="empCommCardAmt" class="emp-comm-num" type="text" placeholder="请输入金额" inputmode="decimal" data-comm-num-mode="amount" autocomplete="off" /></label>
-      </div>
-    </div>
-  </div>
-  <div class="bottom-bar">
-    <div class="bottom-bar__action"><button type="button" class="btn-main" id="empBtnSaveComm">保存</button></div>
-    <div class="bottom-bar__safe" aria-hidden="true"></div>
-  </div>
-</div>
-
 <div class="screen hidden" id="screen-emp-comm-ladder">
   <div class="page-title-bar">
     <button type="button" class="back" data-emp-back-comm aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -14598,32 +14754,6 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <button type="button" class="catalog-action-item catalog-action-item--cancel" id="empCommLineActCancel">取消</button>
     </div>
     <div class="catalog-action-safe" aria-hidden="true"></div>
-  </div>
-</div>
-
-<div class="dialog-mask" id="empPctDialogMask">
-  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="empPctDialogTitle">
-    <div class="dialog__title" id="empPctDialogTitle">编辑比例</div>
-    <div class="emp-pct-dialog-fields" id="empPctDialogFieldsDual">
-      <label>
-        <span>点客比例 (%)</span>
-        <input type="number" id="empPctDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
-      </label>
-      <label>
-        <span>散客比例 (%)</span>
-        <input type="number" id="empPctNonDesignated" inputmode="decimal" min="0" max="100" step="0.1" />
-      </label>
-    </div>
-    <div class="emp-pct-dialog-fields hidden" id="empPctDialogFieldsSingle">
-      <label>
-        <span id="empPctSingleLabel">比例 (%)</span>
-        <input type="number" id="empPctSingleInput" inputmode="decimal" min="0" max="100" step="0.1" />
-      </label>
-    </div>
-    <div class="dialog__actions dialog__actions--row">
-      <button type="button" class="btn-main secondary" id="empPctDialogCancel">取消</button>
-      <button type="button" class="btn-main" id="empPctDialogOk">确定</button>
-    </div>
   </div>
 </div>
 
@@ -16579,6 +16709,150 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <button type="button" class="btn-main" id="btnCouponConfirm">确认</button>
                 </div>
                 <div class="bottom-bar__safe"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== 优惠券管理 ===== -->
+          <div id="screen-coupon-manage" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpBack" aria-label="返回工作台"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">优惠券管理</span>
+            </div>
+            <div class="page-tabs cp-tabs" id="cpTabs" role="tablist">
+              <button type="button" class="page-tabs__item on" data-cp-tab="active" role="tab" aria-selected="true"><span class="page-tabs__label">进行中</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
+              <button type="button" class="page-tabs__item" data-cp-tab="upcoming" role="tab" aria-selected="false"><span class="page-tabs__label">未开始</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
+              <button type="button" class="page-tabs__item" data-cp-tab="ended" role="tab" aria-selected="false"><span class="page-tabs__label">已结束</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
+              <button type="button" class="page-tabs__item" data-cp-tab="draft" role="tab" aria-selected="false"><span class="page-tabs__label">草稿</span><span class="page-tabs__indicator" aria-hidden="true"></span></button>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)">
+              <div class="cp-list" id="cpList"></div>
+              <div class="cp-empty hidden" id="cpEmpty">
+                <div class="cp-empty__icon" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 3v3M16 3v3M8 15h.01M12 15h.01M16 15h.01"/></svg></div>
+                <p class="cp-empty__title">暂无优惠券</p>
+                <p class="cp-empty__hint">点击下方按钮新建优惠券</p>
+              </div>
+            </div>
+            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCpCreate"><span class="btn-main__plus">＋</span> 新建优惠券</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+          </div>
+
+          <!-- 新建 / 编辑优惠券 -->
+          <div id="screen-coupon-create" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpCreateBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title" id="cpCreateTitle">新建优惠券</span>
+            </div>
+            <div class="cp-form-step-bar" id="cpFormStepBar">
+              <div class="cp-step is-active"><span class="cp-step__dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><span class="cp-step__label">券信息</span></div>
+              <div class="cp-step__line"></div>
+              <div class="cp-step"><span class="cp-step__dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><span class="cp-step__label">适用范围</span></div>
+              <div class="cp-step__line"></div>
+              <div class="cp-step"><span class="cp-step__dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><span class="cp-step__label">有效期</span></div>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)">
+              <!-- Step1 券类型 + 面额 + 门槛 -->
+              <div id="cpCreateStep1">
+                <div class="cp-form-card">
+                  <div class="form-row" style="padding-bottom:6px"><span class="label">优惠券名称<span class="req">*</span></span></div>
+                  <div class="form-row" style="padding-top:0"><input class="value" id="cpName" placeholder="请输入优惠券名称" maxlength="30" style="max-width:none;text-align:left" /></div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row" style="padding-bottom:8px"><span class="label">券类型<span class="req">*</span></span></div>
+                  <div class="form-row" style="padding-top:0;display:block">
+                    <div class="cp-type-grid" id="cpTypeGrid">
+                      <button type="button" class="cp-type-opt on" data-cp-type="full"><span class="cp-type-opt__icon cp-type-opt__icon--full"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg></span><span class="cp-type-opt__label">满减券</span><span class="cp-type-opt__desc">满额立减</span></button>
+                      <button type="button" class="cp-type-opt" data-cp-type="discount"><span class="cp-type-opt__icon cp-type-opt__icon--discount"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span><span class="cp-type-opt__label">折扣券</span><span class="cp-type-opt__desc">按折抵扣</span></button>
+                      <button type="button" class="cp-type-opt" data-cp-type="cash"><span class="cp-type-opt__icon cp-type-opt__icon--cash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></span><span class="cp-type-opt__label">代金券</span><span class="cp-type-opt__desc">定额抵扣</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row"><span class="label" id="cpValueLabel">面值金额<span class="req">*</span></span><div class="form-row__trail"><input class="value input-amount" id="cpValue" inputmode="numeric" placeholder="请输入" maxlength="6" data-no-amount-keypad /><span class="suffix" id="cpValueUnit">元</span></div></div>
+                  <div class="form-row"><span class="label">使用门槛</span><div class="form-row__trail"><input class="value input-amount" id="cpMin" inputmode="numeric" placeholder="0" maxlength="6" data-no-amount-keypad /><span class="suffix">元</span></div></div>
+                </div>
+                <p class="form-tip" style="margin:0 16px 16px;border-radius:12px">满减/代金券填面额；折扣券填折数（如 8.5 折）。门槛为 0 即无门槛。</p>
+              </div>
+              <!-- Step2 适用范围 -->
+              <div id="cpCreateStep2" class="hidden">
+                <div class="cp-form-card">
+                  <div class="form-row" style="padding-bottom:8px"><span class="label">适用门店</span></div>
+                  <div class="form-row" style="padding-top:0;display:block"><div class="cp-chip-group" id="cpStoreChips"></div></div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row" style="padding-bottom:8px"><span class="label">适用项目</span></div>
+                  <div class="form-row" style="padding-top:0;display:block"><div class="cp-chip-group" id="cpScopeChips"></div></div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row"><span class="label">可否与权益同享</span><button type="button" class="switch on" id="cpStackable" role="switch" aria-checked="true"></button></div>
+                  <div class="form-row" style="align-items:flex-start"><span class="label" style="line-height:1.5">使用说明<span class="label-hint" style="display:block">展示在券卡「使用规则」中</span></span><input class="value" id="cpDesc" placeholder="选填" maxlength="40" style="max-width:none;text-align:right" /></div>
+                </div>
+              </div>
+              <!-- Step3 有效期 + 发放 + 限制 -->
+              <div id="cpCreateStep3" class="hidden">
+                <div class="cp-form-card">
+                  <div class="form-row" style="padding-bottom:8px"><span class="label">有效期</span></div>
+                  <div class="form-row" style="padding-top:0;display:block"><div class="cp-chip-group" id="cpValidityChips"></div></div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row"><span class="label">发放总量</span><div class="form-row__trail"><input class="value input-amount" id="cpTotal" inputmode="numeric" placeholder="不限" maxlength="6" data-no-amount-keypad /><span class="suffix">张</span></div></div>
+                  <div class="form-row"><span class="label">每人限领</span><div class="form-row__trail"><input class="value input-amount" id="cpPerPerson" inputmode="numeric" placeholder="1" maxlength="2" data-no-amount-keypad /><span class="suffix">张</span></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom-bar bottom-bar--dual">
+              <div class="bottom-bar__action">
+                <button type="button" class="btn-main secondary" id="btnCpPrev">上一步</button>
+                <button type="button" class="btn-main" id="btnCpNext">下一步</button>
+              </div>
+              <div class="bottom-bar__safe" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!-- 优惠券详情 -->
+          <div id="screen-coupon-detail" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpDetailBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">优惠券详情</span>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)">
+              <div class="cp-detail-hero" id="cpDetailHero"></div>
+              <div class="cp-stat-grid" id="cpDetailStats"></div>
+              <div class="cp-detail-info" id="cpDetailInfo"></div>
+            </div>
+            <div class="bottom-bar bottom-bar--detail" id="cpDetailFoot"><div class="bottom-bar__action" id="cpDetailActions"></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+          </div>
+
+          <!-- 发放优惠券 -->
+          <div id="screen-coupon-issue" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpIssueBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">发放优惠券</span>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)">
+              <div class="cp-issue-summary" id="cpIssueSummary"></div>
+              <div class="form-row" style="padding:4px 20px 8px"><span class="label" style="font-size:13px">选择发放会员</span><span class="value" id="cpIssueCount" style="font-size:13px">已选 0 人</span></div>
+              <div id="cpIssueMembers"></div>
+            </div>
+            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCpIssueConfirm">确认发放</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+          </div>
+
+          <!-- 核销记录 -->
+          <div id="screen-coupon-usage" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpUsageBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">核销记录</span>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)" id="cpUsageList"></div>
+          </div>
+
+          <!-- 作废确认 -->
+          <div class="dialog-mask" id="cpVoidMask">
+            <div class="dialog">
+              <div class="dialog__title">作废优惠券？</div>
+              <div class="dialog__body">作废后该券停止发放与核销，已发放的券仍可使用至过期。</div>
+              <div class="dialog__actions">
+                <button type="button" class="btn-main secondary" id="cpVoidCancel">取消</button>
+                <button type="button" class="btn-main" id="cpVoidConfirm">作废</button>
               </div>
             </div>
           </div>
@@ -23929,11 +24203,13 @@ function launchWorkbenchTile(key) {
       else showToast('演示未接入');
       break;
     case 'perf-set':
+      if (!need('achCommSet')) return;
       window.__wbEntry = 'perf-set';
       if (window.EmployeeDemo && typeof window.EmployeeDemo.openAch === 'function') window.EmployeeDemo.openAch();
       else showToast('演示未接入');
       break;
     case 'commission':
+      if (!need('achCommSet')) return;
       window.__wbEntry = 'commission';
       if (window.EmployeeDemo && typeof window.EmployeeDemo.openComm === 'function') window.EmployeeDemo.openComm();
       else showToast('演示未接入');
@@ -23959,6 +24235,10 @@ function launchWorkbenchTile(key) {
         return;
       }
       showToast('商城能力已记入权限矩阵，原型交互待接入');
+      break;
+    case 'coupon':
+      window.__wbEntry = 'coupon';
+      openCpManage();
       break;
     default:
       if (key === 'store' || key === 'hq') {
@@ -24004,6 +24284,439 @@ function seedCreateFormFromPreset(templateId) {
   syncStep2UI();
   updateStep2NextChrome();
   applyBenefitVisibility();
+}
+
+/* ================= 优惠券管理模块 ================= */
+const COUPON_TYPES = {
+  full: { label: '满减券', desc: '满额立减' },
+  discount: { label: '折扣券', desc: '按折抵扣' },
+  cash: { label: '代金券', desc: '定额抵扣' },
+};
+const COUPON_STATUS = {
+  active: { label: '进行中' },
+  upcoming: { label: '未开始' },
+  ended: { label: '已结束' },
+  draft: { label: '草稿' },
+  void: { label: '已作废' },
+};
+const COUPON_STORES = [
+  { id: 'all', label: '全部门店' },
+  { id: 'zp', label: '右尚造型(周浦店)' },
+  { id: 'ls', label: '右尚造型(临港店)' },
+];
+const COUPON_SCOPES = [
+  { id: 'all', label: '项目通用' },
+  { id: 'wash', label: '洗剪吹' },
+  { id: 'pc', label: '烫发/染发' },
+  { id: 'care', label: '护理类' },
+];
+const COUPON_VALIDITIES = [
+  { id: 'd15', label: '领取后 15 天' },
+  { id: 'd30', label: '领取后 30 天' },
+  { id: 'd60', label: '领取后 60 天' },
+  { id: 'd90', label: '领取后 90 天' },
+];
+const COUPON_CATALOG = [
+  { id: 'c1', type: 'full', name: '店长洗剪吹新人优惠券', amount: 100, minAmount: 0, scope: '项目通用', store: 'all', status: 'active', validityLabel: '领取后 15 天有效', stackable: true, perPerson: 1, total: 2000, issued: 1200, used: 860, desc: '洗剪吹专享' },
+  { id: 'c2', type: 'full', name: '全场满减券', amount: 50, minAmount: 200, scope: '项目通用', store: 'all', status: 'active', validityLabel: '领取后 30 天有效', stackable: false, perPerson: 1, total: 3000, issued: 1450, used: 520, desc: '不可与会员卡权益同享' },
+  { id: 'c4', type: 'discount', name: '会员专享 8.5 折券', amount: 8.5, minAmount: 0, scope: '项目通用', store: 'all', status: 'active', validityLabel: '领取后 30 天有效', stackable: false, perPerson: 1, total: 500, issued: 320, used: 210, desc: '不可与会员卡权益同享' },
+  { id: 'c6', type: 'cash', name: '护理代金券', amount: 30, minAmount: 100, scope: '护理类', store: 'all', status: 'active', validityLabel: '领取后 60 天有效', stackable: true, perPerson: 2, total: 800, issued: 460, used: 300, desc: '' },
+  { id: 'c3', type: 'full', name: '烫染护理满减券', amount: 200, minAmount: 800, scope: '烫发/染发', store: 'all', status: 'upcoming', validityLabel: '2026-08-20 至 09-30', stackable: true, perPerson: 1, total: 1000, issued: 0, used: 0, desc: '' },
+  { id: 'c5', type: 'discount', name: '新客首单 8 折券', amount: 8, minAmount: 0, scope: '洗剪吹', store: 'all', status: 'ended', validityLabel: '已过期', stackable: true, perPerson: 1, total: 2000, issued: 2000, used: 1540, desc: '仅限首次到店' },
+  { id: 'c7', type: 'cash', name: '周年庆代金券', amount: 100, minAmount: 500, scope: '项目通用', store: 'all', status: 'draft', validityLabel: '未发布', stackable: true, perPerson: 1, total: 500, issued: 0, used: 0, desc: '' },
+  { id: 'c8', type: 'full', name: '端午满减券', amount: 80, minAmount: 300, scope: '项目通用', store: 'all', status: 'void', validityLabel: '已作废', stackable: true, perPerson: 1, total: 1000, issued: 300, used: 0, desc: '' },
+];
+const COUPON_USAGE_SAMPLES = [
+  { couponId: 'c1', member: '张雨晴', order: 'RT202608010013', amt: 128, time: '08-01 14:32' },
+  { couponId: 'c1', member: '李诗涵', order: 'RT202608020006', amt: 168, time: '08-02 10:18' },
+  { couponId: 'c1', member: '王思琪', order: 'RT202608030021', amt: 96, time: '08-03 16:45' },
+  { couponId: 'c2', member: '陈浩然', order: 'RT202608010028', amt: 258, time: '08-01 18:02' },
+  { couponId: 'c2', member: '赵欣怡', order: 'RT202608020033', amt: 320, time: '08-02 11:30' },
+  { couponId: 'c4', member: '刘子轩', order: 'RT202608020015', amt: 88, time: '08-02 15:20' },
+  { couponId: 'c4', member: '周婉清', order: 'RT202608030009', amt: 136, time: '08-03 12:08' },
+  { couponId: 'c6', member: '吴佳宁', order: 'RT202608040018', amt: 158, time: '08-04 13:55' },
+  { couponId: 'c6', member: '郑一鸣', order: 'RT202608050007', amt: 210, time: '08-05 17:40' },
+];
+
+const cpState = {
+  tab: 'active',
+  detailId: null,
+  createMode: 'create',
+  createEditingId: null,
+  createStep: 1,
+  createDraft: null,
+  issueId: null,
+  issueSelected: {},
+};
+
+function cpNum(n) { const v = Number(n); return (isFinite(v) ? v : 0).toLocaleString('en-US'); }
+function cpRate(cp) { return cp.issued > 0 ? Math.round(cp.used / cp.issued * 100) + '%' : '—'; }
+function cpGateLabel(cp) { return (Number(cp.minAmount) > 0) ? '满' + cp.minAmount + '可用' : '无门槛'; }
+function cpLeftHtml(cp) {
+  if (cp.type === 'discount') {
+    return '<div class="cp-ticket__amount"><span class="cp-ticket__num">' + cp.amount + '</span><span class="cp-ticket__off">折</span></div>';
+  }
+  return '<div class="cp-ticket__amount"><span class="cp-ticket__yen">¥</span><span class="cp-ticket__num">' + cp.amount + '</span></div>';
+}
+function cpTypeIconHtml(type) {
+  const icons = {
+    full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>',
+    discount: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+    cash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
+  };
+  return '<span class="cp-icon">' + (icons[type] || '') + '</span>';
+}
+function cpTicketHtml(cp) {
+  const t = COUPON_TYPES[cp.type];
+  const st = COUPON_STATUS[cp.status];
+  return '<div class="cp-ticket cp-ticket--' + cp.type + ' cp-ticket--' + cp.status + '" data-cp-id="' + cp.id + '" role="button" tabindex="0">' +
+    '<span class="cp-ticket__status cp-ticket__status--' + cp.status + '">' + st.label + '</span>' +
+    '<div class="cp-ticket__body">' +
+      '<div class="cp-ticket__left">' + cpLeftHtml(cp) + '<div class="cp-ticket__type">' + cpTypeIconHtml(cp.type) + t.label + '</div></div>' +
+      '<div class="cp-ticket__perf" aria-hidden="true"></div>' +
+      '<div class="cp-ticket__right">' +
+        '<div class="cp-ticket__name">' + escapeHtml(cp.name) + '</div>' +
+        '<div class="cp-ticket__meta">' + cpGateLabel(cp) + '<span class="cp-ticket__meta-dot"></span>' + escapeHtml(cp.scope) + '</div>' +
+        '<div class="cp-ticket__meta">' + escapeHtml(cp.validityLabel) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="cp-ticket__foot">' +
+      '<span class="cp-ticket__foot-item">已发 <b>' + cpNum(cp.issued) + '</b></span>' +
+      '<span class="cp-ticket__foot-item">已核销 <b>' + cpNum(cp.used) + '</b></span>' +
+      '<span class="cp-ticket__foot-item">核销率 <b>' + cpRate(cp) + '</b></span>' +
+    '</div>' +
+  '</div>';
+}
+function renderCpList() {
+  const list = COUPON_CATALOG.filter(cp => {
+    if (cpState.tab === 'ended') return cp.status === 'ended' || cp.status === 'void';
+    return cp.status === cpState.tab;
+  });
+  const el = document.getElementById('cpList');
+  const empty = document.getElementById('cpEmpty');
+  if (!el) return;
+  if (!list.length) { el.innerHTML = ''; empty && empty.classList.remove('hidden'); return; }
+  empty && empty.classList.add('hidden');
+  el.innerHTML = list.map(cpTicketHtml).join('');
+}
+function setCpTab(tab) {
+  cpState.tab = tab;
+  document.querySelectorAll('#cpTabs [data-cp-tab]').forEach(btn => {
+    const on = btn.dataset.cpTab === tab;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  renderCpList();
+}
+function openCpManage() {
+  if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
+  setCpTab(cpState.tab || 'active');
+  showOnlyScreen('screen-coupon-manage');
+  if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('coupon-list');
+}
+function cpChipsHtml(groupId, items, selectedId) {
+  return items.map(it => '<button type="button" class="cp-chip ' + (it.id === selectedId ? 'on' : '') + '" data-cp-chip-group="' + groupId + '" data-cp-chip-value="' + it.id + '">' + escapeHtml(it.label) + '</button>').join('');
+}
+function cpBlankDraft() {
+  return { type: 'full', name: '', value: '', min: '', store: 'all', scope: 'all', stackable: true, desc: '', validity: 'd15', total: '', perPerson: '1' };
+}
+function cpValueUnit(draft) { return draft.type === 'discount' ? '折' : '元'; }
+function cpValueLabelText(draft) { return draft.type === 'discount' ? '折扣' : '面值金额'; }
+function renderCpCreateStep1() {
+  const d = cpState.createDraft;
+  document.getElementById('cpName').value = d.name;
+  document.getElementById('cpValue').value = d.value;
+  document.getElementById('cpValue').placeholder = d.type === 'discount' ? '请输入' : '请输入';
+  document.getElementById('cpMin').value = d.min;
+  document.getElementById('cpValueLabel').innerHTML = cpValueLabelText(d) + '<span class="req">*</span>';
+  document.getElementById('cpValueUnit').textContent = cpValueUnit(d);
+  document.querySelectorAll('#cpTypeGrid [data-cp-type]').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.cpType === d.type);
+  });
+}
+function renderCpCreateStep2() {
+  const d = cpState.createDraft;
+  document.getElementById('cpStoreChips').innerHTML = cpChipsHtml('store', COUPON_STORES, d.store);
+  document.getElementById('cpScopeChips').innerHTML = cpChipsHtml('scope', COUPON_SCOPES, d.scope);
+  document.getElementById('cpStackable').classList.toggle('on', !!d.stackable);
+  document.getElementById('cpStackable').setAttribute('aria-checked', d.stackable ? 'true' : 'false');
+  document.getElementById('cpDesc').value = d.desc;
+}
+function renderCpCreateStep3() {
+  const d = cpState.createDraft;
+  document.getElementById('cpValidityChips').innerHTML = cpChipsHtml('validity', COUPON_VALIDITIES, d.validity);
+  document.getElementById('cpTotal').value = d.total;
+  document.getElementById('cpPerPerson').value = d.perPerson;
+}
+function cpShowCreateStep(n) {
+  cpState.createStep = n;
+  document.getElementById('cpCreateStep1').classList.toggle('hidden', n !== 1);
+  document.getElementById('cpCreateStep2').classList.toggle('hidden', n !== 2);
+  document.getElementById('cpCreateStep3').classList.toggle('hidden', n !== 3);
+  document.querySelectorAll('#cpFormStepBar .cp-step').forEach((s, i) => {
+    s.classList.toggle('is-done', i < n - 1);
+    s.classList.toggle('is-active', i === n - 1);
+  });
+  document.querySelectorAll('#cpFormStepBar .cp-step__line').forEach((ln, i) => {
+    ln.classList.toggle('is-done', i < n - 1);
+  });
+  document.getElementById('btnCpPrev').classList.toggle('hidden', n === 1);
+  document.getElementById('btnCpNext').textContent = n === 3 ? (cpState.createMode === 'edit' ? '保存' : '完成') : '下一步';
+}
+function cpReadCreateForm() {
+  const d = cpState.createDraft;
+  d.name = document.getElementById('cpName').value.trim();
+  d.value = document.getElementById('cpValue').value.trim();
+  d.min = document.getElementById('cpMin').value.trim();
+  d.desc = document.getElementById('cpDesc').value.trim();
+  d.total = document.getElementById('cpTotal').value.trim();
+  d.perPerson = document.getElementById('cpPerPerson').value.trim();
+  d.stackable = document.getElementById('cpStackable').classList.contains('on');
+  return d;
+}
+function cpBuildCouponFromDraft(d) {
+  const validity = COUPON_VALIDITIES.find(v => v.id === d.validity);
+  return {
+    id: cpState.createEditingId || ('cn' + Date.now()),
+    type: d.type,
+    name: d.name || '未命名优惠券',
+    amount: d.type === 'discount' ? (parseFloat(d.value) || 0) : (parseInt(d.value, 10) || 0),
+    minAmount: parseInt(d.min, 10) || 0,
+    scope: (COUPON_SCOPES.find(s => s.id === d.scope) || COUPON_SCOPES[0]).label,
+    store: d.store,
+    status: 'draft',
+    validityLabel: validity ? validity.label + '有效' : '未发布',
+    stackable: !!d.stackable,
+    perPerson: parseInt(d.perPerson, 10) || 1,
+    total: parseInt(d.total, 10) || 0,
+    issued: 0,
+    used: 0,
+    desc: d.desc || '',
+  };
+}
+function openCpCreate(mode, id) {
+  cpState.createMode = mode || 'create';
+  cpState.createEditingId = mode === 'edit' ? id : null;
+  if (mode === 'edit') {
+    const src = COUPON_CATALOG.find(c => c.id === id);
+    const validityId = COUPON_VALIDITIES.some(v => src && src.validityLabel.indexOf(v.label) === 0) ? COUPON_VALIDITIES.find(v => src.validityLabel.indexOf(v.label) === 0).id : 'd15';
+    const scopeId = src && (COUPON_SCOPES.find(s => s.label === src.scope) || COUPON_SCOPES[0]) ? (COUPON_SCOPES.find(s => s.label === src.scope) || COUPON_SCOPES[0]).id : 'all';
+    cpState.createDraft = {
+      type: src.type, name: src.name,
+      value: String(src.amount),
+      min: String(src.minAmount || ''), store: src.store, scope: scopeId,
+      stackable: !!src.stackable, desc: src.desc || '', validity: validityId,
+      total: src.total ? String(src.total) : '', perPerson: String(src.perPerson || 1),
+    };
+  } else {
+    cpState.createDraft = cpBlankDraft();
+  }
+  document.getElementById('cpCreateTitle').textContent = (mode === 'edit') ? '编辑优惠券' : '新建优惠券';
+  renderCpCreateStep1();
+  renderCpCreateStep2();
+  renderCpCreateStep3();
+  cpShowCreateStep(1);
+  showOnlyScreen('screen-coupon-create');
+}
+function cpCreateNext() {
+  cpReadCreateForm();
+  if (cpState.createStep === 1) {
+    const d = cpState.createDraft;
+    if (!d.name) { showToast('请填写优惠券名称', true); return; }
+    if (d.value === '' || Number(d.value) <= 0) { showToast(d.type === 'discount' ? '请填写有效折扣' : '请填写面值金额', true); return; }
+    cpShowCreateStep(2);
+    return;
+  }
+  if (cpState.createStep === 2) { cpShowCreateStep(3); return; }
+  /* Step3 完成 */
+  const d = cpReadCreateForm();
+  const built = cpBuildCouponFromDraft(d);
+  if (cpState.createMode === 'edit') {
+    const idx = COUPON_CATALOG.findIndex(c => c.id === cpState.createEditingId);
+    if (idx >= 0) { built.issued = COUPON_CATALOG[idx].issued; built.used = COUPON_CATALOG[idx].used; built.status = COUPON_CATALOG[idx].status; COUPON_CATALOG[idx] = built; }
+  } else {
+    COUPON_CATALOG.unshift(built);
+  }
+  showToast(cpState.createMode === 'edit' ? '优惠券已保存' : '优惠券已创建，可在「草稿」中发布');
+  cpState.tab = cpState.createMode === 'edit' ? cpState.tab : 'draft';
+  openCpManage();
+}
+function openCpDetail(id) {
+  cpState.detailId = id;
+  renderCpDetail();
+  showOnlyScreen('screen-coupon-detail');
+  if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('coupon-detail');
+}
+function renderCpDetail() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.detailId);
+  if (!cp) return;
+  const t = COUPON_TYPES[cp.type];
+  document.getElementById('cpDetailHero').innerHTML = cpTicketHtml(cp);
+  document.getElementById('cpDetailStats').innerHTML =
+    '<div class="cp-stat"><div class="cp-stat__num">' + cpNum(cp.issued) + '</div><div class="cp-stat__label">已发放</div></div>' +
+    '<div class="cp-stat"><div class="cp-stat__num">' + cpNum(cp.used) + '</div><div class="cp-stat__label">已核销</div></div>' +
+    '<div class="cp-stat"><div class="cp-stat__num">' + cpRate(cp) + '</div><div class="cp-stat__label">核销率</div></div>';
+  const rows = [];
+  rows.push('<div class="form-row"><span class="label">券类型</span><span class="value has-val">' + t.label + '</span></div>');
+  rows.push('<div class="form-row"><span class="label">使用门槛</span><span class="value has-val">' + cpGateLabel(cp) + '</span></div>');
+  rows.push('<div class="form-row"><span class="label">适用范围</span><span class="value has-val">' + escapeHtml(cp.scope) + '</span></div>');
+  rows.push('<div class="form-row"><span class="label">有效期</span><span class="value has-val">' + escapeHtml(cp.validityLabel) + '</span></div>');
+  rows.push('<div class="form-row"><span class="label">每人限领</span><span class="value has-val">' + cp.perPerson + ' 张</span></div>');
+  rows.push('<div class="form-row"><span class="label">可否与权益同享</span><span class="value has-val">' + (cp.stackable ? '可叠加' : '不可叠加') + '</span></div>');
+  if (cp.desc) rows.push('<div class="form-row"><span class="label">使用说明</span><span class="value has-val">' + escapeHtml(cp.desc) + '</span></div>');
+  if (cp.used > 0) rows.push('<div class="form-row clickable" id="cpDetailUsageRow"><span class="label">核销记录</span><span class="value has-val">查看 ' + cpNum(cp.used) + ' 次</span><span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></div>');
+  document.getElementById('cpDetailInfo').innerHTML = rows.join('');
+  /* 底部操作 */
+  const acts = document.getElementById('cpDetailActions');
+  const btns = [];
+  const editable = cp.status === 'active' || cp.status === 'upcoming' || cp.status === 'draft';
+  if (editable) btns.push('<button type="button" class="btn-main secondary" id="cpDetailEdit">编辑</button>');
+  if (cp.status === 'active' || cp.status === 'upcoming') btns.push('<button type="button" class="btn-main" id="cpDetailIssue">发放</button>');
+  if (cp.status === 'draft') btns.push('<button type="button" class="btn-main" id="cpDetailPublish">发布</button>');
+  if (cp.status === 'active' || cp.status === 'upcoming') btns.push('<button type="button" class="btn-main secondary" id="cpDetailVoid">作废</button>');
+  acts.innerHTML = btns.join('');
+  document.getElementById('cpDetailFoot').classList.toggle('hidden', !btns.length);
+}
+function openCpIssue(id) {
+  cpState.issueId = id;
+  cpState.issueSelected = {};
+  renderCpIssue();
+  showOnlyScreen('screen-coupon-issue');
+}
+function renderCpIssue() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.issueId);
+  if (!cp) return;
+  const t = COUPON_TYPES[cp.type];
+  document.getElementById('cpIssueSummary').innerHTML =
+    '<div class="cp-ticket__left cp-type-chip cp-type-chip--' + cp.type + '">' + cpLeftHtml(cp) + '<div class="cp-ticket__type">' + cpTypeIconHtml(cp.type) + t.label + '</div></div>' +
+    '<div class="cp-issue-summary__info">' +
+      '<div class="cp-issue-summary__name">' + escapeHtml(cp.name) + '</div>' +
+      '<div class="cp-issue-summary__meta">' + cpGateLabel(cp) + ' · ' + escapeHtml(cp.scope) + '</div>' +
+      '<div class="cp-issue-summary__meta">剩余可发 ' + cpNum(Math.max(0, cp.total - cp.issued)) + ' 张</div>' +
+    '</div>';
+  const members = DEMO_MEMBERS.slice(0, 12);
+  document.getElementById('cpIssueMembers').innerHTML = members.map(m => {
+    const on = !!cpState.issueSelected[m.id];
+    const initial = (m.name || '').slice(0, 1);
+    return '<div class="cp-member-row ' + (on ? 'on' : '') + '" data-cp-member-id="' + m.id + '" role="button" tabindex="0">' +
+      '<span class="cp-member-row__avatar">' + escapeHtml(initial) + '</span>' +
+      '<div class="cp-member-row__info"><div class="cp-member-row__name">' + escapeHtml(m.name) + '</div><div class="cp-member-row__sub">' + escapeHtml(m.phone) + '</div></div>' +
+      '<span class="cp-member-row__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>' +
+    '</div>';
+  }).join('');
+  updateCpIssueCount();
+}
+function updateCpIssueCount() {
+  const n = Object.keys(cpState.issueSelected).length;
+  document.getElementById('cpIssueCount').textContent = '已选 ' + n + ' 人';
+}
+function cpDoIssue() {
+  const ids = Object.keys(cpState.issueSelected);
+  if (!ids.length) { showToast('请选择要发放的会员', true); return; }
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.issueId);
+  if (cp) cp.issued += ids.length;
+  showToast('已向 ' + ids.length + ' 位会员发放优惠券');
+  openCpDetail(cpState.issueId);
+}
+function openCpUsage(id) {
+  renderCpUsage(id);
+  showOnlyScreen('screen-coupon-usage');
+}
+function renderCpUsage(id) {
+  const cp = COUPON_CATALOG.find(c => c.id === id);
+  const samples = COUPON_USAGE_SAMPLES.filter(s => s.couponId === id);
+  const el = document.getElementById('cpUsageList');
+  if (!cp) return;
+  const head = '<div class="form-row" style="padding:4px 20px 10px"><span class="label" style="font-size:13px">' + escapeHtml(cp.name) + '</span><span class="value" style="font-size:13px">共核销 ' + cpNum(cp.used) + ' 次</span></div>';
+  if (!samples.length) {
+    el.innerHTML = head + '<div class="cp-empty"><div class="cp-empty__icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h10M4 17h6"/></svg></div><p class="cp-empty__title">暂无核销记录</p><p class="cp-empty__hint">该券尚未产生核销</p></div>';
+    return;
+  }
+  const items = samples.map(s =>
+    '<div class="cp-usage-item">' +
+      '<div class="cp-usage-item__head"><span class="cp-usage-item__name">' + escapeHtml(s.member) + '</span><span class="cp-usage-item__amt">-¥' + cpNum(s.amt) + '</span></div>' +
+      '<div class="cp-usage-item__meta"><span>核销时间 ' + s.time + '</span><span class="cp-usage-item__order">' + s.order + '</span></div>' +
+    '</div>'
+  ).join('');
+  el.innerHTML = head + items;
+}
+function cpPublish() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.detailId);
+  if (cp) { cp.status = 'active'; cp.validityLabel = cp.validityLabel === '未发布' ? '领取后 15 天有效' : cp.validityLabel; }
+  showToast('优惠券已发布');
+  openCpManage();
+}
+function cpOpenVoidMask() { document.getElementById('cpVoidMask')?.classList.add('show'); }
+function cpCloseVoidMask() { document.getElementById('cpVoidMask')?.classList.remove('show'); }
+function cpConfirmVoid() {
+  cpCloseVoidMask();
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.detailId);
+  if (cp) { cp.status = 'void'; cp.validityLabel = '已作废'; }
+  showToast('优惠券已作废');
+  openCpManage();
+}
+function wireCouponModule() {
+  document.getElementById('cpBack')?.addEventListener('click', openWorkbench);
+  document.getElementById('btnCpCreate')?.addEventListener('click', () => openCpCreate('create'));
+  document.querySelectorAll('#cpTabs [data-cp-tab]').forEach(btn => {
+    btn.addEventListener('click', () => setCpTab(btn.dataset.cpTab));
+  });
+  document.getElementById('cpList')?.addEventListener('click', e => {
+    const ticket = e.target.closest('[data-cp-id]');
+    if (ticket) openCpDetail(ticket.dataset.cpId);
+  });
+  document.getElementById('cpCreateBack')?.addEventListener('click', openCpManage);
+  document.getElementById('btnCpPrev')?.addEventListener('click', () => { if (cpState.createStep > 1) cpShowCreateStep(cpState.createStep - 1); });
+  document.getElementById('btnCpNext')?.addEventListener('click', cpCreateNext);
+  document.getElementById('cpStackable')?.addEventListener('click', function () { this.classList.toggle('on'); this.setAttribute('aria-checked', this.classList.contains('on') ? 'true' : 'false'); });
+  /* 券类型选择 */
+  document.getElementById('cpTypeGrid')?.addEventListener('click', e => {
+    const opt = e.target.closest('[data-cp-type]');
+    if (!opt) return;
+    cpState.createDraft.type = opt.dataset.cpType;
+    cpState.createDraft.value = '';
+    renderCpCreateStep1();
+  });
+  /* chips 委托 */
+  ['cpStoreChips', 'cpScopeChips', 'cpValidityChips'].forEach(cid => {
+    document.getElementById(cid)?.addEventListener('click', e => {
+      const chip = e.target.closest('[data-cp-chip-value]');
+      if (!chip) return;
+      const group = chip.dataset.cpChipGroup;
+      const val = chip.dataset.cpChipValue;
+      cpState.createDraft[group] = val;
+      chip.parentElement.querySelectorAll('.cp-chip').forEach(c => c.classList.toggle('on', c === chip));
+    });
+  });
+  document.getElementById('cpDetailBack')?.addEventListener('click', openCpManage);
+  document.getElementById('cpDetailActions')?.addEventListener('click', e => {
+    const edit = e.target.closest('#cpDetailEdit');
+    const issue = e.target.closest('#cpDetailIssue');
+    const publish = e.target.closest('#cpDetailPublish');
+    const voidBtn = e.target.closest('#cpDetailVoid');
+    if (edit) openCpCreate('edit', cpState.detailId);
+    else if (issue) openCpIssue(cpState.detailId);
+    else if (publish) cpPublish();
+    else if (voidBtn) cpOpenVoidMask();
+  });
+  document.getElementById('cpDetailInfo')?.addEventListener('click', e => {
+    if (e.target.closest('#cpDetailUsageRow')) openCpUsage(cpState.detailId);
+  });
+  document.getElementById('cpIssueBack')?.addEventListener('click', () => openCpDetail(cpState.issueId));
+  document.getElementById('cpIssueMembers')?.addEventListener('click', e => {
+    const row = e.target.closest('[data-cp-member-id]');
+    if (!row) return;
+    const id = row.dataset.cpMemberId;
+    if (cpState.issueSelected[id]) delete cpState.issueSelected[id];
+    else cpState.issueSelected[id] = true;
+    row.classList.toggle('on', !!cpState.issueSelected[id]);
+    updateCpIssueCount();
+  });
+  document.getElementById('btnCpIssueConfirm')?.addEventListener('click', cpDoIssue);
+  document.getElementById('cpUsageBack')?.addEventListener('click', () => openCpDetail(cpState.detailId));
+  document.getElementById('cpVoidCancel')?.addEventListener('click', cpCloseVoidMask);
+  document.getElementById('cpVoidConfirm')?.addEventListener('click', cpConfirmVoid);
+  document.getElementById('cpVoidMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpVoidMask')) cpCloseVoidMask(); });
 }
 
 const FLOW_MAP_GROUPS = [
@@ -24077,6 +24790,21 @@ const FLOW_MAP_GROUPS = [
       { id: 'card-reshelf', label: '重新上架 Dialog', screen: 'screen6' },
       { id: 'card-stats-help', label: '运营数据说明 Dialog', screen: 'screen6' },
       { id: 'card-unlimited-validity', label: '永久转有限 Dialog', screen: 'screen6' },
+    ],
+  },
+  {
+    title: '优惠券管理',
+    nodes: [
+      { id: 'coupon-list', label: '优惠券 · 进行中', screen: 'screen-coupon-manage' },
+      { id: 'coupon-list-upcoming', label: '优惠券 · 未开始', screen: 'screen-coupon-manage' },
+      { id: 'coupon-list-ended', label: '优惠券 · 已结束', screen: 'screen-coupon-manage' },
+      { id: 'coupon-list-draft', label: '优惠券 · 草稿', screen: 'screen-coupon-manage' },
+      { id: 'coupon-create', label: '新建优惠券 · Step1', screen: 'screen-coupon-create' },
+      { id: 'coupon-create-step2', label: '新建优惠券 · Step2', screen: 'screen-coupon-create' },
+      { id: 'coupon-create-step3', label: '新建优惠券 · Step3', screen: 'screen-coupon-create' },
+      { id: 'coupon-detail', label: '优惠券详情', screen: 'screen-coupon-detail' },
+      { id: 'coupon-issue', label: '发放优惠券', screen: 'screen-coupon-issue' },
+      { id: 'coupon-usage', label: '核销记录', screen: 'screen-coupon-usage' },
     ],
   },
 ];
@@ -24285,6 +25013,53 @@ const FLOW_NAV = {
   'card-unlimited-validity'() {
     openCardDetailForOverlay(CARD_OVERLAY_DETAIL_ID);
     openUnlimitedValidityDialog(() => {});
+  },
+  'coupon-list'() {
+    ensureDemoFilled();
+    cpState.tab = 'active';
+    openCpManage();
+  },
+  'coupon-list-upcoming'() {
+    ensureDemoFilled();
+    cpState.tab = 'upcoming';
+    openCpManage();
+  },
+  'coupon-list-ended'() {
+    ensureDemoFilled();
+    cpState.tab = 'ended';
+    openCpManage();
+  },
+  'coupon-list-draft'() {
+    ensureDemoFilled();
+    cpState.tab = 'draft';
+    openCpManage();
+  },
+  'coupon-create'() {
+    ensureDemoFilled();
+    openCpCreate('create');
+  },
+  'coupon-create-step2'() {
+    ensureDemoFilled();
+    openCpCreate('create');
+    cpShowCreateStep(2);
+  },
+  'coupon-create-step3'() {
+    ensureDemoFilled();
+    openCpCreate('create');
+    cpShowCreateStep(3);
+  },
+  'coupon-detail'() {
+    ensureDemoFilled();
+    openCpDetail('c1');
+  },
+  'coupon-issue'() {
+    ensureDemoFilled();
+    openCpIssue('c1');
+  },
+  'coupon-usage'() {
+    ensureDemoFilled();
+    cpState.detailId = 'c1';
+    openCpUsage('c1');
   },
   'price-list-empty'() {
     applyDemoListState('empty');
@@ -24616,6 +25391,16 @@ function syncFlowMapFromAppState() {
       else if (p && !p.onSale) id = 'price-edit-off-sale';
       else id = 'price-edit-normal';
     }
+  } else if (visibleScreen === 'screen-coupon-manage') {
+    id = cpState.tab === 'active' ? 'coupon-list' : 'coupon-list-' + cpState.tab;
+  } else if (visibleScreen === 'screen-coupon-create') {
+    id = cpState.createStep === 3 ? 'coupon-create-step3' : (cpState.createStep === 2 ? 'coupon-create-step2' : 'coupon-create');
+  } else if (visibleScreen === 'screen-coupon-detail') {
+    id = 'coupon-detail';
+  } else if (visibleScreen === 'screen-coupon-issue') {
+    id = 'coupon-issue';
+  } else if (visibleScreen === 'screen-coupon-usage') {
+    id = 'coupon-usage';
   }
   if (id) setFlowNavHighlight(id);
 }
@@ -24623,6 +25408,7 @@ function syncFlowMapFromAppState() {
 const FLOW_MAP_TAB_SHORT = {
   '项目创建与管理': '项目',
   '会员卡管理': '会员卡',
+  '优惠券管理': '优惠券',
   '开单记账': '开单',
   '流水订单': '流水',
   '订单流水': '流水',
@@ -31554,6 +32340,7 @@ wireIssuePickerControls();
 wireCardValidityDuration();
 applyGlobalInputLimits();
 wireProjCatalogModule();
+wireCouponModule();
 document.querySelector('.phone')?.addEventListener('click', e => {
   const btn = e.target.closest('.member-card-item__expand');
   if (!btn) return;
@@ -31906,6 +32693,7 @@ function billingNav(fn) {
     cardDelete: { label: '删除卡', prototype: 'unsupported' },
     cardBackfill: { label: '补录卡', prototype: 'unsupported' },
     staffCreate: { label: '创建员工', prototype: 'supported' },
+    achCommSet: { label: '业绩/提成设置', prototype: 'supported' },
     memberDelete: { label: '删除会员', prototype: 'unsupported' },
     memberPhoneView: { label: '查看顾客手机号', prototype: 'unsupported' },
     memberPhoneEdit: { label: '编辑顾客手机号', prototype: 'unsupported' },
@@ -31951,6 +32739,7 @@ function billingNav(fn) {
         'cardItemView', 'cardItemCreate',
         'staffCreate',
         'mallManage', 'mallReport',
+        'achCommSet',
       ]),
       denies: ['hqEnter', 'stockAudit'],
     },
@@ -32214,7 +33003,6 @@ function billingNav(fn) {
     rewardDetailStaffId: null,
     rewardFormReturn: 'salary',
     rewardStaffPicking: false,
-    pctEdit: null,
     achEdit: null,
     calcModePending: null,
     ruleEditIdx: null,
@@ -32440,7 +33228,7 @@ function billingNav(fn) {
       'empAchEditMask', 'empRoleMask', 'empPermMask', 'empStatusMask', 'empDetailStatusMask', 'empSchemePickMask',
       'empGenderMask', 'empAgeBandMask', 'empAvatarActionMask', 'empAlbumMask', 'empCropMask',
       'empSwordTitleMask', 'empSwordMask', 'empScopeSelectedMask', 'empItemCommEditMask'].forEach(closeMask);
-    ['empHelpMask', 'empAchHelpMask', 'empPermHelpMask', 'empNameDialogMask', 'empRoleNameMask', 'empRoleDelConfirmMask', 'empPctDialogMask', 'empLeaveConfirmMask', 'empCalcModeConfirmMask', 'empSchemeTypeMask'].forEach(closeEmpDialog);
+    ['empHelpMask', 'empAchHelpMask', 'empPermHelpMask', 'empNameDialogMask', 'empRoleNameMask', 'empRoleDelConfirmMask', 'empLeaveConfirmMask', 'empCalcModeConfirmMask', 'empSchemeTypeMask'].forEach(closeEmpDialog);
   }
   function fmtMoney(n) {
     return Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -33216,10 +34004,36 @@ function billingNav(fn) {
     return false;
   }
 
-  /** 单方案对某一计算项算出的提成金额（元） */
-  function schemeCategoryCommAmount(sch, cat, baseAmt, totalPerf) {
+  /** 消费类型键：行/消费来源映射到提成设置的 payTypes 键 */
+  function payTypeKeyForChannel(channel) {
+    var c = String(channel || '');
+    if (c.indexOf('团购') >= 0) return 'groupBuy';
+    if (c.indexOf('储值') >= 0 || c.indexOf('会员') >= 0 || c.indexOf('卡') >= 0) return 'memberCard';
+    return 'cash';
+  }
+
+  /** 找按项覆盖：同一分类下 refId 或名称命中 */
+  function findItemOverride(sch, cat, lineCtx) {
+    if (!sch || sch.type !== 'item' || sch.itemOverridesEnabled === false) return null;
+    if (!lineCtx || !Array.isArray(sch.items) || !sch.items.length) return null;
+    var kindMap = { labor: 'project', sales: 'product', issue: 'card', card: 'card' };
+    var wantKind = kindMap[cat];
+    var name = String(lineCtx.name || '');
+    var refId = String(lineCtx.refId || '');
+    for (var i = 0; i < sch.items.length; i++) {
+      var it = sch.items[i];
+      if (it.kind !== wantKind) continue;
+      if (refId && it.refId && String(it.refId) === refId) return it;
+      if (name && it.name && String(it.name) === name) return it;
+    }
+    return null;
+  }
+
+  /** 单方案对某一计算项算出的提成金额（元）；lineCtx 提供单行上下文（name/refId/channel/isWalkIn/adv） */
+  function schemeCategoryCommAmount(sch, cat, baseAmt, totalPerf, lineCtx) {
     if (!sch) return 0;
     var base = Math.max(0, Number(baseAmt) || 0);
+    if (lineCtx && lineCtx.adv === 'none') return 0;
     if (sch.type === 'ladder') {
       if (!ladderCoversCategory(sch, cat)) return 0;
       var tier = ladderTierForTotal(sch, totalPerf);
@@ -33230,12 +34044,28 @@ function billingNav(fn) {
       }
       return Math.round(base * (Number(tier.pct) || 0) / 100 * 100) / 100;
     }
-    var rule = sch.categoryDefaults && sch.categoryDefaults[cat];
-    if (!rule) return 0;
-    if (rule.valueMode === 'amount') {
-      return Math.max(0, Number(rule.designatedAmt) || 0);
+    var rule = findItemOverride(sch, cat, lineCtx);
+    if (!rule) {
+      if (sch.categoryDefaultsEnabled === false) return 0;
+      rule = sch.categoryDefaults && sch.categoryDefaults[cat];
     }
-    return Math.round(base * (Number(rule.designated) || 0) / 100 * 100) / 100;
+    if (!rule) return 0;
+    rule = mergeItemCommRule(rule);
+    var walkIn = !!(lineCtx && lineCtx.isWalkIn);
+    if (rule.byPayType && rule.payTypes) {
+      var payKey = payTypeKeyForChannel(lineCtx && lineCtx.channel);
+      var pb = rule.payTypes[payKey] || rule.payTypes.cash;
+      if (pb) {
+        if (rule.valueMode === 'amount') {
+          return Math.max(0, Number(walkIn ? pb.nonDesignatedAmt : pb.designatedAmt) || 0);
+        }
+        return Math.round(base * (Number(walkIn ? pb.nonDesignated : pb.designated) || 0) / 100 * 100) / 100;
+      }
+    }
+    if (rule.valueMode === 'amount') {
+      return Math.max(0, Number(walkIn ? rule.nonDesignatedAmt : rule.designatedAmt) || 0);
+    }
+    return Math.round(base * (Number(walkIn ? rule.nonDesignated : rule.designated) || 0) / 100 * 100) / 100;
   }
 
   /**
@@ -33271,13 +34101,116 @@ function billingNav(fn) {
 
   function refreshStaffCommissionRow(staffId, d) {
     if (!d) return d;
-    d.commission = calcStaffCommissionFromSchemes(staffId, d);
+    d.commission = sumCommLines(staffId);
     var rewardNet = (Number(d.reward) || 0) - (Number(d.deduct) || 0);
     d.total = calcSalaryTotal(d.base, d.commission, rewardNet);
     return d;
   }
 
-  function genSalaryIfMissing(monthKey, staffId) {
+  /** 提成明细行之和 = 该员工本期提成（与明细页完全一致） */
+  function sumCommLines(staffId) {
+    return getCommLines(staffId).reduce(function (s, l) {
+      return s + (Number(l.comm) || 0);
+    }, 0);
+  }
+
+  /** 单行提成：按行级上下文走方案计算（含按项覆盖/消费类型/散客/基础设置口径/扣成本） */
+  function calcLineCommission(line, staffId) {
+    var schemes = schemesAssignedToStaff(staffId);
+    if (!schemes.length) return 0;
+    var cat = line.kind === 'product' ? 'sales' : (line.kind === 'card' ? 'issue' : 'labor');
+    if ((cat === 'issue' || cat === 'card') && getCardAchBaseMode() === '不计算业绩') return 0;
+    var base = Math.max(0, Number(line.ach) || 0);
+    if (!base) return 0;
+    var baseRow = ensureSalaryBaseRow(state.salaryMonth, staffId);
+    var totalPerf = 0;
+    if (baseRow) {
+      totalPerf = (Number(baseRow.labor) || 0) + (Number(baseRow.sales) || 0) +
+        (Number(baseRow.issue) || 0) + (Number(baseRow.consume != null ? baseRow.consume : baseRow.card) || 0);
+    }
+    base = applyAchCost(cat, base);
+    var lineCtx = {
+      name: line.name,
+      refId: line.refId,
+      channel: line.channel,
+      isWalkIn: !!line.isWalkIn,
+      adv: lineCommRuleForAdv(line),
+    };
+    var best = 0;
+    var has = false;
+    schemes.forEach(function (sch) {
+      var amt = schemeCategoryCommAmount(sch, cat, base, totalPerf, lineCtx);
+      if (!has || amt > best) { best = amt; has = true; }
+    });
+    return has ? Math.round(best * 100) / 100 : 0;
+  }
+
+  /** 基础设置口径对单行的约束：不参与提成则返回 'none' */
+  function lineCommRuleForAdv(line) {
+    var adv = window.EmployeeStore && window.EmployeeStore.advRules;
+    if (!Array.isArray(adv)) return '';
+    function val(label, fallback) {
+      var r = adv.find(function (x) { return x && x.label === label; });
+      return r ? r.value : fallback;
+    }
+    if (line.isFreeOrder && val('免单', '计算业绩和提成') !== '计算业绩和提成') return 'none';
+    if (line.isGift && val('赠送项目（产品）', '按原价计算') === '不计算业绩') return 'none';
+    if (line.isCoupon && val('抵用券', '按原价计算') === '不计算业绩') return 'none';
+    if (line.isConsumeGift && val('消耗赠送金额', '按卡耗金额计算') === '不计算业绩') return 'none';
+    return '';
+  }
+
+  /** 业绩设置的成本扣减：实收扣成本/售价扣成本/固定成本 */
+  function applyAchCost(cat, base) {
+    var ach = window.EmployeeStore && window.EmployeeStore.ach;
+    if (!ach) return base;
+    var bucket = cat === 'sales' ? ach.sales : (cat === 'issue' || cat === 'card' ? ach.card : ach.labor);
+    if (!bucket) return base;
+    var scheme = bucket.defaultScheme;
+    if (!scheme && cat === 'card' && bucket.incomeTypes) scheme = bucket.incomeTypes.open;
+    if (!scheme) return base;
+    var mode = scheme.costMode || 'off';
+    var v = Number(base) || 0;
+    if (mode === 'receipt' || mode === 'price') {
+      return Math.max(0, Math.round(v * (100 - (Number(scheme.costPct) || 0)) / 100 * 100) / 100);
+    }
+    if (mode === 'fixed') {
+      return Math.max(0, Math.round((v - (Number(scheme.costFixed) || 0)) * 100) / 100);
+    }
+    return base;
+  }
+
+  function getAdvRuleValue(label, fallback) {
+    var adv = window.EmployeeStore && window.EmployeeStore.advRules;
+    if (!Array.isArray(adv)) return fallback;
+    var r = adv.find(function (x) { return x && x.label === label; });
+    return r ? r.value : fallback;
+  }
+
+  /** 基础设置四条口径的可见摘要（薪资列表顶部展示，改配置即可见） */
+  function advToneSummaryText() {
+    var labels = ['免单', '消耗赠送金额', '赠送项目（产品）', '抵用券'];
+    var parts = [];
+    labels.forEach(function (label) {
+      var v = getAdvRuleValue(label, '');
+      if (v) parts.push(label + '：' + v);
+    });
+    return parts.join(' · ');
+  }
+
+  /** 方案/分配/口径变更后：清空提成明细缓存并按明细行重算薪资行 */
+  function invalidateCommLineCache() {
+    var store = window.EmployeeStore;
+    if (!store) return;
+    store.commLines = {};
+    var bucket = store.salary && store.salary[state.salaryMonth];
+    if (!bucket) return;
+    Object.keys(bucket).forEach(function (sid) {
+      if (bucket[sid]) refreshStaffCommissionRow(sid, bucket[sid]);
+    });
+  }
+
+  function ensureSalaryBaseRow(monthKey, staffId) {
     var store = window.EmployeeStore;
     ensurePeriodDataBucket('salary', monthKey);
     var st = staffById(staffId);
@@ -33285,9 +34218,9 @@ function billingNav(fn) {
     if (store.salary[monthKey][staffId]) {
       var existing = normalizeSalaryRow(store.salary[monthKey][staffId]);
       existing.base = st.baseSalary || 0;
-      return refreshStaffCommissionRow(staffId, existing);
+      return existing;
     }
-    /* 无种子月份：按角色生成合理区间，提成按绑定方案计算（重叠取高） */
+    /* 无种子月份：按角色生成合理区间，提成由明细行计算（明细行之和） */
     var role = st.role || '';
     var seed = (parseInt(String(monthKey).replace(/-/g, ''), 10) || 0) + (staffId.charCodeAt(2) || 0) * 17;
     var labor = 0;
@@ -33327,8 +34260,14 @@ function billingNav(fn) {
       base: base, labor: labor, sales: sales, issue: issue, consume: consume, card: issue,
       commission: 0, reward: reward, deduct: deduct, total: base,
     };
-    store.salary[monthKey][staffId] = refreshStaffCommissionRow(staffId, row);
-    return store.salary[monthKey][staffId];
+    store.salary[monthKey][staffId] = row;
+    return row;
+  }
+
+  function genSalaryIfMissing(monthKey, staffId) {
+    var base = ensureSalaryBaseRow(monthKey, staffId);
+    if (!base) return null;
+    return refreshStaffCommissionRow(staffId, base);
   }
 
   function normalizeSalaryRow(d) {
@@ -33556,6 +34495,9 @@ function billingNav(fn) {
     if (!s || !body) return;
     state.currentStaffId = id;
     var sw = s.swordId ? swordById(s.swordId) : null;
+    /* 店员/高级店员仅可查看自己的薪资信息，查看他人时隐藏薪资字段 */
+    var selfOnly = isStaffSelfViewer();
+    var hideSalary = selfOnly && id !== getSessionStaffId();
     body.innerHTML =
       '<div class="emp-detail-head">' +
       empAvatarHtml(s) +
@@ -33574,8 +34516,11 @@ function billingNav(fn) {
       row('归属店铺', window.EmployeeStore.shopName, true) +
       row('职位', staffRoleLabel(s)) +
       row('权限', s.perm) +
-      row('基本工资', s.baseSalary ? fmtMoney(s.baseSalary) + ' 元' : '0 元') +
-      row('提成方案', s.scheme) +
+      (hideSalary
+        ? '<div class="form-row is-readonly"><span class="label">薪资信息</span>' +
+          '<span class="form-row__trail"><span class="value has-val">仅店主/合伙人可见</span></span></div>'
+        : row('基本工资', s.baseSalary ? fmtMoney(s.baseSalary) + ' 元' : '0 元') +
+          row('提成方案', s.scheme)) +
       '</div>';
   }
 
@@ -33800,10 +34745,17 @@ function billingNav(fn) {
     var mk = state.salaryMonth;
     var pc = ensurePayCycle();
     if (lbl) lbl.innerHTML = periodLabel(mk) + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
-    if (sumLbl) sumLbl.textContent = '本期全店合计薪酬';
-    if (cycleHint) cycleHint.textContent = payCycleModeLabel(pc) + ' · ' + periodRangeText(mk);
+    var staffOnly = isStaffSelfViewer();
+    if (sumLbl) sumLbl.textContent = staffOnly ? '我的薪酬' : '本期全店合计薪酬';
+    if (cycleHint) {
+      var tone = advToneSummaryText();
+      cycleHint.textContent = payCycleModeLabel(pc) + ' · ' + periodRangeText(mk) + (tone ? ' · ' + tone : '');
+    }
+    var pool = staffOnly
+      ? storeActiveStaff().filter(function (s) { return s.id === getSessionStaffId(); })
+      : storeActiveStaff();
     var storeTotal = 0;
-    list.innerHTML = storeActiveStaff().map(function (s) {
+    list.innerHTML = pool.map(function (s) {
       var d = genSalaryIfMissing(mk, s.id);
       var commission = Number(d.commission) || 0;
       var cardAmt = d.issue != null ? d.issue : d.card;
@@ -33844,6 +34796,12 @@ function billingNav(fn) {
 
   function storeActiveStaff() {
     return window.EmployeeStore.staff.filter(function (s) { return s.status === '在职'; });
+  }
+
+  /** 店员 / 高级店员仅可查看自己的薪资信息 */
+  function isStaffSelfViewer() {
+    var name = getSessionPermName();
+    return name === '店员' || name === '高级店员';
   }
 
   function payChannelDefs() {
@@ -33916,9 +34874,9 @@ function billingNav(fn) {
   }
 
   function buildSeedCommLines(staffId) {
-    var d = genSalaryIfMissing(state.salaryMonth, staffId);
+    var d = ensureSalaryBaseRow(state.salaryMonth, staffId);
+    if (!d) return [];
     var labor = Number(d.labor) || 0;
-    var commission = d.commission != null ? Number(d.commission) : Math.round(labor * 0.1 * 100) / 100;
     var dayAch = labor > 0 ? Math.min(226, labor) : 226;
     var restAch = Math.max(0, roundMoney2(labor - dayAch));
     var parts = periodParts(state.salaryMonth);
@@ -33933,7 +34891,7 @@ function billingNav(fn) {
     }
     var lines = [];
     var seq = 0;
-    function pushLine(ymd, time, item, ach, comm, channel, seedPending) {
+    function pushLine(ymd, time, item, ach, channel, seedPending) {
       seq += 1;
       var ln = {
         id: 'cl-' + staffId + '-' + state.salaryMonth + '-' + seq,
@@ -33942,25 +34900,34 @@ function billingNav(fn) {
         orderTime: time,
         name: item.name,
         kind: item.kind,
+        refId: item.refId || null,
         price: item.price,
         channel: channel || '现金类',
+        isWalkIn: !!item.isWalkIn,
+        isFreeOrder: !!item.isFreeOrder,
+        isGift: !!item.isGift,
+        isCoupon: !!item.isCoupon,
+        isConsumeGift: !!item.isConsumeGift,
         ach: roundMoney2(ach),
-        comm: roundMoney2(comm),
+        comm: 0,
         status: 'effective',
         pending: null,
         rejectReason: null,
       };
+      ln.comm = roundMoney2(calcLineCommission(ln, staffId));
       if (seedPending) {
         ln.status = 'pending';
         ln.pending = {
           ach: roundMoney2(ach + 20),
-          comm: roundMoney2(Math.max(0, comm + 5)),
+          comm: roundMoney2(Math.max(0, ln.comm + 5)),
           reason: '活动价补差，按实收调整',
           by: '店主',
+          byName: '顾清扬',
           at: todayYmd(),
           prevAch: ln.ach,
           prevComm: ln.comm,
         };
+        ln.editedBy = { by: '店主', byName: '顾清扬' };
       }
       lines.push(ln);
     }
@@ -33971,19 +34938,13 @@ function billingNav(fn) {
       ];
       var totalP = items1.reduce(function (s, it) { return s + it.price; }, 0) || 1;
       var achPool = labor || dayAch;
-      var commPool = commission;
       items1.forEach(function (it, idx) {
         var a = idx === items1.length - 1
           ? roundMoney2(achPool - items1.slice(0, -1).reduce(function (s, x, i) {
             return s + roundMoney2(achPool * (x.price / totalP));
           }, 0))
           : roundMoney2(achPool * (it.price / totalP));
-        var c = idx === items1.length - 1
-          ? roundMoney2(commPool - items1.slice(0, -1).reduce(function (s, x, i) {
-            return s + roundMoney2(commPool * (x.price / totalP));
-          }, 0))
-          : roundMoney2(commPool * (it.price / totalP));
-        pushLine(dayA, '下午 14:20', it, a, c, '现金类', idx === 0);
+        pushLine(dayA, '下午 14:20', it, a, '现金类', idx === 0);
       });
       return lines;
     }
@@ -33998,7 +34959,7 @@ function billingNav(fn) {
           return s + roundMoney2(dayAch * (x.price / dayAPrice));
         }, 0))
         : roundMoney2(dayAch * (it.price / dayAPrice));
-      pushLine(dayA, '上午 00:18', it, a, 0, '现金类', false);
+      pushLine(dayA, '上午 00:18', it, a, '现金类', false);
     });
     var dayBItems = [
       { name: '开卡·储值卡', price: 1280, kind: 'card' },
@@ -34012,9 +34973,8 @@ function billingNav(fn) {
         ? roundMoney2(dayBAch - dayBAllocated)
         : roundMoney2(dayBAch * (it.price / dayBPrice));
       dayBAllocated = roundMoney2(dayBAllocated + a);
-      var c = idx === 0 ? commission : 0;
       /* 演示：第二日开卡行预置一条待员工确认的调整 */
-      pushLine(dayB, '下午 22:52', it, a, c, '现金类', idx === 0);
+      pushLine(dayB, '下午 22:52', it, a, '现金类', idx === 0);
     });
     return lines;
   }
@@ -34303,6 +35263,8 @@ function billingNav(fn) {
   function syncCommViewerToggleBtn() {
     var btn = $('empCommViewerToggle');
     if (!btn) return;
+    /* auto_lock：视角由会话权限自动决定，隐藏手动切换钮 */
+    btn.style.display = 'none';
     var isStaff = state.commDetailViewer === 'staff';
     btn.textContent = isStaff ? '店主视角' : '员工视角';
   }
@@ -34360,11 +35322,13 @@ function billingNav(fn) {
       ach: ach,
       comm: comm,
       reason: reason,
-      by: '店主',
+      by: getSessionPermName(),
+      byName: (getSessionStaff() || {}).name || '',
       at: todayYmd(),
       prevAch: ln.ach,
       prevComm: ln.comm,
     };
+    ln.editedBy = { by: ln.pending.by, byName: ln.pending.byName };
     ln.rejectReason = null;
     closeMask('empCommLineEditMask');
     state.commLineEditId = null;
@@ -34486,10 +35450,21 @@ function billingNav(fn) {
         '<span class="emp-comm-line__val-num is-pending">' + fmtMoney(ln.pending.comm) + '</span>'
       : '<span class="emp-comm-line__val-num">' + fmtMoney(ln.comm) + '</span>';
     var reason = '';
-    if (pending && ln.pending.reason) {
-      reason = '<div class="emp-comm-line__reason">' + esc(ln.pending.reason) + '</div>';
+    var editorHtml = '';
+    if (pending) {
+      var pe = ln.pending;
+      if (pe && (pe.byName || pe.by)) {
+        editorHtml = '<div class="emp-comm-line__editor">修改人：' +
+          esc(pe.byName || '') + (pe.byName && pe.by ? ' · ' : '') + esc(pe.by || '') + '</div>';
+      }
+      if (pe && pe.reason) {
+        reason = '<div class="emp-comm-line__reason">' + esc(pe.reason) + '</div>';
+      }
     } else if (ln.status === 'rejected' && ln.rejectReason) {
       reason = '<div class="emp-comm-line__reason">曾驳回：' + esc(ln.rejectReason) + '</div>';
+    } else if (ln.editedBy && (ln.editedBy.byName || ln.editedBy.by)) {
+      editorHtml = '<div class="emp-comm-line__editor is-history">曾由 ' +
+        esc(ln.editedBy.byName || '') + (ln.editedBy.byName && ln.editedBy.by ? ' · ' : '') + esc(ln.editedBy.by || '') + ' 修改</div>';
     }
     var cls = 'emp-comm-line' + (pending ? ' is-pending' : '') + (ln.status === 'rejected' ? ' is-rejected' : '');
     return '<button type="button" class="' + cls + '" data-comm-line="' + esc(ln.id) + '">' +
@@ -34500,7 +35475,7 @@ function billingNav(fn) {
       '<div class="emp-comm-line__vals">' +
       '<div class="emp-comm-line__val"><span class="emp-comm-line__val-lbl">业绩</span>' + achHtml + '</div>' +
       '<div class="emp-comm-line__val"><span class="emp-comm-line__val-lbl">提成</span>' + commHtml + '</div>' +
-      '</div>' + reason + '</button>';
+      '</div>' + editorHtml + reason + '</button>';
   }
 
   function renderSalaryDetail(staffId) {
@@ -34510,8 +35485,16 @@ function billingNav(fn) {
     state.currentStaffId = staffId;
     ensureCommDetailScopeBound();
     if (!state.commDetailFilter) state.commDetailFilter = 'all';
-    if (!state.commDetailViewer) state.commDetailViewer = 'owner';
-    $('empSalaryDetailTitle').textContent = '员工业绩提成明细';
+    /* auto_lock：店员/高级店员锁定员工视角（仅自己、可确认待确认调整），其他角色为店主视角 */
+    var selfOnly = isStaffSelfViewer();
+    state.commDetailViewer = selfOnly ? 'staff' : 'owner';
+    if (selfOnly && staffId !== getSessionStaffId()) {
+      staffId = getSessionStaffId();
+      s = staffById(staffId);
+      if (!s || !body) return;
+      state.currentStaffId = staffId;
+    }
+    $('empSalaryDetailTitle').textContent = selfOnly ? '我的业绩提成明细' : '员工业绩提成明细';
     syncCommViewerToggleBtn();
     var data = demoCommDetail(staffId);
     var mk = state.salaryMonth;
@@ -34577,14 +35560,16 @@ function billingNav(fn) {
       var linesHtml = day.lines.map(renderCommLineCard).join('');
       return '<div class="emp-comm-day">' +
         '<div class="emp-comm-day__head">' +
-        '<span class="emp-comm-day__head-label">' +
+        '<div class="emp-comm-day__head-top">' +
         '<span class="emp-comm-day__date-pill">' + esc(formatCommDayListHead(day.ymd)) + '</span>' +
-        '<span class="emp-comm-day__head-total">当日合计 (元)</span>' +
-        '</span>' +
-        '<span class="emp-comm-day__head-metrics">' +
+        pendingTip +
+        '</div>' +
+        '<div class="emp-comm-day__head-total">' +
+        '<span class="emp-comm-day__head-total-lbl">当日合计 (元)</span>' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#C4A484"></span>业绩：<span class="emp-num">' + fmtMoney(day.ach) + '</span></span>' +
         '<span class="emp-comm-day__metric"><span class="emp-salary-card__bar" style="background:#7FA8A0"></span>提成：<span class="emp-num">' + fmtMoney(day.comm) + '</span></span>' +
-        pendingTip + '</span></div>' + linesHtml + '</div>';
+        '</div>' +
+        '</div>' + linesHtml + '</div>';
     }).join('');
     if (!daysHtml) {
       var emptyMsg = filter === 'pending' ? '暂无待确认调整'
@@ -35087,8 +36072,14 @@ function billingNav(fn) {
     };
   }
 
+  function getCardAchBaseMode() {
+    var card = window.EmployeeStore && window.EmployeeStore.ach && window.EmployeeStore.ach.card;
+    return (card && card.baseMode) || '按实收金额';
+  }
+
   function syncCardBaseToAdvRule() {
-    /* 开卡计入基数仅在「办卡业绩」维护，基础设置不再重复「开卡」规则 */
+    /* 「计入基数」是办卡提成的唯一口径来源：calcLineCommission 直接读取 ach.card.baseMode，
+       此处与基础设置口径保持同一事实源；缓存失效由调用方 invalidateCommLineCache() 负责。 */
   }
 
   function buildCardAchBucket(prevCard) {
@@ -35436,13 +36427,6 @@ function billingNav(fn) {
     return html;
   }
 
-  function setAchPctDialogMode(mode) {
-    var dual = $('empPctDialogFieldsDual');
-    var single = $('empPctDialogFieldsSingle');
-    if (dual) dual.classList.toggle('hidden', mode === 'single');
-    if (single) single.classList.toggle('hidden', mode !== 'single');
-  }
-
   function fmtAchPrice(n) {
     var v = Number(n);
     if (isNaN(v)) return '¥0';
@@ -35752,6 +36736,7 @@ function billingNav(fn) {
     closeMask('empAchEditMask');
     state.achEdit = null;
     renderAch();
+    invalidateCommLineCache();
     if (copyToGroup) toast(copied ? ('已保存并复制到本组 ' + copied + ' 项') : '已保存（本组暂无其他项）');
     else toast('业绩方案已保存');
   }
@@ -36045,8 +37030,7 @@ function billingNav(fn) {
       nextMode: nextMode,
       achSnapshot: snapshotAchKind(kind)
     };
-    setAchCalcMode(kind, nextMode);
-    renderAch();
+    /* 先确认再生效：弹窗确认前不修改任何数据 */
     openEmpDialog('empCalcModeConfirmMask');
   }
 
@@ -36056,12 +37040,14 @@ function billingNav(fn) {
       closeEmpDialog('empCalcModeConfirmMask');
       return;
     }
+    setAchCalcMode(pending.kind, pending.nextMode);
     state.achTab = pending.kind;
     if (pending.kind === 'card') state.achCatId = 'card_rules';
     else state.achCatId = getAchCommonRulesCatId(pending.kind);
     state.achStationBannerDismissed = false;
     state.calcModePending = null;
     closeEmpDialog('empCalcModeConfirmMask');
+    renderAch();
     openAch();
   }
 
@@ -37182,6 +38168,7 @@ function billingNav(fn) {
     closeMask('empItemCommEditMask');
     state.itemCommEdit = null;
     renderItemCommList(sch);
+    invalidateCommLineCache();
     if (copyToGroup) toast(copied ? ('已保存并复制到本组 ' + copied + ' 项') : '已保存（本组暂无其他项）');
     else toast('已保存');
   }
@@ -37441,6 +38428,7 @@ function billingNav(fn) {
     /* 只改当前方案的 assigned；不把员工从其它方案踢出 */
     sch.assigned = ids;
     syncAllStaffSchemeFields();
+    invalidateCommLineCache();
     toast(ids.length ? ('已更新分配 · ' + ids.length + ' 人') : '已清空本方案分配');
   }
 
@@ -37690,6 +38678,7 @@ function billingNav(fn) {
   }
 
   function openAch() {
+    if (!requirePerm('achCommSet')) return;
     closeAllEmpMasks();
     if (typeof ensureDemoFilled === 'function') {
       try { ensureDemoFilled(); } catch (e) { /* ignore */ }
@@ -37705,6 +38694,7 @@ function billingNav(fn) {
   }
 
   function openAchBase() {
+    if (!requirePerm('achCommSet')) return;
     closeAllEmpMasks();
     state.achTab = 'base';
     renderAch();
@@ -37713,6 +38703,7 @@ function billingNav(fn) {
   }
 
   function openComm() {
+    if (!requirePerm('achCommSet')) return;
     closeAllEmpMasks();
     ensureAllCommSchemes();
     renderCommList();
@@ -37951,7 +38942,10 @@ function billingNav(fn) {
       if (!requirePerm('staffCreate')) return;
       openForm('create');
     });
-    $('empBtnEditDetail')?.addEventListener('click', function () { openForm('edit', state.currentStaffId); });
+    $('empBtnEditDetail')?.addEventListener('click', function () {
+      if (!requirePerm('staffCreate')) return;
+      openForm('edit', state.currentStaffId);
+    });
     $('empBtnSaveForm')?.addEventListener('click', saveForm);
 
     wireStaffListDrag();
@@ -38686,51 +39680,6 @@ function billingNav(fn) {
         state.achEdit = null;
       }
     });
-    $('empPctDialogOk')?.addEventListener('click', function () {
-      if (!state.pctEdit) return;
-      if (state.pctEdit.mode === 'single') {
-        var singleVal = parseFloat($('empPctSingleInput').value);
-        if (isNaN(singleVal) || singleVal < 0 || singleVal > 100) {
-          toast('请输入 0–100 的比例', true);
-          return;
-        }
-        var singleInfo = findAchItem(state.pctEdit.itemId);
-        if (singleInfo) {
-          if (state.pctEdit.kind === 'designated') singleInfo.item.designated = singleVal;
-          else singleInfo.item.nonDesignated = singleVal;
-        }
-        $('empPctDialogMask')?.classList.remove('show');
-        state.pctEdit = null;
-        setAchPctDialogMode('dual');
-        renderAch();
-        toast('比例已更新');
-        return;
-      }
-      var des = parseFloat($('empPctDesignated').value);
-      var non = parseFloat($('empPctNonDesignated').value);
-      var info = findAchItem(state.pctEdit.itemId);
-      if (info) {
-        if (!isNaN(des)) info.item.designated = des;
-        if (!isNaN(non)) info.item.nonDesignated = non;
-      }
-      $('empPctDialogMask')?.classList.remove('show');
-      state.pctEdit = null;
-      setAchPctDialogMode('dual');
-      renderAch();
-      toast('比例已更新');
-    });
-    $('empPctDialogCancel')?.addEventListener('click', function () {
-      $('empPctDialogMask')?.classList.remove('show');
-      state.pctEdit = null;
-      setAchPctDialogMode('dual');
-    });
-    $('empPctDialogMask')?.addEventListener('click', function (e) {
-      if (e.target === $('empPctDialogMask')) {
-        $('empPctDialogMask').classList.remove('show');
-        state.pctEdit = null;
-        setAchPctDialogMode('dual');
-      }
-    });
 
     $('empAdvRules')?.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-adv-rule-id][data-adv-rule-val]');
@@ -38742,6 +39691,8 @@ function billingNav(fn) {
       if (!next || next === rule.value) return;
       rule.value = next;
       renderAdv();
+      invalidateCommLineCache();
+      toast('「' + rule.label + '」已设为「' + next + '」');
     });
     $('empRuleList')?.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-rule-val]');
@@ -38754,6 +39705,7 @@ function billingNav(fn) {
         closeMask('empRuleMask');
         state.ruleEditIdx = null;
         renderAch();
+        invalidateCommLineCache();
         toast('计入基数已更新');
         return;
       }
@@ -38787,6 +39739,7 @@ function billingNav(fn) {
         return;
       }
       inp.value = res.value;
+      toast('工位名称已更新');
     });
     $('empBtnStationMapReset')?.addEventListener('click', function () {
       resetStationMapToDefault();
@@ -38841,6 +39794,7 @@ function billingNav(fn) {
         copy.name = sch.name + ' 副本';
         copy.assigned = [];
         window.EmployeeStore.schemes.push(copy);
+        invalidateCommLineCache();
         toast('方案已复制');
         renderCommList();
         return;
@@ -38848,6 +39802,7 @@ function billingNav(fn) {
       if (act.dataset.schemeAct === 'delete') {
         window.EmployeeStore.schemes = window.EmployeeStore.schemes.filter(function (s) { return s.id !== id; });
         syncAllStaffSchemeFields();
+        invalidateCommLineCache();
         toast('方案已删除');
         renderCommList();
       }
@@ -38885,7 +39840,7 @@ function billingNav(fn) {
       /* 重命名：有 editingSchemeId 且无草稿类型 */
       if (state.editingSchemeId && !state.schemeDraftType) {
         var schRename = schemeById(state.editingSchemeId);
-        if (schRename) { schRename.name = name; toast('已重命名'); renderCommList(); }
+        if (schRename) { schRename.name = name; invalidateCommLineCache(); toast('已重命名'); renderCommList(); }
         return;
       }
       if (!state.schemeDraftType) { toast('请先选择方案类型', true); return; }
@@ -38908,99 +39863,6 @@ function billingNav(fn) {
       if (e.target === $('empHelpMask')) closeEmpDialog('empHelpMask');
     });
 
-    $('empBtnSaveComm')?.addEventListener('click', function () {
-      var sch = schemeById(state.editingSchemeId);
-      if (!sch) return;
-      var labor = readCommBlockValue('labor');
-      var sales = readCommBlockValue('sales');
-      var issue = readCommBlockValue('issue');
-      var card = readCommBlockValue('card');
-      sch.laborPct = labor.value;
-      sch.salesPct = sales.value;
-      sch.issuePct = issue.value;
-      sch.cardPct = card.value;
-      sch.laborMode = labor.mode;
-      sch.salesMode = sales.mode;
-      sch.issueMode = issue.mode;
-      sch.cardMode = card.mode;
-      if (sch.laborPct < 0 || sch.salesPct < 0 || sch.issuePct < 0 || sch.cardPct < 0) {
-        toast('提成数值不能为负', true);
-        return;
-      }
-      if ((sch.laborMode === 'pct' && sch.laborPct > 100) ||
-          (sch.salesMode === 'pct' && sch.salesPct > 100) ||
-          (sch.issueMode === 'pct' && sch.issuePct > 100) ||
-          (sch.cardMode === 'pct' && sch.cardPct > 100)) {
-        toast('比例需在 0–100%', true);
-        return;
-      }
-      toast('提成方案已保存');
-      openComm();
-    });
-
-    document.querySelector('.emp-comm-edit-body')?.addEventListener('change', function (e) {
-      var radio = e.target.closest('.emp-comm-block input[type="radio"]');
-      if (!radio) return;
-      var block = radio.closest('.emp-comm-block');
-      if (!block) return;
-      var kind = block.dataset.commKind;
-      var nextMode = normalizeCommMode(radio.value);
-      var prevMode = nextMode === 'amount' ? 'pct' : 'amount';
-      var idMap = {
-        labor: { pct: 'empCommLaborPct', amount: 'empCommLaborAmt' },
-        sales: { pct: 'empCommSalesPct', amount: 'empCommSalesAmt' },
-        issue: { pct: 'empCommIssuePct', amount: 'empCommIssueAmt' },
-        card: { pct: 'empCommCardPct', amount: 'empCommCardAmt' },
-      };
-      var ids = idMap[kind];
-      if (ids) {
-        var prevEl = $(ids[prevMode]);
-        var nextEl = $(ids[nextMode]);
-        if (prevEl && nextEl) {
-          var n = parseCommInputValue(prevEl.value);
-          nextEl.value = Number.isFinite(n) ? formatCommInputDisplay(n, nextMode) : '';
-        }
-      }
-      setCommBlockMode(kind, nextMode);
-    });
-    document.querySelector('.emp-comm-edit-body')?.addEventListener('input', function (e) {
-      var inp = e.target.closest('.emp-comm-block input.emp-comm-num');
-      if (!inp || !inp.id) return;
-      var pair = {
-        empCommLaborPct: 'empCommLaborAmt', empCommLaborAmt: 'empCommLaborPct',
-        empCommSalesPct: 'empCommSalesAmt', empCommSalesAmt: 'empCommSalesPct',
-        empCommIssuePct: 'empCommIssueAmt', empCommIssueAmt: 'empCommIssuePct',
-        empCommCardPct: 'empCommCardAmt', empCommCardAmt: 'empCommCardPct',
-      };
-      var otherId = pair[inp.id];
-      if (!otherId) return;
-      var other = $(otherId);
-      if (!other) return;
-      var n = parseCommInputValue(inp.value);
-      other.value = Number.isFinite(n) ? String(n) : '';
-    });
-    document.querySelector('.emp-comm-edit-body')?.addEventListener('focusin', function (e) {
-      var inp = e.target.closest('input.emp-comm-num');
-      if (inp) focusCommNumInput(inp);
-    });
-    document.querySelector('.emp-comm-edit-body')?.addEventListener('focusout', function (e) {
-      var inp = e.target.closest('input.emp-comm-num');
-      if (!inp) return;
-      blurCommNumInput(inp);
-      var pair = {
-        empCommLaborPct: ['empCommLaborAmt', 'amount'], empCommLaborAmt: ['empCommLaborPct', 'pct'],
-        empCommSalesPct: ['empCommSalesAmt', 'amount'], empCommSalesAmt: ['empCommSalesPct', 'pct'],
-        empCommIssuePct: ['empCommIssueAmt', 'amount'], empCommIssueAmt: ['empCommIssuePct', 'pct'],
-        empCommCardPct: ['empCommCardAmt', 'amount'], empCommCardAmt: ['empCommCardPct', 'pct'],
-      };
-      var info = pair[inp.id];
-      if (!info) return;
-      var other = $(info[0]);
-      if (!other) return;
-      var n = parseCommInputValue(inp.value);
-      other.value = Number.isFinite(n) ? formatCommInputDisplay(n, info[1]) : '';
-    });
-
     $('empLadderScopeEntry')?.addEventListener('click', function () {
       if (state.editingSchemeId) openLadderScopeEditor();
     });
@@ -39015,11 +39877,13 @@ function billingNav(fn) {
     $('empScopeOk')?.addEventListener('click', function () {
       if (state.scopePurpose === 'item') {
         if (!applyItemPickDraftToScheme()) return;
+        invalidateCommLineCache();
         toast('已更新提成项目');
         openItemCommEditor(state.editingSchemeId);
         return;
       }
       if (!applyScopeDraftToScheme()) return;
+      invalidateCommLineCache();
       toast('使用范围已更新');
       openCommEditor(state.editingSchemeId);
     });
@@ -39288,6 +40152,7 @@ function billingNav(fn) {
       var err = validateLadderTiers(tiers);
       if (err) { toast(err, true); return; }
       sch.ladder = tiers;
+      invalidateCommLineCache();
       toast('阶梯提成已保存');
       openComm();
     });
