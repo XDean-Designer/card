@@ -104,11 +104,13 @@ main{max-width:1180px;margin:0 auto;padding:0 28px 70px}
 .fnode.selected{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft),0 8px 20px rgba(246,46,67,.1);background:#fff;transform:translateY(-2px)}
 .fnode small{color:var(--red);font-weight:900;font-size:11px;letter-spacing:.06em}
 .fnode b{display:block;margin-top:6px;font-size:14.5px;line-height:1.35}
-.farr{align-self:center;color:#a5adba;font-size:22px;flex-shrink:0}
+.farr{align-self:center;width:28px;height:28px;border-radius:50%;background:var(--red-soft);border:1px solid var(--red-line);color:var(--red);display:grid;place-items:center;flex-shrink:0}
+.farr svg{width:15px;height:15px}
 .flowstrip--sub{border-top:1px dashed var(--line);margin-top:2px;padding:16px 2px 4px}
 .flowstrip--sub .fnode{min-width:132px;padding:12px 13px}
 .flowstrip--sub .fnode b{font-size:13px;margin-top:4px}
-.flowstrip--sub .farr{font-size:18px}
+.flowstrip--sub .farr{width:23px;height:23px}
+.flowstrip--sub .farr svg{width:12px;height:12px}
 .flow-card{display:block;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:22px}
 .flow-copy{padding:4px 2px}
 .flow-copy .fc-eyebrow2{color:var(--red);font-size:11px;font-weight:900;letter-spacing:.12em}
@@ -150,7 +152,8 @@ main{max-width:1180px;margin:0 auto;padding:0 28px 70px}
 .case-flow__node small{color:var(--red);font-weight:900;font-size:11px;letter-spacing:.06em}
 .case-flow__node b{display:block;font-size:13.5px;margin-top:4px;line-height:1.35}
 .case-flow__desc{display:block;font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
-.case-flow__arr{align-self:center;color:#a5adba;font-size:20px;flex-shrink:0}
+.case-flow__arr{align-self:center;width:25px;height:25px;border-radius:50%;background:var(--red-soft);border:1px solid var(--red-line);color:var(--red);display:grid;place-items:center;flex-shrink:0}
+.case-flow__arr svg{width:13px;height:13px}
 .case-card .proof{font-size:13.5px;color:var(--green);background:#f0faf5;border:1px solid #d2eee0;border-radius:10px;padding:11px 14px;margin:16px 0;line-height:1.55}
 .case-card .proof b{font-weight:800}
 .shot-btn{height:28px;padding:0 11px;border-radius:9px;border:1px solid var(--red-line);background:var(--red-soft);color:var(--red);font-size:12.5px;font-weight:700;margin-top:9px;transition:background .2s,transform .2s}
@@ -353,6 +356,8 @@ body.present-mode .nav{display:none}
     flow: '<svg viewBox="0 0 24 24"><path d="M4 6h10M4 12h16M4 18h8"/><circle cx="18" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
     ok: '<svg viewBox="0 0 24 24"><path d="M20 7L10 17l-5-5"/></svg>'
   };
+
+  var ARR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 5l7 7-7 7"/></svg>';
 
   /* 五个应用场景 */
   var SCENES = [
@@ -718,7 +723,7 @@ body.present-mode .nav{display:none}
       return '<button type="button" class="fnode ' + (i === state.flowIdx ? 'selected' : '') + '" data-i="' + i + '">' +
         '<small>' + String(i + 1).padStart(2, '0') + '</small><b>' + esc(f.t) + '</b>' +
         '</button>' +
-        (i < s.flow.length - 1 ? '<span class="farr">›</span>' : '');
+        (i < s.flow.length - 1 ? '<span class="farr">' + ARR_SVG + '</span>' : '');
     }).join('');
     var strip = document.getElementById('sceneFlow');
     strip.innerHTML = html;
@@ -767,7 +772,7 @@ body.present-mode .nav{display:none}
       return '<button type="button" class="sfnode ' + (i === state.subIdx ? 'selected' : '') + '" data-i="' + i + '">' +
         '<small>' + String(i + 1).padStart(2, '0') + '</small><b>' + esc(st.t) + '</b>' +
         '</button>' +
-        (i < sub.length - 1 ? '<span class="farr">›</span>' : '');
+        (i < sub.length - 1 ? '<span class="farr">' + ARR_SVG + '</span>' : '');
     }).join('');
     container.innerHTML = html;
     container.classList.remove('hidden');
@@ -862,7 +867,7 @@ body.present-mode .nav{display:none}
         '<span class="case-flow__desc">' + esc(s.act) + '</span>' +
         shotHtml +
       '</div>' +
-      (i < c.steps.length - 1 ? '<span class="case-flow__arr">›</span>' : '');
+      (i < c.steps.length - 1 ? '<span class="case-flow__arr">' + ARR_SVG + '</span>' : '');
     }).join('') + '</div>';
 
     var ups = c.upgrades && c.upgrades.length ? '<div class="case-upgrades"><b>下一步更锋利 ·</b> ' + c.upgrades.map(function (u) { return esc(u); }).join('　') + '</div>' : '';
