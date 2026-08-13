@@ -406,16 +406,17 @@ body.present-mode .nav{display:none}
         { t: '新员工入职', d: '店主准备为新员工建档与配置。', shots: [], sub: [
           { t: '准备建档', d: '收集员工姓名、职位、入职信息。' }
         ] },
-        { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['22-staff-create'], sub: [
-          { t: '创建员工档案', d: '录入姓名、职位与在职状态。', shots: ['22-staff-create'] },
-          { t: '绑定账号', d: '选择剑号 / 宝剑，或留待后续补充。' }
+        { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'], sub: [
+          { t: '创建员工档案', d: '录入员工姓名、手机号、归属店铺等基础信息。', shots: ['22-staff-create', '63-staff-create'] },
+          { t: '选择职位', d: '从店长、美容师、技师等头衔中选择职位。', shots: ['64-staff-position'] },
+          { t: '设置状态', d: '设置在职 / 休假状态，同步薪资口径。', shots: ['67-staff-status'] }
         ] },
-        { t: '设置权限', d: '选择店员等权限身份，控制能开单、能否改价目等。', shots: ['23-staff-perm'], sub: [
-          { t: '选择权限身份', d: '店主 / 店员等身份，决定操作范围。', shots: ['23-staff-perm'] },
+        { t: '设置权限', d: '选择店员等权限身份，控制能开单、能否改价目等。', shots: ['23-staff-perm', '65-staff-perm'], sub: [
+          { t: '选择权限身份', d: '合伙人、店长、高级店员、店员等身份，决定操作范围。', shots: ['23-staff-perm', '65-staff-perm'] },
           { t: '细化操作权限', d: '能开单、能否改价目等按需开关。' }
         ] },
-        { t: '业绩提成方案', d: '配置提成方案与规则，与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance'], sub: [
-          { t: '提成设置', d: '按项目 / 产品配置提成比例。', shots: ['24-staff-commission'] },
+        { t: '业绩提成方案', d: '配置提成方案与规则，与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'], sub: [
+          { t: '提成设置', d: '按项目 / 产品配置提成比例，或暂不分配。', shots: ['24-staff-commission', '66-staff-commission'] },
           { t: '业绩设置', d: '绑定业绩口径，流水可核对。', shots: ['25-staff-performance'] }
         ] },
         { t: '排班口径与奖惩', d: '安排出勤班次、维护奖惩规则，支撑预约与到店排人。', shots: ['27-staff-appt', '26-staff-reward'], sub: [
@@ -531,9 +532,9 @@ body.present-mode .nav{display:none}
       { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '65-staff-perm', '66-staff-commission', '67-staff-status'] }
     ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
     { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
-      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shot: '22-staff-create', shotLabel: '创建员工' },
-      { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shot: '23-staff-perm', shotLabel: '选择权限' },
-      { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance'] },
+      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'] },
+      { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shots: ['23-staff-perm', '65-staff-perm'] },
+      { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'] },
       { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
       { icon: 'flow', mod: '奖惩设置', act: '按现网能力维护奖惩规则', desc: '人效管理闭环的一部分。', shot: '26-staff-reward', shotLabel: '奖惩设置' }
     ], upgrades: ['现网可完成新人上线配置；后续排班可更显式、店主看提成下钻更直达。', '月末核提成可结合流水与经营分析场景一起看。'] },
