@@ -104,13 +104,10 @@ main{max-width:1180px;margin:0 auto;padding:0 28px 70px}
 .fnode.selected{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft),0 8px 20px rgba(246,46,67,.1);background:#fff;transform:translateY(-2px)}
 .fnode small{color:var(--red);font-weight:900;font-size:11px;letter-spacing:.06em}
 .fnode b{display:block;margin-top:6px;font-size:14.5px;line-height:1.35}
-.fnode__shot{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 8px}
-.fnode.selected .fnode__shot{color:var(--red);border-color:var(--red-line);background:var(--red-soft)}
 .farr{align-self:center;color:#a5adba;font-size:22px;flex-shrink:0}
 .flowstrip--sub{border-top:1px dashed var(--line);margin-top:2px;padding:16px 2px 4px}
 .flowstrip--sub .fnode{min-width:132px;padding:12px 13px}
 .flowstrip--sub .fnode b{font-size:13px;margin-top:4px}
-.flowstrip--sub .fnode__shot{margin-top:6px}
 .flowstrip--sub .farr{font-size:18px}
 .flow-card{display:block;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:22px}
 .flow-copy{padding:4px 2px}
@@ -720,7 +717,6 @@ body.present-mode .nav{display:none}
     var html = s.flow.map(function (f, i) {
       return '<button type="button" class="fnode ' + (i === state.flowIdx ? 'selected' : '') + '" data-i="' + i + '">' +
         '<small>' + String(i + 1).padStart(2, '0') + '</small><b>' + esc(f.t) + '</b>' +
-        (f.shots && f.shots.length ? '<span class="fnode__shot">' + f.shots.length + ' 张</span>' : '') +
         '</button>' +
         (i < s.flow.length - 1 ? '<span class="farr">›</span>' : '');
     }).join('');
@@ -770,7 +766,6 @@ body.present-mode .nav{display:none}
     var html = sub.map(function (st, i) {
       return '<button type="button" class="sfnode ' + (i === state.subIdx ? 'selected' : '') + '" data-i="' + i + '">' +
         '<small>' + String(i + 1).padStart(2, '0') + '</small><b>' + esc(st.t) + '</b>' +
-        (st.shots && st.shots.length ? '<span class="sfnode__shot">' + st.shots.length + ' 张</span>' : '') +
         '</button>' +
         (i < sub.length - 1 ? '<span class="farr">›</span>' : '');
     }).join('');
