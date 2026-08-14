@@ -5054,6 +5054,22 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 /* 默认折叠：4 条口径标签收起，展开按钮在卡片右下角 */
 .emp-salary-summary.is-tones-open .emp-salary-summary__tones { display: flex; }
 .emp-salary-summary:not(.is-tones-open) .emp-salary-summary__tones { display: none; }
+/* 展开区小标题「生效中」+ 灰发丝分隔线 */
+.emp-salary-summary__tone-head {
+  flex: 1 1 100%; min-width: 0;
+  display: none; align-items: center;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid #E5E5E5;
+  font-size: 12px; color: var(--text-sec); line-height: 1.3;
+}
+.emp-salary-summary.is-tones-open .emp-salary-summary__tone-head { display: flex; }
+.emp-salary-summary__tone-head-title {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.emp-salary-summary__tone-head-title::before {
+  content: ''; width: 2px; height: 10px; border-radius: 1px; background: var(--brand);
+  flex-shrink: 0;
+}
 .emp-salary-summary__tone-toggle {
   flex: 0 0 auto; margin-left: auto; align-self: flex-end;
   width: 26px; height: 26px; padding: 0; border: none; border-radius: 50%;
@@ -14468,7 +14484,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="form-row clickable" id="empRowScheme"><span class="label">提成方案</span><span class="form-row__trail"><span class="value" id="empFScheme">暂未分配</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row emp-form-row--stack"><span class="label">基本工资<span class="req">*</span></span><input class="value input-amount" id="empFBase" type="number" min="0" max="999999.99" step="0.01" placeholder="请输入员工基本工资" inputmode="decimal" /></div>
       <p class="emp-form-note">注：当修改基本工资后，当月的薪资统计以最新的为准。</p>
-      <div class="form-row clickable" id="empRowStatus"><span class="label">状态</span><span class="form-row__trail"><span class="value has-val" id="empFStatus">在职</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
+      <div class="form-row clickable" id="empRowStatus"><span class="label">状态</span><span class="form-row__trail"><span class="value has-val" id="empFStatus">在岗</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
     </div>
   </div>
   <div class="bottom-bar">
@@ -14491,6 +14507,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <button type="button" class="emp-salary-summary__cycle" id="empPayCycleEntry" aria-label="结算周期设置"><span id="empPayCycleHint">自然月</span><span class="emp-salary-summary__cycle-act" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 21 20" fill="none"><path d="M13.6338 0.882812C14.786 1.26977 15.8411 1.86545 16.7549 2.62305C16.6385 2.9904 16.5752 3.3808 16.5752 3.78516C16.5752 5.74918 18.0453 7.36153 19.9424 7.61914C20.1419 8.38846 20.25 9.19492 20.25 10.0273C20.25 10.4841 20.2151 10.9328 20.1533 11.3721C18.1554 11.5343 16.5752 13.1932 16.5752 15.2295C16.5752 15.9263 16.7624 16.5798 17.0869 17.1445C16.1709 17.9762 15.094 18.6361 13.9082 19.0742C13.2417 17.8842 11.9652 17.0801 10.5 17.0801C9.03459 17.0801 7.75726 17.884 7.09082 19.0742C5.90512 18.636 4.82807 17.9762 3.91211 17.1445C4.23683 16.5797 4.42477 15.9264 4.4248 15.2295C4.4248 13.1929 2.84413 11.5338 0.845703 11.3721C0.783923 10.9329 0.75 10.4841 0.75 10.0273C0.750014 9.195 0.857153 8.38838 1.05664 7.61914C2.95418 7.36195 4.4248 5.74951 4.4248 3.78516C4.42479 3.3807 4.3606 2.99048 4.24414 2.62305C5.1578 1.86541 6.21308 1.26986 7.36523 0.882812C8.07596 1.83601 9.21522 2.45508 10.5 2.45508C11.7846 2.45508 12.923 1.83574 13.6338 0.882812Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.5 13.5C12.433 13.5 14 11.933 14 10C14 8.067 12.433 6.5 10.5 6.5C8.567 6.5 7 8.067 7 10C7 11.933 8.567 13.5 10.5 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span></button>
       </div>
       <button type="button" class="emp-month-pill" id="empMonthLabel">2026年07月<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="emp-salary-summary__tone-head" id="empToneHead"><span class="emp-salary-summary__tone-head-title">生效中</span></div>
       <div class="emp-salary-summary__tones" id="empToneChips"></div>
       <button type="button" class="emp-salary-summary__tone-toggle" id="empToneToggle" aria-label="展开口径规则" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
     </div>
@@ -14777,7 +14794,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
         <label><span>提成 (元)</span><input type="text" id="empCommLineEditComm" inputmode="decimal" autocomplete="off" /></label>
         <label><span>调整原因</span><textarea class="emp-comm-edit-reason" id="empCommLineEditReason" placeholder="请填写原因，员工确认时可见" maxlength="80"></textarea></label>
       </div>
-      <p class="emp-comm-edit-hint">提交后为「待确认」草稿，员工同意后才会计入合计；员工可驳回，你也可撤回。</p>
+      <p class="emp-comm-edit-hint" id="empCommLineEditHint">提交后为「待确认」草稿，员工同意后才会计入合计；员工可驳回，你也可撤回。</p>
     </div>
     <div class="picker-foot picker-foot--row">
       <button type="button" class="btn-main secondary" id="empCommLineEditCancel">取消</button>
@@ -14802,7 +14819,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
     <div class="catalog-action-card">
       <div class="picker-head picker-head--stack">
         <div class="picker-head__title">待确认调整</div>
-        <div class="picker-head__sub" id="empCommLineActSub">员工同意后才会生效</div>
+        <div class="picker-head__sub" id="empCommLineActSub">确认前不生效，可修改草稿或撤回</div>
       </div>
       <div class="catalog-action-list">
         <button type="button" class="catalog-action-item" id="empCommLineActEdit">修改草稿</button>
@@ -19898,7 +19915,7 @@ const OPTIMIZATION_LOG = [
   '分类管理列表：右侧仅垃圾桶；支持长按拖拽排序（同步记一笔类型宫格顺序）',
   '分类管理行首六点拖动手：按住立即排序，行空白区点按仍编辑',
   '分类管理入口：齿轮改为 Stratis UI settings 图标，品牌色 + 18px 适配描边按钮',
-  '员工管理列表：行首六点拖动手可排序；编辑状态含在职/休假/离职注销确认',
+  '员工管理列表：行首六点拖动手可排序；编辑状态含在岗/休假/离职注销确认',
   '员工详情顶栏「编辑」：品牌红铅笔图标 + 文案，强化可点击提示',
   '修复员工详情「编辑」：提高 .action.emp-title-link 优先级，避免被 PageTitleBar 灰色覆盖',
   '员工编辑：权限说明 info 图标可见可点；提成方案可在表单内选择并同步 schemeId',
@@ -32879,7 +32896,7 @@ function billingNav(fn) {
   }
   function sessionStaffPool() {
     var list = (window.EmployeeStore && Array.isArray(window.EmployeeStore.staff))
-      ? window.EmployeeStore.staff.filter(function (s) { return s.status === '在职'; })
+      ? window.EmployeeStore.staff.filter(function (s) { return s.status === '在岗'; })
       : [];
     return list.length ? list : [{ id: 'st0', name: '顾清扬', short: '顾', perm: '店主', role: '店主' }];
   }
@@ -33013,7 +33030,7 @@ function billingNav(fn) {
   };
 
   var STATUSES = [
-    { value: '在职', label: '在职' },
+    { value: '在岗', label: '在岗' },
     { value: '休假', label: '休假' },
     { value: '离职', label: '离职（注销账号）' },
   ];
@@ -33147,20 +33164,20 @@ function billingNav(fn) {
     commLines: {},
     roles: DEFAULT_ROLES.slice(),
     staff: [
-      { id: 'st0', name: '顾清扬', short: '顾', gender: '男', ageBand: '30以上', yearsExp: 12, role: '店主', phone: '18600186000', incomplete: false, status: '在职', baseSalary: 5000, perm: '店主', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw11' },
-      { id: 'st1', name: '林屿森', short: '森', gender: '男', ageBand: '24-30岁', yearsExp: 5, role: '美容师', phone: '13800138001', incomplete: false, status: '在职', baseSalary: 4000, perm: '高级店员', scheme: '标准方案、阶梯激励', schemeId: 'sch1', schemeIds: ['sch1', 'sch2'], avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '青峰寒剑', swordId: 'sw1' },
-      { id: 'st2', name: '何苏叶', short: '叶', gender: '女', ageBand: '30以上', yearsExp: 8, role: '店长', phone: '', incomplete: true, status: '在职', baseSalary: 0, perm: '店长', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-a.jpg', swordTitle: '九天玄雷灭世诛魔圣剑', swordId: null },
-      { id: 'st3', name: '阿Ken', short: 'Ken', gender: '男', ageBand: '24-30岁', yearsExp: 3, role: '美容师', phone: '13900139003', incomplete: false, status: '在职', baseSalary: 3500, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '踏雪无痕剑', swordId: 'sw3' },
-      { id: 'st4', name: 'Lisa', short: 'Lisa', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '美甲师', phone: '13700137004', incomplete: false, status: '在职', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-b.jpg', swordTitle: '', swordId: 'sw7' },
-      { id: 'st5', name: '张明', short: '张', gender: '男', ageBand: '24-30岁', yearsExp: 4, role: '美发师', phone: '13600136005', incomplete: false, status: '在职', baseSalary: 3400, perm: '合伙人', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-c.jpg', swordTitle: '凌霄天外飞剑', swordId: 'sw8' },
-      { id: 'st6', name: '李华', short: '李', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13500135006', incomplete: false, status: '在职', baseSalary: 3100, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-d.jpg', swordTitle: '碧落黄泉剑', swordId: 'sw9' },
-      { id: 'st7', name: '王芳', short: '王', gender: '女', ageBand: '24-30岁', yearsExp: 3, role: '美甲师', phone: '13400134007', incomplete: false, status: '在职', baseSalary: 3000, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-c.jpg', swordTitle: '霜华断水剑', swordId: 'sw10' },
-      { id: 'st8', name: '陈强', short: '陈', gender: '男', ageBand: '30以上', yearsExp: 6, role: '美发师', phone: '13300133008', incomplete: false, status: '在职', baseSalary: 3800, perm: '高级店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw16' },
+      { id: 'st0', name: '顾清扬', short: '顾', gender: '男', ageBand: '30以上', yearsExp: 12, role: '店主', phone: '18600186000', incomplete: false, status: '在岗', baseSalary: 5000, perm: '店主', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw11' },
+      { id: 'st1', name: '林屿森', short: '森', gender: '男', ageBand: '24-30岁', yearsExp: 5, role: '美容师', phone: '13800138001', incomplete: false, status: '在岗', baseSalary: 4000, perm: '高级店员', scheme: '标准方案、阶梯激励', schemeId: 'sch1', schemeIds: ['sch1', 'sch2'], avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '青峰寒剑', swordId: 'sw1' },
+      { id: 'st2', name: '何苏叶', short: '叶', gender: '女', ageBand: '30以上', yearsExp: 8, role: '店长', phone: '', incomplete: true, status: '在岗', baseSalary: 0, perm: '店长', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-a.jpg', swordTitle: '九天玄雷灭世诛魔圣剑', swordId: null },
+      { id: 'st3', name: '阿Ken', short: 'Ken', gender: '男', ageBand: '24-30岁', yearsExp: 3, role: '美容师', phone: '13900139003', incomplete: false, status: '在岗', baseSalary: 3500, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '踏雪无痕剑', swordId: 'sw3' },
+      { id: 'st4', name: 'Lisa', short: 'Lisa', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '美甲师', phone: '13700137004', incomplete: false, status: '在岗', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-b.jpg', swordTitle: '', swordId: 'sw7' },
+      { id: 'st5', name: '张明', short: '张', gender: '男', ageBand: '24-30岁', yearsExp: 4, role: '美发师', phone: '13600136005', incomplete: false, status: '在岗', baseSalary: 3400, perm: '合伙人', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-c.jpg', swordTitle: '凌霄天外飞剑', swordId: 'sw8' },
+      { id: 'st6', name: '李华', short: '李', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13500135006', incomplete: false, status: '在岗', baseSalary: 3100, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-d.jpg', swordTitle: '碧落黄泉剑', swordId: 'sw9' },
+      { id: 'st7', name: '王芳', short: '王', gender: '女', ageBand: '24-30岁', yearsExp: 3, role: '美甲师', phone: '13400134007', incomplete: false, status: '在岗', baseSalary: 3000, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-c.jpg', swordTitle: '霜华断水剑', swordId: 'sw10' },
+      { id: 'st8', name: '陈强', short: '陈', gender: '男', ageBand: '30以上', yearsExp: 6, role: '美发师', phone: '13300133008', incomplete: false, status: '在岗', baseSalary: 3800, perm: '高级店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-e.jpg', swordTitle: '流光逐影剑', swordId: 'sw16' },
       { id: 'st9', name: '赵敏', short: '赵', gender: '女', ageBand: '18-23岁', yearsExp: 1, role: '前台', phone: '13200132009', incomplete: false, status: '休假', baseSalary: 2800, perm: '店员', scheme: '暂未分配', schemeId: null, avatar: 'assets/emp-avatars/woman-d.jpg', swordTitle: '', swordId: 'sw12' },
-      { id: 'st10', name: '周杰', short: '周', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13100131010', incomplete: false, status: '在职', baseSalary: 3300, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '赤焰焚空剑', swordId: 'sw13' },
-      { id: 'st11', name: '吴婷', short: '吴', gender: '女', ageBand: '24-30岁', yearsExp: 4, role: '美睫师', phone: '13000130011', incomplete: false, status: '在职', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-e.jpg', swordTitle: '一剑开天门', swordId: 'sw14' },
-      { id: 'st12', name: '小陈', short: '陈', gender: '男', ageBand: '18-23岁', yearsExp: 0, role: '学徒', phone: '15800158012', incomplete: false, status: '在职', baseSalary: 2200, perm: '店员', scheme: '学徒方案', schemeId: 'sch3', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '', swordId: 'sw15' },
-      { id: 'st13', name: '阿宁', short: '宁', gender: '女', ageBand: '18-23岁', yearsExp: 0, role: '学徒', phone: '15700157013', incomplete: false, status: '在职', baseSalary: 2200, perm: '店员', scheme: '学徒方案', schemeId: 'sch3', avatar: 'assets/emp-avatars/woman-b.jpg', swordTitle: '', swordId: 'sw17' },
+      { id: 'st10', name: '周杰', short: '周', gender: '男', ageBand: '24-30岁', yearsExp: 2, role: '美发师', phone: '13100131010', incomplete: false, status: '在岗', baseSalary: 3300, perm: '店员', scheme: '阶梯激励', schemeId: 'sch2', avatar: 'assets/emp-avatars/man-a.jpg', swordTitle: '赤焰焚空剑', swordId: 'sw13' },
+      { id: 'st11', name: '吴婷', short: '吴', gender: '女', ageBand: '24-30岁', yearsExp: 4, role: '美睫师', phone: '13000130011', incomplete: false, status: '在岗', baseSalary: 3200, perm: '店员', scheme: '标准方案', schemeId: 'sch1', avatar: 'assets/emp-avatars/woman-e.jpg', swordTitle: '一剑开天门', swordId: 'sw14' },
+      { id: 'st12', name: '小陈', short: '陈', gender: '男', ageBand: '18-23岁', yearsExp: 0, role: '学徒', phone: '15800158012', incomplete: false, status: '在岗', baseSalary: 2200, perm: '店员', scheme: '学徒方案', schemeId: 'sch3', avatar: 'assets/emp-avatars/man-b.jpg', swordTitle: '', swordId: 'sw15' },
+      { id: 'st13', name: '阿宁', short: '宁', gender: '女', ageBand: '18-23岁', yearsExp: 0, role: '学徒', phone: '15700157013', incomplete: false, status: '在岗', baseSalary: 2200, perm: '店员', scheme: '学徒方案', schemeId: 'sch3', avatar: 'assets/emp-avatars/woman-b.jpg', swordTitle: '', swordId: 'sw17' },
     ],
     salary: {
       /* 合理门店量级：月劳动约 0.6–2.5 万；提成约业绩的 8–15%；合计=底薪+提成+奖惩 */
@@ -34383,8 +34400,8 @@ function billingNav(fn) {
       var sub = subParts.length
         ? subParts.join(' · ')
         : (s.incomplete ? '信息未完善' : '');
-      var st = s.status || '在职';
-      var statusTag = (st === '在职' || st === '休假' || st === '离职')
+      var st = s.status || '在岗';
+      var statusTag = (st === '在岗' || st === '休假' || st === '离职')
         ? '<span class="emp-row__status emp-row__status--' + empStatusChipMod(st) + '">' + esc(st) + '</span>'
         : '';
       return '<div class="emp-row" data-staff-id="' + s.id + '">' +
@@ -34563,7 +34580,7 @@ function billingNav(fn) {
     return 'active';
   }
   function empStatusChipHtml(status) {
-    var st = status || '在职';
+    var st = status || '在岗';
     var mod = empStatusChipMod(st);
     return '<button type="button" class="emp-status-chip emp-status-chip--' + mod +
       '" data-emp-status-chip aria-label="调整状态：' + esc(st) + '">' +
@@ -34578,9 +34595,8 @@ function billingNav(fn) {
     if (!s || !body) return;
     state.currentStaffId = id;
     var sw = s.swordId ? swordById(s.swordId) : null;
-    /* 店员/高级店员仅可查看自己的薪资信息，查看他人时隐藏薪资字段 */
-    var selfOnly = isStaffSelfViewer();
-    var hideSalary = selfOnly && id !== getSessionStaffId();
+    /* 薪资可见范围：店员/高级店员仅自己；店长不包含店主/合伙人；店主/合伙人全部可见 */
+    var hideSalary = !canViewSalaryOf(s);
     body.innerHTML =
       '<div class="emp-detail-head">' +
       empAvatarHtml(s) +
@@ -34601,7 +34617,7 @@ function billingNav(fn) {
       row('权限', s.perm) +
       (hideSalary
         ? '<div class="form-row is-readonly"><span class="label">薪资信息</span>' +
-          '<span class="form-row__trail"><span class="value has-val">仅店主/合伙人可见</span></span></div>'
+          '<span class="form-row__trail"><span class="value has-val">当前权限不可见</span></span></div>'
         : row('基本工资', s.baseSalary ? fmtMoney(s.baseSalary) + ' 元' : '0 元') +
           row('提成方案', s.scheme)) +
       '</div>';
@@ -34652,7 +34668,7 @@ function billingNav(fn) {
       $('empFPerm').textContent = '请选择员工权限';
       $('empFPerm').classList.remove('has-val');
     }
-    $('empFStatus').textContent = s ? s.status : '在职';
+    $('empFStatus').textContent = s ? s.status : '在岗';
     $('empFStatus').classList.add('has-val');
     $('empFBase').value = s && s.baseSalary ? s.baseSalary : '';
     if (s) syncStaffSchemeFields(s);
@@ -34834,9 +34850,7 @@ function billingNav(fn) {
       cycleHint.textContent = payCycleModeLabel(pc) + ' · ' + periodRangeText(mk);
     }
     renderToneChips();
-    var pool = staffOnly
-      ? storeActiveStaff().filter(function (s) { return s.id === getSessionStaffId(); })
-      : storeActiveStaff();
+    var pool = salaryVisibleStaff();
     var storeTotal = 0;
     list.innerHTML = pool.map(function (s) {
       var d = genSalaryIfMissing(mk, s.id);
@@ -34878,7 +34892,36 @@ function billingNav(fn) {
   }
 
   function storeActiveStaff() {
-    return window.EmployeeStore.staff.filter(function (s) { return s.status === '在职'; });
+    return window.EmployeeStore.staff.filter(function (s) { return s.status === '在岗'; });
+  }
+
+  /** 薪资查看范围：店员/高级店员仅自己；店长可见店长/高级店员/店员；店主/合伙人可见全部在岗员工 */
+  function canViewSalaryOf(s) {
+    if (!s) return false;
+    var name = getSessionPermName();
+    if (name === '店员' || name === '高级店员') {
+      return s.id === getSessionStaffId();
+    }
+    if (name === '店长') {
+      var p = s.perm || '店员';
+      return p === '店长' || p === '高级店员' || p === '店员';
+    }
+    return true;
+  }
+  function salaryVisibleStaff() {
+    var all = storeActiveStaff();
+    var name = getSessionPermName();
+    if (name === '店员' || name === '高级店员') {
+      var me = getSessionStaffId();
+      return all.filter(function (s) { return s.id === me; });
+    }
+    if (name === '店长') {
+      return all.filter(function (s) {
+        var p = s.perm || '店员';
+        return p === '店长' || p === '高级店员' || p === '店员';
+      });
+    }
+    return all;
   }
 
   /** 店员 / 高级店员仅可查看自己的薪资信息 */
@@ -35009,6 +35052,8 @@ function billingNav(fn) {
           at: todayYmd(),
           prevAch: ln.ach,
           prevComm: ln.comm,
+          initiatorId: 'st0',
+          confirmRole: 'staff',
         };
         ln.editedBy = { by: '店主', byName: '顾清扬' };
       }
@@ -35368,6 +35413,23 @@ function billingNav(fn) {
     if (achIn) achIn.value = ln.pending ? String(ln.pending.ach) : String(ln.ach);
     if (commIn) commIn.value = ln.pending ? String(ln.pending.comm) : String(ln.comm);
     if (reasonIn) reasonIn.value = ln.pending && ln.pending.reason ? ln.pending.reason : '';
+    var selfEdit = sid === getSessionStaffId();
+    var me = getSessionPermName();
+    var directApply = selfEdit && (me === '店主' || me === '合伙人');
+    var hint = $('empCommLineEditHint');
+    if (hint) {
+      if (directApply) {
+        hint.textContent = '店主/合伙人调整自己的业绩提成，保存后直接生效。';
+      } else if (selfEdit && me === '店长') {
+        hint.textContent = '提交后为「待确认」草稿，需店主或合伙人确认后生效；确认前可撤回。';
+      } else if (selfEdit) {
+        hint.textContent = '提交后为「待确认」草稿，需店主/合伙人/店长确认后生效；确认前可撤回。';
+      } else {
+        hint.textContent = '提交后为「待确认」草稿，员工同意后才会计入合计；员工可驳回，你也可撤回。';
+      }
+    }
+    var okBtn = $('empCommLineEditOk');
+    if (okBtn) okBtn.textContent = directApply ? '保存生效' : '提交待确认';
     openMask('empCommLineEditMask');
   }
 
@@ -35400,22 +35462,52 @@ function billingNav(fn) {
       toast('金额未变化', true);
       return;
     }
+    var selfEdit = sid === getSessionStaffId();
+    var me = getSessionPermName();
+    var sessionStaff = getSessionStaff() || {};
+    /* 店主/合伙人改自己的业绩 → 直接生效 */
+    if (selfEdit && (me === '店主' || me === '合伙人')) {
+      ln.ach = roundMoney2(ach);
+      ln.comm = roundMoney2(comm);
+      ln.status = 'effective';
+      ln.pending = null;
+      ln.editedBy = { by: me, byName: sessionStaff.name || '' };
+      ln.rejectReason = null;
+      closeMask('empCommLineEditMask');
+      state.commLineEditId = null;
+      toast('已修改，直接生效');
+      renderSalaryDetail(sid);
+      return;
+    }
+    /* 店长改自己的业绩 → 待店主/合伙人确认；员工改自己的 → 待店主/合伙人/店长确认 */
+    var confirmRole = 'staff';
+    if (selfEdit) {
+      confirmRole = me === '店长' ? 'ownerNoManager' : 'ownerAll';
+    }
     ln.status = 'pending';
     ln.pending = {
       ach: ach,
       comm: comm,
       reason: reason,
-      by: getSessionPermName(),
-      byName: (getSessionStaff() || {}).name || '',
+      by: me,
+      byName: sessionStaff.name || '',
       at: todayYmd(),
       prevAch: ln.ach,
       prevComm: ln.comm,
+      initiatorId: getSessionStaffId(),
+      confirmRole: confirmRole,
     };
     ln.editedBy = { by: ln.pending.by, byName: ln.pending.byName };
     ln.rejectReason = null;
     closeMask('empCommLineEditMask');
     state.commLineEditId = null;
-    toast('已提交，待员工确认后生效');
+    if (confirmRole === 'staff') {
+      toast('已提交，待员工确认后生效');
+    } else if (confirmRole === 'ownerNoManager') {
+      toast('已提交，待店主/合伙人确认后生效');
+    } else {
+      toast('已提交，待店主/合伙人/店长确认后生效');
+    }
     renderSalaryDetail(sid);
   }
 
@@ -35436,10 +35528,22 @@ function billingNav(fn) {
     var ln = sid ? findCommLine(sid, lineId) : null;
     if (!ln || !ln.pending) return;
     state.commLineActId = lineId;
+    var canConfirm = canUserConfirmPending(ln);
+    var isStaffFlow = ln.pending.confirmRole === 'staff';
     var title = $('empCommLineConsentTitle');
-    if (title) title.textContent = state.commDetailViewer === 'staff' ? '确认店主调整' : '待确认详情';
+    if (title) {
+      if (canConfirm) {
+        title.textContent = isStaffFlow ? '确认上级调整' : (ln.pending.confirmRole === 'ownerNoManager' ? '确认店长调整' : '确认员工调整');
+      } else {
+        title.textContent = '待确认详情';
+      }
+    }
     var body = $('empCommLineConsentBody');
     if (body) {
+      var editor = (ln.pending.byName || ln.pending.by)
+        ? '<div class="emp-comm-line__editor">修改人：' + esc(ln.pending.byName || '') +
+          (ln.pending.byName && ln.pending.by ? ' · ' : '') + esc(ln.pending.by || '') + '</div>'
+        : '';
       body.innerHTML =
         '<div class="emp-comm-edit-meta"><strong>' + esc(ln.name) + '</strong> · ' + esc(ln.orderTime) +
         '<br>售价 ' + fmtMoney(ln.price) + ' · ' + esc(ln.channel) + '</div>' +
@@ -35450,12 +35554,13 @@ function billingNav(fn) {
         '<div class="emp-comm-consent-diff__box"><div class="emp-comm-consent-diff__lbl">提成</div>' +
         '<div class="emp-comm-consent-diff__from">' + fmtMoney(ln.pending.prevComm != null ? ln.pending.prevComm : ln.comm) + '</div>' +
         '<div class="emp-comm-consent-diff__to">' + fmtMoney(ln.pending.comm) + '</div></div></div>' +
+        editor +
         '<div class="emp-comm-line__reason">原因：' + esc(ln.pending.reason || '—') + '</div>';
     }
     var foot = $('empCommLineConsentFoot');
     var rejectBtn = $('empCommLineConsentReject');
     var okBtn = $('empCommLineConsentOk');
-    if (state.commDetailViewer === 'staff') {
+    if (canConfirm) {
       if (foot) foot.classList.remove('hidden');
       if (rejectBtn) rejectBtn.classList.remove('hidden');
       if (okBtn) { okBtn.classList.remove('hidden'); okBtn.textContent = '同意生效'; }
@@ -35494,26 +35599,48 @@ function billingNav(fn) {
     renderSalaryDetail(sid);
   }
 
+  function canUserConfirmPending(ln) {
+    if (!ln || !ln.pending) return false;
+    var role = ln.pending.confirmRole;
+    if (role === 'staff') {
+      return state.commDetailViewer === 'staff';
+    }
+    var me = getSessionPermName();
+    if (role === 'ownerNoManager') return me === '店主' || me === '合伙人';
+    return me === '店主' || me === '合伙人' || me === '店长';
+  }
+
+  function isPendingInitiator(ln) {
+    if (!ln || !ln.pending) return false;
+    return ln.pending.initiatorId != null && ln.pending.initiatorId === getSessionStaffId();
+  }
+
   function handleCommLineTap(lineId) {
     var sid = state.currentStaffId;
     var ln = sid ? findCommLine(sid, lineId) : null;
     if (!ln) return;
     var isStaff = state.commDetailViewer === 'staff';
     if (ln.status === 'pending') {
-      if (isStaff) {
+      if (canUserConfirmPending(ln)) {
         openCommLineConsentSheet(lineId);
-      } else {
+      } else if (isPendingInitiator(ln)) {
         state.commLineActId = lineId;
         var sub = $('empCommLineActSub');
         if (sub && ln.pending) {
-          sub.textContent = '拟改业绩 ' + fmtMoney(ln.pending.ach) + ' / 提成 ' + fmtMoney(ln.pending.comm) + ' · 待员工确认';
+          sub.textContent = '拟改业绩 ' + fmtMoney(ln.pending.ach) + ' / 提成 ' + fmtMoney(ln.pending.comm) + ' · 待确认';
         }
         openMask('empCommLineActMask');
+      } else {
+        openCommLineConsentSheet(lineId);
       }
       return;
     }
-    if (isStaff) {
-      toast(ln.status === 'rejected' ? '该调整已被驳回' : '员工端仅可确认待处理调整');
+    if (ln.status === 'rejected') {
+      if (isStaff) {
+        toast('该调整已被驳回，仍按原金额计入');
+      } else {
+        openCommLineEditSheet(lineId);
+      }
       return;
     }
     openCommLineEditSheet(lineId);
@@ -35568,15 +35695,16 @@ function billingNav(fn) {
     state.currentStaffId = staffId;
     ensureCommDetailScopeBound();
     if (!state.commDetailFilter) state.commDetailFilter = 'all';
-    /* auto_lock：店员/高级店员锁定员工视角（仅自己、可确认待确认调整），其他角色为店主视角 */
+    /* auto_lock：店员/高级店员锁定员工视角（仅自己、可确认待确认调整）；店长查看权限内员工用店主视角；越权时回退到权限内第一个 */
     var selfOnly = isStaffSelfViewer();
-    state.commDetailViewer = selfOnly ? 'staff' : 'owner';
-    if (selfOnly && staffId !== getSessionStaffId()) {
-      staffId = getSessionStaffId();
+    if (!canViewSalaryOf(s)) {
+      var first = salaryVisibleStaff()[0];
+      staffId = selfOnly ? getSessionStaffId() : (first ? first.id : getSessionStaffId());
       s = staffById(staffId);
       if (!s || !body) return;
       state.currentStaffId = staffId;
     }
+    state.commDetailViewer = selfOnly ? 'staff' : 'owner';
     $('empSalaryDetailTitle').textContent = selfOnly ? '我的业绩提成明细' : '员工业绩提成明细';
     syncCommViewerToggleBtn();
     var data = demoCommDetail(staffId);
@@ -35865,6 +35993,12 @@ function billingNav(fn) {
     var s = staffById(staffId);
     var body = $('empRewardDetailBody');
     if (!s || !body) return;
+    if (!canViewSalaryOf(s)) {
+      var first = salaryVisibleStaff()[0];
+      staffId = first ? first.id : getSessionStaffId();
+      s = staffById(staffId);
+      if (!s || !body) return;
+    }
     state.rewardDetailStaffId = staffId;
     var mk = state.salaryMonth;
     var p = mk.split('-');
@@ -38503,7 +38637,7 @@ function billingNav(fn) {
         '<span class="emp-assign-card__meta"><span class="emp-assign-card__name">' + esc(s.name) + '</span>' +
         '<span class="emp-assign-card__role">' + esc(s.role || '未设置职位') + '</span></span>' +
         '<span class="emp-assign-card__check" aria-hidden="true">' + (on ? checkSvg12() : '') + '</span></button>';
-    }).join('') || '<div class="empty-cart" style="padding:32px 16px">暂无在职员工</div>';
+    }).join('') || '<div class="empty-cart" style="padding:32px 16px">暂无在岗员工</div>';
   }
 
   function applyAssignSelection() {
@@ -38544,7 +38678,7 @@ function billingNav(fn) {
   function renderStatusPickerList(current) {
     var root = $('empStatusList');
     if (!root) return;
-    var cur = current || '在职';
+    var cur = current || '在岗';
     var opts = state.formMode === 'create'
       ? STATUSES.filter(function (o) { return o.value !== '离职'; })
       : STATUSES;
@@ -38571,7 +38705,7 @@ function billingNav(fn) {
   function statusToast(value) {
     if (value === '休假') return '已设为休假';
     if (value === '离职') return '已标记注销';
-    return '已恢复在职';
+    return '已恢复在岗';
   }
 
   function applyStaffStatus(value) {
@@ -38594,9 +38728,9 @@ function billingNav(fn) {
     if (sub) sub.textContent = s.name || '';
     var list = $('empDetailStatusList');
     if (!list) return;
-    var cur = s.status || '在职';
+    var cur = s.status || '在岗';
     var opts = [
-      { value: '在职', label: '设为在职' },
+      { value: '在岗', label: '设为在岗' },
       { value: '休假', label: '设为休假' },
     ];
     list.innerHTML = opts.map(function (o) {
@@ -38613,7 +38747,7 @@ function billingNav(fn) {
     var s = staffById(state.currentStaffId);
     if (!s) return;
     if (value === s.status) return;
-    if (value !== '在职' && value !== '休假') return;
+    if (value !== '在岗' && value !== '休假') return;
     applyStaffStatus(value);
   }
 
@@ -38802,7 +38936,7 @@ function billingNav(fn) {
 
   function getBillingStaffPool() {
     return window.EmployeeStore.staff
-      .filter(function (s) { return s.status === '在职'; })
+      .filter(function (s) { return s.status === '在岗'; })
       .map(function (s) {
         return { id: s.id, name: s.name, short: s.short, avatar: s.avatar || '', role: s.role || '' };
       });
@@ -38829,7 +38963,7 @@ function billingNav(fn) {
       'staff-salary': openSalary,
       'staff-pay-cycle': openPayCycleSettings,
       'staff-salary-detail': function () {
-        var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        var id = state.currentStaffId || (salaryVisibleStaff()[0] && salaryVisibleStaff()[0].id);
         if (id) {
           state.commDetailViewer = 'owner';
           state.commDetailFilter = 'all';
@@ -38840,7 +38974,7 @@ function billingNav(fn) {
         } else openSalary();
       },
       'staff-salary-detail-pending': function () {
-        var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        var id = state.currentStaffId || (salaryVisibleStaff()[0] && salaryVisibleStaff()[0].id);
         if (id) {
           state.commDetailViewer = 'owner';
           state.commDetailFilter = 'pending';
@@ -38851,7 +38985,7 @@ function billingNav(fn) {
         } else openSalary();
       },
       'staff-salary-detail-staff': function () {
-        var id = state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        var id = state.currentStaffId || (salaryVisibleStaff()[0] && salaryVisibleStaff()[0].id);
         if (id) {
           state.commDetailViewer = 'staff';
           state.commDetailFilter = 'pending';
@@ -38862,7 +38996,7 @@ function billingNav(fn) {
         } else openSalary();
       },
       'staff-reward-detail': function () {
-        var id = state.rewardDetailStaffId || state.currentStaffId || (storeActiveStaff()[0] && storeActiveStaff()[0].id);
+        var id = state.rewardDetailStaffId || state.currentStaffId || (salaryVisibleStaff()[0] && salaryVisibleStaff()[0].id);
         if (id) { renderRewardDetail(id); showScreen('screen-emp-reward-detail'); nav('staff-reward-detail'); }
         else openSalary();
       },
@@ -39497,14 +39631,18 @@ function billingNav(fn) {
     });
     $('empCommLineEditOk')?.addEventListener('click', function () { submitCommLineEdit(); });
     $('empCommLineConsentReject')?.addEventListener('click', function () {
-      if (state.commDetailViewer !== 'staff') {
+      var ln = state.commLineActId && state.currentStaffId
+        ? findCommLine(state.currentStaffId, state.commLineActId) : null;
+      if (!ln || !canUserConfirmPending(ln)) {
         closeMask('empCommLineConsentMask');
         return;
       }
       if (state.commLineActId) rejectCommLinePending(state.commLineActId);
     });
     $('empCommLineConsentOk')?.addEventListener('click', function () {
-      if (state.commDetailViewer !== 'staff') {
+      var ln = state.commLineActId && state.currentStaffId
+        ? findCommLine(state.currentStaffId, state.commLineActId) : null;
+      if (!ln || !canUserConfirmPending(ln)) {
         closeMask('empCommLineConsentMask');
         state.commLineActId = null;
         return;
@@ -40488,7 +40626,7 @@ function billingNav(fn) {
       return window.EmployeeDemo.getBillingStaffPool() || [];
     }
     return (window.EmployeeStore && window.EmployeeStore.staff || []).filter(function (s) {
-      return s.status === '在职';
+      return s.status === '在岗';
     });
   }
 
