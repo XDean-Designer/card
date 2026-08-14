@@ -422,8 +422,8 @@ body.present-mode .present-exit{display:block}
           { t: '进入员工管理', d: '从工作台进入员工管理，查看现有员工。', shots: ['79-staff-list'] },
           { t: '准备建档', d: '点击「创建员工」，收集姓名、职位、入职信息。' }
         ] },
-        { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'], sub: [
-          { t: '创建员工档案', d: '录入员工姓名、手机号、归属店铺等基础信息。', shots: ['22-staff-create', '63-staff-create'] },
+        { t: '建档与职位', d: '姓名、职位、在职状态等基础档案。', shots: ['63-staff-create', '64-staff-position', '67-staff-status'], sub: [
+          { t: '创建员工档案', d: '录入员工姓名、手机号、归属店铺等基础信息。', shots: ['63-staff-create'] },
           { t: '选择职位', d: '从店长、美容师、技师等头衔中选择职位。', shots: ['64-staff-position'] },
           { t: '设置状态', d: '设置在职 / 休假状态，同步薪资口径。', shots: ['67-staff-status'] }
         ] },
@@ -557,7 +557,7 @@ body.present-mode .present-exit{display:block}
       { icon: 'staff', mod: '客户 / 员工', act: '补齐人与权限基础数据', desc: '前线能选客、能开单、权责清晰。', shots: ['32-onboard-staff', '63-staff-create', '64-staff-position', '85-staff-perm-detail', '66-staff-commission', '67-staff-status'] }
     ], upgrades: ['AI 助手（研发中）：后续支持将店内已有数据快速准确导入，显著降低上线与迁店成本。', '模块录入路径今天就能跑通；AI 导入是把「能就位」升级为「更快更准就位」。'] },
     { id: 'B1', scene: 'B', title: '新招聘员工的管理配置闭环', story: '店里新招了一位美疗师。店主要建档、设权限、定业绩提成，并处理好排班与奖惩相关规则，再让他上线开单。', proof: '店主可完成员工建档与权限、提成/业绩相关配置；排班与奖惩按现网员工及流水业绩能力纳入管理。', steps: [
-      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '从员工管理进入创建，填写姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['79-staff-list', '22-staff-create', '63-staff-create', '64-staff-position', '67-staff-status'] },
+      { icon: 'staff', mod: '员工管理', act: '创建员工档案', desc: '从员工管理进入创建，填写姓名、职位、在职状态等。注册账号时可选「剑号 / 宝剑」且可跳过：跳过则此处两项为「请选择」；注册时已选则此处自动带出已填内容。', shots: ['79-staff-list', '63-staff-create', '64-staff-position', '67-staff-status'] },
       { icon: 'staff', mod: '权限', act: '选择店员等权限身份', desc: '控制能开单、能否改价目等。', shots: ['23-staff-perm', '85-staff-perm-detail'] },
       { icon: 'chart', mod: '提成 / 业绩', act: '配置提成方案与规则', desc: '与流水业绩交叉可核对。', shots: ['24-staff-commission', '25-staff-performance', '66-staff-commission'] },
       { icon: 'appt', mod: '排班口径', act: '安排出勤与班次（并入口径）', desc: '支撑预约与到店排人。', shot: '27-staff-appt', shotLabel: '预约 · 选手艺人' },
@@ -846,7 +846,7 @@ body.present-mode .present-exit{display:block}
       '08b-price-products': '价目表 · 产品', '09-price-edit': '产品增改', '10b-inventory-manage': '库存管理',
       '11-card-manage': '卡管理', '12-coupon': '优惠券', '17-report-hub': '经营分析',
       '18-report-detail': '门店经营报表', '20-expense-book': '支出 · 记一笔', '21-expense-stats': '支出统计',
-      '22-staff-create': '创建员工', '23-staff-perm': '选择权限', '24-staff-commission': '提成设置',
+      '23-staff-perm': '选择权限', '24-staff-commission': '提成设置',
       '25-staff-performance': '业绩设置', '26-staff-reward': '奖惩设置', '27-staff-appt': '预约 · 选手艺人',
       '28-onboard-home': '首页', '29-onboard-price': '价目表 · 项目', '30-onboard-card': '卡管理',
       '31-onboard-coupon': '优惠券', '32-onboard-staff': '员工管理', '33-onboard-workbench': '工作台',
