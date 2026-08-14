@@ -198,6 +198,10 @@ body.present-mode .present-exit{display:block}
 .rf-card b{display:flex;align-items:center;gap:7px;font-size:14px}
 .rf-card b svg{width:17px;height:17px;color:var(--gold);flex:none}
 .rf-card p{font-size:12.5px;line-height:1.65;color:var(--muted);margin:8px 0 0}
+.rf-card--wide{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:18px 20px;border-color:#f0d9a0;background:linear-gradient(120deg,#fffdf6,#fdf4de)}
+.rf-card--wide b{font-size:15.5px;white-space:nowrap}
+.rf-card--wide b svg{width:20px;height:20px;color:var(--red)}
+.rf-card--wide p{margin:0;font-size:13.5px;line-height:1.65;color:#6b5a2e}
 .rf-table{width:100%;border-collapse:collapse;font-size:13px;overflow:hidden;border-radius:12px;border:1px solid var(--line)}
 .rf-table th,.rf-table td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
 .rf-table thead th{background:#fbf4e0;color:#8a6413;font-weight:800;font-size:12.5px}
@@ -410,7 +414,7 @@ body.present-mode .present-exit{display:block}
       cases: ['F1']
     },
     {
-      id: 'B', no: '场景 B · 练兵', name: '员工人效管理', who: '店主',
+      id: 'B', no: '场景 B · 募兵', name: '员工人效管理', who: '店主',
       icon: 'staff', color: '#7258d7', gradient: 'linear-gradient(150deg,#8a6fe8,#6a4fc4)',
       desc: '新员工从建档、权限到提成业绩、排班奖惩的配置闭环，让人效管理有据可依。',
       flow: [
@@ -483,7 +487,7 @@ body.present-mode .present-exit{display:block}
       cases: ['C1']
     },
     {
-      id: 'D', no: '场景 D · 军机', name: '经营看数', who: '店主',
+      id: 'D', no: '场景 D · 军机', name: '经营数据', who: '店主',
       icon: 'chart', color: '#0fa3a3', gradient: 'linear-gradient(150deg,#1bbdbd,#0d8f8f)',
       desc: '营收、客流、卡项与员工下钻一个入口覆盖，配合支出结余看透门店经营。',
       flow: [
@@ -660,6 +664,7 @@ body.present-mode .present-exit{display:block}
     ],
     highlights: [
       { icon: 'flow', title: '开单更快', desc: '选客→点单→结算→分账一条主链；会员卡权益自动带出、展卡/加卡/充续卡与点单同屏，挂单取单、扫码收款双路径，高峰不再手忙脚乱。' },
+      { icon: 'bill', title: '扫码点单，边点边沉淀会员', desc: '顾客在店内扫码即可快速点单，无需排队等店员手录；新客点单的同时自动生成会员信息，散客轻松沉淀为门店客户，开单与会员增长一步到位。', wide: true },
       { icon: 'card', title: '卡更灵活', desc: '固定五类卡升级为权益组合建模：面值 / 项目 / 产品 / 折扣自由组合，既配得出旧体系等价卡，也配得出旧体系做不出的组合卡，营销空间更大。' },
       { icon: 'staff', title: '管理更透', desc: '业绩提成明细逐条展示，店主改数须填原因、员工确认后才计入合计；库存独立成中心并可与价目同步，人效与货效都看得清。' }
     ],
@@ -682,8 +687,9 @@ body.present-mode .present-exit{display:block}
     var ai = REFACTOR.ai.map(function (a) {
       return '<div class="rf-card rf-card--ai"><b>' + ICONS[a.icon] + esc(a.title) + '</b><p>' + esc(a.desc) + '</p></div>';
     }).join('');
-    var hs = REFACTOR.highlights.map(function (h) {
-      return '<div class="rf-card"><b>' + ICONS[h.icon] + esc(h.title) + '</b><p>' + esc(h.desc) + '</p></div>';
+    var hs = REFACTOR.highlights.map(function (h, i) {
+      var wide = h.wide ? ' rf-card--wide' : '';
+      return '<div class="rf-card' + wide + '"><b>' + ICONS[h.icon] + esc(h.title) + '</b><p>' + esc(h.desc) + '</p></div>';
     }).join('');
     var rows = REFACTOR.compare.map(function (r) {
       return '<tr><td>' + esc(r.dim) + '</td><td class="old">' + esc(r.old) + '</td><td class="new">' + esc(r.neu) + '</td></tr>';
