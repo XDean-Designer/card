@@ -13917,7 +13917,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .cp-ticket:active { transform: scale(.985); }
-.cp-ticket--exchange .cp-ticket__left { background: linear-gradient(165deg, #FDEAD8, #F9CDA2); color: var(--cp-orange-deep); }
+.cp-ticket--exchange .cp-ticket__left { background: linear-gradient(165deg, #FFDCDB, #FFA3A1); color: #E2574F; }
 .cp-ticket--cash .cp-ticket__left { background: linear-gradient(165deg, #FBF2CF, #F4E39C); color: var(--cp-yellow-deep); }
 .cp-ticket--disabled .cp-ticket__left { background: linear-gradient(165deg, #F4F3F2, #ECEAE8); color: #A89F9A; }
 .cp-ticket__body { display: flex; align-items: stretch; min-height: 96px; }
@@ -13936,10 +13936,9 @@ button.detail-compose__row:active { background: #FAFAFA; }
 }
 .cp-ticket__yen { font-size: 16px; font-family: var(--font-data); margin-top: 8px; font-weight: 600; }
 .cp-ticket__num { font-size: 38px; font-family: var(--font-data); font-weight: 700; letter-spacing: -.5px; }
-.cp-ticket__off { font-size: 15px; font-family: var(--font-data); font-weight: 700; }
-.cp-ticket__amount--exchange { align-items: center; gap: 4px; flex-direction: column; }
-.cp-ticket__amount--exchange .cp-ticket__num { font-size: 30px; letter-spacing: 2px; }
-.cp-ticket__amount--exchange .cp-ticket__off { font-size: 11px; opacity: .85; }
+.cp-ticket__amount--exchange { align-items: center; justify-content: center; }
+.cp-ticket__gift { display: flex; align-items: center; justify-content: center; }
+.cp-ticket__gift svg { width: 42px; height: 42px; display: block; filter: drop-shadow(0 2px 3px rgba(226,87,79,.22)); }
 .cp-ticket__type {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: 11px; font-weight: 600; letter-spacing: .2px;
@@ -13949,11 +13948,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
 }
 .cp-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .cp-icon svg { display: block; width: 13px; height: 13px; }
-/* 撕票分隔 · 浅灰虚线 */
-.cp-ticket__perf {
-  position: relative; flex: 0 0 0; width: 0; align-self: stretch;
-  border-left: 2px dashed #EADDE3;
-}
 .cp-ticket__right {
   flex: 1; min-width: 0; display: flex; flex-direction: column;
   justify-content: center; gap: 8px; padding: 14px 14px 14px 16px;
@@ -13991,7 +13985,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket--disabled .cp-ticket__meta { color: #A6A29E; }
 .cp-ticket--disabled .cp-ticket__meta-dot { background: #D8D4D0; }
 .cp-ticket--disabled .cp-ticket__type { background: rgba(255,255,255,.85); border-color: rgba(0,0,0,.08); color: #9B9B9B; }
-.cp-ticket--disabled .cp-ticket__perf { border-left-color: #E4E1DE; }
 .cp-ticket--disabled .cp-ticket__foot { color: #A6A29E; background: #FCFBFA; border-top-color: #EFEDEB; }
 .cp-ticket--disabled .cp-ticket__foot b { color: #6B6B6B; }
 /* 状态切换 sheet */
@@ -14023,9 +14016,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-status-opt__radio:checked { border-color: var(--brand); }
 .cp-status-opt__radio:checked::before { transform: scale(1); }
 /* 发放摘要 · 迷你券块 */
-.cp-type-chip--exchange { background: linear-gradient(165deg, #FDEAD8, #F9CDA2); color: var(--cp-orange-deep); }
-.cp-type-chip--cash { background: linear-gradient(165deg, #FBF2CF, #F4E39C); color: var(--cp-yellow-deep); }
-.cp-issue-summary .cp-ticket__left { border-radius: 10px; }
 .cp-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; color: var(--text-sec); gap: 10px; }
 .cp-empty__icon { width: 72px; height: 72px; border-radius: 20px; background: #F1F1F1; display: flex; align-items: center; justify-content: center; color: #C4C4C4; }
 .cp-empty__title { font-size: 14px; color: #6B6B6B; }
@@ -14088,23 +14078,59 @@ button.detail-compose__row:active { background: #FAFAFA; }
   display: inline-flex; align-items: center;
 }
 .cp-chip.on { border-color: var(--cp-orange); color: var(--cp-orange-deep); background: #FFF7FA; }
-/* 发放 */
-.cp-issue-summary { margin: 12px 16px 16px; background: #fff; border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: center; }
-.cp-issue-summary .cp-ticket__left { flex: 0 0 76px; width: 76px; border-radius: 10px; align-self: stretch; min-height: 68px; }
-.cp-issue-summary .cp-ticket__num { font-size: 24px; }
-.cp-issue-summary .cp-ticket__yen { font-size: 12px; margin-top: 4px; }
-.cp-issue-summary .cp-ticket__type { font-size: 10px; padding: 1px 8px; }
-.cp-issue-summary__info { flex: 1; min-width: 0; }
-.cp-issue-summary__name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-.cp-issue-summary__meta { margin-top: 4px; font-size: 12px; color: var(--text-sec); }
-.cp-member-row { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #fff; border-radius: 12px; margin: 0 16px 10px; cursor: pointer; }
-.cp-member-row__avatar { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #F0E6DD; color: #8A6F5F; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; }
-.cp-member-row__info { flex: 1; min-width: 0; }
-.cp-member-row__name { font-size: 14px; font-weight: 500; color: #1a1a1a; }
-.cp-member-row__sub { font-size: 12px; color: var(--text-sec); margin-top: 2px; }
-.cp-member-row__check { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; color: transparent; }
-.cp-member-row.on .cp-member-row__check { border-color: var(--brand); background: var(--brand); color: #fff; }
-.cp-member-row__check svg { width: 12px; height: 12px; }
+/* 分享 · 微信 */
+.cp-ticket__share {
+  flex-shrink: 0; height: 26px; padding: 0 10px; border-radius: 999px;
+  border: 1px solid rgba(7,193,96,.45); background: rgba(7,193,96,.08); color: #06AD56;
+  font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1;
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: filter .15s ease, transform .1s ease;
+}
+.cp-ticket__share:active { transform: scale(.94); }
+.cp-ticket__share svg { width: 14px; height: 14px; display: block; }
+/* 微信分享页 */
+.cp-share-hero { padding: 16px 16px 4px; background: var(--bg-page); }
+.cp-share-hero .cp-ticket { cursor: default; }
+.cp-share-hero .cp-ticket:active { transform: none; }
+.cp-share-hero .cp-ticket__left { flex-basis: 132px; width: 132px; }
+.cp-share-hero .cp-ticket__num { font-size: 40px; }
+.cp-share-hero .cp-ticket__body { min-height: 116px; }
+.cp-share-hero .cp-ticket__foot { display: none; }
+.cp-share-settings { margin: 12px 16px 16px; background: #fff; border-radius: 12px; overflow: hidden; }
+.cp-share-settings .form-row { margin: 0; padding: 15px 16px; border-bottom: 1px solid var(--card-divider); }
+.cp-share-settings .form-row:last-child { border-bottom: none; }
+.cp-share-opt {
+  flex: 1; min-width: 0; height: 48px; border-radius: 12px;
+  border: 1px solid var(--border); background: #fff; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  color: #1a1a1a; font-size: 15px; font-weight: 500;
+  box-shadow: 0 6px 16px rgba(0,0,0,.05);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.cp-share-opt:active { transform: scale(.97); }
+.cp-share-opt__icon { width: 26px; height: 26px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.cp-share-opt__icon svg { width: 26px; height: 26px; display: block; }
+.cp-share-opt__icon--moments {
+  border-radius: 50%;
+  background: conic-gradient(from 20deg, #F9B233, #EE6E2F, #E23C4A, #C44DDB, #4E6CF0, #12B76A, #F9B233);
+}
+.cp-share-opt__icon--moments::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #fff; }
+/* 领取页（好友视角） */
+.cp-claim-hero { padding: 20px 16px 4px; background: var(--bg-page); }
+.cp-claim-hero .cp-ticket { cursor: default; }
+.cp-claim-hero .cp-ticket:active { transform: none; }
+.cp-claim-hero .cp-ticket__left { flex-basis: 132px; width: 132px; }
+.cp-claim-hero .cp-ticket__num { font-size: 40px; }
+.cp-claim-hero .cp-ticket__body { min-height: 116px; }
+.cp-claim-hero .cp-ticket__foot { display: none; }
+.cp-claim-hint { margin: 12px 16px 0; font-size: 13px; color: var(--text-sec); text-align: center; }
+.cp-claim-status { margin: 12px 16px 16px; background: #fff; border-radius: 12px; padding: 18px 16px; text-align: center; }
+.cp-claim-status__remain { font-family: var(--font-data); font-size: 28px; font-weight: 600; color: #1a1a1a; line-height: 1.1; }
+.cp-claim-status__remain em { font-style: normal; font-size: 14px; font-weight: 500; color: var(--text-sec); margin-left: 4px; }
+.cp-claim-status__meta { margin-top: 8px; font-size: 12px; color: var(--text-sec); }
+.cp-claim-progress { margin-top: 14px; height: 6px; border-radius: 999px; background: #F1F1F1; overflow: hidden; }
+.cp-claim-progress__bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #07C160, #0BB862); transition: width .25s ease; }
+#cpDetailShare .cp-wechat-glyph { width: 16px; height: 16px; margin-right: 6px; }
 /* 核销记录 */
 .cp-usage-item { margin: 0 16px 10px; background: #fff; border-radius: 12px; padding: 14px 16px; }
 .cp-usage-item__head { display: flex; align-items: center; gap: 8px; }
@@ -17115,18 +17141,46 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="bottom-bar bottom-bar--detail" id="cpDetailFoot"><div class="bottom-bar__action" id="cpDetailActions"></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
           </div>
 
-          <!-- 发放优惠券 -->
-          <div id="screen-coupon-issue" class="screen hidden">
+          <!-- 微信分享优惠券 -->
+          <div id="screen-coupon-share" class="screen hidden">
             <div class="page-title-bar">
-              <button type="button" class="back" id="cpIssueBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-              <span class="title">发放优惠券</span>
+              <button type="button" class="back" id="cpShareBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">微信分享</span>
             </div>
             <div class="page-body" style="background:var(--bg-page)">
-              <div class="cp-issue-summary" id="cpIssueSummary"></div>
-              <div class="form-row" style="padding:4px 20px 8px"><span class="label" style="font-size:13px">选择发放会员</span><span class="value" id="cpIssueCount" style="font-size:13px">已选 0 人</span></div>
-              <div id="cpIssueMembers"></div>
+              <div class="cp-share-hero" id="cpShareHero"></div>
+              <div class="cp-share-settings">
+                <div class="form-row"><span class="label">分享数量</span><div class="form-row__trail"><input class="value input-amount" id="cpShareQty" inputmode="numeric" placeholder="10" maxlength="6" data-no-amount-keypad /><span class="suffix">张</span></div></div>
+                <div class="form-row" style="align-items:flex-start"><span class="label" style="line-height:1.6">链接有效期<span class="label-hint" style="display:block">链接在有效期内可被领取</span></span><div class="cp-chip-group" id="cpShareValidityChips" style="justify-content:flex-end"></div></div>
+              </div>
             </div>
-            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCpIssueConfirm">确认发放</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="cp-share-opt" id="cpShareMoments"><span class="cp-share-opt__icon cp-share-opt__icon--moments" aria-hidden="true"></span>分享到朋友圈</button><button type="button" class="cp-share-opt" id="cpShareWechat"><span class="cp-share-opt__icon cp-share-opt__icon--wechat" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.3 3.5C5.3 3.5 2 6.4 2 10c0 2 1.1 3.8 2.8 5l-.7 2.3 2.5-1.3c.9.3 1.8.5 2.7.5 4 0 7.3-2.9 7.3-6.5s-3.3-6.5-7.3-6.5z" fill="#07C160"/><circle cx="6.3" cy="9.8" r="1.15" fill="#fff"/><circle cx="10.9" cy="9.8" r="1.15" fill="#fff"/><path d="M15.7 8.2c3.5 0 6.3 2.5 6.3 5.6 0 1.7-.9 3.2-2.4 4.2l.6 1.9-2.1-1.1c-.8.2-1.5.3-2.4.3-3.5 0-6.3-2.5-6.3-5.6s2.8-5.3 6.3-5.3z" fill="#07C160"/><circle cx="13.9" cy="13.4" r="0.95" fill="#fff"/><circle cx="17.8" cy="13.4" r="0.95" fill="#fff"/></svg></span>分享到微信</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+          </div>
+
+          <!-- 领取优惠券（好友视角） -->
+          <div id="screen-coupon-claim" class="screen hidden">
+            <div class="page-title-bar">
+              <button type="button" class="back" id="cpClaimBack" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <span class="title">领取优惠券</span>
+            </div>
+            <div class="page-body" style="background:var(--bg-page)">
+              <div class="cp-claim-hero" id="cpClaimHero"></div>
+              <p class="cp-claim-hint">好友分享给你一张优惠券，点击下方按钮即可领取</p>
+              <div class="cp-claim-status" id="cpClaimStatus"></div>
+            </div>
+            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCpClaim">立即领取</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+          </div>
+
+          <!-- 分享成功 -->
+          <div class="dialog-mask" id="cpShareMask">
+            <div class="dialog">
+              <div class="dialog__title">分享成功</div>
+              <div class="dialog__body" id="cpShareMaskBody"></div>
+              <div class="dialog__actions">
+                <button type="button" class="btn-main secondary" id="cpShareMaskDone">完成</button>
+                <button type="button" class="btn-main" id="cpShareMaskPreview">查看领取页</button>
+              </div>
+            </div>
           </div>
 
           <!-- 核销记录 -->
@@ -24651,9 +24705,18 @@ const cpState = {
   createEditingId: null,
   createStep: 1,
   createDraft: null,
-  issueId: null,
-  issueSelected: {},
+  shareId: null,
+  shareQty: 10,
+  shareValidity: 'd7',
+  shareClaimed: 0,
 };
+
+const CP_SHARE_VALIDITIES = [
+  { id: 'h24', label: '24 小时' },
+  { id: 'd3', label: '3 天' },
+  { id: 'd7', label: '7 天' },
+  { id: 'd30', label: '30 天' },
+];
 
 function cpNum(n) { const v = Number(n); return (isFinite(v) ? v : 0).toLocaleString('en-US'); }
 function cpRate(cp) { return cp.issued > 0 ? Math.round(cp.used / cp.issued * 100) + '%' : '—'; }
@@ -24666,7 +24729,7 @@ function cpExchangeItemsLabel(cp) {
 }
 function cpLeftHtml(cp) {
   if (cp.type === 'exchange') {
-    return '<div class="cp-ticket__amount cp-ticket__amount--exchange"><span class="cp-ticket__num">抵</span><span class="cp-ticket__off">免费</span></div>';
+    return '<div class="cp-ticket__amount cp-ticket__gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>';
   }
   return '<div class="cp-ticket__amount"><span class="cp-ticket__yen">¥</span><span class="cp-ticket__num">' + cp.amount + '</span></div>';
 }
@@ -24677,16 +24740,26 @@ function cpTypeIconHtml(type) {
   };
   return '<span class="cp-icon">' + (icons[type] || '') + '</span>';
 }
+function cpWechatGlyphHtml(fill) {
+  const c = fill || '#07C160';
+  return '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<path d="M9.3 3.5C5.3 3.5 2 6.4 2 10c0 2 1.1 3.8 2.8 5l-.7 2.3 2.5-1.3c.9.3 1.8.5 2.7.5 4 0 7.3-2.9 7.3-6.5s-3.3-6.5-7.3-6.5z" fill="' + c + '"/>' +
+    '<circle cx="6.3" cy="9.8" r="1.15" fill="#fff"/><circle cx="10.9" cy="9.8" r="1.15" fill="#fff"/>' +
+    '<path d="M15.7 8.2c3.5 0 6.3 2.5 6.3 5.6 0 1.7-.9 3.2-2.4 4.2l.6 1.9-2.1-1.1c-.8.2-1.5.3-2.4.3-3.5 0-6.3-2.5-6.3-5.6s2.8-5.3 6.3-5.3z" fill="' + c + '"/>' +
+    '<circle cx="13.9" cy="13.4" r="0.95" fill="#fff"/><circle cx="17.8" cy="13.4" r="0.95" fill="#fff"/></svg>';
+}
 function cpTicketHtml(cp) {
   const t = COUPON_TYPES[cp.type];
   const st = COUPON_STATUS[cp.status];
   const itemMeta = cp.type === 'exchange'
     ? '<div class="cp-ticket__meta">可抵用 ' + escapeHtml(cpExchangeItemsLabel(cp)) + '</div>'
     : '<div class="cp-ticket__meta">' + escapeHtml(cp.validityLabel) + '</div>';
+  const shareBtn = cp.status === 'enabled'
+    ? '<button type="button" class="cp-ticket__share" data-cp-share-id="' + cp.id + '" aria-label="分享优惠券">' + cpWechatGlyphHtml('#07C160') + '分享</button>'
+    : '';
   return '<div class="cp-ticket cp-ticket--' + cp.type + ' cp-ticket--' + cp.status + '" data-cp-id="' + cp.id + '" role="button" tabindex="0">' +
     '<div class="cp-ticket__body">' +
       '<div class="cp-ticket__left">' + cpLeftHtml(cp) + '<div class="cp-ticket__type">' + cpTypeIconHtml(cp.type) + t.label + '</div></div>' +
-      '<div class="cp-ticket__perf" aria-hidden="true"></div>' +
       '<div class="cp-ticket__right">' +
         '<div class="cp-ticket__name">' + escapeHtml(cp.name) + '</div>' +
         '<div class="cp-ticket__meta">' + cpGateLabel(cp) + '<span class="cp-ticket__meta-dot"></span>' + escapeHtml(cp.scope) + '</div>' +
@@ -24698,6 +24771,7 @@ function cpTicketHtml(cp) {
       '<span class="cp-ticket__foot-item">已核销 <b>' + cpNum(cp.used) + '</b></span>' +
       '<span class="cp-ticket__foot-item">核销率 <b>' + cpRate(cp) + '</b></span>' +
       '<span class="cp-ticket__foot-spacer"></span>' +
+      shareBtn +
       '<button type="button" class="cp-ticket__status cp-ticket__status--' + cp.status + '" data-cp-status-toggle="' + cp.id + '" aria-label="切换' + st.label + '状态">' + st.label + '</button>' +
     '</div>' +
   '</div>';
@@ -24923,52 +24997,68 @@ function renderCpDetail() {
   const btns = [];
   const editable = cp.status === 'enabled' || cp.status === 'disabled';
   if (editable) btns.push('<button type="button" class="btn-main secondary" id="cpDetailEdit">编辑</button>');
-  if (cp.status === 'enabled') btns.push('<button type="button" class="btn-main" id="cpDetailIssue">发放</button>');
+  if (cp.status === 'enabled') btns.push('<button type="button" class="btn-main" id="cpDetailShare">' + cpWechatGlyphHtml('#fff') + '分享</button>');
   if (cp.status === 'disabled') btns.push('<button type="button" class="btn-main" id="cpDetailPublish">启用</button>');
   if (cp.status === 'enabled') btns.push('<button type="button" class="btn-main secondary" id="cpDetailVoid">禁用</button>');
   acts.innerHTML = btns.join('');
   document.getElementById('cpDetailFoot').classList.toggle('hidden', !btns.length);
 }
-function openCpIssue(id) {
-  cpState.issueId = id;
-  cpState.issueSelected = {};
-  renderCpIssue();
-  showOnlyScreen('screen-coupon-issue');
+function openCpShare(id) {
+  cpState.shareId = id;
+  cpState.shareQty = 10;
+  cpState.shareValidity = 'd7';
+  cpState.shareClaimed = 0;
+  renderCpShare();
+  showOnlyScreen('screen-coupon-share');
 }
-function renderCpIssue() {
-  const cp = COUPON_CATALOG.find(c => c.id === cpState.issueId);
+function renderCpShare() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.shareId);
   if (!cp) return;
-  const t = COUPON_TYPES[cp.type];
-  document.getElementById('cpIssueSummary').innerHTML =
-    '<div class="cp-ticket__left cp-type-chip cp-type-chip--' + cp.type + '">' + cpLeftHtml(cp) + '<div class="cp-ticket__type">' + cpTypeIconHtml(cp.type) + t.label + '</div></div>' +
-    '<div class="cp-issue-summary__info">' +
-      '<div class="cp-issue-summary__name">' + escapeHtml(cp.name) + '</div>' +
-      '<div class="cp-issue-summary__meta">' + cpGateLabel(cp) + ' · ' + escapeHtml(cp.scope) + '</div>' +
-      '<div class="cp-issue-summary__meta">剩余可发 ' + cpNum(Math.max(0, cp.total - cp.issued)) + ' 张</div>' +
-    '</div>';
-  const members = DEMO_MEMBERS.slice(0, 12);
-  document.getElementById('cpIssueMembers').innerHTML = members.map(m => {
-    const on = !!cpState.issueSelected[m.id];
-    const initial = (m.name || '').slice(0, 1);
-    return '<div class="cp-member-row ' + (on ? 'on' : '') + '" data-cp-member-id="' + m.id + '" role="button" tabindex="0">' +
-      '<span class="cp-member-row__avatar">' + escapeHtml(initial) + '</span>' +
-      '<div class="cp-member-row__info"><div class="cp-member-row__name">' + escapeHtml(m.name) + '</div><div class="cp-member-row__sub">' + escapeHtml(m.phone) + '</div></div>' +
-      '<span class="cp-member-row__check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>' +
-    '</div>';
-  }).join('');
-  updateCpIssueCount();
+  document.getElementById('cpShareHero').innerHTML = cpTicketHtml(cp);
+  document.getElementById('cpShareValidityChips').innerHTML = cpChipsHtml('shareValidity', CP_SHARE_VALIDITIES, cpState.shareValidity);
+  document.getElementById('cpShareQty').value = cpState.shareQty;
 }
-function updateCpIssueCount() {
-  const n = Object.keys(cpState.issueSelected).length;
-  document.getElementById('cpIssueCount').textContent = '已选 ' + n + ' 人';
+function cpDoShare(channel) {
+  const qty = parseInt(document.getElementById('cpShareQty').value.trim(), 10);
+  if (!qty || qty < 1) { showToast('请填写有效的分享数量', true); return; }
+  cpState.shareQty = qty;
+  const label = channel === 'moments' ? '朋友圈' : '微信好友';
+  document.getElementById('cpShareMaskBody').textContent = '已分享到' + label + '，好友可通过链接领取，领满 ' + qty + ' 张即止。';
+  document.getElementById('cpShareMask').classList.add('show');
 }
-function cpDoIssue() {
-  const ids = Object.keys(cpState.issueSelected);
-  if (!ids.length) { showToast('请选择要发放的会员', true); return; }
-  const cp = COUPON_CATALOG.find(c => c.id === cpState.issueId);
-  if (cp) cp.issued += ids.length;
-  showToast('已向 ' + ids.length + ' 位会员发放优惠券');
-  openCpDetail(cpState.issueId);
+function cpCloseShareMask() { document.getElementById('cpShareMask').classList.remove('show'); }
+function cpOpenSharePreview() {
+  cpCloseShareMask();
+  openCpClaim();
+}
+function openCpClaim() {
+  renderCpClaim();
+  showOnlyScreen('screen-coupon-claim');
+}
+function renderCpClaim() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.shareId);
+  if (!cp) return;
+  const remain = Math.max(0, cpState.shareQty - cpState.shareClaimed);
+  const pct = cpState.shareQty > 0 ? Math.round(cpState.shareClaimed / cpState.shareQty * 100) : 0;
+  document.getElementById('cpClaimHero').innerHTML = cpTicketHtml(cp);
+  document.getElementById('cpClaimStatus').innerHTML =
+    '<div class="cp-claim-status__remain">' + cpNum(remain) + '<em>张可领</em></div>' +
+    '<div class="cp-claim-status__meta">已领 ' + cpNum(cpState.shareClaimed) + ' / ' + cpNum(cpState.shareQty) + ' 张</div>' +
+    '<div class="cp-claim-progress"><div class="cp-claim-progress__bar" style="width:' + pct + '%"></div></div>';
+  const btn = document.getElementById('btnCpClaim');
+  if (btn) {
+    btn.disabled = remain <= 0;
+    btn.textContent = remain <= 0 ? '已领完' : '立即领取';
+  }
+}
+function cpClaim() {
+  const cp = COUPON_CATALOG.find(c => c.id === cpState.shareId);
+  if (!cp) return;
+  if (cpState.shareClaimed >= cpState.shareQty) { showToast('该优惠券已领完', true); return; }
+  cpState.shareClaimed += 1;
+  cp.issued += 1;
+  renderCpClaim();
+  showToast('领取成功，优惠券已放入你的账户');
 }
 function openCpUsage(id) {
   renderCpUsage(id);
@@ -25049,6 +25139,12 @@ function wireCouponModule() {
       cpOpenStatusSheet(toggle.dataset.cpStatusToggle);
       return;
     }
+    const share = e.target.closest('[data-cp-share-id]');
+    if (share) {
+      e.stopPropagation();
+      openCpShare(share.dataset.cpShareId);
+      return;
+    }
     const ticket = e.target.closest('[data-cp-id]');
     if (ticket) openCpDetail(ticket.dataset.cpId);
   });
@@ -25107,30 +25203,39 @@ function wireCouponModule() {
     btn.classList.toggle('on', idx < 0);
   });
   document.getElementById('cpDetailBack')?.addEventListener('click', openCpManage);
+  document.getElementById('cpDetailHero')?.addEventListener('click', e => {
+    const share = e.target.closest('[data-cp-share-id]');
+    if (share) openCpShare(share.dataset.cpShareId);
+  });
   document.getElementById('cpDetailActions')?.addEventListener('click', e => {
     const edit = e.target.closest('#cpDetailEdit');
-    const issue = e.target.closest('#cpDetailIssue');
+    const share = e.target.closest('#cpDetailShare');
     const publish = e.target.closest('#cpDetailPublish');
     const voidBtn = e.target.closest('#cpDetailVoid');
     if (edit) openCpCreate('edit', cpState.detailId);
-    else if (issue) openCpIssue(cpState.detailId);
+    else if (share) openCpShare(cpState.detailId);
     else if (publish) cpPublish();
     else if (voidBtn) cpOpenVoidMask();
   });
   document.getElementById('cpDetailInfo')?.addEventListener('click', e => {
     if (e.target.closest('#cpDetailUsageRow')) openCpUsage(cpState.detailId);
   });
-  document.getElementById('cpIssueBack')?.addEventListener('click', () => openCpDetail(cpState.issueId));
-  document.getElementById('cpIssueMembers')?.addEventListener('click', e => {
-    const row = e.target.closest('[data-cp-member-id]');
-    if (!row) return;
-    const id = row.dataset.cpMemberId;
-    if (cpState.issueSelected[id]) delete cpState.issueSelected[id];
-    else cpState.issueSelected[id] = true;
-    row.classList.toggle('on', !!cpState.issueSelected[id]);
-    updateCpIssueCount();
+  /* 微信分享页 */
+  document.getElementById('cpShareBack')?.addEventListener('click', () => openCpDetail(cpState.shareId));
+  document.getElementById('cpShareMoments')?.addEventListener('click', () => cpDoShare('moments'));
+  document.getElementById('cpShareWechat')?.addEventListener('click', () => cpDoShare('wechat'));
+  document.getElementById('cpShareValidityChips')?.addEventListener('click', e => {
+    const chip = e.target.closest('[data-cp-chip-value]');
+    if (!chip) return;
+    cpState.shareValidity = chip.dataset.cpChipValue;
+    chip.parentElement.querySelectorAll('.cp-chip').forEach(c => c.classList.toggle('on', c === chip));
   });
-  document.getElementById('btnCpIssueConfirm')?.addEventListener('click', cpDoIssue);
+  document.getElementById('cpShareMaskDone')?.addEventListener('click', cpCloseShareMask);
+  document.getElementById('cpShareMaskPreview')?.addEventListener('click', cpOpenSharePreview);
+  document.getElementById('cpShareMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpShareMask')) cpCloseShareMask(); });
+  /* 领取页 */
+  document.getElementById('cpClaimBack')?.addEventListener('click', () => openCpDetail(cpState.shareId));
+  document.getElementById('btnCpClaim')?.addEventListener('click', cpClaim);
   document.getElementById('cpUsageBack')?.addEventListener('click', () => openCpDetail(cpState.detailId));
   document.getElementById('cpVoidCancel')?.addEventListener('click', cpCloseVoidMask);
   document.getElementById('cpVoidConfirm')?.addEventListener('click', cpConfirmVoid);
@@ -25218,7 +25323,8 @@ const FLOW_MAP_GROUPS = [
       { id: 'coupon-create-step2', label: '新建优惠券 · Step2', screen: 'screen-coupon-create' },
       { id: 'coupon-create-step3', label: '新建优惠券 · Step3', screen: 'screen-coupon-create' },
       { id: 'coupon-detail', label: '优惠券详情', screen: 'screen-coupon-detail' },
-      { id: 'coupon-issue', label: '发放优惠券', screen: 'screen-coupon-issue' },
+      { id: 'coupon-share', label: '微信分享', screen: 'screen-coupon-share' },
+      { id: 'coupon-claim', label: '领取优惠券', screen: 'screen-coupon-claim' },
       { id: 'coupon-usage', label: '核销记录', screen: 'screen-coupon-usage' },
     ],
   },
@@ -25452,9 +25558,16 @@ const FLOW_NAV = {
     ensureDemoFilled();
     openCpDetail('c1');
   },
-  'coupon-issue'() {
+  'coupon-share'() {
     ensureDemoFilled();
-    openCpIssue('c1');
+    openCpShare('c1');
+  },
+  'coupon-claim'() {
+    ensureDemoFilled();
+    cpState.shareId = 'c1';
+    cpState.shareQty = 10;
+    cpState.shareClaimed = 3;
+    openCpClaim();
   },
   'coupon-usage'() {
     ensureDemoFilled();
@@ -25797,8 +25910,10 @@ function syncFlowMapFromAppState() {
     id = cpState.createStep === 3 ? 'coupon-create-step3' : (cpState.createStep === 2 ? 'coupon-create-step2' : 'coupon-create');
   } else if (visibleScreen === 'screen-coupon-detail') {
     id = 'coupon-detail';
-  } else if (visibleScreen === 'screen-coupon-issue') {
-    id = 'coupon-issue';
+  } else if (visibleScreen === 'screen-coupon-share') {
+    id = 'coupon-share';
+  } else if (visibleScreen === 'screen-coupon-claim') {
+    id = 'coupon-claim';
   } else if (visibleScreen === 'screen-coupon-usage') {
     id = 'coupon-usage';
   }
