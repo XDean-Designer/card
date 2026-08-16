@@ -12654,6 +12654,8 @@ button.biz-pay-row:active { opacity: .72; }
 .coupon-card__yen { font-size: 13px; font-family: var(--font-data); font-weight: 400; margin-top: 6px; }
 .coupon-card__num { font-size: 26px; font-family: var(--font-data); font-weight: 400; }
 .coupon-card__gate { font-size: 11px; margin-top: 6px; }
+.coupon-card__amount--exchange { align-items: center; }
+.coupon-card__amount--exchange .coupon-card__num { font-size: 24px; letter-spacing: 1px; }
 .coupon-card__divider {
   height: 0; margin: 0 16px; border: none; border-top: 1px dashed #E8E8E8;
 }
@@ -42606,22 +42608,23 @@ window.__BILLING_EMBEDDED__ = true;
   const TECHS = ['未指定', '阿Ken', 'Lisa', 'Tony'];
   const COUPONS = [
     {
-      id: 'cp1', tag: '满减券', name: '店长洗剪吹新人优惠券，洗剪吹专享',
+      id: 'cp1', tag: '代金券', name: '店长洗剪吹新人优惠券，洗剪吹专享',
       scope: '项目通用', amount: 100, minAmount: 0, gateLabel: '无门槛',
       stackWithBenefit: true,
-      rules: ['有效期：15天', '适用门店：右尚造型(周浦店)', '测试用账号：18297402934'],
+      rules: ['有效期：15天', '测试用账号：18297402934'],
     },
     {
-      id: 'cp2', tag: '满减券', name: '店长洗剪吹新人优惠券，洗剪吹专享',
-      scope: '项目通用', amount: 100, minAmount: 0, gateLabel: '无门槛',
-      stackWithBenefit: true,
-      rules: ['有效期：15天', '适用门店：右尚造型(周浦店)', '测试用账号：18297402934'],
+      id: 'cp2', tag: '抵用券', name: '洗剪吹免单券，凭券免费洗剪吹一次',
+      scope: '洗剪吹', exchangeItems: [{ id: 'p3', name: '洗剪吹' }, { id: 'p1', name: '时尚洗吹' }],
+      minAmount: 0, gateLabel: '抵用洗剪吹',
+      stackWithBenefit: false,
+      rules: ['有效期：60天', '购物车含绑定项目即可免费抵用', '不可与会员卡权益同享（演示）'],
     },
     {
-      id: 'cp3', tag: '满减券', name: '全场满减券',
+      id: 'cp3', tag: '代金券', name: '全场代金券',
       scope: '项目通用', amount: 50, minAmount: 200, gateLabel: '满200可用',
       stackWithBenefit: false,
-      rules: ['有效期：30天', '适用门店：全部门店', '不可与会员卡权益同享（演示）'],
+      rules: ['有效期：30天', '不可与会员卡权益同享（演示）'],
     },
   ];
 
@@ -44281,10 +44284,9 @@ window.__BILLING_EMBEDDED__ = true;
   function autoApplyBestSettleOffers() {
     if (state.settleOffersTouched) return;
     const listTotal = cartListTotal();
-    /* 演示券均为「项目通用」：仅服务项目可抵，产品/库存/快消不参与 */
     const couponBase = cartDiscountableSubtotal();
     const eligibleCoupons = couponBase > 0
-      ? COUPONS.filter(cp => listTotal >= (cp.minAmount || 0))
+      ? COUPONS.filter(cp => couponEligibleByOrderTotal(cp, listTotal, couponBase))
       : [];
     const couponOpts = [null].concat(eligibleCoupons);
 
@@ -44292,7 +44294,7 @@ window.__BILLING_EMBEDDED__ = true;
       let bestCp = null;
       let bestAmt = -1;
       eligibleCoupons.forEach(cp => {
-        const amt = Math.min(cp.amount, couponBase);
+        const amt = couponDiscountAmount(cp, couponBase);
         if (amt > bestAmt) { bestAmt = amt; bestCp = cp; }
       });
       state.selectedCouponId = bestCp && bestAmt > 0 ? bestCp.id : null;
@@ -45776,13 +45778,12 @@ window.__BILLING_EMBEDDED__ = true;
     let couponDeduct = 0;
     let couponLabel = '';
     const coupon = COUPONS.find(c => c.id === state.selectedCouponId);
-    /* 项目通用券：只抵扣服务项目剩余，不吃产品/库存成本价 */
     const couponCap = Math.max(0, Math.min(
       remaining,
       round2(cartDiscountableSubtotal() - projectDeduct - discountDeduct)
     ));
-    if (coupon && couponCap > 0 && listTotal >= (coupon.minAmount || 0)) {
-      couponDeduct = Math.min(coupon.amount, couponCap);
+    if (coupon && couponCap > 0 && couponEligibleByOrderTotal(coupon, listTotal, couponCap)) {
+      couponDeduct = couponDiscountAmount(coupon, couponCap);
       remaining = round2(remaining - couponDeduct);
       couponLabel = coupon.name;
     }
@@ -46642,10 +46643,22 @@ window.__BILLING_EMBEDDED__ = true;
     afterStaffPickerPaint(document.getElementById('detailBody'));
   }
 
-  function couponEligibleByOrderTotal(cp) {
-    const listTotal = cartListTotal();
-    const couponBase = cartDiscountableSubtotal();
+  function couponEligibleByOrderTotal(cp, listTotal, couponBase) {
+    listTotal = listTotal ?? cartListTotal();
+    couponBase = couponBase ?? cartDiscountableSubtotal();
     const min = Number(cp && cp.minAmount) || 0;
+    if (cp && cp.tag === '抵用券') {
+      const have = (state.cart || []).some(it => (it.qty || 0) > 0 && couponExchangeItemMatch(cp, it));
+      return {
+        ok: have,
+        listTotal,
+        couponBase,
+        min,
+        shortfall: 0,
+        noProject: !have,
+        noExchangeItem: !have,
+      };
+    }
     const ok = couponBase > 0 && listTotal >= min;
     return {
       ok,
@@ -46657,6 +46670,37 @@ window.__BILLING_EMBEDDED__ = true;
     };
   }
 
+  /** 抵用券按项次结算：购物车含绑定项目/产品即可全额免单 */
+  function couponExchangeDeduct(cp, cap, listTotal) {
+    const item = (state.cart || []).find(it => (it.qty || 0) > 0 && couponExchangeItemMatch(cp, it));
+    if (!item) return 0;
+    const amt = Number(item.price || item.unitPrice || item.amount) || 0;
+    return Math.min(amt, Math.max(0, cap ?? listTotal ?? Number.MAX_SAFE_INTEGER));
+  }
+
+  /** 单一绑定项与购物车行的匹配（项目按名称精确/包含、产品按 sku/id） */
+  function couponExchangeItemMatch(cp, it) {
+    if (!cp || !cp.exchangeItems || !it) return false;
+    const isProduct = it.isBillProduct || it.sku || it.skuId ||
+      (typeof isBillProductItem === 'function' && isBillProductItem(it));
+    if (isProduct) {
+      return cp.exchangeItems.some(b => b.id && String(b.id) === String(it.sku || it.skuId || it.id || ''));
+    }
+    const name = String(it.name || '');
+    return cp.exchangeItems.some(b => {
+      if (b.id && (String(it.id) === String(b.id) || String(it.benefitKey) === String(b.id))) return true;
+      const n = String(b.name || '');
+      return n && (name === n || name.includes(n));
+    });
+  }
+
+  /** 通用抵扣额：代金券按面额/门槛，抵用券按绑定项整单免单 */
+  function couponDiscountAmount(cp, couponBase, listTotal) {
+    if (!cp) return 0;
+    if (cp.tag === '抵用券') return couponExchangeDeduct(cp, couponBase, listTotal);
+    return Math.min(Number(cp.amount) || 0, Math.max(0, couponBase ?? 0));
+  }
+
   function renderCouponCardHtml(cp, opts) {
     const selected = !!opts.selected;
     const disabled = !!opts.disabled;
@@ -46664,6 +46708,9 @@ window.__BILLING_EMBEDDED__ = true;
     const hint = opts.hint || '';
     const rulesHtml = (cp.rules || []).map(r => `<div>${escapeHtml(r)}</div>`).join('');
     const mutexHint = cp.stackWithBenefit === false ? '<span class="coupon-card__mutex">不可与权益同享</span>' : '';
+    const valueHtml = cp.tag === '抵用券'
+      ? `<div class="coupon-card__amount coupon-card__amount--exchange"><span class="coupon-card__num">抵</span></div>`
+      : `<div class="coupon-card__amount"><span class="coupon-card__yen">¥</span><span class="coupon-card__num">${cp.amount}</span></div>`;
     return `<div class="coupon-card ${selected ? 'is-selected' : ''} ${disabled ? 'is-disabled' : ''} ${rulesOpen ? 'is-rules-open' : ''}" data-coupon-id="${cp.id}" ${disabled ? 'data-coupon-disabled="1"' : ''} role="button" tabindex="0" aria-pressed="${selected}" aria-disabled="${disabled ? 'true' : 'false'}">
         <span class="coupon-card__tag">${escapeHtml(cp.tag)}</span>${mutexHint}
         <div class="coupon-card__main">
@@ -46673,7 +46720,7 @@ window.__BILLING_EMBEDDED__ = true;
             ${hint ? `<div class="coupon-card__gate-hint">${escapeHtml(hint)}</div>` : ''}
           </div>
           <div class="coupon-card__value">
-            <div class="coupon-card__amount"><span class="coupon-card__yen">¥</span><span class="coupon-card__num">${cp.amount}</span></div>
+            ${valueHtml}
             <div class="coupon-card__gate">${escapeHtml(cp.gateLabel)}</div>
           </div>
         </div>
@@ -46704,11 +46751,13 @@ window.__BILLING_EMBEDDED__ = true;
       selected: false,
       rulesOpen: !!state.couponRulesOpen[cp.id],
       disabled: true,
-      hint: gate.noProject
-        ? '仅适用于服务项目，当前无可抵扣项目'
-        : `开单总价还差 ${formatYen(gate.shortfall)}（按整单合计）`,
+      hint: gate.noExchangeItem
+        ? '购物车未包含可抵用的项目或产品'
+        : gate.noProject
+          ? '仅适用于服务项目，当前无可抵扣项目'
+          : `开单总价还差 ${formatYen(gate.shortfall)}（按整单合计）`,
     })).join('');
-    const unusableLabel = unusable.some(({ gate }) => gate.noProject)
+    const unusableLabel = unusable.some(({ gate }) => gate.noExchangeItem || gate.noProject)
       ? '当前不可用'
       : '未满足开单总价门槛';
     document.getElementById('couponList').innerHTML = `
@@ -54659,12 +54708,13 @@ window.__BILLING_EMBEDDED__ = true;
     const draft = state.couponDraftId;
     if (draft) {
       const cp = COUPONS.find(c => c.id === draft);
-      if (cp && cartDiscountableSubtotal() <= 0) {
-        showToast('优惠券仅适用于服务项目');
-        return;
-      }
-      if (cp && cartListTotal() < (cp.minAmount || 0)) {
-        showToast(`未满 ${cp.minAmount} 元门槛，无法使用`);
+      const gate = cp ? couponEligibleByOrderTotal(cp) : null;
+      if (cp && gate && !gate.ok) {
+        showToast(gate.noExchangeItem
+          ? '购物车未包含该券可抵用的项目或产品'
+          : gate.noProject
+            ? '优惠券仅适用于服务项目'
+            : `未满 ${cp.minAmount} 元门槛，无法使用`);
         return;
       }
     }
