@@ -14000,34 +14000,102 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket--disabled .cp-ticket__type { background: rgba(255,255,255,.85); border-color: rgba(0,0,0,.08); color: #9B9B9B; }
 .cp-ticket--disabled .cp-ticket__foot { color: #A6A29E; background: #FCFBFA; border-top-color: #EFEDEB; }
 .cp-ticket--disabled .cp-ticket__foot b { color: #6B6B6B; }
-/* 状态切换 sheet */
-.cp-status-sheet { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
-.cp-status-opt {
+/* 状态切换 sheet（对齐全局 picker 规范） */
+#cpStatusMask .picker-sheet { max-height: 320px; }
+.cp-status-list { padding: 2px 16px 8px; }
+.cp-status-item {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 12px;
-  background: #fff; cursor: pointer; font-family: inherit;
-  transition: border-color .15s ease, background .15s ease;
+  padding: 15px 2px; border-bottom: 1px solid var(--bg-page); cursor: pointer;
+  font-family: inherit; width: 100%; background: none; border-left: none; border-right: none;
+  border-top: none; text-align: left; font-size: 15px; color: var(--text);
 }
-.cp-status-opt.is-on { border-color: var(--brand); background: #F6FAFF; }
-.cp-status-opt__tag {
+.cp-status-item:last-child { border-bottom: none; }
+.cp-status-item__main { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cp-status-item__tag {
   height: 22px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 600;
-  display: inline-flex; align-items: center; justify-content: center; line-height: 22px;
+  display: inline-flex; align-items: center; justify-content: center; line-height: 22px; flex-shrink: 0;
 }
-.cp-status-opt__tag--enabled { background: #E4F6EC; color: #3D9B6E; }
-.cp-status-opt__tag--disabled { background: #F0F0F0; color: #9B9B9B; }
-.cp-status-opt__radio {
-  appearance: none; -webkit-appearance: none;
-  width: 18px; height: 18px; margin: 0; flex-shrink: 0; box-sizing: border-box;
-  border: 1.5px solid #D0D0D0; border-radius: 50%; background: #fff;
-  cursor: pointer; display: grid; place-content: center;
+.cp-status-item__tag--enabled { background: #E4F6EC; color: #3D9B6E; }
+.cp-status-item__tag--disabled { background: #F0F0F0; color: #9B9B9B; }
+.cp-status-item__desc { font-size: 12px; color: var(--text-sec); }
+.cp-status-item__check {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #D0D0D0;
+  display: inline-flex; align-items: center; justify-content: center; color: transparent; transition: .15s ease;
 }
-.cp-status-opt__radio::before {
-  content: ''; width: 10px; height: 10px; border-radius: 50%;
-  transform: scale(0); background: var(--brand);
-  transition: transform .12s ease-out;
+.cp-status-item__check svg { width: 10px; height: 8px; display: block; }
+.cp-status-item.is-on .cp-status-item__check { border-color: var(--brand); background: var(--brand); color: #fff; }
+/* 新建 Step2 · 适用范围卡片（对齐会员卡 Step2 卡片式入口） */
+.cp-scope-entry {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px;
+  background: #fff; cursor: pointer; font-family: inherit; border: none; text-align: left;
 }
-.cp-status-opt__radio:checked { border-color: var(--brand); }
-.cp-status-opt__radio:checked::before { transform: scale(1); }
+.cp-scope-entry__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cp-scope-entry__title { font-size: 15px; font-weight: 400; color: var(--text); }
+.cp-scope-entry__sub { font-size: 13px; color: var(--brand); font-weight: 600; }
+.cp-scope-entry__chev { flex-shrink: 0; color: var(--text-sec); display: inline-flex; }
+.cp-scope-entry__chev svg { width: 16px; height: 16px; display: block; }
+/* 适用范围 · 多选 picker */
+#cpScopeMask .picker-sheet { max-height: 78%; }
+.cp-scope-head { flex-shrink: 0; }
+.cp-scope-countbar { flex-shrink: 0; padding: 6px 20px 2px; font-size: 13px; color: var(--text-sec); }
+.cp-scope-groups { flex-shrink: 0; padding: 4px 16px 8px; }
+.cp-scope-groups .catalog-group-scroll { padding-right: 0; }
+.cp-scope-groups .catalog-group-tab { flex: 0 0 auto; }
+.cp-scope-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 16px; }
+.cp-scope-row--all { border-bottom: 1px solid var(--border) !important; margin-bottom: 4px; }
+#cpTotalWrap.is-disabled { opacity: .4; pointer-events: none; }
+.cp-scope-row {
+  display: flex; align-items: center; gap: 12px; padding: 13px 0;
+  border-bottom: 1px solid var(--bg-page); cursor: pointer;
+}
+.cp-scope-row:last-child { border-bottom: none; }
+.cp-scope-row__main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.cp-scope-row__name { font-size: 14px; color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cp-scope-row__sub { font-size: 12px; color: var(--text-sec); flex-shrink: 0; }
+.cp-scope-row__kind { font-size: 10px; color: var(--text-sec); background: #F2F2F2; border-radius: 8px; padding: 1px 6px; flex-shrink: 0; }
+.cp-scope-check {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #C7C7CC;
+  display: inline-flex; align-items: center; justify-content: center; color: transparent;
+}
+.cp-scope-check svg { width: 10px; height: 8px; display: block; }
+.cp-scope-row.is-on .cp-scope-check { border-color: var(--cp-orange); background: var(--cp-orange); color: #fff; }
+/* 新建 Step3 · 有效期分段 */
+.cp-seg { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0; }
+.cp-seg__btn {
+  height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid var(--border);
+  background: #fff; color: var(--text); font-size: 13px; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.cp-seg__btn.on { border-color: var(--cp-orange); color: var(--cp-orange-deep); background: #FFF7FA; }
+.cp-validity-sub { margin-top: 8px; padding: 12px 14px; background: #FAFAFA; border-radius: 10px; }
+.cp-date-field {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px;
+  border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer;
+  font-size: 14px; color: var(--text); font-family: inherit;
+}
+.cp-date-field.placeholder { color: var(--text-sec); }
+.cp-date-field svg { width: 15px; height: 15px; color: var(--text-sec); flex-shrink: 0; }
+/* 数字步进器（发放总量 / 每人限领） */
+.cp-num-stepper { display: inline-flex; align-items: center; gap: 0; }
+.cp-num-stepper__btn {
+  width: 32px; height: 32px; border: 1px solid var(--border); background: #fff; color: var(--text);
+  font-size: 18px; line-height: 1; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cp-num-stepper__btn:first-child { border-radius: 10px 0 0 10px; }
+.cp-num-stepper__btn:last-child { border-radius: 0 10px 10px 0; }
+.cp-num-stepper__btn:disabled { color: #C9C9C9; cursor: not-allowed; background: #FAFAFA; }
+.cp-num-stepper__btn.plus { color: var(--cp-orange-deep); }
+.cp-num-stepper__val {
+  min-width: 44px; height: 32px; box-sizing: border-box; padding: 0 4px;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-data); font-size: 15px; font-weight: 500; color: var(--text);
+}
+/* 使用说明 · 备注式输入框 */
+.cp-remark { margin: 0; }
+.cp-remark .detail-remark__label { margin-bottom: 8px; }
+.cp-remark .detail-remark__box { min-height: 92px; }
 /* 发放摘要 · 迷你券块 */
 .cp-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; color: var(--text-sec); gap: 10px; }
 .cp-empty__icon { width: 72px; height: 72px; border-radius: 20px; background: #F1F1F1; display: flex; align-items: center; justify-content: center; color: #C4C4C4; }
@@ -17102,32 +17170,69 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <div class="form-row" id="cpValueRow"><span class="label" id="cpValueLabel">面值金额<span class="req">*</span></span><div class="form-row__trail"><input class="value input-amount" id="cpValue" inputmode="numeric" placeholder="请输入" maxlength="6" data-no-amount-keypad /><span class="suffix" id="cpValueUnit">元</span></div></div>
                   <div class="form-row" id="cpMinRow"><span class="label">使用门槛</span><div class="form-row__trail"><input class="value input-amount" id="cpMin" inputmode="numeric" placeholder="0" maxlength="6" data-no-amount-keypad /><span class="suffix">元</span></div></div>
                   <div id="cpExchangeItemsBlock" class="hidden">
-                    <div class="form-row" style="padding-bottom:8px"><span class="label">可抵用项目/产品<span class="req">*</span></span></div>
+                    <div class="form-row" style="padding-bottom:8px"><span class="label">可抵用项目/产品<span class="label-hint" style="display:block">选填，未选时默认全部项目/产品通用</span></span></div>
                     <div class="form-row" style="padding-top:0;display:block"><div class="cp-exchange-items" id="cpExchangeItems"></div></div>
                   </div>
                 </div>
-                <p class="form-tip" style="margin:0 16px 16px;border-radius:12px">代金券填面额，可设使用门槛；抵用券无需面额，勾选可抵用的项目/产品，凭券免费抵用一次。</p>
+                <p class="form-tip" style="margin:0 16px 16px;border-radius:12px">代金券填面额，可设使用门槛；抵用券无需面额，可勾选可抵用的项目/产品（选填，不选则全部通用），凭券免费抵用一次。</p>
               </div>
               <!-- Step2 适用范围 -->
               <div id="cpCreateStep2" class="hidden">
                 <div class="cp-form-card">
-                  <div class="form-row" style="padding-bottom:8px"><span class="label">适用项目</span></div>
-                  <div class="form-row" style="padding-top:0;display:block"><div class="cp-chip-group" id="cpScopeChips"></div></div>
+                  <button type="button" class="cp-scope-entry" id="cpScopeEntry">
+                    <span class="cp-scope-entry__main">
+                      <span class="cp-scope-entry__title">适用范围</span>
+                      <span class="cp-scope-entry__sub" id="cpScopeSub">全部项目/产品</span>
+                    </span>
+                    <span class="cp-scope-entry__chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+                  </button>
                 </div>
                 <div class="cp-form-card">
                   <div class="form-row"><span class="label">可否与权益同享</span><button type="button" class="switch on" id="cpStackable" role="switch" aria-checked="true"></button></div>
-                  <div class="form-row" style="align-items:flex-start"><span class="label" style="line-height:1.5">使用说明<span class="label-hint" style="display:block">展示在券卡「使用规则」中</span></span><input class="value" id="cpDesc" placeholder="选填" maxlength="40" style="max-width:none;text-align:right" /></div>
+                  <div class="form-row" style="align-items:flex-start;display:block">
+                    <span class="label" style="margin-bottom:10px;display:block">使用说明<span class="label-hint" style="display:block">展示在券卡「使用规则」中</span></span>
+                    <div class="detail-remark cp-remark">
+                      <div class="detail-remark__box">
+                        <textarea id="cpDesc" placeholder="选填，最多 100 字" maxlength="100"></textarea>
+                        <span class="detail-remark__count" id="cpDescCount">0/100</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <!-- Step3 有效期 + 发放 + 限制 -->
               <div id="cpCreateStep3" class="hidden">
                 <div class="cp-form-card">
-                  <div class="form-row" style="padding-bottom:8px"><span class="label">有效期</span></div>
-                  <div class="form-row" style="padding-top:0;display:block"><div class="cp-chip-group" id="cpValidityChips"></div></div>
+                  <div class="form-row" style="padding-bottom:6px"><span class="label">生效时间</span></div>
+                  <div class="form-row" style="padding-top:0;display:block">
+                    <div class="cp-seg" id="cpEffSeg">
+                      <button type="button" class="cp-seg__btn on" data-cp-eff="immediate">立即生效</button>
+                      <button type="button" class="cp-seg__btn" data-cp-eff="date">指定日期</button>
+                    </div>
+                    <div class="cp-validity-sub hidden" id="cpEffDateWrap">
+                      <button type="button" class="cp-date-field placeholder" id="cpEffDateBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>选择生效日期</span></button>
+                    </div>
+                  </div>
                 </div>
                 <div class="cp-form-card">
-                  <div class="form-row"><span class="label">发放总量</span><div class="form-row__trail"><input class="value input-amount" id="cpTotal" inputmode="numeric" placeholder="不限" maxlength="6" data-no-amount-keypad /><span class="suffix">张</span></div></div>
-                  <div class="form-row"><span class="label">每人限领</span><div class="form-row__trail"><input class="value input-amount" id="cpPerPerson" inputmode="numeric" placeholder="1" maxlength="2" data-no-amount-keypad /><span class="suffix">张</span></div></div>
+                  <div class="form-row" style="padding-bottom:6px"><span class="label">有效期限</span></div>
+                  <div class="form-row" style="padding-top:0;display:block">
+                    <div class="cp-seg" id="cpExpSeg">
+                      <button type="button" class="cp-seg__btn on" data-cp-exp="days">领取后N天</button>
+                      <button type="button" class="cp-seg__btn" data-cp-exp="date">固定到期日</button>
+                      <button type="button" class="cp-seg__btn" data-cp-exp="forever">永久有效</button>
+                    </div>
+                    <div class="cp-validity-sub" id="cpExpDaysWrap">
+                      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:13px;color:var(--text-sec)">领取后</span><div id="cpExpDays"></div><span style="font-size:13px;color:var(--text-sec)">天内有效</span></div>
+                    </div>
+                    <div class="cp-validity-sub hidden" id="cpExpDateWrap">
+                      <button type="button" class="cp-date-field placeholder" id="cpExpDateBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>选择到期日期</span></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="cp-form-card">
+                  <div class="form-row" style="align-items:center"><span class="label">发放总量</span><div class="form-row__trail" style="gap:12px"><div id="cpTotalWrap"><div id="cpTotal"></div></div><span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-sec)"><button type="button" class="switch" id="cpTotalUnlimited" role="switch" aria-checked="true"></button>不限</span></div></div>
+                  <div class="form-row" style="align-items:center"><span class="label">每人限领</span><div class="form-row__trail" style="gap:10px"><div id="cpPerPerson"></div><span class="suffix">张</span></div></div>
                 </div>
               </div>
             </div>
@@ -17210,18 +17315,48 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="picker-sheet">
               <div class="picker-sheet__grabber" aria-hidden="true"></div>
               <div class="picker-head">优惠券状态</div>
-              <div class="cp-status-sheet" id="cpStatusList">
-                <label class="cp-status-opt" data-cp-status="enabled">
-                  <span class="cp-status-opt__tag cp-status-opt__tag--enabled">已启用</span>
-                  <input type="radio" name="cpStatus" value="enabled" class="cp-status-opt__radio" />
-                </label>
-                <label class="cp-status-opt" data-cp-status="disabled">
-                  <span class="cp-status-opt__tag cp-status-opt__tag--disabled">已禁用</span>
-                  <input type="radio" name="cpStatus" value="disabled" class="cp-status-opt__radio" />
-                </label>
+              <div class="cp-status-list" id="cpStatusList">
+                <div class="cp-status-item" data-cp-status="enabled">
+                  <span class="cp-status-item__main"><span class="cp-status-item__tag cp-status-item__tag--enabled">已启用</span><span class="cp-status-item__desc">可发放、可核销</span></span>
+                  <span class="cp-status-item__check" aria-hidden="true"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4.2L3.6 6.6L9 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
+                <div class="cp-status-item" data-cp-status="disabled">
+                  <span class="cp-status-item__main"><span class="cp-status-item__tag cp-status-item__tag--disabled">已禁用</span><span class="cp-status-item__desc">停止发放与核销</span></span>
+                  <span class="cp-status-item__check" aria-hidden="true"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4.2L3.6 6.6L9 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                </div>
               </div>
               <div class="picker-foot">
                 <button type="button" class="btn-main" id="cpStatusConfirm">确定</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 适用范围 · 多选 picker -->
+          <div class="picker-mask picker-mask--bottom" id="cpScopeMask">
+            <div class="picker-sheet">
+              <div class="picker-sheet__grabber" aria-hidden="true"></div>
+              <div class="picker-head">选择适用项目/产品</div>
+              <div class="cp-scope-countbar" id="cpScopeCount">不限项目/产品</div>
+              <div class="cp-scope-groups">
+                <div class="catalog-group-scroll" id="cpScopeGroups" role="tablist" aria-label="分组"></div>
+              </div>
+              <div class="cp-scope-list" id="cpScopeList"></div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="cpScopeCancel">取消</button>
+                <button type="button" class="btn-main" id="cpScopeConfirm">确定</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 选择日期 sheet -->
+          <div class="picker-mask picker-mask--bottom" id="cpDateMask">
+            <div class="picker-sheet">
+              <div class="picker-sheet__grabber" aria-hidden="true"></div>
+              <div class="picker-head"><span class="picker-head__title-main" id="cpDateSheetTitle">选择日期</span></div>
+              <div class="flow-balance-cal" id="cpDateCal"></div>
+              <div class="picker-foot picker-foot--row">
+                <button type="button" class="btn-main secondary" id="cpDateCancel">取消</button>
+                <button type="button" class="btn-main" id="cpDateConfirm">确定</button>
               </div>
             </div>
           </div>
@@ -17234,6 +17369,18 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
               <div class="dialog__actions">
                 <button type="button" class="btn-main secondary" id="cpVoidCancel">取消</button>
                 <button type="button" class="btn-main" id="cpVoidConfirm">禁用</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 退出优惠券创建确认 -->
+          <div class="dialog-mask" id="cpExitConfirmMask">
+            <div class="dialog">
+              <div class="dialog__title">退出创建？</div>
+              <div class="dialog__body">确定要退出优惠券创建吗？退出后当前已填写的资料将清空且无法恢复。</div>
+              <div class="dialog__actions">
+                <button type="button" class="btn-main secondary" id="cpExitCancel">取消</button>
+                <button type="button" class="btn-main" id="cpExitConfirm">退出</button>
               </div>
             </div>
           </div>
@@ -24722,6 +24869,12 @@ const cpState = {
   shareQty: 10,
   shareValidity: 'd7',
   shareClaimed: 0,
+  scopeGroupId: 'all',
+  scopeDraftItems: [],
+  dateKind: 'eff',
+  dateDraft: '',
+  calYear: 0,
+  calMonth: 0,
 };
 
 const CP_SHARE_VALIDITIES = [
@@ -24817,7 +24970,51 @@ function cpChipsHtml(groupId, items, selectedId) {
   return items.map(it => '<button type="button" class="cp-chip ' + (it.id === selectedId ? 'on' : '') + '" data-cp-chip-group="' + groupId + '" data-cp-chip-value="' + it.id + '">' + escapeHtml(it.label) + '</button>').join('');
 }
 function cpBlankDraft() {
-  return { type: 'cash', name: '', value: '', min: '', items: [], scope: 'all', stackable: true, desc: '', validity: 'd15', total: '', perPerson: '1' };
+  return {
+    type: 'cash', name: '', value: '', min: '',
+    items: [],
+    scopeMode: 'all', scopeItems: [],
+    stackable: true, desc: '',
+    effMode: 'immediate', effDate: '',
+    expMode: 'days', expDays: 15, expDate: '',
+    totalUnlimited: true, total: 1000, perPerson: 1,
+  };
+}
+function cpTodayKey() {
+  const d = new Date(); const pad = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+}
+function cpParseDateKey(key) {
+  const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? { y: +m[1], m: +m[2] - 1, d: +m[3], key: m[1] + '-' + m[2] + '-' + m[3] } : null;
+}
+function cpDateKeyOf(y, m, d) { const pad = n => String(n).padStart(2, '0'); return y + '-' + pad(m + 1) + '-' + pad(d); }
+function cpFmtDate(key) { return String(key || '').replace(/-/g, '.'); }
+function cpScopeLabel(d) {
+  const items = d.scopeItems || [];
+  if (d.scopeMode !== 'custom' || !items.length) return '全部项目/产品';
+  const names = items.map(i => i.name);
+  const shown = names.slice(0, 2).join('、');
+  return names.length > 2 ? shown + ' 等' + names.length + '项' : shown;
+}
+function cpValidityLabelFromDraft(d) {
+  const eff = d.effMode === 'date' && d.effDate ? cpFmtDate(d.effDate) : '立即生效';
+  let exp;
+  if (d.expMode === 'forever') exp = '长期有效';
+  else if (d.expMode === 'date') exp = d.expDate ? '至 ' + cpFmtDate(d.expDate) : '长期有效';
+  else exp = '领取后 ' + (parseInt(d.expDays, 10) || 15) + ' 天';
+  if (d.effMode === 'immediate' && d.expMode === 'days') return exp + '有效';
+  return eff + ' · ' + exp;
+}
+function cpValidityDraftFromLabel(label) {
+  const d = { effMode: 'immediate', effDate: '', expMode: 'days', expDays: 15, expDate: '' };
+  if (!label) return d;
+  const dm = String(label).match(/领取后\s*(\d+)\s*天/);
+  if (dm) { d.expDays = parseInt(dm[1], 10) || 15; return d; }
+  const rm = String(label).match(/(\d{4}-\d{2}-\d{2})\s*至\s*(\d{4}-\d{2}-\d{2})/);
+  if (rm) { d.effMode = 'date'; d.effDate = rm[1]; d.expMode = 'date'; d.expDate = rm[2]; return d; }
+  if (String(label).indexOf('长期') >= 0 || String(label).indexOf('永久') >= 0) { d.expMode = 'forever'; return d; }
+  return d;
 }
 function cpValueUnit(draft) { return '元'; }
 function cpValueLabelText(draft) { return '面值金额'; }
@@ -24862,16 +25059,49 @@ function renderCpCreateStep1() {
 }
 function renderCpCreateStep2() {
   const d = cpState.createDraft;
-  document.getElementById('cpScopeChips').innerHTML = cpChipsHtml('scope', COUPON_SCOPES, d.scope);
+  const scopeSub = document.getElementById('cpScopeSub');
+  if (scopeSub) scopeSub.textContent = cpScopeLabel(d);
   document.getElementById('cpStackable').classList.toggle('on', !!d.stackable);
   document.getElementById('cpStackable').setAttribute('aria-checked', d.stackable ? 'true' : 'false');
-  document.getElementById('cpDesc').value = d.desc;
+  const desc = document.getElementById('cpDesc');
+  desc.value = d.desc;
+  const count = document.getElementById('cpDescCount');
+  if (count) count.textContent = (d.desc || '').length + '/100';
+}
+function cpNumStepperHtml(id, value, min, max) {
+  const v = Math.max(min, Math.min(max, value));
+  return '<div class="cp-num-stepper" data-cp-stepper="' + id + '">' +
+    '<button type="button" class="cp-num-stepper__btn minus" data-d="-1" aria-label="减少"' + (v <= min ? ' disabled' : '') + '>−</button>' +
+    '<span class="cp-num-stepper__val" data-val>' + v + '</span>' +
+    '<button type="button" class="cp-num-stepper__btn plus" data-d="1" aria-label="增加"' + (v >= max ? ' disabled' : '') + '>+</button>' +
+    '</div>';
 }
 function renderCpCreateStep3() {
   const d = cpState.createDraft;
-  document.getElementById('cpValidityChips').innerHTML = cpChipsHtml('validity', COUPON_VALIDITIES, d.validity);
-  document.getElementById('cpTotal').value = d.total;
-  document.getElementById('cpPerPerson').value = d.perPerson;
+  /* 生效时间 */
+  document.querySelectorAll('#cpEffSeg [data-cp-eff]').forEach(b => b.classList.toggle('on', b.dataset.cpEff === d.effMode));
+  document.getElementById('cpEffDateWrap').classList.toggle('hidden', d.effMode !== 'date');
+  cpSyncDateField('cpEffDateBtn', d.effDate, '选择生效日期');
+  /* 有效期限 */
+  document.querySelectorAll('#cpExpSeg [data-cp-exp]').forEach(b => b.classList.toggle('on', b.dataset.cpExp === d.expMode));
+  document.getElementById('cpExpDaysWrap').classList.toggle('hidden', d.expMode !== 'days');
+  document.getElementById('cpExpDateWrap').classList.toggle('hidden', d.expMode !== 'date');
+  if (d.expMode === 'days') document.getElementById('cpExpDays').innerHTML = cpNumStepperHtml('expDays', d.expDays || 15, 1, 365);
+  cpSyncDateField('cpExpDateBtn', d.expDate, '选择到期日期');
+  /* 发放总量 + 每人限领 */
+  const unlimited = document.getElementById('cpTotalUnlimited');
+  unlimited.classList.toggle('on', !!d.totalUnlimited);
+  unlimited.setAttribute('aria-checked', d.totalUnlimited ? 'true' : 'false');
+  document.getElementById('cpTotalWrap').classList.toggle('is-disabled', !!d.totalUnlimited);
+  document.getElementById('cpTotal').innerHTML = cpNumStepperHtml('total', d.total || 1000, 1, 100000);
+  document.getElementById('cpPerPerson').innerHTML = cpNumStepperHtml('perPerson', d.perPerson || 1, 1, 10);
+}
+function cpSyncDateField(id, value, placeholder) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+  if (value) { el.innerHTML = icon + '<span>' + cpFmtDate(value) + '</span>'; el.classList.remove('placeholder'); }
+  else { el.innerHTML = icon + '<span>' + placeholder + '</span>'; el.classList.add('placeholder'); }
 }
 function cpShowCreateStep(n) {
   cpState.createStep = n;
@@ -24896,13 +25126,10 @@ function cpReadCreateForm() {
   d.value = document.getElementById('cpValue').value.trim();
   d.min = document.getElementById('cpMin').value.trim();
   d.desc = document.getElementById('cpDesc').value.trim();
-  d.total = document.getElementById('cpTotal').value.trim();
-  d.perPerson = document.getElementById('cpPerPerson').value.trim();
   d.stackable = document.getElementById('cpStackable').classList.contains('on');
   return d;
 }
 function cpBuildCouponFromDraft(d) {
-  const validity = COUPON_VALIDITIES.find(v => v.id === d.validity);
   const isEx = d.type === 'exchange';
   return {
     id: cpState.createEditingId || ('cn' + Date.now()),
@@ -24911,12 +25138,12 @@ function cpBuildCouponFromDraft(d) {
     amount: isEx ? 0 : (parseInt(d.value, 10) || 0),
     minAmount: isEx ? 0 : (parseInt(d.min, 10) || 0),
     items: isEx ? (d.items || []).map(i => ({ id: i.id, name: i.name })) : undefined,
-    scope: (COUPON_SCOPES.find(s => s.id === d.scope) || COUPON_SCOPES[0]).label,
+    scope: cpScopeLabel(d),
     status: 'disabled',
-    validityLabel: validity ? validity.label + '有效' : '未发布',
+    validityLabel: cpValidityLabelFromDraft(d),
     stackable: !!d.stackable,
     perPerson: parseInt(d.perPerson, 10) || 1,
-    total: parseInt(d.total, 10) || 0,
+    total: d.totalUnlimited ? 0 : (parseInt(d.total, 10) || 0),
     issued: 0,
     used: 0,
     desc: d.desc || '',
@@ -24927,17 +25154,18 @@ function openCpCreate(mode, id) {
   cpState.createEditingId = mode === 'edit' ? id : null;
   if (mode === 'edit') {
     const src = COUPON_CATALOG.find(c => c.id === id);
-    const validityId = COUPON_VALIDITIES.some(v => src && src.validityLabel.indexOf(v.label) === 0) ? COUPON_VALIDITIES.find(v => src.validityLabel.indexOf(v.label) === 0).id : 'd15';
-    const scopeId = src && (COUPON_SCOPES.find(s => s.label === src.scope) || COUPON_SCOPES[0]) ? (COUPON_SCOPES.find(s => s.label === src.scope) || COUPON_SCOPES[0]).id : 'all';
     const isEx = src && src.type === 'exchange';
+    const vd = cpValidityDraftFromLabel(src ? src.validityLabel : '');
     cpState.createDraft = {
       type: src.type, name: src.name,
       value: isEx ? '' : String(src.amount),
       min: isEx ? '' : String(src.minAmount || ''),
       items: isEx ? (src.items || []).map(i => ({ id: i.id, name: i.name })) : [],
-      scope: scopeId,
-      stackable: !!src.stackable, desc: src.desc || '', validity: validityId,
-      total: src.total ? String(src.total) : '', perPerson: String(src.perPerson || 1),
+      scopeMode: 'all', scopeItems: [],
+      stackable: !!src.stackable, desc: src.desc || '',
+      effMode: vd.effMode, effDate: vd.effDate,
+      expMode: vd.expMode, expDays: vd.expDays, expDate: vd.expDate,
+      totalUnlimited: !(src.total > 0), total: (src.total > 0 ? src.total : 1000), perPerson: (src.perPerson || 1),
     };
   } else {
     cpState.createDraft = cpBlankDraft();
@@ -24954,9 +25182,7 @@ function cpCreateNext() {
   if (cpState.createStep === 1) {
     const d = cpState.createDraft;
     if (!d.name) { showToast('请填写优惠券名称', true); return; }
-    if (d.type === 'exchange') {
-      if (!d.items || !d.items.length) { showToast('请选择可抵用项目/产品', true); return; }
-    } else if (d.value === '' || Number(d.value) <= 0) {
+    if (d.type !== 'exchange' && (d.value === '' || Number(d.value) <= 0)) {
       showToast('请填写面值金额', true); return;
     }
     cpShowCreateStep(2);
@@ -24974,6 +25200,139 @@ function cpCreateNext() {
   }
   showToast(cpState.createMode === 'edit' ? '优惠券已保存' : '优惠券已创建');
   cpState.typeTab = cpState.typeTab || 'all';
+  openCpManage();
+}
+/* ===== 适用范围 · 多选 picker ===== */
+function cpScopeCatalog() {
+  const projects = (typeof getCatalogProjects === 'function' ? getCatalogProjects() : []).filter(p => p.onSale);
+  const products = (typeof getCatalogProducts === 'function' ? getCatalogProducts() : []).filter(p => p.onSale);
+  return projects.map(p => ({ id: p.id, name: p.name, kind: '项目', price: p.price }))
+    .concat(products.map(pd => ({ id: pd.id, name: pd.name + (pd.spec ? ' ' + pd.spec : ''), kind: '产品', price: pd.price })));
+}
+function cpScopeGroups() {
+  const g = [];
+  if (typeof getCustomCatalogGroups === 'function') {
+    g.push.apply(g, getCustomCatalogGroups('project').map(x => ({ id: 'proj:' + x.id, name: x.name, kind: '项目', itemIds: x.itemIds || [] })));
+    g.push.apply(g, getCustomCatalogGroups('product').map(x => ({ id: 'prod:' + x.id, name: x.name, kind: '产品', itemIds: x.itemIds || [] })));
+  }
+  return g;
+}
+function openCpScope() {
+  cpState.scopeGroupId = 'all';
+  cpState.scopeDraftItems = (cpState.createDraft.scopeItems || []).slice();
+  renderCpScope();
+  document.getElementById('cpScopeMask').classList.add('open');
+}
+function renderCpScope() {
+  const groups = cpScopeGroups();
+  const tabs = [{ id: 'all', name: '全部' }].concat(groups.map(g => ({ id: g.id, name: g.name })));
+  const bar = document.getElementById('cpScopeGroups');
+  if (bar) {
+    bar.innerHTML = tabs.map(t => '<button type="button" class="catalog-group-tab' + (t.id === cpState.scopeGroupId ? ' on' : '') + '" data-cp-scope-group="' + escapeHtml(t.id) + '">' +
+      '<span class="catalog-group-tab__face"><span class="catalog-group-tab__label"><span class="catalog-group-tab__label-text">' + escapeHtml(t.name) + '</span></span></span></button>').join('');
+  }
+  const all = cpScopeCatalog();
+  let items = all;
+  const gid = cpState.scopeGroupId || 'all';
+  if (gid !== 'all') {
+    const g = groups.find(x => x.id === gid);
+    if (g) {
+      const set = {};
+      (g.itemIds || []).forEach(id => { set[id] = true; });
+      items = all.filter(it => set[it.id]);
+    }
+  }
+  const selected = {};
+  (cpState.scopeDraftItems || []).forEach(it => { selected[it.id] = true; });
+  const isAll = !(cpState.scopeDraftItems || []).length;
+  const checkSvg = '<span class="cp-scope-check" aria-hidden="true"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4.2L3.6 6.6L9 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+  const allRow = '<div class="cp-scope-row cp-scope-row--all' + (isAll ? ' is-on' : '') + '" data-cp-scope-id="__all__">' +
+    '<span class="cp-scope-row__main"><span class="cp-scope-row__name" style="font-weight:600">全部项目/产品</span></span>' + checkSvg + '</div>';
+  const list = document.getElementById('cpScopeList');
+  if (list) {
+    list.innerHTML = allRow + items.map(it => '<div class="cp-scope-row' + (selected[it.id] ? ' is-on' : '') + '" data-cp-scope-id="' + escapeHtml(it.id) + '">' +
+      '<span class="cp-scope-row__main"><span class="cp-scope-row__kind">' + it.kind + '</span><span class="cp-scope-row__name">' + escapeHtml(it.name) + '</span></span>' +
+      '<span class="cp-scope-row__sub">' + (it.price != null ? '¥' + it.price : '') + '</span>' + checkSvg +
+      '</div>').join('');
+  }
+  const count = document.getElementById('cpScopeCount');
+  if (count) count.textContent = isAll ? '不限项目/产品' : ('已选 ' + (cpState.scopeDraftItems || []).length + ' 项');
+}
+function cpScopeToggleItem(id) {
+  const list = cpState.scopeDraftItems || (cpState.scopeDraftItems = []);
+  if (id === '__all__') {
+    cpState.scopeDraftItems = [];
+  } else {
+    const idx = list.findIndex(it => it.id === id);
+    if (idx >= 0) list.splice(idx, 1);
+    else {
+      const found = cpScopeCatalog().find(it => it.id === id);
+      if (found) list.push({ id: found.id, name: found.name, kind: found.kind });
+    }
+  }
+  renderCpScope();
+}
+function cpScopeConfirm() {
+  cpState.createDraft.scopeItems = (cpState.scopeDraftItems || []).slice();
+  cpState.createDraft.scopeMode = cpState.createDraft.scopeItems.length ? 'custom' : 'all';
+  document.getElementById('cpScopeMask').classList.remove('open');
+  renderCpCreateStep2();
+}
+function cpCloseScope() { document.getElementById('cpScopeMask').classList.remove('open'); }
+/* ===== 日期选择 sheet ===== */
+function openCpDate(kind) {
+  cpState.dateKind = kind;
+  cpState.dateDraft = kind === 'eff' ? (cpState.createDraft.effDate || '') : (cpState.createDraft.expDate || '');
+  const anchor = cpParseDateKey(cpState.dateDraft) || cpParseDateKey(cpTodayKey());
+  cpState.calYear = anchor.y;
+  cpState.calMonth = anchor.m;
+  document.getElementById('cpDateSheetTitle').textContent = kind === 'eff' ? '选择生效日期' : '选择到期日期';
+  cpRenderDateCalendar();
+  document.getElementById('cpDateMask').classList.add('open');
+}
+function cpRenderDateCalendar() {
+  const cal = document.getElementById('cpDateCal');
+  if (!cal) return;
+  const y = cpState.calYear, m = cpState.calMonth;
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  const firstDow = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  const today = cpTodayKey();
+  const selected = cpState.dateDraft || '';
+  const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
+  const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push('<span class="flow-balance-cal__day is-muted" aria-hidden="true"></span>');
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = cpDateKeyOf(y, m, d);
+    const cls = ['flow-balance-cal__day'];
+    if (key === today) cls.push('is-today');
+    if (key === selected) cls.push('is-selected');
+    cells.push('<button type="button" class="' + cls.join(' ') + '" data-cp-cal-day="' + key + '" aria-label="' + key + '"><span class="flow-balance-cal__day-num">' + d + '</span></button>');
+  }
+  cal.innerHTML = '<div class="flow-balance-cal__nav">' +
+    '<button type="button" class="flow-balance-cal__nav-btn" data-cp-cal-nav="-1" aria-label="上一月">' + chevL + '</button>' +
+    '<div class="flow-balance-cal__title">' + y + '年' + (m + 1) + '月</div>' +
+    '<button type="button" class="flow-balance-cal__nav-btn" data-cp-cal-nav="1" aria-label="下一月">' + chevR + '</button></div>' +
+    '<div class="flow-balance-cal__weekdays">' + weekdays.map(w => '<div class="flow-balance-cal__wd">' + w + '</div>').join('') + '</div>' +
+    '<div class="flow-balance-cal__grid">' + cells.join('') + '</div>';
+}
+function cpDateConfirm() {
+  const d = cpState.createDraft;
+  if (cpState.dateKind === 'eff') { d.effDate = cpState.dateDraft || ''; }
+  else { d.expDate = cpState.dateDraft || ''; }
+  document.getElementById('cpDateMask').classList.remove('open');
+  renderCpCreateStep3();
+}
+function cpCloseDate() { document.getElementById('cpDateMask').classList.remove('open'); }
+/* ===== 退出创建拦截 ===== */
+function cpOpenExitConfirm() { document.getElementById('cpExitConfirmMask').classList.add('show'); }
+function cpCloseExitConfirm() { document.getElementById('cpExitConfirmMask').classList.remove('show'); }
+function cpConfirmExit() {
+  cpCloseExitConfirm();
+  cpState.createDraft = null;
+  cpState.createMode = 'create';
+  cpState.createEditingId = null;
   openCpManage();
 }
 function openCpDetail(id) {
@@ -25114,18 +25473,15 @@ function cpOpenStatusSheet(id) {
   cpState.statusId = id;
   const cp = COUPON_CATALOG.find(c => c.id === id);
   const cur = cp ? cp.status : 'disabled';
-  document.querySelectorAll('#cpStatusList .cp-status-opt').forEach(opt => {
-    const on = opt.dataset.cpStatus === cur;
-    opt.classList.toggle('is-on', on);
-    const radio = opt.querySelector('input[type="radio"]');
-    if (radio) radio.checked = on;
+  document.querySelectorAll('#cpStatusList .cp-status-item').forEach(opt => {
+    opt.classList.toggle('is-on', opt.dataset.cpStatus === cur);
   });
   document.getElementById('cpStatusMask').classList.add('open');
 }
 function cpCloseStatusSheet() { document.getElementById('cpStatusMask').classList.remove('open'); }
 function cpConfirmStatus() {
-  const checked = document.querySelector('#cpStatusList input[type="radio"]:checked');
-  const status = checked ? checked.value : null;
+  const active = document.querySelector('#cpStatusList .cp-status-item.is-on');
+  const status = active ? active.dataset.cpStatus : null;
   if (status) {
     const cp = COUPON_CATALOG.find(c => c.id === cpState.statusId);
     if (cp && cp.status !== status) {
@@ -25162,21 +25518,16 @@ function wireCouponModule() {
     if (ticket) openCpDetail(ticket.dataset.cpId);
   });
   document.getElementById('cpStatusList')?.addEventListener('click', e => {
-    const opt = e.target.closest('.cp-status-opt');
+    const opt = e.target.closest('.cp-status-item');
     if (!opt) return;
-    document.querySelectorAll('#cpStatusList .cp-status-opt').forEach(o => o.classList.toggle('is-on', o === opt));
-    const radio = opt.querySelector('input[type="radio"]');
-    if (radio) radio.checked = true;
-  });
-  document.getElementById('cpStatusList')?.addEventListener('change', e => {
-    if (e.target.classList.contains('cp-status-opt__radio')) {
-      const opt = e.target.closest('.cp-status-opt');
-      document.querySelectorAll('#cpStatusList .cp-status-opt').forEach(o => o.classList.toggle('is-on', o === opt));
-    }
+    document.querySelectorAll('#cpStatusList .cp-status-item').forEach(o => o.classList.toggle('is-on', o === opt));
   });
   document.getElementById('cpStatusConfirm')?.addEventListener('click', cpConfirmStatus);
   document.getElementById('cpStatusMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpStatusMask')) cpCloseStatusSheet(); });
-  document.getElementById('cpCreateBack')?.addEventListener('click', openCpManage);
+  document.getElementById('cpCreateBack')?.addEventListener('click', () => {
+    if (cpState.createStep > 1) { cpShowCreateStep(cpState.createStep - 1); }
+    else { cpOpenExitConfirm(); }
+  });
   document.getElementById('btnCpPrev')?.addEventListener('click', () => { if (cpState.createStep > 1) cpShowCreateStep(cpState.createStep - 1); });
   document.getElementById('btnCpNext')?.addEventListener('click', cpCreateNext);
   document.getElementById('cpStackable')?.addEventListener('click', function () { this.classList.toggle('on'); this.setAttribute('aria-checked', this.classList.contains('on') ? 'true' : 'false'); });
@@ -25187,17 +25538,6 @@ function wireCouponModule() {
     cpState.createDraft.type = opt.dataset.cpType;
     cpState.createDraft.value = '';
     renderCpCreateStep1();
-  });
-  /* chips 委托 */
-  ['cpScopeChips', 'cpValidityChips'].forEach(cid => {
-    document.getElementById(cid)?.addEventListener('click', e => {
-      const chip = e.target.closest('[data-cp-chip-value]');
-      if (!chip) return;
-      const group = chip.dataset.cpChipGroup;
-      const val = chip.dataset.cpChipValue;
-      cpState.createDraft[group] = val;
-      chip.parentElement.querySelectorAll('.cp-chip').forEach(c => c.classList.toggle('on', c === chip));
-    });
   });
   /* 抵用券 · 可抵用项目/产品多选 */
   document.getElementById('cpExchangeItems')?.addEventListener('click', e => {
@@ -25215,6 +25555,84 @@ function wireCouponModule() {
     }
     btn.classList.toggle('on', idx < 0);
   });
+  /* Step2 适用范围入口 + 多选 picker */
+  document.getElementById('cpScopeEntry')?.addEventListener('click', openCpScope);
+  document.getElementById('cpScopeGroups')?.addEventListener('click', e => {
+    const tab = e.target.closest('[data-cp-scope-group]');
+    if (!tab) return;
+    cpState.scopeGroupId = tab.dataset.cpScopeGroup;
+    renderCpScope();
+  });
+  document.getElementById('cpScopeList')?.addEventListener('click', e => {
+    const row = e.target.closest('[data-cp-scope-id]');
+    if (!row) return;
+    cpScopeToggleItem(row.dataset.cpScopeId);
+  });
+  document.getElementById('cpScopeConfirm')?.addEventListener('click', cpScopeConfirm);
+  document.getElementById('cpScopeCancel')?.addEventListener('click', cpCloseScope);
+  document.getElementById('cpScopeMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpScopeMask')) cpCloseScope(); });
+  /* Step2 使用说明字数统计 */
+  document.getElementById('cpDesc')?.addEventListener('input', e => {
+    const c = document.getElementById('cpDescCount');
+    if (c) c.textContent = (e.target.value || '').length + '/100';
+  });
+  /* Step3 生效时间 / 有效期限 */
+  document.getElementById('cpEffSeg')?.addEventListener('click', e => {
+    const b = e.target.closest('[data-cp-eff]');
+    if (!b) return;
+    cpState.createDraft.effMode = b.dataset.cpEff;
+    renderCpCreateStep3();
+  });
+  document.getElementById('cpEffDateBtn')?.addEventListener('click', () => openCpDate('eff'));
+  document.getElementById('cpExpSeg')?.addEventListener('click', e => {
+    const b = e.target.closest('[data-cp-exp]');
+    if (!b) return;
+    cpState.createDraft.expMode = b.dataset.cpExp;
+    renderCpCreateStep3();
+  });
+  document.getElementById('cpExpDateBtn')?.addEventListener('click', () => openCpDate('exp'));
+  /* 数字步进器（领取后N天 / 发放总量 / 每人限领） */
+  document.getElementById('cpCreateStep3')?.addEventListener('click', e => {
+    const btn = e.target.closest('.cp-num-stepper__btn');
+    if (!btn) return;
+    const wrap = btn.closest('[data-cp-stepper]');
+    if (!wrap) return;
+    const id = wrap.dataset.cpStepper;
+    const dir = Number(btn.dataset.d) || 0;
+    const d = cpState.createDraft;
+    let min = 1, max = 999999, key = id;
+    if (id === 'total') { min = 1; max = 100000; key = 'total'; }
+    else if (id === 'perPerson') { min = 1; max = 10; key = 'perPerson'; }
+    else if (id === 'expDays') { min = 1; max = 365; key = 'expDays'; }
+    const v = Math.max(min, Math.min(max, (Number(d[key]) || min) + dir));
+    d[key] = v;
+    renderCpCreateStep3();
+  });
+  document.getElementById('cpTotalUnlimited')?.addEventListener('click', function () {
+    cpState.createDraft.totalUnlimited = !cpState.createDraft.totalUnlimited;
+    renderCpCreateStep3();
+  });
+  /* 日期 sheet */
+  document.getElementById('cpDateCal')?.addEventListener('click', e => {
+    const nav = e.target.closest('[data-cp-cal-nav]');
+    if (nav) {
+      let y = cpState.calYear, m = cpState.calMonth + Number(nav.dataset.cpCalNav);
+      if (m < 0) { m = 11; y--; }
+      if (m > 11) { m = 0; y++; }
+      cpState.calYear = y; cpState.calMonth = m;
+      cpRenderDateCalendar();
+      return;
+    }
+    const day = e.target.closest('[data-cp-cal-day]');
+    if (day) { cpState.dateDraft = day.dataset.cpCalDay; cpRenderDateCalendar(); }
+  });
+  document.getElementById('cpDateConfirm')?.addEventListener('click', cpDateConfirm);
+  document.getElementById('cpDateCancel')?.addEventListener('click', cpCloseDate);
+  document.getElementById('cpDateMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpDateMask')) cpCloseDate(); });
+  /* 退出创建拦截 */
+  document.getElementById('cpExitCancel')?.addEventListener('click', cpCloseExitConfirm);
+  document.getElementById('cpExitConfirm')?.addEventListener('click', cpConfirmExit);
+  document.getElementById('cpExitConfirmMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpExitConfirmMask')) cpCloseExitConfirm(); });
   document.getElementById('cpDetailBack')?.addEventListener('click', openCpManage);
   document.getElementById('cpDetailHero')?.addEventListener('click', e => {
     const share = e.target.closest('[data-cp-share-id]');
