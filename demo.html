@@ -17392,7 +17392,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                   <p class="form-tip hidden" id="cpScopeExTip" style="margin:0;border-radius:0 0 12px 12px;padding:8px 16px 10px;background:var(--cp-orange-soft,#FFF7FA);color:#B26A2E">抵用券：所选项目/产品即为可抵用范围，未选择则全部项目/产品通用。</p>
                 </div>
                 <div class="cp-form-card">
-                  <div class="form-row"><span class="label">可否与权益同享</span><button type="button" class="switch on" id="cpStackable" role="switch" aria-checked="true"></button></div>
+                  <div class="form-row"><span class="label">可与会员卡同享</span><button type="button" class="switch on" id="cpStackable" role="switch" aria-checked="true"></button></div>
                   <div class="form-row" style="align-items:flex-start;display:block">
                     <span class="label" style="margin-bottom:10px;display:block">使用说明<span class="label-hint" style="display:block">展示在券卡「使用规则」中</span></span>
                     <div class="detail-remark cp-remark">
@@ -25777,7 +25777,7 @@ function renderCpDetail() {
   rows.push('<div class="form-row"><span class="label">适用范围</span><span class="value has-val">' + escapeHtml(cp.scope) + '</span></div>');
   rows.push('<div class="form-row"><span class="label">有效期</span><span class="value has-val">' + escapeHtml(cp.validityLabel) + '</span></div>');
   rows.push('<div class="form-row"><span class="label">每人限领</span><span class="value has-val">' + cp.perPerson + ' 张</span></div>');
-  rows.push('<div class="form-row"><span class="label">可否与权益同享</span><span class="value has-val">' + (cp.stackable ? '可叠加' : '不可叠加') + '</span></div>');
+  rows.push('<div class="form-row"><span class="label">可与会员卡同享</span><span class="value has-val">' + (cp.stackable ? '可同享' : '不可同享') + '</span></div>');
   if (cp.desc) rows.push('<div class="form-row"><span class="label">使用说明</span><span class="value has-val">' + escapeHtml(cp.desc) + '</span></div>');
   if (cp.used > 0) rows.push('<div class="form-row clickable" id="cpDetailUsageRow"><span class="label">核销记录</span><span class="form-row__trail"><span class="value has-val">查看 ' + cpNum(cp.used) + ' 次</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></span></div>');
   if ((cp.shares || []).length > 0) rows.push('<div class="form-row clickable" id="cpDetailShareHistoryRow"><span class="label">分享记录</span><span class="form-row__trail"><span class="value has-val">查看 ' + cpNum(cp.shares.length) + ' 次</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></span></div>');
@@ -50013,7 +50013,7 @@ window.__BILLING_EMBEDDED__ = true;
     const rulesOpen = !!opts.rulesOpen;
     const hint = opts.hint || '';
     const rulesHtml = (cp.rules || []).map(r => `<div>${escapeHtml(r)}</div>`).join('');
-    const mutexHint = cp.stackWithBenefit === false ? '<span class="coupon-card__mutex">不可与权益同享</span>' : '';
+    const mutexHint = cp.stackWithBenefit === false ? '<span class="coupon-card__mutex">不可与会员卡同享</span>' : '';
     const tone = (cp.tag || '').indexOf('抵用券') >= 0 ? 'exchange' : 'cash';
     const isEx = cp.tag === '抵用券';
     const valueHtml = isEx
