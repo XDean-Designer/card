@@ -6236,14 +6236,14 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 /* 模式卡片：白底、无描边 */
 .ach-simple-card {
   position: relative; flex: 1; min-width: 0; text-align: left; font-family: inherit;
-  background: #FFFFFF; border: none; border-radius: 16px; overflow: hidden;
+  background: #FFFFFF; border: 2px solid transparent; border-radius: 16px; overflow: hidden;
   padding: 0; box-sizing: border-box; cursor: pointer;
   display: flex; flex-direction: column;
   box-shadow: 0 2px 10px rgba(0,0,0,.05);
-  transition: box-shadow .15s, transform .1s;
+  transition: box-shadow .15s, transform .1s, border-color .15s;
 }
 .ach-simple-card:active { transform: translateY(1px); }
-.ach-simple-card.is-on { box-shadow: 0 4px 16px rgba(243,47,65,.14); }
+.ach-simple-card.is-on { border-color: var(--brand); box-shadow: 0 6px 20px rgba(243,47,65,.2); }
 /* 图片占位（上半部分，下半渐变渐隐） */
 .ach-simple-card__img {
   position: relative; width: 100%; height: 96px; flex-shrink: 0; overflow: hidden;
@@ -6313,23 +6313,23 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 /* 右上角打勾 radio */
 .ach-simple-card__radio {
   position: absolute; top: 10px; right: 10px; z-index: 2;
-  width: 20px; height: 20px; border-radius: 50%;
+  width: 24px; height: 24px; border-radius: 50%;
   border: 1.5px solid #D6D6D6; background: #FFFFFF;
   display: flex; align-items: center; justify-content: center;
   box-sizing: border-box;
   transition: border-color .15s, background .15s;
 }
-.ach-simple-card__radio svg { width: 12px; height: 12px; color: #FFFFFF; opacity: 0; transition: opacity .15s; }
+.ach-simple-card__radio svg { width: 14px; height: 14px; color: #FFFFFF; opacity: 0; transition: opacity .15s; }
 .ach-simple-card.is-on .ach-simple-card__radio { border-color: var(--brand); background: var(--brand); }
 .ach-simple-card.is-on .ach-simple-card__radio svg { opacity: 1; }
 /* 进阶设置：单独一行，左侧图片右侧渐隐 */
 .ach-simple-adv {
   position: relative; width: 100%; display: flex; align-items: stretch; gap: 14px;
-  padding: 0; background: #FFFFFF; border: none; border-radius: 16px; overflow: hidden;
+  padding: 0; background: #FFFFFF; border: 2px solid transparent; border-radius: 16px; overflow: hidden;
   cursor: pointer; font-family: inherit; text-align: left;
   min-height: 176px;
   box-shadow: 0 2px 10px rgba(0,0,0,.05);
-  transition: box-shadow .15s, transform .1s;
+  transition: box-shadow .15s, transform .1s, border-color .15s;
 }
 .ach-simple-adv:active { transform: translateY(1px); }
 .ach-simple-adv__img {
@@ -6352,20 +6352,20 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
   background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
   pointer-events: none;
 }
-.ach-simple-adv__main { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 20px 0; }
+.ach-simple-adv__main { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 20px 48px 20px 0; }
 .ach-simple-adv__title { display: block; font-size: 20px; font-weight: 600; color: #1A1A1A; line-height: 28px; }
 .ach-simple-adv__sub { display: block; margin-top: 6px; font-size: 14px; color: #929292; line-height: 21px; }
 .ach-simple-adv__radio {
   position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
-  width: 20px; height: 20px; border-radius: 50%;
+  width: 24px; height: 24px; border-radius: 50%;
   border: 1.5px solid #D6D6D6; background: #FFFFFF;
   display: flex; align-items: center; justify-content: center;
   box-sizing: border-box;
 }
-.ach-simple-adv__radio svg { width: 12px; height: 12px; color: #FFFFFF; opacity: 0; transition: opacity .15s; }
+.ach-simple-adv__radio svg { width: 14px; height: 14px; color: #FFFFFF; opacity: 0; transition: opacity .15s; }
 .ach-simple-adv.is-on .ach-simple-adv__radio { border-color: var(--brand); background: var(--brand); }
 .ach-simple-adv.is-on .ach-simple-adv__radio svg { opacity: 1; }
-.ach-simple-adv.is-on { box-shadow: 0 4px 16px rgba(243,47,65,.14); }
+.ach-simple-adv.is-on { border-color: var(--brand); box-shadow: 0 6px 20px rgba(243,47,65,.2); }
 .ach-simple-rate__desc {
   margin: 0; padding: 0 16px 14px; font-size: 13px; color: #929292; line-height: 19px;
 }
@@ -13923,8 +13923,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-list { display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 24px; }
 /* ===== 一键建券 · 模板条 + 轻拟物 ===== */
 .cp-tpl-bar {
-  margin: 10px 16px 0; border-radius: 16px; background: #fff;
-  box-shadow: 0 10px 22px rgba(200,170,180,.14), 0 2px 6px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.9);
+  margin: 0; border-radius: 0; background: #fff;
   overflow: hidden; flex-shrink: 0;
 }
 .cp-tpl-head {
@@ -13936,7 +13935,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
   flex: 0 0 34px; width: 34px; height: 34px; border-radius: 10px;
   background: linear-gradient(135deg, #FF8A9B, #F43044);
   display: flex; align-items: center; justify-content: center; color: #fff;
-  box-shadow: 0 4px 10px rgba(244,48,68,.28);
 }
 .cp-tpl-head__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .cp-tpl-head__title { font-size: 14px; font-weight: 700; color: #1a1a1a; line-height: 1.3; }
@@ -13964,12 +13962,11 @@ button.detail-compose__row:active { background: #FAFAFA; }
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 30px; height: 30px; border-radius: 50%;
   background: #fff; border: 1px solid #F0E7EA;
-  box-shadow: 0 3px 8px rgba(0,0,0,.08);
   display: flex; align-items: center; justify-content: center; color: var(--brand);
   cursor: pointer; padding: 0; z-index: 2;
-  transition: opacity .15s, transform .15s, box-shadow .15s;
+  transition: opacity .15s, transform .15s;
 }
-.cp-tpl-arrow:active { transform: translateY(-50%) scale(.88); box-shadow: 0 2px 5px rgba(0,0,0,.1); }
+.cp-tpl-arrow:active { transform: translateY(-50%) scale(.88); }
 .cp-tpl-arrow--left { left: 8px; }
 .cp-tpl-arrow--right { right: 8px; }
 .cp-tpl-arrow.is-disabled { opacity: .25; pointer-events: none; }
@@ -14051,7 +14048,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 /* 券票本体 · 白卡柔彩 */
 .cp-ticket {
   position: relative; display: flex; flex-direction: column;
-  background: #fff; border-radius: 16px; overflow: hidden; cursor: pointer;
+  background: var(--bg-page); border-radius: 16px; overflow: hidden; cursor: pointer;
   text-align: left; font-family: inherit; color: var(--text);
   box-shadow: 0 8px 20px rgba(200,160,180,.10), 0 2px 6px rgba(0,0,0,.04);
   border: 1px solid #F2EDF0; padding: 0; width: 100%; box-sizing: border-box;
@@ -14061,7 +14058,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket--exchange .cp-ticket__left { background: linear-gradient(165deg, #FFDCDB, #FFA3A1); color: #E2574F; }
 .cp-ticket--cash .cp-ticket__left { background: linear-gradient(165deg, #FBF2CF, #F4E39C); color: var(--cp-yellow-deep); }
 .cp-ticket--disabled .cp-ticket__left { background: linear-gradient(165deg, #F4F3F2, #ECEAE8); color: #A89F9A; }
-.cp-ticket__body { display: flex; align-items: stretch; min-height: 96px; }
+.cp-ticket__body { display: flex; align-items: stretch; min-height: 96px; background: #fff; position: relative; }
 .cp-ticket__left {
   flex: 0 0 118px; width: 118px; box-sizing: border-box;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -14087,6 +14084,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket__right {
   flex: 1; min-width: 0; display: flex; flex-direction: column;
   justify-content: center; gap: 8px; padding: 14px 14px 14px 16px;
+  background: #fff;
 }
 .cp-ticket__name {
   font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.35;
@@ -14095,9 +14093,9 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket__meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8A8A8A; line-height: 1.4; }
 .cp-ticket__meta-dot { flex-shrink: 0; width: 3px; height: 3px; border-radius: 50%; background: #D9D9D9; }
 .cp-ticket__status {
-  flex-shrink: 0; height: 20px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 600;
-  display: inline-flex; align-items: center; justify-content: center; line-height: 20px;
-  border: none; cursor: pointer; font-family: inherit;
+  flex-shrink: 0; height: 24px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center; line-height: 24px;
+  border: none; cursor: pointer; font-family: inherit; box-sizing: border-box;
   transition: filter .15s ease, transform .1s ease;
 }
 .cp-ticket__status:active { transform: scale(.94); }
@@ -14105,10 +14103,32 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket__status--disabled { background: #F0F0F0; color: #9B9B9B; }
 /* 撕票底边 · 白底浅边 · 两行：统计行 + 操作行 */
 .cp-ticket__foot {
+  position: relative;
   border-top: 1px dashed #F0E4EA; padding: 10px 16px;
   display: flex; flex-direction: column; gap: 10px; font-size: 12px;
   color: #8A8A8A; background: #FDFBFB;
 }
+/* 虚线两端半圆缺口 · 撕票镂空感
+   券面在缺口处被"挖穿"：缺口圆填充页面背景色（真镂空），
+   圆内上缘带券面厚度压痕阴影 + 断面细描边，缺口轮廓清晰可见；
+   圆覆盖在 foot 虚线上使虚线在两端断开。不依赖 mask，全浏览器兼容 */
+.cp-ticket__body::before,
+.cp-ticket__body::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--bg-page);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, .08),
+    inset 0 0 0 1px #EFE7EA;
+  z-index: 1;
+  pointer-events: none;
+}
+.cp-ticket__body::before { left: -9px; }
+.cp-ticket__body::after { right: -9px; }
 .cp-ticket__foot-stats {
   display: flex; align-items: center; gap: 12px; min-width: 0; flex-wrap: nowrap;
 }
@@ -14219,6 +14239,12 @@ button.detail-compose__row:active { background: #FAFAFA; }
   display: inline-flex; align-items: center; justify-content: center;
   font-family: var(--font-data); font-size: 15px; font-weight: 500; color: var(--text);
 }
+.cp-num-stepper__input {
+  width: 52px; border-left: none; border-right: none; outline: none; background: #fff;
+  text-align: center; font: inherit; color: inherit;
+}
+.cp-share-settings .cp-num-stepper__btn,
+.cp-share-settings .cp-num-stepper__input { border-color: #EDE7EA; }
 /* 使用说明 · 备注式输入框 */
 .cp-remark { margin: 0; }
 .cp-remark .detail-remark__label { margin-bottom: 8px; }
@@ -14284,9 +14310,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
 /* 分享 · 微信 */
 .cp-ticket__share {
   flex-shrink: 0; height: 24px; padding: 0 8px; border-radius: 999px;
-  border: 1px solid #3C3C3C; background: transparent; color: #3C3C3C;
+  border: 1px solid #929292; background: transparent; color: #929292;
   font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1;
   display: inline-flex; align-items: center; gap: 3px;
+  box-sizing: border-box;
   transition: filter .15s ease, transform .1s ease;
 }
 .cp-ticket__share:active { transform: scale(.94); }
@@ -14314,6 +14341,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
 }
 .cp-share-settings .duration-input__units--share .duration-input__unit { color: #929292; }
 .cp-share-settings .duration-input__units--share .duration-input__unit.is-active { color: var(--brand); font-weight: 600; }
+.cp-share-custom { display: flex; align-items: center; gap: 10px; width: 100%; }
+.cp-share-custom.hidden { display: none; }
+.cp-share-custom__label { font-size: 13px; color: var(--text-sec); flex-shrink: 0; }
+.cp-share-custom__unit { font-size: 13px; color: var(--text-sec); }
 .cp-share-opt {
   flex: 1; min-width: 0; height: 48px; border-radius: 12px;
   border: 1px solid var(--border); background: #fff; cursor: pointer; font-family: inherit;
@@ -14924,7 +14955,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
       <div class="form-row"><span class="label">员工手机号<span class="req">*</span></span><input class="value" id="empFPhone" placeholder="请输入" inputmode="numeric" maxlength="11" autocomplete="tel" /></div>
       <div class="form-row clickable" id="empRowGender"><span class="label">性别<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFGender">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowAgeBand"><span class="label">年龄段<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFAgeBand">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
-      <div class="form-row"><span class="label">从业年限</span><input class="value" id="empFYears" type="number" min="0" max="50" step="1" placeholder="请输入年数" inputmode="numeric" /></div>
+      <div class="form-row"><span class="label">从业年限</span><input class="value issue-extend-custom-input" id="empFYears" type="number" min="0" max="50" step="1" placeholder="请输入年数" inputmode="numeric" /></div>
       <div class="form-row is-readonly"><span class="label">归属店铺</span><span class="form-row__trail"><span class="value has-val" id="empFShop"></span></span></div>
       <div class="form-row clickable" id="empRowRole"><span class="label">职位<span class="req">*</span></span><span class="form-row__trail"><span class="value" id="empFRole">请选择</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
       <div class="form-row clickable" id="empRowPerm"><span class="label">权限<span class="req">*</span><button type="button" class="emp-label-info" id="empPermInfo" aria-label="权限说明"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.25v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5.2" r="0.85" fill="currentColor"/></svg></button></span><span class="form-row__trail"><span class="value" id="empFPerm">请选择员工权限</span><span class="chevron"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span></span></div>
@@ -17441,8 +17472,8 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body" style="background:var(--bg-page)">
               <div class="cp-share-hero" id="cpShareHero"></div>
               <div class="cp-share-settings">
-                <div class="form-row"><span class="label">分享数量</span><div class="form-row__trail"><input class="value input-amount" id="cpShareQty" inputmode="numeric" placeholder="10" maxlength="6" data-no-amount-keypad /><span class="suffix">张</span></div></div>
-                <div class="form-row form-row--validity-stack"><span class="label">链接有效期</span><div class="duration-input__units duration-input__units--share" id="cpShareValidityChips"></div></div>
+                <div class="form-row"><span class="label">分享数量</span><div class="form-row__trail"><div id="cpShareQtyStepper"></div><span class="suffix">张</span></div></div>
+                <div class="form-row form-row--validity-stack"><span class="label">链接有效期</span><div class="duration-input__units duration-input__units--share" id="cpShareValidityChips"></div><div class="cp-share-custom hidden" id="cpShareValidityCustom"><span class="cp-share-custom__label">自定义天数</span><div id="cpShareValidityDays"></div><span class="cp-share-custom__unit">天</span></div></div>
               </div>
             </div>
             <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="cp-share-opt" id="cpShareMoments"><span class="cp-share-opt__icon cp-share-opt__icon--moments" aria-hidden="true"></span>分享到朋友圈</button><button type="button" class="cp-share-opt" id="cpShareWechat"><span class="cp-share-opt__icon cp-share-opt__icon--wechat" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path transform="translate(0.05 2.24)" fill="#07C160" d="M16.1739 5.89565C16.4348 5.89565 16.6957 5.89565 17.0087 5.94783C16.2783 2.55652 12.6261 0 8.45217 0C3.8087 0 0 3.18261 0 7.2C0 9.54783 1.25217 11.4261 3.3913 12.887L2.55652 15.4957L5.53043 14.0348C6.57391 14.2435 7.46087 14.4522 8.50435 14.4522C8.76522 14.4522 9.02609 14.4522 9.28696 14.4C9.13044 13.8261 9.02609 13.2522 9.02609 12.6261C8.97391 8.92174 12.1565 5.89565 16.1739 5.89565ZM11.6348 3.6C12.2609 3.6 12.6783 4.01739 12.6783 4.64348C12.6783 5.26957 12.2609 5.68696 11.6348 5.68696C11.0087 5.68696 10.3826 5.26957 10.3826 4.64348C10.3826 4.01739 11.0087 3.6 11.6348 3.6ZM5.68696 5.73913C5.06087 5.73913 4.43478 5.32174 4.43478 4.69565C4.43478 4.06957 5.06087 3.65217 5.68696 3.65217C6.31304 3.65217 6.73043 4.06957 6.73043 4.69565C6.78261 5.32174 6.36522 5.73913 5.68696 5.73913Z"/><path transform="translate(9.55 8.61)" fill="#07C160" d="M14.4 6.15652C14.4 2.76522 11.0087 0 7.2 0C3.18261 0 0 2.76522 0 6.15652C0 9.54782 3.18261 12.313 7.2 12.313C8.03478 12.313 8.86956 12.1043 9.75652 11.8956L12.0522 13.1478L11.4261 11.0087C13.1478 9.75652 14.4 8.03478 14.4 6.15652ZM4.90435 5.06087C4.48695 5.06087 4.06956 4.64348 4.06956 4.22608C4.06956 3.80869 4.48695 3.3913 4.90435 3.3913C5.53043 3.3913 5.94782 3.80869 5.94782 4.22608C5.94782 4.64348 5.53043 5.06087 4.90435 5.06087ZM9.54782 5.06087C9.13043 5.06087 8.71304 4.64348 8.71304 4.22608C8.71304 3.80869 9.13043 3.3913 9.54782 3.3913C10.1739 3.3913 10.5913 3.80869 10.5913 4.22608C10.5913 4.64348 10.1739 5.06087 9.54782 5.06087Z"/></svg></span>分享到微信</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
@@ -25083,6 +25114,7 @@ const cpState = {
   shareId: null,
   shareQty: 10,
   shareValidity: 'd7',
+  shareValidityDays: 30,
   shareClaimed: 0,
   shareHistoryId: null,
   scopeGroupId: 'all',
@@ -25103,7 +25135,7 @@ const CP_SHARE_VALIDITIES = [
   { id: 'h24', label: '24 小时' },
   { id: 'd3', label: '3 天' },
   { id: 'd7', label: '7 天' },
-  { id: 'd30', label: '30 天' },
+  { id: 'custom', label: '自定义' },
 ];
 const CP_TPL_VALIDITY_OPTS = [
   { id: 'now_30d', label: '立即生效 · 30天', eff: 'immediate', exp: '30d' },
@@ -25156,7 +25188,7 @@ function cpTicketHtml(cp) {
     ? '<div class="cp-ticket__meta">可抵用 ' + escapeHtml(cpExchangeItemsLabel(cp)) + '</div>'
     : '<div class="cp-ticket__meta">' + escapeHtml(cp.validityLabel) + '</div>';
   const shareBtn = cp.status === 'enabled'
-    ? '<button type="button" class="cp-ticket__share" data-cp-share-id="' + cp.id + '" aria-label="分享优惠券">' + cpWechatGlyphHtml('#3C3C3C') + '分享</button>'
+    ? '<button type="button" class="cp-ticket__share" data-cp-share-id="' + cp.id + '" aria-label="分享优惠券">' + cpWechatGlyphHtml('#929292') + '分享</button>'
     : '';
   return '<div class="cp-ticket cp-ticket--' + cp.type + ' cp-ticket--' + cp.status + '" data-cp-id="' + cp.id + '" role="button" tabindex="0">' +
     '<div class="cp-ticket__body">' +
@@ -25203,8 +25235,7 @@ function setCpTypeTab(tab) {
 function openCpManage() {
   if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
   setCpTypeTab(cpState.typeTab || 'all');
-  const tplBar = document.getElementById('cpTplBar');
-  if (tplBar) tplBar.classList.toggle('hidden', !!cpState.demoEmpty);
+  if (cpState.demoEmpty) cpState.tplCollapsed = false;
   renderTplBar();
   showOnlyScreen('screen-coupon-manage');
   if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight(cpState.demoEmpty ? 'coupon-empty' : 'coupon-list');
@@ -25766,6 +25797,7 @@ function openCpShare(id) {
   cpState.shareId = id;
   cpState.shareQty = 10;
   cpState.shareValidity = 'd7';
+  cpState.shareValidityDays = 30;
   cpState.shareClaimed = 0;
   renderCpShare();
   showOnlyScreen('screen-coupon-share');
@@ -25775,7 +25807,18 @@ function renderCpShare() {
   if (!cp) return;
   document.getElementById('cpShareHero').innerHTML = cpTicketHtml(cp);
   renderCpShareValidity();
-  document.getElementById('cpShareQty').value = cpState.shareQty;
+  renderCpShareQty();
+}
+function renderCpShareQty() {
+  const box = document.getElementById('cpShareQtyStepper');
+  if (!box) return;
+  const v = Math.max(1, Math.min(1000, cpState.shareQty || 10));
+  cpState.shareQty = v;
+  box.innerHTML = '<div class="cp-num-stepper" data-cp-stepper="shareQty">' +
+    '<button type="button" class="cp-num-stepper__btn minus" data-d="-1" aria-label="减少"' + (v <= 1 ? ' disabled' : '') + '>−</button>' +
+    '<input class="cp-num-stepper__val cp-num-stepper__input" type="text" inputmode="numeric" maxlength="4" value="' + v + '" data-val aria-label="分享数量" />' +
+    '<button type="button" class="cp-num-stepper__btn plus" data-d="1" aria-label="增加"' + (v >= 1000 ? ' disabled' : '') + '>+</button>' +
+    '</div>';
 }
 function renderCpShareValidity() {
   const box = document.getElementById('cpShareValidityChips');
@@ -25785,11 +25828,32 @@ function renderCpShareValidity() {
   const indicatorStyle = 'width:calc((100% - 2 * var(--dur-seg-inset, 3px)) / ' + n + ');transform:translateX(' + (idx * 100) + '%)';
   box.innerHTML = '<span class="duration-seg-indicator" style="' + indicatorStyle + '" aria-hidden="true"></span>' +
     CP_SHARE_VALIDITIES.map((v, i) =>
-      '<button type="button" class="duration-input__unit' + (i === idx ? ' is-active' : '') + '" data-share-validity="' + v.id + '">' + escapeHtml(v.label.replace(/\s/g, '')) + '</button>'
+      '<button type="button" class="duration-input__unit' + (i === idx ? ' is-active' : '') + '" data-share-validity="' + v.id + '">' + escapeHtml(v.label) + '</button>'
     ).join('');
+  renderCpShareDays();
+}
+function renderCpShareDays() {
+  const wrap = document.getElementById('cpShareValidityCustom');
+  const box = document.getElementById('cpShareValidityDays');
+  if (!wrap) return;
+  wrap.classList.toggle('hidden', cpState.shareValidity !== 'custom');
+  if (!box) return;
+  if (cpState.shareValidity !== 'custom') { box.innerHTML = ''; return; }
+  const v = Math.max(1, Math.min(30, cpState.shareValidityDays || 30));
+  cpState.shareValidityDays = v;
+  box.innerHTML = '<div class="cp-num-stepper" data-cp-stepper="shareValidityDays">' +
+    '<button type="button" class="cp-num-stepper__btn minus" data-d="-1" aria-label="减少"' + (v <= 1 ? ' disabled' : '') + '>−</button>' +
+    '<input class="cp-num-stepper__val cp-num-stepper__input" type="text" inputmode="numeric" maxlength="2" value="' + v + '" data-val aria-label="自定义天数" />' +
+    '<button type="button" class="cp-num-stepper__btn plus" data-d="1" aria-label="增加"' + (v >= 30 ? ' disabled' : '') + '>+</button>' +
+    '</div>';
+}
+function cpShareValidityLabel() {
+  if (cpState.shareValidity === 'custom') return cpState.shareValidityDays + ' 天';
+  const v = CP_SHARE_VALIDITIES.find(x => x.id === cpState.shareValidity);
+  return v ? v.label : '';
 }
 function cpDoShare(channel) {
-  const qty = parseInt(document.getElementById('cpShareQty').value.trim(), 10);
+  const qty = Math.max(1, Math.min(1000, parseInt(cpState.shareQty, 10) || 0));
   if (!qty || qty < 1) { showToast('请填写有效的分享数量', true); return; }
   cpState.shareQty = qty;
   const cp = COUPON_CATALOG.find(c => c.id === cpState.shareId);
@@ -26135,6 +26199,35 @@ function wireCouponModule() {
     cpState.shareValidity = unit.dataset.shareValidity;
     renderCpShareValidity();
   });
+  /* 分享数量 / 自定义天数 步进器 */
+  document.getElementById('cpShareQtyStepper')?.addEventListener('click', e => {
+    const btn = e.target.closest('.cp-num-stepper__btn');
+    if (!btn) return;
+    const dir = Number(btn.dataset.d) || 0;
+    cpState.shareQty = Math.max(1, Math.min(1000, (cpState.shareQty || 10) + dir));
+    renderCpShareQty();
+  });
+  document.getElementById('cpShareQtyStepper')?.addEventListener('input', e => {
+    const inp = e.target.closest('[data-val]');
+    if (!inp) return;
+    const n = parseInt(inp.value, 10);
+    cpState.shareQty = isNaN(n) ? 10 : n;
+  });
+  document.getElementById('cpShareQtyStepper')?.addEventListener('blur', () => renderCpShareQty(), true);
+  document.getElementById('cpShareValidityCustom')?.addEventListener('click', e => {
+    const btn = e.target.closest('.cp-num-stepper__btn');
+    if (!btn) return;
+    const dir = Number(btn.dataset.d) || 0;
+    cpState.shareValidityDays = Math.max(1, Math.min(30, (cpState.shareValidityDays || 30) + dir));
+    renderCpShareDays();
+  });
+  document.getElementById('cpShareValidityCustom')?.addEventListener('input', e => {
+    const inp = e.target.closest('[data-val]');
+    if (!inp) return;
+    const n = parseInt(inp.value, 10);
+    cpState.shareValidityDays = isNaN(n) ? 30 : n;
+  });
+  document.getElementById('cpShareValidityCustom')?.addEventListener('blur', () => renderCpShareDays(), true);
   document.getElementById('cpShareMaskDone')?.addEventListener('click', cpCloseShareMask);
   document.getElementById('cpShareMaskPreview')?.addEventListener('click', cpOpenSharePreview);
   document.getElementById('cpShareMask')?.addEventListener('click', e => { if (e.target === document.getElementById('cpShareMask')) cpCloseShareMask(); });
@@ -27581,12 +27674,17 @@ function openAmountKeypad(el) {
   const titleEl = document.getElementById('amountKeypadTitle');
   if (titleEl) {
     if (el.id === 'fPrice') titleEl.textContent = state.projFormKind === 'product' ? '产品价格' : '项目价格';
+    else if (el.id === 'empFYears') titleEl.textContent = '输入从业年限';
+    else if (el.id === 'empAchEditCostPct') titleEl.textContent = '成本比例';
+    else if (el.id === 'empAchEditCostFixed') titleEl.textContent = '固定成本';
+    else if (el.classList.contains('qty-input')) titleEl.textContent = '输入数量';
     else if (el.id === 'holdPriceKeypadProxy') titleEl.textContent = '挂单金额';
     else if (el.id === 'billDueKeypadProxy' || el.id === 'cardIssuePayKeypadProxy' || el.id === 'billRechargeDue' || el.id === 'billTimesDue' || el.id === 'billExtendDue' || (el.dataset && (el.dataset.billRechargeField === 'due' || el.dataset.billTimesDue != null || el.dataset.billExtendDue != null))) titleEl.textContent = '应付金额';
     else if (el.id === 'quickConsumeKeypadProxy' || el.id === 'billQuickAmt') titleEl.textContent = '快速消费金额';
     else if (el.dataset && (el.dataset.flowPerf === 'achievement' || el.dataset.flowEditPerf === 'achievement' || el.dataset.flowEditStaffPerf === 'achievement')) titleEl.textContent = '修改业绩';
     else if (el.dataset && (el.dataset.flowPerf === 'commission' || el.dataset.flowEditPerf === 'commission' || el.dataset.flowEditStaffPerf === 'commission')) titleEl.textContent = '修改提成';
     else if (el.dataset && el.dataset.flowEditItemPrice != null) titleEl.textContent = '修改单价';
+    else if (el.getAttribute && el.getAttribute('aria-label')) titleEl.textContent = el.getAttribute('aria-label');
     else titleEl.textContent = state.amountKeypadMode === 'integer' ? '输入天数' : '输入金额';
   }
   updateAmountKeypadDisplay();
@@ -31902,6 +32000,7 @@ function renderProjectPickParams() {
     next => { Object.assign(state.projBenefitDraft, next); },
     renderProjectPickParams,
   );
+  if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(host);
 }
 
 function renderDiscountPickParams() {
@@ -32075,6 +32174,7 @@ function wireSimpleProductPicker(container) {
     input.addEventListener('change', commit);
     input.addEventListener('blur', commit);
   });
+  if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(container);
 }
 
 function openAddProjectBenefit() {
@@ -33194,7 +33294,7 @@ function projQtyScopeRadioHtml(mode, checked, proj, opts = {}) {
 function projQtyStepperHtml(proj, kind, value, minVal) {
   return `<div class="qty-stepper">
     <button type="button" class="qty-btn" data-${kind}-minus="${escapeAttr(proj)}">−</button>
-    <input type="number" class="qty-input" data-${kind}-input="${escapeAttr(proj)}" min="${minVal}" max="999" value="${value}" />
+    <input type="number" class="qty-input issue-extend-custom-input" data-${kind}-input="${escapeAttr(proj)}" min="${minVal}" max="999" value="${value}" />
     <button type="button" class="qty-btn" data-${kind}-plus="${escapeAttr(proj)}">+</button>
   </div>`;
 }
@@ -37331,10 +37431,11 @@ function billingNav(fn) {
       '<button type="button" class="emp-reward-radio' + (draft.type === 'deduct' ? ' is-on' : '') + '" data-reward-type="deduct"><span class="emp-reward-radio__dot"></span>扣除</button>' +
       '</div></div></div>' +
       '<div class="emp-reward-form__row"><span class="emp-reward-form__lbl">金额</span><div class="emp-reward-form__field"><div class="emp-reward-form__amt-wrap">' +
-      '<input type="number" id="empRewardAmount" inputmode="decimal" min="0" max="999999.99" step="0.01" placeholder="请输入奖惩金额" value="' +
+      '<input type="number" id="empRewardAmount" class="input-amount" inputmode="decimal" min="0" max="999999.99" step="0.01" placeholder="请输入奖惩金额" value="' +
       (draft.amount === '' || draft.amount == null ? '' : esc(String(draft.amount))) + '" /><span class="emp-reward-form__unit">元</span></div></div></div>' +
       '<div class="emp-reward-form__row emp-reward-form__row--note"><span class="emp-reward-form__lbl">备注</span><div class="emp-reward-form__field">' +
       '<textarea class="emp-reward-form__note" id="empRewardNote" maxlength="200" placeholder="请输入备注">' + esc(draft.note || '') + '</textarea></div></div>';
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(form);
 
     if (recent) {
       var items = rewardMonthItems(state.salaryMonth).slice(0, 5);
@@ -37937,7 +38038,7 @@ function billingNav(fn) {
       '<button type="button" class="emp-ach-pad__step" data-ach-step="' + stepField + '" data-ach-dir="-1" aria-label="减少">−</button>' +
       '<div class="emp-ach-pad__input-wrap' + (isAmt ? ' has-prefix' : '') + '">' +
       (isAmt ? '<span class="emp-ach-pad__unit is-prefix">¥</span>' : '') +
-      '<input type="number" id="' + id + '" inputmode="decimal" min="0"' +
+      '<input type="number" id="' + id + '" class="issue-extend-custom-input" inputmode="decimal" min="0"' +
       (isAmt ? ' step="1"' : ' max="100" step="1"') +
       ' value="' + esc(String(val)) + '" aria-label="' + label + '" />' +
       (isAmt ? '' : '<span class="emp-ach-pad__unit">%</span>') +
@@ -38118,9 +38219,9 @@ function billingNav(fn) {
       '</div></div>';
     html += '<div class="emp-ach-edit-fields emp-ach-edit-fields--inline" id="empAchEditCostFields">';
     if (cost === 'receipt' || cost === 'price') {
-      html += '<div class="emp-ach-edit-field"><label><span>成本比例</span><input type="number" id="empAchEditCostPct" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.costPct)) + '" aria-label="成本比例" /></label></div>';
+      html += '<div class="emp-ach-edit-field"><label><span>成本比例</span><input type="number" id="empAchEditCostPct" class="input-amount" inputmode="decimal" min="0" max="100" step="0.1" value="' + esc(String(scheme.costPct)) + '" aria-label="成本比例" /></label></div>';
     } else if (cost === 'fixed') {
-      html += '<div class="emp-ach-edit-field"><label><span>固定成本</span><input type="number" id="empAchEditCostFixed" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.costFixed)) + '" aria-label="固定成本" /></label></div>';
+      html += '<div class="emp-ach-edit-field"><label><span>固定成本</span><input type="number" id="empAchEditCostFixed" class="input-amount" inputmode="decimal" min="0" step="0.01" value="' + esc(String(scheme.costFixed)) + '" aria-label="固定成本" /></label></div>';
     }
     html += '</div>';
     html += '<p class="emp-ach-edit-hint">有扣除成本时，先按实收或售价减去成本再计算业绩。</p>';
@@ -38263,6 +38364,7 @@ function billingNav(fn) {
     };
     $('empAchEditTitle').textContent = state.achEdit.title;
     $('empAchEditBody').innerHTML = renderAchEditBody(scheme);
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs($('empAchEditBody'));
     syncAchEditFoot();
     openMask('empAchEditMask');
   }
@@ -38275,6 +38377,7 @@ function billingNav(fn) {
     draft.costMode = state.achEdit.costMode;
     state.achEdit.draft = draft;
     $('empAchEditBody').innerHTML = renderAchEditBody(draft);
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs($('empAchEditBody'));
   }
 
   function applyAchEditToAllStations() {
@@ -39935,11 +40038,11 @@ function billingNav(fn) {
         '<div class="emp-ladder-block">' +
         '<div class="emp-ladder-block__title">业绩范围</div>' +
         '<div class="emp-ladder-well emp-ladder-bounds">' +
-        '<input type="number" data-ladder-min="' + i + '" value="' + (tier.min || 0) + '"' +
+        '<input type="number" class="input-amount" data-ladder-min="' + i + '" value="' + (tier.min || 0) + '"' +
         (minLinked ? ' readonly' : '') +
         ' inputmode="decimal" aria-label="区间下限"' + (minLinked ? ' title="与上一档上限自动衔接"' : '') + ' />' +
         '<span class="emp-ladder-bounds-sep" aria-hidden="true">—</span>' +
-        '<input type="number" data-ladder-max="' + i + '" value="' + maxVal + '" placeholder="及以上" inputmode="decimal" aria-label="区间上限" />' +
+        '<input type="number" class="input-amount" data-ladder-max="' + i + '" value="' + maxVal + '" placeholder="及以上" inputmode="decimal" aria-label="区间上限" />' +
         '</div></div>' +
         '<div class="emp-ladder-block">' +
         '<div class="emp-ladder-block__title">提成方式</div>' +
@@ -39964,6 +40067,7 @@ function billingNav(fn) {
         '</div></div>' +
         '</div></div>';
     }).join('');
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(root);
   }
 
   function syncLadderLinkedMinsFromDom() {
@@ -40327,9 +40431,8 @@ function billingNav(fn) {
     if (tplId && state.achSimpleMianDan && state.achSimpleMianDan[tplId] != null) {
       return !!state.achSimpleMianDan[tplId];
     }
-    var rules = ensureAdvRules();
-    var free = rules.find(function (r) { return r.id === 'ar9'; });
-    return !(free && free.value === '不计算业绩提成');
+    /* 独立记忆：未显式设置时默认免单计入业绩（与 ar9 默认值一致） */
+    return true;
   }
 
   function getAchSimpleBase(tplId) {
@@ -40441,6 +40544,8 @@ function billingNav(fn) {
     if (typeof invalidateCommLineCache === 'function') invalidateCommLineCache();
     state.achSimpleTemplate = id;
     state.achSimpleAdvReturn = false;
+    /* 切换选中方案后，把该方案自己的免单设置同步到全局计算规则 */
+    syncAchSimpleMianDanToGlobal(id);
     renderAchSimple();
     toast('已启用「' + tpl.title + '」');
   }
@@ -40572,12 +40677,8 @@ function billingNav(fn) {
     toast('已更新');
   }
 
-  function applyAchSimpleMianDan(tplId, on) {
-    on = !!on;
-    if (tplId) {
-      state.achSimpleMianDan = state.achSimpleMianDan || {};
-      state.achSimpleMianDan[tplId] = on;
-    }
+  function syncAchSimpleMianDanToGlobal(tplId) {
+    var on = getAchSimpleMianDan(tplId);
     try { ensureDemoFilled(); } catch (e) { /* ignore */ }
     var rules = ensureAdvRules();
     rules.forEach(function (r) {
@@ -40585,6 +40686,18 @@ function billingNav(fn) {
     });
     window.EmployeeStore.advRules = rules;
     if (typeof invalidateCommLineCache === 'function') invalidateCommLineCache();
+  }
+
+  function applyAchSimpleMianDan(tplId, on) {
+    on = !!on;
+    if (tplId) {
+      state.achSimpleMianDan = state.achSimpleMianDan || {};
+      state.achSimpleMianDan[tplId] = on;
+      /* 仅当前选中的方案才会写入全局计算规则，另一个卡片的开关互不影响 */
+      if (getAchSimpleTemplate() === tplId) syncAchSimpleMianDanToGlobal(tplId);
+    } else {
+      syncAchSimpleMianDanToGlobal(tplId);
+    }
     renderAchSimple();
     toast(on ? '免单已计入业绩' : '免单不计入业绩');
   }
@@ -41561,6 +41674,7 @@ function billingNav(fn) {
       var advBtn = e.target.closest('[data-ach-simple-adv]');
       if (advBtn) {
         state.achSimpleAdvReturn = true;
+        syncAchSimpleMianDanToGlobal(getAchSimpleTemplate());
         openAch();
         return;
       }
@@ -50127,7 +50241,7 @@ window.__BILLING_EMBEDDED__ = true;
         inner += `<div class="benefit-row"><span>${(card.discount * 10).toFixed(1)}折（${escapeHtml(card.name)}）</span><button type="button" class="toggle ${d.discountOn ? 'on' : ''}" data-disc="${card.id}"></button></div>`;
       }
       if (showFace) {
-        inner += `<div class="benefit-row"><span>面值抵扣（余 ${formatYen(card.balance)}）</span><input class="amount-input num" type="number" min="0" max="${card.balance}" step="0.01" data-bal="${card.id}" value="${d.balanceUse || ''}" placeholder="0"></div>`;
+        inner += `<div class="benefit-row"><span>面值抵扣（余 ${formatYen(card.balance)}）</span><input class="amount-input num input-amount" type="number" min="0" max="${card.balance}" step="0.01" data-bal="${card.id}" value="${d.balanceUse || ''}" placeholder="0"></div>`;
         inner += `<div class="benefit-row"><span>固定金额 98 元（${escapeHtml(card.name)}）</span><button type="button" class="toggle ${d.fixedUse ? 'on' : ''}" data-fixed="${card.id}"></button></div>`;
       }
       (card.projects || []).forEach((p, idx) => {
@@ -50155,6 +50269,7 @@ window.__BILLING_EMBEDDED__ = true;
       <button type="button" class="benefit-none-btn" data-benefit-none>${offerActionIconHtml('benefit-none')}不使用权益</button>
       <button type="button" class="benefit-none-btn" id="btnOpenDiscount">${offerActionIconHtml('manual-discount')}人工打折</button>
       ${cards || '<div class="empty-cart" style="padding:24px 16px">本单暂无可用会员卡权益</div>'}`;
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(document.getElementById('benefitBody'));
   }
 
   function renderDiscountPage() {
@@ -50165,10 +50280,11 @@ window.__BILLING_EMBEDDED__ = true;
           <button type="button" class="discount-row__check ${cat.on ? 'is-on' : ''}" data-disc-check="${cat.id}" aria-pressed="${cat.on ? 'true' : 'false'}">${iconCheckSvg()}</button>
           <div class="discount-row__name">${escapeHtml(cat.name)}</div>
           <div class="discount-row__field ${cat.on ? 'is-on' : ''}">
-            <input type="number" min="0" max="10" step="0.1" data-disc-rate="${cat.id}" value="${cat.rate}">
+            <input type="number" class="input-amount" min="0" max="10" step="0.1" data-disc-rate="${cat.id}" value="${cat.rate}">
             <span>折</span>
           </div>
         </div>`).join('')}`;
+    if (typeof wireAmountKeypadInputs === 'function') wireAmountKeypadInputs(document.getElementById('discountBody'));
   }
 
   function renderScanMe() {
