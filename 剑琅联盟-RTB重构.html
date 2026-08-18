@@ -13939,11 +13939,6 @@ button.detail-compose__row:active { background: #FAFAFA; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; color: var(--cp-orange-deep); position: relative; overflow: hidden;
 }
-.cp-ticket__left::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,.55), rgba(255,255,255,0) 46%);
-  pointer-events: none;
-}
 .cp-ticket__amount {
   display: flex; align-items: flex-start; justify-content: center; gap: 1px; line-height: 1;
 }
@@ -13980,20 +13975,24 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-ticket__status:active { transform: scale(.94); }
 .cp-ticket__status--enabled { background: #E4F6EC; color: #3D9B6E; }
 .cp-ticket__status--disabled { background: #F0F0F0; color: #9B9B9B; }
-/* 撕票底边 · 白底浅边 */
+/* 撕票底边 · 白底浅边 · 两行：统计行 + 操作行 */
 .cp-ticket__foot {
   border-top: 1px dashed #F0E4EA; padding: 10px 16px;
-  display: flex; align-items: center; gap: 18px; font-size: 12px;
+  display: flex; flex-direction: column; gap: 10px; font-size: 12px;
   color: #8A8A8A; background: #FDFBFB;
 }
-.cp-ticket__foot-item { display: inline-flex; align-items: center; gap: 5px; }
+.cp-ticket__foot-stats {
+  display: flex; align-items: center; gap: 18px; min-width: 0;
+}
+.cp-ticket__foot-item { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
 .cp-ticket__foot-item b { font-family: var(--font-data); font-weight: 600; color: #1a1a1a; font-size: 13px; }
-.cp-ticket__foot-spacer { flex: 1; }
+.cp-ticket__foot-actions {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-width: 0;
+}
 .cp-ticket__foot-more { color: #B5A9AF; display: inline-flex; align-items: center; gap: 2px; }
 .cp-ticket__foot-more svg { width: 14px; height: 14px; }
 /* 已禁用：灰调票面 + 整体降饱和 */
 .cp-ticket--disabled { opacity: .75; border: 1px solid #EDEBEA; }
-.cp-ticket--disabled .cp-ticket__left::after { background: radial-gradient(120% 120% at 0% 0%, rgba(255,255,255,.45), rgba(255,255,255,0) 46%); }
 .cp-ticket--disabled .cp-ticket__name { color: #6B6B6B; }
 .cp-ticket--disabled .cp-ticket__meta { color: #A6A29E; }
 .cp-ticket--disabled .cp-ticket__meta-dot { background: #D8D4D0; }
@@ -14161,10 +14160,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-chip.on { border-color: var(--cp-orange); color: var(--cp-orange-deep); background: #FFF7FA; }
 /* 分享 · 微信 */
 .cp-ticket__share {
-  flex-shrink: 0; height: 26px; padding: 0 10px; border-radius: 999px;
+  flex-shrink: 0; height: 24px; padding: 0 8px; border-radius: 999px;
   border: 1px solid rgba(7,193,96,.45); background: rgba(7,193,96,.08); color: #06AD56;
-  font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1;
-  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1;
+  display: inline-flex; align-items: center; gap: 3px;
   transition: filter .15s ease, transform .1s ease;
 }
 .cp-ticket__share:active { transform: scale(.94); }
@@ -24933,12 +24932,15 @@ function cpTicketHtml(cp) {
       '</div>' +
     '</div>' +
     '<div class="cp-ticket__foot">' +
-      '<span class="cp-ticket__foot-item">已发 <b>' + cpNum(cp.issued) + '</b></span>' +
-      '<span class="cp-ticket__foot-item">已核销 <b>' + cpNum(cp.used) + '</b></span>' +
-      '<span class="cp-ticket__foot-item">核销率 <b>' + cpRate(cp) + '</b></span>' +
-      '<span class="cp-ticket__foot-spacer"></span>' +
-      shareBtn +
-      '<button type="button" class="cp-ticket__status cp-ticket__status--' + cp.status + '" data-cp-status-toggle="' + cp.id + '" aria-label="切换' + st.label + '状态">' + st.label + '</button>' +
+      '<div class="cp-ticket__foot-stats">' +
+        '<span class="cp-ticket__foot-item">已发 <b>' + cpNum(cp.issued) + '</b></span>' +
+        '<span class="cp-ticket__foot-item">已核销 <b>' + cpNum(cp.used) + '</b></span>' +
+        '<span class="cp-ticket__foot-item">核销率 <b>' + cpRate(cp) + '</b></span>' +
+      '</div>' +
+      '<div class="cp-ticket__foot-actions">' +
+        shareBtn +
+        '<button type="button" class="cp-ticket__status cp-ticket__status--' + cp.status + '" data-cp-status-toggle="' + cp.id + '" aria-label="切换' + st.label + '状态">' + st.label + '</button>' +
+      '</div>' +
     '</div>' +
   '</div>';
 }
