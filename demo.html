@@ -6267,7 +6267,7 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 }
 /* 内容区 */
 .ach-simple-card__body {
-  display: flex; flex-direction: column; flex: 1; padding: 10px 12px 14px;
+  display: flex; flex-direction: column; flex: 1; padding: 8px 12px 12px;
 }
 .ach-simple-card__title {
   display: block; font-size: 15px; font-weight: 600; color: #1A1A1A; line-height: 21px;
@@ -6275,16 +6275,16 @@ body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #e
 .ach-simple-card__sub {
   display: block; margin-top: 2px; font-size: 11px; color: #929292; line-height: 16px;
 }
-.ach-simple-card__fields { display: block; margin-top: 10px; }
+.ach-simple-card__fields { display: block; margin-top: 8px; }
 .ach-simple-card__note {
-  display: inline-block; margin-top: 8px; padding: 2px 8px; border-radius: 999px;
+  display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 999px;
   font-size: 10px; color: #9A9A9A; background: #F0F0F0; line-height: 16px;
 }
 .ach-simple-card.is-on .ach-simple-card__note { color: #9A9A9A; background: #F0F0F0; }
 /* 字段行（点击可编辑） */
 .ach-simple-field {
   display: flex; align-items: center; justify-content: space-between; gap: 6px;
-  width: 100%; margin-top: 8px; padding: 7px 10px; border: none; border-radius: 9px;
+  width: 100%; margin-top: 6px; padding: 5px 10px; border: none; border-radius: 9px;
   background: #F5F5F5; cursor: pointer; font-family: inherit; text-align: left;
   box-sizing: border-box; transition: background .15s;
 }
@@ -14178,10 +14178,10 @@ button.detail-compose__row:active { background: #FAFAFA; }
 .cp-remark .detail-remark__label { margin-bottom: 8px; }
 .cp-remark .detail-remark__box { min-height: 92px; }
 /* 发放摘要 · 迷你券块 */
-.cp-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; color: var(--text-sec); gap: 10px; }
-.cp-empty__icon { width: 72px; height: 72px; border-radius: 20px; background: #F1F1F1; display: flex; align-items: center; justify-content: center; color: #C4C4C4; }
-.cp-empty__title { font-size: 14px; color: #6B6B6B; }
-.cp-empty__hint { font-size: 12px; }
+.cp-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px; color: var(--text-sec); gap: 10px; text-align: center; }
+.cp-empty__icon { width: 76px; height: 76px; border-radius: 22px; background: linear-gradient(160deg, #F7F0F2, #FBFAF9); border: 1px solid #F1E7EA; display: flex; align-items: center; justify-content: center; color: #C9B6BD; margin-bottom: 4px; }
+.cp-empty__title { font-size: 16px; color: #555; font-weight: 600; }
+.cp-empty__hint { font-size: 12px; color: #9A9A9A; line-height: 1.5; max-width: 220px; }
 /* 券详情 hero */
 .cp-detail-hero { padding: 16px 16px 4px; background: var(--bg-page); }
 .cp-detail-hero .cp-ticket { cursor: default; }
@@ -14237,7 +14237,7 @@ button.detail-compose__row:active { background: #FAFAFA; }
 /* 分享 · 微信 */
 .cp-ticket__share {
   flex-shrink: 0; height: 24px; padding: 0 8px; border-radius: 999px;
-  border: 1px solid rgba(7,193,96,.45); background: rgba(7,193,96,.08); color: #06AD56;
+  border: 1px solid #3C3C3C; background: transparent; color: #3C3C3C;
   font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; line-height: 1;
   display: inline-flex; align-items: center; gap: 3px;
   transition: filter .15s ease, transform .1s ease;
@@ -17242,9 +17242,9 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
             <div class="page-body" style="background:var(--bg-page)">
               <div class="cp-list" id="cpList"></div>
               <div class="cp-empty hidden" id="cpEmpty">
-                <div class="cp-empty__icon" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M8 3v3M16 3v3M8 15h.01M12 15h.01M16 15h.01"/></svg></div>
-                <p class="cp-empty__title">暂无优惠券</p>
-                <p class="cp-empty__hint">点击下方按钮新建优惠券</p>
+                <div class="cp-empty__icon" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M8 3v3M16 3v3M7.5 15.5h.01M12 15.5h.01M16.5 15.5h.01"/><path d="M8.5 18v1.5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V18" stroke-dasharray="2 2"/></svg></div>
+                <p class="cp-empty__title">还没有优惠券</p>
+                <p class="cp-empty__hint">创建第一张优惠券，让顾客领券到店消费</p>
               </div>
             </div>
             <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="btn-main" id="btnCpCreate"><span class="btn-main__plus">＋</span> 新建优惠券</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
@@ -17384,7 +17384,7 @@ if (new URLSearchParams(location.search).get('figma') || location.hash.includes(
                 <div class="form-row form-row--validity-stack"><span class="label">链接有效期</span><div class="duration-input__units duration-input__units--share" id="cpShareValidityChips"></div></div>
               </div>
             </div>
-            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="cp-share-opt" id="cpShareMoments"><span class="cp-share-opt__icon cp-share-opt__icon--moments" aria-hidden="true"></span>分享到朋友圈</button><button type="button" class="cp-share-opt" id="cpShareWechat"><span class="cp-share-opt__icon cp-share-opt__icon--wechat" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.3 3.5C5.3 3.5 2 6.4 2 10c0 2 1.1 3.8 2.8 5l-.7 2.3 2.5-1.3c.9.3 1.8.5 2.7.5 4 0 7.3-2.9 7.3-6.5s-3.3-6.5-7.3-6.5z" fill="#07C160"/><circle cx="6.3" cy="9.8" r="1.15" fill="#fff"/><circle cx="10.9" cy="9.8" r="1.15" fill="#fff"/><path d="M15.7 8.2c3.5 0 6.3 2.5 6.3 5.6 0 1.7-.9 3.2-2.4 4.2l.6 1.9-2.1-1.1c-.8.2-1.5.3-2.4.3-3.5 0-6.3-2.5-6.3-5.6s2.8-5.3 6.3-5.3z" fill="#07C160"/><circle cx="13.9" cy="13.4" r="0.95" fill="#fff"/><circle cx="17.8" cy="13.4" r="0.95" fill="#fff"/></svg></span>分享到微信</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
+            <div class="bottom-bar"><div class="bottom-bar__action"><button type="button" class="cp-share-opt" id="cpShareMoments"><span class="cp-share-opt__icon cp-share-opt__icon--moments" aria-hidden="true"></span>分享到朋友圈</button><button type="button" class="cp-share-opt" id="cpShareWechat"><span class="cp-share-opt__icon cp-share-opt__icon--wechat" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path transform="translate(0.05 2.24)" fill="#07C160" d="M16.1739 5.89565C16.4348 5.89565 16.6957 5.89565 17.0087 5.94783C16.2783 2.55652 12.6261 0 8.45217 0C3.8087 0 0 3.18261 0 7.2C0 9.54783 1.25217 11.4261 3.3913 12.887L2.55652 15.4957L5.53043 14.0348C6.57391 14.2435 7.46087 14.4522 8.50435 14.4522C8.76522 14.4522 9.02609 14.4522 9.28696 14.4C9.13044 13.8261 9.02609 13.2522 9.02609 12.6261C8.97391 8.92174 12.1565 5.89565 16.1739 5.89565ZM11.6348 3.6C12.2609 3.6 12.6783 4.01739 12.6783 4.64348C12.6783 5.26957 12.2609 5.68696 11.6348 5.68696C11.0087 5.68696 10.3826 5.26957 10.3826 4.64348C10.3826 4.01739 11.0087 3.6 11.6348 3.6ZM5.68696 5.73913C5.06087 5.73913 4.43478 5.32174 4.43478 4.69565C4.43478 4.06957 5.06087 3.65217 5.68696 3.65217C6.31304 3.65217 6.73043 4.06957 6.73043 4.69565C6.78261 5.32174 6.36522 5.73913 5.68696 5.73913Z"/><path transform="translate(9.55 8.61)" fill="#07C160" d="M14.4 6.15652C14.4 2.76522 11.0087 0 7.2 0C3.18261 0 0 2.76522 0 6.15652C0 9.54782 3.18261 12.313 7.2 12.313C8.03478 12.313 8.86956 12.1043 9.75652 11.8956L12.0522 13.1478L11.4261 11.0087C13.1478 9.75652 14.4 8.03478 14.4 6.15652ZM4.90435 5.06087C4.48695 5.06087 4.06956 4.64348 4.06956 4.22608C4.06956 3.80869 4.48695 3.3913 4.90435 3.3913C5.53043 3.3913 5.94782 3.80869 5.94782 4.22608C5.94782 4.64348 5.53043 5.06087 4.90435 5.06087ZM9.54782 5.06087C9.13043 5.06087 8.71304 4.64348 8.71304 4.22608C8.71304 3.80869 9.13043 3.3913 9.54782 3.3913C10.1739 3.3913 10.5913 3.80869 10.5913 4.22608C10.5913 4.64348 10.1739 5.06087 9.54782 5.06087Z"/></svg></span>分享到微信</button></div><div class="bottom-bar__safe" aria-hidden="true"></div></div>
           </div>
 
           <!-- 领取优惠券（好友视角） -->
@@ -25034,6 +25034,7 @@ const cpState = {
   tplDraft: null,
   tplValidityId: 'now_60d',
   tplMoreOpen: false,
+  demoEmpty: false,
 };
 
 const CP_SHARE_VALIDITIES = [
@@ -25082,10 +25083,9 @@ function cpTypeIconHtml(type) {
 function cpWechatGlyphHtml(fill) {
   const c = fill || '#07C160';
   return '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
-    '<path d="M9.3 3.5C5.3 3.5 2 6.4 2 10c0 2 1.1 3.8 2.8 5l-.7 2.3 2.5-1.3c.9.3 1.8.5 2.7.5 4 0 7.3-2.9 7.3-6.5s-3.3-6.5-7.3-6.5z" fill="' + c + '"/>' +
-    '<circle cx="6.3" cy="9.8" r="1.15" fill="#fff"/><circle cx="10.9" cy="9.8" r="1.15" fill="#fff"/>' +
-    '<path d="M15.7 8.2c3.5 0 6.3 2.5 6.3 5.6 0 1.7-.9 3.2-2.4 4.2l.6 1.9-2.1-1.1c-.8.2-1.5.3-2.4.3-3.5 0-6.3-2.5-6.3-5.6s2.8-5.3 6.3-5.3z" fill="' + c + '"/>' +
-    '<circle cx="13.9" cy="13.4" r="0.95" fill="#fff"/><circle cx="17.8" cy="13.4" r="0.95" fill="#fff"/></svg>';
+    '<path transform="translate(0.05 2.24)" fill="' + c + '" d="M16.1739 5.89565C16.4348 5.89565 16.6957 5.89565 17.0087 5.94783C16.2783 2.55652 12.6261 0 8.45217 0C3.8087 0 0 3.18261 0 7.2C0 9.54783 1.25217 11.4261 3.3913 12.887L2.55652 15.4957L5.53043 14.0348C6.57391 14.2435 7.46087 14.4522 8.50435 14.4522C8.76522 14.4522 9.02609 14.4522 9.28696 14.4C9.13044 13.8261 9.02609 13.2522 9.02609 12.6261C8.97391 8.92174 12.1565 5.89565 16.1739 5.89565ZM11.6348 3.6C12.2609 3.6 12.6783 4.01739 12.6783 4.64348C12.6783 5.26957 12.2609 5.68696 11.6348 5.68696C11.0087 5.68696 10.3826 5.26957 10.3826 4.64348C10.3826 4.01739 11.0087 3.6 11.6348 3.6ZM5.68696 5.73913C5.06087 5.73913 4.43478 5.32174 4.43478 4.69565C4.43478 4.06957 5.06087 3.65217 5.68696 3.65217C6.31304 3.65217 6.73043 4.06957 6.73043 4.69565C6.78261 5.32174 6.36522 5.73913 5.68696 5.73913Z"/>' +
+    '<path transform="translate(9.55 8.61)" fill="' + c + '" d="M14.4 6.15652C14.4 2.76522 11.0087 0 7.2 0C3.18261 0 0 2.76522 0 6.15652C0 9.54782 3.18261 12.313 7.2 12.313C8.03478 12.313 8.86956 12.1043 9.75652 11.8956L12.0522 13.1478L11.4261 11.0087C13.1478 9.75652 14.4 8.03478 14.4 6.15652ZM4.90435 5.06087C4.48695 5.06087 4.06956 4.64348 4.06956 4.22608C4.06956 3.80869 4.48695 3.3913 4.90435 3.3913C5.53043 3.3913 5.94782 3.80869 5.94782 4.22608C5.94782 4.64348 5.53043 5.06087 4.90435 5.06087ZM9.54782 5.06087C9.13043 5.06087 8.71304 4.64348 8.71304 4.22608C8.71304 3.80869 9.13043 3.3913 9.54782 3.3913C10.1739 3.3913 10.5913 3.80869 10.5913 4.22608C10.5913 4.64348 10.1739 5.06087 9.54782 5.06087Z"/>' +
+    '</svg>';
 }
 function cpTicketHtml(cp) {
   const t = COUPON_TYPES[cp.type];
@@ -25094,7 +25094,7 @@ function cpTicketHtml(cp) {
     ? '<div class="cp-ticket__meta">可抵用 ' + escapeHtml(cpExchangeItemsLabel(cp)) + '</div>'
     : '<div class="cp-ticket__meta">' + escapeHtml(cp.validityLabel) + '</div>';
   const shareBtn = cp.status === 'enabled'
-    ? '<button type="button" class="cp-ticket__share" data-cp-share-id="' + cp.id + '" aria-label="分享优惠券">' + cpWechatGlyphHtml('#07C160') + '分享</button>'
+    ? '<button type="button" class="cp-ticket__share" data-cp-share-id="' + cp.id + '" aria-label="分享优惠券">' + cpWechatGlyphHtml('#3C3C3C') + '分享</button>'
     : '';
   return '<div class="cp-ticket cp-ticket--' + cp.type + ' cp-ticket--' + cp.status + '" data-cp-id="' + cp.id + '" role="button" tabindex="0">' +
     '<div class="cp-ticket__body">' +
@@ -25120,10 +25120,11 @@ function cpTicketHtml(cp) {
   '</div>';
 }
 function renderCpList() {
-  const list = COUPON_CATALOG.filter(cp => cpState.typeTab === 'all' || cp.type === cpState.typeTab);
   const el = document.getElementById('cpList');
   const empty = document.getElementById('cpEmpty');
   if (!el) return;
+  if (cpState.demoEmpty) { el.innerHTML = ''; empty && empty.classList.remove('hidden'); return; }
+  const list = COUPON_CATALOG.filter(cp => cpState.typeTab === 'all' || cp.type === cpState.typeTab);
   if (!list.length) { el.innerHTML = ''; empty && empty.classList.remove('hidden'); return; }
   empty && empty.classList.add('hidden');
   el.innerHTML = list.map(cpTicketHtml).join('');
@@ -25140,9 +25141,11 @@ function setCpTypeTab(tab) {
 function openCpManage() {
   if (typeof closeAllFlowOverlays === 'function') closeAllFlowOverlays();
   setCpTypeTab(cpState.typeTab || 'all');
+  const tplBar = document.getElementById('cpTplBar');
+  if (tplBar) tplBar.classList.toggle('hidden', !!cpState.demoEmpty);
   renderTplBar();
   showOnlyScreen('screen-coupon-manage');
-  if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight('coupon-list');
+  if (typeof setFlowNavHighlight === 'function') setFlowNavHighlight(cpState.demoEmpty ? 'coupon-empty' : 'coupon-list');
 }
 function cpChipsHtml(groupId, items, selectedId) {
   return items.map(it => '<button type="button" class="cp-chip ' + (it.id === selectedId ? 'on' : '') + '" data-cp-chip-group="' + groupId + '" data-cp-chip-value="' + it.id + '">' + escapeHtml(it.label) + '</button>').join('');
@@ -25319,8 +25322,9 @@ function cpTplCreate() {
   built.validityLabel = cpValidityLabelFromDraft(d);
   COUPON_CATALOG.unshift(built);
   cpCloseTpl();
+  cpState.demoEmpty = false;
   showToast('优惠券已创建并启用');
-  setCpTypeTab(cpState.typeTab || 'all');
+  openCpManage();
 }
 function cpValueUnit(draft) { return '元'; }
 function cpValueLabelText(draft) { return '面值金额'; }
@@ -25490,6 +25494,7 @@ function cpCreateNext() {
   }
   showToast(cpState.createMode === 'edit' ? '优惠券已保存' : '优惠券已创建');
   cpState.typeTab = cpState.typeTab || 'all';
+  cpState.demoEmpty = false;
   openCpManage();
 }
 /* ===== 适用范围 · 多选 picker ===== */
@@ -26129,6 +26134,7 @@ const FLOW_MAP_GROUPS = [
     title: '优惠券管理',
     nodes: [
       { id: 'coupon-list', label: '优惠券 · 全部', screen: 'screen-coupon-manage' },
+      { id: 'coupon-empty', label: '优惠券 · 空态', screen: 'screen-coupon-manage' },
       { id: 'coupon-create', label: '新建优惠券 · Step1', screen: 'screen-coupon-create' },
       { id: 'coupon-create-step2', label: '新建优惠券 · Step2', screen: 'screen-coupon-create' },
       { id: 'coupon-create-step3', label: '新建优惠券 · Step3', screen: 'screen-coupon-create' },
@@ -26349,7 +26355,14 @@ const FLOW_NAV = {
   'coupon-list'() {
     ensureDemoFilled();
     cpState.typeTab = 'all';
+    cpState.demoEmpty = false;
     openCpManage();
+  },
+  'coupon-empty'() {
+    cpState.typeTab = 'all';
+    cpState.demoEmpty = true;
+    openCpManage();
+    setFlowNavHighlight('coupon-empty');
   },
   'coupon-create'() {
     ensureDemoFilled();
@@ -34346,9 +34359,9 @@ function billingNav(fn) {
       calcMode: 'station',
       img: '插图/按工位分配.png',
       fields: [
-        { key: 'station', station: 'senior', label: '大工业绩' },
-        { key: 'station', station: 'mid', label: '中工业绩' },
-        { key: 'station', station: 'junior', label: '小工业绩' },
+        { key: 'station', station: 'senior', label: '大工' },
+        { key: 'station', station: 'mid', label: '中工' },
+        { key: 'station', station: 'junior', label: '小工' },
         { key: 'base', label: '计算基数', select: true },
         { key: 'free', label: '免单算业绩', toggle: true },
       ],
