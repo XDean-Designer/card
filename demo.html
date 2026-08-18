@@ -14521,8 +14521,13 @@ button.detail-compose__row:active { background: #FAFAFA; }
     var q = new URLSearchParams(location.search);
     /* capture / figma 截图模式保持原布局，不抢真机预览 */
     if (q.get('capture') === '1' || q.get('figma')) return;
-    /* PC 版默认桌面布局（左侧功能链路可见）；仅显式 ?device=1 进入真机预览 */
-    if (q.get('device') !== '1') return;
+    /* 真机预览：?device=1 强制开启；?device=0 强制关闭；缺省时手机/触摸设备自动进入。
+       桌面设备（有鼠标/触控板 hover+fine pointer）即使窗口较窄也不自动切换，避免笔记本误入手机模式 */
+    var deviceFlag = q.get('device');
+    var isNarrow = (window.innerWidth || document.documentElement.clientWidth || 0) <= 768;
+    var isDesktop = !!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+    var autoDevice = !isDesktop && isNarrow;
+    if (deviceFlag !== '1' && (deviceFlag === '0' || !autoDevice)) return;
     document.documentElement.classList.add('device-preview');
     var meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
@@ -32893,11 +32898,18 @@ function getFlowDeepLinkId() {
   return new URLSearchParams(location.search).get('flow');
 }
 
-/** ?device=1 显式真机预览；默认 PC 桌面布局，不再随窗口宽度自动切换 */
+/** 真机预览：?device=1 强制开启；?device=0 强制关闭；缺省时手机/触摸设备自动进入。
+    桌面设备（有鼠标/触控板 hover+fine pointer）即使窗口较窄也不自动切换 */
 function shouldUseDevicePreview() {
   const q = new URLSearchParams(location.search);
   if (q.get('capture') === '1' || q.get('figma')) return false;
-  return q.get('device') === '1';
+  const flag = q.get('device');
+  if (flag === '1') return true;
+  if (flag === '0') return false;
+  const isNarrow = (window.innerWidth || document.documentElement.clientWidth || 0) <= 768;
+  const isDesktop = typeof window.matchMedia === 'function'
+    && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  return !isDesktop && isNarrow;
 }
 
 function isDevicePreviewMode() {
